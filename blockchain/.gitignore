@@ -1,0 +1,25 @@
+node_modules/
+cache/
+artifacts/
+coverage/
+coverage.json
+typechain-types/
+
+# Hardhat files
+.env
+.env.local
+deployments/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
