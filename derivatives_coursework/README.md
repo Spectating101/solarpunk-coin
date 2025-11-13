@@ -24,7 +24,23 @@
 
 ## 🚀 Quick Start
 
-### Option 1: Interactive Notebook (Recommended)
+### Option 1: Web App (Recommended - No Terminal Required! ⭐)
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Launch web app (easiest!)
+streamlit run app.py
+
+# Or use the launcher scripts:
+# Linux/Mac: ./run_app.sh
+# Windows: run_app.bat
+```
+
+**Opens in your browser automatically!** All visualizations show immediately - no code to run!
+
+### Option 2: Interactive Jupyter Notebook
 
 ```bash
 # Install dependencies
@@ -39,7 +55,7 @@ jupyter notebook interactive_demo.ipynb
 
 Then **Run All Cells** to see the complete interactive analysis!
 
-### Option 2: Command-Line Demo
+### Option 3: Command-Line Demo
 
 ```bash
 pip install numpy pandas matplotlib scipy requests
@@ -100,21 +116,27 @@ This framework provides comprehensive derivative pricing on Bitcoin energy costs
 ```
 derivatives_coursework/
 ├── README.md                  # This file
-├── interactive_demo.ipynb     # ⭐ MAIN FILE - Interactive notebook
+├── app.py                     # ⭐ WEB APP - Easiest way to use! (NEW!)
+├── run_app.sh                 # Quick launcher (Linux/Mac)
+├── run_app.bat                # Quick launcher (Windows)
+├── interactive_demo.ipynb     # Interactive Jupyter notebook
 ├── demo.py                    # Command-line demo
 ├── pricer.py                  # Core American option pricing engine
 ├── data_utils.py              # Data loading utilities
-├── live_data.py               # 🆕 Real-time Bitcoin API integration
-├── visualizations.py          # 🆕 Professional visualization suite
+├── live_data.py               # Real-time Bitcoin API integration
+├── visualizations.py          # Professional visualization suite
+├── validate.py                # Automated testing script
 └── requirements.txt           # All dependencies
 ```
 
 **Key Files:**
 
-- **`interactive_demo.ipynb`** - Complete interactive analysis (recommended)
+- **`app.py`** - ⭐ Streamlit web app (NO TERMINAL! Just open browser!)
+- **`interactive_demo.ipynb`** - Complete interactive Jupyter analysis
 - **`live_data.py`** - LiveDataFetcher class for real-time data
 - **`visualizations.py`** - ProfessionalVisualizer with 3D plots
 - **`pricer.py`** - AmericanOptionPricer with Greeks
+- **`validate.py`** - Pre-submission testing
 - **`demo.py`** - Quick command-line demonstration
 
 ---
@@ -392,53 +414,67 @@ American Option Value + Greeks
 ### Setup (30 seconds)
 ```
 "I've built a professional derivatives pricing framework
-with real-time data and interactive analysis."
+with real-time data and interactive web interface."
 ```
 
-### Demo Flow (4 minutes)
+### Demo Flow (4 minutes) - Web App Version (EASIEST!)
 
-**1. Launch Notebook (30s)**
+**1. Launch App (30s)**
 ```bash
-jupyter notebook interactive_demo.ipynb
+streamlit run app.py
+# Opens automatically in browser
 ```
-"This notebook fetches live Bitcoin data and prices energy derivatives."
+"This web app shows everything immediately - no code to run!"
 
 **2. Show Live Data (30s)**
 ```
-Run Part 1 cell → Show real-time Bitcoin price, volatility, energy consumption
-"See - we're pulling live data from CoinGecko right now: BTC at $X, volatility Y%"
+Point to top metrics → Bitcoin price, energy unit price, moneyness
+"See - real-time Bitcoin data at the top: BTC at $X, energy price $Y"
+"Everything updates automatically from CoinGecko API"
 ```
 
 **3. Show Option Pricing (30s)**
 ```
-Run Part 2 cell → Show American option value and Greeks
-"Binomial tree prices the redemption option at $X with Delta of Y"
+Point to Option Pricing Results section
+"American call priced at $X with full Greeks below"
+"See intrinsic value, time value, and early exercise premium"
 ```
 
 **4. Interactive Demo (1m 30s)**
 ```
-Run Part 3 cell → Adjust sliders
-"Watch - I move spot price slider... option value updates instantly"
-"Increase volatility... vega shows how sensitive we are"
-"This is ATM now, move to ITM... delta increases toward 1.0"
+Use sidebar sliders → Adjust parameters
+"Watch the left sidebar - I move spot price slider..."
+"Everything recalculates instantly - option value, Greeks, all metrics update"
+"Increase volatility... see how vega captures that sensitivity"
+"Move strike to change moneyness... delta adjusts automatically"
 ```
 
 **5. Visualizations (1m)**
 ```
-Run Part 4 cells → Show 3D surface and heatmaps
-"This 3D surface shows option value across spot and volatility"
-"These heatmaps reveal how all Greeks behave across parameter ranges"
+Click through tabs → Show 3D surface, comprehensive analysis, heatmaps
+"Tab 1: 9-panel comprehensive analysis - everything in one view"
+"Tab 2: 3D rotating surface - option value across spot and volatility"
+"Tab 3: Greeks heatmaps - sensitivity analysis across parameter ranges"
 ```
 
 **6. Wrap-up (30s)**
 ```
 "This demonstrates:
  ✓ American option theory with early exercise
- ✓ Real-time data integration
- ✓ Complete risk management tools
- ✓ Professional interactive presentation
+ ✓ Real-time data integration from live API
+ ✓ Complete risk management tools (see delta hedging section below)
+ ✓ Professional interactive web interface - no terminal needed!
 Applied to a novel domain: cryptocurrency energy derivatives"
 ```
+
+### Alternative: Jupyter Notebook Version
+
+If you prefer notebooks:
+1. Launch: `jupyter notebook interactive_demo.ipynb`
+2. Run all cells to see complete analysis
+3. Use ipywidgets sliders for parameter exploration
+
+(But web app is easier for presentations!)
 
 ---
 
