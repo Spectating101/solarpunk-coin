@@ -1,0 +1,116 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb~
+.jupyter/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.spyderproject
+.spyproject
+.ropeproject
+
+# Data files (keep structure, ignore large data)
+*.csv
+*.xlsx
+*.xls
+*.json
+!requirements.txt
+!package.json
+
+# Results (generated files)
+results/*.png
+results/*.pdf
+results/*.svg
+empirical/*.png
+empirical/*.pdf
+empirical/*.xlsx
+empirical/*.csv
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+empirical.zip
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+
+# LaTeX (if you add LaTeX versions of papers)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+
+# R (if you add R analysis)
+.Rhistory
+.RData
+.Rproj.user
+
+# Credentials and secrets
+.env
+.env.local
+credentials.json
+*.key
+*.pem
+
+# Large PDFs (keep selected ones, ignore generated)
+# Uncomment if PDFs become too large
+# *.pdf

@@ -1,0 +1,71 @@
+# Citation File Format for Solarpunk Bitcoin Research
+# For more information see: https://citation-file-format.github.io/
+
+cff-version: 1.2.0
+message: "If you use this research or software, please cite it as below."
+type: software
+title: "Solarpunk Bitcoin Research Project: Energy-Backed Cryptocurrency Valuation and Derivatives Framework"
+abstract: "A comprehensive academic research project investigating energy-backed cryptocurrency valuation through the Cumulative Energy Investment Ratio (CEIR) framework, with applications to sustainable digital currencies. Includes triple natural experiment design, SolarPunkCoin concept, and production-ready derivatives pricing implementation."
+authors:
+  - family-names: "[Your Last Name]"
+    given-names: "[Your First Name]"
+    # email: your.email@university.edu
+    # affiliation: "Yuan Ze University"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/[your-username]/solarpunk-coin"
+url: "https://github.com/[your-username]/solarpunk-coin"
+keywords:
+  - Bitcoin
+  - cryptocurrency
+  - energy economics
+  - CEIR
+  - natural experiment
+  - derivatives pricing
+  - sustainable finance
+  - renewable energy
+  - stablecoin
+  - quantitative finance
+license: MIT
+version: 1.0.0
+date-released: "2025-11-13"
+
+# Preferred citation for academic use
+preferred-citation:
+  type: article
+  title: "When Does Energy Cost Anchor Cryptocurrency Value? Evidence from a Triple Natural Experiment"
+  authors:
+    - family-names: "[Your Last Name]"
+      given-names: "[Your First Name]"
+  year: 2025
+  # journal: "[Target Journal Name]"
+  # volume: TBD
+  # issue: TBD
+  # start: TBD
+  # end: TBD
+  # doi: "10.xxxx/xxxxx"
+  abstract: "We investigate when energy costs fundamentally anchor cryptocurrency valuations using a novel metric—the Cumulative Energy Investment Ratio (CEIR), defined as market capitalization divided by total historical energy expenditure. Through three exogenous shocks, we identify precise conditions for energy anchoring."
+  keywords:
+    - Bitcoin
+    - Energy Economics
+    - CEIR
+    - Natural Experiment
+    - Cryptocurrency Valuation
+    - China Mining Ban
+    - Ethereum Merge
+
+references:
+  - type: software
+    title: "Energy Derivatives Pricing Framework"
+    authors:
+      - family-names: "[Your Last Name]"
+        given-names: "[Your First Name]"
+    year: 2025
+    repository-code: "https://github.com/[your-username]/solarpunk-coin/tree/main/energy_derivatives"
+    abstract: "Production-ready Python framework for pricing renewable energy-backed digital assets using binomial trees, Monte-Carlo simulation, and Greeks calculation."
+    keywords:
+      - derivatives pricing
+      - option pricing
+      - energy finance
+      - Monte-Carlo simulation
+      - binomial model
+      - risk management
