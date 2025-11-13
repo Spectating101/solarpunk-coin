@@ -24,18 +24,31 @@
 
 ## 🚀 Quick Start
 
+### 🌟 TWO VERSIONS AVAILABLE:
+
+#### **Standard App** (`app.py`) - Perfect for presentations
+Clean, focused interface with all core features
+
+#### **Enhanced App** (`app_enhanced.py`) - Professional analytics ⭐
+Everything in standard PLUS Monte Carlo, Implied Vol, Scenario Comparison, Exports
+
+[📖 See Enhanced Features Guide →](README_ENHANCED.md)
+
+---
+
 ### Option 1: Web App (Recommended - No Terminal Required! ⭐)
 
 ```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Launch web app (easiest!)
+# Launch STANDARD web app (clean, fast)
 streamlit run app.py
+# OR: ./run_app.sh
 
-# Or use the launcher scripts:
-# Linux/Mac: ./run_app.sh
-# Windows: run_app.bat
+# Launch ENHANCED web app (all features)
+streamlit run app_enhanced.py
+# OR: ./run_enhanced.sh
 ```
 
 **Opens in your browser automatically!** All visualizations show immediately - no code to run!
@@ -116,9 +129,11 @@ This framework provides comprehensive derivative pricing on Bitcoin energy costs
 ```
 derivatives_coursework/
 ├── README.md                  # This file
-├── app.py                     # ⭐ WEB APP - Easiest way to use! (NEW!)
-├── run_app.sh                 # Quick launcher (Linux/Mac)
-├── run_app.bat                # Quick launcher (Windows)
+├── README_ENHANCED.md         # 🆕 Enhanced features guide
+├── app.py                     # ⭐ Standard web app
+├── app_enhanced.py            # 🆕 Enhanced web app (Monte Carlo, ImpliedVol, etc)
+├── run_app.sh/.bat            # Standard launchers
+├── run_enhanced.sh/.bat       # 🆕 Enhanced launchers
 ├── interactive_demo.ipynb     # Interactive Jupyter notebook
 ├── demo.py                    # Command-line demo
 ├── pricer.py                  # Core American option pricing engine
@@ -131,7 +146,9 @@ derivatives_coursework/
 
 **Key Files:**
 
-- **`app.py`** - ⭐ Streamlit web app (NO TERMINAL! Just open browser!)
+- **`app.py`** - ⭐ Standard Streamlit web app (NO TERMINAL! Clean & fast)
+- **`app_enhanced.py`** - 🆕 Enhanced app (Monte Carlo, Implied Vol, Scenarios, Export)
+- **`README_ENHANCED.md`** - 🆕 Complete guide to enhanced features
 - **`interactive_demo.ipynb`** - Complete interactive Jupyter analysis
 - **`live_data.py`** - LiveDataFetcher class for real-time data
 - **`visualizations.py`** - ProfessionalVisualizer with 3D plots
@@ -511,6 +528,40 @@ Before final submission:
 - [ ] Double-check code comments and documentation
 
 **Backup**: If live API fails during demo, fallback data automatically loads!
+
+---
+
+## 🌟 Enhanced Version Features
+
+Want to go beyond 100%? The **Enhanced App** (`app_enhanced.py`) adds professional analytics capabilities:
+
+### 🎲 Monte Carlo Simulation
+- Simulate 10,000+ price paths
+- Validate binomial tree pricing
+- Visualize payoff distributions
+- Export simulation data
+
+### 🔍 Implied Volatility Calculator
+- Reverse-engineer vol from market prices
+- Calibrate models to market data
+- Analyze volatility smile
+- Compare implied vs historical vol
+
+### ⚖️ Scenario Comparison
+- Run multiple scenarios side-by-side
+- Compare base case vs stressed vs bullish
+- Visualize differences with charts
+- Export comparison tables
+
+### 💾 Export & Presets
+- Download results as CSV/JSON
+- Save parameter configurations
+- Load presets with one click
+- Professional data export
+
+**[📖 See Complete Enhanced Features Guide →](README_ENHANCED.md)**
+
+**Launch Enhanced:** `streamlit run app_enhanced.py` or `./run_enhanced.sh`
 
 ---
 
