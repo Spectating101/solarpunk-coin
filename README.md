@@ -9,8 +9,9 @@ This repository contains:
 1. **Academic Research Papers** - Rigorous empirical analysis of cryptocurrency energy anchoring
 2. **SolarPunkCoin Concept** - Design for renewable-energy-backed stablecoin
 3. **Energy Derivatives Framework** - Production-ready Python implementation for pricing energy-backed digital assets
+4. **🆕 Complete Blockchain Implementation** - Full SolarPunkCoin cryptocurrency with PoS consensus, energy oracle, and web interface
 
-**Total Scope**: 4,982+ lines of code and documentation across multiple research domains.
+**Total Scope**: 8,000+ lines of code and documentation across multiple research domains.
 
 ## 📂 Repository Structure
 
@@ -22,24 +23,39 @@ solarpunk-coin/
 ├── Academic Research Papers/
 │   ├── CEIR-Trifecta.md         # Main paper: Triple natural experiment (674 lines)
 │   ├── Quasi-SD-CEIR.md         # Extension: Supply-demand dynamics (217 lines)
+│   ├── Final-Iteration.md       # SolarPunkCoin whitepaper (458 lines)
 │   └── Empirical-Milestone.md   # Research proposal (175 lines)
 │
-├── SolarPunkCoin Design/
-│   ├── Final-Iteration.md       # Complete stablecoin design (458 lines)
-│   └── Derivatives-context.md   # Theoretical framework (573 lines)
+├── 🆕 solarpunkcoin/             # Complete blockchain implementation ⭐
+│   ├── core/                    # Blockchain, blocks, transactions, UTXO, wallet
+│   ├── consensus/               # Proof-of-Stake with green certification
+│   ├── oracle/                  # Energy verification & minting authorization
+│   ├── contracts/               # Peg stability & seigniorage auctions
+│   ├── node/                    # Full SPK node implementation
+│   ├── web/                     # Real-time web dashboard (Streamlit)
+│   ├── README.md                # Complete blockchain documentation
+│   └── requirements.txt         # Python dependencies
+│
+├── derivatives_coursework/       # Derivatives pricing final project
+│   ├── app.py                   # Standard web app
+│   ├── app_enhanced.py          # Enhanced app (Monte Carlo, ImpliedVol)
+│   ├── interactive_demo.ipynb   # Jupyter notebook
+│   └── README.md                # Project documentation
+│
+├── spk_derivatives_bridge/       # CEIR → SPK integration
+│   └── SPK token pricing mechanics
 │
 ├── empirical/                    # Empirical data and analysis scripts
 │   ├── Data files (Bitcoin, Ethereum, energy consumption)
 │   ├── Analysis scripts (CEIR calculation, regressions)
 │   └── Results (tables, charts, PDFs)
 │
-├── energy_derivatives/           # Production-ready derivatives pricing framework
-│   ├── src/                     # 5 core Python modules (2,283 lines)
+├── crypto_energy_derivatives/    # Production framework (3,748 lines)
+│   ├── src/                     # 5 core Python modules
 │   ├── notebooks/               # Complete demonstration notebook
-│   ├── docs/                    # API reference and guides
-│   └── requirements.txt         # Python dependencies
+│   └── docs/                    # API reference and guides
 │
-└── gecko.py                     # Data collection utility
+└── gecko.py                      # Data collection utility
 ```
 
 ## 🚀 Quick Start
@@ -52,16 +68,47 @@ Start with the main research paper:
 cat CEIR-Trifecta.md
 ```
 
-### For Coursework Submission
+### 🆕 For Blockchain/Cryptocurrency (NEW!)
 
-The energy derivatives framework is ready for immediate submission:
+Run the complete SolarPunkCoin blockchain:
 ```bash
-cd energy_derivatives
+cd solarpunkcoin
+
+# Install dependencies
 pip install -r requirements.txt
-jupyter notebook notebooks/main.ipynb
+
+# Run web dashboard (easiest!)
+./launch_dashboard.sh
+# OR: streamlit run web/dashboard.py
+
+# Run complete node
+python node/spk_node.py --demo
+
+# Test components
+python core/blockchain.py
+python consensus/pos.py
+python oracle/energy_oracle.py
 ```
 
-See `energy_derivatives/docs/COURSEWORK_GUIDE.md` for submission guidelines.
+See `solarpunkcoin/README.md` for complete documentation.
+
+### For Derivatives Coursework
+
+The derivatives coursework is ready with interactive web apps:
+```bash
+cd derivatives_coursework
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Launch web app (standard version)
+streamlit run app.py
+
+# Launch enhanced version (Monte Carlo, Implied Vol, Scenarios)
+streamlit run app_enhanced.py
+```
+
+See `derivatives_coursework/README.md` for usage guide.
 
 ### For Complete Context
 
