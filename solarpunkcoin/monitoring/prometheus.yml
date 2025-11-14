@@ -1,0 +1,63 @@
+# Prometheus Configuration for SolarPunkCoin
+# ==========================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'spk-blockchain'
+    environment: 'testnet'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - 'alertmanager:9093'
+
+# Load rules once and periodically evaluate them
+rule_files:
+  - 'alerts/*.yml'
+
+# Scrape configurations
+scrape_configs:
+  # SolarPunkCoin nodes
+  - job_name: 'spk-nodes'
+    static_configs:
+      - targets:
+          - 'validator1:9091'
+          - 'validator2:9091'
+          - 'validator3:9091'
+          - 'fullnode:9091'
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  # API servers
+  - job_name: 'spk-api'
+    static_configs:
+      - targets:
+          - 'validator1:8545'
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+
+  # Block explorer
+  - job_name: 'spk-explorer'
+    static_configs:
+      - targets:
+          - 'explorer:8080'
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Node exporter (system metrics)
+  - job_name: 'node'
+    static_configs:
+      - targets:
+          - 'validator1:9100'
+          - 'validator2:9100'
+          - 'validator3:9100'
+    scrape_interval: 15s
