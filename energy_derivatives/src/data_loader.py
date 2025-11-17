@@ -60,7 +60,7 @@ def load_ceir_data(data_dir: str = '../empirical') -> pd.DataFrame:
             return _generate_synthetic_ceir_data()
         
         df = pd.read_csv(btc_file)
-        
+
         # Ensure Date column
         if 'Date' not in df.columns:
             if 'Exchange Date' in df.columns:
@@ -69,38 +69,39 @@ def load_ceir_data(data_dir: str = '../empirical') -> pd.DataFrame:
                 df['Date'] = pd.date_range(start='2018-01-01', periods=len(df))
         else:
             df['Date'] = pd.to_datetime(df['Date'])
-        
+
         # Ensure Price column
         if 'Price' not in df.columns:
             if 'Open' in df.columns:
                 df['Price'] = df['Open']
             elif 'Close' in df.columns:
                 df['Price'] = df['Close']
-        
-        # Load energy data if available
-        energy_file = os.path.join(data_dir, 'btc_con.csv')
-        if os.path.exists(energy_file):
-            energy_df = pd.read_csv(energy_file)
-            energy_df['DateTime'] = pd.to_datetime(energy_df['DateTime'])
-            energy_df['Date'] = energy_df['DateTime'].dt.date
-            energy_df = energy_df.rename(columns={'Estimated TWh per Year': 'Energy_TWh_Annual'})
-            
-            df['Date_only'] = df['Date'].dt.date
-            df = df.merge(energy_df[['Date', 'Energy_TWh_Annual']].drop_duplicates('Date', keep='first'),
-                         left_on='Date_only', right_on='Date', how='left')
-            df = df.drop('Date_only', axis=1)
-        
+
+        # Load energy data if needed (only if not already present)
+        if 'Energy_TWh_Annual' not in df.columns:
+            energy_file = os.path.join(data_dir, 'btc_con.csv')
+            if os.path.exists(energy_file):
+                energy_df = pd.read_csv(energy_file)
+                energy_df['DateTime'] = pd.to_datetime(energy_df['DateTime'])
+                energy_df['Date_merge'] = energy_df['DateTime'].dt.date
+                energy_df = energy_df.rename(columns={'Estimated TWh per Year': 'Energy_TWh_Annual'})
+
+                df['Date_only'] = df['Date'].dt.date
+                df = df.merge(energy_df[['Date_merge', 'Energy_TWh_Annual']].drop_duplicates('Date_merge', keep='first'),
+                             left_on='Date_only', right_on='Date_merge', how='left')
+                df = df.drop(['Date_only', 'Date_merge'], axis=1)
+
         # Compute market cap if not present
         if 'Market_Cap' not in df.columns:
             # Approximate Bitcoin supply curve
             days_since_start = (df['Date'] - df['Date'].min()).dt.days
             df['Supply'] = 21e6 - (21e6 - 17e6) * np.exp(-0.693 * days_since_start / (4 * 365))
             df['Market_Cap'] = df['Price'] * df['Supply']
-        
+
         # Compute CEIR if not present
         if 'CEIR' not in df.columns and 'Energy_TWh_Annual' in df.columns:
             df = compute_ceir_column(df)
-        
+
         return df.sort_values('Date').reset_index(drop=True)
     
     except Exception as e:

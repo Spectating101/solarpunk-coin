@@ -19,8 +19,12 @@ rho(): Interest rate sensitivity
 import numpy as np
 import pandas as pd
 from typing import Dict, Callable, Optional, Tuple
-from .binomial import BinomialTree
-from .monte_carlo import MonteCarloSimulator
+try:
+    from .binomial import BinomialTree
+    from .monte_carlo import MonteCarloSimulator
+except ImportError:
+    from binomial import BinomialTree
+    from monte_carlo import MonteCarloSimulator
 import warnings
 
 

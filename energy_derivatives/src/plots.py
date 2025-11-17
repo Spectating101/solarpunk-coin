@@ -21,9 +21,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Optional, Dict, List, Tuple
-from .binomial import BinomialTree
-from .monte_carlo import MonteCarloSimulator
-from .sensitivities import GreeksCalculator
+try:
+    from .binomial import BinomialTree
+    from .monte_carlo import MonteCarloSimulator
+    from .sensitivities import GreeksCalculator
+except ImportError:
+    from binomial import BinomialTree
+    from monte_carlo import MonteCarloSimulator
+    from sensitivities import GreeksCalculator
 import warnings
 
 
