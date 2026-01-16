@@ -1,0 +1,93 @@
+phyrexian@phyrexian:~/Downloads/empirical$ python Regression.py 
+=== BITCOIN CEIR COMPREHENSIVE REGRESSION ANALYSIS ===
+
+/home/phyrexian/Downloads/empirical/Regression.py:42: FutureWarning: Series.fillna with 'method' is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+  df['google_trends'] = df['google_trends'].fillna(method='ffill').fillna(method='bfill').fillna(50)
+Google Trends loaded: 2703 valid observations
+/home/phyrexian/Downloads/empirical/Regression.py:71: FutureWarning: Series.fillna with 'method' is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+  df['EPU_Index'] = df['EPU_Index'].fillna(method='ffill').fillna(method='bfill').fillna(100)
+EPU data loaded: 2703 valid observations
+
+Data prepared: 2310 observations
+Pre-ban: 896, Post-ban: 1414
+
+============================================================
+BASELINE CEIR MODELS
+============================================================
+
+Model 1: Simple CEIR
+CEIR coefficient: -0.1154 (p=0.090)
+R-squared: 0.0553
+
+Model 2: CEIR + Volatility
+CEIR coefficient: -0.1298 (p=0.045)
+Volatility coefficient: 0.0897 (p=0.407)
+R-squared: 0.0636
+
+Model 3: Full Controls
+=====================================================================================
+                        coef    std err          z      P>|z|      [0.025      0.975]
+-------------------------------------------------------------------------------------
+Intercept             0.8898      0.335      2.660      0.008       0.234       1.546
+log_CEIR             -0.2154      0.080     -2.705      0.007      -0.372      -0.059
+volatility_30d        0.0296      0.110      0.269      0.788      -0.186       0.245
+google_trends_std     0.0493      0.039      1.270      0.204      -0.027       0.125
+EPU_Index_std         0.0183      0.036      0.514      0.607      -0.052       0.088
+=====================================================================================
+
+============================================================
+INTERACTION MODELS
+============================================================
+
+Model 4: CEIR × Google Trends
+CEIR base effect: -0.2692 (p=0.001)
+Interaction effect: -0.1087 (p=0.231)
+
+Model 5: CEIR × EPU
+CEIR base effect: -0.1006 (p=0.167)
+Interaction effect: 0.0932 (p=0.189)
+
+============================================================
+STRUCTURAL BREAK ANALYSIS
+============================================================
+
+Pre-China Ban Period:
+CEIR coefficient: -0.2154 (p=0.007)
+R-squared: 0.1014
+
+Post-China Ban Period:
+CEIR coefficient: -0.1041 (p=0.071)
+R-squared: 0.0820
+
+Chow test for structural break:
+F-statistic: 39.4315
+P-value: 0.0000
+
+============================================================
+ROBUSTNESS CHECKS
+============================================================
+
+A. Different Return Horizons (Pre-ban):
+  1-day: β=-0.0032 (p=0.316)
+  7-day: β=-0.0232 (p=0.214)
+  30-day: β=-0.1298 (p=0.045)
+
+B. Non-linear Specifications:
+  Quadratic - Linear term: -0.1198 (p=0.081)
+  Quadratic - Squared term: -0.0320 (p=0.818)
+
+============================================================
+ANALYSIS SUMMARY
+============================================================
+
+Economic Significance (Model 2):
+  1 SD change in log(CEIR): 0.458
+  Expected 30-day return impact: 5.95%
+  Annualized impact: 71.3%
+
+Key Findings:
+  - Pre-ban CEIR significantly predicts returns
+  - Post-ban relationship disappears
+  - Structural break confirmed at China ban date
+
+Results saved to ceir_analysis_summary.csv

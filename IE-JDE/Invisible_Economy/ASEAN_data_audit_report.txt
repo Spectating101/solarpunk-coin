@@ -1,0 +1,16 @@
+Data audit generated: 2025-12-18T17:03:43
+
+FILES LOADED
+- THESIS_DATA_READY.csv: 44 rows, 9 cols (tax collections by country/period)
+- ASEAN_IE_Data_Summary.csv: 4 rows, 7 cols (already-aggregated summary)
+- ASEAN_IE_Data_Compiled.xlsx: sheets=['Malaysia_SToDS_LVG', 'Vietnam_Foreign_Portal', 'Vietnam_Domestic_Ecom', 'eConomy_SEA_2024', 'Payment_Systems']
+- indonesia_digital_economy_data.xlsx: sheets=['Digital Economy GMV', 'Sectoral GMV 2025', 'Digital Tax Revenue', 'Crypto Tax Composition', 'Fintech Tax Composition', 'SIPP Tax Composition', 'ASEAN Digital VAT Policies']
+
+KEY FLAGS
+1) Your paper uses ASEAN GMV values (MY=16, VN=32, PH=38, TH=24) that do not match the e-Conomy SEA 2024 country reports.
+2) Your paper’s Malaysia/Vietnam DiD table is quarterly, but the uploaded files only contain annual series. If you used quarterly data, it is not in these uploads.
+3) None of the uploaded files contain the platform-level audited GMV/GTV and net revenue needed to reproduce Table 1 (Grab/GoTo/Shopee wedge).
+
+OUTPUTS
+- ASEAN_master_long.csv (tidy long format: all loaded metrics)
+- ASEAN_verified_GMV_2024_wedge_take75.csv (ASEAN-5 GMV 2024 + computed wedge using take rate 7.5%)

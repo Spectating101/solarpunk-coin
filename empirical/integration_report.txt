@@ -1,0 +1,24 @@
+DATA INTEGRATION REPORT
+==================================================
+
+Generated: 2025-06-12 18:47:46
+
+DATASETS INTEGRATED:
+1. Bitcoin base data (processed_bitcoin_data_FIXED.csv)
+2. Fear & Greed Index (Alternative.me API)
+3. EPUREG (synthetic from volatility)
+4. Mining distribution (Cambridge data, manually collected)
+5. Electricity prices (weighted by mining location)
+
+KEY STATISTICS:
+Total observations: 2333
+Date range: 2018-01-02 00:00:00 to 2025-05-25 00:00:00
+Fear & Greed mean: 48.76
+EPUREG mean: 100.00
+Weighted electricity price mean: $0.075/kWh
+
+DATA SOURCES:
+- Fear & Greed: https://alternative.me/crypto/fear-and-greed-index/
+- Mining distribution: Cambridge Centre for Alternative Finance
+- Electricity prices: EIA, Eurostat, national statistics
+- EPUREG: Synthetic (based on 30-day volatility)

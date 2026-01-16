@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-01-16T00:22:56.773311",
+  "simulation_config": {
+    "days": 10000,
+    "daily_surplus_kwh": 1000,
+    "peg_target": 1.0,
+    "peg_band": 0.05
+  },
+  "best_parameters": {
+    "proportional_gain": 1.05,
+    "integral_gain": 0.255,
+    "days_in_band_percent": 6.56,
+    "avg_price": 0.954747836126908,
+    "std_price": 0.5462845639822188,
+    "max_excursion": 2.3298772769826246,
+    "total_mints": 490036408,
+    "total_burns": 996,
+    "final_supply": 490036412.0
+  },
+  "top_5_results": [
+    {
+      "rank": 1,
+      "proportional_gain": 1.05,
+      "integral_gain": 0.255,
+      "days_in_band": 6.56,
+      "avg_price": 0.954747836126908,
+      "std_price": 0.5462845639822188
+    },
+    {
+      "rank": 2,
+      "proportional_gain": 1.05,
+      "integral_gain": 0.01,
+      "days_in_band": 4.04,
+      "avg_price": 1.0454136157144462,
+      "std_price": 1.2317576252836921
+    },
+    {
+      "rank": 3,
+      "proportional_gain": 0.1,
+      "integral_gain": 0.5,
+      "days_in_band": 2.5,
+      "avg_price": 0.2834218178279533,
+      "std_price": 0.4927373617203381
+    },
+    {
+      "rank": 4,
+      "proportional_gain": 0.575,
+      "integral_gain": 0.01,
+      "days_in_band": 2.44,
+      "avg_price": 0.21338435549199117,
+      "std_price": 0.3169615297487129
+    },
+    {
+      "rank": 5,
+      "proportional_gain": 2.0,
+      "integral_gain": 0.5,
+      "days_in_band": 2.4,
+      "avg_price": 0.4081688965135061,
+      "std_price": 0.46548006091194816
+    }
+  ]
+}

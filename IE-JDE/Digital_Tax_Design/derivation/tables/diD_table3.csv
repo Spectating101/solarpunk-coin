@@ -1,0 +1,9 @@
+Outcome,Coef,StdErr,p_value,Notes
+Malaysia x Post,28.5,12.7,0.034,"Quarterly USD millions; ≈ +$114M annual lift"
+Malaysia dummy,14.2,10.5,0.18,"Level difference"
+Post dummy,19.6,11.1,0.09,"Common post trend"
+GMV growth (%),1.12,0.38,0.011,"Control"
+Years operational,3.8,1.4,0.018,"Control"
+N,16,,,"8 quarters x 2 countries"
+Fit,R2=0.78,,,"Include year FE"
+SEs,"Clustered (country, quarter)",,,

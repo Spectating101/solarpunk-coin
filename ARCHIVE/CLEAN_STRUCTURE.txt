@@ -1,0 +1,45 @@
+SOLARPUNK-BITCOIN REPOSITORY CLEANUP PLAN
+==========================================
+
+KEEP (Essential for MVP):
+├── contracts/                 # Solidity smart contracts
+│   ├── SolarPunkCoin.sol     # Main contract
+│   └── README.md
+├── test/                      # Test suite
+│   └── SolarPunkCoin.test.js
+├── scripts/
+│   ├── deploy.js             # Deployment script
+│   └── simulate_peg.py       # Peg simulation
+├── hardhat.config.js         # Hardhat configuration
+├── package.json              # Node dependencies
+├── package-lock.json         # Lock file
+
+DOCUMENTATION (Keep Only Essential):
+├── README.md                 # Main project README
+├── MVP_SUMMARY.md           # Grant application summary
+├── SOLIDITY_QUICKSTART.md   # Dev quickstart
+├── POLYGON_ARCHITECTURE_EXPLAINED.md  # Architecture rationale
+├── REPO_STRUCTURE.md        # This file structure
+├── RESEARCH/                # Archive research docs
+│   ├── CEIR-Trifecta.md
+│   ├── Quasi-SD-CEIR.md
+│   ├── Final-Iteration.md
+│   ├── Empirical-Milestone.md
+│   └── ...other research...
+└── ARCHIVE/                 # Old/obsolete files
+    ├── BUILD_STATUS.md
+    ├── PRESENTATION_SCRIPT.md
+    ├── ...all the build scripts...
+    └── ...all duplicate docs...
+
+IGNORE:
+- node_modules/              (git ignored, rebuild with npm install)
+- .pytest_cache/
+- artifacts/
+- cache/
+- build_*.py               (obsolete build scripts)
+- create_*.py              (obsolete)
+- slide_*.py               (presentation only)
+- *.egg-info/
+- test_env/
+- tests/                   (superseded by test/)

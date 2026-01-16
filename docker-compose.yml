@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # SolarPunk Oracle Service
+  oracle:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solarpunk-oracle
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=INFO
+      - NASA_API_KEY=${NASA_API_KEY:-public}
+      - CACHE_TTL=300
+    volumes:
+      - ./empirical:/app/empirical:ro
+      - oracle_cache:/app/cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - solarpunk
+    labels:
+      - "monitoring=true"
+
+  # Optional: Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: solarpunk-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - solarpunk
+    depends_on:
+      - oracle
+    labels:
+      - "monitoring=true"
+
+  # Optional: Grafana for dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: solarpunk-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - solarpunk
+    depends_on:
+      - prometheus
+    labels:
+      - "monitoring=true"
+
+networks:
+  solarpunk:
+    driver: bridge
+
+volumes:
+  oracle_cache:
+  prometheus_data:
+  grafana_data:

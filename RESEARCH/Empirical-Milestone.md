@@ -1,0 +1,175 @@
+Does Energy Cost Anchor Bitcoin Prices?
+Yuan Ze University
+Christopher Ongko (1133958) Empirical Finance
+
+Spring 2025 Term Report Proposal May 28, 2025
+
+Abstract
+Yuan Ze University
+Bitcoin mining consumes 150 TWh annually, costing miners $20-80 million daily in electricity. This study tests whether these production costs create a price floor for Bitcoin, similar to how mining costs support commodity prices. I introduce the Cumulative Energy Investment Ratio (CEIR) and use Ethereum's elimination of energy costs as a natural experiment to test this relationship.
+
+Research Motivation
+The Valuation Puzzle
+Bitcoin represents $1.8 trillion in market value
+No traditional fundamentals: zero earnings, no dividends, no physical assets
+Results in extreme volatility: 80-100% annually vs 15-20% for equities
+Academic consensus: purely speculative asset (Cheah & Fry, 2015)
+
+The Energy Cost Reality
+Bitcoin network consumes ~150 TWh annually (comparable to Argentina)
+Miners spend $7-29 billion yearly on electricity
+Energy represents 60-80% of mining operational expenses
+Miners must sell Bitcoin to pay bills, creating economic linkage
+
+Research Gap
+No empirical studies test whether these production costs provide fundamental value. This research examines if energy expenses create the missing valuation anchor for digital assets.
+
+Literature Review
+Three Distinct Research Streams Identified
+
+1. Production Cost Theory (Mixed Evidence)
+Hayes (2017): Production costs determine crypto value ✓
+Schilling & Uhlig (2019): Theoretical Bitcoin valuation models ✓
+Gap: All use daily/marginal costs, not cumulative investment
+2. Energy Consumption Studies (Environmental Focus)
+Krause & Tolaymat (2018): Quantified per-coin energy costs
+Guidi et al. (2025): 32.3 TWh by top 34 US mines
+Gap: Environmental focus ignores valuation implications
+3. Ethereum Merge Natural Experiment (Strong Support)
+Kapengut & Mizrach (2023): 99.98% energy reduction post-Merge
+Liu et al. (2025): Reduced volatility after energy removal
+Opportunity: Clean test of energy's stabilizing role
+
+Critical Finding
+No academic paper has introduced cumulative energy investment ratios as valuation metrics
+
+Foundational Theory
+Asset Pricing Foundations
+Fama (1970): Market efficiency requires fundamental anchors
+Production cost theory: Competitive markets → Price = Marginal Cost
+Bitcoin mining: Perfect competition with transparent costs
+
+Introducing CEIR (Cumulative Energy Investment Ratio)
+
+CEIR = (Current Market Cap - Baseline Market Cap) ÷ Energy Investment Since Baseline
+
+Interpretation:
+CEIR = 1.0: Pure cost recovery (fair value)
+CEIR > 1.0: Market premium above energy costs
+CEIR < 1.0: Market undervaluing energy investment (potential floor)
+
+Economic Logic
+Why CEIR Should Work:
+Cumulative investment represents total economic commitment to network security
+Market efficiency suggests prices should reflect fundamental value over time
+Production cost floors provide natural support levels in competitive markets
+
+Research Questions & Hypotheses
+Primary Research Question: Do energy production costs create a fundamental value floor for cryptocurrency prices?
+
+H1: Energy Investment Floor When CEIR is low, expect positive returns
+Means: Bitcoin trading near cumulative production cost tends to rebound
+Logic: Market valuing entire mining enterprise below investment unsustainable
+H2: Cost Pressure Effect - When electricity prices rise, Bitcoin prices fall short-term
+Means: Higher input costs create selling pressure from miners
+Logic: Miners must sell more Bitcoin to cover higher electricity bills
+H3: Energy Removal Effect Ethereum became more volatile after eliminating energy costs
+Means: Production costs stabilize prices by providing fundamental anchor
+Logic: No cumulative energy investment = no production cost floor
+
+Data & Methodology
+Variable	Source	Frequency	Period	Status
+Bitcoin/Ethereum Prices	LSEG Datastream	Daily	2018-2024	✓ Available
+Bitcoin Energy (TWh)	Digiconomist	Daily	2018-2024	✓ Available
+Ethereum Energy (TWh)	Digiconomist	Daily	2018-Sept 2022	✓ Available
+"Google Trends ""Bitcoin"""	Google Trends	Weekly	2018-2024	✓ Available
+Economic Policy Uncertainty	[PolicyUncertainty.com](http://policyuncertainty.com/)	Monthly	2018-2024	✓ Available
+
+Sample Period: January 1, 2018 - December 31, 2024 (2181 daily observations)
+What CEIR Measures: "Value creation efficiency since industrial mining era began"
+Calculation: Market cap growth since 2018 divided by energy investment since 2018. Bitcoin created $760 billion additional value using $45 billion energy investment, yielding CEIR of 16.9.
+Data Sources & Availability
+CEIR Example:
+Market cap growth since Jan 2018: $760 billion
+Energy investment since Jan 2018: $45 billion
+CEIR = 760 ÷ 45 = 16.9
+Control Variable Justification: Borri et al. (2023) EBA validation across 2+ million regressions
+
+Descriptive Statistics
+Variable	N	Mean	Std Dev	Min	Max	Skewness
+Bitcoin Daily Return (%)	"2,181"	0.19	3.59	-26.60	19.83	-0.08
+Bitcoin Price (USD)	"2,181"	"25,613.83"	"22,636.69"	"3,157.98"	"106,415.00"	1.23
+CEIR (Robust)	"2,181"	2.95	44.40	-159.92	91.38	-0.88
+Bitcoin Energy (TWh/year)	"2,181"	97.33	39.25	40.64	175.87	0.69
+Google Trends (Bitcoin)	"2,131"	32.13	19.07	13.00	100.00	2.02
+Economic Policy Uncertainty	"2,181"	192.03	82.51	76.84	503.96	1.70
+Ethereum Daily Return (%)	"2,512"	0.16	4.56	-33.69	38.28	0.31
+Ethereum Price (USD)	"2,513"	"1,518.23"	"1,238.80"	81.77	"4,800.10"	0.50
+Ethereum Energy (TWh/year)	"2,554"	19.13	26.63	0.00	93.98	1.70
+
+Main Regression Model:
+Bitcoin_Return(t+1) = α + β₁CEIR(t) + β₂Google_Trends(t) + β₃EPU(t) + ε(t)
+If β₁ < 0: Low CEIR predicts price rebounds
+If EPU data is not available, VIX serves as a robust substitute measuring market uncertainty
+
+Difference-in-Differences Framework:
+Volatility_ijt = β₀ + β₁ETH_i + β₂Post_t + β₃(ETH_i × Post_t) + β₄Controls + ε_ijt
+Treatment: Ethereum loses energy anchor (Sept 15, 2022)
+Control: Bitcoin retains energy anchor
+Test: β₃ > 0 indicates energy removal increased volatility
+Identification: Same market conditions, different energy treatment
+Empirical Methodology
+CEIR Construction:
+Baseline: Jan 1, 2018 (Bitcoin = $240B)
+Energy Data: Digiconomist daily estimates
+Regional Costs: Weighted by mining geography ($0.03-0.08/kWh)
+Formula: CEIR = (Market_Cap - $240B) ÷ Cumulative_Energy_Cost
+Benchmark: 30-day moving average for dynamic fair value
+
+Expected Results
+Main Findings
+CEIR Floor Effect: When CEIR < (30-day MA - 1.5 SD) → +15-25% returns (3-6 months)
+Mean Reversion: CEIR reverts to 30-day MA with half-life of 45-90 days
+Threshold Effects: Strongest predictive power when CEIR < 0.6 × historical average
+Economic Significance
+Dynamic Anchoring: 30-day MA CEIR provides time-varying fair value benchmark
+Relative Valuation: Current CEIR vs. MA-CEIR explains 12-18% of return variation
+Asymmetric Effects: Stronger predictive power during market stress (bear markets)
+DiD Findings:
+Treatment Effect: β₃ = +1.2pp daily volatility (p < 0.05)
+Economic Significance: Ethereum volatility increased 18% relative to Bitcoin post-merge
+Robustness: Results hold with different volatility measures (realized, GARCH)
+Validation
+Regime Stability: Results hold across pre/post China mining ban periods
+Robustness: Alternative MA windows (14-day, 60-day) yield similar results
+Cross-Validation: Out-of-sample performance maintains 60%+ accuracy
+
+Conclusions & Implications
+Big Takeaway (headline)
+“Mining energy isn’t a bug—it’s Bitcoin’s fundamental value anchor.”
+Key Contributions
+First empirical evidence that energy costs anchor crypto prices
+Introduced CEIR—an actionable “cost-to-market” valuation metric
+A unified framework linking mining economics to price dynamics
+Practical Impact
+New risk-management tool for a $1.8 T asset class (CEIR thresholds)
+Trading strategies: buy when CEIR spikes, sell when it’s deeply negative
+Policy insights: energy‐backed stability levers for regulators
+
+Full empirical results ready June 18, 2025
+
+References & Dataset
+Core Literature:
+Nakamoto, S. (2008). Bitcoin: A peer-to-peer electronic cash system. White paper.Hayes, A. (2017). Cryptocurrency value formation: An empirical study leading to a cost of production model for valuing bitcoin. Telematics and Informatics, 34(7), 1308-1321.Kapengut, E., & Mizrach, B. (2023). An event study of the Ethereum transition to proof-of-stake. Commodities, 2(2), 96-110.Liu, B., Prodromou, T., Suardi, S., & Xu, C. (2025). Ethereum's Merge: Market liquidity, efficiency and volatility in the proof of stake era. Finance Research Letters, 61, 104985.Borri, N., Shakhnov, K., & Veronesi, P. (2023). On the robust drivers of cryptocurrency liquidity: the case of Bitcoin. Financial Innovation, 9(1), 1-31.
+
+Theoretical Foundations:
+Fama, E. F. (1970). Efficient capital markets: A review of theory and empirical work. Journal of Finance, 25(2), 383-417.Schilling, L., & Uhlig, H. (2019). Some simple bitcoin economics. Journal of Monetary Economics, 106, 16-26.
+
+Energy & Environmental Studies:
+Krause, M. J., & Tolaymat, T. (2018). Quantification of energy and carbon costs for mining cryptocurrencies. Resources, Conservation & Recycling, 137, 232-243.Guidi, G., Dominici, F., Steinsultz, N. et al. (2025). The environmental burden of the United States' bitcoin mining boom. Nature Communications, 16, 2970.
+
+Market Behavior:
+Cheah, E. T., & Fry, J. (2015). Speculative bubbles in Bitcoin markets? Economics Letters, 130, 32-36.
+
+Dataset
+https://docs.google.com/spreadsheets/d/1Xpn2Vf63RcA2jg9T7si92Kw94mdb21t5qZCVpmPUqq8/edit?usp=sharing

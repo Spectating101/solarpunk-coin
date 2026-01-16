@@ -58,7 +58,7 @@ cd frontend && npm run dev
 
 **What Works Today:**
 - ✅ **Smart Contracts**: 46/46 tests passing ([test suite](test/))
-- ✅ **Testnet Deployment**: Polygon Mumbai - Contract: `[DEPLOY FIRST]`
+- ✅ **Testnet Deployment**: Polygon Amoy - Contract: `[DEPLOY FIRST]`
 - ✅ **Pricing Engine**: Python library validated against 3 years NASA data ([spk-derivatives](https://github.com/spectating101/spk-derivatives))
 - ✅ **Run Tests**: `npx hardhat test` (takes ~30 seconds)
 

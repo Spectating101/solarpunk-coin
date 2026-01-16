@@ -1,0 +1,10 @@
+Spec,Sample,Controls,Cluster/SE,TaxRate_pvalue,Notes
+Baseline linear,17 country-year,GMV, Years_Op,Year FE,OLS,0.415,"Rate ns; GMV/Years significant"
+Panel FE,17 country-year,GMV, Years_Op,Year FE,FE country,0.441,"Rate ns; Indonesia FE +$187M"
+Log-log,17 country-year,ln(GMV), Years_Op,OLS,0.465,"Rate ns; elasticity ~1.24"
+Trim Thailand,16 (drop TH),GMV, Years_Op,OLS,>0.4,"Rate ns; stale TH data removed"
+Trim Philippines,16 (drop PH),GMV, Years_Op,OLS,>0.4,"Rate ns; partial-year PH removed"
+Add GDP/Internet,17,GMV, Years_Op, GDP, Internet,OLS,>0.4,"Rate ns; robustness to macro/penetration"
+Cluster country,17,GMV, Years_Op,Year FE,Cluster country,~0.45,"Rate ns; clustered SEs"
+Cluster year,17,GMV, Years_Op,Year FE,Cluster year,~0.5,"Rate ns; clustered SEs"
+Placebo treat,16 (DiD placebo),GMV, Years_Op,Year FE,OLS,>0.5,"Shift treatment to 2023Q3; no effect"

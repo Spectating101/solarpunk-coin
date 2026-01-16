@@ -2,21 +2,29 @@
 
 **Stop overthinking. Here's the minimal path.**
 
+**Network:** Polygon Amoy (current testnet, Mumbai was deprecated April 2024)
+
 ---
 
-## Step 1: Get Testnet MATIC (5 mins)
+## Step 1: Get Testnet POL (5 mins)
 
 **Go here:** https://faucet.polygon.technology/
 
-1. Enter your wallet address
-2. Click "Submit"
-3. Wait 30 seconds
-4. You'll get 0.5 MATIC (enough for deployment)
+1. Select "Polygon Amoy"
+2. Enter your wallet address
+3. Click "Submit"
+4. Wait 30 seconds
+5. You'll get testnet POL (enough for deployment)
 
 **Don't have a wallet?** Use MetaMask:
 - Install: https://metamask.io
 - Create wallet
-- Switch network to "Polygon Mumbai"
+- Add Polygon Amoy network:
+  - Network Name: Polygon Amoy
+  - RPC: https://rpc-amoy.polygon.technology/
+  - Chain ID: 80002
+  - Currency: POL
+  - Explorer: https://amoy.polygonscan.com/
 - Copy your address
 
 ---
@@ -35,26 +43,26 @@ code .env
 # Replace this line:
 PRIVATE_KEY=your_wallet_private_key_here
 
-# With your actual private key from MetaMask:
-# (Click 3 dots → Account Details → Export Private Key)
-PRIVATE_KEY=0xabcdef123456...
-```
-
-**Mumbai USDC is already configured.** Don't touch anything else.
+# Amoy USDC will be auto-deployed.** Don't touch anything else.
 
 ---
 
 ## Step 3: Deploy (3 mins)
 
 ```bash
-./scripts/deploy_mumbai.sh
+./scripts/deploy_amoy.sh
 ```
 
 **That's it.** Script will:
 - Compile contracts
-- Deploy to Mumbai
+- Deploy to Amoy
 - Show you the contract address
 - Give you the PolygonScan link
+
+**Output will look like:**
+```
+✅ SolarPunkCoin deployed to: 0x1234567890abcdef...
+🔍 PolygonScan: https://amoyk
 
 **Output will look like:**
 ```
@@ -70,16 +78,16 @@ Copy the contract address and paste it into README.md:
 
 ```markdown
 # Replace this line:
-- ✅ **Testnet Deployment**: Polygon Mumbai - Contract: `[DEPLOY FIRST]`
+- ✅ **Testnet Deployment**: Polygon Amoy - Contract: `[DEPLOY FIRST]`
 
 # With this:
-- ✅ **Testnet Deployment**: Polygon Mumbai - Contract: [`0x1234...`](https://mumbai.polygonscan.com/address/0x1234...)
+- ✅ **Testnet Deployment**: Polygon Amoy - Contract: [`0x1234...`](https://amoy.polygonscan.com/address/0x1234...)
 ```
 
 Commit and push:
 ```bash
 git add README.md
-git commit -m "Deploy to Polygon Mumbai testnet"
+git commit -m "Deploy to Polygon Amoy testnet"
 git push origin master
 ```
 
@@ -89,7 +97,7 @@ git push origin master
 
 **Polygon form:**
 - Website: https://github.com/Spectating101/solarpunk-coin
-- Testnet: Link to PolygonScan
+- Testnet: Link to Amoy PolygonScan
 - Email: s1133958@mail.yzu.edu.tw
 - Telegram/Twitter: **"Available upon request"** (if not required, skip)
 
@@ -110,7 +118,7 @@ npx hardhat compile
 ```
 
 **"Insufficient funds"**
-- Go back to faucet, get more MATIC
+- Go back to faucet, select "Polygon Amoy", get more POL
 
 **"Private key invalid"**
 - Make sure it starts with 0x
@@ -118,15 +126,14 @@ npx hardhat compile
 
 **Contract deploys but verification fails**
 - That's fine. Verification is optional.
-- Just submit with the PolygonScan link
+- Just submit with the Amoy PolygonScan link
 
 ---
 
 ## What This Gets You
 
-**Before testnet:** 50% odds  
-**After testnet:** 65% odds  
+**Before testnet:** Looks like vaporware  
+**After testnet:** Looks like you ship code  
 **Effort:** 10 minutes  
-**ROI:** +$15K expected value  
 
 **Just deploy and submit.**

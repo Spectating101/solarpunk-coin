@@ -1,0 +1,31 @@
+name: solidity-security
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  slither:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        working-directory: blockchain
+        run: npm install
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.3.0
+        with:
+          target: blockchain/contracts
+          slither-config: blockchain/slither.config.json
+          slither-args: "--filter-paths node_modules"
+          fail-on: medium

@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # 🚀 TESTNET DEPLOYMENT SCRIPT
-# Deploys SolarPunkCoin to Polygon Mumbai in one command
+# Deploys SolarPunkCoin to Polygon Amoy testnet in one command
 
 set -e  # Exit on any error
 
 echo "=================================="
-echo "SolarPunk Protocol - Mumbai Deploy"
+echo "SolarPunk Protocol - Amoy Deploy"
 echo "=================================="
 echo ""
 
@@ -32,7 +32,7 @@ fi
 
 # Check if wallet has funds
 echo "🔍 Checking wallet balance..."
-WALLET_ADDRESS=$(npx hardhat run --network mumbai scripts/get_wallet.js 2>/dev/null || echo "unknown")
+WALLET_ADDRESS=$(npx hardhat run --network amoy scripts/get_wallet.js 2>/dev/null || echo "unknown")
 
 if [ "$WALLET_ADDRESS" != "unknown" ]; then
     echo "   Wallet: $WALLET_ADDRESS"
@@ -41,7 +41,7 @@ else
 fi
 
 echo ""
-echo "💡 Need Mumbai testnet MATIC?"
+echo "💡 Need Amoy testnet POL?"
 echo "   Get it here: https://faucet.polygon.technology/"
 echo ""
 read -p "Press Enter when ready to deploy..."
@@ -51,12 +51,12 @@ echo ""
 echo "📝 Compiling contracts..."
 npx hardhat compile --quiet
 
-# Deploy to Mumbai
+# Deploy to Amoy
 echo ""
-echo "🚀 Deploying to Polygon Mumbai..."
+echo "🚀 Deploying to Polygon Amoy testnet..."
 echo ""
 
-DEPLOY_OUTPUT=$(npx hardhat run scripts/deploy.js --network mumbai)
+DEPLOY_OUTPUT=$(npx hardhat run scripts/deploy.js --network amoy)
 echo "$DEPLOY_OUTPUT"
 
 # Extract contract address
@@ -74,7 +74,7 @@ echo ""
 echo "✅ Contract address saved to .testnet_address"
 
 # Generate PolygonScan link
-POLYGONSCAN_URL="https://mumbai.polygonscan.com/address/$CONTRACT_ADDRESS"
+POLYGONSCAN_URL="https://amoy.polygonscan.com/address/$CONTRACT_ADDRESS"
 
 echo ""
 echo "=================================="
@@ -89,11 +89,11 @@ echo "   $POLYGONSCAN_URL"
 echo ""
 echo "📋 Next Steps:"
 echo "   1. Verify on PolygonScan:"
-echo "      npx hardhat verify --network mumbai $CONTRACT_ADDRESS"
+echo "      npx hardhat verify --network amoy $CONTRACT_ADDRESS"
 echo ""
 echo "   2. Update README.md with this address"
 echo ""
 echo "   3. Test the contract:"
-echo "      npx hardhat test --network mumbai"
+echo "      npx hardhat test --network amoy"
 echo ""
 echo "=================================="
