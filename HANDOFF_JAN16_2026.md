@@ -74,7 +74,9 @@ networks: {
 ## Repository Structure
 
 ### Main Grant Repo
-**https://github.com/Spectating101/solarpunk-coin**
+**https://github.com/Spectating101/solarpunk-coin/tree/master** (USE MASTER BRANCH)
+
+**⚠️ CRITICAL:** GitHub default branch (main) shows old Python library. Always link to `/tree/master` for grant applications.
 
 Contains:
 ```
