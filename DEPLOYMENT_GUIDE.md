@@ -62,12 +62,7 @@ PRIVATE_KEY=your_wallet_private_key_here
 **Output will look like:**
 ```
 ✅ SolarPunkCoin deployed to: 0x1234567890abcdef...
-🔍 PolygonScan: https://amoyk
-
-**Output will look like:**
-```
-✅ SolarPunkCoin deployed to: 0x1234567890abcdef...
-🔍 PolygonScan: https://mumbai.polygonscan.com/address/0x1234...
+🔍 Amoy PolygonScan: https://amoy.polygonscan.com/address/0x1234...
 ```
 
 ---
