@@ -63,7 +63,7 @@ cd frontend && npm run dev
 - ✅ **Run Tests**: `npx hardhat test` (takes ~30 seconds)
 
 **Repository Structure:**
-- **This repo** (`solarpunk-coin`): Smart contracts, frontend, grant materials
+- **This repo** ([solarpunk-coin/tree/master](https://github.com/Spectating101/solarpunk-coin/tree/master)): Smart contracts, frontend, grant materials (use master branch)
 - **Supporting library** ([spk-derivatives](https://github.com/spectating101/spk-derivatives)): Python pricing engine (v0.4.0, pip-installable)
 
 ---

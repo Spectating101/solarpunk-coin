@@ -179,7 +179,7 @@ User hasn't run the script (requires MetaMask private key + faucet request). Thi
 ### Key Application Fields
 
 **Correct Values for Polygon Form:**
-- **Website/GitHub:** https://github.com/Spectating101/solarpunk-coin
+- **Website/GitHub:** https://github.com/Spectating101/solarpunk-coin/tree/master
 - **Testnet Deployment:** [AFTER DEPLOYMENT] Link to Amoy PolygonScan contract
 - **Contact Email:** s1133958@mail.yzu.edu.tw
 - **Contact Name:** Christopher Ongko
