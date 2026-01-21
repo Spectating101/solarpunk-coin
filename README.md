@@ -58,7 +58,7 @@ cd frontend && npm run dev
 
 **What Works Today:**
 - ✅ **Smart Contracts**: 46/46 tests passing ([test suite](test/))
-- ✅ **Testnet Deployment**: Polygon Amoy - Contract: `[DEPLOY FIRST]` → [View on Amoy PolygonScan](https://amoy.polygonscan.com/)
+- ⚙️ **Testnet Deployment**: Infrastructure ready ([scripts/deploy_amoy.sh](scripts/deploy_amoy.sh)). Pending public deployment due to faucet verification barriers (requires social media accounts). Available for immediate deployment upon request for technical review.
 - ✅ **Pricing Engine**: Python library validated against 3 years NASA data ([spk-derivatives](https://github.com/spectating101/spk-derivatives))
 - ✅ **Run Tests**: `npx hardhat test` (takes ~30 seconds)
 
