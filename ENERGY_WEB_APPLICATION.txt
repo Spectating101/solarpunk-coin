@@ -1,0 +1,254 @@
+ENERGY WEB FOUNDATION - GRANT APPLICATION
+==========================================
+
+TO: info@energyweb.org
+CC: hello@energyweb.org
+SUBJECT: Grant Application - SolarPunk Protocol (Renewable Energy Revenue Derivatives)
+
+---
+
+Dear Energy Web Foundation Team,
+
+I am writing to apply for grant support for SolarPunk Protocol, a blockchain-based derivatives platform that stabilizes renewable energy project cash flows and enables financing for solar, wind, and other clean energy installations.
+
+---
+
+PROJECT OVERVIEW
+
+SolarPunk Protocol creates a revenue floor for renewable energy producers using financial derivatives (put options). Solar/wind operators can purchase insurance that pays out when production drops below target levels due to weather variability. This transforms unpredictable revenue streams into bankable cash flows, unlocking project finance.
+
+Problem:
+Renewable energy projects face revenue volatility that blocks financing. A solar farm may produce 1000 MWh one month, then 700 MWh during monsoons or cloudy periods. Banks and lenders won't finance projects with unpredictable cash flows, creating a barrier to renewable energy deployment—especially in emerging markets.
+
+Solution:
+Smart contract-based derivatives that hedge production risk. Operators pay premiums to buy protection; option writers earn yield by providing coverage. Settlement is automated via on-chain oracles pulling solar irradiance data (NASA POWER API) and production metrics.
+
+---
+
+TECHNICAL ARCHITECTURE
+
+Three-layer design:
+
+1. Settlement Layer (Solidity - EVM compatible)
+   - Holds collateral in escrow
+   - Enforces liquidations and payouts
+   - On-chain price feeds via Chainlink
+   - Current status: 46/46 tests passing
+
+2. Pricing Engine (Python - NumPy/SciPy)
+   - Calculates option premiums using Black-Scholes framework
+   - Validated against 3 years NASA solar irradiance data
+   - Handles volatility skew for renewable energy assets
+   - Current status: pip-installable library (spk-derivatives v0.4.0)
+
+3. User Dashboard (React/Vite)
+   - Interface for operators to purchase hedges
+   - Real-time portfolio monitoring
+   - Settlement history and analytics
+   - Current status: Prototype UI designed
+
+---
+
+WHY ENERGY WEB CHAIN
+
+1. Sector Focus: Energy Web Chain is purpose-built for energy sector use cases. Your ecosystem of utilities, grid operators, and renewable developers is our target market.
+
+2. EVM Compatibility: Our Solidity contracts deploy directly to Energy Web Chain without modification. We're already familiar with EVM tooling (Hardhat, Ethers.js).
+
+3. Grid Integration Potential: Beyond individual operators, our derivatives can hedge grid-level renewable penetration risk for utilities managing variable supply.
+
+4. Decentralized Identity: Energy Web's DID framework could enable verified identity for operators (preventing sybil attacks on subsidy programs).
+
+5. Carbon Market Synergy: Derivatives stabilize revenue → more renewable projects financed → more carbon credits generated. Potential integration with Energy Web's carbon initiatives.
+
+---
+
+TECHNICAL VALIDATION TO DATE
+
+Completed:
+- ✅ Smart contract test suite: 46/46 tests passing (Hardhat framework)
+- ✅ Pricing library: 3 years NASA POWER data backtested for solar
+- ✅ GitHub repository: Complete documentation and deployment scripts
+- ✅ Gas optimization: Settlement functions average 120K gas per transaction
+
+Repository: https://github.com/Spectating101/solarpunk-coin/tree/master
+Supporting Library: https://github.com/spectating101/spk-derivatives
+
+Infrastructure Ready:
+- Deployment scripts prepared (adaptable to Energy Web Chain RPC)
+- Testnet deployment infrastructure complete
+- Documentation for grant reviewers and auditors
+
+---
+
+MARKET & GO-TO-MARKET
+
+Target Users (Phase 1 - Year 1):
+- Small-to-medium solar operators: 50kW - 5MW installations
+- Geographic focus: Southeast Asia, Sub-Saharan Africa, Latin America
+- Operators currently rejected for loans due to revenue uncertainty
+
+Phase 1 (Q1-Q2 2026):
+- Deploy to Energy Web Chain testnet
+- Pilot with 2-3 solar farms (Indonesia, Philippines, Kenya)
+- Integrate Chainlink oracles for solar data feeds
+- Target: $500K notional value in hedges
+
+Phase 2 (Q3 2026):
+- Mainnet launch on Energy Web Chain
+- Partnership outreach to utilities and development banks
+- Target: 10 operators, $5M notional value
+
+Phase 3 (2027+):
+- Expand to wind derivatives (modular oracle design)
+- Grid operator hedging products (utility-scale)
+- Geothermal and hydro support
+- Target: $50M+ notional value, revenue via protocol fees
+
+Revenue Model:
+- Transaction fees: 0.3% on settlements
+- Option writing marketplace: 5% of premiums (protocol treasury)
+- Enterprise licensing: API access for utilities ($5K-25K/year)
+
+---
+
+FUNDING REQUEST
+
+Amount Requested: $50,000
+
+Budget Breakdown:
+- Smart contract audits: $20K
+  → OpenZeppelin or ConsenSys Diligence
+  → Critical for handling collateral and automated settlements
+  
+- Oracle integration: $10K
+  → Chainlink price feeds and VRF for fair settlement
+  → Custom adapter for NASA POWER API via Chainlink Any API
+  
+- Energy Web Chain deployment & testing: $5K
+  → Testnet POL tokens, RPC infrastructure
+  → Integration with Energy Web DID (optional)
+  
+- User testing & pilot program: $8K
+  → Incentives for 3 pilot operators ($2K each)
+  → Data collection and UX feedback
+  
+- Operations & tools: $7K
+  → Hosting (frontend + API)
+  → Development tools (Hardhat, Tenderly, Defender)
+  → Legal review (ToS, disclaimers)
+
+Alternative Smaller Request: $25,000
+If full amount unavailable, prioritize: Smart contract audits ($20K) + Oracle integration ($5K). We can bootstrap remaining costs.
+
+---
+
+TEAM
+
+Christopher Ongko (Solo Founder)
+- Background: Finance (Master's student, Yuan Ze University, Taiwan)
+- Research: Environmental Economics, derivatives pricing, renewable energy finance
+- Technical: Solidity, Python, React, Hardhat, NumPy/SciPy
+- GitHub: github.com/Spectating101/solarpunk-coin
+- Email: s1133958@mail.yzu.edu.tw
+- Location: Taiwan (remote, available for calls GMT+8)
+
+Current Status: Thesis phase, available for full-time development Q2 2026.
+
+Advisory/Mentorship Needs:
+- Energy sector partnerships (introductions to solar operators)
+- Smart contract security best practices
+- Oracle design for energy data feeds
+- Energy Web Chain specific guidance (DID integration, etc.)
+
+---
+
+ALIGNMENT WITH ENERGY WEB MISSION
+
+SolarPunk Protocol directly addresses Energy Web Foundation's goals:
+
+1. Decarbonization: Unlocks financing for renewable projects that currently can't secure loans due to revenue uncertainty.
+
+2. Energy Sector Innovation: Brings financial derivatives (proven in traditional energy markets) to decentralized energy systems.
+
+3. Emerging Markets: Focuses on regions with highest solar potential but lowest access to capital (Southeast Asia, Africa).
+
+4. Grid Modernization: Derivatives can stabilize revenue for VPPs (Virtual Power Plants) and DERs (Distributed Energy Resources), enabling grid operators to manage renewable variability.
+
+5. Real-World Impact: Not speculative DeFi—solving actual barrier to renewable energy deployment (bankable cash flows).
+
+---
+
+EXPECTED OUTCOMES
+
+With Energy Web Foundation support, we will deliver:
+
+**6 Months:**
+- Audited smart contracts deployed to Energy Web Chain mainnet
+- 3 pilot operators actively hedging production risk
+- Technical documentation and open-source codebase
+- Case study: "How derivatives unlocked financing for [Operator X]"
+
+**12 Months:**
+- 10+ operators using platform ($5M+ notional value)
+- Partnership with development bank or impact investor
+- Research paper: "Blockchain Derivatives for Renewable Energy Finance" (submit to academic journals)
+- Template for other energy derivatives (wind, geothermal)
+
+**Impact Metrics:**
+- MWh of renewable capacity financed via hedging
+- Number of projects that secured loans after stabilizing revenue
+- Reduction in cost of capital for hedged operators
+- Geographic expansion (countries served)
+
+---
+
+ADDITIONAL INFORMATION
+
+Relevant Research:
+- [Link to thesis draft if available]
+- NASA POWER API documentation: https://power.larc.nasa.gov/
+- Derivatives pricing methodology: Black-Scholes for commodities
+
+Open Source Commitment:
+All smart contracts and core libraries will remain open source (MIT license). Commercial licensing only for enterprise API access.
+
+Energy Web Chain Deployment:
+We are prepared to deploy exclusively to Energy Web Chain if preferred by the Foundation. Our contracts are EVM-compatible and require only RPC configuration changes.
+
+References Available:
+Can provide academic references (thesis advisors) or technical peer reviews upon request.
+
+---
+
+NEXT STEPS
+
+If this proposal aligns with Energy Web Foundation's priorities, I would appreciate:
+
+1. Feedback on technical approach and market strategy
+2. Introduction to potential pilot partners (solar operators, utilities)
+3. Guidance on Energy Web Chain best practices and DID integration
+4. Clarity on grant timeline and next steps
+
+I am available for a call to discuss this proposal in detail at your convenience. Thank you for considering SolarPunk Protocol for support.
+
+Best regards,
+Christopher Ongko
+
+---
+
+ATTACHMENTS (if sending via email):
+- Link to GitHub repository: https://github.com/Spectating101/solarpunk-coin/tree/master
+- Link to Python library: https://github.com/spectating101/spk-derivatives
+- [Optional: Attach 1-page technical diagram PDF if you create one]
+
+---
+
+SUBMISSION CHECKLIST:
+☐ Proofread entire email
+☐ Update any [placeholders] if applicable
+☐ Test GitHub links open correctly
+☐ Send from: s1133958@mail.yzu.edu.tw
+☐ Subject line exactly as shown above
+☐ BCC yourself for records
+☐ Save confirmation and response

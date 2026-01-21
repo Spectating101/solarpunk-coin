@@ -1,0 +1,255 @@
+ETHEREUM FOUNDATION - ECOSYSTEM SUPPORT PROGRAM (ESP)
+======================================================
+
+APPLICATION LINK: https://esp.ethereum.foundation/applicants/
+
+---
+
+PROJECT NAME
+SolarPunk Protocol
+
+---
+
+PROJECT TAGLINE
+Blockchain derivatives that stabilize renewable energy revenue and enable project finance
+
+---
+
+PROJECT CATEGORY
+Select: Climate & Sustainability + DeFi/Financial Primitives
+
+---
+
+PROJECT DESCRIPTION (500 words max)
+
+SolarPunk Protocol solves a critical barrier to renewable energy deployment: revenue volatility blocks financing.
+
+The Problem:
+Solar and wind farms face unpredictable production due to weather. A solar installation may generate 1000 MWh one month, then 700 MWh during monsoons. Banks won't lend against these unstable cash flows, preventing billions in renewable energy projects—especially in emerging markets with highest solar potential.
+
+Our Solution:
+Financial derivatives (put options) that create a revenue floor for renewable producers. Operators purchase insurance that pays out when production drops below target. This transforms volatile revenue into bankable cash flow, unlocking project finance.
+
+Technical Architecture:
+1. Smart Contracts (Solidity): Hold collateral, enforce automated settlements, manage liquidations
+2. Pricing Engine (Python): Calculate premiums using Black-Scholes framework validated on 3 years NASA solar data
+3. Oracle Layer: Chainlink integration for solar irradiance data and production metrics
+4. User Interface (React): Dashboard for operators to hedge, monitor, and settle positions
+
+Current Status:
+- 46/46 smart contract tests passing (Hardhat framework)
+- Python pricing library deployed (pip install spk-derivatives)
+- Deployment infrastructure ready for EVM chains
+- GitHub: github.com/Spectating101/solarpunk-coin
+
+Why Ethereum Ecosystem:
+- EVM compatibility: Deploy to L2s (Arbitrum, Optimism) for lower fees
+- Chainlink oracles: Critical for trustless data feeds
+- Liquidity: Connect to Ethereum DeFi for option writer capital
+- Credibility: Ethereum ecosystem legitimacy helps with traditional energy sector partnerships
+
+Target Impact:
+Enable financing for $100M+ in renewable energy projects by providing revenue stability that satisfies lender requirements. Focus on emerging markets (Southeast Asia, Sub-Saharan Africa, Latin America) where solar potential is highest but capital access is lowest.
+
+---
+
+TEAM
+
+Name: Christopher Ongko
+Role: Solo Founder / Developer
+Background:
+- Finance Master's student, Yuan Ze University (Taiwan)
+- Research focus: Environmental Economics, derivatives pricing
+- Technical: Solidity, Python, React, smart contract testing (Hardhat)
+- GitHub: github.com/Spectating101/solarpunk-coin
+- Email: s1133958@mail.yzu.edu.tw
+
+Additional team members: Not yet (currently solo, seeking advisors post-funding)
+
+---
+
+FUNDING REQUEST
+
+Amount: $40,000
+
+Budget:
+- Smart contract audits: $20K (OpenZeppelin/ConsenSys)
+- Chainlink oracle integration: $10K (Any API for NASA POWER data)
+- L2 deployment & testing: $5K (Arbitrum/Optimism gas, infrastructure)
+- User pilot program: $5K (incentives for 3 test operators)
+
+Timeline: 6 months to audited mainnet deployment
+
+Alternative: If partial funding, prioritize audits ($20K) to ensure security before handling real collateral.
+
+---
+
+TECHNICAL DETAILS
+
+Smart Contracts:
+- Language: Solidity 0.8.x
+- Framework: Hardhat
+- Tests: 46/46 passing (100% coverage of core functions)
+- Gas optimization: Settlements average 120K gas
+- Repository: github.com/Spectating101/solarpunk-coin/tree/master
+
+Architecture:
+- Settlement contract: Holds collateral, enforces payouts
+- Option contract: Manages positions (calls/puts on solar production)
+- Oracle adapter: Chainlink Any API → NASA POWER solar data
+- Access control: OpenZeppelin Ownable, ReentrancyGuard
+
+Deployment Target:
+- Primary: Arbitrum One (low fees for frequent settlements)
+- Secondary: Optimism (growing DeFi ecosystem)
+- Testnet: Currently Polygon Amoy ready, adaptable to Sepolia/Arbitrum Goerli
+
+External Dependencies:
+- Chainlink: Price feeds, VRF for fair settlement, Any API for solar data
+- OpenZeppelin: Contract libraries (tested, audited)
+- NASA POWER API: Solar irradiance data (free, global coverage)
+
+---
+
+GITHUB & CODE
+
+Repository: https://github.com/Spectating101/solarpunk-coin/tree/master
+
+Key Files:
+- contracts/SolarPunkCoin.sol - ERC20 collateral token
+- contracts/SolarPunkOption.sol - Derivatives settlement logic
+- test/SolarPunkCoin.test.js - Comprehensive test suite
+- scripts/deploy_amoy.sh - Deployment automation
+
+Supporting Library: https://github.com/spectating101/spk-derivatives
+- Python pricing engine
+- NASA data validation
+- Volatility modeling
+
+Open Source: MIT License (all core contracts and libraries)
+
+---
+
+MARKET & ADOPTION STRATEGY
+
+Phase 1 (Q1-Q2 2026): Deploy & Pilot
+- Deploy audited contracts to Arbitrum mainnet
+- Pilot with 2-3 solar operators (50kW-5MW scale)
+- Target: $500K notional value in hedges
+- Refine UX based on operator feedback
+
+Phase 2 (Q3 2026): Partnerships & Scale
+- Partner with development bank or impact investor
+- Expand to 10 operators across 3 countries
+- Target: $5M notional value
+- Launch option writer marketplace (liquidity providers earn yield)
+
+Phase 3 (2027+): Multi-Asset & Enterprise
+- Expand to wind, geothermal derivatives
+- Enterprise API for utilities and grid operators
+- Target: $50M+ notional value
+- Protocol revenue via transaction fees (0.3%) and option marketplace fees (5%)
+
+User Acquisition:
+- Direct outreach: Solar operator associations in Indonesia, Philippines, Kenya
+- Partnership: Development banks requiring revenue stability for loans
+- Education: Workshops on financial risk management for renewable operators
+
+---
+
+WHY ESP SUPPORT IS CRITICAL
+
+1. Security First: Cannot launch with real money without professional audit. Handling collateral requires highest security standards.
+
+2. Oracle Infrastructure: Chainlink integration needs dedicated development. NASA POWER API → Chainlink Any API is non-trivial.
+
+3. Credibility: ESP support signals legitimacy to traditional energy sector (banks, utilities) who are skeptical of crypto.
+
+4. Ethereum Ecosystem: L2 deployment, DeFi integration, Chainlink oracles—all dependent on Ethereum ecosystem maturity.
+
+5. Climate Impact: This directly addresses climate financing gap. Renewable energy is economically viable but blocked by financiers' risk aversion. Derivatives solve this.
+
+---
+
+EXPECTED OUTCOMES (6-12 Months)
+
+Deliverables:
+- ✅ Audited smart contracts on Arbitrum mainnet
+- ✅ 3 pilot operators actively using platform
+- ✅ Open-source codebase with documentation
+- ✅ Case study: "How Derivatives Unlocked Financing for [Solar Operator X]"
+- ✅ Research paper submitted to academic journals
+
+Impact Metrics:
+- MWh of renewable capacity financed via hedging
+- Number of projects that secured loans after revenue stabilization
+- Reduction in cost of capital for hedged operators (target: 200-300 bps)
+- Geographic reach (countries served)
+
+Long-Term Vision:
+Create decentralized infrastructure for renewable energy risk management. Traditional energy markets use derivatives extensively (crude oil futures, nat gas options). Renewable energy needs similar tools—but decentralized, transparent, and accessible to small operators.
+
+---
+
+ALIGNMENT WITH ETHEREUM VALUES
+
+1. Public Good: Solving climate financing barrier benefits humanity, not just token holders.
+
+2. Open Source: All contracts MIT licensed. Anyone can fork and adapt.
+
+3. Decentralization: No central authority controls settlements. Smart contracts + oracles = trustless.
+
+4. Financial Inclusion: Brings sophisticated risk management to emerging market operators who can't access traditional derivatives markets.
+
+5. Ethereum Ecosystem Growth: Demonstrates real-world utility for DeFi primitives beyond speculation.
+
+---
+
+ADDITIONAL INFORMATION
+
+Academic Background:
+- Master's thesis related to environmental economics and renewable finance
+- Research on derivatives pricing for non-traditional assets
+- Familiar with both traditional finance and blockchain technology
+
+Technical Peer Review:
+Available upon request. Can provide:
+- Detailed technical architecture diagrams
+- Pricing model mathematical derivation
+- Gas optimization analysis
+- Security considerations documentation
+
+Previous Validation:
+- Invisible Economy paper submitted to AEDC (African Economic Development Conference)
+- Python library (spk-derivatives) peer-reviewed by academic advisors
+- Smart contract tests reviewed by developer community
+
+References:
+Can provide academic references (thesis advisors) or technical mentors upon request.
+
+---
+
+CONTACT & NEXT STEPS
+
+Email: s1133958@mail.yzu.edu.tw
+GitHub: github.com/Spectating101
+Location: Taiwan (GMT+8, flexible for calls)
+Availability: Thesis phase until June 2026, then full-time
+
+If selected for ESP support, I would appreciate:
+1. Security review guidance (preparation for audits)
+2. Introductions to Chainlink BD (oracle design)
+3. L2 ecosystem connections (Arbitrum/Optimism partnerships)
+4. Climate-focused advisors in Ethereum ecosystem
+
+Thank you for considering SolarPunk Protocol for Ecosystem Support.
+
+---
+
+SUBMISSION CHECKLIST:
+☐ Proofread entire application
+☐ Test all GitHub links
+☐ Update any [placeholders]
+☐ Attach any supporting documents (optional: technical diagrams)
+☐ Save draft before submitting
+☐ Screenshot confirmation page after submit
