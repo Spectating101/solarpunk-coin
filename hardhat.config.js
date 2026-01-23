@@ -35,6 +35,12 @@ module.exports = {
       accounts: [PRIVATE_KEY],
       chainId: 80002,
     },
+    // Sepolia - Ethereum testnet (working faucets)
+    sepolia: {
+      url: process.env.SEPOLIA_RPC || "https://rpc.sepolia.org",
+      accounts: [PRIVATE_KEY],
+      chainId: 11155111,
+    },
     // Mumbai deprecated April 2024 - kept for historical reference only
     mumbai: {
       url: process.env.POLYGON_MUMBAI_RPC || "https://rpc-mumbai.maticvigil.com",
