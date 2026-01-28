@@ -4,8 +4,8 @@
 
 ## Email Template (Copy-Paste Ready)
 
-**To:** hello@energyweb.org  
-**CC:** grants@energyweb.org  
+**To:** info@energyweb.org  
+**CC:** hello@energyweb.org  
 **Subject:** Grant Application Inquiry - Decentralized Energy Derivatives Protocol
 
 ---

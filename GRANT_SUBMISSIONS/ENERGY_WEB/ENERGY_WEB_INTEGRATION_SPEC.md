@@ -126,7 +126,7 @@ Our integration brings **derivatives infrastructure** to Energy Web's ecosystem,
 
 **Energy Web expertise:**
 - Reviewed EW-DOS documentation, FlexibilityOS architecture, Green Proofs API specs
-- Familiar with Substrate-based chains (Energy Web Chain built on Parity Substrate)
+- Familiar with Energy Web Chain architecture and EVM compatibility
 - Experience with cross-chain bridges (LayerZero, Axelar integration patterns)
 
 **Commitment:**
