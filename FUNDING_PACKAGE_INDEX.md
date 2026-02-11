@@ -1,14 +1,26 @@
 # SolarPunk Protocol - Complete Funding & Grant Package
 
-**Generated:** January 16, 2026  
-**Status:** ✅ GRANT-READY & DEPLOYABLE  
+**Generated:** February 11, 2026  
+**Status:** ✅ GRANT-READY (evidence pack automated)  
 **Purpose:** Comprehensive package for securing funding & executing protocol deployment
 
 ---
 
 ## 🎯 START HERE
 
-You have **everything you need to raise funding and go to mainnet in 6 months.**
+You have a canonical package and reproducible evidence pipeline.
+
+### Canonical pre-submission commands
+```bash
+bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.json
+python3 scripts/build_grant_readiness_pack.py
+```
+
+### Canonical submission set
+1. `GRANT_SPONSORSHIP_PACKAGE.md`
+2. `GRANT_PROPOSAL.md`
+3. `docs/GRANT_BRIEF_POLYGON.md`
+4. `docs/grants/GRANT_READINESS_PACK.md`
 
 ### For Grants (This Week)
 1. Read: [`QUICK_START_FUNDING.md`](QUICK_START_FUNDING.md) (10-day action plan)

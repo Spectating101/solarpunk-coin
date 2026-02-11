@@ -87,6 +87,14 @@ This project is not a hackathon toy. It is based on a comprehensive **Master's T
 ## 💰 Grant Proposal
 We are applying for the Polygon Community Grant to move from **MVP** to **Pilot**.
 *   **[Read the Proposal](./GRANT_PROPOSAL.md)**
+*   **[Grant Sponsorship Package](./GRANT_SPONSORSHIP_PACKAGE.md)**
+*   **[Funding Package Index](./FUNDING_PACKAGE_INDEX.md)**
+
+### Reproducible grant evidence (before submission)
+```bash
+bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.json
+python3 scripts/build_grant_readiness_pack.py
+```
 
 ## 🎯 For Grant Reviewers
 
