@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-02-12T00:00:00Z",
+  "project": "Solarpunk-bitcoin",
+  "external_audit": {
+    "status": "NOT_STARTED",
+    "auditor": null,
+    "report_url": null,
+    "completed_at": null
+  },
+  "findings": {
+    "critical_open": 0,
+    "high_open": 0,
+    "medium_open": 0,
+    "low_open": 0,
+    "resolved_total": 0
+  },
+  "notes": "Mainnet expansion remains blocked until external audit is completed and findings policy is satisfied."
+}

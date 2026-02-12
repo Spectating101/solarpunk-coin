@@ -1,16 +1,16 @@
 # Grant Readiness Pack
 
-- generated_at: `2026-02-11T16:00:21.041673+00:00`
-- readiness_grade: `D`
-- overall_status: `degraded`
-- warnings: `2`
+- generated_at: `2026-02-11T18:02:05.923751+00:00`
+- readiness_grade: `A`
+- overall_status: `ok`
+- warnings: `0`
 
 ## Verification Snapshot
 
 - python_dependencies: `ok`
 - pricing_engine: `ok`
-- contracts: `degraded`
-- frontend: `degraded`
+- contracts: `ok`
+- frontend: `ok`
 
 ## Artifact Integrity
 

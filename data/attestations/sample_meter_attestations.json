@@ -1,0 +1,25 @@
+{
+  "batch_id": "batch_2026_02_12_a",
+  "attestations": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-11T00:00:00Z",
+      "window_end": "2026-02-11T23:59:59Z",
+      "surplus_kwh": 1420.5,
+      "quality_score": 0.98,
+      "source": "edge_meter_gateway",
+      "attestor": "pilot_operator_v1"
+    },
+    {
+      "meter_id": "TW-TY-0002",
+      "site_id": "taoyuan-rooftop-b",
+      "window_start": "2026-02-11T00:00:00Z",
+      "window_end": "2026-02-11T23:59:59Z",
+      "surplus_kwh": 1186.2,
+      "quality_score": 0.95,
+      "source": "edge_meter_gateway",
+      "attestor": "pilot_operator_v1"
+    }
+  ]
+}

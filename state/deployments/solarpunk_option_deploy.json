@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-02-11T18:03:02.924Z",
+  "network": "localhost",
+  "chain_id": null,
+  "contract": "SolarPunkOption",
+  "contract_address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "collateral_address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "insurance_fund": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "price_decimals": 6,
+  "deploy_tx_hash": "0x0c073fbebeb2597007618c9d9c4e0946432fc9caa692a9867f36b2557774db6e"
+}

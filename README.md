@@ -96,6 +96,86 @@ bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.j
 python3 scripts/build_grant_readiness_pack.py
 ```
 
+## 🧭 Independent Project Operations
+SolarPunk is now structured as an independent project with seven operating modes:
+1. Research mode (empirical and economics outputs)
+2. Protocol mode (contracts + oracle + frontend verification)
+3. Funding mode (submission package generation)
+4. Commercial mode (pilot term sheets and client artifacts)
+5. Monetary-system mode (currency-protocol readiness checks)
+6. Phase-gate mode (GO/NO_GO progression enforcement)
+7. Evidence-validation mode (deployment + audit proof validation)
+
+Canonical one-command operating cycle:
+```bash
+bash scripts/run_project_operating_cycle.sh
+```
+
+Project-level status output:
+- `docs/project/PROJECT_READINESS_PACK.md`
+- `docs/project/PROJECT_READINESS_PACK.json`
+- `docs/project/PROJECT_DASHBOARD.html`
+- `docs/project/MONETARY_SYSTEM_READINESS.md`
+- `docs/project/PROTOCOL_PHASE_GATES.md`
+- `docs/project/METER_ATTESTATION_BUNDLE.md`
+- `docs/project/DEPLOYMENT_RECEIPT_VALIDATION.md`
+- `docs/project/SECURITY_AUDIT_VALIDATION.md`
+
+Independent operations reference:
+- `docs/project/PROJECT_OPERATIONS.md`
+- `docs/project/MONETARY_SYSTEM_BLUEPRINT.md`
+
+## 💼 Commercial Pilot Mode
+SolarPunk can run as a revenue-facing risk desk for renewable operators:
+1. Build project integrity artifacts:
+```bash
+bash scripts/run_project_operating_cycle.sh
+```
+2. Build indicative pilot term sheet from client profile:
+```bash
+python3 scripts/build_pilot_termsheet.py --client-profile clients/sample_solar_operator.json
+```
+3. Run the full commercial cycle:
+```bash
+bash scripts/run_commercial_cycle.sh
+```
+
+Commercial operations reference:
+- `docs/commercial/COMMERCIAL_OPERATING_MODEL.md`
+
+## 🪙 Monetary-System Readiness
+To evaluate Solarpunk as a standalone energy-native monetary protocol:
+```bash
+python3 scripts/build_monetary_system_readiness.py
+```
+Or run the full cycle:
+```bash
+bash scripts/run_project_operating_cycle.sh
+```
+
+Strict phase-gate enforcement (example target phase 1):
+```bash
+bash scripts/run_protocol_gate.sh 1
+```
+
+Evidence validation commands:
+```bash
+python3 scripts/build_deployment_receipt.py
+python3 scripts/confirm_deployment_onchain.py
+python3 scripts/validate_deployment_receipt.py
+python3 scripts/record_audit_update.py --status IN_PROGRESS
+python3 scripts/render_security_audit_status.py
+python3 scripts/validate_audit_status.py
+```
+Local deployment simulation (single command, persistent local chain):
+```bash
+bash scripts/simulate_local_deployment.sh
+```
+Policy references:
+- `docs/project/DEPLOYMENT_EVIDENCE_POLICY.md`
+- `docs/project/SECURITY_AUDIT_STATUS.json`
+- `docs/project/PHASE3_UNLOCK_RUNBOOK.md`
+
 ## 🎯 For Grant Reviewers
 
 **What We're Building With Funding:**

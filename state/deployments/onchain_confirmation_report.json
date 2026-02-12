@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-02-11T18:03:03.057652+00:00",
+  "rpc_url": "http://127.0.0.1:8545",
+  "confirmation_passed": true,
+  "checks": {
+    "coin_receipt_found": true,
+    "option_receipt_found": true,
+    "coin_tx_success": true,
+    "option_tx_success": true,
+    "coin_contract_match": true,
+    "option_contract_match": true
+  },
+  "errors": []
+}

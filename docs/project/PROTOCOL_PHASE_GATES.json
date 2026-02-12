@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-02-11T18:02:06.655144+00:00",
+  "project": "Solarpunk-bitcoin",
+  "target_phase": 3,
+  "target_phase_key": "phase_3_market_expansion_readiness",
+  "target_phase_passed": false,
+  "phases": {
+    "phase_0_protocol_integrity": {
+      "status": "PASS",
+      "passed": true,
+      "description": "Protocol integrity and deterministic verification",
+      "blockers": []
+    },
+    "phase_1_controlled_monetary_pilot": {
+      "status": "PASS",
+      "passed": true,
+      "description": "Controlled pilot operations with monetary + risk stack",
+      "blockers": []
+    },
+    "phase_2_live_attestation_hardening": {
+      "status": "PASS",
+      "passed": true,
+      "description": "Live attestation and oracle hardening",
+      "blockers": []
+    },
+    "phase_3_market_expansion_readiness": {
+      "status": "FAIL",
+      "passed": false,
+      "description": "Expansion readiness under production controls",
+      "blockers": [
+        "Deployment receipt validation has not passed.",
+        "Security audit validation has not passed."
+      ]
+    }
+  },
+  "decision": "NO_GO",
+  "next_actions": [
+    "Run `bash scripts/run_project_operating_cycle.sh` before gate evaluation.",
+    "Use `python3 scripts/build_protocol_phase_gates.py --target-phase N --strict` for hard gate enforcement.",
+    "Advance one phase at a time; do not skip blockers."
+  ]
+}

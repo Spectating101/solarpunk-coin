@@ -1,4 +1,6 @@
 const hre = require("hardhat");
+const fs = require("fs");
+const path = require("path");
 
 async function main() {
   const [deployer] = await hre.ethers.getSigners();
@@ -36,7 +38,43 @@ async function main() {
   );
   await optionContract.waitForDeployment();
 
-  console.log("SolarPunkOption (Pillar 3) deployed to:", optionContract.target);
+  const optionAddress = optionContract.target;
+  const deployTx = optionContract.deploymentTransaction();
+  const deployTxHash = deployTx ? deployTx.hash : null;
+  console.log("SolarPunkOption (Pillar 3) deployed to:", optionAddress);
+  if (deployTxHash) {
+    console.log("Pillar3 deploy tx hash:", deployTxHash);
+  }
+
+  const rootDir = path.join(__dirname, "..");
+  // Keep deployment state outside Hardhat-managed artifacts/ to avoid accidental wipes.
+  const deployDir = process.env.SPK_DEPLOYMENT_STATE_DIR
+    ? path.resolve(rootDir, process.env.SPK_DEPLOYMENT_STATE_DIR)
+    : path.join(rootDir, "state", "deployments");
+  fs.mkdirSync(deployDir, { recursive: true });
+
+  const deployArtifact = {
+    generated_at: new Date().toISOString(),
+    network: hre.network.name,
+    chain_id: hre.network.config.chainId || null,
+    contract: "SolarPunkOption",
+    contract_address: optionAddress,
+    deployer: deployer.address,
+    collateral_address: usdcAddress,
+    insurance_fund: insuranceFund,
+    price_decimals: priceDecimals,
+    deploy_tx_hash: deployTxHash,
+  };
+
+  fs.writeFileSync(
+    path.join(deployDir, "solarpunk_option_deploy.json"),
+    JSON.stringify(deployArtifact, null, 2) + "\n",
+    "utf-8"
+  );
+  fs.writeFileSync(path.join(rootDir, ".pillar3_address"), `${optionAddress}\n`, "utf-8");
+  if (deployTxHash) {
+    fs.writeFileSync(path.join(rootDir, ".pillar3_tx_hash"), `${deployTxHash}\n`, "utf-8");
+  }
 
   // 4. Verify (if on Etherscan/PolygonScan)
   // await hre.run("verify:verify", { address: optionContract.target, constructorArguments: [usdcAddress, insuranceFund] });

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-02-11T16:00:21.041673+00:00",
+  "generated_at": "2026-02-11T18:02:05.923751+00:00",
   "repo": "Solarpunk-bitcoin",
   "verification_path": "/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/artifacts/verify_health.json",
   "verification": {
-    "timestamp": "2026-02-11T15:26:04+08:00",
-    "overall_status": "degraded",
+    "timestamp": "2026-02-12T02:02:05+08:00",
+    "overall_status": "ok",
     "strict_mode": false,
-    "warnings": 2,
+    "warnings": 0,
     "environment": {
       "node_version": "v18.20.8",
       "node_major": 18,
@@ -15,8 +15,8 @@
     "checks": {
       "python_dependencies": "ok",
       "pricing_engine": "ok",
-      "contracts": "degraded",
-      "frontend": "degraded"
+      "contracts": "ok",
+      "frontend": "ok"
     }
   },
   "key_artifacts": [
@@ -32,7 +32,7 @@
   "missing_artifacts": [],
   "artifact_freshness": {
     "grant_docs_latest": "2026-01-15T17:09:30.808255+00:00",
-    "verification_latest": "2026-02-11T07:26:04.231477+00:00",
+    "verification_latest": "2026-02-11T18:02:05.882857+00:00",
     "contracts_latest": "2026-01-07T09:23:03.807580+00:00",
     "frontend_latest": "2025-12-27T08:23:05.699856+00:00"
   },
@@ -40,7 +40,7 @@
     "csv_files": 22,
     "png_files": 9
   },
-  "readiness_grade": "D",
+  "readiness_grade": "A",
   "priority_actions": [
     "Run `bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.json` before submissions.",
     "Keep `GRANT_PROPOSAL.md` and `docs/GRANT_BRIEF_POLYGON.md` synchronized with latest verification results.",

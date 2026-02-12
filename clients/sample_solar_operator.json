@@ -1,0 +1,36 @@
+{
+  "client_name": "Taoyuan Pilot Solar Co.",
+  "region": "Taoyuan, Taiwan",
+  "operator_type": "commercial_rooftop",
+  "hedge_goal": "revenue_floor",
+  "hedge_horizon_days": 90,
+  "expected_generation_kwh": 125000,
+  "coverage_target": 0.7,
+  "entry_index_usd_per_kwh": 0.0525,
+  "spot_index_usd_per_kwh": 0.055,
+  "strike_usd_per_kwh": 0.0525,
+  "volatility_assumption": 1.89,
+  "contract_notional_kwh": 1000,
+  "contracts_requested": 88,
+  "risk_budget_usdc": 36000,
+  "oracle_sources": [
+    {
+      "name": "utility_feed",
+      "value": 0.055,
+      "weight": 0.4,
+      "staleness_seconds": 120
+    },
+    {
+      "name": "market_aggregator",
+      "value": 0.054,
+      "weight": 0.35,
+      "staleness_seconds": 180
+    },
+    {
+      "name": "regional_index",
+      "value": 0.056,
+      "weight": 0.25,
+      "staleness_seconds": 240
+    }
+  ]
+}
