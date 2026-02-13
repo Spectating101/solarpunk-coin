@@ -255,7 +255,7 @@ def load_control_variables(df):
         trends_daily = trends.set_index('Month').resample('D').ffill()
         df = df.merge(trends_daily, left_on='Date', right_index=True, how='left')
         df['google_trends'] = df['google_trends'].ffill()
-    except:
+    except Exception:
         df['google_trends'] = 50
     
     # EPU Index
@@ -265,7 +265,7 @@ def load_control_variables(df):
         epu_daily = epu[['Date', 'GEPU_current']].set_index('Date').resample('D').ffill()
         df = df.merge(epu_daily, left_on='Date', right_index=True, how='left')
         df.rename(columns={'GEPU_current': 'EPU_Index'}, inplace=True)
-    except:
+    except Exception:
         df['EPU_Index'] = 100
     
     # Standardize variables

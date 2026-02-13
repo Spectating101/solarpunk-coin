@@ -27,7 +27,7 @@ const MarketStats = () => {
           <h3 style={{ margin: 0 }}>Market Health</h3>
         </div>
         <div className="status-badge status-active">
-          Live · Polygon
+          Demo Data
         </div>
       </div>
 

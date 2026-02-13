@@ -68,9 +68,9 @@ def fetch_fear_greed_index():
         df_fg['Date'] = pd.to_datetime(df_fg['Date'])
         print_status(f"Loaded existing Fear & Greed data: {len(df_fg)} records", "SUCCESS")
         return df_fg
-    except:
+    except (FileNotFoundError, pd.errors.EmptyDataError):
         pass
-    
+
     # Fetch fresh data
     url = "https://api.alternative.me/fng/?limit=0&format=json"
     

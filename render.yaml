@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: solarpunk-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: SPK_API_KEYS
+        sync: false
+    plan: starter

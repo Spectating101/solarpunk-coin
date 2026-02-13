@@ -49,9 +49,9 @@ for file in csv_files:
                             else:
                                 freq = f"~{mode_diff.days} days"
                             print(f"   Frequency: {freq}")
-                except:
+                except (ValueError, TypeError):
                     pass
-        
+
         # Show first 5 columns
         print(f"   Columns: {list(df.columns[:5])} {'...' if len(df.columns) > 5 else ''}")
         
@@ -84,7 +84,7 @@ for file in excel_files:
                     valid_dates = dates.dropna()
                     if len(valid_dates) > 0:
                         print(f"   Date column '{date_col}': {valid_dates.min()} to {valid_dates.max()}")
-                except:
+                except (ValueError, TypeError):
                     pass
         
         print(f"   Columns: {list(df.columns[:5])} {'...' if len(df.columns) > 5 else ''}")

@@ -24,37 +24,37 @@ print("\n1. LOADING RAW DATA FILES...")
 try:
     btc_price = pd.read_excel('bitcoin_datastream.xlsx')
     print(f"✓ Bitcoin price data loaded: {len(btc_price)} rows")
-except:
-    print("✗ Error loading bitcoin_datastream.xlsx")
+except (FileNotFoundError, ValueError) as e:
+    print(f"✗ Error loading bitcoin_datastream.xlsx: {e}")
 
 # Load energy consumption data
 try:
     btc_energy = pd.read_excel('btc_con.xls')
     print(f"✓ Bitcoin energy data loaded: {len(btc_energy)} rows")
-except:
-    print("✗ Error loading btc_con.xls")
+except (FileNotFoundError, ValueError) as e:
+    print(f"✗ Error loading btc_con.xls: {e}")
 
 # Load mining distribution data
 try:
     mining_dist = pd.read_csv('cambridge_mining_distribution.csv')
     print(f"✓ Mining distribution loaded: {len(mining_dist)} rows")
-except:
-    print("✗ Error loading cambridge_mining_distribution.csv")
+except (FileNotFoundError, ValueError) as e:
+    print(f"✗ Error loading cambridge_mining_distribution.csv: {e}")
 
 # Load Fear & Greed Index
 try:
     fear_greed = pd.read_csv('fear_greed_index.csv')
     print(f"✓ Fear & Greed data loaded: {len(fear_greed)} rows")
-except:
-    print("✗ Error loading fear_greed_index.csv")
+except (FileNotFoundError, ValueError) as e:
+    print(f"✗ Error loading fear_greed_index.csv: {e}")
 
 # Load Ethereum data for comparison
 try:
     eth_price = pd.read_excel('ethereum_datastream.xlsx')
     eth_energy = pd.read_excel('eth_con.xls')
     print(f"✓ Ethereum data loaded")
-except:
-    print("✗ Error loading Ethereum data")
+except (FileNotFoundError, ValueError) as e:
+    print(f"✗ Error loading Ethereum data: {e}")
 
 # ============================================================================
 # STEP 2: CLEAN AND STANDARDIZE EACH DATASET
@@ -267,7 +267,7 @@ try:
     eth_merge_date = pd.to_datetime('2022-09-15')
     df['post_eth_merge'] = (df['Date'] > eth_merge_date).astype(int)
     
-except:
+except Exception:
     print("   Warning: Could not process Ethereum data")
 
 # ============================================================================

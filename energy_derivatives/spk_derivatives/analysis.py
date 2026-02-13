@@ -373,7 +373,7 @@ def export_to_excel(filename: str,
                     try:
                         if len(str(cell.value)) > max_length:
                             max_length = len(str(cell.value))
-                    except:
+                    except (TypeError, AttributeError):
                         pass
                 ws.column_dimensions[column_letter].width = min(max_length + 2, 50)
         

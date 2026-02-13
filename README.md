@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 [![Network](https://img.shields.io/badge/network-Polygon-purple)]()
-[![Status](https://img.shields.io/badge/status-MVP%20Testnet%20Ready-orange)]()
+[![Status](https://img.shields.io/badge/status-Local%20MVP-yellow)]()
 
 > **The "Bretton Woods" of the Energy Transition.**
 > A decentralized protocol to hedge renewable energy volatility using physics-priced derivatives.

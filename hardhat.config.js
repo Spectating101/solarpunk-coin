@@ -37,9 +37,15 @@ module.exports = {
     },
     // Sepolia - Ethereum testnet (working faucets)
     sepolia: {
-      url: process.env.SEPOLIA_RPC || "https://rpc.sepolia.org",
+      url: process.env.SEPOLIA_RPC || "https://ethereum-sepolia-rpc.publicnode.com",
       accounts: [PRIVATE_KEY],
       chainId: 11155111,
+    },
+    // Holesky - Ethereum testnet (generous faucets)
+    holesky: {
+      url: process.env.HOLESKY_RPC || "https://holesky.drpc.org",
+      accounts: [PRIVATE_KEY],
+      chainId: 17000,
     },
     // Mumbai deprecated April 2024 - kept for historical reference only
     mumbai: {

@@ -1,0 +1,118 @@
+{
+  "simulation": {
+    "type": "multi-agent economic simulation",
+    "agents": {
+      "hedgers": 20,
+      "speculators": 10,
+      "arbitrageurs": 5
+    },
+    "duration_days": 1000,
+    "scenarios_tested": 6
+  },
+  "scenarios": {
+    "baseline": {
+      "scenario": "baseline",
+      "avg_price": 0.9999,
+      "std_price": 0.0247,
+      "min_price": 0.9061,
+      "max_price": 1.0772,
+      "pct_in_band": 93.2,
+      "avg_deviation_bps": -1.0,
+      "max_deviation_bps": 939.0,
+      "daily_volatility_pct": 2.32,
+      "final_supply_millions": 0.41
+    },
+    "grid_failure": {
+      "scenario": "grid_failure",
+      "avg_price": 0.9987,
+      "std_price": 0.0314,
+      "min_price": 0.807,
+      "max_price": 1.1877,
+      "pct_in_band": 90.5,
+      "avg_deviation_bps": -13.0,
+      "max_deviation_bps": 1930.0,
+      "daily_volatility_pct": 2.73,
+      "final_supply_millions": 1.21
+    },
+    "policy_shock": {
+      "scenario": "policy_shock",
+      "avg_price": 1.0008,
+      "std_price": 0.0269,
+      "min_price": 0.8439,
+      "max_price": 1.1358,
+      "pct_in_band": 92.9,
+      "avg_deviation_bps": 8.0,
+      "max_deviation_bps": 1561.0,
+      "daily_volatility_pct": 2.58,
+      "final_supply_millions": 0.11
+    },
+    "demand_crash": {
+      "scenario": "demand_crash",
+      "avg_price": 1.001,
+      "std_price": 0.0286,
+      "min_price": 0.8119,
+      "max_price": 1.1193,
+      "pct_in_band": 92.5,
+      "avg_deviation_bps": 10.0,
+      "max_deviation_bps": 1881.0,
+      "daily_volatility_pct": 2.81,
+      "final_supply_millions": 0.08
+    },
+    "speculative_attack": {
+      "scenario": "speculative_attack",
+      "avg_price": 1.0,
+      "std_price": 0.0248,
+      "min_price": 0.9047,
+      "max_price": 1.1282,
+      "pct_in_band": 93.4,
+      "avg_deviation_bps": -0.0,
+      "max_deviation_bps": 1282.0,
+      "daily_volatility_pct": 2.46,
+      "final_supply_millions": 0.29
+    },
+    "combined": {
+      "scenario": "combined",
+      "avg_price": 1.0009,
+      "std_price": 0.0391,
+      "min_price": 0.7389,
+      "max_price": 1.2631,
+      "pct_in_band": 89.5,
+      "avg_deviation_bps": 9.0,
+      "max_deviation_bps": 2631.0,
+      "daily_volatility_pct": 3.35,
+      "final_supply_millions": 0.06
+    }
+  },
+  "benchmarks": {
+    "SPK_target": {
+      "daily_vol_pct": 2.32,
+      "note": "Computed from simulation"
+    },
+    "USD_inflation": {
+      "annual_debasement_pct": 3.2,
+      "note": "Average CPI 2020-2025, Federal Reserve data"
+    },
+    "BTC": {
+      "daily_vol_pct": 3.5,
+      "annual_vol_pct": 67.0,
+      "max_drawdown_pct": 77.0,
+      "note": "Bitcoin 2020-2025 empirical"
+    },
+    "USDT": {
+      "daily_vol_pct": 0.03,
+      "max_deviation_pct": 5.0,
+      "note": "Tether 2020-2025, centralized reserve risk"
+    },
+    "energy_spot": {
+      "daily_vol_pct": 8.5,
+      "annual_vol_pct": 189.0,
+      "note": "ERCOT real-time LMP 2023-2024"
+    }
+  },
+  "verdict": {
+    "baseline_stability": 93.2,
+    "worst_case_stability": 89.5,
+    "survived_all_stress_tests": true,
+    "less_volatile_than_btc": true
+  }
+}

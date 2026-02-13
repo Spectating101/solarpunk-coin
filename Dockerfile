@@ -1,5 +1,5 @@
-# Production-Grade Oracle Service Container
-# SolarPunk Pillar 3 Pricing Engine
+# SolarPunk Energy Derivatives API
+# Deployable on Railway, Render, Fly.io, or any Docker host
 
 FROM python:3.11-slim
 
@@ -11,27 +11,22 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY energy_derivatives/requirements.txt .
-
-# Install Python dependencies
+# Copy and install Python dependencies
+COPY energy_derivatives/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir fastapi uvicorn pydantic
+    pip install --no-cache-dir fastapi uvicorn[standard] pydantic
 
 # Copy application code
-COPY scripts/pillar3_engine.py ./pillar3_engine.py
 COPY energy_derivatives/ ./energy_derivatives/
-COPY empirical/ ./empirical/
 
-# Create oracle service wrapper
-COPY oracle_service.py ./oracle_service.py
+# Set Python path so imports work
+ENV PYTHONPATH=/app/energy_derivatives
+ENV PORT=8000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/health')"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
 
-# Expose API port
 EXPOSE 8000
 
-# Run FastAPI server
-CMD ["uvicorn", "oracle_service:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD uvicorn energy_derivatives.api.main:app --host 0.0.0.0 --port ${PORT}

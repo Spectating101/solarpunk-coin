@@ -1,29 +1,45 @@
 # Grant Submission Checklist & Quick Reference
 
-**Date Created:** January 16, 2026  
-**Status:** Ready to submit
+**Date Created:** January 16, 2026
+**Last Updated:** February 13, 2026
+**Status:** Pending submission
 
 ---
 
-## PRIORITY ORDER (Start Here)
+## PRIORITY ORDER (Verified February 13, 2026)
 
-### 🎯 **#1 POLYGON** - Submit TODAY (Highest Priority)
-- **Odds:** 50-60%
-- **Amount:** $50-150K
-- **Time:** 2 hours
-- **Decision:** 2-4 weeks
+### 🎯 **#1 CHAINLINK BUILD** (Best Fit - Rolling Applications)
+- **Odds:** 40-50% (strong fit: 5 product integrations)
+- **Amount:** $100-500K in services (not cash - custom DONs, support, marketing)
+- **Cost:** 3% of SPK token supply
+- **Time:** 1 hour to submit form
+- **Decision:** ~3 months
+- **Portal:** https://chainlinkcommunity.typeform.com/BUILD
+- **App doc:** CHAINLINK/BUILD_APPLICATION.md
 
-### 🎯 **#2 ENERGY WEB** - Submit TODAY  
+### 🎯 **#2 ETHEREUM FOUNDATION ESP** (Academic Grants)
 - **Odds:** 30-40%
-- **Amount:** $75-250K
-- **Time:** 30 mins (email first)
-- **Decision:** 6-8 weeks
+- **Amount:** $30-50K (from $1.5-2M pool)
+- **Time:** 30 mins (email inquiry first)
+- **Decision:** Variable
+- **Portal:** https://esp.ethereum.foundation/academic-grants
+- **App doc:** EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md
+- **Note:** PhD Fellowship requires PhD enrollment (Christopher is master's - use Academic Grants instead)
 
-### 🎯 **#3 GITCOIN** - Setup profile TODAY (wait for round)
+### 🎯 **#3 CELO PROOF-OF-SHIP** (ReFi Ecosystem)
 - **Odds:** 35-45%
-- **Amount:** $25-75K
-- **Time:** 1 hour
-- **Decision:** 2 weeks (when round opens)
+- **Amount:** $10-50K
+- **Time:** 30 mins (subscribe first)
+- **Decision:** Variable
+- **Portal:** https://celo-devs.beehiiv.com/subscribe
+
+### CLOSED / NOT APPLICABLE:
+- ~~POLYGON~~ - Season 2 CLOSED, requires live deployment + traction
+- ~~GITCOIN~~ - GG24 has NO climate round (infra/tooling focus only)
+- ~~ENERGY WEB~~ - No active grants page found (404)
+- ~~CLIMATEDAO~~ - Appears defunct
+- ~~OPEN CLIMATE~~ - Appears defunct
+- ~~FILECOIN~~ - Poor fit (requires IPFS/Filecoin integration)
 
 ---
 
@@ -58,7 +74,7 @@
 
 ### 📧 ENERGY WEB SUBMISSION
 
-**Step 1: Initial Email (Send TODAY)**
+**Step 1: Initial Email**
 
 **To:** grants@energyweb.org  
 **Subject:** Grant Inquiry: Decentralized Energy Derivatives Protocol  
@@ -80,7 +96,7 @@ They'll send you a link to their formal application portal after initial review.
 
 ### 🌐 GITCOIN SUBMISSION
 
-**Step 1: Create Profile (Do TODAY)**
+**Step 1: Create Profile**
 
 **Portal:** https://gitcoin.co
 
@@ -158,7 +174,7 @@ They'll send you a link to their formal application portal after initial review.
 
 ---
 
-## TODAY'S ACTION PLAN (2-3 hours)
+## ACTION PLAN (2-3 hours)
 
 **🕐 Hour 1: Polygon Application**
 1. Open: https://founders.polygon.technology/programs/981/apply

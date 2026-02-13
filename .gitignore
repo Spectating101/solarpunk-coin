@@ -168,6 +168,19 @@ energy_derivatives/data/*.json
 *.pdf
 *.html
 
+# Large binary files
+*.zip
+
+# Deployment state (machine-specific)
+.pillar3_address
+.pillar3_tx_hash
+.testnet_address
+.testnet_tx_hash
+
+# Environment files (keep examples)
+.env.*
+!.env.example
+
 # Temporary files
 *.tmp
 *.bak

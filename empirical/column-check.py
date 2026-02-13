@@ -36,7 +36,7 @@ def check_csv_file(filename):
             try:
                 df[date_cols[0]] = pd.to_datetime(df[date_cols[0]])
                 info['date_range'] = f"{df[date_cols[0]].min()} to {df[date_cols[0]].max()}"
-            except:
+            except (ValueError, TypeError):
                 pass
                 
     except Exception as e:
