@@ -1,6 +1,6 @@
 # Grant Readiness Pack
 
-- generated_at: `2026-02-11T18:02:05.923751+00:00`
+- generated_at: `2026-02-14T08:38:56.336355+00:00`
 - readiness_grade: `A`
 - overall_status: `ok`
 - warnings: `0`

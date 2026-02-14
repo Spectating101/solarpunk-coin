@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-02-13T15:52:50.706Z",
+  "generated_at": "2026-02-13T16:08:58.695Z",
   "network": "localhost",
   "chain_id": null,
   "contract": "SolarPunkOption",
-  "contract_address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+  "contract_address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
   "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  "collateral_address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+  "collateral_address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
   "insurance_fund": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
   "price_decimals": 6,
-  "deploy_tx_hash": "0x64dbd72213b62785f8681010addaa281bbf444cc407d6f1bf85123b5ee92d404"
+  "deploy_tx_hash": "0x0f13ecc53aea73eee9a89bdb4705e4b56298faf869d6145156eec5d6f0894382"
 }

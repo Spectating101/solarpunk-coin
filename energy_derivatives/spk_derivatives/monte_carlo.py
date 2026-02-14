@@ -145,6 +145,8 @@ class MonteCarloSimulator:
         
         if self.payoff_type == 'call':
             payoffs = np.maximum(self.terminal_prices - self.K, 0)
+        elif self.payoff_type == 'put':
+            payoffs = np.maximum(self.K - self.terminal_prices, 0)
         elif self.payoff_type == 'redeemable':
             payoffs = self.terminal_prices.copy()
         else:

@@ -1,16 +1,19 @@
 {
-  "generated_at": "2026-02-13T15:52:50.887707+00:00",
-  "validation_passed": true,
-  "receipt_status": "CONFIRMED",
-  "onchain_confirmed": true,
+  "generated_at": "2026-02-14T08:38:56.875223+00:00",
+  "validation_passed": false,
+  "receipt_status": "PENDING_CONFIRMATION",
+  "onchain_confirmed": false,
   "checks": {
     "has_coin_address": true,
     "has_option_address": true,
     "has_coin_tx_hash": true,
     "has_option_tx_hash": true,
     "has_confirmed_flag": true,
-    "onchain_confirmed_true": true,
-    "receipt_status_confirmed": true
+    "onchain_confirmed_true": false,
+    "receipt_status_confirmed": false
   },
-  "errors": []
+  "errors": [
+    "onchain_confirmed must be true for expansion gate.",
+    "receipt_status must be CONFIRMED."
+  ]
 }

@@ -45,6 +45,13 @@ class PayoffFunction:
             Payoff at maturity
         """
         return max(S_T - K, 0)
+
+    @staticmethod
+    def european_put(S_T: float, K: float) -> float:
+        """
+        European put payoff: max(K - S(T), 0).
+        """
+        return max(K - S_T, 0)
     
     @staticmethod
     def redeemable_claim(S_T: float, K: float = 0) -> float:
@@ -183,6 +190,9 @@ class BinomialTree:
         if self.payoff_type == 'call':
             for i, price in enumerate(terminal_prices):
                 payoffs[i] = PayoffFunction.european_call(price, self.K)
+        elif self.payoff_type == 'put':
+            for i, price in enumerate(terminal_prices):
+                payoffs[i] = PayoffFunction.european_put(price, self.K)
         elif self.payoff_type == 'redeemable':
             for i, price in enumerate(terminal_prices):
                 payoffs[i] = PayoffFunction.redeemable_claim(price, self.K)

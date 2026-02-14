@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-02-11T18:02:06.655144+00:00",
+  "generated_at": "2026-02-14T08:38:56.970463+00:00",
   "project": "Solarpunk-bitcoin",
-  "target_phase": 3,
-  "target_phase_key": "phase_3_market_expansion_readiness",
-  "target_phase_passed": false,
+  "target_phase": 1,
+  "target_phase_key": "phase_1_controlled_monetary_pilot",
+  "target_phase_passed": true,
   "phases": {
     "phase_0_protocol_integrity": {
       "status": "PASS",
@@ -33,7 +33,7 @@
       ]
     }
   },
-  "decision": "NO_GO",
+  "decision": "GO",
   "next_actions": [
     "Run `bash scripts/run_project_operating_cycle.sh` before gate evaluation.",
     "Use `python3 scripts/build_protocol_phase_gates.py --target-phase N --strict` for hard gate enforcement.",

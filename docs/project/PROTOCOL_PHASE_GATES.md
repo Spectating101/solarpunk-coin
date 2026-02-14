@@ -1,10 +1,10 @@
 # Protocol Phase Gates
 
-- generated_at: `2026-02-11T18:02:06.655144+00:00`
-- target_phase: `3`
-- target_phase_key: `phase_3_market_expansion_readiness`
-- target_phase_passed: `False`
-- decision: `NO_GO`
+- generated_at: `2026-02-14T08:38:56.970463+00:00`
+- target_phase: `1`
+- target_phase_key: `phase_1_controlled_monetary_pilot`
+- target_phase_passed: `True`
+- decision: `GO`
 
 ## Phase Status
 

@@ -140,6 +140,28 @@ python3 scripts/build_pilot_termsheet.py --client-profile clients/sample_solar_o
 bash scripts/run_commercial_cycle.sh
 ```
 
+### Weekly Decision Desk (must-have workflow)
+Generate an operator decision pack with:
+- immediate `GO/NO_GO`
+- risk band and operating score
+- prioritized action queue (owner + due date)
+
+```bash
+python3 scripts/build_operator_decision_pack.py --client-profile clients/sample_solar_operator.json
+```
+
+Build the meeting-ready Operator Workbench (JSON + markdown + dashboard):
+```bash
+python3 scripts/build_operator_workbench.py --client-profile clients/sample_solar_operator.json
+```
+
+Outputs:
+- `docs/commercial/DECISION_PACK_<client>.md`
+- `docs/commercial/DECISION_PACK_<client>.json`
+- `docs/commercial/OPERATOR_WORKBENCH_<client>.md`
+- `docs/commercial/OPERATOR_WORKBENCH_<client>.json`
+- `docs/commercial/OPERATOR_WORKBENCH_<client>.html`
+
 Commercial operations reference:
 - `docs/commercial/COMMERCIAL_OPERATING_MODEL.md`
 

@@ -2,6 +2,7 @@ import os
 import time
 import secrets
 from collections import defaultdict
+from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, HTTPException, Request, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -148,6 +149,19 @@ class RiskAssessmentRequest(BaseModel):
 class BatchPricingRequest(BaseModel):
     requests: List[PricingRequest] = Field(..., max_length=50)
 
+class DecisionPackRequest(BaseModel):
+    client_name: str = Field("Operator", description="Client/operator display name")
+    region: str = Field("unknown", description="Region label for reporting")
+    capacity_mw: float = Field(..., description="Plant capacity in MW", gt=0)
+    lat: float = Field(..., ge=-90, le=90)
+    lon: float = Field(..., ge=-180, le=180)
+    energy_type: str = Field("solar", description="solar, wind, hydro")
+    hedge_period_years: float = Field(1.0, gt=0)
+    target_floor_pct: float = Field(0.8, ge=0.1, le=1.0)
+    risk_budget_usd: float = Field(50000.0, gt=0)
+    contract_notional_mwh: float = Field(100.0, gt=0)
+    contracts_planned: int = Field(0, ge=0)
+
 class WindParams(BaseModel):
     lat: float = Field(..., ge=-90, le=90)
     lon: float = Field(..., ge=-180, le=180)
@@ -273,6 +287,8 @@ location-specific risk models, then price options using institutional-grade meth
 <li><code>POST /v1/greeks</code> - Compute option Greeks</li>
 <li><code>POST /v1/batch</code> - Batch price up to 50 options</li>
 <li><code>POST /v1/risk-assessment</code> - Full risk report for a plant</li>
+<li><code>POST /v1/decision-pack</code> - GO/NO_GO + prioritized operator actions</li>
+<li><code>POST /v1/operator-workbench</code> - Decision desk payload for weekly execution</li>
 <li><code>POST /v1/data/solar</code> - NASA solar calibration data</li>
 <li><code>POST /v1/data/wind</code> - NASA wind calibration data</li>
 <li><code>POST /v1/data/hydro</code> - NASA hydro calibration data</li>
@@ -415,6 +431,210 @@ async def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(ve
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Assessment failed: {str(e)}")
+
+
+@app.post("/v1/decision-pack")
+async def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_key)):
+    if auth["tier"] == "demo":
+        raise HTTPException(status_code=403, detail="Decision pack requires Starter or Pro tier.")
+
+    try:
+        if req.energy_type == "solar":
+            params = load_solar_parameters(req.lat, req.lon)
+        elif req.energy_type == "wind":
+            params = WindDataLoader(lat=req.lat, lon=req.lon).load_parameters()
+        elif req.energy_type == "hydro":
+            params = HydroDataLoader(lat=req.lat, lon=req.lon).load_parameters()
+        else:
+            raise HTTPException(status_code=400, detail="energy_type must be solar, wind, or hydro")
+
+        sigma = float(params.get("sigma", params.get("annual_volatility", 0.35)))
+        S0 = float(params.get("S0", params.get("spot_price", 50.0)))
+        K = S0 * req.target_floor_pct
+
+        tree = BinomialTree(
+            S0=S0,
+            K=K,
+            T=req.hedge_period_years,
+            r=0.05,
+            sigma=sigma,
+            N=200,
+            payoff_type="put",
+        )
+        premium_per_mwh = float(tree.price())
+
+        capacity_factor = float(params.get("capacity_factor", 0.20))
+        annual_mwh = float(req.capacity_mw * 8760 * capacity_factor)
+        target_hedged_mwh = annual_mwh * req.target_floor_pct
+        recommended_contracts = int(np.ceil(target_hedged_mwh / req.contract_notional_mwh))
+        contracts_eval = req.contracts_planned if req.contracts_planned > 0 else recommended_contracts
+        total_hedge_cost = premium_per_mwh * req.contract_notional_mwh * contracts_eval
+        budget_fit = "within_budget" if total_hedge_cost <= req.risk_budget_usd else "over_budget"
+
+        covered_mwh = contracts_eval * req.contract_notional_mwh
+        coverage_gap_ratio = max(0.0, (target_hedged_mwh - covered_mwh) / max(target_hedged_mwh, 1.0))
+
+        score = 100
+        if budget_fit == "over_budget":
+            score -= 25
+        if coverage_gap_ratio > 0.15:
+            score -= 12
+        elif coverage_gap_ratio > 0.05:
+            score -= 5
+        if sigma > 1.0:
+            score -= 10
+        if sigma > 1.5:
+            score -= 8
+        operating_score = int(max(0, min(100, score)))
+
+        risk_band = "normal"
+        if budget_fit == "over_budget" or coverage_gap_ratio > 0.15:
+            risk_band = "high"
+        elif sigma > 1.0:
+            risk_band = "elevated"
+
+        actions: List[Dict[str, Any]] = []
+        if budget_fit == "over_budget":
+            actions.append(
+                {
+                    "priority": "P0",
+                    "owner": "Treasury",
+                    "action": "Reduce contracts or increase risk budget before execution approval.",
+                    "reason": "Projected hedge cost exceeds stated budget.",
+                }
+            )
+        if coverage_gap_ratio > 0.05:
+            actions.append(
+                {
+                    "priority": "P1",
+                    "owner": "Risk Committee",
+                    "action": "Review hedge coverage gap and rebalance contract count.",
+                    "reason": f"Coverage gap ratio is {coverage_gap_ratio:.3f}.",
+                }
+            )
+        if sigma > 1.0:
+            actions.append(
+                {
+                    "priority": "P1",
+                    "owner": "Portfolio Manager",
+                    "action": "Run downside stress scenario before next quote cycle.",
+                    "reason": f"Calibrated annual volatility is high ({sigma:.3f}).",
+                }
+            )
+        actions.append(
+            {
+                "priority": "P2",
+                "owner": "Data Ops",
+                "action": "Refresh weather/spot calibration weekly and regenerate decision pack.",
+                "reason": "Decision quality depends on current calibration inputs.",
+            }
+        )
+
+        immediate = "NO_GO" if any(a["priority"] == "P0" for a in actions) else "GO"
+
+        return {
+            "decision": {
+                "immediate_go_no_go": immediate,
+                "risk_band": risk_band,
+                "operating_score": operating_score,
+            },
+            "summary": {
+                "energy_type": req.energy_type,
+                "location": {"lat": req.lat, "lon": req.lon},
+                "annual_mwh_estimate": round(annual_mwh, 2),
+                "calibrated_volatility": round(sigma, 4),
+                "spot_price_per_mwh": round(S0, 4),
+                "strike_price_per_mwh": round(K, 4),
+                "premium_per_mwh": round(premium_per_mwh, 4),
+                "recommended_contracts": recommended_contracts,
+                "contracts_evaluated": contracts_eval,
+                "projected_hedge_cost_usd": round(total_hedge_cost, 2),
+                "risk_budget_usd": req.risk_budget_usd,
+                "risk_budget_fit": budget_fit,
+                "coverage_gap_ratio": round(coverage_gap_ratio, 6),
+            },
+            "actions": actions,
+            "tier": auth["tier"],
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Decision pack failed: {str(e)}")
+
+
+@app.post("/v1/operator-workbench")
+async def operator_workbench_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_key)):
+    if auth["tier"] == "demo":
+        raise HTTPException(status_code=403, detail="Operator workbench requires Starter or Pro tier.")
+
+    try:
+        decision_payload = await decision_pack_v1(req, auth)
+        summary = decision_payload["summary"]
+        decision = decision_payload["decision"]
+        actions = decision_payload["actions"]
+
+        annual_mwh = float(summary["annual_mwh_estimate"])
+        spot = float(summary["spot_price_per_mwh"])
+        strike = float(summary["strike_price_per_mwh"])
+        contracts = int(summary["contracts_evaluated"])
+        contract_notional_mwh = float(req.contract_notional_mwh)
+
+        gross_revenue = annual_mwh * spot
+        floor_revenue = min(annual_mwh, contracts * contract_notional_mwh) * strike
+        hedge_cost = float(summary["projected_hedge_cost_usd"])
+        hedge_burden_pct = 0.0 if gross_revenue <= 0 else (hedge_cost / gross_revenue) * 100.0
+
+        now = datetime.now(timezone.utc)
+        assignment_items: List[Dict[str, Any]] = []
+        for idx, item in enumerate(actions, start=1):
+            priority = str(item.get("priority", "P2"))
+            due_days = 7
+            if priority == "P0":
+                due_days = 1
+            elif priority == "P1":
+                due_days = 2
+            assignment_items.append(
+                {
+                    "id": f"T{idx:02d}",
+                    "priority": priority,
+                    "owner": item.get("owner", "Ops"),
+                    "task": item.get("action", "Review action."),
+                    "reason": item.get("reason", "No reason provided."),
+                    "due_at": (now + timedelta(days=due_days)).isoformat(),
+                    "status": "open",
+                }
+            )
+
+        confidence = "low"
+        if decision["immediate_go_no_go"] == "GO" and decision["operating_score"] >= 85 and decision["risk_band"] == "normal":
+            confidence = "high"
+        elif decision["immediate_go_no_go"] == "GO" and decision["operating_score"] >= 70:
+            confidence = "medium"
+
+        return {
+            "generated_at": now.isoformat(),
+            "decision": decision,
+            "business_snapshot": {
+                "client_name": req.client_name,
+                "region": req.region,
+                "energy_type": req.energy_type,
+                "gross_revenue_estimate_usd": round(gross_revenue, 2),
+                "floor_revenue_estimate_usd": round(floor_revenue, 2),
+                "initial_hedge_cost_estimate_usd": round(hedge_cost, 2),
+                "hedge_burden_pct_of_revenue": round(hedge_burden_pct, 2),
+                "risk_budget_fit": summary["risk_budget_fit"],
+                "recommended_contracts": summary["recommended_contracts"],
+                "contracts_evaluated": summary["contracts_evaluated"],
+                "confidence": confidence,
+            },
+            "assignments": assignment_items,
+            "summary": summary,
+            "tier": auth["tier"],
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Operator workbench failed: {str(e)}")
 
 # --- Data Endpoints ---
 

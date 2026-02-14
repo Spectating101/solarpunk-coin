@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-02-14T08:38:57.127266+00:00",
+  "next_review_due_at": "2026-02-21T08:38:57.127266+00:00",
+  "decision": {
+    "operating_score": 100,
+    "risk_band": "normal",
+    "immediate_go_no_go": "GO",
+    "coverage_gap_ratio": 0.0
+  },
+  "actions": [
+    {
+      "priority": "P2",
+      "owner": "Data Ops",
+      "action": "Refresh generation forecast and spot index assumptions for weekly re-pricing.",
+      "reason": "Taoyuan, Taiwan profile requires rolling repricing to stay decision-ready.",
+      "due_in_days": 7
+    },
+    {
+      "priority": "P2",
+      "owner": "Portfolio Manager",
+      "action": "Issue board-style weekly hedge summary (exposure, margin, scenario deltas).",
+      "reason": "Institutional workflow requires decision trace and audit trail.",
+      "due_in_days": 7
+    }
+  ],
+  "termsheet_snapshot": {
+    "generated_at": "2026-02-14T08:38:57.127231+00:00",
+    "inputs": {
+      "client_name": "Taoyuan Pilot Solar Co.",
+      "region": "Taoyuan, Taiwan",
+      "hedge_goal": "revenue_floor",
+      "hedge_horizon_days": 90,
+      "expected_generation_kwh": 125000.0,
+      "coverage_target": 0.7,
+      "entry_index_usd_per_kwh": 0.0525,
+      "spot_index_usd_per_kwh": 0.055,
+      "strike_usd_per_kwh": 0.0525,
+      "volatility_assumption": 1.89,
+      "contract_notional_kwh": 1000.0,
+      "contracts_requested": 88,
+      "risk_budget_usdc": 36000.0
+    },
+    "outputs": {
+      "target_hedged_volume_kwh": 87500.0,
+      "recommended_contracts": 88,
+      "contracts_evaluated": 88,
+      "aggregated_spot_index_usd_per_kwh": 0.055,
+      "oracle_status": "OK",
+      "current_mtm_per_contract_usdc": 0.0,
+      "indicative_var99_payoff_usdc": 0.263793,
+      "indicative_initial_margin_per_contract_usdc": 0.39569,
+      "indicative_total_initial_margin_usdc": 34.820703,
+      "risk_budget_fit": "within_budget",
+      "mapped_stress_row": {
+        "S0": 0.0525,
+        "sigma": 1.89
+      }
+    },
+    "scenarios": {
+      "downside_index_usd_per_kwh": 0.042,
+      "downside_payoff_usdc": 10.5,
+      "base_index_usd_per_kwh": 0.055,
+      "base_payoff_usdc": 0.0,
+      "upside_index_usd_per_kwh": 0.063,
+      "upside_payoff_usdc": 0.0
+    },
+    "warnings": []
+  }
+}

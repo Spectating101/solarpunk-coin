@@ -1,14 +1,18 @@
 {
-  "generated_at": "2026-02-13T15:52:50.843771+00:00",
-  "rpc_url": "http://127.0.0.1:8545",
-  "confirmation_passed": true,
+  "generated_at": "2026-02-14T08:38:56.827543+00:00",
+  "rpc_url": "https://rpc-amoy.polygon.technology/",
+  "confirmation_passed": false,
   "checks": {
-    "coin_receipt_found": true,
-    "option_receipt_found": true,
-    "coin_tx_success": true,
-    "option_tx_success": true,
-    "coin_contract_match": true,
-    "option_contract_match": true
+    "coin_receipt_found": false,
+    "option_receipt_found": false,
+    "coin_tx_success": false,
+    "option_tx_success": false,
+    "coin_contract_match": false,
+    "option_contract_match": false
   },
-  "errors": []
+  "errors": [
+    "RPC connection failed: HTTP Error 403: Forbidden",
+    "Coin deployment receipt not found.",
+    "Option deployment receipt not found."
+  ]
 }

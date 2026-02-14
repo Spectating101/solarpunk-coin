@@ -1,6 +1,6 @@
 # Pilot Term Sheet (Indicative)
 
-- generated_at: `2026-02-11T17:21:44.404420+00:00`
+- generated_at: `2026-02-14T08:38:57.068781+00:00`
 - client: `Taoyuan Pilot Solar Co.`
 - region: `Taoyuan, Taiwan`
 - hedge_goal: `revenue_floor`
