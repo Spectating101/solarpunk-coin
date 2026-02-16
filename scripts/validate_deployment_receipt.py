@@ -48,14 +48,15 @@ def _to_md(payload: Dict[str, Any]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate deployment receipt artifact for phase gates.")
-    parser.add_argument("--input", default="state/deployments/amoy_receipt.json")
+    parser.add_argument("--input", default=None)
     parser.add_argument("--out-json", default="state/deployments/deployment_receipt_validation.json")
     parser.add_argument("--out-md", default="docs/project/DEPLOYMENT_RECEIPT_VALIDATION.md")
     parser.add_argument("--strict", action="store_true")
     args = parser.parse_args()
 
     root = Path(__file__).resolve().parents[1]
-    receipt = _load_json(root / args.input)
+    input_path = args.input or "state/deployments/amoy_receipt.json"
+    receipt = _load_json(root / input_path)
 
     contracts = receipt.get("contracts", {}) if isinstance(receipt, dict) else {}
     proof = receipt.get("proof", {}) if isinstance(receipt, dict) else {}

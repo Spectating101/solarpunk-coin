@@ -67,14 +67,10 @@ async function main() {
   };
 
   fs.writeFileSync(
-    path.join(deployDir, "solarpunk_option_deploy.json"),
+    path.join(deployDir, `${networkName}_solarpunk_option_deploy.json`),
     JSON.stringify(deployArtifact, null, 2) + "\n",
     "utf-8"
   );
-  fs.writeFileSync(path.join(rootDir, ".pillar3_address"), `${optionAddress}\n`, "utf-8");
-  if (deployTxHash) {
-    fs.writeFileSync(path.join(rootDir, ".pillar3_tx_hash"), `${deployTxHash}\n`, "utf-8");
-  }
 
   // 4. Verify (if on Etherscan/PolygonScan)
   // await hre.run("verify:verify", { address: optionContract.target, constructorArguments: [usdcAddress, insuranceFund] });

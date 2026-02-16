@@ -94,14 +94,10 @@ async function main() {
   };
 
   fs.writeFileSync(
-    path.join(deployDir, "solarpunk_coin_deploy.json"),
+    path.join(deployDir, `${networkName}_solarpunk_coin_deploy.json`),
     JSON.stringify(deployArtifact, null, 2) + "\n",
     "utf-8"
   );
-  fs.writeFileSync(path.join(rootDir, ".testnet_address"), `${contractAddress}\n`, "utf-8");
-  if (deployTxHash) {
-    fs.writeFileSync(path.join(rootDir, ".testnet_tx_hash"), `${deployTxHash}\n`, "utf-8");
-  }
 
   return contractAddress;
 }

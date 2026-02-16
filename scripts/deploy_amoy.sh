@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# 🚀 TESTNET DEPLOYMENT SCRIPT
-# Deploys SolarPunkCoin to Polygon Amoy testnet in one command
+# 🚀 TESTNET DEPLOYMENT SCRIPT (AMOY)
+# Deploys full stack (MockUSDC + SolarPunkCoin + SolarPunkOption) to Polygon Amoy.
+# Canonical receipt output: state/deployments/amoy_full_deploy.json
 
 set -e  # Exit on any error
 
 echo "=================================="
-echo "SolarPunk Protocol - Amoy Deploy"
+echo "SolarPunk Protocol - Amoy Full Deploy"
 echo "=================================="
 echo ""
 
@@ -14,9 +15,9 @@ echo ""
 if [ ! -f .env ]; then
     echo "❌ .env file not found!"
     echo ""
-    echo "Create .env with:"
+    echo "Create .env with at least:"
     echo "  PRIVATE_KEY=your_wallet_private_key"
-    echo "  RESERVE_TOKEN_ADDRESS=0x0FA8781a83E46826621b3BC094Ea2A0212e71B23  # Mumbai USDC"
+    echo "  POLYGON_AMOY_RPC=your_rpc_url  # recommended, avoids public RPC blocks"
     echo ""
     exit 1
 fi
@@ -42,7 +43,7 @@ fi
 
 echo ""
 echo "💡 Need Amoy testnet POL?"
-echo "   Get it here: https://faucet.polygon.technology/"
+echo "   https://www.alchemy.com/faucets/polygon-amoy"
 echo ""
 read -p "Press Enter when ready to deploy..."
 
@@ -53,47 +54,28 @@ npx hardhat compile --quiet
 
 # Deploy to Amoy
 echo ""
-echo "🚀 Deploying to Polygon Amoy testnet..."
+echo "🚀 Deploying full stack to Polygon Amoy testnet..."
 echo ""
 
-DEPLOY_OUTPUT=$(npx hardhat run scripts/deploy.js --network amoy)
+DEPLOY_OUTPUT=$(npx hardhat run scripts/deploy_testnet_full.js --network amoy)
 echo "$DEPLOY_OUTPUT"
 
-# Extract contract address
-CONTRACT_ADDRESS=$(echo "$DEPLOY_OUTPUT" | grep "SolarPunkCoin deployed to:" | awk '{print $NF}')
-
-if [ -z "$CONTRACT_ADDRESS" ]; then
-    echo ""
-    echo "❌ Deployment failed - no contract address found"
-    exit 1
-fi
-
-# Save to file
-echo "$CONTRACT_ADDRESS" > .testnet_address
-echo ""
-echo "✅ Contract address saved to .testnet_address"
-
-# Generate Amoy PolygonScan link
-POLYGONSCAN_URL="https://amoy.polygonscan.com/address/$CONTRACT_ADDRESS"
+# Receipt path (written by deploy_testnet_full.js)
+RECEIPT_FILE="state/deployments/amoy_full_deploy.json"
 
 echo ""
 echo "=================================="
 echo "✅ DEPLOYMENT SUCCESSFUL!"
 echo "=================================="
 echo ""
-echo "📍 Contract Address:"
-echo "   $CONTRACT_ADDRESS"
-echo ""
-echo "🔍 Amoy PolygonScan:"
-echo "   $POLYGONSCAN_URL"
+echo "📦 Receipt:"
+echo "   $RECEIPT_FILE"
 echo ""
 echo "📋 Next Steps:"
-echo "   1. Verify on Amoy PolygonScan:"
-echo "      npx hardhat verify --network amoy $CONTRACT_ADDRESS"
-echo ""
-echo "   2. Update README.md with this address"
-echo ""
-echo "   3. Test the contract:"
-echo "      npx hardhat test --network amoy"
+echo "   1. (Optional) Verify contracts on Amoy PolygonScan (see deploy output)"
+echo "   2. Build evidence receipt + attempt on-chain confirmation:"
+echo "      python3 scripts/build_deployment_receipt.py --network amoy"
+echo "      python3 scripts/confirm_deployment_onchain.py --receipt state/deployments/amoy_receipt.json"
+echo "      python3 scripts/validate_deployment_receipt.py --strict"
 echo ""
 echo "=================================="

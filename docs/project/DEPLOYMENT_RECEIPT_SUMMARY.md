@@ -1,6 +1,6 @@
 # Deployment Receipt Summary
 
-- generated_at: `2026-02-14T08:38:56.533229+00:00`
+- generated_at: `2026-02-15T16:53:14.240907+00:00`
 - receipt_status: `PENDING_CONFIRMATION`
 - network: `amoy`
 - chain_id: `80002`
@@ -9,21 +9,26 @@
 
 ## Contract Addresses
 
-- solarpunk_coin: `0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6`
-- solarpunk_option: `0x610178dA211FEF7D417bC0e6FeD39F05609AD788`
+- solarpunk_coin: `None`
+- solarpunk_option: `None`
 
 ## Deployment Tx Hashes
 
-- coin_deploy_tx_hash: `0xf0eb1b77ba2c296c5ab26e3b87827cd74a1b4f9197fccbfe444280d4869b3ad4`
-- option_deploy_tx_hash: `0x0f13ecc53aea73eee9a89bdb4705e4b56298faf869d6145156eec5d6f0894382`
+- coin_deploy_tx_hash: `None`
+- option_deploy_tx_hash: `None`
 
 ## Explorer Links
 
-- coin_contract_url: `https://amoy.polygonscan.com/address/0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6`
-- option_contract_url: `https://amoy.polygonscan.com/address/0x610178dA211FEF7D417bC0e6FeD39F05609AD788`
-- coin_tx_url: `https://amoy.polygonscan.com/tx/0xf0eb1b77ba2c296c5ab26e3b87827cd74a1b4f9197fccbfe444280d4869b3ad4`
-- option_tx_url: `https://amoy.polygonscan.com/tx/0x0f13ecc53aea73eee9a89bdb4705e4b56298faf869d6145156eec5d6f0894382`
+- coin_contract_url: `None`
+- option_contract_url: `None`
+- coin_tx_url: `None`
+- option_tx_url: `None`
 
 ## Warnings
 
+- Missing `state/deployments/amoy_full_deploy.json` and no explicit --coin/--option args provided.
+- Missing or invalid SolarPunkCoin address.
+- Missing or invalid SolarPunkOption address.
+- Missing or invalid coin deploy tx hash.
+- Missing or invalid option deploy tx hash.
 - Receipt is not on-chain confirmed.

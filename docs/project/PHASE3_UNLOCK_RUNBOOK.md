@@ -9,9 +9,13 @@ Move `phase_3_market_expansion_readiness` from `NO_GO` to `GO` using machine-val
 - External audit completed with report URL and no open critical/high findings.
 
 ## Step 1: Build/confirm deployment evidence
-1. Deploy contracts (or provide existing addresses/tx hashes).
-2. Build receipt:
-- `python3 scripts/build_deployment_receipt.py --coin-address <SPK_ADDR> --option-address <OPTION_ADDR> --coin-tx-hash <SPK_TX> --option-tx-hash <OPTION_TX>`
+1. Deploy contracts (preferred):
+- `npx hardhat run scripts/deploy_testnet_full.js --network amoy`
+- This produces: `state/deployments/amoy_full_deploy.json`
+2. Build receipt (auto-ingests from `amoy_full_deploy.json`):
+- `python3 scripts/build_deployment_receipt.py --network amoy`
+   Manual override (if needed):
+   `python3 scripts/build_deployment_receipt.py --network amoy --coin-address <SPK_ADDR> --option-address <OPTION_ADDR> --coin-tx-hash <SPK_TX> --option-tx-hash <OPTION_TX>`
 3. Confirm on-chain:
 - `python3 scripts/confirm_deployment_onchain.py --strict`
 4. Validate receipt:

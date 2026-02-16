@@ -34,6 +34,16 @@ def _rpc_call(url: str, method: str, params: List[Any]) -> Dict[str, Any]:
     with urllib.request.urlopen(req, timeout=20) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
+def _rpc_chain_id(url: str) -> Optional[int]:
+    try:
+        data = _rpc_call(url, "eth_chainId", [])
+        raw = data.get("result") if isinstance(data, dict) else None
+        if isinstance(raw, str) and raw.startswith("0x"):
+            return int(raw, 16)
+    except Exception:
+        return None
+    return None
+
 
 def _to_md(report: Dict[str, Any]) -> str:
     lines: List[str] = []
@@ -41,6 +51,8 @@ def _to_md(report: Dict[str, Any]) -> str:
     lines.append("")
     lines.append(f"- generated_at: `{report.get('generated_at')}`")
     lines.append(f"- rpc_url: `{report.get('rpc_url')}`")
+    if "rpc_chain_id" in report:
+        lines.append(f"- rpc_chain_id: `{report.get('rpc_chain_id')}`")
     lines.append(f"- confirmation_passed: `{report.get('confirmation_passed')}`")
     lines.append("")
     lines.append("## Checks")
@@ -113,11 +125,19 @@ def main() -> int:
 
     coin_r = None
     option_r = None
+    rpc_chain_id = _rpc_chain_id(rpc_url)
+    expected_chain_id = receipt.get("network", {}).get("chain_id")
+    if rpc_chain_id is None:
+        errors.append("RPC probe failed (could not read eth_chainId). Provide a working --rpc-url or set POLYGON_AMOY_RPC/SEPOLIA_RPC.")
+    elif expected_chain_id and rpc_chain_id != expected_chain_id:
+        errors.append(f"RPC chainId mismatch: expected {expected_chain_id}, got {rpc_chain_id}.")
+
     try:
-        coin_r = _tx_receipt(rpc_url, coin_tx)
-        option_r = _tx_receipt(rpc_url, option_tx)
+        if rpc_chain_id is not None and not errors:
+            coin_r = _tx_receipt(rpc_url, coin_tx)
+            option_r = _tx_receipt(rpc_url, option_tx)
     except urllib.error.URLError as exc:
-        errors.append(f"RPC connection failed: {exc}")
+        errors.append(f"RPC connection failed: {exc}. Provide a working --rpc-url or set POLYGON_AMOY_RPC/SEPOLIA_RPC.")
     except Exception as exc:
         errors.append(f"RPC query failed: {exc}")
 
@@ -165,6 +185,7 @@ def main() -> int:
     report = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "rpc_url": rpc_url,
+        "rpc_chain_id": rpc_chain_id,
         "confirmation_passed": passed,
         "checks": checks,
         "errors": errors,

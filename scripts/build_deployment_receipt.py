@@ -85,6 +85,26 @@ def _to_md(payload: Dict[str, Any]) -> str:
     lines.append("")
     return "\n".join(lines)
 
+def _extract_from_full_deploy(full: Dict[str, Any]) -> Dict[str, Optional[str]]:
+    """
+    Extract contract addresses + tx hashes from a `state/deployments/<network>_full_deploy.json`.
+    This avoids mixing localhost artifacts into public testnet evidence.
+    """
+    contracts = full.get("contracts", {}) if isinstance(full, dict) else {}
+    spk = contracts.get("SolarPunkCoin", {}) if isinstance(contracts, dict) else {}
+    opt = contracts.get("SolarPunkOption", {}) if isinstance(contracts, dict) else {}
+
+    spk_addr = spk.get("address") if isinstance(spk, dict) else None
+    spk_tx = spk.get("tx") if isinstance(spk, dict) else None
+    opt_addr = opt.get("address") if isinstance(opt, dict) else None
+    opt_tx = opt.get("tx") if isinstance(opt, dict) else None
+    return {
+        "coin_addr": spk_addr if isinstance(spk_addr, str) else None,
+        "coin_tx": spk_tx if isinstance(spk_tx, str) else None,
+        "option_addr": opt_addr if isinstance(opt_addr, str) else None,
+        "option_tx": opt_tx if isinstance(opt_tx, str) else None,
+    }
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build deployment receipt artifact for phase-gate evidence.")
@@ -96,38 +116,39 @@ def main() -> int:
     parser.add_argument("--option-tx-hash", default=None)
     parser.add_argument("--confirmed", action="store_true", help="Mark on-chain confirmed=true.")
     parser.add_argument("--confirmation-method", default="manual")
-    parser.add_argument("--out-json", default="state/deployments/amoy_receipt.json")
-    parser.add_argument("--out-md", default="docs/project/DEPLOYMENT_RECEIPT_SUMMARY.md")
+    parser.add_argument("--out-json", default=None)
+    parser.add_argument("--out-md", default=None)
     args = parser.parse_args()
 
     root = Path(__file__).resolve().parents[1]
 
-    coin_art = _read_json(root / "state/deployments/solarpunk_coin_deploy.json")
-    option_art = _read_json(root / "state/deployments/solarpunk_option_deploy.json")
+    # Prefer network-scoped full deploy receipts (produced by deploy_testnet_full.js).
+    full_deploy = _read_json(root / "state/deployments" / f"{args.network}_full_deploy.json")
+    extracted = _extract_from_full_deploy(full_deploy) if full_deploy else {}
 
     coin_addr = (
         _norm_addr(args.coin_address)
-        or _norm_addr(coin_art.get("contract_address"))
-        or _norm_addr(_read_text(root / ".testnet_address"))
+        or _norm_addr(extracted.get("coin_addr"))
     )
     option_addr = (
         _norm_addr(args.option_address)
-        or _norm_addr(option_art.get("contract_address"))
-        or _norm_addr(_read_text(root / ".pillar3_address"))
+        or _norm_addr(extracted.get("option_addr"))
     )
 
     coin_tx = (
         _norm_hash(args.coin_tx_hash)
-        or _norm_hash(coin_art.get("deploy_tx_hash"))
-        or _norm_hash(_read_text(root / ".testnet_tx_hash"))
+        or _norm_hash(extracted.get("coin_tx"))
     )
     option_tx = (
         _norm_hash(args.option_tx_hash)
-        or _norm_hash(option_art.get("deploy_tx_hash"))
-        or _norm_hash(_read_text(root / ".pillar3_tx_hash"))
+        or _norm_hash(extracted.get("option_tx"))
     )
 
     warnings = []
+    if not full_deploy and not (args.coin_address or args.option_address or args.coin_tx_hash or args.option_tx_hash):
+        warnings.append(
+            f"Missing `state/deployments/{args.network}_full_deploy.json` and no explicit --coin/--option args provided."
+        )
     if not coin_addr:
         warnings.append("Missing or invalid SolarPunkCoin address.")
     if not option_addr:
@@ -165,8 +186,11 @@ def main() -> int:
         "warnings": warnings,
     }
 
-    out_json = root / args.out_json
-    out_md = root / args.out_md
+    out_json_path = args.out_json or f"state/deployments/{args.network}_receipt.json"
+    out_md_path = args.out_md or "docs/project/DEPLOYMENT_RECEIPT_SUMMARY.md"
+
+    out_json = root / out_json_path
+    out_md = root / out_md_path
     out_json.parent.mkdir(parents=True, exist_ok=True)
     out_md.parent.mkdir(parents=True, exist_ok=True)
 

@@ -94,11 +94,9 @@ async function main() {
   const receiptFile = path.join(deployDir, `${networkName}_full_deploy.json`);
   fs.writeFileSync(receiptFile, JSON.stringify(receipt, null, 2) + "\n");
 
-  // Also write quick-reference files
-  fs.writeFileSync(path.join(rootDir, ".testnet_address"), spkAddress + "\n");
-  fs.writeFileSync(path.join(rootDir, ".testnet_tx_hash"), (spkTx?.hash || "") + "\n");
-  fs.writeFileSync(path.join(rootDir, ".pillar3_address"), optionAddress + "\n");
-  fs.writeFileSync(path.join(rootDir, ".pillar3_tx_hash"), (optionTx?.hash || "") + "\n");
+  // NOTE: Do not write ambiguous dotfiles like `.testnet_address` that can be
+  // confused with public testnet deployments. The canonical source of truth is
+  // the network-scoped receipt: `state/deployments/<network>_full_deploy.json`.
 
   // --- Summary ---
   const explorerBase = {
