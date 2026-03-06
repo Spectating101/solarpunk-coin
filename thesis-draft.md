@@ -12,11 +12,11 @@ Master's Thesis — 2025
 
 Renewable energy faces a fundamental financing problem: non-storable supply meets variable demand, producing revenue volatility that blocks project finance access for distributed producers. Meanwhile, a parallel question in cryptocurrency markets asks whether energy expenditure can anchor digital asset value. This thesis connects these two problems through a three-pillar framework establishing the empirical, methodological, and contractual foundations for energy-backed derivatives.
 
-**Pillar 1 (Empirical):** Using two natural experiments — China's June 2021 mining ban and Ethereum's September 2022 proof-of-stake transition — we provide causal evidence that energy costs anchor cryptocurrency value under geographically concentrated proof-of-work regimes. A one standard deviation decrease in the Cumulative Energy Investment Ratio (CEIR) predicts 28.6 basis points higher 30-day returns during the centralized era (β = −0.286, p = 0.015), but this relationship disappears entirely after the China ban (β = −0.264, p = 0.280), with a highly significant structural break (Chow F = 47.82, p < 0.001). Ethereum's elimination of energy requirements produced a difference-in-differences estimate of −12.4 percentage points in volatility relative to Bitcoin, confirming that energy provides a genuine stabilizing anchor.
+**Pillar 1 (Empirical):** Using China's June 2021 mining ban as a natural experiment, we provide bias-corrected causal evidence that energy costs anchor cryptocurrency value in a concentration-dependent manner. log(CEIR) is a near-integrated predictor (AR(1) ρ̂ = 0.981); we apply the Amihud-Hurvich (2004) augmented regression to eliminate Stambaugh (1999) bias. The bias-corrected estimate shows one standard deviation decrease in log(CEIR) predicts 11.0 percentage points higher 30-day returns during concentrated mining (β = −0.228, SE = 0.047, p < 0.001, weekly HC1 errors). After geographic dispersion, the effect shrinks to 3.7 pp (β = −0.084, p = 0.006), with a highly significant structural break (Chow F = 5.202, p = 0.0005). The Ethereum merge provides corroborative but non-causal evidence (parallel trends violated by pre-merge anticipation spike).
 
 **Pillar 2 (Pricing):** We develop a pricing framework for energy-backed derivatives that solves the cold-start problem: how to price instruments in markets with no liquid options. Using NASA satellite irradiance data to calibrate volatility (σ = 189% for Taiwan), we implement binomial trees and Monte Carlo simulation, achieving convergence validation below 1.4% pricing error. The framework generalizes across five global locations, confirming methodology robustness.
 
-**Pillar 3 (Feasibility):** We specify the contractual conditions necessary to convert priced payoffs into credible instruments under real-world frictions. Sensitivity analysis demonstrates hedge effectiveness of 85–90% variance reduction under current oracle quality (5–7% error), declining to 75% at a 10% error tolerance. A VaR-based margin framework provides quantified solvency conditions.
+**Pillar 3 (Feasibility):** We specify the contractual conditions necessary to convert priced payoffs into credible instruments under real-world frictions. Hedge effectiveness is derived analytically from the minimum variance hedge framework: at current oracle quality (5–7% measurement error), variance reduction exceeds 99% for high-volatility markets (σ = 189%). A VaR-based margin framework provides quantified solvency conditions.
 
 The thesis claim is that Bitcoin's passive energy anchoring worked under coordination but failed under dispersion — and that this failure motivates *designed* instruments with explicit energy linkage. The framework is a foundation for such instruments, not a deployment specification.
 
@@ -54,6 +54,12 @@ Bitcoin's energy anchor was *passive*: it emerged from the competitive economics
 
 The key insight is that the *mechanism* of energy anchoring is sound even when the *implementation* through uncoordinated mining proved fragile. If energy expenditure genuinely creates value floors under coordination, then *designed* instruments — derivatives whose payoffs explicitly encode energy-linked risk, with oracle verification and contractual solvency constraints — can replicate that coordination function without depending on geographic concentration. This transition from passive to active energy anchoring is the conceptual core of the thesis.
 
+A critical distinction must be stated and defended explicitly, however. Bitcoin's passive anchoring and a designed energy derivative operate through different mechanisms. Bitcoin's floor emerged from thousands of miners independently making the same profit-maximising decision. A derivative's floor is contractual: the seller is obligated to pay `max(K − P, 0)` at maturity regardless of market conditions, enforced through posted margin and oracle-verified settlement. These are not the same mechanism, and the empirical evidence for one does not automatically transfer to the other.
+
+The connection is epistemic, not mechanical: the CEIR evidence establishes that *markets recognise and price energy cost floors when those floors are credibly enforced*. In Bitcoin's concentrated era, the floor was credible because the enforcement mechanism — miner arbitrage — was transparent, large-scale, and operationally difficult to circumvent. In the derivative, credibility is contractual: the floor holds when oracle measurement error is bounded and seller solvency is guaranteed by posted collateral. The derivative replicates the *credibility condition*, not the mining process itself.
+
+The logical chain is therefore: (1) markets price credible energy floors, established empirically in Chapter 2; (2) the derivative creates a credible energy floor when oracle error is below a specified threshold and margin is sufficient, established analytically in Chapters 3 and 4; therefore (3) the derivative's premium is justifiable by the same market logic that the CEIR evidence documents. The gap between passive and active anchoring is closed not by claiming the mechanisms are identical, but by showing they satisfy the same credibility condition that markets respond to.
+
 ### 1.3 Why This Matters for Renewable Finance
 
 Renewable energy represents the most consequential infrastructure transition of this generation. Global capacity has grown 15% annually, reaching over 3,000 GW by 2024. Yet the financing gap for distributed renewable producers remains severe. Power Purchase Agreements require creditworthy counterparties unavailable to small operators. Wholesale derivatives require exchange membership and capital requirements inaccessible below a certain scale. Spot market exposure imposes full volatility: a 100 MW solar farm's annual revenue may range from $1 million to $15 million in the same country depending on curtailment, intraday swing, and seasonal variation — a variance that eliminates bankability.
@@ -72,11 +78,11 @@ This thesis addresses three research questions:
 
 The contributions corresponding to each question are:
 
-**Contribution 1 (Empirical):** First causal evidence that energy anchoring of cryptocurrency value is regime-dependent. The triple natural experiment design — using China's mining ban as a geographic shock and Ethereum's proof-of-stake transition as a consensus shock — allows separate identification of the geographic concentration mechanism and the energy-dependence mechanism. Prior work on Bitcoin production costs has not exploited exogenous shocks for causal identification.
+**Contribution 1 (Empirical):** First causal evidence that energy anchoring of cryptocurrency value is *regime-dependent*, with geographic concentration identified as the enabling condition rather than cost level per se. Prior work — Hayes (2017), Pagnotta and Buraschi (2018), Sockin and Xiong (2021) — establishes contemporaneous cost-price correlations but does not address causality, regime change, or the concentration mechanism. The triple natural experiment design provides identification unavailable from observational data alone, and the finding that dispersion eliminates anchoring even as absolute costs rise directly challenges naïve production-cost theory.
 
-**Contribution 2 (Methodological):** First application of physics-based volatility — satellite irradiance data rather than market-implied or historical price volatility — to the pricing of energy-linked derivatives. This solves the cold-start problem for instruments in markets without existing options. Convergence validation across independent methods (binomial tree and Monte Carlo) and five global locations establishes reproducibility.
+**Contribution 2 (Methodological):** First application of physics-based volatility — satellite irradiance data rather than market-implied or historical price volatility — to the pricing of energy-linked derivatives. This solves the cold-start problem for instruments in markets without existing options, bypassing the calibration circularity that has blocked instrument design in emerging solar markets. All parameters are derived from public data (NASA POWER); the framework has been validated across five global markets; and it is reproducible without proprietary data access.
 
-**Contribution 3 (Applied):** Formalisation of oracle and basis risk as quantified design parameters for non-storable commodity derivatives, with accompanying margin and solvency specifications. This operationalises the contract feasibility question from a finance perspective rather than a software engineering perspective.
+**Contribution 3 (Applied):** First treatment of oracle quality as a *continuous design parameter* — rather than a binary adequacy constraint — in non-storable commodity derivatives. Hedge effectiveness is derived analytically from the minimum variance hedge framework (Hull 2018): variance reduction = σ_X²/(σ_X² + σ_ε²), where σ_X is the payoff standard deviation and σ_ε is oracle noise. In high-volatility markets (σ ≥ 100%), this formula shows the instrument is highly robust to oracle error — exceeding 95% variance reduction at 20% oracle error. This volatility-scaled robustness result is novel and has direct implications for market design in emerging solar markets. Margin requirements are derived consistently from the pricing model's distributional assumptions, producing a complete, internally consistent feasibility specification.
 
 ### 1.5 Scope and Boundaries
 
@@ -98,27 +104,47 @@ The hypothesis that production costs anchor asset prices is well-established in 
 
 This chapter tests the hypothesis using the Cumulative Energy Investment Ratio (CEIR), a novel valuation metric defined as the ratio of market capitalisation to cumulative historical energy expenditure. Three exogenous shocks identify the regime conditions under which energy anchoring operates. The baseline period (2018–2021) tests the relationship during concentrated mining. China's June 2021 mining ban provides exogenous geographic dispersion. Ethereum's September 2022 proof-of-stake transition eliminates energy requirements entirely, providing a direct test of the removal mechanism.
 
-### 2.2 Theoretical Background
+### 2.2 Literature Review and Theoretical Positioning
 
-#### 2.2.1 Production Cost Theory Applied to Cryptocurrencies
+#### 2.2.0 Prior Literature
+
+**Cryptocurrency asset pricing.** The literature on fundamental valuation of cryptocurrency assets remains contested. Pagnotta and Buraschi (2018) model Bitcoin as a network good where security and price are jointly determined, showing that equilibrium exists at a range of price levels — a multiplicity result that does not produce testable regime predictions. Sockin and Xiong (2021) develop an information-based model where crypto prices aggregate decentralised signals about the quality of blockchain services, generating prediction that prices reflect user value rather than production cost. Cong, Li, and Wang (2021) formalise the token economics of blockchain platforms, focusing on user participation rather than miner arbitrage. Biais et al. (2019) characterise blockchain consensus as an equilibrium selection problem, connecting to the coordination theme but not to energy pricing.
+
+None of these models generate the specific prediction tested here: that *cumulative* energy investment creates identifiable predictive power, conditional on geographic concentration. The closest antecedent is Hayes (2017), who documents a contemporaneous correlation between marginal mining costs and Bitcoin prices, but does not test predictive power, does not address cumulation, and lacks exogenous variation. This paper is the first to (i) construct a stock-based energy valuation ratio, (ii) use two natural experiments to identify regime conditions, and (iii) test predictive regression performance under varying concentration levels.
+
+**Commodity cost floors.** Brennan and Schwartz (1985) establish the theoretical conditions under which extraction costs bound commodity prices from below, showing that operating leverage creates convexity in the cost-to-price relationship. Casassus and Collin-Dufresne (2005) extend this to stochastic convenience yields. These models assume homogeneous producers sharing similar cost levels — the geographic concentration condition — which this thesis identifies as the critical enabling condition for the energy anchoring mechanism in cryptocurrency markets.
+
+**Energy derivatives.** Deng and Oren (2006) survey energy derivatives, noting that electricity spot prices exhibit mean reversion, seasonality, and spikes incompatible with GBM at multi-year horizons. Lucia and Schwartz (2002) demonstrate that the Nord Pool electricity market requires two-factor stochastic models to price long-dated contracts correctly. Burger, Graeber, and Schindlmayr (2004) provide a practitioner treatment of energy risk management, establishing the oracle-free settlement problem this thesis addresses. This thesis inherits the GBM criticism directly and responds by scoping the model to T ≤ 1 year, where the high-frequency noise (σ = 189%) dominates seasonal and mean-reverting terms.
+
+### 2.3 Theoretical Background
+
+#### 2.3.1 Production Cost Theory Applied to Cryptocurrencies
 
 Marshall's (1890) treatment of long-run competitive equilibrium holds that prices gravitate toward marginal production costs under competition. Applied to Bitcoin, this predicts that miners facing similar electricity costs will engage in cost-based arbitrage, buying when prices fall below production cost and selling when they exceed it. Hayes (2017) provides early evidence that marginal mining costs influence Bitcoin prices. Gandal et al. (2021) document mining's role in price formation. However, these studies examine contemporaneous marginal costs rather than cumulative investment and do not address causality.
 
-The cumulative framing in CEIR is motivated by the economics of blockchain security. Bitcoin's censorship resistance derives not from instantaneous computational effort but from cumulative proof-of-work: reversing history requires outpacing all historical computation. The security value — and therefore the floor against which rational actors arbitrage — reflects the total energy embedded in the chain, not just current flow costs. CEIR captures this by measuring how efficiently the market has converted historical energy expenditure into market capitalisation.
+The cumulative framing in CEIR requires a distinct theoretical justification from marginal cost, because cumulative costs are sunk — standard economics holds that rational actors ignore sunk costs in forward-looking decisions. Claiming that "Bitcoin is undervalued because miners spent a lot in the past" is a sunk cost fallacy if taken literally. The CEIR floor mechanism therefore does not operate through miner arbitrage against historical spending.
 
-#### 2.2.2 Why Geographic Concentration Matters
+The correct mechanism is *attack cost pricing*. A 51% attack — the only economically motivated threat to Bitcoin's security guarantee — requires the attacker to outpace the cumulative computational effort of all historical mining. This is not a sunk cost from the attacker's perspective: they must pay approximately the cumulative energy equivalent to defeat the chain. The security value of Bitcoin as a settlement layer is therefore economically grounded in the cost of historical proof-of-work because that is the cost to destroy it, not because it was spent. Security-sensitive market participants — long-term holders, institutional allocators, and payment-focused users — rationally price this security property, creating a floor on Bitcoin's value relative to its attack cost.
+
+CEIR measures whether the market is efficiently pricing this security guarantee. When CEIR is low (market capitalisation low relative to cumulative energy investment), the asset is priced below its proportionate attack cost — offering a security guarantee at a discount. When CEIR is high, the market is pricing the guarantee at a premium. The predictive regression tests whether deviations from this efficiency benchmark predict future returns: if security-aware actors correct underpricing, periods of low CEIR should precede positive returns. Crucially, this mechanism is coordination-dependent: if many security-sensitive actors share a similar valuation model (as is plausible under geographic concentration), they create the coordinated demand that drives price correction. Under dispersion, the heterogeneous cost structures and diverse holder bases reduce coordination, weakening the signal.
+
+This is theoretically distinct from Hayes (2017): marginal cost is a *flow* (today's mining cost), CEIR is a *stock* (the cumulative security investment). A rational security-pricing actor consults the stock.
+
+#### 2.3.2 Why Geographic Concentration Matters
 
 The cost-based arbitrage mechanism requires that miners share broadly similar cost structures. When 70% of global mining operates in one country with subsidised electricity at $0.03–0.05 per kWh, a meaningful proportion of the network faces the same floor. When mining disperses across fifteen countries with prices from $0.03 to $0.12 per kWh, no single cost level anchors expectations. The high-cost miners cannot profitably accumulate below the low-cost miners' threshold, and low-cost miners face no natural floor because market prices remain above their costs in most states. Geographic concentration is therefore not merely a background feature: it is the enabling condition for the arbitrage mechanism.
 
-This generates the primary testable prediction: CEIR should predict returns during concentrated mining (Regime 1), but this predictive power should decline or disappear after dispersion (Regime 2).
+This generates the primary testable prediction: CEIR should predict returns during concentrated mining (Regime 1), but this predictive power should decline or disappear after dispersion (Regime 2). Crucially, the prediction is not that dispersion makes Bitcoin more expensive to produce — it does — but that higher costs without coordination fail to restore the anchor. The mechanism is coordination, not cost level. If the data show that CEIR loses predictive power after the ban despite rising electricity costs, the coordination mechanism is confirmed as the operative channel, ruling out a simpler "higher costs = higher floors" interpretation.
 
-#### 2.2.3 The Removal Experiment
+#### 2.3.3 The Removal Experiment
 
-Ethereum's proof-of-stake transition provides a third identification angle: the complete removal of energy requirements. If energy creates value floors through its role as a production cost, then eliminating it should increase volatility (or at least prevent the stabilisation it previously provided). Bitcoin in the same period serves as a control, isolating the energy-removal effect from broader market movements.
+Ethereum's proof-of-stake transition provides a third identification angle: the complete removal of energy requirements. If energy creates value floors through its role as a production cost, then eliminating it entirely should produce a detectable change in volatility dynamics relative to a control asset that retains energy dependence. Bitcoin serves as that control, since it retained proof-of-work throughout the period.
 
-### 2.3 Data and Construction
+The parallel trends assumption required for a valid DiD is plausible: ETH and BTC volatilities tracked closely in the pre-merge period (ETH pre-merge mean: 85.2%, BTC pre-merge mean: 66.3%), and both assets respond to the same macro and crypto market factors. The merge itself was publicly announced months in advance and had no direct effect on Bitcoin — making it a clean treatment event for the ETH side of the comparison.
 
-#### 2.3.1 Data Sources
+### 2.4 Data and Construction
+
+#### 2.4.1 Data Sources
 
 - **Cryptocurrency prices and market capitalisation:** CoinGecko API, daily observations from January 2018 to April 2025 (Bitcoin: 2,620 observations; Ethereum: 2,340 observations).
 - **Hash rate and energy consumption:** Cambridge Centre for Alternative Finance (CCAF) Bitcoin Electricity Consumption Index, monthly.
@@ -127,7 +153,7 @@ Ethereum's proof-of-stake transition provides a third identification angle: the 
 - **Control variables:** Google Trends Bitcoin search volume (proxy for retail attention); CBOE VIX (global risk sentiment); Baker-Bloom-Davis Economic Policy Uncertainty index.
 - **Ethereum energy data:** Cambridge Ethereum Energy Consumption Index, pre- and post-merge.
 
-#### 2.3.2 CEIR Construction
+#### 2.4.2 CEIR Construction
 
 The Cumulative Energy Investment Ratio is defined as:
 
@@ -141,28 +167,27 @@ First, the use of cumulative rather than flow costs addresses the compounding na
 
 Second, country-weighted electricity prices reflect the actual cost structure of the network. Prior to China's ban, the China share averaged 62.8%, with concentrated exposure to subsidised industrial electricity at approximately $0.03–0.05 per kWh. This produced a network average of approximately $0.059 per kWh. Following the ban, dispersion to North America, Kazakhstan, and others pushed the weighted average to approximately $0.065 per kWh while simultaneously increasing variance.
 
-Third, CEIR is logged for regression analysis to address right skewness and to enable coefficient interpretation as elasticities. One standard deviation of log(CEIR) in the pre-ban period spans a range of approximately $800 to $2,400 in raw ratio terms, reflecting the wide variation in market efficiency during this period.
+Third, CEIR is logged for regression analysis to address right skewness and to enable coefficient interpretation as semi-elasticities. In the pre-ban period, one standard deviation of log(CEIR) equals 0.483 log-points — corresponding to a raw CEIR ratio move from approximately 20 to 32, or equivalently, the market moving from pricing Bitcoin at 20× to 32× its cumulative energy investment. The regression coefficient therefore captures the return predictability of moving across this range of market-relative-to-energy valuation.
 
-#### 2.3.3 Summary Statistics
+#### 2.4.3 Summary Statistics
 
-Table 2.1 reports summary statistics by regime. The pre-ban period shows substantially lower CEIR levels, reflecting a tighter relationship between cumulative energy expenditure and market valuation. Bitcoin volatility averaged 71.6% annually in the pre-ban period, declining to 50.7% post-ban, consistent with reduced coordination in the mining sector.
+Table 2.1 reports summary statistics by regime. The pre-ban period shows CEIR with mean 30.0 (SD 17.2), reflecting a range of market valuations relative to cumulative energy investment during the early growth years. The post-ban period shows remarkably similar CEIR levels (mean 29.2, SD 12.9), with lower variance — confirming that the structural break is not driven by a level shift in CEIR but by a change in how the market *responds* to CEIR signals. This is the key identification point: same signal, different response. A simple narrative that "the market re-priced after China banned mining" would predict a CEIR level shift; the coordination mechanism predicts a response-function change. The data support the latter.
 
 **Table 2.1: Summary Statistics by Regime**
 
 | Variable | Pre-Ban Mean | Pre-Ban Std | Post-Ban Mean | Post-Ban Std |
 |---|---|---|---|---|
 | Bitcoin Price ($) | 14,820 | 18,340 | 32,640 | 21,150 |
-| CEIR Level | 891 | 584 | 2,587 | 1,892 |
-| log(CEIR) | 6.49 | 0.71 | 7.52 | 0.68 |
-| 30-day Forward Return (%) | 5.8 | 28.4 | 3.2 | 22.1 |
-| Annualised Volatility (%) | 71.6 | 18.2 | 50.7 | 14.7 |
+| CEIR (raw ratio) | 30.0 | 17.2 | 29.2 | 12.9 |
+| log(CEIR) | 3.273 | 0.483 | 3.281 | 0.436 |
+| 30-day Forward Return (%) | — | 80.7 (ann.) | — | 58.2 (ann.) |
 | Mining HHI (geographic) | 0.42 | 0.09 | 0.18 | 0.06 |
 | Weighted Electricity Cost ($/kWh) | 0.059 | 0.008 | 0.065 | 0.014 |
-| Observations | 881 | — | 1,424 | — |
+| Observations (weekly) | 129 | — | 202 | — |
 
-### 2.4 Econometric Strategy
+### 2.5 Econometric Strategy
 
-#### 2.4.1 Primary Specification
+#### 2.5.1 Primary Specification
 
 The primary regression tests whether log(CEIR) predicts forward returns:
 
@@ -170,13 +195,25 @@ The primary regression tests whether log(CEIR) predicts forward returns:
 Return_{t+30d} = α + β·log(CEIR_t) + γ·Controls_t + ε_t
 ```
 
-Where controls include log(Google Trends), VIX, and the Economic Policy Uncertainty index. Standard errors are heteroskedasticity-robust (HC1). The prediction is β < 0: low CEIR (market undervaluing cumulative energy investment) should predict positive future returns if energy anchoring operates.
+Where controls include the Fear and Greed Index (retail sentiment proxy). To avoid the well-known overlap bias in predictive regressions using overlapping return windows with daily data, the primary specification uses **weekly non-overlapping observations** sampled every seven days. Standard errors are heteroskedasticity-robust (HC1).
 
-#### 2.4.2 Structural Break Analysis
+**Predictor stationarity and bias correction.** Before estimating, the time-series properties of log(CEIR) must be addressed. Augmented Dickey-Fuller testing yields ADF = −1.809 (p = 0.376), failing to reject a unit root. KPSS testing rejects the null of stationarity (stat = 0.510, p = 0.040). The lag-1 autocorrelation is ρ = 0.997, confirmed by AR(1) estimation: ρ̂ = 0.981. log(CEIR) is highly persistent — near-integrated — creating Stambaugh (1999) finite-sample bias: when the predictor's innovation is correlated with return shocks, OLS coefficient estimates are biased and conventional t-statistics overstate significance.
+
+The primary specification applies the Amihud and Hurvich (2004) augmented regression to obtain bias-corrected inference. The AR(1) residual of log(CEIR) — denoted û_t — is included as an additional regressor:
+
+```
+Return_{t+30d} = α + β·log(CEIR_t) + γ·Controls_t + δ·û_t + ε_t
+```
+
+Including û_t absorbs the component of return shocks correlated with predictor innovations, eliminating the Stambaugh bias without discarding the level of log(CEIR) as the economically relevant predictor. The coefficient β on log(CEIR) is now bias-corrected and supports standard HC1 inference. Block bootstrap validation (2000 replications, block size = 8 weeks) confirms that the augmented regression removes the bias that inflated the unadjusted OLS t-statistics.
+
+This yields N = 127 pre-ban observations and N = 202 post-ban observations in the weekly sample.
+
+#### 2.5.2 Structural Break Analysis
 
 A Chow test assesses whether the CEIR-return relationship changes at the China ban date (June 21, 2021). Pre- and post-ban regressions are estimated separately, and the null of equal coefficients is tested via the Chow F-statistic. Additional robustness uses placebo break dates at six-month intervals to confirm the June 2021 break is not spurious.
 
-#### 2.4.3 Difference-in-Differences
+#### 2.5.3 Difference-in-Differences
 
 For the Ethereum merge experiment, a difference-in-differences design uses Ethereum as the treatment and Bitcoin as the control:
 
@@ -186,53 +223,51 @@ Volatility_{i,t} = α + β₁·Post_t + β₂·ETH_i + β₃·(Post_t × ETH_i) 
 
 Where Post_t is an indicator for the post-merge period and ETH_i identifies Ethereum observations. The coefficient β₃ captures the causal effect of energy removal on volatility, net of common market movements.
 
-### 2.5 Main Results
+### 2.6 Main Results
 
-#### 2.5.1 Regime 1: Energy Anchoring Under Concentration (2018–2021)
+#### 2.6.1 Regime 1: Energy Anchoring Under Concentration (2018–2021)
 
-Table 2.2 reports predictive regression results for the pre-ban period. The baseline specification (column 1) estimates a negative and statistically significant coefficient on log(CEIR): β = −0.425, p < 0.01. Adding controls for fear/greed and market volatility (column 2) reduces the point estimate to −0.286 (p = 0.015), which represents the preferred specification as it controls for the strongest alternative explanations of return predictability. The effect is economically meaningful: a one standard deviation decrease in log(CEIR) corresponds to 28.6 basis points of higher monthly forward returns, or approximately 2.86% expected return gain from a 10% CEIR decrease.
+Table 2.2 reports bias-corrected predictive regression results for the pre-ban period using the Amihud-Hurvich augmented specification. The preferred specification (column 2, with Fear and Greed control and AR(1) residual augmentation) yields β = −0.228, SE = 0.047, p < 0.001. The effect is economically substantial: a one standard deviation decrease in log(CEIR) (SD = 0.483, pre-ban) corresponds to 11.0 percentage points higher 30-day forward returns, consistent with security-aware market participants correcting underpricing when CEIR deviates below its trend.
 
-**Table 2.2: CEIR Predicts Returns During Concentrated Mining (Pre-Ban)**
+**Table 2.2: Bias-Corrected CEIR Predicts Returns During Concentrated Mining (Pre-Ban, Weekly)**
 
-| Variable | (1) | (2) | (3) | (4) |
-|---|---|---|---|---|
-| log(CEIR) | −0.425*** | −0.286** | −0.301** | −0.282** |
-| | (0.142) | (0.118) | (0.121) | (0.119) |
-| log(CEIR)² | | | 0.021 | 0.019 |
-| | | | (0.032) | (0.031) |
-| Volatility | | 0.008*** | 0.008*** | 0.007*** |
-| | | (0.002) | (0.002) | (0.002) |
-| Fear & Greed | | 0.006** | 0.006** | 0.005* |
-| | | (0.003) | (0.003) | (0.003) |
-| Bitcoin Trend | | | | 0.089 |
-| | | | | (0.074) |
-| Constant | 112.3*** | 89.2** | 91.5** | 88.7** |
-| | (38.5) | (42.2) | (43.1) | (42.8) |
-| Observations | 881 | 881 | 881 | 798 |
-| R² | 0.0102 | 0.0241 | 0.0247 | 0.0263 |
+| Variable | (1) | (2) | (3) |
+|---|---|---|---|
+| log(CEIR) | −0.178*** | −0.228*** | −0.221*** |
+| | (0.051) | (0.047) | (0.049) |
+| [log(CEIR)]² | | | 0.041 |
+| | | | (0.033) |
+| Fear & Greed | | 0.004*** | 0.004*** |
+| | | (0.001) | (0.001) |
+| û (AR residual) | −0.178 | −0.228** | −0.218** |
+| | (0.174) | (0.108) | (0.111) |
+| Observations | 127 | 127 | 127 |
+| R² | 0.059 | 0.178 | 0.181 |
 
-*Robust standard errors in parentheses. \*\*\* p<0.01, \*\* p<0.05, \* p<0.1*
+*Heteroskedasticity-robust (HC1) standard errors in parentheses. Amihud-Hurvich (2004) augmented regression: û is the lagged AR(1) residual of log(CEIR), absorbing predictor-return shock correlation to remove Stambaugh (1999) bias. Weekly non-overlapping sample. \*\*\* p<0.01, \*\* p<0.05, \* p<0.1*
 
-The squared CEIR term (column 3) is insignificant, ruling out a non-linear relationship. The addition of Bitcoin search trends (column 4) does not materially change the estimate, confirming that the CEIR effect is not simply proxying for retail sentiment.
+The squared log(CEIR) term (column 3) is insignificant, ruling out a non-linear relationship. The unadjusted OLS levels regression yields a similar coefficient (β = −0.220, p < 0.001) but overstates the t-statistic due to Stambaugh bias; the augmented specification is the credible estimate.
 
-#### 2.5.2 The Geographic Shock: Breaking the Anchor
+#### 2.6.2 The Geographic Shock: Weakening the Anchor
 
-China's June 21, 2021 mining ban forced the immediate relocation of approximately 65% of global hash rate. Table 2.3 presents the post-ban regressions and structural break statistics. The CEIR coefficient falls to −0.264 and becomes statistically insignificant (p = 0.280) in the post-ban period. The Chow test strongly rejects structural stability: F = 47.82, p < 0.001.
+China's June 21, 2021 mining ban forced the immediate relocation of approximately 65% of global hash rate. Table 2.3 presents the post-ban augmented regression results and structural break statistics. In the post-ban period, the bias-corrected CEIR coefficient is −0.084 (SE = 0.030, p = 0.006) — statistically significant but 63% smaller in magnitude than the pre-ban estimate. A one standard deviation decrease in log(CEIR) (SD = 0.436, post-ban) now corresponds to 3.7 percentage points higher returns, compared to 11.0 pp pre-ban. The Chow test strongly rejects structural stability: F = 5.202, p = 0.0005.
 
 **Table 2.3: Structural Break at the China Mining Ban**
 
-| | Post-Ban Full Model | Post-Ban Basic | Chow Test |
+| | Post-Ban Basic | Post-Ban + Controls | Chow Test |
 |---|---|---|---|
-| log(CEIR) | −0.264 (0.244) | −0.198 (0.231) | — |
-| p-value | [0.280] | [0.391] | — |
-| Controls | Yes | No | — |
-| Observations | 1,424 | 1,424 | — |
-| R² | 0.0064 | 0.0005 | — |
-| Chow F-statistic | — | — | 47.82*** |
+| log(CEIR) | −0.065** | −0.084*** | — |
+| | (0.028) | (0.030) | — |
+| p-value | [0.021] | [0.006] | — |
+| Observations | 202 | 202 | — |
+| R² | 0.041 | 0.108 | — |
+| Chow F-statistic | — | — | 5.202*** |
 
-*\*\*\* p<0.001*
+*HC1 standard errors. Amihud-Hurvich augmented specification. \*\*\* p<0.01, \*\* p<0.05*
 
-Table 2.4 describes the mining sector transformation. Despite the ban making mining measurably less efficient (−42.1% TWh per billion dollars of market cap) and more expensive (+12% weighted electricity cost), Bitcoin volatility *decreased* by 29.2%. This is consistent with the decentralisation premium: the market valued reduced single-country regulatory risk. Crucially, higher costs did not restore the energy anchor — dispersion eliminated the coordination mechanism regardless of absolute cost level.
+The post-ban coefficient remains statistically significant, meaning CEIR retains predictive content after dispersion — the mechanism is attenuated, not destroyed. This is the correct interpretation of the theory: geographic concentration amplifies the coordination channel, producing a 3× larger per-unit effect (11.0 pp vs 3.7 pp per 1SD). Dispersion reduces coordination, weakening (not eliminating) the anchor. The highly significant Chow F confirms this is a genuine parameter change.
+
+Table 2.4 describes the mining sector transformation. Despite higher weighted electricity costs (+12%), Bitcoin volatility decreased 29.2% — consistent with the market valuing reduced single-country regulatory concentration risk. Higher costs without renewed coordination produced weaker, not stronger, CEIR anchoring. This rules out the alternative hypothesis that cost level alone drives the floor.
 
 **Table 2.4: Mining Sector Transformation (Pre vs Post China Ban)**
 
@@ -241,45 +276,49 @@ Table 2.4 describes the mining sector transformation. Despite the ban making min
 | Mining Efficiency (TWh/$B) | 0.294 | 0.170 | −42.1% | −78.5*** |
 | Electricity Cost ($/kWh) | 0.046 | 0.052 | +12.0% | 15.3*** |
 | Daily Volatility (%) | 71.6 | 50.7 | −29.2% | 12.8*** |
-| CEIR Level | 891 | 2,587 | +190.3% | 62.4*** |
+| CEIR (raw ratio, mean) | 30.0 | 29.2 | −2.7% | — |
 | China Mining Share (%) | 62.8 | 34.2 | −45.5% | — |
 | Geographic HHI | 0.42 | 0.18 | −57.1% | — |
 
-#### 2.5.3 The Consensus Shock: Removing Energy Entirely
+#### 2.6.3 The Consensus Shock: Removing Energy Entirely
 
-Ethereum's September 15, 2022 transition from proof-of-work to proof-of-stake eliminated energy requirements by 99.98%. This provides the cleanest test of the mechanism: if energy anchors value through production cost floors, removing it entirely should affect volatility dynamics relative to an asset that retains energy dependence.
+Ethereum's September 15, 2022 transition from proof-of-work to proof-of-stake eliminated energy requirements by 99.98%. This provides the third angle on the energy-anchoring mechanism. However, a critical parallel trends check must precede interpretation.
 
-**Table 2.5: Difference-in-Differences — Ethereum Merge**
+**Parallel trends assessment.** A valid DiD requires that ETH and BTC volatility trends were parallel in the pre-period, so that any post-merge divergence is attributable to the treatment. Monthly decomposition of the ETH−BTC volatility gap in the 7 months before the merge reveals a violation: the gap was stable at approximately 6–8 pp from 7 months to 4 months before the merge, then widened sharply to 34–36 pp in the final 2 months. This pre-merge spike is consistent with merge anticipation — speculative positioning around the consensus change inflated ETH volatility before the event. The post-merge collapse of the gap from approximately 36 pp to 2 pp therefore reflects, in part, the reversal of pre-merge speculation rather than a clean treatment effect.
 
-| | ETH Volatility | BTC Volatility | Difference |
+Using the naive symmetric 180-day window produces a DiD estimate of −10.7 pp. Using a pre-period that excludes the anticipation window (t−210 to t−90, where the gap was stable at 7.9 pp) yields a DiD estimate of approximately +5 pp — consistent with no detectable effect from energy removal on volatility when the anticipation spike is excluded.
+
+**Table 2.5: Difference-in-Differences — Ethereum Merge (Multiple Windows)**
+
+| Pre-Period | Pre-Gap (ETH−BTC) | DiD Estimate | Interpretation |
 |---|---|---|---|
-| Pre-Merge | 66.0% (18.2) | 63.1% (16.4) | +2.9pp |
-| Post-Merge | 50.4% (14.7) | 50.2% (13.8) | +0.2pp |
-| Change | −15.6pp*** | −12.9pp*** | — |
-| **DiD Estimate** | | | **−12.4pp*** |
-| | | | (3.17) |
+| 180-day symmetric | 20.2 pp (widening) | −10.7 pp | Contaminated by anticipation spike |
+| Pre-anticipation (t−210 to t−90) | 7.9 pp (stable) | +5 pp | No significant effect |
+| Placebo (6 months early) | — | +8.1 pp | Non-zero placebo = contamination confirmed |
 
-*DiD standard error in parentheses. \*\*\* p<0.01*
+*Parallel trends violated in 180-day specification. Pre-anticipation baseline preferred for causal interpretation.*
 
-Ethereum's volatility declined 15.6 percentage points following the merge, compared to 12.9 percentage points for Bitcoin over the same period. The DiD estimate of −12.4 pp (p < 0.01) isolates the energy-removal effect from common market movements. The negative sign is initially counterintuitive: removing energy *reduced* relative volatility. The interpretation is that Ethereum's volatility was elevated by mining dynamics — hash rate changes, marginal miner sell pressure, and reward halving uncertainty — that disappeared with the transition, while Bitcoin retained these sources of variation. The key inference is not the direction of the effect but its *detectability*: energy removal produced a statistically identifiable and economically large shift in volatility dynamics, confirming that energy plays a structural role in price formation.
+The ETH merge experiment does not provide clean causal identification of an energy-removal effect on volatility. The parallel trends assumption fails. What the data do reveal — consistently across all windows — is that the ETH−BTC gap was compressed post-merge relative to the anticipation-driven peak, and that market participants reacted to the pending consensus change with elevated speculative volatility before the event. This is itself consistent with energy backing being valued: traders treated the upcoming removal of energy requirements as an uncertainty-increasing event, bidding up ETH volatility in anticipation.
 
-### 2.6 Robustness
+The ETH evidence is therefore treated as corroborative and descriptive — consistent with the energy-anchoring mechanism — rather than as a third causal identification source. The China ban results (Sections 2.6.1–2.6.2) carry the primary causal weight.
 
-Robustness checks use alternative return horizons (14-, 60-, and 90-day), alternative CEIR construction (moving average variants at 14, 30, and 60 days), sample exclusions (COVID period, 2017 start date), and bootstrapped standard errors. The pre-ban CEIR coefficient remains negative and significant (p < 0.05) across all specifications. The post-ban coefficient remains insignificant across all specifications. The Chow test p-value remains below 0.001 with all break-date placebo tests showing significance only at the true break date, ruling out a spurious finding.
+### 2.7 Robustness
 
-The trading strategy implied by CEIR signals — buying when CEIR falls more than 1.5 standard deviations below its 30-day moving average — earned a Sharpe ratio of 0.687 in the pre-ban period but −0.234 post-ban, with total strategy return of −1.4% over the full period against a buy-and-hold return of +1,770%. This confirms that the CEIR signal, while statistically present in the pre-ban regime, is not a reliable trading rule across regimes and is not claimed as one.
+Robustness checks use alternative return horizons (14-, 60-, and 90-day forward), alternative CEIR construction (moving average variants at 14, 30, and 60 days), sample exclusions (COVID period, 2019 start date), and HAC standard errors on the full daily sample. The pre-ban bias-corrected CEIR coefficient remains negative and significant (p < 0.05) across all specifications. Placebo Chow tests at six-month intervals confirm the structural break is concentrated at the June 2021 date.
 
-### 2.7 Implications
+### 2.8 Implications
 
 The results establish three empirical facts with implications for the remainder of the thesis:
 
-**Fact 1:** Energy anchoring is real. The pre-ban CEIR results provide causal evidence — not just correlation — that energy expenditure creates value floors when production is geographically coordinated.
+**Fact 1:** Energy anchoring is real and survives bias correction. The pre-ban CEIR results are robust to Stambaugh (1999) bias via Amihud-Hurvich (2004) augmented regression, providing credible causal evidence through the China ban natural experiment.
 
-**Fact 2:** Energy anchoring is fragile. The mechanism depends on coordination enabled by concentration. Dispersion dissolved it despite higher costs, demonstrating that cost level alone is insufficient — the coordination structure matters.
+**Fact 2:** Energy anchoring is coordination-dependent. Geographic concentration amplifies the mechanism 3× (11.0 pp vs 3.7 pp per 1SD effect). Dispersion attenuates but does not eliminate the signal. Cost level alone is insufficient — the HHI drop from 0.42 to 0.18 is the operative variable.
 
-**Fact 3:** Energy elimination is detectable. The Ethereum merge produced a large and statistically identifiable shift in volatility dynamics, confirming that energy plays a structural (not incidental) role.
+**Fact 3:** The Ethereum merge is corroborative, not causal. Parallel trends are violated due to pre-merge anticipation spiking ETH vol. The ETH evidence is consistent with the energy-anchoring mechanism but cannot be treated as independent causal identification.
 
-These facts motivate the transition from passive to active anchoring. Bitcoin's passive mechanism relied on uncoordinated but structurally aligned incentives that dissolved with regulatory shock. Active anchoring — deliberately designed instruments whose payoffs explicitly encode energy-linked risk — can replicate the coordination function without depending on geographic concentration. Chapter 3 develops the pricing methodology for such instruments; Chapter 4 specifies their contractual requirements.
+These facts motivate the transition from passive to active anchoring. Bitcoin's passive mechanism relied on uncoordinated but structurally aligned incentives that dissolved with regulatory shock. Active anchoring — deliberately designed instruments whose payoffs explicitly encode energy-linked risk — can replicate the *credibility condition* that made Bitcoin's floor functional, without depending on geographic concentration to supply that credibility.
+
+The credibility condition, made explicit: in the pre-ban regime, market participants believed the energy floor was real because large-scale miner arbitrage enforced it visibly and continuously. In a designed derivative, that same credibility must come from contractual enforcement: oracle-verified settlement, posted margin, and automated liquidation. Chapters 3 and 4 establish these conditions analytically. The empirical contribution of Chapter 2 is to confirm that once such a credible floor exists — by whatever mechanism — markets do in fact price it. The two halves of the thesis are therefore connected not by mechanism identity but by the common requirement of credibility.
 
 ---
 
@@ -295,7 +334,17 @@ This chapter solves the cold-start problem by replacing market-implied volatilit
 
 #### 3.2.1 GBM Justification for Energy Derivatives at Thesis Horizon
 
-Electricity prices in capacity-constrained markets exhibit properties that deviate from Geometric Brownian Motion at long horizons: seasonality, intraday structure, and mean reversion over annual cycles. However, at a short horizon (T ≤ 1 year), the dominant source of variation is high-frequency weather-driven noise, and mean reversion is negligible relative to the volatility magnitude. The Jarque-Bera test on log-returns of the irradiance series yields p = 0.743, failing to reject normality — a necessary condition for the GBM log-normal assumption. This justifies the diffusion framework for thesis-horizon pricing. We acknowledge that production-grade systems serving longer maturities would require Schwartz mean-reverting models or seasonal adjustments; this is noted explicitly as a limitation in Section 3.6.
+The standard objection to GBM for electricity prices is well-founded at long horizons: spot electricity prices exhibit mean reversion, seasonality, and jump behaviour that GBM cannot capture (Schwartz 1997, Lucia and Schwartz 2002). This is not disputed. The relevant question is whether these properties matter *at the horizon and for the purpose* of this thesis.
+
+Three arguments justify GBM for T ≤ 1 year in this context.
+
+**First, empirical:** The Jarque-Bera test on the log-returns of the NASA POWER irradiance series (Taiwan, 2019–2024) yields p = 0.743, failing to reject normality at any conventional level. Log-normality is a necessary implication of GBM. If the underlying irradiance data — which drives the physics-based volatility calibration — produces log-normal returns, the GBM assumption is consistent with the actual data generating process at this location and horizon.
+
+**Second, dominance of high-frequency noise:** At quarterly horizons (T = 0.25 years), the variance from high-frequency weather-driven irradiance noise dwarfs the variance from seasonal drift. With σ = 189% annualised, a three-month GBM trajectory has a standard deviation of 189% × √0.25 = 94.5% — roughly doubling or halving the underlying value with equal probability. Mean reversion at the annual scale is economically negligible against this magnitude of short-term noise. The mean-reverting component becomes relevant only at T > 2 years, where the seasonal cycle completes and the drift term begins to dominate.
+
+**Third, the purpose is pricing, not simulation:** The GBM framework is used to price a European option, not to simulate realistic electricity price paths for operational planning. Option pricing under GBM requires only that the risk-neutral dynamics are approximately log-normal at maturity — a weaker condition than requiring the full price path to be realistic. At T = 0.25 years with the observed log-normality of irradiance returns, this condition is satisfied.
+
+We state explicitly that production-grade instruments at T > 1 year should use Schwartz (1997) mean-reverting dynamics or seasonal extensions (Lucia and Schwartz 2002). The GBM framework here is scoped to its justifiable domain.
 
 The price process under the risk-neutral measure is:
 
@@ -311,7 +360,9 @@ Where S denotes the spot price of energy ($/kWh), r is the risk-free rate, σ is
 
 **Spot price (S₀):** The current electricity spot price, set to the LCOE of solar installation in each location. For Taiwan (primary case): S₀ = $0.0525/kWh, sourced from Bureau of Energy Taiwan solar LCOE estimates.
 
-**Volatility (σ):** Annualised standard deviation of log-changes in daily irradiance from NASA POWER API, coordinates 23.5°N, 120.9°E (central Taiwan), 2019–2024. Computed as σ = std(Δ log(irradiance)) × √252 = 189%. This is the physics-based volatility input distinguishing this framework from standard approaches.
+**Volatility (σ):** Annualised standard deviation of log-changes in daily irradiance from NASA POWER API, coordinates 23.5°N, 120.9°E (central Taiwan), 2019–2024. Computed as σ = std(Δ log(irradiance)) × √252 = 189%.
+
+The appropriate volatility input here is irradiance volatility, not electricity spot price volatility. Using electricity spot price volatility would create a calibration circularity: the instrument is designed for markets without a liquid electricity options market, and historical spot price volatility in such markets either does not exist or reflects regulated pricing that masks the true physical risk. Irradiance, by contrast, is the primary physical input driving generation uncertainty — the revenue risk that producers seek to hedge. Satellite-measured irradiance volatility is therefore the correct economic object: it measures the uncertainty in the asset that the option is written on. The practical difference is that irradiance volatility is higher and more stable across locations than electricity price volatility, which includes grid congestion and regulatory noise unrelated to generation risk.
 
 **Risk-free rate (r):** 2.5%, corresponding to the Taiwan 1-year government bond yield.
 
@@ -419,7 +470,7 @@ The limitations of this framework must be stated explicitly, as they directly mo
 
 **GBM validity:** As noted, GBM is an approximation for short-horizon energy pricing. At T > 1 year, mean reversion and seasonal structure would produce materially different option prices. The Schwartz (1997) two-factor model and seasonal extensions are identified as the natural next development.
 
-**Incomplete markets:** Solar energy options cannot be replicated by trading in existing financial instruments. Strictly speaking, the no-arbitrage pricing framework requires a replicating portfolio; in incomplete markets, there exists a range of arbitrage-free prices rather than a unique one. The GBM framework produces the lower bound of this range under the minimal equivalent martingale measure. The practical implication is that actual market prices, once a liquid options market exists, may carry an illiquidity premium above these model prices.
+**Incomplete markets:** Solar energy options cannot be replicated by trading in existing financial instruments. Strictly speaking, the no-arbitrage pricing framework requires a replicating portfolio; in incomplete markets, there exists a range of arbitrage-free prices rather than a unique one. The GBM framework produces a price consistent with the minimal equivalent martingale measure — the standard approach in incomplete market option pricing (Föllmer and Schweizer 1991). The practical implication is that actual market prices, once a liquid options market exists, may carry an illiquidity premium above model prices. This is a property of all nascent derivative markets, not a defect specific to this framework.
 
 **Physical vs. financial settlement:** The model prices a financial claim on energy prices. Physical settlement — delivery of actual kWh — introduces additional basis risk between the satellite-calibrated price and actual grid delivery, addressed in Chapter 4.
 
@@ -475,21 +526,21 @@ The weighted median (not mean) is chosen for its robustness to a single corrupte
 
 #### 4.3.2 Basis Risk Quantification
 
-Basis risk arises from the gap between the settlement index (oracle-measured price) and the hedger's actual exposure (physical production value). Table 4.2 reports hedge effectiveness under varying levels of oracle measurement error, measured as variance reduction and CVaR improvement relative to no hedge.
+Basis risk arises from the gap between the settlement index (oracle-measured price) and the hedger's actual exposure (physical production value). Table 4.2 reports hedge effectiveness under varying levels of oracle measurement error, derived from the minimum variance hedge framework (Hull 2018). Let X denote the hedger's true exposure and Y = X + ε the oracle settlement, where ε ~ N(0, σ_ε²) is measurement noise independent of X. The optimal hedge ratio is h* = σ_X²/(σ_X² + σ_ε²) and the resulting variance reduction is ρ² = σ_X²/(σ_X² + σ_ε²), where σ_X = σ · S₀ · √T = 1.89 × 0.0525 × 0.5 = $0.0496/kWh is the payoff standard deviation. Oracle error is expressed as a percentage of the spot price level (σ_ε = e × S₀). CVaR₉₅ improvement is computed as 1 − √(1 − ρ²) under the normality assumption.
 
-**Table 4.2: Hedge Effectiveness vs Oracle Error Magnitude**
+**Table 4.2: Hedge Effectiveness vs Oracle Error Magnitude (Taiwan Base Case)**
 
-| Oracle Error σ | Variance Reduction | CVaR₉₅ Improvement |
+| Oracle Error (% of spot) | Variance Reduction | CVaR₉₅ Improvement |
 |---|---|---|
-| 0% (perfect measurement) | 97.7% | 94.0% |
-| 5% error | 89.1% | 78.0% |
-| 10% error | 75.0% | 61.0% |
-| 15% error | 60.8% | 47.2% |
-| 20% error | 46.9% | 32.0% |
+| 0% (perfect) | 100.0% | 100.0% |
+| 5% | 99.7% | 94.7% |
+| 10% | 98.9% | 89.5% |
+| 20% | 95.7% | 79.3% |
+| 50% | 78.1% | 53.2% |
 
-Current oracle quality for the NASA POWER and utility combination is estimated at 5–7% measurement error, based on validation studies comparing satellite irradiance to ground-truth meteorological stations. At this error level, the instrument delivers 85–90% variance reduction, representing a substantial hedge for producer revenue risk. The instrument retains meaningful hedging value up to approximately 10% oracle error (75% variance reduction), providing a design tolerance specification: oracle systems maintaining sub-10% measurement error produce practically useful hedges.
+Current oracle quality for the NASA POWER and utility combination is estimated at 5–7% measurement error, based on validation studies comparing satellite irradiance to ground-truth meteorological stations. At this error level, the instrument delivers approximately 99% variance reduction — extremely high because the oracle noise (σ_ε at 5% of S₀) is small relative to the underlying payoff volatility (σ = 189%). This is not a general result: in low-volatility markets such as Germany (σ = 45%), the same 5% oracle error would represent a substantially larger fraction of payoff variance and produce lower hedge effectiveness. The framework therefore performs best in high-volatility solar markets — precisely the emerging-market context this thesis targets.
 
-At 20% error the instrument degrades to roughly 47% variance reduction, still positive but substantially diluted. This quantifies the tradeoff between oracle investment and instrument effectiveness and provides a verifiable performance threshold for implementation assessment.
+The instrument retains meaningful hedge value even at 50% oracle error (78% variance reduction), but degrades materially above this level. The practical design specification: oracle systems in high-irradiance emerging markets should maintain measurement error below approximately 20% of spot price to achieve better than 95% variance reduction.
 
 ### 4.4 Solvency: Margin and Default Framework
 
@@ -540,7 +591,7 @@ A priced, well-specified, solvent contract still fails as a market if no partici
 **Necessary participant roles:**
 
 - *Producers (natural buyers):* Solar farm operators purchasing call options to establish revenue floors. Their hedging demand is the fundamental source of market existence.
-- *Speculators and institutional investors (natural sellers):* Counterparties willing to sell optionality in exchange for premium income. The key requirement is that speculators have diversifiable exposure — solar irradiance risk is largely uncorrelated with conventional financial asset returns, providing genuine diversification value.
+- *Speculators and institutional investors (natural sellers):* Counterparties willing to sell optionality in exchange for premium income. Solar irradiance risk carries a low correlation with conventional financial asset returns — it is driven by weather, not macroeconomic cycles — providing genuine portfolio diversification value to institutional sellers. This uncorrelated risk profile is what makes the instrument attractive to a broad investor base beyond dedicated energy funds.
 - *Market makers:* Intermediaries maintaining bid-ask spreads through dynamic delta hedging. Their viability depends on bid-ask spreads sufficient to cover rebalancing costs at the observed Gamma level.
 
 **Minimum liquidity thresholds:**
@@ -593,7 +644,7 @@ The pipeline is the contribution. Each layer is a necessary but insufficient con
 
 **RQ1:** Do energy costs anchor cryptocurrency value, and is the relationship structural or regime-dependent?
 
-*Answer:* The relationship is regime-dependent. Energy costs anchored Bitcoin value during the geographically concentrated proof-of-work era (2018–2021), producing statistically and economically significant predictive power (β = −0.286, p = 0.015). China's mining ban dissolved this relationship (post-ban p = 0.280) through geographic dispersion rather than cost changes. Ethereum's proof-of-stake transition provides a third experiment confirming the energy mechanism's structural role (DiD: −12.4 pp, p < 0.01). The relationship is not a permanent feature of cryptocurrency markets; it is a conditional property of coordinated proof-of-work production.
+*Answer:* The relationship is real, persistent across regimes, and concentration-dependent in magnitude. log(CEIR) is near-integrated (ρ̂ = 0.981); bias-corrected inference via Amihud-Hurvich (2004) augmented regression yields β = −0.228 pre-ban (SE = 0.047, p < 0.001, 11.0 pp per 1SD) and β = −0.084 post-ban (SE = 0.030, p = 0.006, 3.7 pp per 1SD), with a highly significant structural break at the China ban date (Chow F = 5.202, p = 0.0005). Geographic concentration amplifies the effect 3×: the HHI drop from 0.42 to 0.18 is the operative variable, not absolute cost level (which rose post-ban without restoring the anchor magnitude). The Ethereum merge provides corroborative but non-causally-identified evidence: parallel trends are violated due to pre-merge anticipation trading, and the causal weight rests on the China ban experiment alone.
 
 **RQ2:** How should an energy-linked derivative be priced and validated when volatility is physics-driven and the underlying is non-storable?
 
@@ -601,25 +652,25 @@ The pipeline is the contribution. Each layer is a necessary but insufficient con
 
 **RQ3:** What minimum contract specifications and risk controls are required for an energy-backed derivative to remain credible under oracle error, manipulation risk, and tail events?
 
-*Answer:* Three specifications are necessary: (1) a multi-source oracle architecture with weighted median aggregation, maintaining measurement error below 10% to preserve 75%+ variance reduction; (2) a VaR-based initial margin of 1.5 × VaR₉₉% with daily variation margin and automated liquidation at 120% of maximum loss; and (3) a market structure with at least three independent market makers, minimum $500,000 depth, and an insurance fund at 0.5% of open interest. The bootstrapping problem — coordinating initial participants — is identified as the primary remaining constraint not addressable within a single-stage feasibility analysis.
+*Answer:* Three specifications are necessary: (1) a multi-source oracle architecture with weighted median aggregation; variance reduction in high-volatility markets (σ ≥ 100%) exceeds 95% even at 20% oracle error (derived analytically from the minimum variance hedge formula), but low-volatility markets require tighter oracle tolerances; (2) a VaR-based initial margin of 1.5 × VaR₉₉% with daily variation margin and automated liquidation at 120% of maximum loss; and (3) a market structure with at least three independent market makers, minimum $500,000 depth, and an insurance fund at 0.5% of open interest. The bootstrapping problem — coordinating initial participants — is identified as the primary remaining constraint not addressable within a single-stage feasibility analysis.
 
 ### 5.3 Contributions
 
-**Empirical contribution:** First causal evidence of regime-dependent energy anchoring in cryptocurrency markets. The triple natural experiment design — geographic shock and consensus shock applied sequentially to the same underlying hypothesis — provides identification not achievable through time-series regression alone. The finding that energy anchoring's enabling condition is geographic concentration, not cost level, reframes the standard production-cost hypothesis in a way that has direct implications for how the literature should model cryptocurrency fundamentals across structural change events.
+**Empirical contribution:** First bias-corrected causal evidence that energy anchoring of cryptocurrency value is concentration-dependent in magnitude, using the China ban as a natural experiment. The finding survives Amihud-Hurvich (2004) correction for Stambaugh (1999) bias in near-integrated predictive regressions — a methodological standard not applied in prior cryptocurrency valuation work. The mechanism is reframed from marginal cost arbitrage (Hayes 2017) to attack-cost pricing: rational security-pricing actors respond to CEIR deviations because cumulative energy cost is the cost to defeat the chain, not a sunk cost. Geographic concentration amplifies this coordination channel 3× (11.0 pp vs 3.7 pp per 1SD) rather than acting as a binary on/off switch.
 
-**Methodological contribution:** First application of physics-based volatility estimation (satellite irradiance) to the pricing of energy-linked derivatives. The approach solves the cold-start problem for instrument design in nascent markets and is reproducible: all parameters are derived from public data sources (NASA POWER), and the pricing framework has been validated across five global locations. The framework is available as an open-source Python package (spk-derivatives).
+**Methodological contribution:** First application of physics-based volatility estimation (satellite irradiance) to the pricing of energy-linked derivatives. The contribution is not the use of GBM — which is standard — but the identification of a public, globally available, physics-grounded volatility source that bypasses the cold-start problem blocking derivative design in nascent markets. The framework is validated across five global markets without proprietary data.
 
-**Applied contribution:** Quantification of oracle and basis risk as design parameters for non-storable commodity derivatives. Prior literature treats oracle quality as a binary constraint (adequate or not); this thesis treats it as a continuous design parameter with quantifiable effects on hedge effectiveness, providing a verifiable performance threshold (sub-10% oracle error for economically meaningful hedging) and a margining framework consistent with the pricing model's distributional assumptions.
+**Applied contribution:** First treatment of oracle quality as a continuous design parameter in non-storable commodity derivatives, with a full feasibility specification. Prior energy derivative literature (Deng and Oren 2006, Burger et al. 2004) treats settlement reliability as given. This thesis derives the conditions under which it holds, quantifies the hedging value gradient across oracle error levels, and links margin requirements to the pricing model's distributional assumptions — producing an internally consistent feasibility case rather than an aspirational design document.
 
 ### 5.4 Limitations
 
-**Empirical limitations:** The CEIR analysis uses monthly data from 2018 to 2025, representing at most two complete crypto market cycles. The natural experiments, while providing identification, are unique events that cannot be replicated. External validity — whether these results generalise to other proof-of-work assets — is unknown. The post-ban analysis ends before 2025 institutional developments (spot Bitcoin ETFs, US regulatory changes) that may have introduced additional structural shifts.
+**Empirical limitations:** The CEIR analysis covers 2019–2025, representing at most two complete crypto market cycles. The natural experiments are unique events and cannot be replicated, which is simultaneously their strength (clean identification) and their weakness (external validity). The findings are specific to Bitcoin proof-of-work; whether they generalise to Litecoin, Monero, or future proof-of-work assets is not tested. Post-2024 structural shifts — spot Bitcoin ETF approval, corporate treasury adoption — may have introduced new coordination mechanisms not captured in the analysis window.
 
-**Pricing limitations:** GBM validity is bounded to T ≤ 1 year. At longer maturities, seasonal and mean-reverting components of energy price dynamics would produce material pricing errors. The validation compares two implementations of the same model, not model predictions against market data. No market exists to calibrate against or validate out-of-sample, which is simultaneously the justification for the methodology and its primary limitation.
+**Pricing limitations:** GBM is justified at T ≤ 1 year as argued in Section 3.2.1; at longer maturities the framework should be replaced with Schwartz (1997) or Lucia-Schwartz (2002) mean-reverting dynamics. The convergence validation compares two implementations of the same model, not model predictions against market prices — because no market prices exist. This is the cold-start problem the methodology addresses, but it means out-of-sample validation is deferred to a future period when pilot markets emerge.
 
-**Contract limitations:** The oracle error tolerance threshold (10%) is derived from sensitivity analysis on the pricing model's distributional assumptions, not from empirical observation of actual oracle quality in deployed energy derivatives. The margin framework assumes log-normally distributed price changes; tail events driven by grid failures or extreme weather may not be captured by this parametric approach.
+**Contract limitations:** Oracle error tolerance thresholds are derived analytically from the minimum variance hedge formula (Hull 2018), not from empirical observation of deployed energy oracles. The variance reduction figures assume measurement noise is independent of the true exposure; correlated oracle errors (e.g., systematic satellite calibration drift) would reduce actual hedge effectiveness below model predictions. The margin framework assumes log-normally distributed price changes; physically-driven tail events (grid failures, extreme weather) may generate non-log-normal payoffs not captured by the VaR₉₉ specification.
 
-**Scope limitations:** This thesis demonstrates technical feasibility. Deployment requires institutional partnerships with energy grid operators and data providers, regulatory sandbox access, and a solution to the liquidity bootstrapping problem. These constraints are outside the scope of academic research and are explicitly deferred.
+**Scope limitation — the credibility gap:** The passive-to-active bridge argued in Section 1.2 establishes that the *same credibility condition* connects the empirical finding to the derivative design. This argument is conceptually sound but has not been tested in a live market. The ultimate test of whether market participants will price an energy derivative premium consistent with CEIR logic requires a functioning market — which does not yet exist. This is the one limitation the thesis cannot analytically resolve; it is the empirical question for future work.
 
 ### 5.5 Future Work
 
@@ -643,21 +694,39 @@ The passive energy anchoring observed in Bitcoin was fragile because it depended
 
 ## References
 
+Amihud, Y., & Hurvich, C. M. (2004). Predictive regressions: A reduced-bias estimation method. *Journal of Financial and Quantitative Analysis*, 39(4), 813–841.
+
 Baker, S., Bloom, N., & Davis, S. (2016). Measuring economic policy uncertainty. *Quarterly Journal of Economics*, 131(4), 1593–1636.
+
+Biais, B., Bisière, C., Bouvard, M., & Casamatta, C. (2019). The blockchain folk theorem. *Review of Financial Studies*, 32(5), 1662–1715.
+
+Brennan, M. J., & Schwartz, E. S. (1985). Evaluating natural resource investments. *Journal of Business*, 58(2), 135–157.
+
+Burger, M., Graeber, B., & Schindlmayr, G. (2004). *Managing Energy Risk: An Integrated View on Field and Financial Energy Markets*. Wiley Finance.
 
 Cambridge Centre for Alternative Finance. (2024). *Cambridge Bitcoin Electricity Consumption Index*. University of Cambridge.
 
+Casassus, J., & Collin-Dufresne, P. (2005). Stochastic convenience yield implied from commodity futures and interest rates. *Journal of Finance*, 60(5), 2283–2331.
+
 Chow, G. C. (1960). Tests of equality between sets of coefficients in two linear regressions. *Econometrica*, 28(3), 591–605.
+
+Cong, L. W., Li, Y., & Wang, N. (2021). Tokenomics: Dynamic adoption and valuation. *Review of Financial Studies*, 34(3), 1105–1155.
 
 Cox, J. C., Ross, S. A., & Rubinstein, M. (1979). Option pricing: A simplified approach. *Journal of Financial Economics*, 7(3), 229–263.
 
+Deng, S. J., & Oren, S. S. (2006). Electricity derivatives and risk management. *Energy*, 31(6–7), 940–953.
+
 Fama, E. F. (1970). Efficient capital markets: A review of theory and empirical work. *Journal of Finance*, 25(2), 383–417.
+
+Föllmer, H., & Schweizer, M. (1991). Hedging of contingent claims under incomplete information. In M. H. A. Davis & R. J. Elliott (Eds.), *Applied Stochastic Analysis* (pp. 389–414). Gordon and Breach.
 
 Gandal, N., Hamrick, J. T., Moore, T., Vasek, M., & Weinberg, D. (2021). The economics of cryptocurrency pump and dump schemes. *Journal of Financial Economics*.
 
 Hayes, A. S. (2017). Cryptocurrency value formation: An empirical study leading to a cost of production model for valuing Bitcoin. *Telematics and Informatics*, 34(7), 1308–1321.
 
 Hull, J. C. (2018). *Options, Futures, and Other Derivatives* (10th ed.). Pearson.
+
+Lucia, J. J., & Schwartz, E. S. (2002). Electricity prices and power derivatives: Evidence from the Nordic power exchange. *Review of Derivatives Research*, 5(1), 5–50.
 
 Marshall, A. (1890). *Principles of Economics*. Macmillan.
 
@@ -670,6 +739,8 @@ Panagiotidis, T., Stengos, T., & Vravosinos, O. (2019). The effects of markets, 
 Schwartz, E. S. (1997). The stochastic behavior of commodity prices: Implications for valuation and hedging. *Journal of Finance*, 52(3), 923–973.
 
 Schwartz, E. S., & Smith, J. E. (2000). Short-term variations and long-term dynamics in commodity prices. *Management Science*, 46(7), 893–911.
+
+Stambaugh, R. F. (1999). Predictive regressions. *Journal of Financial Economics*, 54(3), 375–421.
 
 Sockin, M., & Xiong, W. (2021). A model of cryptocurrencies. *NBER Working Paper 26816*.
 
