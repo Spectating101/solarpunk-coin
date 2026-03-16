@@ -16,13 +16,14 @@ get_volatility_params(): Calculate annualized volatility from solar data
 load_solar_parameters(): Load complete parameters for solar derivative pricing
 """
 
-import requests
-import pandas as pd
-import numpy as np
-import warnings
-from typing import Dict, Tuple, Optional
-from pathlib import Path
 import time
+import warnings
+from pathlib import Path
+from typing import Dict, Optional, Tuple
+
+import numpy as np
+import pandas as pd
+import requests
 
 # --- CONFIGURATION ---
 # Coordinates for Taoyuan, Taiwan
@@ -39,7 +40,7 @@ def fetch_nasa_data(
     lon: float = LON,
     start: int = START_YEAR,
     end: int = END_YEAR,
-    cache: bool = True
+    cache: bool = True,
 ) -> pd.DataFrame:
     """
     Fetches Daily Global Horizontal Irradiance (GHI) from NASA POWER API.
@@ -64,14 +65,14 @@ def fetch_nasa_data(
     """
 
     # Check cache first
-    cache_dir = Path(__file__).parent.parent / 'data'
-    cache_file = cache_dir / f'nasa_ghi_{lat}_{lon}_{start}_{end}.csv'
+    cache_dir = Path(__file__).parent.parent / "data"
+    cache_file = cache_dir / f"nasa_ghi_{lat}_{lon}_{start}_{end}.csv"
 
     if cache and cache_file.exists():
         try:
             print(f"📁 Loading cached NASA data from {cache_file}")
-            df = pd.read_csv(cache_file, parse_dates=['Date'], index_col='Date')
-            if df.empty or 'GHI' not in df.columns:
+            df = pd.read_csv(cache_file, parse_dates=["Date"], index_col="Date")
+            if df.empty or "GHI" not in df.columns:
                 raise ValueError("Cached file is empty or missing GHI column")
             print(f"✅ Loaded {len(df)} days of cached data")
             return df
@@ -82,12 +83,12 @@ def fetch_nasa_data(
     base_url = "https://power.larc.nasa.gov/api/temporal/daily/point"
     params = {
         "parameters": "ALLSKY_SFC_SW_DWN",  # Solar Irradiance (kW-hr/m²/day)
-        "community": "RE",                   # Renewable Energy
+        "community": "RE",  # Renewable Energy
         "longitude": lon,
         "latitude": lat,
         "start": f"{start}0101",
         "end": f"{end}1231",
-        "format": "JSON"
+        "format": "JSON",
     }
 
     print(f"📡 Connecting to NASA Satellite Database for Taoyuan ({lat}, {lon})...")
@@ -103,7 +104,9 @@ def fetch_nasa_data(
             if attempt == MAX_RETRIES:
                 raise ConnectionError(f"NASA API Failed after {attempt} attempts: {e}")
             sleep_for = RETRY_BACKOFF * attempt
-            warnings.warn(f"NASA API request failed (attempt {attempt}/{MAX_RETRIES}): {e}. Retrying in {sleep_for:.1f}s")
+            warnings.warn(
+                f"NASA API request failed (attempt {attempt}/{MAX_RETRIES}): {e}. Retrying in {sleep_for:.1f}s"
+            )
             time.sleep(sleep_for)
 
     if response is None:
@@ -116,24 +119,24 @@ def fetch_nasa_data(
 
     # Parse JSON into DataFrame
     try:
-        properties = data['properties']
+        properties = data["properties"]
         if not isinstance(properties, dict):
             raise ValueError("Malformed response: 'properties' missing or not a dict")
-        parameter = properties.get('parameter', {})
-        if not isinstance(parameter, dict) or 'ALLSKY_SFC_SW_DWN' not in parameter:
+        parameter = properties.get("parameter", {})
+        if not isinstance(parameter, dict) or "ALLSKY_SFC_SW_DWN" not in parameter:
             raise ValueError("Malformed response: ALLSKY_SFC_SW_DWN not present")
-        solar_dict = parameter['ALLSKY_SFC_SW_DWN']
+        solar_dict = parameter["ALLSKY_SFC_SW_DWN"]
         if not isinstance(solar_dict, dict):
             raise ValueError("Malformed response: ALLSKY_SFC_SW_DWN not a dict")
-        df = pd.DataFrame.from_dict(solar_dict, orient='index', columns=['GHI'])
-        df.index = pd.to_datetime(df.index, format='%Y%m%d')
-        df.index.name = 'Date'
+        df = pd.DataFrame.from_dict(solar_dict, orient="index", columns=["GHI"])
+        df.index = pd.to_datetime(df.index, format="%Y%m%d")
+        df.index.name = "Date"
     except (KeyError, ValueError) as e:
         raise ValueError(f"Failed to parse NASA API response: {e}")
 
     # Filter missing data (NASA uses -999 for missing)
     original_len = len(df)
-    df = df[df['GHI'] > -900].copy()
+    df = df[df["GHI"] > -900].copy()
     removed = original_len - len(df)
 
     if removed > 0:
@@ -154,8 +157,8 @@ def get_volatility_params(
     df: pd.DataFrame,
     window: int = 365,
     deseason: bool = True,
-    method: str = 'log',
-    cap_volatility: Optional[float] = None
+    method: str = "log",
+    cap_volatility: Optional[float] = None,
 ) -> Tuple[float, pd.DataFrame]:
     """
     Calculates the Annualized Volatility (Sigma) from solar irradiance data.
@@ -202,28 +205,28 @@ def get_volatility_params(
 
     # Step 1: Deseasonalization (if requested)
     if deseason:
-        df['Month'] = df.index.month
-        monthly_avg = df.groupby('Month')['GHI'].transform('mean')
-        df['GHI_Deseason'] = df['GHI'] / monthly_avg
-        source_data = df['GHI_Deseason']
-        print(f"   ℹ️  Deseasoning applied: removes predictable seasonal cycles")
+        df["Month"] = df.index.month
+        monthly_avg = df.groupby("Month")["GHI"].transform("mean")
+        df["GHI_Deseason"] = df["GHI"] / monthly_avg
+        source_data = df["GHI_Deseason"]
+        print("   ℹ️  Deseasoning applied: removes predictable seasonal cycles")
     else:
-        source_data = df['GHI']
+        source_data = df["GHI"]
 
     # Step 2: Calculate returns using specified method
-    if method == 'log':
+    if method == "log":
         # Log returns: log(P_t / P_{t-1})
         # Most stable for finance applications
-        df['Returns'] = np.log(source_data / source_data.shift(1))
-    elif method == 'pct_change':
+        df["Returns"] = np.log(source_data / source_data.shift(1))
+    elif method == "pct_change":
         # Simple returns: (P_t - P_{t-1}) / P_{t-1}
         # Can create artifacts with small denominators
-        df['Returns'] = source_data.pct_change()
-    elif method in {'normalized', 'std'}:
+        df["Returns"] = source_data.pct_change()
+    elif method in {"normalized", "std"}:
         # Normalized changes: (P_t - P_{t-1}) / mean(P)
         # Matches documented 'std' method; kept as alias for backward compatibility
         mean_value = source_data.mean()
-        df['Returns'] = (source_data - source_data.shift(1)) / mean_value
+        df["Returns"] = (source_data - source_data.shift(1)) / mean_value
     else:
         raise ValueError(
             f"Unknown volatility method: '{method}'. "
@@ -231,12 +234,10 @@ def get_volatility_params(
         )
 
     # Step 3: Clean returns
-    valid_returns = df['Returns'].replace([np.inf, -np.inf], np.nan).dropna()
+    valid_returns = df["Returns"].replace([np.inf, -np.inf], np.nan).dropna()
 
     if len(valid_returns) < 2:
-        warnings.warn(
-            "Not enough valid returns to estimate volatility; defaulting to 20%"
-        )
+        warnings.warn("Not enough valid returns to estimate volatility; defaulting to 20%")
         return 0.20, df
 
     # Step 4: Calculate volatility
@@ -255,18 +256,19 @@ def get_volatility_params(
     # Step 6: Sanity check
     if not np.isfinite(annual_vol) or annual_vol <= 0:
         warnings.warn(
-            f"Invalid volatility {annual_vol}; defaulting to 20%. "
-            f"Check input data for issues."
+            f"Invalid volatility {annual_vol}; defaulting to 20%. " f"Check input data for issues."
         )
         annual_vol = 0.20
 
     return float(annual_vol), df
 
 
-def compute_solar_price(df: pd.DataFrame,
-                       energy_value_per_kwh: float = 0.10,
-                       panel_efficiency: float = 0.20,
-                       panel_area_m2: float = 1.0) -> np.ndarray:
+def compute_solar_price(
+    df: pd.DataFrame,
+    energy_value_per_kwh: float = 0.10,
+    panel_efficiency: float = 0.20,
+    panel_area_m2: float = 1.0,
+) -> np.ndarray:
     """
     Compute underlying asset price from GHI data.
 
@@ -291,7 +293,7 @@ def compute_solar_price(df: pd.DataFrame,
     """
 
     # Energy generated (kWh) = GHI × efficiency × area
-    energy_kwh = df['GHI'] * panel_efficiency * panel_area_m2
+    energy_kwh = df["GHI"] * panel_efficiency * panel_area_m2
 
     # Economic value ($) = energy × price per kWh
     prices = energy_kwh * energy_value_per_kwh
@@ -308,9 +310,9 @@ def load_solar_parameters(
     r: float = 0.05,
     energy_value_per_kwh: float = 0.10,
     cache: bool = True,
-    volatility_method: str = 'log',
+    volatility_method: str = "log",
     volatility_cap: Optional[float] = None,
-    deseason: bool = True
+    deseason: bool = True,
 ) -> Dict:
     """
     Load all parameters for solar derivative pricing from NASA data.
@@ -376,10 +378,7 @@ def load_solar_parameters(
 
     # Calculate volatility with specified method
     sigma, ghi_df = get_volatility_params(
-        ghi_df,
-        method=volatility_method,
-        cap_volatility=volatility_cap,
-        deseason=deseason
+        ghi_df, method=volatility_method, cap_volatility=volatility_cap, deseason=deseason
     )
 
     # Compute energy prices
@@ -391,29 +390,21 @@ def load_solar_parameters(
     # Strike price (at-the-money)
     K = S0
 
-    # Check if volatility was capped
-    volatility_capped = (volatility_cap is not None and
-                        'exceeds cap' in str(warnings.filters))
-
     params = {
-        'S0': S0,
-        'sigma': sigma,
-        'T': T,
-        'r': r,
-        'K': K,
-        'ghi_df': ghi_df,
-        'energy_prices': energy_prices,
-        'location': {
-            'latitude': lat,
-            'longitude': lon,
-            'name': 'Taoyuan, Taiwan'
-        },
-        'data_source': 'NASA POWER API',
-        'parameter': 'ALLSKY_SFC_SW_DWN (GHI)',
-        'date_range': f"{start}-{end}",
-        'volatility_method': volatility_method,
-        'volatility_cap': volatility_cap,
-        'deseasonalized': deseason
+        "S0": S0,
+        "sigma": sigma,
+        "T": T,
+        "r": r,
+        "K": K,
+        "ghi_df": ghi_df,
+        "energy_prices": energy_prices,
+        "location": {"latitude": lat, "longitude": lon, "name": "Taoyuan, Taiwan"},
+        "data_source": "NASA POWER API",
+        "parameter": "ALLSKY_SFC_SW_DWN (GHI)",
+        "date_range": f"{start}-{end}",
+        "volatility_method": volatility_method,
+        "volatility_cap": volatility_cap,
+        "deseasonalized": deseason,
     }
 
     return params
@@ -434,26 +425,26 @@ def get_solar_summary(params: Dict) -> Dict:
         Summary statistics
     """
 
-    ghi_df = params['ghi_df']
-    energy_prices = params['energy_prices']
+    ghi_df = params["ghi_df"]
+    energy_prices = params["energy_prices"]
 
     summary = {
-        'location': params['location']['name'],
-        'latitude': params['location']['latitude'],
-        'longitude': params['location']['longitude'],
-        'data_source': params['data_source'],
-        'date_range': params['date_range'],
-        'start_date': ghi_df.index.min(),
-        'end_date': ghi_df.index.max(),
-        'n_days': len(ghi_df),
-        'ghi_mean': ghi_df['GHI'].mean(),
-        'ghi_std': ghi_df['GHI'].std(),
-        'ghi_min': ghi_df['GHI'].min(),
-        'ghi_max': ghi_df['GHI'].max(),
-        'price_mean': np.mean(energy_prices),
-        'price_std': np.std(energy_prices),
-        'price_current': params['S0'],
-        'volatility': params['sigma']
+        "location": params["location"]["name"],
+        "latitude": params["location"]["latitude"],
+        "longitude": params["location"]["longitude"],
+        "data_source": params["data_source"],
+        "date_range": params["date_range"],
+        "start_date": ghi_df.index.min(),
+        "end_date": ghi_df.index.max(),
+        "n_days": len(ghi_df),
+        "ghi_mean": ghi_df["GHI"].mean(),
+        "ghi_std": ghi_df["GHI"].std(),
+        "ghi_min": ghi_df["GHI"].min(),
+        "ghi_max": ghi_df["GHI"].max(),
+        "price_mean": np.mean(energy_prices),
+        "price_std": np.std(energy_prices),
+        "price_current": params["S0"],
+        "volatility": params["sigma"],
     }
 
     return summary
@@ -463,9 +454,9 @@ if __name__ == "__main__":
     """
     Demo: Fetch NASA data and calculate volatility
     """
-    print("="*80)
+    print("=" * 80)
     print("NASA POWER API Solar Data Loader - Demo".center(80))
-    print("="*80)
+    print("=" * 80)
 
     # Load parameters
     params = load_solar_parameters()
@@ -473,36 +464,36 @@ if __name__ == "__main__":
     # Display summary
     summary = get_solar_summary(params)
 
-    print(f"\n📍 LOCATION:")
+    print("\n📍 LOCATION:")
     print(f"   {summary['location']}")
     print(f"   Latitude: {summary['latitude']}°N")
     print(f"   Longitude: {summary['longitude']}°E")
 
-    print(f"\n📊 DATA SUMMARY:")
+    print("\n📊 DATA SUMMARY:")
     print(f"   Source: {summary['data_source']}")
     print(f"   Date Range: {summary['date_range']}")
     print(f"   Trading Days: {summary['n_days']}")
 
-    print(f"\n☀️ SOLAR IRRADIANCE (GHI):")
+    print("\n☀️ SOLAR IRRADIANCE (GHI):")
     print(f"   Mean: {summary['ghi_mean']:.2f} kW-hr/m²/day")
     print(f"   Std Dev: {summary['ghi_std']:.2f} kW-hr/m²/day")
     print(f"   Range: [{summary['ghi_min']:.2f}, {summary['ghi_max']:.2f}]")
 
-    print(f"\n💰 ENERGY PRICES:")
+    print("\n💰 ENERGY PRICES:")
     print(f"   Mean: ${summary['price_mean']:.4f}")
     print(f"   Std Dev: ${summary['price_std']:.4f}")
     print(f"   Current (S₀): ${summary['price_current']:.4f}")
 
-    print(f"\n📈 VOLATILITY:")
+    print("\n📈 VOLATILITY:")
     print(f"   Annualized (σ): {summary['volatility']:.2%}")
 
-    print(f"\n💡 DERIVATIVES PARAMETERS:")
+    print("\n💡 DERIVATIVES PARAMETERS:")
     print(f"   S₀ = ${params['S0']:.4f}")
     print(f"   K = ${params['K']:.4f} (at-the-money)")
     print(f"   σ = {params['sigma']:.2%}")
     print(f"   T = {params['T']} year")
     print(f"   r = {params['r']:.2%}")
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("✅ NASA data integration successful!")
-    print("="*80)
+    print("=" * 80)

@@ -37,7 +37,7 @@ Geographic Presets:
 Use preset locations with location_name parameter instead of manual coordinates:
 
 >>> from spk_derivatives import WindDataLoader
->>> 
+>>>
 >>> # Use named location instead of coordinates
 >>> loader = WindDataLoader(location_name='Aalborg')  # Denmark - excellent wind
 >>> params = loader.load_parameters()
@@ -47,17 +47,17 @@ Use preset locations with location_name parameter instead of manual coordinates:
 >>> print(format_location_table())
 """
 
-import requests
-import pandas as pd
-import numpy as np
-import warnings
-from typing import Optional
-from pathlib import Path
 import time
+import warnings
+from pathlib import Path
+from typing import Optional
+
+import numpy as np
+import pandas as pd
+import requests
 
 from .data_loader_base import EnergyDataLoader
 from .location_guide import get_location
-
 
 # --- CONFIGURATION ---
 # Default location (Phoenix, Arizona - excellent wind resource)
@@ -68,7 +68,7 @@ DEFAULT_END_YEAR = 2024
 
 # Wind turbine specifications
 DEFAULT_ROTOR_DIAMETER_M = 80.0  # 80m diameter = 5 MW typical turbine
-DEFAULT_HUB_HEIGHT_M = 80.0      # Hub height at 80m (50-100m typical)
+DEFAULT_HUB_HEIGHT_M = 80.0  # Hub height at 80m (50-100m typical)
 DEFAULT_POWER_COEFFICIENT = 0.40  # Cp = 0.40 (40% efficient)
 
 # API configuration
@@ -80,10 +80,10 @@ API_TIMEOUT = 30  # seconds
 class WindDataLoader(EnergyDataLoader):
     """
     Wind speed data loader for energy derivative pricing.
-    
+
     Fetches daily wind speed from NASA POWER API and converts to economic
     prices using power curve formula. Supports configurable turbine specifications.
-    
+
     Parameters
     ----------
     lat : float
@@ -104,19 +104,19 @@ class WindDataLoader(EnergyDataLoader):
         Air density in kg/m³ (default: 1.225 at sea level)
     energy_value_per_kwh : float
         Economic value per kWh (default: 0.08 = $0.08/kWh)
-    
+
     Attributes
     ----------
     rotor_area : float
         Rotor swept area in m² = π × (diameter/2)²
-    
+
     Examples
     --------
     >>> # Default location (Phoenix, AZ) with standard turbine
     >>> loader = WindDataLoader()
     >>> params = loader.load_parameters()
     >>> print(f"Wind volatility: {params['sigma']:.1%}")
-    
+
     >>> # Custom location and turbine specs
     >>> loader = WindDataLoader(
     ...     lat=39.74, lon=-104.99,  # Denver, Colorado
@@ -125,7 +125,7 @@ class WindDataLoader(EnergyDataLoader):
     ... )
     >>> params = loader.load_parameters(energy_value_per_kwh=0.09)
     """
-    
+
     def __init__(
         self,
         lat: float = None,
@@ -141,7 +141,7 @@ class WindDataLoader(EnergyDataLoader):
     ):
         """
         Initialize wind data loader.
-        
+
         Parameters
         ----------
         location_name : str, optional
@@ -165,21 +165,21 @@ class WindDataLoader(EnergyDataLoader):
         # Handle location-based initialization
         if location_name is not None:
             location_data = get_location(location_name)
-            lat, lon = location_data['coordinates']
-            wind_params = location_data['wind_params']
-            
+            lat, lon = location_data["coordinates"]
+            wind_params = location_data["wind_params"]
+
             # Use preset values if not overridden
             if rotor_diameter_m is None:
-                rotor_diameter_m = wind_params['rotor_diameter_m']
+                rotor_diameter_m = wind_params["rotor_diameter_m"]
             if hub_height_m is None:
-                hub_height_m = wind_params['hub_height_m']
+                hub_height_m = wind_params["hub_height_m"]
             if power_coefficient is None:
-                power_coefficient = wind_params['power_coefficient']
-            
+                power_coefficient = wind_params["power_coefficient"]
+
             self.location_name = location_name
-            self.landscape = location_data['landscape']
-            self.seasonal_pattern = location_data['seasonal_pattern']
-            self.wind_rating = location_data['wind_rating']
+            self.landscape = location_data["landscape"]
+            self.seasonal_pattern = location_data["seasonal_pattern"]
+            self.wind_rating = location_data["wind_rating"]
         else:
             # Manual coordinate mode
             if lat is None:
@@ -192,14 +192,14 @@ class WindDataLoader(EnergyDataLoader):
                 hub_height_m = DEFAULT_HUB_HEIGHT_M
             if power_coefficient is None:
                 power_coefficient = DEFAULT_POWER_COEFFICIENT
-            
+
             self.location_name = None
             self.landscape = "Unknown"
             self.seasonal_pattern = "Unknown"
             self.wind_rating = None
-        
+
         super().__init__(lat, lon, start_year, end_year)
-        
+
         # Turbine specifications
         self.rotor_diameter = rotor_diameter_m
         self.hub_height = hub_height_m
@@ -207,24 +207,24 @@ class WindDataLoader(EnergyDataLoader):
         self.power_coefficient = power_coefficient
         self.air_density = air_density
         self.energy_value = energy_value_per_kwh
-        
+
         # Validate specifications
         if power_coefficient <= 0 or power_coefficient > 0.593:  # Betz limit
             warnings.warn(
                 f"Cp={power_coefficient} is unusual. "
                 f"Typical range: 0.35-0.45. Max (Betz limit): 0.593"
             )
-    
+
     def fetch_data(self, use_50m: bool = True) -> pd.DataFrame:
         """
         Fetch wind speed data from NASA POWER API.
-        
+
         Parameters
         ----------
         use_50m : bool
             If True, use WS50M (50m height, typical turbine hub).
             If False, use WS10M (10m height, standard measurement).
-        
+
         Returns
         -------
         pd.DataFrame
@@ -232,36 +232,38 @@ class WindDataLoader(EnergyDataLoader):
             Index: DatetimeIndex with daily frequency
         """
         # Check cache first
-        cache_dir = Path(__file__).parent.parent / 'data'
-        cache_file = cache_dir / f'nasa_wind_{self.lat}_{self.lon}_{self.start_year}_{self.end_year}.csv'
-        
+        cache_dir = Path(__file__).parent.parent / "data"
+        cache_file = (
+            cache_dir / f"nasa_wind_{self.lat}_{self.lon}_{self.start_year}_{self.end_year}.csv"
+        )
+
         if cache_file.exists():
             try:
                 print(f"📁 Loading cached NASA wind data from {cache_file}")
-                df = pd.read_csv(cache_file, parse_dates=['Date'], index_col='Date')
-                if df.empty or 'WS50M' not in df.columns:
+                df = pd.read_csv(cache_file, parse_dates=["Date"], index_col="Date")
+                if df.empty or "WS50M" not in df.columns:
                     raise ValueError("Cached file is invalid")
                 print(f"✅ Loaded {len(df)} days of cached wind data")
                 return df
             except Exception as exc:
                 warnings.warn(f"Cache unusable ({exc}); refetching from API")
-        
+
         # Fetch from NASA POWER API
         base_url = "https://power.larc.nasa.gov/api/temporal/daily/point"
         params = {
             "parameters": "WS10M,WS50M,WD10M",  # Wind speed at 10m & 50m + direction
-            "community": "RE",                   # Renewable Energy
+            "community": "RE",  # Renewable Energy
             "longitude": self.lon,
             "latitude": self.lat,
             "start": f"{self.start_year}0101",
             "end": f"{self.end_year}1231",
-            "format": "JSON"
+            "format": "JSON",
         }
-        
+
         print(f"📡 Connecting to NASA MERRA-2 Data for Wind Speed ({self.lat}, {self.lon})...")
         print(f"   Date Range: {self.start_year}-01-01 to {self.end_year}-12-31")
         print(f"   Hub Height: {self.hub_height}m (using WS50M parameter)")
-        
+
         response = None
         for attempt in range(1, MAX_RETRIES + 1):
             try:
@@ -276,52 +278,54 @@ class WindDataLoader(EnergyDataLoader):
                     f"Attempt {attempt}/{MAX_RETRIES} failed. Retrying in {sleep_for:.1f}s"
                 )
                 time.sleep(sleep_for)
-        
+
         if response is None:
             raise ConnectionError("NASA API response is None")
-        
+
         # Parse JSON response
         try:
             data = response.json()
-            properties = data['properties']
-            parameter = properties.get('parameter', {})
-            
-            ws10m_dict = parameter.get('WS10M')
-            ws50m_dict = parameter.get('WS50M')
-            wd10m_dict = parameter.get('WD10M')
-            
+            properties = data["properties"]
+            parameter = properties.get("parameter", {})
+
+            ws10m_dict = parameter.get("WS10M")
+            ws50m_dict = parameter.get("WS50M")
+            wd10m_dict = parameter.get("WD10M")
+
             if not all([ws10m_dict, ws50m_dict, wd10m_dict]):
                 raise ValueError("Missing wind parameters in response")
-            
+
             # Create DataFrame
-            df = pd.DataFrame({
-                'WS10M': pd.Series(ws10m_dict),
-                'WS50M': pd.Series(ws50m_dict),
-                'WD10M': pd.Series(wd10m_dict),
-            })
-            df.index = pd.to_datetime(df.index, format='%Y%m%d')
-            df.index.name = 'Date'
-            
+            df = pd.DataFrame(
+                {
+                    "WS10M": pd.Series(ws10m_dict),
+                    "WS50M": pd.Series(ws50m_dict),
+                    "WD10M": pd.Series(wd10m_dict),
+                }
+            )
+            df.index = pd.to_datetime(df.index, format="%Y%m%d")
+            df.index.name = "Date"
+
         except (KeyError, ValueError) as e:
             raise ValueError(f"Failed to parse NASA API response: {e}")
-        
+
         # Validate data
         original_len = len(df)
-        df = df[(df['WS50M'] > 0) & (df['WS50M'] < 50)].copy()  # Remove invalid values
+        df = df[(df["WS50M"] > 0) & (df["WS50M"] < 50)].copy()  # Remove invalid values
         removed = original_len - len(df)
-        
+
         if removed > 0:
             warnings.warn(f"Removed {removed} days with invalid wind data")
-        
+
         print(f"✅ Loaded {len(df)} days of wind speed data")
-        
+
         # Cache for future use
         cache_dir.mkdir(parents=True, exist_ok=True)
         df.to_csv(cache_file)
         print(f"💾 Cached data to {cache_file}")
-        
+
         return df
-    
+
     def compute_price(
         self,
         df: pd.DataFrame,
@@ -331,10 +335,10 @@ class WindDataLoader(EnergyDataLoader):
     ) -> np.ndarray:
         """
         Convert wind speed to economic price.
-        
+
         Uses power curve formula:
         P = 0.5 × ρ × A × Cp × v³ (Watts)
-        
+
         Parameters
         ----------
         df : pd.DataFrame
@@ -345,12 +349,12 @@ class WindDataLoader(EnergyDataLoader):
             Air density (default: instance value)
         energy_value_per_kwh : Optional[float]
             $/kWh (default: instance value)
-        
+
         Returns
         -------
         np.ndarray
             Array of daily energy prices
-        
+
         Notes
         -----
         Power curve formula assumes Cp is constant (simplified).
@@ -359,25 +363,25 @@ class WindDataLoader(EnergyDataLoader):
         Cp = power_coefficient or self.power_coefficient
         rho = air_density or self.air_density
         energy_val = energy_value_per_kwh or self.energy_value
-        
-        wind_speed = df['WS50M'].values  # m/s
-        
+
+        wind_speed = df["WS50M"].values  # m/s
+
         # Calculate power (Watts)
-        power_w = 0.5 * rho * self.rotor_area * Cp * (wind_speed ** 3)
-        
+        power_w = 0.5 * rho * self.rotor_area * Cp * (wind_speed**3)
+
         # Daily energy (kWh) = Power (W) × 24 hours / 1000
         daily_energy_kwh = (power_w * 24) / 1000
-        
+
         # Economic price ($/day)
         prices = daily_energy_kwh * energy_val
-        
+
         return prices.astype(np.float64)
-    
+
     def load_parameters(
         self,
         T: float = 1.0,
         r: float = 0.05,
-        volatility_method: str = 'log',
+        volatility_method: str = "log",
         volatility_cap: Optional[float] = None,
         power_coefficient: Optional[float] = None,
         air_density: Optional[float] = None,
@@ -385,7 +389,7 @@ class WindDataLoader(EnergyDataLoader):
     ) -> dict:
         """
         Load all parameters for wind derivative pricing.
-        
+
         Parameters
         ----------
         T : float
@@ -402,7 +406,7 @@ class WindDataLoader(EnergyDataLoader):
             Air density override
         energy_value_per_kwh : Optional[float]
             Energy value override
-        
+
         Returns
         -------
         dict
@@ -410,23 +414,24 @@ class WindDataLoader(EnergyDataLoader):
         """
         # Call parent implementation
         params = super().load_parameters(
-            T=T, r=r,
+            T=T,
+            r=r,
             volatility_method=volatility_method,
             volatility_cap=volatility_cap,
             power_coefficient=power_coefficient,
             air_density=air_density,
             energy_value_per_kwh=energy_value_per_kwh,
         )
-        
+
         # Add wind-specific metadata
-        params['energy_source'] = 'wind'
-        params['turbine_specs'] = {
-            'rotor_diameter_m': self.rotor_diameter,
-            'hub_height_m': self.hub_height,
-            'rotor_area_m2': float(self.rotor_area),
-            'power_coefficient': power_coefficient or self.power_coefficient,
+        params["energy_source"] = "wind"
+        params["turbine_specs"] = {
+            "rotor_diameter_m": self.rotor_diameter,
+            "hub_height_m": self.hub_height,
+            "rotor_area_m2": float(self.rotor_area),
+            "power_coefficient": power_coefficient or self.power_coefficient,
         }
-        params['data_source'] = 'NASA MERRA-2 (POWER API)'
-        params['parameter'] = 'WS50M (Wind Speed at 50m hub height)'
-        
+        params["data_source"] = "NASA MERRA-2 (POWER API)"
+        params["parameter"] = "WS50M (Wind Speed at 50m hub height)"
+
         return params

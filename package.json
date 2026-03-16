@@ -27,7 +27,7 @@
   "author": "SolarPunkCoin Team",
   "license": "MIT",
   "engines": {
-    "node": ">=16 <19"
+    "node": ">=20 <23"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",

@@ -2,25 +2,27 @@
 Generate a simple pricing report (markdown + optional PDF) using local modules or API.
 """
 
-from pathlib import Path
 import json
 import os
+from pathlib import Path
 from typing import Optional
 
-from .data_loader import load_parameters
 from .binomial import BinomialTree
+from .data_loader import load_parameters
 from .monte_carlo import MonteCarloSimulator
 from .sensitivities import GreeksCalculator
 
 try:
     from reportlab.lib.pagesizes import letter
     from reportlab.pdfgen import canvas
+
     HAS_PDF = True
 except ImportError:
     HAS_PDF = False
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
@@ -31,7 +33,9 @@ def _compute_local(S0: float, K: float, T: float, r: float, sigma: float):
     binom_price = tree.price()
     sim = MonteCarloSimulator(S0, K, T, r, sigma, num_simulations=10000)
     mc_price, mc_low, mc_high = sim.confidence_interval()
-    greeks = GreeksCalculator(S0, K, T, r, sigma, pricing_method="binomial", N=200).compute_all_greeks()
+    greeks = GreeksCalculator(
+        S0, K, T, r, sigma, pricing_method="binomial", N=200
+    ).compute_all_greeks()
     return binom_price, mc_price, mc_low, mc_high, greeks
 
 
@@ -75,14 +79,28 @@ def _write_pdf(path: Path, payload: dict):
         f"r: {payload['r']:.4f}",
         f"sigma: {payload['sigma']:.4f}",
     ]:
-        c.drawString(50, y, line); y -= 15
+        c.drawString(50, y, line)
+        y -= 15
     y -= 10
-    c.setFont("Helvetica-Bold", 12); c.drawString(50, y, "Prices"); y -= 20; c.setFont("Helvetica", 10)
-    c.drawString(50, y, f"Binomial: {payload['binomial']:.6f}"); y -= 15
-    c.drawString(50, y, f"Monte Carlo: {payload['mc_price']:.6f} (95% CI [{payload['mc_low']:.6f}, {payload['mc_high']:.6f}])"); y -= 25
-    c.setFont("Helvetica-Bold", 12); c.drawString(50, y, "Greeks"); y -= 20; c.setFont("Helvetica", 10)
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Prices")
+    y -= 20
+    c.setFont("Helvetica", 10)
+    c.drawString(50, y, f"Binomial: {payload['binomial']:.6f}")
+    y -= 15
+    c.drawString(
+        50,
+        y,
+        f"Monte Carlo: {payload['mc_price']:.6f} (95% CI [{payload['mc_low']:.6f}, {payload['mc_high']:.6f}])",
+    )
+    y -= 25
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Greeks")
+    y -= 20
+    c.setFont("Helvetica", 10)
     for k, v in payload["greeks"].items():
-        c.drawString(50, y, f"{k}: {v:.6f}"); y -= 15
+        c.drawString(50, y, f"{k}: {v:.6f}")
+        y -= 15
     c.showPage()
     c.save()
 
@@ -109,26 +127,43 @@ def generate_report(
 
     if api_url and HAS_REQUESTS:
         headers = {"x-api-key": api_key} if api_key else {}
-        price_resp = requests.post(f"{api_url}/price", json={"method": "binomial", **payload, "N": 200}, headers=headers, timeout=10)
+        price_resp = requests.post(
+            f"{api_url}/price",
+            json={"method": "binomial", **payload, "N": 200},
+            headers=headers,
+            timeout=10,
+        )
         greeks_resp = requests.post(f"{api_url}/greeks", json=payload, headers=headers, timeout=10)
         price_data = price_resp.json()
         greeks_data = greeks_resp.json()["greeks"]
-        payload.update({
-            "binomial": price_data.get("price"),
-            "mc_price": price_data.get("price"),
-            "mc_low": price_data.get("ci_95", [None, None])[0] if "ci_95" in price_data else price_data.get("price"),
-            "mc_high": price_data.get("ci_95", [None, None])[1] if "ci_95" in price_data else price_data.get("price"),
-            "greeks": greeks_data,
-        })
+        payload.update(
+            {
+                "binomial": price_data.get("price"),
+                "mc_price": price_data.get("price"),
+                "mc_low": (
+                    price_data.get("ci_95", [None, None])[0]
+                    if "ci_95" in price_data
+                    else price_data.get("price")
+                ),
+                "mc_high": (
+                    price_data.get("ci_95", [None, None])[1]
+                    if "ci_95" in price_data
+                    else price_data.get("price")
+                ),
+                "greeks": greeks_data,
+            }
+        )
     else:
         binom_price, mc_price, mc_low, mc_high, greeks = _compute_local(**payload)
-        payload.update({
-            "binomial": binom_price,
-            "mc_price": mc_price,
-            "mc_low": mc_low,
-            "mc_high": mc_high,
-            "greeks": greeks,
-        })
+        payload.update(
+            {
+                "binomial": binom_price,
+                "mc_price": mc_price,
+                "mc_low": mc_low,
+                "mc_high": mc_high,
+                "greeks": greeks,
+            }
+        )
 
     _write_markdown(md_path, payload)
     if HAS_PDF:

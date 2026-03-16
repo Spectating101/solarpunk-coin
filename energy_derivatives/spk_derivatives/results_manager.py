@@ -7,11 +7,12 @@ Save, load, compare, validate, and export pricing results.
 This is what users reasonably expect from a professional library.
 """
 
-import json
 import csv
-from pathlib import Path
-from typing import Dict, List, Optional, Any
+import json
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 
 
@@ -24,11 +25,7 @@ class PricingResult:
     """
 
     def __init__(
-        self,
-        option_price: float,
-        greeks: Dict,
-        params: Dict,
-        metadata: Optional[Dict] = None
+        self, option_price: float, greeks: Dict, params: Dict, metadata: Optional[Dict] = None
     ):
         """
         Initialize pricing result.
@@ -56,20 +53,22 @@ class PricingResult:
     def _add_computed_fields(self):
         """Add useful computed fields"""
         self.computed = {
-            'premium_pct': self.option_price / self.params['S0'] * 100 if self.params['S0'] > 0 else 0,
-            'moneyness': self.params['S0'] / self.params['K'] if self.params['K'] > 0 else 1.0,
-            'time_to_maturity_days': self.params['T'] * 365,
+            "premium_pct": (
+                self.option_price / self.params["S0"] * 100 if self.params["S0"] > 0 else 0
+            ),
+            "moneyness": self.params["S0"] / self.params["K"] if self.params["K"] > 0 else 1.0,
+            "time_to_maturity_days": self.params["T"] * 365,
         }
 
     def to_dict(self) -> Dict:
         """Convert to dictionary for serialization"""
         return {
-            'option_price': self.option_price,
-            'greeks': self.greeks,
-            'params': self.params,
-            'metadata': self.metadata,
-            'computed': self.computed,
-            'timestamp': self.timestamp
+            "option_price": self.option_price,
+            "greeks": self.greeks,
+            "params": self.params,
+            "metadata": self.metadata,
+            "computed": self.computed,
+            "timestamp": self.timestamp,
         }
 
     def save(self, filepath: str):
@@ -88,13 +87,13 @@ class PricingResult:
         filepath = Path(filepath)
         filepath.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             json.dump(self.to_dict(), f, indent=2)
 
         return filepath
 
     @classmethod
-    def load(cls, filepath: str) -> 'PricingResult':
+    def load(cls, filepath: str) -> "PricingResult":
         """
         Load results from JSON file.
 
@@ -112,16 +111,16 @@ class PricingResult:
         --------
         >>> result = PricingResult.load('taiwan_10kw_pricing.json')
         """
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             data = json.load(f)
 
         result = cls(
-            option_price=data['option_price'],
-            greeks=data['greeks'],
-            params=data['params'],
-            metadata=data.get('metadata', {})
+            option_price=data["option_price"],
+            greeks=data["greeks"],
+            params=data["params"],
+            metadata=data.get("metadata", {}),
         )
-        result.timestamp = data.get('timestamp', result.timestamp)
+        result.timestamp = data.get("timestamp", result.timestamp)
 
         return result
 
@@ -143,15 +142,15 @@ class PricingResult:
 
         # Flatten all data
         flat = {
-            'timestamp': self.timestamp,
-            'option_price': self.option_price,
-            **{f'greek_{k}': v for k, v in self.greeks.items()},
-            **{f'param_{k}': v for k, v in self.params.items()},
-            **{f'computed_{k}': v for k, v in self.computed.items()},
-            **{f'meta_{k}': v for k, v in self.metadata.items()}
+            "timestamp": self.timestamp,
+            "option_price": self.option_price,
+            **{f"greek_{k}": v for k, v in self.greeks.items()},
+            **{f"param_{k}": v for k, v in self.params.items()},
+            **{f"computed_{k}": v for k, v in self.computed.items()},
+            **{f"meta_{k}": v for k, v in self.metadata.items()},
         }
 
-        with open(filepath, 'w', newline='') as f:
+        with open(filepath, "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=flat.keys())
             writer.writeheader()
             writer.writerow(flat)
@@ -220,7 +219,7 @@ class ResultsComparator:
         table += f"{'Metric':<{col_width}}"
         for label in self.labels:
             table += f"{label:<{col_width}}"
-        table += "\n" + "-"*80 + "\n"
+        table += "\n" + "-" * 80 + "\n"
 
         # Option price
         table += f"{'Option Price':<{col_width}}"
@@ -235,27 +234,27 @@ class ResultsComparator:
         table += "\n\n"
 
         # Greeks
-        table += "GREEKS\n" + "-"*80 + "\n"
-        for greek in ['delta', 'gamma', 'theta', 'vega', 'rho']:
+        table += "GREEKS\n" + "-" * 80 + "\n"
+        for greek in ["delta", "gamma", "theta", "vega", "rho"]:
             table += f"{greek.capitalize():<{col_width}}"
             for r in self.results:
                 table += f"{r.greeks[greek]:<{col_width}.6f}"
             table += "\n"
 
-        table += "\n" + "PARAMETERS\n" + "-"*80 + "\n"
+        table += "\n" + "PARAMETERS\n" + "-" * 80 + "\n"
 
         # Parameters
-        for param in ['S0', 'K', 'T', 'r', 'sigma']:
+        for param in ["S0", "K", "T", "r", "sigma"]:
             table += f"{param:<{col_width}}"
             for r in self.results:
                 val = r.params[param]
-                if param in ['r', 'sigma']:
+                if param in ["r", "sigma"]:
                     table += f"{val*100:<{col_width}.2f}%"
                 else:
                     table += f"{val:<{col_width}.4f}"
             table += "\n"
 
-        table += "\n" + "="*80 + "\n"
+        table += "\n" + "=" * 80 + "\n"
 
         return table
 
@@ -274,7 +273,7 @@ class ResultsComparator:
 
     def highest_delta(self) -> tuple:
         """Find option with highest delta"""
-        deltas = [r.greeks['delta'] for r in self.results]
+        deltas = [r.greeks["delta"] for r in self.results]
         idx = np.argmax(deltas)
         return idx, self.labels[idx], self.results[idx]
 
@@ -293,16 +292,16 @@ class ResultsComparator:
         rows = []
         for label, result in zip(self.labels, self.results):
             row = {
-                'scenario': label,
-                'option_price': result.option_price,
-                'premium_pct': result.computed['premium_pct'],
-                **{f'greek_{k}': v for k, v in result.greeks.items()},
-                **{f'param_{k}': v for k, v in result.params.items()}
+                "scenario": label,
+                "option_price": result.option_price,
+                "premium_pct": result.computed["premium_pct"],
+                **{f"greek_{k}": v for k, v in result.greeks.items()},
+                **{f"param_{k}": v for k, v in result.params.items()},
             }
             rows.append(row)
 
         if rows:
-            with open(filepath, 'w', newline='') as f:
+            with open(filepath, "w", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=rows[0].keys())
                 writer.writeheader()
                 writer.writerows(rows)
@@ -345,42 +344,54 @@ class PricingValidator:
         # Check option price
         if result.option_price <= 0:
             errors.append("Option price is zero or negative - calculation error")
-        elif result.option_price > result.params['S0']:
-            warnings.append(f"Option price (${result.option_price:.4f}) exceeds spot price (${result.params['S0']:.4f})")
+        elif result.option_price > result.params["S0"]:
+            warnings.append(
+                f"Option price (${result.option_price:.4f}) exceeds spot price (${result.params['S0']:.4f})"
+            )
 
         # Check volatility
-        vol = result.params['sigma']
+        vol = result.params["sigma"]
         if vol > PricingValidator.VOLATILITY_EXTREME_MAX:
-            warnings.append(f"EXTREME volatility: {vol:.0%} (typical max: {PricingValidator.VOLATILITY_EXTREME_MAX:.0%})")
+            warnings.append(
+                f"EXTREME volatility: {vol:.0%} (typical max: {PricingValidator.VOLATILITY_EXTREME_MAX:.0%})"
+            )
         elif vol > PricingValidator.VOLATILITY_NORMAL_MAX:
-            info.append(f"High volatility: {vol:.0%} (normal max: {PricingValidator.VOLATILITY_NORMAL_MAX:.0%})")
+            info.append(
+                f"High volatility: {vol:.0%} (normal max: {PricingValidator.VOLATILITY_NORMAL_MAX:.0%})"
+            )
 
         # Check premium
-        premium_pct = result.computed['premium_pct'] / 100
+        premium_pct = result.computed["premium_pct"] / 100
         if premium_pct > PricingValidator.PREMIUM_EXTREME_MAX:
-            warnings.append(f"EXTREME premium: {premium_pct:.0%} of spot (typical max: {PricingValidator.PREMIUM_EXTREME_MAX:.0%})")
+            warnings.append(
+                f"EXTREME premium: {premium_pct:.0%} of spot (typical max: {PricingValidator.PREMIUM_EXTREME_MAX:.0%})"
+            )
         elif premium_pct > PricingValidator.PREMIUM_TYPICAL_MAX:
-            info.append(f"High premium: {premium_pct:.0%} (normal max: {PricingValidator.PREMIUM_TYPICAL_MAX:.0%})")
+            info.append(
+                f"High premium: {premium_pct:.0%} (normal max: {PricingValidator.PREMIUM_TYPICAL_MAX:.0%})"
+            )
 
         # Check delta
-        delta = result.greeks['delta']
+        delta = result.greeks["delta"]
         if not (0 <= delta <= 1):
             warnings.append(f"Delta ({delta:.3f}) outside valid range [0, 1]")
 
         # Check moneyness
-        moneyness = result.computed['moneyness']
+        moneyness = result.computed["moneyness"]
         if moneyness < 0.5 or moneyness > 2.0:
-            info.append(f"Deep {'out' if moneyness < 1 else 'in'}-the-money (moneyness: {moneyness:.2f})")
+            info.append(
+                f"Deep {'out' if moneyness < 1 else 'in'}-the-money (moneyness: {moneyness:.2f})"
+            )
 
         # Generate summary
-        status = 'ERROR' if errors else 'WARNING' if warnings else 'OK'
+        status = "ERROR" if errors else "WARNING" if warnings else "OK"
 
         return {
-            'status': status,
-            'errors': errors,
-            'warnings': warnings,
-            'info': info,
-            'is_valid': len(errors) == 0
+            "status": status,
+            "errors": errors,
+            "warnings": warnings,
+            "info": info,
+            "is_valid": len(errors) == 0,
         }
 
     @staticmethod
@@ -389,30 +400,30 @@ class PricingValidator:
         validation = PricingValidator.validate(result)
 
         report = f"\n{'='*60}\n"
-        report += f"VALIDATION REPORT\n"
+        report += "VALIDATION REPORT\n"
         report += f"{'='*60}\n"
         report += f"Status: {validation['status']}\n"
         report += f"{'='*60}\n\n"
 
-        if validation['errors']:
+        if validation["errors"]:
             report += "❌ ERRORS:\n"
-            for err in validation['errors']:
+            for err in validation["errors"]:
                 report += f"  - {err}\n"
             report += "\n"
 
-        if validation['warnings']:
+        if validation["warnings"]:
             report += "⚠️  WARNINGS:\n"
-            for warn in validation['warnings']:
+            for warn in validation["warnings"]:
                 report += f"  - {warn}\n"
             report += "\n"
 
-        if validation['info']:
+        if validation["info"]:
             report += "ℹ️  INFO:\n"
-            for inf in validation['info']:
+            for inf in validation["info"]:
                 report += f"  - {inf}\n"
             report += "\n"
 
-        if not (validation['errors'] or validation['warnings'] or validation['info']):
+        if not (validation["errors"] or validation["warnings"] or validation["info"]):
             report += "✅ All checks passed - result looks reasonable\n\n"
 
         report += f"{'='*60}\n"
@@ -421,9 +432,7 @@ class PricingValidator:
 
 
 def batch_price(
-    scenarios: List[Dict],
-    pricing_func,
-    labels: Optional[List[str]] = None
+    scenarios: List[Dict], pricing_func, labels: Optional[List[str]] = None
 ) -> ResultsComparator:
     """
     Price multiple scenarios in batch.
@@ -457,12 +466,7 @@ def batch_price(
 
     for scenario in scenarios:
         price, greeks, params = pricing_func(scenario)
-        result = PricingResult(
-            option_price=price,
-            greeks=greeks,
-            params=params,
-            metadata=scenario
-        )
+        result = PricingResult(option_price=price, greeks=greeks, params=params, metadata=scenario)
         results.append(result)
 
     return ResultsComparator(results, labels)
@@ -487,45 +491,41 @@ def comparative_context(result: PricingResult) -> Dict[str, str]:
     context = {}
 
     # Volatility comparison
-    vol = result.params['sigma']
+    vol = result.params["sigma"]
     stock_market_vol = 0.20  # Typical S&P 500
     vol_multiple = vol / stock_market_vol
 
-    context['volatility_vs_stocks'] = (
+    context["volatility_vs_stocks"] = (
         f"Your volatility ({vol:.0%}) is {vol_multiple:.1f}x higher than "
         f"stock market ({stock_market_vol:.0%})"
     )
 
     # Premium comparison
-    premium_pct = result.computed['premium_pct']
+    premium_pct = result.computed["premium_pct"]
     insurance_typical = 1.5  # Typical insurance ~1-2% of value
 
     if premium_pct > 10:
-        context['premium_vs_insurance'] = (
+        context["premium_vs_insurance"] = (
             f"Your option premium ({premium_pct:.1f}% of spot) is {premium_pct/insurance_typical:.1f}x "
             f"higher than typical insurance ({insurance_typical:.1f}%). "
             f"This is weather derivatives, not insurance - high volatility = high premium."
         )
     else:
-        context['premium_vs_insurance'] = (
+        context["premium_vs_insurance"] = (
             f"Your option premium ({premium_pct:.1f}% of spot) is comparable to "
             f"insurance costs ({insurance_typical:.1f}%)."
         )
 
     # Time value
-    days_to_expiry = result.computed['time_to_maturity_days']
+    days_to_expiry = result.computed["time_to_maturity_days"]
     if days_to_expiry < 30:
-        context['time_context'] = (
+        context["time_context"] = (
             f"Only {days_to_expiry:.0f} days to expiry - time decay accelerating rapidly"
         )
     elif days_to_expiry < 90:
-        context['time_context'] = (
-            f"{days_to_expiry:.0f} days to expiry - moderate time decay"
-        )
+        context["time_context"] = f"{days_to_expiry:.0f} days to expiry - moderate time decay"
     else:
-        context['time_context'] = (
-            f"{days_to_expiry:.0f} days to expiry - slow time decay"
-        )
+        context["time_context"] = f"{days_to_expiry:.0f} days to expiry - slow time decay"
 
     return context
 
@@ -552,29 +552,21 @@ def break_even_analysis(result: PricingResult, system_size_kw: float = 10.0) -> 
     # For a call option: pays off when S_T > K + premium
 
     premium = result.option_price
-    strike = result.params['K']
-    spot = result.params['S0']
+    strike = result.params["K"]
+    spot = result.params["S0"]
 
     # Break-even spot price at expiry
     breakeven_price = strike + premium
     breakeven_change_pct = ((breakeven_price / spot) - 1) * 100
 
-    # Probability estimate (simplified using normal approximation)
-    vol = result.params['sigma']
-    T = result.params['T']
-
-    # For ATM option, roughly 50% probability
-    # For ITM/OTM, adjust based on moneyness
-    moneyness = result.computed['moneyness']
-
     return {
-        'breakeven_price': breakeven_price,
-        'breakeven_change_pct': breakeven_change_pct,
-        'current_spot': spot,
-        'strike': strike,
-        'premium_paid': premium,
-        'interpretation': (
+        "breakeven_price": breakeven_price,
+        "breakeven_change_pct": breakeven_change_pct,
+        "current_spot": spot,
+        "strike": strike,
+        "premium_paid": premium,
+        "interpretation": (
             f"Option breaks even if price reaches ${breakeven_price:.4f} "
             f"({breakeven_change_pct:+.1f}% from current spot)"
-        )
+        ),
     }

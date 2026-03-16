@@ -18,7 +18,13 @@ Quick reference for building, testing, and deploying the SPK contract.
 npm install
 ```
 
-Use Node 16.x (or 20.x) to avoid Hardhat compatibility warnings.
+Use Node 20.x (LTS) for the Hardhat toolchain.
+
+### 1.1 Enable Local Security Hooks (Recommended)
+
+```bash
+bash scripts/setup_githooks.sh
+```
 
 ### 2. Create .env File
 

@@ -5,7 +5,6 @@ into a JSON file usable by the blockchain oracle updater.
 
 import json
 from pathlib import Path
-import sys
 
 from data_loader import load_parameters
 from sensitivities import GreeksCalculator
@@ -23,8 +22,13 @@ def export_snapshot(
         use_live_if_missing=use_live_if_missing,
     )
     calc = GreeksCalculator(
-        params["S0"], params["K"], params["T"], params["r"], params["sigma"],
-        pricing_method="binomial", N=200
+        params["S0"],
+        params["K"],
+        params["T"],
+        params["r"],
+        params["sigma"],
+        pricing_method="binomial",
+        N=200,
     )
     greeks = calc.compute_all_greeks()
 

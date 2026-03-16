@@ -21,6 +21,7 @@ Philosophy: Meet users where they are. Give them numbers that connect to their r
 """
 
 from typing import Dict, Optional, Tuple
+
 import numpy as np
 
 
@@ -36,7 +37,7 @@ class SolarSystemContext:
     # Industry standard values
     PANEL_EFFICIENCY_TYPICAL = 0.20  # Modern panels: 20%
     PANEL_EFFICIENCY_PREMIUM = 0.22  # High-end panels: 22%
-    PANEL_EFFICIENCY_BUDGET = 0.15   # Budget panels: 15%
+    PANEL_EFFICIENCY_BUDGET = 0.15  # Budget panels: 15%
 
     SYSTEM_LOSSES = 0.15  # Inverter, wiring, temperature: 15%
     DEGRADATION_PER_YEAR = 0.005  # 0.5% per year
@@ -46,7 +47,7 @@ class SolarSystemContext:
         system_size_kw: float,
         panel_efficiency: float = PANEL_EFFICIENCY_TYPICAL,
         system_age_years: float = 0,
-        include_losses: bool = True
+        include_losses: bool = True,
     ):
         """
         Initialize solar system context.
@@ -72,7 +73,7 @@ class SolarSystemContext:
         self.effective_efficiency = panel_efficiency * degradation_factor
 
         if include_losses:
-            self.effective_efficiency *= (1 - self.SYSTEM_LOSSES)
+            self.effective_efficiency *= 1 - self.SYSTEM_LOSSES
 
     def ghi_to_ac_output(self, ghi_kwh_m2_day: float) -> float:
         """
@@ -115,12 +116,12 @@ class SolarSystemContext:
             system_type = "Utility-Scale Solar Farm"
 
         return {
-            'system_type': system_type,
-            'size_kw': self.system_size_kw,
-            'panel_efficiency_pct': self.panel_efficiency * 100,
-            'effective_efficiency_pct': self.effective_efficiency * 100,
-            'age_years': self.system_age_years,
-            'includes_losses': self.include_losses
+            "system_type": system_type,
+            "size_kw": self.system_size_kw,
+            "panel_efficiency_pct": self.panel_efficiency * 100,
+            "effective_efficiency_pct": self.effective_efficiency * 100,
+            "age_years": self.system_age_years,
+            "includes_losses": self.include_losses,
         }
 
 
@@ -133,7 +134,7 @@ class PriceTranslator:
         self,
         solar_system: SolarSystemContext,
         electricity_rate: float = 0.12,  # $/kWh (typical US residential)
-        buyback_rate: Optional[float] = None  # $/kWh (net metering rate)
+        buyback_rate: Optional[float] = None,  # $/kWh (net metering rate)
     ):
         """
         Initialize price translator.
@@ -153,9 +154,7 @@ class PriceTranslator:
         self.buyback_rate = buyback_rate or electricity_rate
 
     def option_price_to_monthly_cost(
-        self,
-        option_price_per_ghi: float,
-        ghi_kwh_m2_day: float
+        self, option_price_per_ghi: float, ghi_kwh_m2_day: float
     ) -> float:
         """
         Convert option price ($/kWh/m²/day) to monthly hedge cost.
@@ -179,9 +178,7 @@ class PriceTranslator:
         return monthly_cost
 
     def option_price_to_annual_cost(
-        self,
-        option_price_per_ghi: float,
-        ghi_kwh_m2_day: float
+        self, option_price_per_ghi: float, ghi_kwh_m2_day: float
     ) -> float:
         """Convert option price to annual hedge cost."""
         daily_cost = option_price_per_ghi * self.solar_system.system_size_kw
@@ -211,11 +208,7 @@ class VolatilityTranslator:
     Translates volatility percentages into dollar revenue swings.
     """
 
-    def __init__(
-        self,
-        price_translator: PriceTranslator,
-        spot_ghi: float
-    ):
+    def __init__(self, price_translator: PriceTranslator, spot_ghi: float):
         """
         Initialize volatility translator.
 
@@ -230,9 +223,7 @@ class VolatilityTranslator:
         self.spot_ghi = spot_ghi
 
     def volatility_to_revenue_range(
-        self,
-        volatility: float,
-        confidence: float = 0.68  # 1 standard deviation
+        self, volatility: float, confidence: float = 0.68  # 1 standard deviation
     ) -> Tuple[float, float, float]:
         """
         Convert volatility to daily revenue range.
@@ -272,9 +263,7 @@ class VolatilityTranslator:
         return daily_low, daily_expected, daily_high
 
     def volatility_to_monthly_range(
-        self,
-        volatility: float,
-        confidence: float = 0.68
+        self, volatility: float, confidence: float = 0.68
     ) -> Tuple[float, float, float]:
         """
         Convert volatility to monthly revenue range.
@@ -295,10 +284,7 @@ class GreeksTranslator:
 
     @staticmethod
     def delta_to_hedge_amount(
-        delta: float,
-        system_size_kw: float,
-        ghi_kwh_m2_day: float,
-        solar_system: SolarSystemContext
+        delta: float, system_size_kw: float, ghi_kwh_m2_day: float, solar_system: SolarSystemContext
     ) -> Dict:
         """
         Translate Delta to actual amount of production to hedge.
@@ -324,19 +310,16 @@ class GreeksTranslator:
         hedge_kwh_monthly = hedge_kwh_daily * 30
 
         return {
-            'delta': delta,
-            'hedge_ratio_pct': delta * 100,
-            'daily_output_kwh': daily_output_kwh,
-            'hedge_kwh_daily': hedge_kwh_daily,
-            'hedge_kwh_monthly': hedge_kwh_monthly,
-            'interpretation': f"Hedge {delta:.1%} of your production"
+            "delta": delta,
+            "hedge_ratio_pct": delta * 100,
+            "daily_output_kwh": daily_output_kwh,
+            "hedge_kwh_daily": hedge_kwh_daily,
+            "hedge_kwh_monthly": hedge_kwh_monthly,
+            "interpretation": f"Hedge {delta:.1%} of your production",
         }
 
     @staticmethod
-    def theta_to_time_decay(
-        theta: float,
-        system_size_kw: float
-    ) -> Dict:
+    def theta_to_time_decay(theta: float, system_size_kw: float) -> Dict:
         """
         Translate Theta to actual dollar decay.
 
@@ -359,19 +342,17 @@ class GreeksTranslator:
         annual_decay = daily_decay * 365
 
         return {
-            'theta_per_day': theta,
-            'daily_decay_dollars': daily_decay,
-            'weekly_decay_dollars': weekly_decay,
-            'monthly_decay_dollars': monthly_decay,
-            'annual_decay_dollars': annual_decay,
-            'interpretation': f"Option loses ${daily_decay:.2f}/day to time decay"
+            "theta_per_day": theta,
+            "daily_decay_dollars": daily_decay,
+            "weekly_decay_dollars": weekly_decay,
+            "monthly_decay_dollars": monthly_decay,
+            "annual_decay_dollars": annual_decay,
+            "interpretation": f"Option loses ${daily_decay:.2f}/day to time decay",
         }
 
     @staticmethod
     def vega_to_volatility_impact(
-        vega: float,
-        system_size_kw: float,
-        current_volatility: float
+        vega: float, system_size_kw: float, current_volatility: float
     ) -> Dict:
         """
         Translate Vega to dollar impact of volatility changes.
@@ -402,13 +383,13 @@ class GreeksTranslator:
         impact_20pct_decrease = -vega_scaled * 20
 
         return {
-            'vega': vega,
-            'current_volatility_pct': current_volatility * 100,
-            'impact_10pct_increase': impact_10pct_increase,
-            'impact_10pct_decrease': impact_10pct_decrease,
-            'impact_20pct_increase': impact_20pct_increase,
-            'impact_20pct_decrease': impact_20pct_decrease,
-            'interpretation': f"±10% volatility change = ±${abs(impact_10pct_increase):.2f} option value"
+            "vega": vega,
+            "current_volatility_pct": current_volatility * 100,
+            "impact_10pct_increase": impact_10pct_increase,
+            "impact_10pct_decrease": impact_10pct_decrease,
+            "impact_20pct_increase": impact_20pct_increase,
+            "impact_20pct_decrease": impact_20pct_decrease,
+            "interpretation": f"±10% volatility change = ±${abs(impact_10pct_increase):.2f} option value",
         }
 
 
@@ -418,7 +399,7 @@ def create_contextual_summary(
     params: Dict,
     system_size_kw: float = 10.0,
     electricity_rate: float = 0.12,
-    panel_efficiency: float = 0.20
+    panel_efficiency: float = 0.20,
 ) -> str:
     """
     Create a comprehensive, contextually grounded summary.
@@ -447,52 +428,41 @@ def create_contextual_summary(
     """
     # Set up translators
     solar_system = SolarSystemContext(
-        system_size_kw=system_size_kw,
-        panel_efficiency=panel_efficiency
+        system_size_kw=system_size_kw, panel_efficiency=panel_efficiency
     )
 
-    price_translator = PriceTranslator(
-        solar_system=solar_system,
-        electricity_rate=electricity_rate
-    )
+    price_translator = PriceTranslator(solar_system=solar_system, electricity_rate=electricity_rate)
 
     vol_translator = VolatilityTranslator(
-        price_translator=price_translator,
-        spot_ghi=params['S0'] / 0.10  # Convert back to GHI
+        price_translator=price_translator, spot_ghi=params["S0"] / 0.10  # Convert back to GHI
     )
 
     # Calculate contextual metrics
-    spot_ghi = params['S0'] / 0.10
+    spot_ghi = params["S0"] / 0.10
     system_info = solar_system.get_system_info()
     daily_output = solar_system.ghi_to_ac_output(spot_ghi)
     monthly_output = daily_output * 30
 
     daily_rev, monthly_rev, annual_rev = price_translator.revenue_at_ghi(spot_ghi)
 
-    monthly_hedge_cost = price_translator.option_price_to_monthly_cost(
-        option_price, spot_ghi
-    )
-    annual_hedge_cost = price_translator.option_price_to_annual_cost(
-        option_price, spot_ghi
-    )
+    monthly_hedge_cost = price_translator.option_price_to_monthly_cost(option_price, spot_ghi)
+    annual_hedge_cost = price_translator.option_price_to_annual_cost(option_price, spot_ghi)
 
     daily_low, daily_exp, daily_high = vol_translator.volatility_to_revenue_range(
-        params['sigma'], confidence=0.68
+        params["sigma"], confidence=0.68
     )
     monthly_low, monthly_exp, monthly_high = vol_translator.volatility_to_monthly_range(
-        params['sigma'], confidence=0.68
+        params["sigma"], confidence=0.68
     )
 
     delta_info = GreeksTranslator.delta_to_hedge_amount(
-        greeks['delta'], system_size_kw, spot_ghi, solar_system
+        greeks["delta"], system_size_kw, spot_ghi, solar_system
     )
 
-    theta_info = GreeksTranslator.theta_to_time_decay(
-        greeks['theta'], system_size_kw
-    )
+    theta_info = GreeksTranslator.theta_to_time_decay(greeks["theta"], system_size_kw)
 
     vega_info = GreeksTranslator.vega_to_volatility_impact(
-        greeks['vega'], system_size_kw, params['sigma']
+        greeks["vega"], system_size_kw, params["sigma"]
     )
 
     # Build the summary

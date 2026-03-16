@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 import numpy as np
+import pytest
 from scipy.stats import norm
 
 repo_root = Path(__file__).resolve().parents[1]
@@ -43,7 +44,8 @@ def test_monte_carlo_is_seed_reproducible():
 
 
 def test_data_loader_synthetic_path_when_disabled_fallback():
-    params = load_parameters(data_dir="__no_such_dir__", use_repo_fallback=False)
+    with pytest.warns(UserWarning, match="no fallback available"):
+        params = load_parameters(data_dir="__no_such_dir__", use_repo_fallback=False)
     assert params['energy_prices'].size > 10
     assert params['sigma'] > 0
     assert params['S0'] > 0

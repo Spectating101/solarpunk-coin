@@ -26,18 +26,20 @@ def fetch_live_bitcoin_market(days: int = 365) -> pd.DataFrame:
     days : int
         Lookback window in days
     """
-    url = f"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart"
+    url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart"
     resp = requests.get(url, params={"vs_currency": "usd", "days": days})
     resp.raise_for_status()
     data = resp.json()
     prices = data.get("prices", [])
     market_caps = data.get("market_caps", [])
 
-    df = pd.DataFrame({
-        "Date": pd.to_datetime([p[0] for p in prices], unit="ms"),
-        "Price": [p[1] for p in prices],
-        "Market_Cap": [m[1] for m in market_caps] if market_caps else [np.nan] * len(prices),
-    })
+    df = pd.DataFrame(
+        {
+            "Date": pd.to_datetime([p[0] for p in prices], unit="ms"),
+            "Price": [p[1] for p in prices],
+            "Market_Cap": [m[1] for m in market_caps] if market_caps else [np.nan] * len(prices),
+        }
+    )
 
     # Synthetic energy estimates (placeholder rising trend)
     days_idx = np.arange(len(df))

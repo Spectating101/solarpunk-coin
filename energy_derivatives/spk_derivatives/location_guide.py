@@ -52,7 +52,6 @@ PRESET_LOCATIONS = {
     # =========================================================================
     # SOLAR-OPTIMIZED LOCATIONS (High insolation, low cloud cover)
     # =========================================================================
-    
     "Phoenix": {
         "city": "Phoenix",
         "country": "United States",
@@ -90,7 +89,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.85,
         },
     },
-    
     "Atacama": {
         "city": "San Pedro de Atacama",
         "country": "Chile",
@@ -128,7 +126,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.80,
         },
     },
-    
     "Cairo": {
         "city": "Cairo",
         "country": "Egypt",
@@ -166,11 +163,9 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.85,
         },
     },
-    
     # =========================================================================
     # WIND-OPTIMIZED LOCATIONS (High wind speeds, good exposure)
     # =========================================================================
-    
     "Aalborg": {
         "city": "Aalborg",
         "country": "Denmark",
@@ -208,7 +203,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.87,
         },
     },
-    
     "Kansas City": {
         "city": "Kansas City",
         "country": "United States",
@@ -246,7 +240,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.86,
         },
     },
-    
     "Edinburgh": {
         "city": "Edinburgh",
         "country": "United Kingdom",
@@ -284,11 +277,9 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.88,
         },
     },
-    
     # =========================================================================
     # HYDRO-OPTIMIZED LOCATIONS (High precipitation, elevation, topography)
     # =========================================================================
-    
     "Nepal": {
         "city": "Kathmandu",
         "country": "Nepal",
@@ -326,7 +317,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.90,
         },
     },
-    
     "Alps": {
         "city": "Interlaken",
         "country": "Switzerland",
@@ -364,7 +354,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.91,
         },
     },
-    
     "Amazon Basin": {
         "city": "Manaus",
         "country": "Brazil",
@@ -402,7 +391,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.88,
         },
     },
-    
     "Tasmania": {
         "city": "Hobart",
         "country": "Australia",
@@ -440,11 +428,9 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.89,
         },
     },
-    
     # =========================================================================
     # BALANCED/MULTI-ENERGY LOCATIONS (Good for multiple resource types)
     # =========================================================================
-    
     "Patagonia": {
         "city": "Punta Arenas",
         "country": "Chile",
@@ -482,7 +468,6 @@ PRESET_LOCATIONS = {
             "turbine_efficiency": 0.87,
         },
     },
-    
     "Kenya Highlands": {
         "city": "Nairobi",
         "country": "Kenya",
@@ -527,25 +512,26 @@ PRESET_LOCATIONS = {
 # LOCATION LOOKUP AND UTILITY FUNCTIONS
 # =============================================================================
 
+
 def get_location(location_name: str) -> dict:
     """
     Get a specific location by name.
-    
+
     Parameters
     ----------
     location_name : str
         Location name (case-insensitive). Must match a key in PRESET_LOCATIONS.
-    
+
     Returns
     -------
     dict
         Complete location data including coordinates, ratings, and parameter sets.
-    
+
     Raises
     ------
     KeyError
         If location not found.
-    
+
     Examples
     --------
     >>> phoenix = get_location('Phoenix')
@@ -554,28 +540,25 @@ def get_location(location_name: str) -> dict:
     for key in PRESET_LOCATIONS.keys():
         if key.lower() == location_name.lower():
             return PRESET_LOCATIONS[key]
-    
+
     available = ", ".join(PRESET_LOCATIONS.keys())
-    raise KeyError(
-        f"Location '{location_name}' not found. "
-        f"Available locations: {available}"
-    )
+    raise KeyError(f"Location '{location_name}' not found. " f"Available locations: {available}")
 
 
 def list_locations(energy_type: str = None) -> dict:
     """
     List all available locations with their energy ratings.
-    
+
     Parameters
     ----------
     energy_type : str, optional
         Filter by energy type: 'solar', 'wind', 'hydro', or None for all.
-    
+
     Returns
     -------
     dict
         Dictionary mapping location names to their properties.
-    
+
     Examples
     --------
     >>> # Show all locations
@@ -585,7 +568,7 @@ def list_locations(energy_type: str = None) -> dict:
     >>> wind_locations = list_locations('wind')
     """
     result = {}
-    
+
     for name, data in PRESET_LOCATIONS.items():
         if energy_type is None:
             result[name] = {
@@ -614,51 +597,51 @@ def list_locations(energy_type: str = None) -> dict:
                 "country": data["country"],
                 "hydro_rating": data["hydro_rating"],
             }
-    
+
     return result
 
 
 def search_by_country(country_name: str) -> dict:
     """
     Find all locations in a specific country.
-    
+
     Parameters
     ----------
     country_name : str
         Country name (case-insensitive).
-    
+
     Returns
     -------
     dict
         Dictionary mapping location names to their data.
-    
+
     Examples
     --------
     >>> chile_locations = search_by_country('Chile')
     """
     result = {}
-    
+
     for name, data in PRESET_LOCATIONS.items():
         if data["country"].lower() == country_name.lower():
             result[name] = data
-    
+
     return result
 
 
 def get_best_location_for_energy(energy_type: str) -> str:
     """
     Get the location with highest rating for a specific energy type.
-    
+
     Parameters
     ----------
     energy_type : str
         'solar', 'wind', or 'hydro'
-    
+
     Returns
     -------
     str
         Location name with highest rating for that energy type.
-    
+
     Examples
     --------
     >>> best_solar = get_best_location_for_energy('solar')  # Returns 'Atacama' or 'Phoenix'
@@ -666,7 +649,7 @@ def get_best_location_for_energy(energy_type: str) -> str:
     >>> best_hydro = get_best_location_for_energy('hydro')  # Returns 'Nepal' or 'Alps'
     """
     energy_type = energy_type.lower()
-    
+
     if energy_type == "solar":
         rating_key = "solar_rating"
     elif energy_type == "wind":
@@ -675,22 +658,22 @@ def get_best_location_for_energy(energy_type: str) -> str:
         rating_key = "hydro_rating"
     else:
         raise ValueError(f"Unknown energy type: {energy_type}")
-    
+
     best_location = None
     best_rating = 0
-    
+
     for name, data in PRESET_LOCATIONS.items():
         if data[rating_key] > best_rating:
             best_location = name
             best_rating = data[rating_key]
-    
+
     return best_location
 
 
 def format_location_table() -> str:
     """
     Return a formatted table of all locations with their ratings.
-    
+
     Returns
     -------
     str
@@ -700,16 +683,16 @@ def format_location_table() -> str:
     lines.append("=" * 85)
     lines.append(f"{'Location':<20} {'Country':<20} {'Solar':<8} {'Wind':<8} {'Hydro':<8}")
     lines.append("-" * 85)
-    
+
     for name in sorted(PRESET_LOCATIONS.keys()):
         data = PRESET_LOCATIONS[name]
         lines.append(
             f"{name:<20} {data['country']:<20} "
             f"{data['solar_rating']:<8} {data['wind_rating']:<8} {data['hydro_rating']:<8}"
         )
-    
+
     lines.append("=" * 85)
-    
+
     return "\n".join(lines)
 
 

@@ -12,19 +12,20 @@ This demonstrates that:
 """
 
 import sys
-sys.path.insert(0, '.')
 
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from data_loader_nasa import load_solar_parameters, get_solar_summary
-from binomial import BinomialTree
-from monte_carlo import MonteCarloSimulator
+sys.path.insert(0, ".")
+
+import matplotlib.pyplot as plt  # noqa: E402
+import seaborn as sns  # noqa: E402
+from binomial import BinomialTree  # noqa: E402
+from data_loader_nasa import get_solar_summary  # noqa: E402
+from data_loader_nasa import load_solar_parameters  # noqa: E402
+from monte_carlo import MonteCarloSimulator  # noqa: E402
 
 # Set publication-quality style
 sns.set_style("whitegrid")
-plt.rcParams['figure.figsize'] = (14, 10)
-plt.rcParams['font.size'] = 11
+plt.rcParams["figure.figsize"] = (14, 10)
+plt.rcParams["font.size"] = 11
 
 
 def run_convergence_analysis():
@@ -32,9 +33,9 @@ def run_convergence_analysis():
     Run complete convergence analysis with NASA solar data
     """
 
-    print("="*80)
+    print("=" * 80)
     print("SOLAR ENERGY DERIVATIVES CONVERGENCE ANALYSIS".center(80))
-    print("="*80)
+    print("=" * 80)
 
     # Load NASA solar parameters
     print("\n📡 Loading NASA solar data for Taoyuan, Taiwan...")
@@ -47,13 +48,13 @@ def run_convergence_analysis():
     print(f"📈 Volatility: {summary['volatility']:.2%}")
 
     # Extract parameters
-    S0 = params['S0']
-    K = params['K']
-    T = params['T']
-    r = params['r']
-    sigma = params['sigma']
+    S0 = params["S0"]
+    K = params["K"]
+    T = params["T"]
+    r = params["r"]
+    sigma = params["sigma"]
 
-    print(f"\n💰 Pricing Parameters:")
+    print("\n💰 Pricing Parameters:")
     print(f"   S₀ = ${S0:.4f} (current energy price)")
     print(f"   K = ${K:.4f} (strike price)")
     print(f"   σ = {sigma:.2%} (from NASA data)")
@@ -61,27 +62,25 @@ def run_convergence_analysis():
     print(f"   r = {r:.2%}")
 
     # Run binomial convergence
-    print(f"\n🌳 Running Binomial Tree convergence analysis...")
+    print("\n🌳 Running Binomial Tree convergence analysis...")
     step_counts = [10, 25, 50, 100, 200, 500, 1000]
     binomial_prices = []
 
     for N in step_counts:
-        tree = BinomialTree(S0, K, T, r, sigma, N=N, payoff_type='call')
+        tree = BinomialTree(S0, K, T, r, sigma, N=N, payoff_type="call")
         price = tree.price()
         binomial_prices.append(price)
         print(f"   N={N:4d}: ${price:.6f}")
 
     # Run Monte-Carlo
-    print(f"\n🎲 Running Monte-Carlo simulations...")
+    print("\n🎲 Running Monte-Carlo simulations...")
     simulation_counts = [1000, 5000, 10000, 50000, 100000]
     mc_prices = []
     mc_ci_lower = []
     mc_ci_upper = []
 
     for num_sims in simulation_counts:
-        sim = MonteCarloSimulator(S0, K, T, r, sigma,
-                                  num_simulations=num_sims,
-                                  payoff_type='call')
+        sim = MonteCarloSimulator(S0, K, T, r, sigma, num_simulations=num_sims, payoff_type="call")
         price, lower, upper = sim.confidence_interval()
         mc_prices.append(price)
         mc_ci_lower.append(lower)
@@ -94,7 +93,7 @@ def run_convergence_analysis():
     difference = abs(final_binomial - final_mc)
     rel_diff_pct = (difference / final_binomial) * 100
 
-    print(f"\n✅ CONVERGENCE RESULTS:")
+    print("\n✅ CONVERGENCE RESULTS:")
     print(f"   Binomial (N=1000):    ${final_binomial:.6f}")
     print(f"   Monte-Carlo (N=100k): ${final_mc:.6f}")
     print(f"   Absolute Difference:  ${difference:.6f}")
@@ -106,54 +105,90 @@ def run_convergence_analysis():
 
     # Plot 1: Binomial Convergence
     ax1 = fig.add_subplot(gs[0, 0])
-    ax1.plot(step_counts, binomial_prices, 'o-', linewidth=2, markersize=8,
-             color='#2E86AB', label='Binomial Price')
-    ax1.axhline(y=final_binomial, color='red', linestyle='--',
-                linewidth=1.5, label=f'Converged: ${final_binomial:.6f}')
-    ax1.set_xlabel('Number of Steps (N)', fontsize=12, fontweight='bold')
-    ax1.set_ylabel('Option Price ($)', fontsize=12, fontweight='bold')
-    ax1.set_title('Binomial Tree Convergence\n(NASA Solar Volatility σ = {:.1%})'.format(sigma),
-                  fontsize=13, fontweight='bold')
+    ax1.plot(
+        step_counts,
+        binomial_prices,
+        "o-",
+        linewidth=2,
+        markersize=8,
+        color="#2E86AB",
+        label="Binomial Price",
+    )
+    ax1.axhline(
+        y=final_binomial,
+        color="red",
+        linestyle="--",
+        linewidth=1.5,
+        label=f"Converged: ${final_binomial:.6f}",
+    )
+    ax1.set_xlabel("Number of Steps (N)", fontsize=12, fontweight="bold")
+    ax1.set_ylabel("Option Price ($)", fontsize=12, fontweight="bold")
+    ax1.set_title(
+        "Binomial Tree Convergence\n(NASA Solar Volatility σ = {:.1%})".format(sigma),
+        fontsize=13,
+        fontweight="bold",
+    )
     ax1.legend(fontsize=10)
     ax1.grid(True, alpha=0.3)
 
     # Plot 2: Monte-Carlo Convergence
     ax2 = fig.add_subplot(gs[0, 1])
-    ax2.plot(simulation_counts, mc_prices, 's-', linewidth=2, markersize=8,
-             color='#A23B72', label='MC Price')
-    ax2.fill_between(simulation_counts, mc_ci_lower, mc_ci_upper,
-                     alpha=0.2, color='#A23B72', label='95% CI')
-    ax2.axhline(y=final_mc, color='red', linestyle='--',
-                linewidth=1.5, label=f'Converged: ${final_mc:.6f}')
-    ax2.set_xlabel('Number of Simulations', fontsize=12, fontweight='bold')
-    ax2.set_ylabel('Option Price ($)', fontsize=12, fontweight='bold')
-    ax2.set_title('Monte-Carlo Convergence\n(NASA Solar Volatility σ = {:.1%})'.format(sigma),
-                  fontsize=13, fontweight='bold')
-    ax2.set_xscale('log')
+    ax2.plot(
+        simulation_counts,
+        mc_prices,
+        "s-",
+        linewidth=2,
+        markersize=8,
+        color="#A23B72",
+        label="MC Price",
+    )
+    ax2.fill_between(
+        simulation_counts, mc_ci_lower, mc_ci_upper, alpha=0.2, color="#A23B72", label="95% CI"
+    )
+    ax2.axhline(
+        y=final_mc, color="red", linestyle="--", linewidth=1.5, label=f"Converged: ${final_mc:.6f}"
+    )
+    ax2.set_xlabel("Number of Simulations", fontsize=12, fontweight="bold")
+    ax2.set_ylabel("Option Price ($)", fontsize=12, fontweight="bold")
+    ax2.set_title(
+        "Monte-Carlo Convergence\n(NASA Solar Volatility σ = {:.1%})".format(sigma),
+        fontsize=13,
+        fontweight="bold",
+    )
+    ax2.set_xscale("log")
     ax2.legend(fontsize=10)
     ax2.grid(True, alpha=0.3)
 
     # Plot 3: Method Comparison
     ax3 = fig.add_subplot(gs[1, 0])
-    methods = ['Binomial\n(N=1000)', 'Monte-Carlo\n(N=100k)']
+    methods = ["Binomial\n(N=1000)", "Monte-Carlo\n(N=100k)"]
     prices = [final_binomial, final_mc]
-    colors = ['#2E86AB', '#A23B72']
-    bars = ax3.bar(methods, prices, color=colors, alpha=0.7, edgecolor='black', linewidth=2)
-    ax3.set_ylabel('Option Price ($)', fontsize=12, fontweight='bold')
-    ax3.set_title('Method Comparison\n(Difference: {:.3f}%)'.format(rel_diff_pct),
-                  fontsize=13, fontweight='bold')
-    ax3.grid(axis='y', alpha=0.3)
+    colors = ["#2E86AB", "#A23B72"]
+    bars = ax3.bar(methods, prices, color=colors, alpha=0.7, edgecolor="black", linewidth=2)
+    ax3.set_ylabel("Option Price ($)", fontsize=12, fontweight="bold")
+    ax3.set_title(
+        "Method Comparison\n(Difference: {:.3f}%)".format(rel_diff_pct),
+        fontsize=13,
+        fontweight="bold",
+    )
+    ax3.grid(axis="y", alpha=0.3)
 
     # Add value labels on bars
     for bar, price in zip(bars, prices):
         height = bar.get_height()
-        ax3.text(bar.get_x() + bar.get_width()/2., height,
-                f'${price:.6f}',
-                ha='center', va='bottom', fontsize=11, fontweight='bold')
+        ax3.text(
+            bar.get_x() + bar.get_width() / 2.0,
+            height,
+            f"${price:.6f}",
+            ha="center",
+            va="bottom",
+            fontsize=11,
+            fontweight="bold",
+        )
 
     # Plot 4: Data Summary
     ax4 = fig.add_subplot(gs[1, 1])
-    ax4.axis('off')
+    ax4.axis("off")
 
     summary_text = f"""
     NASA SOLAR DATA SUMMARY
@@ -187,29 +222,40 @@ def run_convergence_analysis():
        Pricing framework is robust
     """
 
-    ax4.text(0.1, 0.95, summary_text, transform=ax4.transAxes,
-            fontsize=10, verticalalignment='top', family='monospace',
-            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.3))
+    ax4.text(
+        0.1,
+        0.95,
+        summary_text,
+        transform=ax4.transAxes,
+        fontsize=10,
+        verticalalignment="top",
+        family="monospace",
+        bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.3),
+    )
 
     # Main title
-    fig.suptitle('Solar Energy Derivatives Convergence Analysis\nTaoyuan, Taiwan • NASA POWER API Data',
-                fontsize=16, fontweight='bold', y=0.98)
+    fig.suptitle(
+        "Solar Energy Derivatives Convergence Analysis\nTaoyuan, Taiwan • NASA POWER API Data",
+        fontsize=16,
+        fontweight="bold",
+        y=0.98,
+    )
 
     # Save
     plt.tight_layout()
-    output_path = '../results/solar_convergence_nasa.png'
-    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    output_path = "../results/solar_convergence_nasa.png"
+    plt.savefig(output_path, dpi=300, bbox_inches="tight")
     print(f"\n💾 Plot saved to: {output_path}")
 
     plt.show()
 
     return {
-        'binomial_prices': binomial_prices,
-        'mc_prices': mc_prices,
-        'final_binomial': final_binomial,
-        'final_mc': final_mc,
-        'params': params,
-        'summary': summary
+        "binomial_prices": binomial_prices,
+        "mc_prices": mc_prices,
+        "final_binomial": final_binomial,
+        "final_mc": final_mc,
+        "params": params,
+        "summary": summary,
     }
 
 
@@ -218,9 +264,9 @@ def generate_presentation_slide_content():
     Generate text content for presentation slides
     """
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("PRESENTATION SLIDE CONTENT".center(80))
-    print("="*80)
+    print("=" * 80)
 
     slide_content = """
 
@@ -334,6 +380,6 @@ if __name__ == "__main__":
     # Generate slide content
     slide_content = generate_presentation_slide_content()
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("✅ SOLAR CONVERGENCE ANALYSIS COMPLETE".center(80))
-    print("="*80)
+    print("=" * 80)
