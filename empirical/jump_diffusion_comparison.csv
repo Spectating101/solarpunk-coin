@@ -1,0 +1,6 @@
+scenario,lambda,mu_J,sigma_J,price,vs_gbm_pct
+No jumps (GBM baseline),0.0,0.0,0.1,0.019184575576171713,0.0
+Rare large downward (grid failure),0.5,-0.3,0.4,0.019400834376965537,1.1272535060010878
+Rare large upward (heatwave),0.5,0.3,0.4,0.019603659155715183,2.1844818921300195
+Frequent small jumps,4.0,-0.05,0.15,0.019413600176112742,1.1937955000969096
+Moderate extreme weather,1.0,-0.2,0.3,0.019434841879646073,1.3045183224444308
