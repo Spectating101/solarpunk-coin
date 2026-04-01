@@ -182,6 +182,10 @@ energy_derivatives/data/*.json
 .env.*
 !.env.example
 
+
 # Temporary files
 *.tmp
 *.bak
+
+# Gemini CLI Brainstorming
+.superpowers/
