@@ -315,10 +315,10 @@ def create_pricing_validation_table(doc):
     
     data = [
         ['Taiwan (primary)', '189%', '0.01918', '0.01886', '−0.00219 (credit)'],
-        ['Saudi Arabia', '172%', '0.01842', '0.01808', '−0.00212 (credit)'],
-        ['Arizona, USA', '165%', '0.01878', '0.01813', '−0.00241 (credit)'],
-        ['Brazil', '198%', '0.03689', '0.03420', '−0.00599 (credit)'],
-        ['Germany', '45%', '~0.000001', '~0.000001', 'Near-zero'],
+        ['Saudi Arabia', '172%', '0.01841', '0.01808', '−0.00212 (credit)'],
+        ['Arizona, USA', '165%', '0.01877', '0.01813', '−0.00241 (credit)'],
+        ['Brazil', '198%', '0.03702', '0.03389', '−0.00640 (credit)'],
+        ['Germany', '45%', '0.00234', '0.00212', '−0.00034 (credit)'],
     ]
     
     headers = ['Location', 'σ (%)', 'Call ($/kWh)', 'Put ($/kWh)', 'Collar Net Cost']
@@ -330,7 +330,7 @@ def create_pricing_validation_table(doc):
     run = p.add_run('Note: ')
     run.font.italic = True
     run.font.size = Pt(10)
-    run = p.add_run('S₀ = K (ATM). σ calibrated from NASA POWER irradiance data (2018–2024). Collar: buy put at 0.9×K, sell call at 1.1×K. Negative net cost indicates credit to producer. All pricing via binomial tree (N=500 steps), validated against Monte Carlo (100,000 paths). Risk-free rate r = 3%.')
+    run = p.add_run('S₀ = K (ATM). Taiwan σ calibrated from NASA POWER irradiance data (2019–2024) using explicit filtered preprocessing: 4-day rolling mean plus 1% absolute-return trim, yielding σ = 189.5%. Collar: buy put at 0.9×K, sell call at 1.1×K. Negative net cost indicates a structural credit to the producer. Pricing shown via binomial tree (N=400), with Taiwan base-case binomial-vs-Monte Carlo divergence of 2.08% at 20,000 paths. Risk-free rate r = 2.5%.')
     run.font.size = Pt(10)
     p.paragraph_format.left_indent = Inches(0.5)
     p.paragraph_format.right_indent = Inches(0.5)

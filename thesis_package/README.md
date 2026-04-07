@@ -86,8 +86,8 @@ LAYER 2 — INSTRUMENT PRICING (Chapter 3)
 ────────────────────────────────────────
 Question: Can you price an energy-backed derivative without a liquid market?
 Method:   Physics-based volatility (NASA POWER) → GBM → Black-Scholes
-Finding:  Yes — and zero-premium collar achievable at σ ≥ 165%
-Role:     Proves the instrument is priceable and accessible to producers
+Finding:  Yes — and the ±10% collar is structurally net-credit, with credit magnitude increasing in high-σ markets
+Role:     Proves the instrument is priceable and identifies where the structure is most economically attractive
 Status:   COMPLETE. Code in 02_pricing/
 
         ↓ Implication: instrument design is technically feasible
@@ -120,9 +120,9 @@ S0    = 0.0525   # $/kWh — Bureau of Energy Taiwan LCOE
 K     = S0       # ATM strike = LCOE (at-the-money at inception)
 r     = 0.025    # Risk-free rate — Taiwan 1yr government bond
 T     = 0.25     # Quarterly maturity (0.25 years)
-sigma = 1.89     # Annualised irradiance vol — NASA POWER 2019-2024
+sigma = 1.89     # Filtered NASA POWER calibration: 4-day rolling mean + 1% |log return| trim on 2019–2024 data
 N     = 400      # Binomial tree steps (convergence-verified)
-paths = 20000    # Monte Carlo paths (convergence < 1.4%)
+paths = 20000    # Monte Carlo paths (Taiwan base-case divergence = 2.08%)
 
 # Margin Framework (thesis §4.4)
 z99       = 2.33   # 99th percentile z-score
@@ -133,12 +133,14 @@ ins_fund  = 0.005  # Insurance fund (0.5% of open interest)
 # Collar Structure
 put_strike_pct  = 0.90  # 10% OTM put (floor)
 call_strike_pct = 1.10  # 10% OTM call (cap)
-# Note: collar achieves net credit when σ ≥ 165%
+# Note: collar net credit is structural for this strike pair; higher σ increases the credit magnitude
 
 # Oracle Architecture
 oracle_weights = {"nasa": 0.40, "utility": 0.40, "chainlink": 0.20}
 oracle_error_target = 0.07  # 7% maximum measurement error
 ```
+
+Important calibration note: the thesis-grade Taiwan volatility is a filtered operational estimate, not the raw daily irradiance volatility. The reproducible real-data path is `thesis_reconstructed` in [monetary_scorecard.py](/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/thesis_package/monetary_scorecard.py), which applies a 4-day rolling mean and trims the top 1% of absolute log returns before annualising. On the fetched 2019–2024 NASA POWER series, that produces `σ = 189.5%` and `JB p = 0.349`.
 
 ---
 
@@ -196,6 +198,19 @@ CEIR is one piece of evidence for Layer 1. Do not expand its role.
 
 ## Running Order
 
+For the current submission-ready package, these are the commands that matter:
+
+```bash
+python thesis_package/options_pricing.py
+python thesis_package/monetary_scorecard.py --data-source real --diagnostics
+```
+
+This writes the current empirical outputs into `thesis_package/empirical_results/`, including:
+- `cross_location_pricing.csv`
+- `oracle_tolerance.csv`
+- `calibration_diagnostics_real.csv`
+- `quarterly_simulation_real_thesis_reconstructed.csv`
+
 If starting fresh:
 
 ```bash
@@ -243,7 +258,7 @@ Each script outputs to `03_simulation/results/` and logs key findings.
 - Work within `04_monetary_design/standard_properties.py`
 - The seven properties are fixed — do not add or remove without documented justification
 - The comparison is Energy vs Gold vs Fiat — do not add other standards without reason
-- The scorecard result (7/7, 3/7, 2/7) should be reproducible from the properties logic
+- The scorecard result (7/7, 3/7, 1/7) should be reproducible from the properties logic
 
 ### If asked to write thesis content:
 - The tone is academic finance, not crypto advocacy
@@ -315,8 +330,8 @@ De-Rong Kong reviewed the proposal and gave the following key directions:
 |---|---|---|
 | CEIR empirical analysis | ✅ Complete | SSRN working paper |
 | China ban natural experiment | ✅ Complete | SSRN working paper |
-| Irradiance calibration (Taiwan) | ✅ Complete | σ = 189% verified |
-| Options pricing (B-S + binomial + MC) | ✅ Complete | < 1.4% convergence |
+| Irradiance calibration (Taiwan) | ✅ Complete | Real-data methods now explicit; filtered Taiwan spec lands near σ ≈ 189% |
+| Options pricing (B-S + binomial + MC) | ✅ Complete | 2.08% Taiwan base-case B vs MC divergence |
 | Cross-location validation | ✅ Complete | 5 markets |
 | Quarterly historical simulation | ✅ Complete | 20 quarters |
 | Monetary standard scorecard | ✅ Complete | 7/7 vs 3/7 vs 1/7 |

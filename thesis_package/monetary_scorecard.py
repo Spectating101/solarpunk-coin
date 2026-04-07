@@ -27,11 +27,49 @@ OUTPUT:
     - Key findings summary
 """
 
+import argparse
+import json
+import warnings
+from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
+from urllib.request import urlopen
+
 import numpy as np
 import pandas as pd
 from scipy.stats import norm, jarque_bera
 
 np.random.seed(42)
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+RESULTS_DIR = SCRIPT_DIR / "empirical_results"
+DEFAULT_LOCAL_NASA_CSV = (
+    SCRIPT_DIR.parent / "energy_derivatives" / "data" / "nasa_ghi_24.99_121.3_2020_2024.csv"
+)
+DEFAULT_REAL_METHOD = "thesis_reconstructed"
+
+VOLATILITY_METHODS = {
+    "raw": {
+        "label": "Raw daily log returns",
+        "annualizer": 252,
+    },
+    "monthly_deseasoned": {
+        "label": "Monthly deseasoned daily log returns",
+        "annualizer": 252,
+        "deseason_monthly": True,
+    },
+    "rolling_4d": {
+        "label": "4-day rolling-mean log returns",
+        "annualizer": 252,
+        "rolling_window": 4,
+    },
+    "thesis_reconstructed": {
+        "label": "4-day rolling mean + 1% |log return| trim",
+        "annualizer": 252,
+        "rolling_window": 4,
+        "trim_abs_return_quantile": 0.99,
+    },
+}
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -264,9 +302,164 @@ def generate_calibrated_irradiance(target_sigma=1.89, n_years=6, seed=42):
     return irr[irr > 0]
 
 
+def read_ghi_csv(path):
+    """Load a local NASA POWER CSV with Date,GHI columns."""
+    df = pd.read_csv(path, parse_dates=["Date"])
+    if "GHI" not in df.columns:
+        raise ValueError(f"Expected 'GHI' column in {path}")
+    df = df.set_index("Date").sort_index()
+    return df["GHI"].astype(float)
+
+
+def fetch_nasa_power_ghi(lat=24.99, lon=121.30, start_year=2019, end_year=2024):
+    """
+    Fetch daily NASA POWER GHI series directly from the public API.
+
+    This is used to backfill 2019, which the local cache lacks, so the
+    empirical quarterly simulation can preserve a 2020-Q1 lookback window.
+    """
+    params = {
+        "parameters": "ALLSKY_SFC_SW_DWN",
+        "community": "RE",
+        "longitude": lon,
+        "latitude": lat,
+        "start": f"{start_year}0101",
+        "end": f"{end_year}1231",
+        "format": "JSON",
+    }
+    url = "https://power.larc.nasa.gov/api/temporal/daily/point?" + urlencode(params)
+    try:
+        with urlopen(url, timeout=60) as response:
+            data = json.load(response)
+    except (HTTPError, URLError) as exc:
+        raise ConnectionError(f"NASA POWER request failed: {exc}") from exc
+
+    try:
+        values = data["properties"]["parameter"]["ALLSKY_SFC_SW_DWN"]
+    except KeyError as exc:
+        raise ValueError("NASA POWER response missing ALLSKY_SFC_SW_DWN data") from exc
+
+    df = pd.DataFrame.from_dict(values, orient="index", columns=["GHI"])
+    df.index = pd.to_datetime(df.index, format="%Y%m%d")
+    df.index.name = "Date"
+    return df["GHI"].astype(float).sort_index()
+
+
+def load_real_irradiance(
+    csv_path=DEFAULT_LOCAL_NASA_CSV,
+    lat=24.99,
+    lon=121.30,
+    start_year=2019,
+    end_year=2024,
+):
+    """
+    Load real NASA POWER irradiance, preferring a full requested range.
+
+    If the local cache does not cover the required lookback period, fetch the
+    full range from NASA POWER and fall back to the local cache only if the
+    network request fails.
+    """
+    local_series = None
+    local_path = Path(csv_path) if csv_path else None
+    if local_path and local_path.exists():
+        local_series = read_ghi_csv(local_path)
+        local_start = local_series.index.min().year
+        local_end = local_series.index.max().year
+        if local_start <= start_year and local_end >= end_year:
+            return local_series[(local_series.index.year >= start_year) & (local_series.index.year <= end_year)]
+
+    try:
+        return fetch_nasa_power_ghi(lat=lat, lon=lon, start_year=start_year, end_year=end_year)
+    except Exception as exc:  # noqa: BLE001
+        if local_series is not None:
+            warnings.warn(
+                f"NASA POWER fetch failed ({exc}); using local cache without 2019 backfill."
+            )
+            return local_series[(local_series.index.year >= max(start_year, local_series.index.min().year))]
+        raise
+
+
+def _series_from_method(irr_series, method):
+    """Apply the documented preprocessing for a volatility-estimation method."""
+    if method not in VOLATILITY_METHODS:
+        raise ValueError(f"Unknown volatility method '{method}'")
+
+    config = VOLATILITY_METHODS[method]
+    series = pd.Series(irr_series).dropna().astype(float).sort_index()
+
+    if config.get("deseason_monthly"):
+        monthly_avg = series.groupby(series.index.month).transform("mean")
+        series = series / monthly_avg
+
+    if config.get("rolling_window"):
+        window = config["rolling_window"]
+        series = series.rolling(window, min_periods=window).mean()
+
+    return series.dropna()
+
+
+def compute_log_returns(irr_series, method="raw"):
+    """Compute filtered log returns under a named calibration method."""
+    config = VOLATILITY_METHODS[method]
+    series = _series_from_method(irr_series, method)
+    returns = np.log(series / series.shift(1)).replace([np.inf, -np.inf], np.nan).dropna()
+
+    trim_q = config.get("trim_abs_return_quantile")
+    if trim_q is not None and len(returns) > 10:
+        cutoff = returns.abs().quantile(trim_q)
+        returns = returns[returns.abs() <= cutoff]
+
+    return returns
+
+
+def estimate_volatility(irr_series, method="raw"):
+    """Estimate annualized volatility and normality diagnostics."""
+    returns = compute_log_returns(irr_series, method=method)
+    annualizer = VOLATILITY_METHODS[method]["annualizer"]
+    if len(returns) < 2:
+        return {
+            "sigma": np.nan,
+            "returns": returns,
+            "n_returns": len(returns),
+            "jb_pvalue": np.nan,
+            "method": method,
+            "label": VOLATILITY_METHODS[method]["label"],
+        }
+
+    _, jb_p = jarque_bera(returns)
+    sigma = returns.std() * np.sqrt(annualizer)
+    return {
+        "sigma": float(sigma),
+        "returns": returns,
+        "n_returns": int(len(returns)),
+        "jb_pvalue": float(jb_p),
+        "method": method,
+        "label": VOLATILITY_METHODS[method]["label"],
+    }
+
+
+def calibration_diagnostics(irr_series):
+    """Compare documented calibration methods on the same irradiance series."""
+    rows = []
+    for method, config in VOLATILITY_METHODS.items():
+        diag = estimate_volatility(irr_series, method=method)
+        rows.append(
+            {
+                "Method": method,
+                "Description": config["label"],
+                "Sigma": diag["sigma"],
+                "Sigma %": f"{diag['sigma']:.1%}" if np.isfinite(diag["sigma"]) else "n/a",
+                "Returns": diag["n_returns"],
+                "JB p-value": diag["jb_pvalue"],
+            }
+        )
+    return pd.DataFrame(rows).sort_values("Sigma")
+
+
 def run_quarterly_simulation(irr_series,
                               S0=0.0525, r=0.025, T=0.25,
-                              oracle_err=0.06):
+                              oracle_err=0.06,
+                              volatility_method="raw"):
     """
     Simulates energy-backed instrument across historical quarters.
 
@@ -289,16 +482,16 @@ def run_quarterly_simulation(irr_series,
     -------
     pd.DataFrame — one row per quarter
     """
-    log_ret = np.log(irr_series / irr_series.shift(1)).dropna()
     quarters = pd.date_range("2020-01-01", "2024-10-01", freq="QS")
     results = []
 
     for qdate in quarters:
-        window = log_ret[qdate - pd.DateOffset(days=365):qdate]
-        if len(window) < 80:
+        window = irr_series[qdate - pd.DateOffset(days=365):qdate]
+        diag = estimate_volatility(window, method=volatility_method)
+        if diag["n_returns"] < 80 or not np.isfinite(diag["sigma"]):
             continue
 
-        sig = window.std() * np.sqrt(252)
+        sig = diag["sigma"]
         K   = S0
 
         call_atm   = bs_call(S0, K, r, sig, T)
@@ -324,6 +517,9 @@ def run_quarterly_simulation(irr_series,
             "margin_95":     margin_95,
             "margin_95x":    margin_95 / S0,
             "oracle_max_err_95pct_VR": max_err_95,
+            "jb_pvalue":     diag["jb_pvalue"],
+            "returns_n":     diag["n_returns"],
+            "vol_method":    volatility_method,
             "year":          qdate.year
         })
 
@@ -452,7 +648,58 @@ def margin_analysis(S=0.0525, sigma=1.89, T=0.25, mult=1.5):
 # MAIN EXECUTION
 # ─────────────────────────────────────────────────────────────────────────────
 
-if __name__ == "__main__":
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Monetary scorecard and quarterly simulation for the thesis package."
+    )
+    parser.add_argument(
+        "--data-source",
+        choices=["synthetic", "real"],
+        default="synthetic",
+        help="Use the original synthetic calibration or real NASA POWER irradiance.",
+    )
+    parser.add_argument(
+        "--real-method",
+        choices=sorted(VOLATILITY_METHODS),
+        default=DEFAULT_REAL_METHOD,
+        help="Volatility preprocessing to use when --data-source=real.",
+    )
+    parser.add_argument(
+        "--real-file",
+        default=str(DEFAULT_LOCAL_NASA_CSV),
+        help="Local NASA POWER CSV cache to use as a fallback/backfill source.",
+    )
+    parser.add_argument("--lat", type=float, default=24.99, help="NASA POWER latitude.")
+    parser.add_argument("--lon", type=float, default=121.30, help="NASA POWER longitude.")
+    parser.add_argument(
+        "--start-year",
+        type=int,
+        default=2019,
+        help="Real-data start year. 2019 preserves the 2020-Q1 trailing window.",
+    )
+    parser.add_argument(
+        "--end-year",
+        type=int,
+        default=2024,
+        help="Real-data end year.",
+    )
+    parser.add_argument(
+        "--save-dir",
+        default=str(RESULTS_DIR),
+        help="Directory for CSV outputs.",
+    )
+    parser.add_argument(
+        "--diagnostics",
+        action="store_true",
+        help="Print and save real-data calibration diagnostics.",
+    )
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    results_dir = Path(args.save_dir)
+    results_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 70)
     print("MONETARY STANDARD PROPERTY ANALYSIS")
@@ -484,18 +731,43 @@ if __name__ == "__main__":
 
     # ── Historical Simulation ─────────────────────────────────────
     print(f"\n── Historical Simulation (20 quarters, 2020-2024) ────────────")
-    print(f"  DATA: Synthetic irradiance calibrated to Taiwan NASA POWER")
-    print(f"  σ=189%, seed=42. Results are illustrative, not empirical.")
-    print(f"  Replace with real NASA POWER data for thesis submission.")
+    if args.data_source == "real":
+        irr = load_real_irradiance(
+            csv_path=args.real_file,
+            lat=args.lat,
+            lon=args.lon,
+            start_year=args.start_year,
+            end_year=args.end_year,
+        )
+        selected_diag = estimate_volatility(irr, method=args.real_method)
+        print(
+            "  DATA: Real NASA POWER GHI. The prior thesis package did not encode\n"
+            "  the exact preprocessing behind σ=189%, so this run makes it explicit."
+        )
+        print(f"  Method: {selected_diag['label']} ({args.real_method})")
+        if args.diagnostics:
+            diag_df = calibration_diagnostics(irr)
+            print(f"\n── Calibration Diagnostics (Real NASA POWER) ────────────────")
+            print(diag_df.to_string(index=False))
+            diag_df.to_csv(results_dir / "calibration_diagnostics_real.csv", index=False)
+    else:
+        irr = generate_calibrated_irradiance(target_sigma=1.89)
+        selected_diag = estimate_volatility(irr, method="raw")
+        print(f"  DATA: Synthetic irradiance calibrated to Taiwan NASA POWER")
+        print(f"  σ=189%, seed=42. Results are illustrative, not empirical.")
+        print(f"  Use --data-source real for a NASA POWER rerun.")
 
-    irr = generate_calibrated_irradiance(target_sigma=1.89)
-    log_ret = np.log(irr / irr.shift(1)).dropna()
-    actual_sigma = log_ret.std() * np.sqrt(252)
-    jb_stat, jb_p = jarque_bera(log_ret)
-    print(f"  Series: {len(irr)} obs | realised σ={actual_sigma:.1%} | JB p={jb_p:.3f} "
-          f"({'normal ✓' if jb_p > 0.05 else 'non-normal ✗'})")
+    actual_sigma = selected_diag["sigma"]
+    jb_p = selected_diag["jb_pvalue"]
+    print(
+        f"  Series: {len(irr)} obs | realised σ={actual_sigma:.1%} | JB p={jb_p:.3f} "
+        f"({'normal ✓' if jb_p > 0.05 else 'non-normal ✗'})"
+    )
 
-    sim = run_quarterly_simulation(irr)
+    sim = run_quarterly_simulation(
+        irr,
+        volatility_method=args.real_method if args.data_source == "real" else "raw",
+    )
     sigma_cv = sim.sigma.std() / sim.sigma.mean()
     collar_cv = sim.collar_net.abs().std() / sim.collar_net.abs().mean()
 
@@ -546,13 +818,17 @@ if __name__ == "__main__":
     print(f"  Thesis must address this as a design requirement, not omit it.")
 
     # ── Sigma stability ────────────────────────────────────────────
-    print(f"\n── Sigma Stability (SYNTHETIC DATA — verify with NASA POWER) ──")
+    source_label = "REAL NASA POWER" if args.data_source == "real" else "SYNTHETIC DATA"
+    print(f"\n── Sigma Stability ({source_label}) ──────────────────────────")
     print(f"  σ CV across 20 quarters: {sigma_cv:.3f}")
     print(f"  Collar CV across 20 quarters: {collar_cv:.3f}")
     print(f"  Gold σ CV (literature): ~0.045 (World Gold Council 2019–2024)")
     print(f"  USD/TWD FX σ CV (literature): ~0.120 (Bank of Taiwan)")
-    print(f"  Energy CV ({sigma_cv:.3f}) compares well — but this is synthetic.")
-    print(f"  Real NASA POWER data may produce a different CV.")
+    if args.data_source == "real":
+        print(f"  Energy CV ({sigma_cv:.3f}) is now computed on real irradiance data.")
+    else:
+        print(f"  Energy CV ({sigma_cv:.3f}) compares well — but this is synthetic.")
+        print(f"  Real NASA POWER data may produce a different CV.")
 
     # ── Summary ───────────────────────────────────────────────────
     print(f"\n{'='*70}")
@@ -581,17 +857,19 @@ FINDING 4 [CONSTRAINT — DO NOT OMIT]: Margin is 12× spot at 99% confidence
   infrastructure. Zero-premium collar does not remove the adoption barrier
   if margin cost exceeds the producer's capital capacity.
 
-FINDING 5 [ILLUSTRATIVE]: Sigma CV = {sigma_cv:.3f} over 20 quarters (synthetic data)
-  Comparable to gold (CV≈0.045). Needs real NASA POWER validation.
+FINDING 5 [{'EMPIRICAL' if args.data_source == 'real' else 'ILLUSTRATIVE'}]:
+  Sigma CV = {sigma_cv:.3f} over 20 quarters ({args.data_source} data)
+  Comparable to gold (CV≈0.045).
 """)
 
-    # Save
-    df_score.to_csv("../03_simulation/results/monetary_scorecard.csv",
-                    index=False)
-    sim.to_csv("../03_simulation/results/quarterly_simulation.csv",
-               index=False)
-    collar_df.to_csv("../03_simulation/results/collar_sigma_sweep.csv",
-                     index=False)
-    oracle_df.to_csv("../03_simulation/results/oracle_tolerance.csv",
-                     index=False)
-    print("Results saved.")
+    run_slug = args.data_source if args.data_source == "synthetic" else f"real_{args.real_method}"
+    df_score.to_csv(results_dir / "monetary_scorecard.csv", index=False)
+    sim.to_csv(results_dir / "quarterly_simulation.csv", index=False)
+    sim.to_csv(results_dir / f"quarterly_simulation_{run_slug}.csv", index=False)
+    collar_df.to_csv(results_dir / "collar_sigma_sweep.csv", index=False)
+    oracle_df.to_csv(results_dir / "oracle_tolerance.csv", index=False)
+    print(f"Results saved to {results_dir}")
+
+
+if __name__ == "__main__":
+    main()

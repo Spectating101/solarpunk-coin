@@ -20,13 +20,16 @@ WHAT THIS IS NOT:
 
 USAGE:
     python options_pricing.py
-    # Outputs results to ../03_simulation/results/
+    # Outputs results to thesis_package/empirical_results/
 
 THEORETICAL BASIS:
     - GBM justified at T <= 0.25 years (see RESEARCH_DESIGN.md §2.2)
     - Volatility from irradiance, not electricity price (cold-start solution)
-    - Collar structure achieves zero net cost at sigma >= 165%
+    - Collar net credit is structural for ±10% strikes in a lognormal model;
+      credit magnitude grows with sigma
 """
+
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -34,6 +37,9 @@ from scipy.stats import norm
 from scipy import stats
 import warnings
 warnings.filterwarnings('ignore')
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+RESULTS_DIR = SCRIPT_DIR / "empirical_results"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -67,7 +73,7 @@ LOCATIONS = {
 
 T = 0.25          # Quarterly maturity (years)
 N_BINOMIAL = 400  # Steps — convergence verified (see Table 3.2)
-N_MC = 20000      # Monte Carlo paths — convergence < 1.4% (see §3.4)
+N_MC = 20000      # Monte Carlo paths — Taiwan base-case divergence is 2.08%
 
 # Collar strikes
 PUT_STRIKE_PCT  = 0.90   # 10% OTM put  (floor)
@@ -149,7 +155,7 @@ def monte_carlo_call(S, K, r, sigma, T, paths=N_MC, seed=42):
     """
     Monte Carlo European call price.
     Used for cross-method validation against binomial tree.
-    Convergence < 1.4% vs binomial at 20,000 paths.
+    Taiwan base-case divergence is 2.08% at 20,000 paths.
     """
     np.random.seed(seed)
     Z  = np.random.standard_normal(paths)
@@ -218,7 +224,9 @@ def hedge_effectiveness(sigma, oracle_error_pct, S, T):
     σ_ε = oracle noise = oracle_error_pct × S
 
     Higher σ → higher VR → instrument more robust to oracle error.
-    At σ = 189% and 6% oracle error → VR ≈ 99%
+    A fixed 6% error can produce ~99% VR at σ = 189%, but that single-point
+    figure is only illustrative. The thesis should lead with oracle tolerance
+    thresholds, not this fixed-error example.
     """
     sigma_X = sigma * S * np.sqrt(T)
     sigma_eps = oracle_error_pct * S
@@ -237,7 +245,9 @@ def zero_premium_collar(S, r, sigma, T,
 
     Net cost = put_premium - call_premium
     When net_cost <= 0: producer receives net credit (zero upfront cost)
-    This occurs at sigma >= ~165% for standard collar parameters.
+    With ±10% symmetric strikes in a lognormal model, this is structural:
+    the sold call is closer to ATM in log-space and therefore always more
+    expensive than the bought put. Sigma changes credit magnitude, not sign.
 
     Returns
     -------
@@ -365,7 +375,7 @@ if __name__ == "__main__":
     print(f"    Zero-premium:         {'✓ Yes' if collar['zero_premium'] else '✗ No'}")
     print(f"\n  Risk:")
     print(f"    Initial margin (1.5×VaR₉₉%): ${margin:.4f}/kWh")
-    print(f"    Hedge effectiveness (6% err):  {he:.1%}")
+    print(f"    Illustrative hedge effectiveness (6% err):  {he:.1%}")
     print(f"\n  Greeks:")
     for g, v in greeks.items():
         print(f"    {g.capitalize():8s}: {v:.4f}")
@@ -382,12 +392,13 @@ if __name__ == "__main__":
                     "Put (ATM)", "Collar Net Cost", "Zero-Premium"]
     print(xl[display_cols].to_string(index=False))
 
-    print(f"\n  Zero-premium collar achievable: "
-          f"{xl['Zero-Premium'].sum()}/{len(xl)} locations "
-          f"(all sigma >= 165%)")
+    print(
+        f"\n  Net-credit collar observed: {xl['Zero-Premium'].sum()}/{len(xl)} locations "
+        f"(structural for this strike pair, not a sigma-threshold result)"
+    )
 
     # ── Save ──────────────────────────────────────────────────────
-    xl.to_csv("../03_simulation/results/cross_location_pricing.csv",
-              index=False)
-    print("\nResults saved to ../03_simulation/results/")
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    xl.to_csv(RESULTS_DIR / "cross_location_pricing.csv", index=False)
+    print(f"\nResults saved to {RESULTS_DIR}")
     print("=" * 65)

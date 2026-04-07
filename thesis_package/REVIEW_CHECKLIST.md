@@ -90,11 +90,11 @@ Review Chapter 3. Verify:
 ### Pricing Methodology:
 - [ ] I used **binomial tree** implementation
 - [ ] I validated with **Monte Carlo** simulation
-- [ ] I achieved **< 1.4% pricing error** convergence
+- [ ] I reported the **actual binomial-vs-MC divergence** honestly (2.08% at 20,000 paths, or lower if rerun with more paths)
 - [ ] I calibrated volatility using **NASA satellite data**
 
 ### Taiwan Solar Parameters:
-- [ ] Volatility (σ): 189% annualized
+- [ ] Volatility (σ): documented from an explicit NASA POWER preprocessing method
 - [ ] Drift: Based on long-term capacity factor trends
 - [ ] Settlement: Quarterly (T = 0.25 years)
 
