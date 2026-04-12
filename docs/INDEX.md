@@ -2,13 +2,18 @@
 
 This folder collects the ALL-CAPS docs that used to live in the repo root.
 
-## Grant Materials
-- docs/grants/GRANT_MATERIALS_AUDIT.md
-- docs/grants/GRANT_PROPOSAL_OLD.md
-- docs/grants/GRANT_SUBMISSION_GUIDE.md
-- docs/grants/POLYGON_GRANTS_STRATEGY.md
-- docs/grants/START_GRANT_PROCESS.md
-- docs/grants/TEST_VERIFICATION_REPORT.md
+## Canonical Current Docs
+- `README.md`
+- `DEPLOYMENT_GUIDE.md`
+- `GRANT_EXECUTIVE_SUMMARY.md`
+- `GRANT_PROPOSAL.md`
+- `GRANT_SPONSORSHIP_PACKAGE.md`
+- `docs/GRANT_BRIEF_POLYGON.md`
+- `docs/project/PROJECT_OPERATIONS.md`
+- `docs/project/DEPLOYMENT_EVIDENCE_POLICY.md`
+- `docs/grants/SUBMISSION_KIT.md`
+- `docs/grants/GRANT_READINESS_PACK.md`
+- `submissions_log/README.md`
 
 ## Thesis + Research Packaging
 - docs/thesis/MASTER_THESIS_PROPOSAL.md

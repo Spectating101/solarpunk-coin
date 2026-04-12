@@ -97,11 +97,11 @@ code_reference/                     - Working code for reference
 ├── SolarPunkCoin.test.js          - Test suite
 └── pillar3_engine.py              - Pricing oracle
 
-supporting_docs/                    - Thesis proposals and strategies
-├── MASTER_THESIS_PROPOSAL.md      - Original thesis proposal
-├── THESIS_PROPOSAL.md
-├── THESIS_DEFENSE_STRATEGY.md
-└── PACKAGE_SUMMARY.md
+docs/thesis/                        - Canonical proposal and defense docs
+├── MASTER_THESIS_PROPOSAL.md      - Current master thesis proposal
+├── THESIS_PROPOSAL.md             - Thesis proposal mirror
+├── THESIS_DEFENSE_STRATEGY.md     - Defense strategy
+└── PACKAGE_SUMMARY.md             - Thesis/package summary
 ```
 
 ---
@@ -258,7 +258,7 @@ This thesis **does not** attempt to deliver a production-ready token protocol or
 
 1. **Review by advisor** - Send to your Yuan Ze advisor for feedback
 2. **Format check** - Ensure compliance with university guidelines
-3. **Defense preparation** - Use `supporting_docs/THESIS_DEFENSE_STRATEGY.md`
+3. **Defense preparation** - Use `docs/thesis/THESIS_DEFENSE_STRATEGY.md`
 4. **Submission** - Follow Yuan Ze thesis submission procedures
 5. **Potential publications:**
    - Chapter 1 → Journal of Finance / Cryptoeconomics journal

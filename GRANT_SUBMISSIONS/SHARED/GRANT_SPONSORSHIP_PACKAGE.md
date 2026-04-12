@@ -263,7 +263,7 @@ Total (projected year 1):            $2-5M
 - `contracts/SolarPunkCoin.sol` — Settlement contract (577 lines, 36 tests passing)
 - `contracts/SolarPunkOption.sol` — Options clearinghouse (327 lines, 10 tests passing)
 - `scripts/pi_tuning.py` — Control parameter optimization results
-- `ORACLE_DEPLOYMENT.md` — Production deployment guide for oracle
+- `energy_derivatives/api/main.py` — Canonical FastAPI pricing service
 
 ### Contact & Next Steps
 ```

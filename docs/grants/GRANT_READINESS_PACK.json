@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-02-14T08:38:56.336355+00:00",
+  "generated_at": "2026-04-12T15:24:25.523215+00:00",
   "repo": "Solarpunk-bitcoin",
   "verification_path": "/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/artifacts/verify_health.json",
   "verification": {
-    "timestamp": "2026-02-14T16:38:56+08:00",
+    "timestamp": "2026-04-12T02:14:29+08:00",
     "overall_status": "ok",
     "strict_mode": false,
     "warnings": 0,
     "environment": {
-      "node_version": "v18.20.8",
-      "node_major": 18,
+      "node_version": "v22.21.1",
+      "node_major": 22,
       "hardhat_local_available": true
     },
     "checks": {
@@ -32,12 +32,12 @@
   "missing_artifacts": [],
   "artifact_freshness": {
     "grant_docs_latest": "2026-01-15T17:09:30.808255+00:00",
-    "verification_latest": "2026-02-14T08:38:56.301300+00:00",
+    "verification_latest": "2026-04-11T18:14:29.232342+00:00",
     "contracts_latest": "2026-01-07T09:23:03.807580+00:00",
-    "frontend_latest": "2025-12-27T08:23:05.699856+00:00"
+    "frontend_latest": "2026-03-16T08:59:37.654137+00:00"
   },
   "empirical_inventory": {
-    "csv_files": 22,
+    "csv_files": 29,
     "png_files": 9
   },
   "readiness_grade": "A",

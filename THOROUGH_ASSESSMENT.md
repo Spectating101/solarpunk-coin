@@ -261,8 +261,8 @@ SolarPunk-bitcoin/
 
 ### 5.1 Current Deployment Status
 - **Local Network:** ✅ Fully functional (Hardhat node)
-- **Mumbai Testnet:** ⚠️ **BLOCKED** — requires:
-  - `.env` file with `POLYGON_MUMBAI_RPC` (not configured)
+- **Polygon Amoy:** ⚠️ **BLOCKED** — requires:
+  - `.env` file with `POLYGON_AMOY_RPC` (not configured)
   - `PRIVATE_KEY` for deploying account (not configured)
   - Gas funds (MATIC) for deployment
 - **Mainnet:** ❌ Not attempted yet
@@ -271,7 +271,7 @@ SolarPunk-bitcoin/
 **Blocker Summary:**
 ```bash
 # Current status:
-❌ npm run deploy:mumbai  # Fails: need RPC URL + private key
+❌ bash scripts/deploy_amoy.sh  # Fails: need RPC URL + private key
 ❌ npm run deploy:polygon # Not configured
 ✅ npx hardhat test      # Works on local fork
 ✅ npm run simulate      # Python simulation runs
@@ -467,7 +467,7 @@ The GRANT_PROPOSAL.md outlines a Polygon Community Grant request ($50-75K, 6 mon
 
 ### Immediate (Week 1-2)
 - [ ] **Clarify versions:** Resolve whether library is 0.2.0 or 0.4.0; tag releases consistently
-- [ ] **Verify testnet deploy:** Run `npm run deploy:mumbai` with real RPC/key (use testnet faucet)
+- [ ] **Verify testnet deploy:** Run `bash scripts/deploy_amoy.sh` with real RPC/key (use testnet faucet)
 - [ ] **Document oracle service plan:** Spec out HTTP API for pillar3_engine.py
 - [ ] **Create deployment guide:** Step-by-step guide from repo to testnet contract address
 
@@ -478,7 +478,7 @@ The GRANT_PROPOSAL.md outlines a Polygon Community Grant request ($50-75K, 6 mon
 - [ ] **Implement monitoring:** Prometheus + Grafana for oracle uptime, contract state
 
 ### Medium-term (Months 2-3)
-- [ ] **Testnet pilot:** Deploy to Mumbai, onboard test solar farm, execute live hedge trade
+- [ ] **Testnet pilot:** Deploy to Polygon Amoy, onboard test solar farm, execute live hedge trade
 - [ ] **Frontend hardening:** Add state management (Redux/Zustand), error boundaries, input validation, accessibility
 - [ ] **Governance framework:** Define parameter update process (DAO, multisig, or centralized for now?)
 - [ ] **Regulatory review:** Consult lawyers on stablecoin/derivatives licensing in target jurisdictions
@@ -562,7 +562,7 @@ The GRANT_PROPOSAL.md outlines a Polygon Community Grant request ($50-75K, 6 mon
    - Document tuning methodology for future adjustments
 
 4. **Testnet Pilot (Cost: $15K (gas + incentives), Timeline: 8 weeks)**
-   - Deploy to Polygon Mumbai
+   - Deploy to Polygon Amoy
    - Onboard 2-3 test solar farms with real data
    - Execute 10+ live hedge trades, collect feedback
    - Iterate on UX/pricing based on feedback

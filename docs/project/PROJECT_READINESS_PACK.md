@@ -1,8 +1,8 @@
 # Project Readiness Pack
 
-- generated_at: `2026-02-14T08:38:56.374314+00:00`
+- generated_at: `2026-04-12T15:24:25.560552+00:00`
 - project: `Solarpunk-bitcoin`
-- readiness_grade: `A`
+- readiness_grade: `B`
 - verification_status: `ok`
 - verification_warnings: `0`
 
@@ -11,7 +11,7 @@
 - pricing_engine_ok: `True`
 - contracts_ok: `True`
 - frontend_ok: `True`
-- oracle_service_present: `True`
+- api_service_present: `True`
 - empirical_data_present: `True`
 - deployment_docs_present: `True`
 
@@ -19,11 +19,11 @@
 
 - contracts_solidity_files: `3`
 - contract_test_files: `2`
-- script_files: `33`
-- frontend_source_files: `5`
-- empirical_csv_files: `22`
+- script_files: `34`
+- frontend_source_files: `8`
+- empirical_csv_files: `29`
 - empirical_png_files: `9`
-- grant_docs_files: `10`
+- grant_docs_files: `2`
 
 ## Required Docs
 

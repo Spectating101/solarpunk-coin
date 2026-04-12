@@ -41,7 +41,7 @@ This document maps the academic claims of the thesis to the concrete engineering
 ---
 
 ## 💰 Grant & Commercialization Readiness
-**Strategy:** `POLYGON_GRANTS_STRATEGY.md`
+**Strategy:** `docs/GRANT_BRIEF_POLYGON.md`
 *   **Differentiation:** Unlike 99% of applicants, we have **working, tested code** backed by **academic rigor**.
 *   **Next Step:** Submit `SolarPunkOption.sol` deployment verification to Polygon Community Grants.
 

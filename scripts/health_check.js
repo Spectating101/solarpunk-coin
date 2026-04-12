@@ -4,13 +4,13 @@ const { ethers } = require("ethers");
 async function main() {
   const rpcUrl =
     process.env.RPC_URL ||
-    process.env.POLYGON_MUMBAI_RPC ||
-    process.env.ALCHEMY_MUMBAI_RPC;
+    process.env.POLYGON_AMOY_RPC ||
+    process.env.ALCHEMY_AMOY_RPC;
   const spkAddress = process.env.SPK_ADDRESS;
   const optionAddress = process.env.OPTION_ADDRESS;
 
   if (!rpcUrl || !spkAddress || !optionAddress) {
-    console.error("Missing env vars: RPC_URL (or POLYGON_MUMBAI_RPC), SPK_ADDRESS, OPTION_ADDRESS");
+    console.error("Missing env vars: RPC_URL (or POLYGON_AMOY_RPC), SPK_ADDRESS, OPTION_ADDRESS");
     process.exit(1);
   }
 

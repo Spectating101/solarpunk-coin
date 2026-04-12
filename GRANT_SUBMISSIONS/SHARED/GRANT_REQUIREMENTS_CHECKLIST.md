@@ -441,7 +441,7 @@
 
 ### 🔴 MUST DO (Increases success 20-30%)
 1. **Deploy to testnet this month**
-   - Follow TESTNET_DEPLOYMENT.md
+   - Follow DEPLOYMENT_GUIDE.md
    - Get one live trade working
    - This alone = +20% probability per grant
 
@@ -507,7 +507,7 @@ Then apply with 55-60% odds instead of 40% odds.
 ## Submission Timeline (Revised)
 
 ### Week 1: Testnet Deployment
-- [ ] Deploy to Mumbai testnet
+- [ ] Deploy to Polygon Amoy
 - [ ] Do first live trade (even if $1)
 - [ ] Document with screenshots
 - [ ] Include in all applications: "Live testnet deployment video: [link]"
@@ -537,7 +537,7 @@ Then apply with 55-60% odds instead of 40% odds.
 When you send this to your ChatGPT agent, ask it to verify:
 
 1. **Is the testnet deployment guide actually executable?**
-   - Can someone follow TESTNET_DEPLOYMENT.md and get live trade?
+   - Can someone follow DEPLOYMENT_GUIDE.md and get live trade?
    - Or are there missing steps?
 
 2. **Are the grant application templates customized enough?**
@@ -573,4 +573,3 @@ When you send this to your ChatGPT agent, ask it to verify:
 - Risk/reward is favorable
 - 2-3 weeks of work → $150K+ expected value
 - Even 1 approval pays for the effort 10x
-

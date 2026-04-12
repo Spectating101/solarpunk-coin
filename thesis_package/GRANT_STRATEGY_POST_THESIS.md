@@ -357,7 +357,7 @@ June 1-30: Follow up, interviews, respond to questions
 1. Read your existing grant materials:
    - GRANT_OPPORTUNITIES_RANKED.md
    - GRANT_SPONSORSHIP_PACKAGE.md
-   - QUICK_START_FUNDING.md
+   - GRANT_SPONSORSHIP_PACKAGE.md
 
 2. Make decision: Wait until after April 3rd? ← **RECOMMENDED**
 
@@ -460,4 +460,3 @@ June 1-30: Follow up, interviews, respond to questions
 **Time to apply (serious):** 20-30 hours (after April 3rd)  
 
 **Next step:** Read your existing grant materials tonight, then decide tomorrow if you prep now or wait.
-

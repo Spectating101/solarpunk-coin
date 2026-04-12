@@ -47,12 +47,6 @@ module.exports = {
       accounts: [PRIVATE_KEY],
       chainId: 17000,
     },
-    // Mumbai deprecated April 2024 - kept for historical reference only
-    mumbai: {
-      url: process.env.POLYGON_MUMBAI_RPC || "https://rpc-mumbai.maticvigil.com",
-      accounts: [PRIVATE_KEY],
-      chainId: 80001,
-    },
     localhost: {
       url: "http://127.0.0.1:8545",
     },

@@ -2,6 +2,9 @@
 
 **Last Updated:** December 27, 2025
 
+> Canonical active docs now live in `README.md`, `DEPLOYMENT_GUIDE.md`, `docs/project/`, `docs/grants/`, `docs/commercial/`, and `submissions_log/`.
+> Older root-level guides are kept only when they redirect to those canonical paths.
+
 ---
 
 ## 📖 WHAT ACTUALLY EXISTS
@@ -10,9 +13,9 @@
 
 #### Core Implementation Docs
 1. **README.md** (2025) ✅
-   - 6.7 KB - Clean MVP quickstart
-   - Features: Contract overview, getting started, architecture, test results
-   - Status: **Complete** - ready for grants
+   - Current top-level project overview
+   - Links to canonical deployment, project ops, grant, and submission docs
+   - Status: **Complete**
 
 2. **MVP_SUMMARY.md** (2025) ✅
    - 4.3 KB - What you built + next steps
@@ -217,7 +220,7 @@ Old/obsolete documentation preserved in `ARCHIVE/`:
 ## 🚀 YOUR NEXT STEPS
 
 **Immediate (This Week):**
-1. Deploy to Polygon Mumbai testnet
+1. Deploy to Polygon Amoy testnet
 2. Get contract address
 3. Apply to Gitcoin/Polygon grants using MVP_SUMMARY.md
 

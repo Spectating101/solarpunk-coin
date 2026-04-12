@@ -129,7 +129,7 @@ Rerun and compare charts.
 ```bash
 export SPK_ADDRESS=0x...
 export OPTION_ADDRESS=0x...
-export RPC_URL=https://rpc-mumbai.maticvigil.com
+export RPC_URL=https://rpc-amoy.polygon.technology/
 npm run health:check
 ```
 
@@ -182,12 +182,12 @@ npx hardhat test --network localhost
 npx hardhat console --network localhost
 ```
 
-## 🌐 Mumbai Testnet Deployment (10 minutes)
+## 🌐 Polygon Amoy Testnet Deployment (10 minutes)
 
 ### 1. Get Test MATIC
 
 - Go to [Polygon Faucet](https://faucet.polygon.technology/)
-- Connect MetaMask (Mumbai testnet)
+- Connect MetaMask (Polygon Amoy)
 - Claim 0.5 MATIC (free)
 
 ### 2. Set Private Key
@@ -202,7 +202,7 @@ export RESERVE_TOKEN_ADDRESS=0x...
 ### 3. Deploy
 
 ```bash
-npx hardhat run scripts/deploy.js --network mumbai
+npx hardhat run scripts/deploy.js --network amoy
 ```
 
 Output:
@@ -214,12 +214,12 @@ Output:
 ✨ Deployment complete!
 ```
 
-**Contract is LIVE!** View on [PolygonScan](https://mumbai.polygonscan.com/) using address.
+**Contract is LIVE!** View on [PolygonScan](https://amoy.polygonscan.com/) using address.
 
 ### 4. Deploy Options Clearinghouse (SolarPunkOption)
 
 ```bash
-npx hardhat run scripts/deploy_pillar3.js --network mumbai
+npx hardhat run scripts/deploy_pillar3.js --network amoy
 ```
 
 Set `USDC_ADDRESS` and (optionally) `PRICE_DECIMALS` in `.env` before running. The deploy script will log the deployed SolarPunkOption address (and MockUSDC if you target localhost).
@@ -229,7 +229,7 @@ Set `USDC_ADDRESS` and (optionally) `PRICE_DECIMALS` in `.env` before running. T
 ### Via Hardhat Console
 
 ```bash
-npx hardhat console --network mumbai
+npx hardhat console --network amoy
 ```
 
 Then:
@@ -266,7 +266,7 @@ console.log("Peg stable?", stable);
 
 ### Via Web Interface (PolygonScan)
 
-1. Go to [PolygonScan Mumbai](https://mumbai.polygonscan.com/)
+1. Go to [PolygonScan Amoy](https://amoy.polygonscan.com/)
 2. Search your contract address
 3. Click **"Contract"** tab
 4. Scroll to **"Read Contract"** → View balances
@@ -278,7 +278,7 @@ console.log("Peg stable?", stable);
 ```python
 from web3 import Web3
 
-w3 = Web3(Web3.HTTPProvider("https://rpc-mumbai.maticvigil.com"))
+w3 = Web3(Web3.HTTPProvider("https://rpc-amoy.polygon.technology/"))
 contract_address = "0xAbCD1234..."
 
 # Load ABI from artifacts
@@ -376,8 +376,8 @@ PRIVATE_KEY=0x...
 ### "Error: Provider not found"
 
 ```bash
-# Update POLYGON_MUMBAI_RPC in .env
-POLYGON_MUMBAI_RPC=https://rpc-mumbai.maticvigil.com
+# Update POLYGON_AMOY_RPC in .env
+POLYGON_AMOY_RPC=https://rpc-amoy.polygon.technology/
 ```
 
 ### "Reverted: Must have MINTER_ROLE"
@@ -399,8 +399,8 @@ Increase gas in hardhat.config.js:
 
 ```javascript
 networks: {
-  mumbai: {
-    url: process.env.POLYGON_MUMBAI_RPC,
+  amoy: {
+    url: process.env.POLYGON_AMOY_RPC,
     accounts: [process.env.PRIVATE_KEY],
     gasPrice: "auto", // Auto-detect
     // OR manually set:
@@ -447,7 +447,7 @@ npx hardhat test --network localhost
 1. **Run tests:** `npm test`
 2. **Simulate:** `python3 scripts/simulate_peg.py`
 3. **Deploy local:** `npx hardhat run scripts/deploy.js --network localhost`
-4. **Deploy Mumbai:** `npx hardhat run scripts/deploy.js --network mumbai`
+4. **Deploy Amoy:** `npx hardhat run scripts/deploy.js --network amoy`
 5. **Interact:** Use PolygonScan or web3.py
 6. **Iterate:** Adjust parameters based on real data
 7. **Grant funding:** Apply with testnet contract address

@@ -1,6 +1,6 @@
 # Grant Readiness Pack
 
-- generated_at: `2026-02-14T08:38:56.336355+00:00`
+- generated_at: `2026-04-12T15:24:25.523215+00:00`
 - readiness_grade: `A`
 - overall_status: `ok`
 - warnings: `0`
@@ -18,7 +18,7 @@
 
 ## Empirical Inventory
 
-- empirical_csv_files: `22`
+- empirical_csv_files: `29`
 - empirical_png_files: `9`
 
 ## Priority Actions

@@ -54,9 +54,10 @@ def _build_payload(root: Path) -> Dict[str, Any]:
     required_docs = [
         "README.md",
         "DEPLOYMENT_GUIDE.md",
-        "ORACLE_DEPLOYMENT.md",
-        "TESTNET_DEPLOYMENT.md",
+        "docs/project/PROJECT_OPERATIONS.md",
+        "docs/project/DEPLOYMENT_EVIDENCE_POLICY.md",
         "docs/GRANT_BRIEF_POLYGON.md",
+        "docs/grants/GRANT_READINESS_PACK.md",
     ]
     missing_docs = [d for d in required_docs if not _exists(root, d)]
 
@@ -69,9 +70,11 @@ def _build_payload(root: Path) -> Dict[str, Any]:
             "pricing_engine_ok": checks.get("pricing_engine") == "ok",
             "contracts_ok": checks.get("contracts") == "ok",
             "frontend_ok": checks.get("frontend") == "ok",
-            "oracle_service_present": _exists(root, "oracle_service.py"),
+            "api_service_present": _exists(root, "energy_derivatives/api/main.py"),
             "empirical_data_present": _exists(root, "empirical"),
-            "deployment_docs_present": all(_exists(root, x) for x in ["DEPLOYMENT_GUIDE.md", "TESTNET_DEPLOYMENT.md"]),
+            "deployment_docs_present": all(
+                _exists(root, x) for x in ["DEPLOYMENT_GUIDE.md", "docs/project/DEPLOYMENT_EVIDENCE_POLICY.md"]
+            ),
         },
         "inventories": {
             "contracts_solidity_files": _count_files(root, "contracts", ["*.sol"]),

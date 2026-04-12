@@ -2,6 +2,9 @@
 
 What you have on disk right now:
 
+> Current deployment and status docs now point at `DEPLOYMENT_GUIDE.md`, `docs/project/`, `docs/grants/`, and `submissions_log/`.
+> Older Mumbai-era testnet instructions are treated as historical unless a file explicitly says otherwise.
+
 ```
 Solarpunk-bitcoin/
 ├── contracts/
@@ -92,7 +95,7 @@ Solarpunk-bitcoin/
 **`hardhat.config.js`**
 - Solidity version: 0.8.20
 - Optimizer enabled (200 runs)
-- Networks: localhost, Mumbai, mainnet
+- Networks: localhost, Amoy, Sepolia, Holesky
 - Gas reporting configured
 - Mocha timeout: 40s
 
@@ -205,9 +208,9 @@ npx hardhat run scripts/deploy.js             # Terminal 2
 ### This Week
 
 ```bash
-# Deploy to Mumbai testnet
-npx hardhat run scripts/deploy.js --network mumbai
-# Expected: Live contract on Polygon
+# Deploy to Polygon Amoy
+bash scripts/deploy_amoy.sh
+# Expected: Live contract on Polygon Amoy
 ```
 
 ### For Grants

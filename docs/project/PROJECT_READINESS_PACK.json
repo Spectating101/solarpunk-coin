@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-14T08:38:56.374314+00:00",
+  "generated_at": "2026-04-12T15:24:25.560552+00:00",
   "project": "Solarpunk-bitcoin",
   "verification_status": "ok",
   "verification_warnings": 0,
@@ -7,18 +7,18 @@
     "pricing_engine_ok": true,
     "contracts_ok": true,
     "frontend_ok": true,
-    "oracle_service_present": true,
+    "api_service_present": true,
     "empirical_data_present": true,
     "deployment_docs_present": true
   },
   "inventories": {
     "contracts_solidity_files": 3,
     "contract_test_files": 2,
-    "script_files": 33,
-    "frontend_source_files": 5,
-    "empirical_csv_files": 22,
+    "script_files": 34,
+    "frontend_source_files": 8,
+    "empirical_csv_files": 29,
     "empirical_png_files": 9,
-    "grant_docs_files": 10
+    "grant_docs_files": 2
   },
   "missing_required_docs": [],
   "project_modes": {
@@ -66,7 +66,7 @@
     "bash scripts/run_commercial_cycle.sh",
     "bash scripts/run_protocol_gate.sh 1"
   ],
-  "readiness_grade": "A",
+  "readiness_grade": "B",
   "next_actions": [
     "Keep `artifacts/verify_health.json` fresh before any external submission or demo.",
     "Use `scripts/run_project_operating_cycle.sh` as the canonical pre-release routine.",

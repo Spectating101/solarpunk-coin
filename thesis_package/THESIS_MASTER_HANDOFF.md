@@ -346,7 +346,7 @@ feedback items. Key structural changes:
 
 ### Task 3 — Final numerical audit (Codex)
 - Re-audit create_thesis_word.py against current package
-  (HANDOFF.md flags this as containing stale static tables)
+  (legacy handoff notes flag this as containing stale static tables)
 - Verify all table numbers match empirical_results/ CSV outputs
 - Confirm all equation numbers are consistent
 
@@ -378,7 +378,7 @@ Journée, M., & Bertrand, C. (2010). Quality control of solar radiation data.
 | File | What it is | Trust level |
 |---|---|---|
 | COMPLETE_THESIS_SUBMISSION_READY.docx | Most current full thesis draft | High — real numbers |
-| HANDOFF.md (from Codex) | Backend verification of real data outputs | High |
+| legacy handoff notes | Backend verification of real data outputs | High |
 | FINDINGS.md (revised) | Corrected findings with bug notes | High |
 | monetary_scorecard.py | Simulation code with √2 bug fixed | High |
 | options_pricing.py | Pricing framework code | High |

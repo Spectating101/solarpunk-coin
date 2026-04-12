@@ -2,6 +2,8 @@
 
 **Stop overthinking. Here's the minimal path.**
 
+> Canonical deployment guide. Older testnet/oracle deployment writeups were consolidated here and removed.
+
 **Network:** Polygon Amoy (current testnet, Mumbai was deprecated April 2024)
 
 ---
