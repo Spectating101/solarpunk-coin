@@ -30,6 +30,31 @@ This thesis addresses a fundamental problem in cryptocurrency: **how to create s
 
 ---
 
+## PACKAGE MAP
+
+This file is the canonical thesis handoff. The narrower thesis docs should point here instead of repeating the same story.
+
+- `thesis-draft.md` — root canonical thesis draft.
+- `RESEARCH/`, `energy_derivatives/`, `empirical/` — supporting source material.
+- `thesis_package/THESIS_MASTER_HANDOFF.md` — legacy handoff pointer.
+
+## Defense posture
+
+- **GBM validity:** the thesis uses a short-horizon, conservative upper-bound argument, not a claim that GBM is perfect for long horizons.
+- **Capital efficiency:** the expensive bootstrap regime is deliberate; solvency comes before liquidity optimization.
+- **Passive vs. active:** the protocol restores coordination explicitly rather than relying on dispersed miner behavior.
+- **NASA proxy data:** irradiance is the cold-start proxy and the basis-risk buffer is part of the design, not an accident.
+
+## Evidence map
+
+| Pillar | Thesis claim | Evidence in the repo |
+|---|---|---|
+| Pillar 1 | Energy anchoring is empirically defensible | `empirical/CEIR.py`, `empirical/Regression.py`, `empirical/ceir_analysis_summary.csv` |
+| Pillar 2 | Physics-based pricing is reproducible | `scripts/sensitivity_check.py`, `scripts/pillar3_engine.py` |
+| Pillar 3 | On-chain settlement is feasible and bounded | `contracts/SolarPunkOption.sol`, `scripts/pillar3_engine.py`, `test/SolarPunkOption.test.js` |
+
+---
+
 ## 1. Research Questions and Objectives
 
 ### Primary Research Questions (4 nested hypotheses):

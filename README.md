@@ -57,8 +57,10 @@ cd frontend && npm run dev
 ## 🧪 Evidence (For Grant Reviewers)
 
 **What Works Today:**
-- ✅ **Smart Contracts**: 46/46 tests passing ([test suite](test/))
-- ⚙️ **Testnet Deployment**: Infrastructure ready ([scripts/deploy_amoy.sh](scripts/deploy_amoy.sh)). Pending public deployment due to faucet verification barriers (requires social media accounts). Available for immediate deployment upon request for technical review.
+- ✅ **Smart Contracts**: 51/51 tests passing ([test suite](test/))
+- ⚙️ **Testnet Deployment**: Full-stack Amoy deployment ready ([scripts/deploy_amoy.sh](scripts/deploy_amoy.sh)) with treasury routing. Public addresses will be published after the funded deployment step.
+- ✅ **Treasury Demo**: `npm run demo:treasury` shows fee routing, trading fees, liquidation, and bond slashing locally.
+- ✅ **Treasury Model**: `npm run model:treasury` estimates monthly break-even under configurable volume assumptions.
 - ✅ **Pricing Engine**: Python library validated against 3 years NASA data ([spk-derivatives](https://github.com/spectating101/spk-derivatives))
 - ✅ **Run Tests**: `npx hardhat test` (takes ~30 seconds)
 
@@ -81,14 +83,12 @@ cd frontend && npm run dev
 
 ## 📄 Academic Foundation
 This project is not a hackathon toy. It is based on a comprehensive **Master's Thesis**:
-*   **[THESIS_DEFENSE_STRATEGY.md](./docs/thesis/THESIS_DEFENSE_STRATEGY.md):** How we solve the "GBM" and "Oracle" critiques.
-*   **[PACKAGE_SUMMARY.md](./docs/thesis/PACKAGE_SUMMARY.md):** Mapping code to academic claims.
+*   **[MASTER_THESIS_PROPOSAL.md](./docs/thesis/MASTER_THESIS_PROPOSAL.md):** Canonical thesis package, defense posture, and evidence map.
+*   **[THESIS_MASTER_HANDOFF.md](./thesis_package/THESIS_MASTER_HANDOFF.md):** Legacy handoff for thesis assembly and continuation.
 
 ## 💰 Grant Proposal
 We are applying for the Polygon Community Grant to move from **MVP** to **Pilot**.
 *   **[Read the Proposal](./GRANT_PROPOSAL.md)**
-*   **[Grant Sponsorship Package](./GRANT_SPONSORSHIP_PACKAGE.md)**
-*   **[Grant Submission Kit](./docs/grants/SUBMISSION_KIT.md)**
 *   **[Grant Readiness Pack](./docs/grants/GRANT_READINESS_PACK.md)**
 
 ### Reproducible grant evidence (before submission)
@@ -97,117 +97,47 @@ bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.j
 python3 scripts/build_grant_readiness_pack.py
 ```
 
-## 🧭 Independent Project Operations
-SolarPunk is now structured as an independent project with seven operating modes:
-1. Research mode (empirical and economics outputs)
-2. Protocol mode (contracts + oracle + frontend verification)
-3. Funding mode (submission package generation)
-4. Commercial mode (pilot term sheets and client artifacts)
-5. Monetary-system mode (currency-protocol readiness checks)
-6. Phase-gate mode (GO/NO_GO progression enforcement)
-7. Evidence-validation mode (deployment + audit proof validation)
+## 🚦 Launch Sequence
+1. Refresh the verification and readiness packs:
+   ```bash
+   bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.json
+   python3 scripts/build_grant_readiness_pack.py
+   python3 scripts/build_project_readiness_pack.py
+   ```
+2. Deploy to Polygon Amoy with a funded wallet:
+    ```bash
+    ./scripts/deploy_amoy.sh
+    ```
+   This deploys MockUSDC, ProtocolTreasury, SolarPunkCoin, and SolarPunkOption together.
+3. Submit the canonical grant bundle:
+    - `GRANT_PROPOSAL.md`
+    - `docs/grants/GRANT_READINESS_PACK.md`
+    - `docs/project/PROJECT_READINESS_PACK.md`
 
-Canonical one-command operating cycle:
+## 🔧 Operations and evidence
+The full operational handoff lives in [`docs/project/PROJECT_OPERATIONS.md`](./docs/project/PROJECT_OPERATIONS.md). Use that file for the canonical launch, grant, pilot, and gate story.
+
+Current status artifacts:
+- [`docs/project/PROJECT_READINESS_PACK.md`](./docs/project/PROJECT_READINESS_PACK.md)
+- [`docs/project/PROJECT_READINESS_PACK.json`](./docs/project/PROJECT_READINESS_PACK.json)
+- [`docs/project/METER_ATTESTATION_BUNDLE.md`](./docs/project/METER_ATTESTATION_BUNDLE.md)
+- [`docs/project/DEPLOYMENT_RECEIPT_VALIDATION.md`](./docs/project/DEPLOYMENT_RECEIPT_VALIDATION.md)
+
+Canonical cycle:
 ```bash
 bash scripts/run_project_operating_cycle.sh
 ```
 
-Project-level status output:
-- `docs/project/PROJECT_READINESS_PACK.md`
-- `docs/project/PROJECT_READINESS_PACK.json`
-- `docs/project/PROJECT_DASHBOARD.html`
-- `docs/project/MONETARY_SYSTEM_READINESS.md`
-- `docs/project/PROTOCOL_PHASE_GATES.md`
-- `docs/project/METER_ATTESTATION_BUNDLE.md`
-- `docs/project/DEPLOYMENT_RECEIPT_VALIDATION.md`
-- `docs/project/SECURITY_AUDIT_VALIDATION.md`
-
-Independent operations reference:
-- `docs/project/PROJECT_OPERATIONS.md`
-- `docs/project/MONETARY_SYSTEM_BLUEPRINT.md`
-
-## 💼 Commercial Pilot Mode
-SolarPunk can run as a revenue-facing risk desk for renewable operators:
-1. Build project integrity artifacts:
-```bash
-bash scripts/run_project_operating_cycle.sh
-```
-2. Build indicative pilot term sheet from client profile:
-```bash
-python3 scripts/build_pilot_termsheet.py --client-profile clients/sample_solar_operator.json
-```
-3. Run the full commercial cycle:
-```bash
-bash scripts/run_commercial_cycle.sh
-```
-
-### Weekly Decision Desk (must-have workflow)
-Generate an operator decision pack with:
-- immediate `GO/NO_GO`
-- risk band and operating score
-- prioritized action queue (owner + due date)
-
-```bash
-python3 scripts/build_operator_decision_pack.py --client-profile clients/sample_solar_operator.json
-```
-
-Build the meeting-ready Operator Workbench (JSON + markdown + dashboard):
-```bash
-python3 scripts/build_operator_workbench.py --client-profile clients/sample_solar_operator.json
-```
-
-Outputs:
-- `docs/commercial/DECISION_PACK_<client>.md`
-- `docs/commercial/DECISION_PACK_<client>.json`
-- `docs/commercial/OPERATOR_WORKBENCH_<client>.md`
-- `docs/commercial/OPERATOR_WORKBENCH_<client>.json`
-- `docs/commercial/OPERATOR_WORKBENCH_<client>.html`
-
-Commercial operations reference:
-- `docs/commercial/COMMERCIAL_OPERATING_MODEL.md`
-
-## 🪙 Monetary-System Readiness
-To evaluate Solarpunk as a standalone energy-native monetary protocol:
-```bash
-python3 scripts/build_monetary_system_readiness.py
-```
-Or run the full cycle:
-```bash
-bash scripts/run_project_operating_cycle.sh
-```
-
-Strict phase-gate enforcement (example target phase 1):
-```bash
-bash scripts/run_protocol_gate.sh 1
-```
-
-Evidence validation commands:
-```bash
-python3 scripts/build_deployment_receipt.py
-python3 scripts/confirm_deployment_onchain.py
-python3 scripts/validate_deployment_receipt.py
-python3 scripts/record_audit_update.py --status IN_PROGRESS
-python3 scripts/render_security_audit_status.py
-python3 scripts/validate_audit_status.py
-```
-Local deployment simulation (single command, persistent local chain):
-```bash
-bash scripts/simulate_local_deployment.sh
-```
-Policy references:
-- `docs/project/DEPLOYMENT_EVIDENCE_POLICY.md`
-- `docs/project/SECURITY_AUDIT_STATUS.json`
-- `docs/project/PHASE3_UNLOCK_RUNBOOK.md`
+## 💼 Commercial pilot path
+For pilots and paid work, use the same evidence base and pair it with:
+- [`docs/economics/PILOT_PLAN.md`](./docs/economics/PILOT_PLAN.md)
+- [`docs/pitch/PITCH_DECK_OUTLINE.md`](./docs/pitch/PITCH_DECK_OUTLINE.md)
+- [`docs/monetization/SERVICES.md`](./docs/monetization/SERVICES.md)
 
 ## 🎯 For Grant Reviewers
-
-**What We're Building With Funding:**
-- 🚀 Mainnet deployment with $100K+ TVL target
-- 🚀 Integration with 3 pilot solar farms (LOI outreach in progress)
-- 🚀 Professional security audit (OpenZeppelin/ConsenSys)
-- 🚀 Chainlink oracle integration for live price feeds
-
-**6-Month Milestones:** See [GRANT_PROPOSAL.md](./GRANT_PROPOSAL.md) for detailed roadmap.
+Use the grant bundle for the funder-facing story:
+- [`GRANT_PROPOSAL.md`](./GRANT_PROPOSAL.md)
+- [`docs/grants/GRANT_READINESS_PACK.md`](./docs/grants/GRANT_READINESS_PACK.md)
 
 **Contact:**
 - **Developer**: Christopher Ongko (s1133958@mail.yzu.edu.tw)

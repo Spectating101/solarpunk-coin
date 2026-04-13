@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-15T16:53:14.240907+00:00",
+  "generated_at": "2026-04-13T06:16:44.569355+00:00",
   "receipt_status": "PENDING_CONFIRMATION",
   "network": {
     "name": "amoy",
@@ -13,7 +13,7 @@
     "coin_deploy_tx_hash": null,
     "option_deploy_tx_hash": null,
     "onchain_confirmed": false,
-    "confirmation_method": "manual",
+    "confirmation_method": "rpc_receipt_check",
     "confirmed_at": null,
     "coin_contract_url": null,
     "option_contract_url": null,

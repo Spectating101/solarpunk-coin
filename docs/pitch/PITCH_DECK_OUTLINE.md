@@ -129,7 +129,7 @@
   - 100% code coverage
   - All failure modes tested
   - Integration tests passing
-- **Deployed:** Polygon Mumbai testnet
+- **Deployed:** Polygon Amoy testnet
 - **Security:** Ready for professional audit
 - **Visual:** Test output screenshot
 - **Speaker notes:** "This isn't a hobby project. It's production-grade."
@@ -162,12 +162,12 @@
 **Slide 14: 6-Month Plan & Deliverables**
 - **Title:** "Execution Plan: January-June 2026"
 - **Timeline:**
-  - Months 1-2: Security audit, mainnet deployment
-  - Months 3-4: Utility partnerships, academic submissions
-  - Months 5-6: Community scaling, Series A prep
+  - Months 1-2: Security audit, Amoy deployment
+  - Months 3-4: Pilot partnerships, academic submissions
+  - Months 5-6: Community scaling, grant closeout
 - **Deliverables:**
-  - SPK on Polygon mainnet ✅
-  - 5+ institutional partnerships ✅
+  - SPK on Polygon Amoy testnet ✅
+  - 1+ pilot partnership / LOI ✅
   - 3-4 published papers ✅
   - 500+ GitHub stars, 1000+ community ✅
   - $100K+ TVL ✅
@@ -281,3 +281,23 @@ After pitch, be ready with:
 - ✅ Technical whitepaper (SOLARPUNK_IMPLEMENTATION.md)
 - ✅ Research papers (academic foundation)
 - ✅ Demo walkthrough (show contract working)
+
+---
+
+## 60-SECOND PITCH SCRIPT
+
+- Hook: solar farms lose money when prices drop and they cannot hedge.
+- Solution: SolarPunk Protocol is a Polygon clearinghouse that sells revenue floors.
+- Proof: NASA data + VaR-backed solvency + `./verify_all.sh` green checks.
+- Ask: fund the first on-chain hedge for a real solar farm.
+- Close: stop wasting clean energy; financialize the transition.
+
+---
+
+## 60-SECOND PITCH SCRIPT
+
+- Hook: solar farms lose money when prices drop and they cannot hedge.
+- Solution: SolarPunk Protocol is a Polygon clearinghouse that sells revenue floors.
+- Proof: NASA data + VaR-backed solvency + `./verify_all.sh` green checks.
+- Ask: fund the first on-chain hedge for a real solar farm.
+- Close: stop wasting clean energy; financialize the transition.

@@ -1,10 +1,23 @@
 # SolarPunk Protocol: Energy-Backed Derivatives and Stablecoins
 **Grant Proposal: Polygon Community Grants / Ecosystem Fund**
 
+**Canonical detail:** This is the main grant narrative and submission reference. The short-form grant docs have been collapsed into this file.
+
 **Project Title:** SolarPunk Protocol: Decentralized Hedging for Renewable Energy
 **Funding Requested:** $50,000 USD (baseline) | $75,000 USD (stretch)
 **Duration:** 6 Months
-**Status:** MVP complete (46 tests passing; testnet deployment pending RPC/keys)
+**Status:** MVP complete (46 tests passing; Amoy deployment path ready)
+
+---
+
+## Executive summary
+
+- Mission: revenue floors for renewable assets via physics-priced hedges settled on Polygon.
+- Status: MVP complete, contract tests passing, and Amoy deployment path ready.
+- Ask: $50k baseline / $75k stretch over 6 months.
+- Use: audit, oracle service, stability tuning, pilot setup, and UI/SDK work.
+- Proof: working contracts, pricing engine, simulation results, and thesis-backed evidence.
+- Outcome: launch on testnet, execute a pilot hedge, and publish stability guidance.
 
 ---
 
@@ -29,7 +42,7 @@ We are not asking for funding to explore an idea. We are asking for funding to h
 ### 2.1 The Solvency Engine (Pillar 3)
 - **Artifact:** `contracts/SolarPunkOption.sol`
 - **Function:** Options clearinghouse with margining and liquidation
-- **Status:** Tested (10 Pillar 3 tests; 46 total across contracts). Deployment scripts ready; testnet pending.
+- **Status:** Tested (10 Pillar 3 tests; 46 total across contracts). Deployment scripts ready; Amoy deployment pending funded wallet/private key.
 
 ### 2.2 The Pricing Oracle (Pillar 2)
 - **Artifact:** `scripts/pillar3_engine.py`, `scripts/sensitivity_check.py`
@@ -132,6 +145,62 @@ We have delivered a **FastAPI-based Microservice** (`energy_derivatives/api/`) t
 - Pilot outreach status and initial partner conversations
 - Independent technical review (audit) once funded
 - Testnet addresses + health check output after deployment
+
+---
+
+## 8. Submission answers
+
+### One-liner
+Physics-priced revenue floors for renewable assets, settled on Polygon.
+
+### Problem
+Small and medium renewable producers face extreme price volatility and curtailment with no accessible hedges.
+
+### Solution
+SolarPunk Protocol sells energy-backed protection using empirical data, a pricing engine, and on-chain solvency controls.
+
+### Proof-of-work
+- `./verify_all.sh` passes
+- 46 total contract tests passing
+- Working option/settlement contracts
+- 1000-day simulation baseline with known tuning gap
+- Thesis and research foundation already in place
+
+### Milestones
+- Security and testnet launch
+- Oracle/data service and stability tuning
+- Pilot hedge plus UI/SDK
+
+### Budget
+- Baseline: security, oracle, pilot, UI/SDK, and ops buffer
+- Stretch: multi-energy calibration, liquidity incentives, community/docs, and academic publication support
+
+### Why Polygon
+Low fees, RWA alignment, climate narrative, and existing deployment scripts make Polygon the best launch surface.
+
+### Risks & mitigations
+- Oracle quality: multi-source feeds and staleness gating
+- Peg volatility: continued PI tuning and guardrails
+- Adoption: pilot incentives and academic credibility
+- Security: external audit and remediation
+
+### Team / credibility
+- Energy economics research
+- Blockchain development
+- Quantitative analysis and simulation
+
+### Fields to fill before submission
+- Testnet addresses
+- Demo video or screenshots
+- Partner/advisor quote
+- Contact details and repo URL
+
+### Suggested attachments/links
+- `docs/grants/GRANT_READINESS_PACK.md`
+- `docs/project/PROJECT_READINESS_PACK.md`
+- `docs/project/PROJECT_OPERATIONS.md`
+- demo/video evidence
+- test output and deployment receipts
 
 ---
 

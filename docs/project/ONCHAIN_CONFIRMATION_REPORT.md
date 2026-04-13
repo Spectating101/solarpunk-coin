@@ -1,7 +1,8 @@
 # On-Chain Deployment Confirmation
 
-- generated_at: `2026-02-14T08:38:56.827543+00:00`
+- generated_at: `2026-04-13T06:16:45.736671+00:00`
 - rpc_url: `https://rpc-amoy.polygon.technology/`
+- rpc_chain_id: `None`
 - confirmation_passed: `False`
 
 ## Checks
@@ -15,6 +16,6 @@
 
 ## Errors
 
-- RPC connection failed: HTTP Error 403: Forbidden
+- RPC probe failed (could not read eth_chainId). Provide a working --rpc-url or set POLYGON_AMOY_RPC/SEPOLIA_RPC.
 - Coin deployment receipt not found.
 - Option deployment receipt not found.

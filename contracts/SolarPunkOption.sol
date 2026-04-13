@@ -48,6 +48,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     uint256 public initialMarginBps = 15_000; // 150% of exposure
     uint256 public maintenanceMarginBps = 7_500; // 75% of exposure
     uint256 public liquidationPenaltyBps = 100; // 1% of remaining margin to insurance fund
+    uint256 public tradingFeeBps = 0;
 
     mapping(bytes32 => Series) public series;
     mapping(address => mapping(bytes32 => Position)) public positions;
@@ -58,6 +59,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     event Liquidated(address indexed user, bytes32 indexed seriesId, uint256 penalty, uint256 returnedMargin);
     event InsuranceFundUpdated(address indexed fund);
     event MarginParamsUpdated(uint256 initialMarginBps, uint256 maintenanceMarginBps, uint256 liquidationPenaltyBps);
+    event TradingFeeUpdated(uint256 tradingFeeBps);
+    event TradingFeeCollected(address indexed user, bytes32 indexed seriesId, uint256 fee);
 
     error InvalidSeries();
     error IndexNotSet();
@@ -111,6 +114,12 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         emit MarginParamsUpdated(imBps, mmBps, penaltyBps);
     }
 
+    function setTradingFeeBps(uint256 newTradingFeeBps) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(newTradingFeeBps <= 500, "fee too high");
+        tradingFeeBps = newTradingFeeBps;
+        emit TradingFeeUpdated(newTradingFeeBps);
+    }
+
     function pause() external onlyRole(PAUSER_ROLE) {
         _pause();
     }
@@ -140,6 +149,14 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
 
         // Realize PnL to current index before adjusting
         _markToIndex(p, s);
+
+        if (qtyDelta != 0) {
+            uint256 tradingFee = _tradingFeeForQuantity(s, _abs(qtyDelta));
+            if (tradingFee > 0) {
+                collateral.safeTransferFrom(msg.sender, insuranceFund, tradingFee);
+                emit TradingFeeCollected(msg.sender, seriesId, tradingFee);
+            }
+        }
 
         if (marginDelta > 0) {
             collateral.safeTransferFrom(msg.sender, address(this), marginDelta);
@@ -235,6 +252,12 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         return (_initialMarginRequired(s, absQty), _maintenanceMarginRequired(s, absQty));
     }
 
+    function estimateTradingFee(bytes32 seriesId, uint256 absQty) external view returns (uint256) {
+        Series memory s = series[seriesId];
+        if (!s.exists) revert InvalidSeries();
+        return _tradingFeeForQuantity(s, absQty);
+    }
+
     // ---------------------- Internal ----------------------
 
     function _requireIndexSet() internal view {
@@ -296,6 +319,12 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         if (absQty == 0) return;
         uint256 mmReq = _maintenanceMarginRequired(s, absQty);
         if (p.margin < mmReq) revert InsufficientMargin();
+    }
+
+    function _tradingFeeForQuantity(Series memory s, uint256 absQty) internal view returns (uint256) {
+        if (tradingFeeBps == 0 || absQty == 0) return 0;
+        uint256 exposure = _exposureInCollateral(s, absQty);
+        return Math.mulDiv(exposure, tradingFeeBps, 10_000);
     }
 
     function _initialMarginRequired(Series memory s, uint256 absQty) internal view returns (uint256) {

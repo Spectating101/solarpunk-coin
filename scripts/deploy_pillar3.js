@@ -24,12 +24,22 @@ async function main() {
     console.log("Using existing USDC at:", usdcAddress);
   }
 
-  // 2. Define Insurance Fund (deployer for now)
-  const insuranceFund = deployer.address;
+  // 2. Deploy treasury and use it as the insurance fund
+  console.log("Deploying ProtocolTreasury...");
+  const ProtocolTreasury = await hre.ethers.getContractFactory("ProtocolTreasury");
+  const treasury = await ProtocolTreasury.deploy(usdcAddress);
+  await treasury.waitForDeployment();
+  const treasuryAddress = treasury.target;
+  console.log("ProtocolTreasury deployed to:", treasuryAddress);
+  await (await treasury.setBudgetVaults(treasuryAddress, treasuryAddress, deployer.address, deployer.address)).wait();
+  console.log("Budget vaults configured (reserve/insurance -> treasury, ops/audit -> deployer)");
+
+  // 3. Define Insurance Fund (treasury)
+  const insuranceFund = treasuryAddress;
   // Use 6 decimals by default to align with USDC/most price feeds; override via PRICE_DECIMALS if needed.
   const priceDecimals = Number(process.env.PRICE_DECIMALS || 6);
 
-  // 3. Deploy SolarPunkOption
+  // 4. Deploy SolarPunkOption
   const SolarPunkOption = await hre.ethers.getContractFactory("SolarPunkOption");
   const optionContract = await SolarPunkOption.deploy(
     usdcAddress,
@@ -37,6 +47,7 @@ async function main() {
     priceDecimals
   );
   await optionContract.waitForDeployment();
+  await (await optionContract.setTradingFeeBps(Number(process.env.TRADING_FEE_BPS || 50))).wait();
 
   const optionAddress = optionContract.target;
   const deployTx = optionContract.deploymentTransaction();
@@ -61,8 +72,16 @@ async function main() {
     contract_address: optionAddress,
     deployer: deployer.address,
     collateral_address: usdcAddress,
+    treasury_address: treasuryAddress,
+    budget_vaults: {
+      reserve: treasuryAddress,
+      insurance: treasuryAddress,
+      ops: deployer.address,
+      audit: deployer.address,
+    },
     insurance_fund: insuranceFund,
     price_decimals: priceDecimals,
+    trading_fee_bps: Number(process.env.TRADING_FEE_BPS || 50),
     deploy_tx_hash: deployTxHash,
   };
 

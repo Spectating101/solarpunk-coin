@@ -1,6 +1,6 @@
 # Protocol Phase Gates
 
-- generated_at: `2026-02-14T08:38:56.970463+00:00`
+- generated_at: `2026-04-13T06:16:45.856626+00:00`
 - target_phase: `1`
 - target_phase_key: `phase_1_controlled_monetary_pilot`
 - target_phase_passed: `True`

@@ -4,6 +4,7 @@ const { ethers } = require("hardhat");
 describe("SolarPunkOption", () => {
   let option;
   let usdc;
+  let treasury;
   let owner;
   let oracle;
   let liquidator;
@@ -21,8 +22,12 @@ describe("SolarPunkOption", () => {
     usdc = await MockUSDC.deploy();
     await usdc.waitForDeployment();
 
+    const ProtocolTreasury = await ethers.getContractFactory("ProtocolTreasury");
+    treasury = await ProtocolTreasury.deploy(usdc.target);
+    await treasury.waitForDeployment();
+
     const SolarPunkOption = await ethers.getContractFactory("SolarPunkOption");
-    option = await SolarPunkOption.deploy(usdc.target, owner.address, PRICE_DECIMALS);
+    option = await SolarPunkOption.deploy(usdc.target, treasury.target, PRICE_DECIMALS);
     await option.waitForDeployment();
 
     // Loosen margins for tests (10% IM, 5% MM, 1% penalty)
@@ -79,9 +84,9 @@ describe("SolarPunkOption", () => {
     await option.markPosition(trader.address, SERIES_ID);
 
     // Liquidate
-    const insuranceBefore = await usdc.balanceOf(owner.address);
+    const insuranceBefore = await usdc.balanceOf(treasury.target);
     await option.connect(liquidator).liquidate(trader.address, SERIES_ID);
-    const insuranceAfter = await usdc.balanceOf(owner.address);
+    const insuranceAfter = await usdc.balanceOf(treasury.target);
 
     const posAfter = await option.getPosition(trader.address, SERIES_ID);
     expect(posAfter.qty).to.equal(0);
@@ -135,6 +140,17 @@ describe("SolarPunkOption", () => {
     await expect(
       option.connect(trader).modifyPosition(SERIES_ID, 1, 200_000_000n)
     ).to.be.revertedWithCustomError(option, "EnforcedPause");
+  });
+
+  it("charges trading fees on position changes", async () => {
+    await option.setTradingFeeBps(50);
+
+    const tradeFee = await option.estimateTradingFee(SERIES_ID, 1n);
+    const treasuryBefore = await usdc.balanceOf(treasury.target);
+
+    await option.connect(trader).modifyPosition(SERIES_ID, 1, 200_000_000n);
+
+    expect(await usdc.balanceOf(treasury.target)).to.equal(treasuryBefore + tradeFee);
   });
 
   it("marks losses for a long put when index rises", async () => {

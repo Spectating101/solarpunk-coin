@@ -1,6 +1,6 @@
 # Project Readiness Pack
 
-- generated_at: `2026-04-12T15:24:25.560552+00:00`
+- generated_at: `2026-04-13T06:16:44.392196+00:00`
 - project: `Solarpunk-bitcoin`
 - readiness_grade: `B`
 - verification_status: `ok`
@@ -23,7 +23,7 @@
 - frontend_source_files: `8`
 - empirical_csv_files: `29`
 - empirical_png_files: `9`
-- grant_docs_files: `2`
+- grant_docs_files: `1`
 
 ## Required Docs
 

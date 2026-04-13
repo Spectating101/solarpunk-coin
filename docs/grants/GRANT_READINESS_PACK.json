@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-12T15:24:25.523215+00:00",
+  "generated_at": "2026-04-13T06:16:44.344401+00:00",
   "repo": "Solarpunk-bitcoin",
   "verification_path": "/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/artifacts/verify_health.json",
   "verification": {
-    "timestamp": "2026-04-12T02:14:29+08:00",
+    "timestamp": "2026-04-13T14:16:44+08:00",
     "overall_status": "ok",
     "strict_mode": false,
     "warnings": 0,
@@ -21,8 +21,8 @@
   },
   "key_artifacts": [
     "GRANT_PROPOSAL.md",
-    "GRANT_EXECUTIVE_SUMMARY.md",
-    "docs/GRANT_BRIEF_POLYGON.md",
+    "docs/project/PROJECT_OPERATIONS.md",
+    "docs/grants/GRANT_READINESS_PACK.md",
     "THOROUGH_ASSESSMENT.md",
     "verify_all.sh",
     "contracts/SolarPunkOption.sol",
@@ -31,8 +31,8 @@
   ],
   "missing_artifacts": [],
   "artifact_freshness": {
-    "grant_docs_latest": "2026-01-15T17:09:30.808255+00:00",
-    "verification_latest": "2026-04-11T18:14:29.232342+00:00",
+    "grant_docs_latest": "2026-04-13T06:15:46.465586+00:00",
+    "verification_latest": "2026-04-13T06:16:44.297219+00:00",
     "contracts_latest": "2026-01-07T09:23:03.807580+00:00",
     "frontend_latest": "2026-03-16T08:59:37.654137+00:00"
   },
@@ -43,7 +43,7 @@
   "readiness_grade": "A",
   "priority_actions": [
     "Run `bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.json` before submissions.",
-    "Keep `GRANT_PROPOSAL.md` and `docs/GRANT_BRIEF_POLYGON.md` synchronized with latest verification results.",
+    "Keep `GRANT_PROPOSAL.md` and `docs/project/PROJECT_OPERATIONS.md` synchronized with latest verification results.",
     "Attach the generated `docs/grants/GRANT_READINESS_PACK.md` as technical appendix in grant forms."
   ]
 }

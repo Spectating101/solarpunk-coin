@@ -56,8 +56,8 @@ def _build_payload(root: Path) -> Dict[str, Any]:
 
     key_artifacts = [
         "GRANT_PROPOSAL.md",
-        "GRANT_EXECUTIVE_SUMMARY.md",
-        "docs/GRANT_BRIEF_POLYGON.md",
+        "docs/project/PROJECT_OPERATIONS.md",
+        "docs/grants/GRANT_READINESS_PACK.md",
         "THOROUGH_ASSESSMENT.md",
         "verify_all.sh",
         "contracts/SolarPunkOption.sol",
@@ -81,8 +81,8 @@ def _build_payload(root: Path) -> Dict[str, Any]:
             "grant_docs_latest": _latest_mtime_iso(
                 [
                     root / "GRANT_PROPOSAL.md",
-                    root / "GRANT_EXECUTIVE_SUMMARY.md",
-                    root / "docs/GRANT_BRIEF_POLYGON.md",
+                    root / "docs/project/PROJECT_OPERATIONS.md",
+                    root / "docs/grants/GRANT_READINESS_PACK.md",
                 ]
             ),
             "verification_latest": _latest_mtime_iso([verify_json]),
@@ -97,7 +97,7 @@ def _build_payload(root: Path) -> Dict[str, Any]:
     readiness["readiness_grade"] = _grade(readiness)
     readiness["priority_actions"] = [
         "Run `bash verify_all.sh --contracts-in-docker --json-report=artifacts/verify_health.json` before submissions.",
-        "Keep `GRANT_PROPOSAL.md` and `docs/GRANT_BRIEF_POLYGON.md` synchronized with latest verification results.",
+        "Keep `GRANT_PROPOSAL.md` and `docs/project/PROJECT_OPERATIONS.md` synchronized with latest verification results.",
         "Attach the generated `docs/grants/GRANT_READINESS_PACK.md` as technical appendix in grant forms.",
     ]
     return readiness
@@ -140,7 +140,7 @@ def _to_md(payload: Dict[str, Any]) -> str:
     lines.append("")
     lines.append("## Submission Guidance")
     lines.append("")
-    lines.append("- Use this file + `GRANT_PROPOSAL.md` + `docs/GRANT_BRIEF_POLYGON.md` as canonical package.")
+    lines.append("- Use this file + `GRANT_PROPOSAL.md` + `docs/project/PROJECT_OPERATIONS.md` as canonical package.")
     lines.append("- Re-run the builder before every submission so timestamps and verification state are current.")
     return "\n".join(lines) + "\n"
 

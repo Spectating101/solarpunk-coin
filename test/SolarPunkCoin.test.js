@@ -4,6 +4,7 @@ const { ethers } = require("hardhat");
 describe("SolarPunkCoin", function () {
   let spk;
   let usdc;
+  let treasury;
   let owner;
   let minter;
   let oracle;
@@ -19,10 +20,15 @@ describe("SolarPunkCoin", function () {
     usdc = await MockUSDC.deploy();
     await usdc.waitForDeployment();
 
+    const ProtocolTreasury = await ethers.getContractFactory("ProtocolTreasury");
+    treasury = await ProtocolTreasury.deploy(usdc.target);
+    await treasury.waitForDeployment();
+
     // Deploy SolarPunkCoin with reserve token
     const SolarPunkCoin = await ethers.getContractFactory("SolarPunkCoin");
     spk = await SolarPunkCoin.deploy(usdc.target);
     await spk.waitForDeployment();
+    await spk.setTreasury(treasury.target);
 
     // Seed reserves for minting eligibility
     await usdc.mint(owner.address, RESERVE_AMOUNT);
@@ -58,6 +64,7 @@ describe("SolarPunkCoin", function () {
     it("Should mint SPK from surplus with fee", async function () {
       const surplusKwh = 1000;
       const recipient = user.address;
+      const fee = ethers.parseEther("1");
 
       // Update oracle price first
       await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
@@ -70,6 +77,7 @@ describe("SolarPunkCoin", function () {
       // Check SPK balance
       const balance = await spk.balanceOf(recipient);
       expect(balance).to.be.gt(0);
+      expect(await spk.balanceOf(treasury.target)).to.equal(fee);
 
       // Verify event
       await expect(tx).to.emit(spk, "SPKMinted");
@@ -111,6 +119,7 @@ describe("SolarPunkCoin", function () {
 
       const balance = await spk.balanceOf(user.address);
       expect(balance).to.equal(expectedAmount);
+      expect(await spk.balanceOf(treasury.target)).to.equal(fee);
     });
   });
 
@@ -198,12 +207,15 @@ describe("SolarPunkCoin", function () {
     it("Should apply redemption fee", async function () {
       const balanceBefore = await spk.balanceOf(user.address);
       const amount = ethers.parseEther("100");
+      const expectedFee = (amount * 10n) / 10000n;
+      const treasuryBefore = await spk.balanceOf(treasury.target);
 
       await spk.connect(user).redeemForEnergy(amount);
 
       // SPK should be burned (all of it)
       const balanceAfter = await spk.balanceOf(user.address);
       expect(balanceAfter).to.equal(balanceBefore - amount);
+      expect(await spk.balanceOf(treasury.target)).to.equal(treasuryBefore + expectedFee);
     });
 
     it("Should reject redemption with insufficient balance", async function () {

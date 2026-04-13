@@ -1,6 +1,6 @@
 # Deployment Receipt Summary
 
-- generated_at: `2026-02-15T16:53:14.240907+00:00`
+- generated_at: `2026-04-13T06:16:44.569355+00:00`
 - receipt_status: `PENDING_CONFIRMATION`
 - network: `amoy`
 - chain_id: `80002`

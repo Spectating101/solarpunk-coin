@@ -9,7 +9,7 @@ Goal: execute a small-zone pilot with 1–3 month puts, daily marking, and clear
 - Roles: ORACLE_ROLE (data service), LIQUIDATOR_ROLE (ops), PAUSER_ROLE (ops), DEFAULT_ADMIN (you).
 
 ## Milestones
-1) Deploy SolarPunkOption + SolarPunkCoin to Mumbai with zone identifiers and publish addresses.
+1) Deploy SolarPunkOption + SolarPunkCoin to Amoy with zone identifiers and publish addresses.
 2) Wire frontend (`VITE_OPTION_ADDRESS`) and add zone selector to match oracle posts.
 3) Post daily index; run health dashboard for staleness/deviation; exercise pause if 3σ/age triggers hit.
 4) Execute first pilot trade (long put) with partner; capture demo/screenshot and PnL/margin logs.

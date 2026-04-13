@@ -42,6 +42,8 @@ contract SolarPunkCoin is
     bytes32 public constant RESERVE_MANAGER_ROLE =
         keccak256("RESERVE_MANAGER_ROLE");
     bytes32 public constant STABILIZER_ROLE = keccak256("STABILIZER_ROLE");
+    bytes32 private constant MINT_FEE_KIND = keccak256("MINT_FEE");
+    bytes32 private constant REDEEM_FEE_KIND = keccak256("REDEEM_FEE");
 
     // ============ State Variables: Peg Parameters ============
     /// @notice Target peg price in USD (1e18 = $1.00)
@@ -87,6 +89,9 @@ contract SolarPunkCoin is
     /// @notice Address holding stabilization inventory
     address public stabilityPool;
 
+    /// @notice Address receiving protocol fees and treasury disbursements
+    address public treasury;
+
     /// @notice Cumulative surplus kWh recorded
     uint256 public cumulativeSurplusKwh = 0;
 
@@ -118,6 +123,8 @@ contract SolarPunkCoin is
     event ReserveWithdrawn(address indexed to, uint256 amount);
     event StabilityPoolUpdated(address indexed newPool);
     event StabilityPoolDisbursed(address indexed to, uint256 amount);
+    event TreasuryUpdated(address indexed treasury);
+    event FeeCollected(address indexed payer, address indexed treasury, uint256 amount, bytes32 feeKind);
     event GridStressManualOverride(bool isStressed);
     event ParameterUpdated(string paramName, uint256 newValue);
 
@@ -182,6 +189,7 @@ contract SolarPunkCoin is
         reserveToken = IERC20(reserveTokenAddress);
         reserveTokenDecimals = IERC20Metadata(reserveTokenAddress).decimals();
         stabilityPool = address(this);
+        treasury = msg.sender;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
         _grantRole(ORACLE_ROLE, msg.sender);
@@ -224,9 +232,10 @@ contract SolarPunkCoin is
         // Mint tokens to recipient
         _mint(recipient, amountToMint);
 
-        // Mint fee to treasury (owner)
+        // Mint fee to treasury
         if (fee > 0) {
-            _mint(owner(), fee);
+            _mint(treasury, fee);
+            emit FeeCollected(msg.sender, treasury, fee, MINT_FEE_KIND);
         }
 
         emit SurplusRecorded(surplusKwh, block.timestamp);
@@ -342,10 +351,10 @@ contract SolarPunkCoin is
         _burn(msg.sender, amount);
         emit SPKBurned(msg.sender, amount);
 
-        // Fee goes to reserve/treasury
+        // Fee goes to treasury so redemptions still contribute to protocol funding
         if (fee > 0) {
-            // In production: transfer fee to treasury multisig
-            // For now: emit event for offchain tracking
+            _mint(treasury, fee);
+            emit FeeCollected(msg.sender, treasury, fee, REDEEM_FEE_KIND);
         }
 
         // Track redemption
@@ -414,6 +423,12 @@ contract SolarPunkCoin is
 
         emit ParameterUpdated("mintingFee", newMintFee);
         emit ParameterUpdated("redemptionFee", newRedeemFee);
+    }
+
+    function setTreasury(address newTreasury) external onlyOwner {
+        require(newTreasury != address(0), "Invalid treasury");
+        treasury = newTreasury;
+        emit TreasuryUpdated(newTreasury);
     }
 
     function updateReserveParameters(uint256 newMinReserveMarginPercent)

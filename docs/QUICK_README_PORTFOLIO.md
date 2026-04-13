@@ -27,11 +27,11 @@ Last updated: [fill date]
 
 4) **LLM Hybrid**  
    - Pick a venue (applied ML/FinAI).  
-   - Use `RESEARCH/LLM_HYBRID_SUBMISSION.md` cover letter template; trim to venue length.  
+   - Use `RESEARCH/LLM_HYBRID_SUBMISSION.md` cover letter template; trim to venue length.
 
 ## Grants/Polygon Next Steps
-- Grant brief: `docs/GRANT_BRIEF_POLYGON.md` (updated proof-of-work, options contract, 46 tests).  
-- To strengthen grant apps: deploy SolarPunkOption to testnet, set `VITE_OPTION_ADDRESS`, capture a short demo, and optionally get a partner LOI.  
+- Grant proposal: `GRANT_PROPOSAL.md` and `docs/grants/GRANT_READINESS_PACK.md` (updated proof-of-work, options contract, 46 tests).
+- To strengthen grant apps: deploy SolarPunkOption to testnet, set `VITE_OPTION_ADDRESS`, capture a short demo, and optionally get a partner LOI.
 
 ## Important Paths
 - VoxEU: `IE-JDE/Invisible_Economy/Completed-Draft.md`, `COVER_LETTER_VoxEU.md`

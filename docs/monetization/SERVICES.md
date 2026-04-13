@@ -1,9 +1,15 @@
-# Outreach Templates (Fast Paid Deliverable)
+# Monetization Services
 
-## Short DM (Discord/Twitter/Telegram)
+## Service
+
+72-hour grant-readiness and peg-stability package for SolarPunk-style projects.
+
+## Outreach templates
+
+### Short DM
 Hey [Name] — I run SolarPunk (energy-backed stablecoin R&D). I can ship a 72-hour grant-readiness + peg-stability report: tests verified, sim charts, risk gaps, 1-page summary, 3-min demo video. Fixed price ($750, 50% upfront). Want me to send a sample outline?
 
-## Email (Short)
+### Email
 Subject: 72-hour grant-readiness report for [Project]
 
 Hi [Name],
@@ -15,5 +21,31 @@ If you want to proceed, send the repo link + test command and your deadline.
 Best,
 [Your Name]
 
-## Follow-Up (48 hours later)
+### Follow-up
 Quick follow-up — if grant timelines are tight, I can reserve a 72-hour slot this week. Want the outline?
+
+## Delivery checklist
+
+### Intake
+- Repo link and branch
+- Test command + prerequisites
+- Chain target and any deployments
+- Deadline + reviewer constraints
+
+### Execution
+- Run tests and log results
+- Run peg simulation and export charts
+- Review docs for claims and consistency
+- Identify top 5 gaps + fixes
+
+### Deliverables
+- Executive summary (1 page)
+- Test verification report
+- Simulation summary (chart + metrics)
+- Risk/gap list with fixes
+- 3-minute demo video
+
+### Handoff
+- Send deliverables bundle
+- 30-minute walkthrough call
+- Collect remaining balance

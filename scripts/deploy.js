@@ -6,6 +6,7 @@ async function main() {
   console.log("🚀 Deploying SolarPunkCoin...");
 
   const networkName = hre.network.name;
+  const [deployer] = await hre.ethers.getSigners();
   let reserveTokenAddress;
 
   if (networkName === "localhost" || networkName === "hardhat") {
@@ -23,10 +24,20 @@ async function main() {
     console.log("Using reserve token at:", reserveTokenAddress);
   }
 
+  console.log("Deploying ProtocolTreasury...");
+  const ProtocolTreasury = await hre.ethers.getContractFactory("ProtocolTreasury");
+  const treasury = await ProtocolTreasury.deploy(reserveTokenAddress);
+  await treasury.waitForDeployment();
+  const treasuryAddress = await treasury.getAddress();
+  console.log("✅ ProtocolTreasury deployed to:", treasuryAddress);
+  await (await treasury.setBudgetVaults(treasuryAddress, treasuryAddress, deployer.address, deployer.address)).wait();
+  console.log("✅ Budget vaults configured (reserve/insurance -> treasury, ops/audit -> deployer)");
+
   // Deploy contract
   const SolarPunkCoin = await hre.ethers.getContractFactory("SolarPunkCoin");
   const spk = await SolarPunkCoin.deploy(reserveTokenAddress);
   await spk.waitForDeployment();
+  await (await spk.setTreasury(treasuryAddress)).wait();
 
   const contractAddress = await spk.getAddress();
   const deployTx = spk.deploymentTransaction();
@@ -36,8 +47,6 @@ async function main() {
     console.log("🧾 Deploy tx hash:", deployTxHash);
   }
 
-  // Get deployer info
-  const [deployer] = await hre.ethers.getSigners();
   console.log("📍 Deployed by:", deployer.address);
 
   // Initial configuration
@@ -54,6 +63,7 @@ async function main() {
   console.log("  - Minting Fee: 0.1% (10 bps)");
   console.log("  - Supply Cap: 1,000,000,000 SPK");
   console.log("  - Reserve Token:", reserveTokenAddress);
+  console.log("  - Treasury:", treasuryAddress);
 
   // Create verification info
   console.log("\n📋 Contract Information:");
@@ -90,6 +100,13 @@ async function main() {
     contract_address: contractAddress,
     deployer: deployer.address,
     reserve_token_address: reserveTokenAddress,
+    treasury_address: treasuryAddress,
+    budget_vaults: {
+      reserve: treasuryAddress,
+      insurance: treasuryAddress,
+      ops: deployer.address,
+      audit: deployer.address,
+    },
     deploy_tx_hash: deployTxHash,
   };
 

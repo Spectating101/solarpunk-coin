@@ -128,6 +128,14 @@ function syncReserve() external
 - Deposits increase backing and update `gridStressed`
 - `withdrawReserve` is role-gated for treasury operations
 
+#### Treasury & Fee Routing
+
+- Mint fees and redemption fees now route to `treasury` instead of staying with the deployer.
+- Option position changes can charge protocol trading fees into the treasury.
+- `ProtocolTreasury` receives liquidation penalties from `SolarPunkOption`.
+- Treasury budgets can be split into reserve, insurance, operations, and audit buckets.
+- Keeper/oracle bonds are held in treasury and can be slashed if a role misbehaves.
+
 ### Parameters (Configurable)
 
 ```solidity
@@ -166,8 +174,9 @@ npx hardhat test
 ✓ View Functions (3 tests)
 ✓ Emergency Functions (3 tests)
 ✓ Integration: Full Flow (2 tests)
+✓ Treasury & Bonds (4 tests)
 
-Total: 36 tests (all passing)
+Total: 40 tests (all passing)
 ```
 
 ### Gas Benchmarks
@@ -336,8 +345,23 @@ await spk.redeemForEnergy(amount);
 // Deposit reserves (anyone can deposit)
 await spk.depositReserve(ethers.parseUnits("1000", 6)); // 1,000 USDC
 
-// Withdraw reserves (treasury only)
+// Withdraw reserves to the treasury vault
 await spk.withdrawReserve(ethers.parseUnits("500", 6), treasuryAddress);
+```
+
+### As a Treasury Operator
+
+```javascript
+const treasury = await ethers.getContractAt("ProtocolTreasury", treasuryAddress);
+
+// Configure bucket addresses
+await treasury.setBudgetVaults(reserveVault, insuranceVault, opsVault, auditVault);
+
+// Route a fee pool into the configured buckets
+await treasury.disburseReserveToken(ethers.parseUnits("1000", 6));
+
+// Accept and manage keeper bond collateral
+await treasury.depositBond(ethers.parseUnits("250", 6));
 ```
 
 ### As a Stabilizer

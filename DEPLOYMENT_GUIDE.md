@@ -45,7 +45,10 @@ code .env
 # Replace this line:
 PRIVATE_KEY=your_wallet_private_key_here
 
-# Amoy USDC will be auto-deployed.** Don't touch anything else.
+# Keep the remaining example values unchanged.
+```
+
+The deployment script reads the Amoy RPC and private key from `.env`.
 
 ---
 
@@ -57,28 +60,33 @@ PRIVATE_KEY=your_wallet_private_key_here
 
 **That's it.** Script will:
 - Compile contracts
-- Deploy to Amoy
-- Show you the contract address
-- Give you the PolygonScan link
+- Deploy the full Amoy stack: MockUSDC + ProtocolTreasury + SolarPunkCoin + SolarPunkOption
+- Set the treasury as the fee sink and insurance fund
+- Configure budget vaults so reserve/insurance stay in treasury and ops/audit go to the deployer
+- Show you the contract addresses
+- Give you the PolygonScan links
+
+If you want the receipt written outside the repo during local validation, set `SPK_DEPLOYMENT_STATE_DIR=/tmp/solarpunk-deploy-state`.
 
 **Output will look like:**
 ```
-✅ SolarPunkCoin deployed to: 0x1234567890abcdef...
-🔍 Amoy PolygonScan: https://amoy.polygonscan.com/address/0x1234...
+✅ ProtocolTreasury deployed to: 0x1234567890abcdef...
+✅ SolarPunkCoin deployed to: 0xabcdef1234567890...
+✅ SolarPunkOption deployed to: 0xfedcba0987654321...
 ```
 
 ---
 
 ## Step 4: Update README (2 mins)
 
-Copy the contract address and paste it into README.md:
+Copy the deployed addresses and paste the public Amoy links into README.md:
 
 ```markdown
 # Replace this line:
-- ✅ **Testnet Deployment**: Polygon Amoy - Contract: `[DEPLOY FIRST]`
+- ✅ **Testnet Deployment**: Polygon Amoy - Full stack deployed via `deploy_amoy.sh`
 
 # With this:
-- ✅ **Testnet Deployment**: Polygon Amoy - Contract: [`0x1234...`](https://amoy.polygonscan.com/address/0x1234...)
+- ✅ **Testnet Deployment**: Polygon Amoy - Treasury: [`0x1234...`](https://amoy.polygonscan.com/address/0x1234...)
 ```
 
 Commit and push:
@@ -102,7 +110,7 @@ git push origin master
 **No Twitter threads needed.**  
 **No marketing needed.**
 
-Just: Code + Testnet + Submit = 65% odds on $50-150K.
+Just: Code + Testnet + Submit.
 
 ---
 

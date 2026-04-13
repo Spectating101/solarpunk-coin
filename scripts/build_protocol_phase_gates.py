@@ -87,8 +87,8 @@ def _build(root: Path, target_phase: int) -> Dict[str, Any]:
         and checks.get("oracle_safety_controls")
         and _exists(root, "scripts/ingest_meter_attestations.py")
         and _exists(root, "artifacts/attestations/latest_attestation_bundle.json")
-        and _exists(root, "docs/project/ATTESTATION_PIPELINE_SPEC.md")
-        and _exists(root, "docs/project/ORACLE_SAFETY_POLICY.md")
+        and _exists(root, "docs/project/PROJECT_OPERATIONS.md")
+        and _exists(root, "docs/project/METER_ATTESTATION_BUNDLE.md")
     )
     phase2_blockers: List[str] = []
     if not phase1_ok:
@@ -99,33 +99,30 @@ def _build(root: Path, target_phase: int) -> Dict[str, Any]:
         phase2_blockers.append("Missing attestation ingestion script.")
     if not _exists(root, "artifacts/attestations/latest_attestation_bundle.json"):
         phase2_blockers.append("Missing latest attestation bundle artifact.")
-    if not _exists(root, "docs/project/ATTESTATION_PIPELINE_SPEC.md"):
-        phase2_blockers.append("Missing attestation pipeline spec.")
-    if not _exists(root, "docs/project/ORACLE_SAFETY_POLICY.md"):
-        phase2_blockers.append("Missing oracle safety policy.")
+    if not _exists(root, "docs/project/PROJECT_OPERATIONS.md"):
+        phase2_blockers.append("Missing project operations handbook.")
+    if not _exists(root, "docs/project/METER_ATTESTATION_BUNDLE.md"):
+        phase2_blockers.append("Missing meter attestation bundle.")
 
     phase3_ok = bool(
         phase2_ok
-        and _exists(root, "docs/project/MAINNET_READINESS_CHECKLIST.md")
-        and _exists(root, "docs/project/PILOT_OPERATING_SLO.md")
+        and _exists(root, "docs/project/PROJECT_OPERATIONS.md")
+        and _exists(root, "docs/project/PROJECT_READINESS_PACK.md")
         and bool(deployment_validation.get("validation_passed"))
-        and _exists(root, "docs/project/SECURITY_AUDIT_STATUS.md")
         and _exists(root, "docs/project/SECURITY_AUDIT_STATUS.json")
         and bool(audit_validation.get("validation_passed"))
     )
     phase3_blockers: List[str] = []
     if not phase2_ok:
         phase3_blockers.append("Phase 2 must pass first.")
-    if not _exists(root, "docs/project/MAINNET_READINESS_CHECKLIST.md"):
-        phase3_blockers.append("Missing mainnet readiness checklist.")
-    if not _exists(root, "docs/project/PILOT_OPERATING_SLO.md"):
-        phase3_blockers.append("Missing pilot operating SLO definition.")
+    if not _exists(root, "docs/project/PROJECT_OPERATIONS.md"):
+        phase3_blockers.append("Missing project operations handbook.")
+    if not _exists(root, "docs/project/PROJECT_READINESS_PACK.md"):
+        phase3_blockers.append("Missing project readiness pack.")
     if not _exists(root, "state/deployments/amoy_receipt.json"):
         phase3_blockers.append("Missing deployment receipt artifact for expansion gate.")
     if not bool(deployment_validation.get("validation_passed")):
         phase3_blockers.append("Deployment receipt validation has not passed.")
-    if not _exists(root, "docs/project/SECURITY_AUDIT_STATUS.md"):
-        phase3_blockers.append("Missing security audit status document.")
     if not _exists(root, "docs/project/SECURITY_AUDIT_STATUS.json"):
         phase3_blockers.append("Missing machine-readable security audit status.")
     if not bool(audit_validation.get("validation_passed")):

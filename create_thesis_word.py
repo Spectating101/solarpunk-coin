@@ -3,7 +3,7 @@
 Clean thesis DOCX exporter.
 
 Builds a Word document from the canonical markdown source in
-`thesis_package/thesis-draft.md` using a real markdown parser so the output
+`thesis-draft.md` using a real markdown parser so the output
 does not leak raw fences, horizontal rules, or pipe tables.
 """
 
@@ -24,7 +24,7 @@ from docx.shared import Inches, Pt
 
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_INPUT = ROOT / "thesis_package" / "thesis-draft.md"
+DEFAULT_INPUT = ROOT / "thesis-draft.md"
 DEFAULT_OUTPUT = ROOT / "thesis_package" / "THESIS_COMPLETE_FINAL.docx"
 
 

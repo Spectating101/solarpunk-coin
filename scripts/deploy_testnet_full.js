@@ -51,8 +51,20 @@ async function main() {
   console.log(`  MockUSDC:  ${usdcAddress}`);
   console.log(`  Tx:        ${usdcTx?.hash || "n/a"}`);
 
-  // --- Step 2: Deploy SolarPunkCoin ---
-  console.log("\n[2/3] Deploying SolarPunkCoin (Pillar 1+2: peg-controlled stablecoin)...");
+  // --- Step 2: Deploy ProtocolTreasury ---
+  console.log("\n[2/4] Deploying ProtocolTreasury (fee vault + bond escrow)...");
+  const ProtocolTreasury = await hre.ethers.getContractFactory("ProtocolTreasury");
+  const treasury = await ProtocolTreasury.deploy(usdcAddress);
+  await treasury.waitForDeployment();
+  const treasuryAddress = await treasury.getAddress();
+  const treasuryTx = treasury.deploymentTransaction();
+  console.log(`  ProtocolTreasury: ${treasuryAddress}`);
+  console.log(`  Tx:               ${treasuryTx?.hash || "n/a"}`);
+  await (await treasury.setBudgetVaults(treasuryAddress, treasuryAddress, deployer.address, deployer.address)).wait();
+  console.log("  Budget vaults:    reserve/insurance -> treasury, ops/audit -> deployer");
+
+  // --- Step 3: Deploy SolarPunkCoin ---
+  console.log("\n[3/4] Deploying SolarPunkCoin (Pillar 1+2: peg-controlled stablecoin)...");
   const SolarPunkCoin = await hre.ethers.getContractFactory("SolarPunkCoin");
   const spk = await SolarPunkCoin.deploy(usdcAddress);
   await spk.waitForDeployment();
@@ -60,21 +72,27 @@ async function main() {
   const spkTx = spk.deploymentTransaction();
   console.log(`  SolarPunkCoin: ${spkAddress}`);
   console.log(`  Tx:            ${spkTx?.hash || "n/a"}`);
+  await (await spk.setTreasury(treasuryAddress)).wait();
+  console.log(`  Treasury set to: ${treasuryAddress}`);
 
-  // --- Step 3: Deploy SolarPunkOption ---
+  // --- Step 4: Deploy SolarPunkOption ---
   const priceDecimals = Number(process.env.PRICE_DECIMALS || 6);
-  console.log(`\n[3/3] Deploying SolarPunkOption (Pillar 3: clearinghouse, ${priceDecimals} decimals)...`);
+  console.log(`\n[4/4] Deploying SolarPunkOption (Pillar 3: clearinghouse, ${priceDecimals} decimals)...`);
   const SolarPunkOption = await hre.ethers.getContractFactory("SolarPunkOption");
-  const option = await SolarPunkOption.deploy(usdcAddress, deployer.address, priceDecimals);
+  const option = await SolarPunkOption.deploy(usdcAddress, treasuryAddress, priceDecimals);
   await option.waitForDeployment();
   const optionAddress = await option.getAddress();
   const optionTx = option.deploymentTransaction();
   console.log(`  SolarPunkOption: ${optionAddress}`);
   console.log(`  Tx:              ${optionTx?.hash || "n/a"}`);
+  await (await option.setTradingFeeBps(50)).wait();
+  console.log("  Trading fee:      50 bps");
 
   // --- Save deployment receipt ---
   const rootDir = path.join(__dirname, "..");
-  const deployDir = path.join(rootDir, "state", "deployments");
+  const deployDir = process.env.SPK_DEPLOYMENT_STATE_DIR
+    ? path.resolve(rootDir, process.env.SPK_DEPLOYMENT_STATE_DIR)
+    : path.join(rootDir, "state", "deployments");
   fs.mkdirSync(deployDir, { recursive: true });
 
   const receipt = {
@@ -84,11 +102,19 @@ async function main() {
     deployer: deployer.address,
     contracts: {
       MockUSDC: { address: usdcAddress, tx: usdcTx?.hash || null },
+      ProtocolTreasury: { address: treasuryAddress, tx: treasuryTx?.hash || null },
       SolarPunkCoin: { address: spkAddress, tx: spkTx?.hash || null },
       SolarPunkOption: { address: optionAddress, tx: optionTx?.hash || null },
     },
     price_decimals: priceDecimals,
-    insurance_fund: deployer.address,
+    trading_fee_bps: 50,
+    insurance_fund: treasuryAddress,
+    budget_vaults: {
+      reserve: treasuryAddress,
+      insurance: treasuryAddress,
+      ops: deployer.address,
+      audit: deployer.address,
+    },
   };
 
   const receiptFile = path.join(deployDir, `${networkName}_full_deploy.json`);
@@ -110,13 +136,15 @@ async function main() {
   console.log("=".repeat(60));
   console.log(`\nContracts on ${networkName}:`);
   console.log(`  MockUSDC:        ${explorerBase}/address/${usdcAddress}`);
+  console.log(`  ProtocolTreasury: ${explorerBase}/address/${treasuryAddress}`);
   console.log(`  SolarPunkCoin:   ${explorerBase}/address/${spkAddress}`);
   console.log(`  SolarPunkOption: ${explorerBase}/address/${optionAddress}`);
   console.log(`\nReceipt saved to: ${receiptFile}`);
   console.log(`\nNext steps:`);
   console.log(`  1. Verify contracts on explorer:`);
+  console.log(`     npx hardhat verify --network ${networkName} ${treasuryAddress} ${usdcAddress}`);
   console.log(`     npx hardhat verify --network ${networkName} ${spkAddress} ${usdcAddress}`);
-  console.log(`     npx hardhat verify --network ${networkName} ${optionAddress} ${usdcAddress} ${deployer.address} ${priceDecimals}`);
+  console.log(`     npx hardhat verify --network ${networkName} ${optionAddress} ${usdcAddress} ${treasuryAddress} ${priceDecimals}`);
   console.log(`  2. Update README.md with contract addresses`);
   console.log(`  3. Test interactions via Hardhat console:`);
   console.log(`     npx hardhat console --network ${networkName}`);
