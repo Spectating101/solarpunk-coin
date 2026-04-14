@@ -8,6 +8,10 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 
+interface IProtocolTreasuryBonds {
+    function keeperBonds(address keeper) external view returns (uint256);
+}
+
 /**
  * @title SolarPunkOption
  * @notice Margin-based clearinghouse for energy index options (European, cash-settled in USDC or compatible collateral).
@@ -49,6 +53,10 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     uint256 public maintenanceMarginBps = 7_500; // 75% of exposure
     uint256 public liquidationPenaltyBps = 100; // 1% of remaining margin to insurance fund
     uint256 public tradingFeeBps = 0;
+    address public bondSource;
+    uint256 public minOracleBond = 0;
+    uint256 public minLiquidatorBond = 0;
+    uint256 public governanceDelay = 0;
 
     mapping(bytes32 => Series) public series;
     mapping(address => mapping(bytes32 => Position)) public positions;
@@ -61,6 +69,13 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     event MarginParamsUpdated(uint256 initialMarginBps, uint256 maintenanceMarginBps, uint256 liquidationPenaltyBps);
     event TradingFeeUpdated(uint256 tradingFeeBps);
     event TradingFeeCollected(address indexed user, bytes32 indexed seriesId, uint256 fee);
+    event BondSourceUpdated(address indexed bondSource);
+    event BondRequirementsUpdated(uint256 minOracleBond, uint256 minLiquidatorBond);
+    event OperatorRoleUpdated(bytes32 indexed role, address indexed operator, bool granted);
+    event GovernanceDelayUpdated(uint256 newDelay);
+    event GovernanceActionQueued(bytes32 indexed actionId, uint256 executeAfter);
+    event GovernanceActionCancelled(bytes32 indexed actionId);
+    event GovernanceActionConsumed(bytes32 indexed actionId);
 
     error InvalidSeries();
     error IndexNotSet();
@@ -69,6 +84,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     error Unauthorized();
     error SeriesExpired();
     error StillHealthy();
+
+    mapping(bytes32 => uint256) public queuedGovernanceActions;
 
     constructor(address collateralToken, address insuranceFund_, uint8 priceDecimals_) {
         require(collateralToken != address(0), "collateral required");
@@ -79,6 +96,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         collateralDecimals = collateral.decimals();
         collateralScale = 10 ** collateralDecimals;
         insuranceFund = insuranceFund_;
+        bondSource = insuranceFund_;
         priceDecimals = priceDecimals_;
         priceScale = 10 ** priceDecimals_;
 
@@ -99,13 +117,31 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         emit SeriesCreated(seriesId, expiry, strike, isCall, notional);
     }
 
-    function setInsuranceFund(address newFund) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setInsuranceFund(address newFund)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyGovernanceApproved(actionIdSetInsuranceFund(newFund))
+    {
         require(newFund != address(0), "invalid fund");
         insuranceFund = newFund;
         emit InsuranceFundUpdated(newFund);
     }
 
-    function setMarginParams(uint256 imBps, uint256 mmBps, uint256 penaltyBps) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setBondSource(address newBondSource)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyGovernanceApproved(actionIdSetBondSource(newBondSource))
+    {
+        require(newBondSource != address(0), "invalid bond source");
+        bondSource = newBondSource;
+        emit BondSourceUpdated(newBondSource);
+    }
+
+    function setMarginParams(uint256 imBps, uint256 mmBps, uint256 penaltyBps)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyGovernanceApproved(actionIdSetMarginParams(imBps, mmBps, penaltyBps))
+    {
         require(imBps >= mmBps, "IM<MM");
         require(penaltyBps <= 1_000, "penalty too high"); // cap at 10%
         initialMarginBps = imBps;
@@ -114,10 +150,27 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         emit MarginParamsUpdated(imBps, mmBps, penaltyBps);
     }
 
-    function setTradingFeeBps(uint256 newTradingFeeBps) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setTradingFeeBps(uint256 newTradingFeeBps)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyGovernanceApproved(actionIdSetTradingFeeBps(newTradingFeeBps))
+    {
         require(newTradingFeeBps <= 500, "fee too high");
         tradingFeeBps = newTradingFeeBps;
         emit TradingFeeUpdated(newTradingFeeBps);
+    }
+
+    function setBondRequirements(uint256 oracleBond, uint256 liquidatorBond)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyGovernanceApproved(actionIdSetBondRequirements(oracleBond, liquidatorBond))
+    {
+        if (oracleBond > 0 || liquidatorBond > 0) {
+            require(bondSource.code.length > 0, "bond source must be contract");
+        }
+        minOracleBond = oracleBond;
+        minLiquidatorBond = liquidatorBond;
+        emit BondRequirementsUpdated(oracleBond, liquidatorBond);
     }
 
     function pause() external onlyRole(PAUSER_ROLE) {
@@ -128,9 +181,84 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         _unpause();
     }
 
+    function setGovernanceDelay(uint256 newDelay) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(newDelay <= 30 days, "delay too high");
+        governanceDelay = newDelay;
+        emit GovernanceDelayUpdated(newDelay);
+    }
+
+    function queueGovernanceAction(bytes32 actionId) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(governanceDelay > 0, "governance delay disabled");
+        uint256 executeAfter = block.timestamp + governanceDelay;
+        queuedGovernanceActions[actionId] = executeAfter;
+        emit GovernanceActionQueued(actionId, executeAfter);
+    }
+
+    function cancelGovernanceAction(bytes32 actionId) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(queuedGovernanceActions[actionId] != 0, "action not queued");
+        delete queuedGovernanceActions[actionId];
+        emit GovernanceActionCancelled(actionId);
+    }
+
+    function setOperatorRole(bytes32 role, address operator, bool shouldGrant)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyGovernanceApproved(actionIdSetOperatorRole(role, operator, shouldGrant))
+    {
+        require(operator != address(0), "invalid operator");
+        require(
+            role == ORACLE_ROLE || role == LIQUIDATOR_ROLE || role == PAUSER_ROLE,
+            "unsupported role"
+        );
+
+        if (shouldGrant) {
+            grantRole(role, operator);
+        } else {
+            revokeRole(role, operator);
+        }
+        emit OperatorRoleUpdated(role, operator, shouldGrant);
+    }
+
+    function actionIdSetInsuranceFund(address newFund) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_INSURANCE_FUND", newFund));
+    }
+
+    function actionIdSetBondSource(address newBondSource) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_BOND_SOURCE", newBondSource));
+    }
+
+    function actionIdSetMarginParams(uint256 imBps, uint256 mmBps, uint256 penaltyBps)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encode("SET_MARGIN_PARAMS", imBps, mmBps, penaltyBps));
+    }
+
+    function actionIdSetTradingFeeBps(uint256 newTradingFeeBps) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_TRADING_FEE_BPS", newTradingFeeBps));
+    }
+
+    function actionIdSetBondRequirements(uint256 oracleBond, uint256 liquidatorBond)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encode("SET_BOND_REQUIREMENTS", oracleBond, liquidatorBond));
+    }
+
+    function actionIdSetOperatorRole(bytes32 role, address operator, bool shouldGrant)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encode("SET_OPERATOR_ROLE", role, operator, shouldGrant));
+    }
+
     // ---------------------- Oracle ----------------------
 
     function updateIndex(uint256 newIndex, bytes32 sourceHash) external onlyRole(ORACLE_ROLE) whenNotPaused {
+        _requireBond(msg.sender, minOracleBond, "oracle bond too low");
         require(newIndex > 0, "index required");
         currentIndex = newIndex;
         lastIndexUpdate = block.timestamp;
@@ -210,6 +338,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     }
 
     function liquidate(address user, bytes32 seriesId) external whenNotPaused nonReentrant {
+        require(hasRole(LIQUIDATOR_ROLE, msg.sender), "liquidator required");
+        _requireBond(msg.sender, minLiquidatorBond, "liquidator bond too low");
         Series memory s = series[seriesId];
         if (!s.exists) revert InvalidSeries();
         Position storage p = positions[user][seriesId];
@@ -262,6 +392,13 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
 
     function _requireIndexSet() internal view {
         if (currentIndex == 0) revert IndexNotSet();
+    }
+
+    function _requireBond(address operator, uint256 minBond, string memory err) internal view {
+        if (minBond == 0) return;
+        require(bondSource.code.length > 0, "bond source must be contract");
+        uint256 bonded = IProtocolTreasuryBonds(bondSource).keeperBonds(operator);
+        require(bonded >= minBond, err);
     }
 
     function _markToIndex(Position storage p, Series memory s) internal {
@@ -352,5 +489,19 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         uint256 size = Math.mulDiv(s.notional, absQty, 1); // notional kWh × qty
         uint256 exposureRaw = Math.mulDiv(s.strike, size, 1); // priceDecimals × size
         return Math.mulDiv(exposureRaw, collateralScale, priceScale);
+    }
+
+    modifier onlyGovernanceApproved(bytes32 actionId) {
+        if (governanceDelay == 0) {
+            _;
+            return;
+        }
+
+        uint256 executeAfter = queuedGovernanceActions[actionId];
+        require(executeAfter != 0, "governance action not queued");
+        require(block.timestamp >= executeAfter, "governance action timelocked");
+        delete queuedGovernanceActions[actionId];
+        emit GovernanceActionConsumed(actionId);
+        _;
     }
 }

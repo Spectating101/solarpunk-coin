@@ -113,6 +113,23 @@ describe("SolarPunkOption", () => {
     ).to.be.revertedWithCustomError(option, "AccessControlUnauthorizedAccount");
   });
 
+  it("enforces oracle bond requirements when configured", async () => {
+    const minOracleBond = 100_000_000n; // 100 USDC
+    await option.setBondRequirements(minOracleBond, 0);
+
+    await expect(
+      option.connect(oracle).updateIndex(1_050_000n, ethers.ZeroHash)
+    ).to.be.revertedWith("oracle bond too low");
+
+    await usdc.mint(oracle.address, minOracleBond);
+    await usdc.connect(oracle).approve(treasury.target, minOracleBond);
+    await treasury.connect(oracle).depositBond(minOracleBond);
+
+    await expect(
+      option.connect(oracle).updateIndex(1_050_000n, ethers.ZeroHash)
+    ).not.to.be.reverted;
+  });
+
   it("enforces maintenance margin on withdraw", async () => {
     // Short with enough margin, then price rises against the short
     await option.connect(trader).modifyPosition(SERIES_ID, -1, 150_000_000n); // 150 USDC
@@ -135,6 +152,28 @@ describe("SolarPunkOption", () => {
     ).to.be.revertedWithCustomError(option, "StillHealthy");
   });
 
+  it("enforces liquidator bond requirements when configured", async () => {
+    const minLiquidatorBond = 50_000_000n; // 50 USDC
+    await option.setBondRequirements(0, minLiquidatorBond);
+
+    const margin = 120_000_000n;
+    await option.connect(trader).modifyPosition(SERIES_ID, -1, margin);
+    await option.connect(oracle).updateIndex(1_100_000n, ethers.ZeroHash);
+    await option.markPosition(trader.address, SERIES_ID);
+
+    await expect(
+      option.connect(liquidator).liquidate(trader.address, SERIES_ID)
+    ).to.be.revertedWith("liquidator bond too low");
+
+    await usdc.mint(liquidator.address, minLiquidatorBond);
+    await usdc.connect(liquidator).approve(treasury.target, minLiquidatorBond);
+    await treasury.connect(liquidator).depositBond(minLiquidatorBond);
+
+    await expect(
+      option.connect(liquidator).liquidate(trader.address, SERIES_ID)
+    ).not.to.be.reverted;
+  });
+
   it("honors pause on trading paths", async () => {
     await option.pause();
     await expect(
@@ -151,6 +190,59 @@ describe("SolarPunkOption", () => {
     await option.connect(trader).modifyPosition(SERIES_ID, 1, 200_000_000n);
 
     expect(await usdc.balanceOf(treasury.target)).to.equal(treasuryBefore + tradeFee);
+  });
+
+  it("enforces timelock queue for admin setters when governance delay is enabled", async () => {
+    const delay = 1800;
+    await option.setGovernanceDelay(delay);
+
+    await expect(option.setTradingFeeBps(30)).to.be.revertedWith("governance action not queued");
+
+    const actionId = await option.actionIdSetTradingFeeBps(30);
+    await option.queueGovernanceAction(actionId);
+
+    await expect(option.setTradingFeeBps(30)).to.be.revertedWith("governance action timelocked");
+
+    await ethers.provider.send("evm_increaseTime", [delay + 1]);
+    await ethers.provider.send("evm_mine");
+
+    await option.setTradingFeeBps(30);
+    expect(await option.tradingFeeBps()).to.equal(30);
+  });
+
+  it("allows cancelling queued governance action on option admin path", async () => {
+    const delay = 1800;
+    await option.setGovernanceDelay(delay);
+    const actionId = await option.actionIdSetTradingFeeBps(40);
+
+    await option.queueGovernanceAction(actionId);
+    await option.cancelGovernanceAction(actionId);
+
+    await ethers.provider.send("evm_increaseTime", [delay + 1]);
+    await ethers.provider.send("evm_mine");
+
+    await expect(option.setTradingFeeBps(40)).to.be.revertedWith("governance action not queued");
+  });
+
+  it("supports rotating backup operators through explicit role setter", async () => {
+    const ORACLE_ROLE = await option.ORACLE_ROLE();
+
+    await option.setOperatorRole(ORACLE_ROLE, trader.address, true);
+    await expect(
+      option.connect(trader).updateIndex(1_150_000n, ethers.ZeroHash)
+    ).not.to.be.reverted;
+
+    await option.setOperatorRole(ORACLE_ROLE, trader.address, false);
+    await expect(
+      option.connect(trader).updateIndex(1_200_000n, ethers.ZeroHash)
+    ).to.be.revertedWithCustomError(option, "AccessControlUnauthorizedAccount");
+  });
+
+  it("rejects unsupported operator role updates", async () => {
+    const fakeRole = ethers.id("FAKE_ROLE");
+    await expect(
+      option.setOperatorRole(fakeRole, trader.address, true)
+    ).to.be.revertedWith("unsupported role");
   });
 
   it("marks losses for a long put when index rises", async () => {

@@ -80,6 +80,11 @@ async function main() {
   const optionAddress = await option.getAddress();
   await option.setMarginParams(1_000, 500, 100);
   await option.setTradingFeeBps(50);
+  const operatorBond = hre.ethers.parseUnits("50", usdcDecimals);
+  await usdc.mint(deployer.address, operatorBond);
+  await usdc.approve(treasuryAddress, operatorBond);
+  await treasury.depositBond(operatorBond);
+  await option.setBondRequirements(operatorBond, operatorBond);
 
   const seriesId = hre.ethers.id("DEMO_SERIES");
   const expiry = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
@@ -108,6 +113,7 @@ async function main() {
 
   console.log("\nTrading fee flow");
   console.log(`  Trading fee paid:     ${formatUsdc(tradingFee)}`);
+  console.log(`  Operator bond set:    ${formatUsdc(operatorBond)}`);
 
   const bondAmount = hre.ethers.parseUnits("200", usdcDecimals);
   const slashAmount = hre.ethers.parseUnits("50", usdcDecimals);

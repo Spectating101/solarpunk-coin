@@ -46,9 +46,26 @@ code .env
 PRIVATE_KEY=your_wallet_private_key_here
 
 # Keep the remaining example values unchanged.
+# Optional:
+# TRADING_FEE_BPS=50
+# SPK_MINTER_BOND_UNITS=0
+# SPK_ORACLE_BOND_UNITS=0
+# ORACLE_BOND_UNITS=0
+# LIQUIDATOR_BOND_UNITS=0
+# GOVERNANCE_ADMIN=0xYourMultisigAddress
+# STRICT_ADMIN_HANDOFF=true
+# OPS_VAULT=0xOpsTreasury
+# AUDIT_VAULT=0xAuditTreasury
+# RESERVE_VAULT=0xReserveVault   # default: ProtocolTreasury address
+# INSURANCE_VAULT=0xInsuranceVault # default: ProtocolTreasury address
+# TREASURY_GOVERNANCE_DELAY_SECONDS=3600
+# SPK_GOVERNANCE_DELAY_SECONDS=3600
+# OPTION_GOVERNANCE_DELAY_SECONDS=3600
 ```
 
 The deployment script reads the Amoy RPC and private key from `.env`.
+If `GOVERNANCE_ADMIN` is set, deploy scripts grant admin/owner controls to that address.
+If `STRICT_ADMIN_HANDOFF=true`, deployer admin roles are renounced after grant.
 
 ---
 
@@ -62,7 +79,7 @@ The deployment script reads the Amoy RPC and private key from `.env`.
 - Compile contracts
 - Deploy the full Amoy stack: MockUSDC + ProtocolTreasury + SolarPunkCoin + SolarPunkOption
 - Set the treasury as the fee sink and insurance fund
-- Configure budget vaults so reserve/insurance stay in treasury and ops/audit go to the deployer
+- Configure budget vaults (defaults: reserve/insurance in treasury, ops/audit to governance admin or deployer)
 - Show you the contract addresses
 - Give you the PolygonScan links
 

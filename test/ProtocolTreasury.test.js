@@ -113,4 +113,69 @@ describe("ProtocolTreasury", function () {
     expect(await spk.balanceOf(auditVault.address)).to.equal(100n * 10n ** 15n);
     expect(await spk.balanceOf(await spkTreasury.getAddress())).to.equal(0n);
   });
+
+  it("enforces timelock queue for treasury admin setters when governance delay is enabled", async function () {
+    const delay = 1200;
+    await treasury.setGovernanceDelay(delay);
+
+    await expect(
+      treasury.setBudgetPolicy(3000, 3000, 3000, 1000)
+    ).to.be.revertedWith("governance action not queued");
+
+    const actionId = await treasury.actionIdSetBudgetPolicy(3000, 3000, 3000, 1000);
+    await treasury.queueGovernanceAction(actionId);
+
+    await expect(
+      treasury.setBudgetPolicy(3000, 3000, 3000, 1000)
+    ).to.be.revertedWith("governance action timelocked");
+
+    await ethers.provider.send("evm_increaseTime", [delay + 1]);
+    await ethers.provider.send("evm_mine");
+
+    await treasury.setBudgetPolicy(3000, 3000, 3000, 1000);
+    const policy = await treasury.budgetPolicy();
+    expect(policy.reserveBps).to.equal(3000);
+    expect(policy.insuranceBps).to.equal(3000);
+    expect(policy.opsBps).to.equal(3000);
+    expect(policy.auditBps).to.equal(1000);
+  });
+
+  it("allows cancelling queued treasury governance actions", async function () {
+    const delay = 1200;
+    await treasury.setGovernanceDelay(delay);
+    const actionId = await treasury.actionIdSetBondCooldown(3600);
+
+    await treasury.queueGovernanceAction(actionId);
+    await treasury.cancelGovernanceAction(actionId);
+
+    await ethers.provider.send("evm_increaseTime", [delay + 1]);
+    await ethers.provider.send("evm_mine");
+
+    await expect(treasury.setBondCooldown(3600)).to.be.revertedWith("governance action not queued");
+  });
+
+  it("supports rotating budget/slasher operators", async function () {
+    const BUDGET_MANAGER_ROLE = await treasury.BUDGET_MANAGER_ROLE();
+    const SLASHER_ROLE = await treasury.SLASHER_ROLE();
+
+    await treasury.setOperatorRole(BUDGET_MANAGER_ROLE, keeper.address, true);
+    await treasury.setOperatorRole(SLASHER_ROLE, keeper.address, true);
+
+    const amount = 100n * ONE_USDC;
+    await usdc.mint(treasury.target, amount);
+    await expect(
+      treasury.connect(keeper).disburseReserveToken(amount)
+    ).not.to.be.reverted;
+
+    await treasury.setOperatorRole(BUDGET_MANAGER_ROLE, keeper.address, false);
+    await expect(
+      treasury.connect(keeper).disburseReserveToken(1n)
+    ).to.be.revertedWithCustomError(treasury, "AccessControlUnauthorizedAccount");
+  });
+
+  it("rejects unsupported treasury operator role updates", async function () {
+    await expect(
+      treasury.setOperatorRole(ethers.id("FAKE_ROLE"), keeper.address, true)
+    ).to.be.revertedWith("unsupported role");
+  });
 });

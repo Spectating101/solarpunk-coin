@@ -104,6 +104,9 @@ def _build_payload(root: Path) -> Dict[str, Any]:
             and _exists(root, "docs/thesis/MASTER_THESIS_PROPOSAL.md"),
             "phase_gate_lane_ready": _exists(root, "scripts/build_protocol_phase_gates.py")
             and _exists(root, "scripts/run_protocol_gate.sh"),
+            "governance_lane_ready": _exists(root, "scripts/build_governance_status.py")
+            and _exists(root, "docs/project/ROLE_PERMISSION_MATRIX.md")
+            and _exists(root, "docs/project/PROJECT_OPERATIONS.md"),
             "evidence_validation_lane_ready": _exists(root, "scripts/build_deployment_receipt.py")
             and _exists(root, "scripts/validate_deployment_receipt.py")
             and _exists(root, "scripts/validate_audit_status.py"),
@@ -118,6 +121,7 @@ def _build_payload(root: Path) -> Dict[str, Any]:
             "profile_4_commercial_pilot": "Generate client-facing indicative term sheets and integrity artifacts.",
             "profile_5_monetary_protocol": "Track and validate standalone monetary-protocol readiness.",
             "profile_6_phase_gate_enforcement": "Enforce explicit GO/NO_GO protocol progression gates.",
+            "profile_6b_governance_hardening": "Track governance controls and change-trace cadence artifacts.",
             "profile_7_evidence_validation": "Validate deployment and audit evidence before expansion claims.",
             "profile_8_onchain_confirmation": "Confirm deployment tx receipts on-chain and synchronize evidence artifacts.",
         },
@@ -135,6 +139,7 @@ def _build_payload(root: Path) -> Dict[str, Any]:
             "python3 scripts/render_security_audit_status.py",
             "python3 scripts/validate_audit_status.py",
             "python3 scripts/build_protocol_phase_gates.py --target-phase 1",
+            "python3 scripts/build_governance_status.py",
             "bash scripts/run_project_operating_cycle.sh",
             "bash scripts/run_commercial_cycle.sh",
             "bash scripts/run_protocol_gate.sh 1",

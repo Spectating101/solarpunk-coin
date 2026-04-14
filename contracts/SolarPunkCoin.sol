@@ -11,6 +11,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
+interface IProtocolTreasuryBondView {
+    function keeperBonds(address keeper) external view returns (uint256);
+}
+
 /**
  * @title SolarPunkCoin (SPK)
  * @notice Energy-backed stablecoin pegged to renewable energy prices
@@ -91,6 +95,10 @@ contract SolarPunkCoin is
 
     /// @notice Address receiving protocol fees and treasury disbursements
     address public treasury;
+    address public bondSource;
+    uint256 public minMinterBond = 0;
+    uint256 public minOracleBond = 0;
+    uint256 public governanceDelay = 0;
 
     /// @notice Cumulative surplus kWh recorded
     uint256 public cumulativeSurplusKwh = 0;
@@ -124,9 +132,17 @@ contract SolarPunkCoin is
     event StabilityPoolUpdated(address indexed newPool);
     event StabilityPoolDisbursed(address indexed to, uint256 amount);
     event TreasuryUpdated(address indexed treasury);
+    event BondSourceUpdated(address indexed bondSource);
+    event BondRequirementsUpdated(uint256 minMinterBond, uint256 minOracleBond);
     event FeeCollected(address indexed payer, address indexed treasury, uint256 amount, bytes32 feeKind);
     event GridStressManualOverride(bool isStressed);
     event ParameterUpdated(string paramName, uint256 newValue);
+    event GovernanceDelayUpdated(uint256 newDelay);
+    event GovernanceActionQueued(bytes32 indexed actionId, uint256 executeAfter);
+    event GovernanceActionCancelled(bytes32 indexed actionId);
+    event GovernanceActionConsumed(bytes32 indexed actionId);
+
+    mapping(bytes32 => uint256) public queuedGovernanceActions;
 
     // ============ Modifiers ============
     modifier onlyOracle() {
@@ -190,6 +206,7 @@ contract SolarPunkCoin is
         reserveTokenDecimals = IERC20Metadata(reserveTokenAddress).decimals();
         stabilityPool = address(this);
         treasury = msg.sender;
+        bondSource = msg.sender;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
         _grantRole(ORACLE_ROLE, msg.sender);
@@ -210,6 +227,7 @@ contract SolarPunkCoin is
         uint256 surplusKwh,
         address recipient
     ) external onlyMinter gridNotStressed oracleNotStale returns (uint256) {
+        _requireBond(msg.sender, minMinterBond, "minter bond too low");
         require(surplusKwh > 0, "Surplus must be > 0");
         require(recipient != address(0), "Invalid recipient");
 
@@ -257,6 +275,7 @@ contract SolarPunkCoin is
         onlyOracle
         returns (bool adjusted)
     {
+        _requireBond(msg.sender, minOracleBond, "oracle bond too low");
         require(newPrice > 0, "Price must be positive");
 
         // Update oracle state
@@ -374,6 +393,7 @@ contract SolarPunkCoin is
      * @param isStressed True if grid reserve < min threshold
      */
     function setGridStressed(bool isStressed) external onlyOracle {
+        _requireBond(msg.sender, minOracleBond, "oracle bond too low");
         manualGridStress = isStressed;
         emit GridStressManualOverride(isStressed);
         _updateGridStress();
@@ -392,7 +412,7 @@ contract SolarPunkCoin is
         uint256 newBand,
         uint256 newPropGain,
         uint256 newIntGain
-    ) external onlyOwner {
+    ) external onlyOwner onlyGovernanceApproved(actionIdUpdateControlParameters(newBand, newPropGain, newIntGain)) {
         require(newBand > 0 && newBand <= 1e17, "Invalid band"); // Max 10%
         require(newPropGain > 0, "Invalid prop gain");
         require(newIntGain > 0, "Invalid int gain");
@@ -414,6 +434,7 @@ contract SolarPunkCoin is
     function updateFees(uint256 newMintFee, uint256 newRedeemFee)
         external
         onlyOwner
+        onlyGovernanceApproved(actionIdUpdateFees(newMintFee, newRedeemFee))
     {
         require(newMintFee <= 5000, "Mint fee too high"); // Max 50%
         require(newRedeemFee <= 5000, "Redeem fee too high");
@@ -425,15 +446,58 @@ contract SolarPunkCoin is
         emit ParameterUpdated("redemptionFee", newRedeemFee);
     }
 
-    function setTreasury(address newTreasury) external onlyOwner {
+    function setTreasury(address newTreasury)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetTreasury(newTreasury))
+    {
         require(newTreasury != address(0), "Invalid treasury");
+        address oldTreasury = treasury;
         treasury = newTreasury;
         emit TreasuryUpdated(newTreasury);
+        if (bondSource == oldTreasury) {
+            bondSource = newTreasury;
+            emit BondSourceUpdated(newTreasury);
+        }
+    }
+
+    function setBondSource(address newBondSource)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetBondSource(newBondSource))
+    {
+        require(newBondSource != address(0), "Invalid bond source");
+        bondSource = newBondSource;
+        emit BondSourceUpdated(newBondSource);
+    }
+
+    function setBondRequirements(uint256 newMinMinterBond, uint256 newMinOracleBond)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetBondRequirements(newMinMinterBond, newMinOracleBond))
+    {
+        if (newMinMinterBond > 0 || newMinOracleBond > 0) {
+            require(bondSource.code.length > 0, "Bond source must be contract");
+        }
+        minMinterBond = newMinMinterBond;
+        minOracleBond = newMinOracleBond;
+        emit BondRequirementsUpdated(newMinMinterBond, newMinOracleBond);
+    }
+
+    function _requireBond(address operator, uint256 minBond, string memory err)
+        internal
+        view
+    {
+        if (minBond == 0) return;
+        require(bondSource.code.length > 0, "Bond source must be contract");
+        uint256 bonded = IProtocolTreasuryBondView(bondSource).keeperBonds(operator);
+        require(bonded >= minBond, err);
     }
 
     function updateReserveParameters(uint256 newMinReserveMarginPercent)
         external
         onlyOwner
+        onlyGovernanceApproved(actionIdUpdateReserveParameters(newMinReserveMarginPercent))
     {
         require(newMinReserveMarginPercent <= 100, "Invalid reserve margin");
         minReserveMarginPercent = newMinReserveMarginPercent;
@@ -441,7 +505,11 @@ contract SolarPunkCoin is
         _updateGridStress();
     }
 
-    function setStabilityPool(address newPool) external onlyOwner {
+    function setStabilityPool(address newPool)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetStabilityPool(newPool))
+    {
         require(newPool != address(0), "Invalid stability pool");
         stabilityPool = newPool;
         emit StabilityPoolUpdated(newPool);
@@ -491,6 +559,7 @@ contract SolarPunkCoin is
     function setOracleRole(address oracle, bool shouldGrant)
         external
         onlyOwner
+        onlyGovernanceApproved(actionIdSetOracleRole(oracle, shouldGrant))
     {
         require(oracle != address(0), "Invalid oracle address");
         if (shouldGrant) {
@@ -573,6 +642,99 @@ contract SolarPunkCoin is
         _unpause();
     }
 
+    function setGovernanceDelay(uint256 newDelay) external onlyOwner {
+        require(newDelay <= 30 days, "Delay too high");
+        governanceDelay = newDelay;
+        emit GovernanceDelayUpdated(newDelay);
+    }
+
+    function queueGovernanceAction(bytes32 actionId) external onlyOwner {
+        require(governanceDelay > 0, "Governance delay disabled");
+        uint256 executeAfter = block.timestamp + governanceDelay;
+        queuedGovernanceActions[actionId] = executeAfter;
+        emit GovernanceActionQueued(actionId, executeAfter);
+    }
+
+    function cancelGovernanceAction(bytes32 actionId) external onlyOwner {
+        require(queuedGovernanceActions[actionId] != 0, "Action not queued");
+        delete queuedGovernanceActions[actionId];
+        emit GovernanceActionCancelled(actionId);
+    }
+
+    function actionIdUpdateControlParameters(uint256 newBand, uint256 newPropGain, uint256 newIntGain)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encode("UPDATE_CONTROL_PARAMETERS", newBand, newPropGain, newIntGain));
+    }
+
+    function actionIdUpdateFees(uint256 newMintFee, uint256 newRedeemFee) public pure returns (bytes32) {
+        return keccak256(abi.encode("UPDATE_FEES", newMintFee, newRedeemFee));
+    }
+
+    function actionIdSetTreasury(address newTreasury) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_TREASURY", newTreasury));
+    }
+
+    function actionIdSetBondSource(address newBondSource) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_BOND_SOURCE", newBondSource));
+    }
+
+    function actionIdSetBondRequirements(uint256 newMinMinterBond, uint256 newMinOracleBond)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encode("SET_BOND_REQUIREMENTS", newMinMinterBond, newMinOracleBond));
+    }
+
+    function actionIdUpdateReserveParameters(uint256 newMinReserveMarginPercent)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encode("UPDATE_RESERVE_PARAMETERS", newMinReserveMarginPercent));
+    }
+
+    function actionIdSetStabilityPool(address newPool) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_STABILITY_POOL", newPool));
+    }
+
+    function actionIdSetOracleRole(address oracle, bool shouldGrant) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_ORACLE_ROLE", oracle, shouldGrant));
+    }
+
+    function actionIdSetOperatorRole(bytes32 role, address operator, bool shouldGrant)
+        public
+        pure
+        returns (bytes32)
+    {
+        return keccak256(abi.encode("SET_OPERATOR_ROLE", role, operator, shouldGrant));
+    }
+
+    function setOperatorRole(bytes32 role, address operator, bool shouldGrant)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetOperatorRole(role, operator, shouldGrant))
+    {
+        require(operator != address(0), "Invalid operator address");
+        require(
+            role == MINTER_ROLE ||
+            role == ORACLE_ROLE ||
+            role == PAUSER_ROLE ||
+            role == RESERVE_MANAGER_ROLE ||
+            role == STABILIZER_ROLE,
+            "Unsupported role"
+        );
+
+        if (shouldGrant) {
+            grantRole(role, operator);
+        } else {
+            revokeRole(role, operator);
+        }
+    }
+
     // ============ Future: DAO & Governance Hooks ============
     // These are placeholders for future governance integration
 
@@ -587,5 +749,19 @@ contract SolarPunkCoin is
         // Transfer ownership to DAO timelock
         // _transferOwnership(daoTimeLock);
         // Emit governance event
+    }
+
+    modifier onlyGovernanceApproved(bytes32 actionId) {
+        if (governanceDelay == 0) {
+            _;
+            return;
+        }
+
+        uint256 executeAfter = queuedGovernanceActions[actionId];
+        require(executeAfter != 0, "governance action not queued");
+        require(block.timestamp >= executeAfter, "governance action timelocked");
+        delete queuedGovernanceActions[actionId];
+        emit GovernanceActionConsumed(actionId);
+        _;
     }
 }

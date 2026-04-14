@@ -7,6 +7,27 @@ async function main() {
 
   const networkName = hre.network.name;
   const [deployer] = await hre.ethers.getSigners();
+  const governanceAdminRaw = process.env.GOVERNANCE_ADMIN || "";
+  const governanceAdmin = governanceAdminRaw && hre.ethers.isAddress(governanceAdminRaw)
+    ? governanceAdminRaw
+    : deployer.address;
+  const strictAdminHandoff = ["1", "true", "yes"].includes(
+    String(process.env.STRICT_ADMIN_HANDOFF || "").toLowerCase()
+  );
+  const reserveVault = process.env.RESERVE_VAULT && hre.ethers.isAddress(process.env.RESERVE_VAULT)
+    ? process.env.RESERVE_VAULT
+    : null;
+  const insuranceVault = process.env.INSURANCE_VAULT && hre.ethers.isAddress(process.env.INSURANCE_VAULT)
+    ? process.env.INSURANCE_VAULT
+    : null;
+  const opsVault = process.env.OPS_VAULT && hre.ethers.isAddress(process.env.OPS_VAULT)
+    ? process.env.OPS_VAULT
+    : governanceAdmin;
+  const auditVault = process.env.AUDIT_VAULT && hre.ethers.isAddress(process.env.AUDIT_VAULT)
+    ? process.env.AUDIT_VAULT
+    : governanceAdmin;
+  const treasuryGovernanceDelay = Number(process.env.TREASURY_GOVERNANCE_DELAY_SECONDS || 0);
+  const spkGovernanceDelay = Number(process.env.SPK_GOVERNANCE_DELAY_SECONDS || 0);
   let reserveTokenAddress;
 
   if (networkName === "localhost" || networkName === "hardhat") {
@@ -30,14 +51,31 @@ async function main() {
   await treasury.waitForDeployment();
   const treasuryAddress = await treasury.getAddress();
   console.log("✅ ProtocolTreasury deployed to:", treasuryAddress);
-  await (await treasury.setBudgetVaults(treasuryAddress, treasuryAddress, deployer.address, deployer.address)).wait();
-  console.log("✅ Budget vaults configured (reserve/insurance -> treasury, ops/audit -> deployer)");
+  await (await treasury.setBudgetVaults(
+    reserveVault || treasuryAddress,
+    insuranceVault || treasuryAddress,
+    opsVault,
+    auditVault
+  )).wait();
+  if (treasuryGovernanceDelay > 0) {
+    await (await treasury.setGovernanceDelay(treasuryGovernanceDelay)).wait();
+  }
+  console.log("✅ Budget vaults configured");
 
   // Deploy contract
   const SolarPunkCoin = await hre.ethers.getContractFactory("SolarPunkCoin");
   const spk = await SolarPunkCoin.deploy(reserveTokenAddress);
   await spk.waitForDeployment();
   await (await spk.setTreasury(treasuryAddress)).wait();
+  const spkMinterBondUnits = process.env.SPK_MINTER_BOND_UNITS || "0";
+  const spkOracleBondUnits = process.env.SPK_ORACLE_BOND_UNITS || "0";
+  if (spkMinterBondUnits !== "0" || spkOracleBondUnits !== "0") {
+    await (await spk.setBondRequirements(spkMinterBondUnits, spkOracleBondUnits)).wait();
+    console.log(`✅ SPK bond minimums set (minter=${spkMinterBondUnits}, oracle=${spkOracleBondUnits})`);
+  }
+  if (spkGovernanceDelay > 0) {
+    await (await spk.setGovernanceDelay(spkGovernanceDelay)).wait();
+  }
 
   const contractAddress = await spk.getAddress();
   const deployTx = spk.deploymentTransaction();
@@ -48,6 +86,30 @@ async function main() {
   }
 
   console.log("📍 Deployed by:", deployer.address);
+  console.log("🛡️  Governance admin:", governanceAdmin);
+
+  if (governanceAdmin !== deployer.address) {
+    const TREASURY_ADMIN = await treasury.DEFAULT_ADMIN_ROLE();
+    const BUDGET_MANAGER_ROLE = await treasury.BUDGET_MANAGER_ROLE();
+    const SLASHER_ROLE = await treasury.SLASHER_ROLE();
+    const SPK_ADMIN = await spk.DEFAULT_ADMIN_ROLE();
+    const SPK_PAUSER = await spk.PAUSER_ROLE();
+
+    await (await treasury.grantRole(TREASURY_ADMIN, governanceAdmin)).wait();
+    await (await treasury.grantRole(BUDGET_MANAGER_ROLE, governanceAdmin)).wait();
+    await (await treasury.grantRole(SLASHER_ROLE, governanceAdmin)).wait();
+    await (await spk.grantRole(SPK_ADMIN, governanceAdmin)).wait();
+    await (await spk.grantRole(SPK_PAUSER, governanceAdmin)).wait();
+    await (await spk.transferOwnership(governanceAdmin)).wait();
+
+    if (strictAdminHandoff) {
+      await (await treasury.renounceRole(TREASURY_ADMIN, deployer.address)).wait();
+      await (await treasury.renounceRole(BUDGET_MANAGER_ROLE, deployer.address)).wait();
+      await (await treasury.renounceRole(SLASHER_ROLE, deployer.address)).wait();
+      await (await spk.renounceRole(SPK_ADMIN, deployer.address)).wait();
+      await (await spk.renounceRole(SPK_PAUSER, deployer.address)).wait();
+    }
+  }
 
   // Initial configuration
   console.log("\n⚙️  Initializing contract...");
@@ -99,13 +161,23 @@ async function main() {
     contract: "SolarPunkCoin",
     contract_address: contractAddress,
     deployer: deployer.address,
+    governance_admin: governanceAdmin,
+    strict_admin_handoff: strictAdminHandoff,
+    governance_delays_seconds: {
+      treasury: treasuryGovernanceDelay,
+      spk: spkGovernanceDelay,
+    },
     reserve_token_address: reserveTokenAddress,
     treasury_address: treasuryAddress,
+    spk_bond_requirements: {
+      minter: spkMinterBondUnits,
+      oracle: spkOracleBondUnits,
+    },
     budget_vaults: {
-      reserve: treasuryAddress,
-      insurance: treasuryAddress,
-      ops: deployer.address,
-      audit: deployer.address,
+      reserve: reserveVault || treasuryAddress,
+      insurance: insuranceVault || treasuryAddress,
+      ops: opsVault,
+      audit: auditVault,
     },
     deploy_tx_hash: deployTxHash,
   };

@@ -350,6 +350,105 @@ describe("SolarPunkCoin", function () {
         "Mint fee too high"
       );
     });
+
+    it("Should enforce timelock queue for owner changes when governance delay is enabled", async function () {
+      const delay = 3600;
+      const newMintFee = 100;
+      const newRedeemFee = 120;
+
+      await spk.connect(owner).setGovernanceDelay(delay);
+
+      await expect(
+        spk.connect(owner).updateFees(newMintFee, newRedeemFee)
+      ).to.be.revertedWith("governance action not queued");
+
+      const actionId = await spk.actionIdUpdateFees(newMintFee, newRedeemFee);
+      await spk.connect(owner).queueGovernanceAction(actionId);
+
+      await expect(
+        spk.connect(owner).updateFees(newMintFee, newRedeemFee)
+      ).to.be.revertedWith("governance action timelocked");
+
+      await ethers.provider.send("evm_increaseTime", [delay + 1]);
+      await ethers.provider.send("evm_mine");
+
+      await spk.connect(owner).updateFees(newMintFee, newRedeemFee);
+      expect(await spk.mintingFee()).to.equal(newMintFee);
+      expect(await spk.redemptionFee()).to.equal(newRedeemFee);
+    });
+
+    it("Should allow cancelling queued governance action", async function () {
+      const delay = 1800;
+      const newMintFee = 80;
+      const newRedeemFee = 90;
+
+      await spk.connect(owner).setGovernanceDelay(delay);
+      const actionId = await spk.actionIdUpdateFees(newMintFee, newRedeemFee);
+      await spk.connect(owner).queueGovernanceAction(actionId);
+      await spk.connect(owner).cancelGovernanceAction(actionId);
+
+      await ethers.provider.send("evm_increaseTime", [delay + 1]);
+      await ethers.provider.send("evm_mine");
+
+      await expect(
+        spk.connect(owner).updateFees(newMintFee, newRedeemFee)
+      ).to.be.revertedWith("governance action not queued");
+    });
+
+    it("Should enforce minter bond requirements when configured", async function () {
+      const minterBond = 100n * USDC_DECIMALS;
+      await spk.connect(owner).setBondRequirements(minterBond, 0);
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+
+      await expect(
+        spk.connect(minter).mintFromSurplus(1000, user.address)
+      ).to.be.revertedWith("minter bond too low");
+
+      await usdc.mint(minter.address, minterBond);
+      await usdc.connect(minter).approve(treasury.target, minterBond);
+      await treasury.connect(minter).depositBond(minterBond);
+
+      await expect(
+        spk.connect(minter).mintFromSurplus(1000, user.address)
+      ).not.to.be.reverted;
+    });
+
+    it("Should enforce oracle bond requirements when configured", async function () {
+      const oracleBond = 100n * USDC_DECIMALS;
+      await spk.connect(owner).setBondRequirements(0, oracleBond);
+
+      await expect(
+        spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"))
+      ).to.be.revertedWith("oracle bond too low");
+
+      await usdc.mint(oracle.address, oracleBond);
+      await usdc.connect(oracle).approve(treasury.target, oracleBond);
+      await treasury.connect(oracle).depositBond(oracleBond);
+
+      await expect(
+        spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"))
+      ).not.to.be.reverted;
+    });
+
+    it("Should rotate backup operators via explicit operator role setter", async function () {
+      const reserveManagerRole = await spk.RESERVE_MANAGER_ROLE();
+
+      await spk.connect(owner).setOperatorRole(reserveManagerRole, user.address, true);
+      await expect(
+        spk.connect(user).withdrawReserve(1000n * USDC_DECIMALS, user.address)
+      ).not.to.be.reverted;
+
+      await spk.connect(owner).setOperatorRole(reserveManagerRole, user.address, false);
+      await expect(
+        spk.connect(user).withdrawReserve(1n, user.address)
+      ).to.be.reverted;
+    });
+
+    it("Should reject unsupported roles in operator role setter", async function () {
+      await expect(
+        spk.connect(owner).setOperatorRole(ethers.id("FAKE_ROLE"), user.address, true)
+      ).to.be.revertedWith("Unsupported role");
+    });
   });
 
   describe("View Functions", function () {

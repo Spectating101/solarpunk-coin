@@ -1,5 +1,7 @@
 require("dotenv").config();
 const { ethers } = require("ethers");
+const fs = require("fs");
+const path = require("path");
 
 async function main() {
   const rpcUrl =
@@ -33,6 +35,7 @@ async function main() {
     oracleStalenessThreshold,
     totalSupply,
     usdcReserve,
+    minReserveMarginPercent,
   ] = await Promise.all([
     spk.getReserveRatio(),
     spk.gridStressed(),
@@ -40,29 +43,48 @@ async function main() {
     spk.oracleStalenessThreshold(),
     spk.totalSupply(),
     spk.usdcReserve(),
+    spk.minReserveMarginPercent(),
   ]);
 
   const [
     currentIndex,
-    lastUpdateTimestamp,
-    maxStaleness,
+    lastIndexUpdate,
     isPaused,
-    minOracleQuorum,
-    maxDeviationBps,
   ] = await Promise.all([
     option.currentIndex(),
-    option.lastUpdateTimestamp(),
-    option.maxStaleness(),
-    option.isPaused(),
-    option.minOracleQuorum(),
-    option.maxDeviationBps(),
+    option.lastIndexUpdate(),
+    option.paused(),
   ]);
 
   const spkOracleAge = now - Number(lastOracleUpdate);
-  const optionOracleAge = now - Number(lastUpdateTimestamp);
+  const optionOracleAge = now - Number(lastIndexUpdate);
+  const optionMaxOracleAgeSeconds = Number(process.env.OPTION_MAX_ORACLE_AGE_SECONDS || 86400);
+
+  const signals = {
+    reserve_ratio_percent: Number(reserveRatio),
+    min_reserve_margin_percent: Number(minReserveMarginPercent),
+    reserve_ratio_breach: Number(reserveRatio) < Number(minReserveMarginPercent),
+    grid_stressed: Boolean(gridStressed),
+    spk_oracle_age_seconds: spkOracleAge,
+    spk_oracle_stale: spkOracleAge > Number(oracleStalenessThreshold),
+    option_oracle_age_seconds: optionOracleAge,
+    option_oracle_stale: optionOracleAge > optionMaxOracleAgeSeconds,
+    option_paused: Boolean(isPaused),
+  };
+
+  const status = signals.reserve_ratio_breach || signals.grid_stressed || signals.spk_oracle_stale || signals.option_oracle_stale
+    ? "WARN"
+    : "OK";
+  const report = {
+    generated_at: new Date().toISOString(),
+    status,
+    signals,
+  };
 
   console.log("SPK Health");
   console.log(`  Reserve Ratio: ${reserveRatio}%`);
+  console.log(`  Min Reserve Margin: ${minReserveMarginPercent}%`);
+  console.log(`  Reserve Ratio Breach: ${signals.reserve_ratio_breach}`);
   console.log(`  Grid Stressed: ${gridStressed}`);
   console.log(`  Oracle Age: ${spkOracleAge}s (threshold ${oracleStalenessThreshold}s)`);
   console.log(`  Supply: ${ethers.formatEther(totalSupply)} SPK`);
@@ -70,10 +92,25 @@ async function main() {
 
   console.log("\nOption Health");
   console.log(`  Current Index: ${currentIndex.toString()} (collateral decimals)`);
-  console.log(`  Oracle Age: ${optionOracleAge}s (threshold ${maxStaleness}s)`);
+  console.log(`  Oracle Age: ${optionOracleAge}s (threshold ${optionMaxOracleAgeSeconds}s from env OPTION_MAX_ORACLE_AGE_SECONDS)`);
   console.log(`  Paused: ${isPaused}`);
-  console.log(`  Min Quorum: ${minOracleQuorum}`);
-  console.log(`  Max Deviation (bps): ${maxDeviationBps}`);
+  console.log(`\nAlert status: ${status}`);
+  console.log(`Signals: ${JSON.stringify(signals)}`);
+
+  const outputPath = process.env.HEALTH_OUTPUT_JSON;
+  if (outputPath) {
+    const resolved = path.resolve(outputPath);
+    fs.mkdirSync(path.dirname(resolved), { recursive: true });
+    fs.writeFileSync(resolved, JSON.stringify(report, null, 2) + "\n");
+    console.log(`Health report written: ${resolved}`);
+  }
+
+  const failOnWarn = ["1", "true", "yes"].includes(
+    String(process.env.HEALTH_FAIL_ON_WARN || "").toLowerCase()
+  );
+  if (failOnWarn && status !== "OK") {
+    process.exit(2);
+  }
 }
 
 main().catch((error) => {

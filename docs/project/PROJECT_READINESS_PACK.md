@@ -1,25 +1,25 @@
 # Project Readiness Pack
 
-- generated_at: `2026-04-13T06:16:44.392196+00:00`
+- generated_at: `2026-04-14T12:41:25.508202+00:00`
 - project: `Solarpunk-bitcoin`
-- readiness_grade: `B`
-- verification_status: `ok`
-- verification_warnings: `0`
+- readiness_grade: `D`
+- verification_status: `None`
+- verification_warnings: `None`
 
 ## Core Checks
 
-- pricing_engine_ok: `True`
-- contracts_ok: `True`
-- frontend_ok: `True`
+- pricing_engine_ok: `False`
+- contracts_ok: `False`
+- frontend_ok: `False`
 - api_service_present: `True`
 - empirical_data_present: `True`
 - deployment_docs_present: `True`
 
 ## Inventory Snapshot
 
-- contracts_solidity_files: `3`
-- contract_test_files: `2`
-- script_files: `34`
+- contracts_solidity_files: `4`
+- contract_test_files: `3`
+- script_files: `39`
 - frontend_source_files: `8`
 - empirical_csv_files: `29`
 - empirical_png_files: `9`
@@ -39,12 +39,13 @@
 ## Independent Lanes
 
 - research_lane_ready: `True`
-- protocol_lane_ready: `True`
+- protocol_lane_ready: `False`
 - operations_lane_ready: `True`
 - handoff_lane_ready: `True`
 - commercial_lane_ready: `True`
 - monetary_system_lane_ready: `True`
 - phase_gate_lane_ready: `True`
+- governance_lane_ready: `True`
 - evidence_validation_lane_ready: `True`
 - onchain_confirmation_lane_ready: `True`
 
@@ -56,6 +57,7 @@
 - profile_4_commercial_pilot: Generate client-facing indicative term sheets and integrity artifacts.
 - profile_5_monetary_protocol: Track and validate standalone monetary-protocol readiness.
 - profile_6_phase_gate_enforcement: Enforce explicit GO/NO_GO protocol progression gates.
+- profile_6b_governance_hardening: Track governance controls and change-trace cadence artifacts.
 - profile_7_evidence_validation: Validate deployment and audit evidence before expansion claims.
 - profile_8_onchain_confirmation: Confirm deployment tx receipts on-chain and synchronize evidence artifacts.
 
@@ -74,6 +76,7 @@
 - `python3 scripts/render_security_audit_status.py`
 - `python3 scripts/validate_audit_status.py`
 - `python3 scripts/build_protocol_phase_gates.py --target-phase 1`
+- `python3 scripts/build_governance_status.py`
 - `bash scripts/run_project_operating_cycle.sh`
 - `bash scripts/run_commercial_cycle.sh`
 - `bash scripts/run_protocol_gate.sh 1`

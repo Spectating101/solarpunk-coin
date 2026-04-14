@@ -1,23 +1,24 @@
 {
-  "generated_at": "2026-04-14T09:20:39.725Z",
-  "network": "localhost",
+  "generated_at": "2026-04-14T09:19:22.856Z",
+  "network": "hardhat",
+  "chain_id": 1337,
   "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
   "contracts": {
     "MockUSDC": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "tx": "0x5cb4c275ce638d259322fdc8a1439b1edf6bb8bcc4b10ed2aad02a804924d98e"
+      "tx": "0xaaab83277f209dee4014fed34af1941a0ed466256722c71efb750cd5d9d5346b"
     },
     "ProtocolTreasury": {
       "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-      "tx": "0xfb72b2fcce588dfc6e25b2afdf9930c66aa16537e2002493c6786216585ac4cd"
+      "tx": "0x7dd32ccdc0e681a15d02b98e2d6b0c90a77d12d4ed4c22ba33df2324e8d96ea7"
     },
     "SolarPunkCoin": {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "tx": "0x49733119cd20082d6fddec6ba515902369c82c139443b8292e9e6dc6e2b07219"
+      "tx": "0xa800854b1d16bf0e09a66574707b1689c1ad168d2d5549ce855a30cb64471f25"
     },
     "SolarPunkOption": {
       "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      "tx": "0x092e4e878cc84c7b18dcb61658f0d2a3f60ceb2e7cf20b3d501509eea02c1052"
+      "tx": "0xb064dc9e2ce62d93a3533cd0acdd7975d6914eaa409b9ae7e2a7d9011273611a"
     }
   },
   "price_decimals": 6,

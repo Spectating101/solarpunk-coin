@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-04-14T12:41:25.412719+00:00",
+  "project": "Solarpunk-bitcoin",
+  "governance_status": "READY_INTERNAL",
+  "checks": {
+    "coin_timelock_controls_present": true,
+    "option_timelock_controls_present": true,
+    "treasury_timelock_controls_present": true,
+    "coin_operator_action_id_present": true,
+    "option_operator_action_id_present": true,
+    "treasury_operator_action_id_present": true,
+    "ops_handbook_present": true,
+    "role_matrix_present": true,
+    "audit_handoff_checklist_present": true,
+    "governance_deploy_wiring_present": true
+  },
+  "latest_deployment_context": {
+    "network": "localhost",
+    "governance_admin": null,
+    "strict_admin_handoff": null,
+    "governance_delays_seconds": {}
+  },
+  "governance_cadence": {
+    "recommended_review_period_days": 14,
+    "required_artifacts": [
+      "docs/project/GOVERNANCE_STATUS.json",
+      "docs/project/GOVERNANCE_STATUS.md",
+      "docs/project/ROLE_PERMISSION_MATRIX.md",
+      "docs/project/PROJECT_OPERATIONS.md"
+    ],
+    "change_trace_minimum_fields": [
+      "action_id",
+      "queued_tx_hash",
+      "executed_tx_hash",
+      "function_name",
+      "params_digest"
+    ]
+  },
+  "recommendation": "MAINTAIN",
+  "next_actions": [
+    "Refresh governance status artifact every cadence cycle.",
+    "Use timelock queue/consume for critical parameter changes when governance delay is enabled.",
+    "Record queue and execution tx hashes for each governance action."
+  ]
+}

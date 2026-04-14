@@ -15,7 +15,7 @@ SolarPunk is an energy-backed derivatives and revenue-floor protocol on Polygon,
 
 | Area | Current state |
 |---|---|
-| Smart contracts | 51/51 tests passing |
+| Smart contracts | 55/55 tests passing |
 | Grant readiness | A |
 | Project readiness | B |
 | Verification warnings | 0 |
@@ -351,6 +351,7 @@ This is the single reference point for operational evidence. The narrower docs b
 | Surface | What it covers | Canonical artifact(s) | Gate effect |
 |---|---|---|---|
 | Deployment receipt | Network-scoped deploy proof | `state/deployments/amoy_receipt.json` | Required for any expansion claim |
+| Interaction proof | Minimal on-chain interaction tx evidence | `state/deployments/amoy_interaction_proof.json` and `docs/project/INTERACTION_PROOF_REPORT.md` | Demonstrates post-deploy functional behavior |
 | Receipt validation | Completeness and formatting checks | `state/deployments/deployment_receipt_validation.json` | `NO_GO` if validation fails |
 | On-chain confirmation | RPC-level confirmation of the recorded deployment | `state/deployments/onchain_confirmation_report.json` | Confirms the receipt against chain state |
 | Attestation pipeline | Meter-surplus ingestion and normalization | `artifacts/attestations/latest_attestation_bundle.json` and `docs/project/METER_ATTESTATION_BUNDLE.md` | Only accepted surplus can feed minting workflows |
@@ -480,6 +481,21 @@ Mainnet readiness checklist:
 - incident response runbook validated
 - governance/role rotation procedure tested
 
+### Governance change-control traceability
+
+- Critical admin parameter changes on `SolarPunkCoin`, `SolarPunkOption`, and `ProtocolTreasury` support optional timelock queue/consume flow.
+- Operational rule: when governance delay is enabled, publish the queued `actionId`, target function/params, queue tx hash, and execution tx hash in the ops log before marking a change complete.
+- Deployment scripts support multisig-first control with `GOVERNANCE_ADMIN` and optional `STRICT_ADMIN_HANDOFF=true` to remove deployer admin rights after handoff.
+- Maintain `docs/project/GOVERNANCE_STATUS.json` and `docs/project/GOVERNANCE_STATUS.md` via `python3 scripts/build_governance_status.py` every cadence cycle.
+
+### Key rotation / backup operator procedure
+
+1. Queue governance action ID for role change when timelock delay is enabled.
+2. Grant role using `setOperatorRole(...)` on the relevant contract.
+3. Validate backup operator path in a non-destructive command flow.
+4. Revoke superseded key role using `setOperatorRole(..., false)`.
+5. Record queue/execute tx hashes and role delta in the governance log.
+
 ### Monetary-system mode
 
 - Mission: energy-native monetary protocol with verifiable issuance, redemption, and solvency controls
@@ -495,3 +511,8 @@ Mainnet readiness checklist:
 - Attestation freshness: `latest_attestation_bundle.json` updated within 24 hours
 - Integrity: `overall_status=ok` and `warnings=0`
 - Reliability: no more than 1 failed daily cycle per 14-day window during pilot
+
+Operational health automation notes:
+- `npm run health:check` reports reserve-ratio breach, oracle staleness, grid stress, and option pause/oracle age signals.
+- Set `HEALTH_FAIL_ON_WARN=true` to make the check fail for non-OK status in CI/cron.
+- Set `HEALTH_OUTPUT_JSON=path/to/health_report.json` to persist machine-readable output.
