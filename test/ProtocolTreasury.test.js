@@ -96,8 +96,10 @@ describe("ProtocolTreasury", function () {
     await spk.updateOraclePriceAndAdjust(ethers.parseEther("1"));
 
     await spk.mintFromSurplus(1000, keeper.address);
-    const fee = ethers.parseEther("1");
-    expect(await spk.balanceOf(await spkTreasury.getAddress())).to.equal(fee);
+    // stabilityFeeShare = 50% → treasury receives half of the total 0.1% mint fee
+    // totalFee = 1e18, treasuryFee = 0.5e18
+    const treasuryFee = ethers.parseEther("0.5");
+    expect(await spk.balanceOf(await spkTreasury.getAddress())).to.equal(treasuryFee);
 
     await spkTreasury.setBudgetVaults(
       reserveVault.address,
@@ -105,12 +107,13 @@ describe("ProtocolTreasury", function () {
       opsVault.address,
       auditVault.address
     );
-    await spkTreasury.disburseToken(await spk.getAddress(), fee);
+    await spkTreasury.disburseToken(await spk.getAddress(), treasuryFee);
 
-    expect(await spk.balanceOf(reserveVault.address)).to.equal(400n * 10n ** 15n);
-    expect(await spk.balanceOf(insuranceVault.address)).to.equal(250n * 10n ** 15n);
-    expect(await spk.balanceOf(opsVault.address)).to.equal(250n * 10n ** 15n);
-    expect(await spk.balanceOf(auditVault.address)).to.equal(100n * 10n ** 15n);
+    // Budget split: 40% reserve, 25% insurance, 25% ops, 10% audit applied to 0.5e18
+    expect(await spk.balanceOf(reserveVault.address)).to.equal(200n * 10n ** 15n);
+    expect(await spk.balanceOf(insuranceVault.address)).to.equal(125n * 10n ** 15n);
+    expect(await spk.balanceOf(opsVault.address)).to.equal(125n * 10n ** 15n);
+    expect(await spk.balanceOf(auditVault.address)).to.equal(50n * 10n ** 15n);
     expect(await spk.balanceOf(await spkTreasury.getAddress())).to.equal(0n);
   });
 

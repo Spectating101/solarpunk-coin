@@ -64,7 +64,9 @@ describe("SolarPunkCoin", function () {
     it("Should mint SPK from surplus with fee", async function () {
       const surplusKwh = 1000;
       const recipient = user.address;
-      const fee = ethers.parseEther("1");
+      const totalFee = ethers.parseEther("1"); // 0.1% of 1000 SPK
+      // stabilityFeeShare = 50% → treasury gets half, stability pool gets half
+      const treasuryFee = (totalFee * 5000n) / 10000n;
 
       // Update oracle price first
       await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
@@ -77,7 +79,7 @@ describe("SolarPunkCoin", function () {
       // Check SPK balance
       const balance = await spk.balanceOf(recipient);
       expect(balance).to.be.gt(0);
-      expect(await spk.balanceOf(treasury.target)).to.equal(fee);
+      expect(await spk.balanceOf(treasury.target)).to.equal(treasuryFee);
 
       // Verify event
       await expect(tx).to.emit(spk, "SPKMinted");
@@ -109,9 +111,11 @@ describe("SolarPunkCoin", function () {
 
     it("Should apply minting fee correctly", async function () {
       const surplusKwh = 1000;
-      const baseSPK = ethers.parseEther("1000"); // 1 SPK per 1 kWh
-      const fee = (baseSPK * 10n) / 10000n; // 0.1%
-      const expectedAmount = baseSPK - fee;
+      const baseSPK = ethers.parseEther("1000"); // 1 SPK per 1 kWh (energyPricePerKwh default = 1e18)
+      const totalFee = (baseSPK * 10n) / 10000n; // 0.1%
+      const expectedAmount = baseSPK - totalFee;
+      // stabilityFeeShare = 50% → treasury gets half of fee
+      const expectedTreasuryFee = (totalFee * 5000n) / 10000n;
 
       await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
 
@@ -119,7 +123,7 @@ describe("SolarPunkCoin", function () {
 
       const balance = await spk.balanceOf(user.address);
       expect(balance).to.equal(expectedAmount);
-      expect(await spk.balanceOf(treasury.target)).to.equal(fee);
+      expect(await spk.balanceOf(treasury.target)).to.equal(expectedTreasuryFee);
     });
   });
 
@@ -448,6 +452,77 @@ describe("SolarPunkCoin", function () {
       await expect(
         spk.connect(owner).setOperatorRole(ethers.id("FAKE_ROLE"), user.address, true)
       ).to.be.revertedWith("Unsupported role");
+    });
+
+    it("Should allow oracle to update energy price", async function () {
+      const newPrice = ethers.parseEther("0.05"); // $0.05 per kWh
+
+      const tx = await spk.connect(oracle).updateEnergyPrice(newPrice);
+
+      expect(await spk.energyPricePerKwh()).to.equal(newPrice);
+      await expect(tx).to.emit(spk, "EnergyPriceUpdated");
+    });
+
+    it("Should reject energy price update from non-oracle", async function () {
+      await expect(
+        spk.connect(user).updateEnergyPrice(ethers.parseEther("0.05"))
+      ).to.be.reverted;
+    });
+
+    it("Should scale mint amounts by energyPricePerKwh", async function () {
+      // Set price to $0.05/kWh
+      const energyPrice = ethers.parseEther("0.05");
+      await spk.connect(oracle).updateEnergyPrice(energyPrice);
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+
+      // 1000 kWh × $0.05 = $50 = 50 SPK (minus fee)
+      const surplusKwh = 1000;
+      const baseSPK = BigInt(surplusKwh) * energyPrice;
+      const totalFee = (baseSPK * 10n) / 10000n;
+      const expectedNet = baseSPK - totalFee;
+
+      await spk.connect(minter).mintFromSurplus(surplusKwh, user.address);
+      expect(await spk.balanceOf(user.address)).to.equal(expectedNet);
+    });
+
+    it("Should allow owner to set stability fee share", async function () {
+      await spk.connect(owner).setStabilityFeeShare(7500); // 75% to stability pool
+
+      expect(await spk.stabilityFeeShare()).to.equal(7500);
+    });
+
+    it("Should reject stability fee share above 100%", async function () {
+      await expect(
+        spk.connect(owner).setStabilityFeeShare(10001)
+      ).to.be.revertedWith("Share exceeds 100%");
+    });
+
+    it("Should route fees according to stability fee share", async function () {
+      // Set 75% to stability pool
+      await spk.connect(owner).setStabilityFeeShare(7500);
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+
+      const surplusKwh = 1000;
+      const baseSPK = ethers.parseEther("1000");
+      const totalFee = (baseSPK * 10n) / 10000n;
+      const expectedTreasuryFee = (totalFee * 2500n) / 10000n; // 25% to treasury
+
+      await spk.connect(minter).mintFromSurplus(surplusKwh, user.address);
+
+      expect(await spk.balanceOf(treasury.target)).to.equal(expectedTreasuryFee);
+    });
+
+    it("Should atomically transfer owner and DEFAULT_ADMIN_ROLE via handoffAdmin", async function () {
+      const DEFAULT_ADMIN_ROLE = await spk.DEFAULT_ADMIN_ROLE();
+
+      expect(await spk.owner()).to.equal(owner.address);
+      expect(await spk.hasRole(DEFAULT_ADMIN_ROLE, owner.address)).to.be.true;
+
+      await spk.connect(owner).handoffAdmin(user.address);
+
+      expect(await spk.owner()).to.equal(user.address);
+      expect(await spk.hasRole(DEFAULT_ADMIN_ROLE, user.address)).to.be.true;
+      expect(await spk.hasRole(DEFAULT_ADMIN_ROLE, owner.address)).to.be.false;
     });
   });
 

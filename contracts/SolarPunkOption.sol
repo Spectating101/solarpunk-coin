@@ -76,6 +76,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     event GovernanceActionQueued(bytes32 indexed actionId, uint256 executeAfter);
     event GovernanceActionCancelled(bytes32 indexed actionId);
     event GovernanceActionConsumed(bytes32 indexed actionId);
+    event PositionSettled(address indexed user, bytes32 indexed seriesId, uint256 finalPayoff, uint256 marginReturned);
 
     error InvalidSeries();
     error IndexNotSet();
@@ -366,6 +367,42 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         }
 
         emit Liquidated(user, seriesId, penalty, remaining);
+    }
+
+    // ---------------------- Settlement ----------------------
+
+    /**
+     * @notice Settle an expired position and return remaining collateral
+     * @dev Called by any position holder after series expiry. Marks PnL to the
+     *      current index (which should reflect the expiry settlement price posted
+     *      by the oracle), closes the position, and returns all remaining margin.
+     *      `modifyPosition` blocks with SeriesExpired after expiry, so this is
+     *      the only exit path for open positions once a series expires.
+     * @param seriesId The series to settle
+     */
+    function settle(bytes32 seriesId) external nonReentrant {
+        Series memory s = series[seriesId];
+        if (!s.exists) revert InvalidSeries();
+        require(s.expiry <= block.timestamp, "Series not yet expired");
+        if (currentIndex == 0) revert IndexNotSet();
+
+        Position storage p = positions[msg.sender][seriesId];
+        require(p.qty != 0, "No position to settle");
+
+        // Realize all PnL at final settlement index
+        _markToIndex(p, s);
+        p.lastIndex = currentIndex;
+
+        uint256 marginToReturn = p.margin;
+        uint256 finalPayoff = _payoff(currentIndex, s);
+        p.margin = 0;
+        p.qty = 0;
+
+        if (marginToReturn > 0) {
+            collateral.safeTransfer(msg.sender, marginToReturn);
+        }
+
+        emit PositionSettled(msg.sender, seriesId, finalPayoff, marginToReturn);
     }
 
     // ---------------------- Views ----------------------

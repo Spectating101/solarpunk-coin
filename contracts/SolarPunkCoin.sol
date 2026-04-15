@@ -100,6 +100,17 @@ contract SolarPunkCoin is
     uint256 public minOracleBond = 0;
     uint256 public governanceDelay = 0;
 
+    /// @notice Energy price per kWh in USD (1e18 = $1.00). Set by oracle.
+    ///         Determines how many SPK are minted per kWh of surplus.
+    ///         Default 1e18 ($1.00/kWh) for backward compatibility.
+    uint256 public energyPricePerKwh = 1e18;
+    uint256 public lastEnergyPriceUpdate = 0;
+
+    /// @notice Fraction of mint fee routed to stability pool (basis points).
+    ///         Remainder goes to treasury. Stability pool needs a token balance
+    ///         for the PI controller burn path to function.
+    uint256 public stabilityFeeShare = 5000; // 50%
+
     /// @notice Cumulative surplus kWh recorded
     uint256 public cumulativeSurplusKwh = 0;
 
@@ -141,6 +152,8 @@ contract SolarPunkCoin is
     event GovernanceActionQueued(bytes32 indexed actionId, uint256 executeAfter);
     event GovernanceActionCancelled(bytes32 indexed actionId);
     event GovernanceActionConsumed(bytes32 indexed actionId);
+    event EnergyPriceUpdated(uint256 price, uint256 timestamp);
+    event StabilityFeeShareUpdated(uint256 newShare);
 
     mapping(bytes32 => uint256) public queuedGovernanceActions;
 
@@ -231,9 +244,9 @@ contract SolarPunkCoin is
         require(surplusKwh > 0, "Surplus must be > 0");
         require(recipient != address(0), "Invalid recipient");
 
-        // Calculate base SPK amount: 1 SPK per 1 kWh (adjust as needed)
-        // In practice: surplusKwh * multiplier based on regional prices
-        uint256 baseSPK = surplusKwh * 1e18;
+        // SPK amount = surplusKwh × energyPricePerKwh (set by energy price oracle)
+        // e.g., 100 kWh × $0.05/kWh = $5 = 5 SPK (peg $1.00)
+        uint256 baseSPK = surplusKwh * energyPricePerKwh;
 
         // Apply minting fee (seigniorage)
         uint256 fee = (baseSPK * mintingFee) / 10000;
@@ -250,10 +263,18 @@ contract SolarPunkCoin is
         // Mint tokens to recipient
         _mint(recipient, amountToMint);
 
-        // Mint fee to treasury
+        // Split fee: stabilityFeeShare goes to stability pool (enables PI burn path),
+        // remainder goes to treasury
         if (fee > 0) {
-            _mint(treasury, fee);
-            emit FeeCollected(msg.sender, treasury, fee, MINT_FEE_KIND);
+            uint256 stabilityAmount = (fee * stabilityFeeShare) / 10000;
+            uint256 treasuryAmount = fee - stabilityAmount;
+            if (stabilityAmount > 0) {
+                _mint(stabilityPool, stabilityAmount);
+            }
+            if (treasuryAmount > 0) {
+                _mint(treasury, treasuryAmount);
+                emit FeeCollected(msg.sender, treasury, treasuryAmount, MINT_FEE_KIND);
+            }
         }
 
         emit SurplusRecorded(surplusKwh, block.timestamp);
@@ -298,39 +319,44 @@ contract SolarPunkCoin is
     function _applyPIControl(uint256 currentPrice) internal returns (bool) {
         int256 priceDelta = int256(currentPrice) - int256(pegTarget);
         bool adjusted = false;
+        uint256 supply = totalSupply();
+        if (supply == 0) return false;
 
-        // Proportional term: immediate response
-        int256 proportional = (priceDelta * int256(proportionalGain)) / 1e18;
+        // Scale control signal as a fraction of total supply relative to peg deviation.
+        // Formula: (priceDelta / pegTarget) * gain * supply
+        // This ensures the response is proportional to market size at any supply level.
+        // Units: (1e18 * 1e18 * 1e18) / (1e18 * 1e18) = 1e18 (SPK token units)
+        int256 proportional = (priceDelta * int256(proportionalGain) * int256(supply))
+            / (int256(pegTarget) * 1e18);
 
-        // Integral term: accumulates over time (prevents steady-state error)
+        // Integral term: accumulates peg error over time, prevents steady-state drift
         integralError += priceDelta;
-        // Cap integral to prevent wind-up
         if (integralError > 10e18) integralError = 10e18;
         if (integralError < -10e18) integralError = -10e18;
 
-        int256 integral = (integralError * int256(integralGain)) / 1e18;
+        int256 integral = (integralError * int256(integralGain) * int256(supply))
+            / (int256(pegTarget) * 1e18);
 
-        // Total control signal (scaled down to avoid overflow)
         int256 controlSignal = proportional + integral;
 
-        // If price too high (positive delta), mint supply to push price down
+        // If price too high: mint to stability pool to increase supply
         if (controlSignal > 0) {
             uint256 mintAmount = uint256(controlSignal);
-            uint256 maxCanMint = (supplyCap - totalSupply()) / 100; // Max 1% growth per adjustment
+            uint256 maxCanMint = supply / 100; // cap: 1% of current supply per update
             if (mintAmount > 0 && maxCanMint > 0) {
                 uint256 actualMint = mintAmount > maxCanMint ? maxCanMint : mintAmount;
-                uint256 newSupply = totalSupply() + actualMint;
+                uint256 newSupply = supply + actualMint;
                 if (newSupply <= supplyCap && !_isGridStressedForSupply(newSupply)) {
                     _mint(stabilityPool, actualMint);
-                    emit PegAdjusted(currentPrice, true); // true = mint
+                    emit PegAdjusted(currentPrice, true);
                     adjusted = true;
                 }
             }
         }
-        // If price too low (negative delta), burn supply to push price up
+        // If price too low: burn from stability pool to reduce supply
         else if (controlSignal < 0) {
             uint256 burnAmount = uint256(-controlSignal);
-            uint256 maxCanBurn = totalSupply() / 100; // Max 1% contraction per adjustment
+            uint256 maxCanBurn = supply / 100; // cap: 1% of current supply per update
             uint256 availableToBurn = balanceOf(stabilityPool);
             if (burnAmount > 0 && maxCanBurn > 0 && availableToBurn > 0) {
                 uint256 actualBurn = burnAmount;
@@ -338,7 +364,7 @@ contract SolarPunkCoin is
                 if (actualBurn > availableToBurn) actualBurn = availableToBurn;
                 _burn(stabilityPool, actualBurn);
                 emit SPKBurned(stabilityPool, actualBurn);
-                emit PegAdjusted(currentPrice, false); // false = burn
+                emit PegAdjusted(currentPrice, false);
                 adjusted = true;
             }
         }
@@ -569,6 +595,47 @@ contract SolarPunkCoin is
         }
     }
 
+    /**
+     * @notice Update the energy price oracle (USD per kWh, 1e18 = $1.00)
+     * @dev Sets how many SPK are minted per kWh of verified surplus.
+     *      At $0.05/kWh: 100 kWh → 5 SPK. Requires ORACLE_ROLE.
+     * @param newPrice New energy price in USD (1e18 precision)
+     */
+    function updateEnergyPrice(uint256 newPrice) external onlyOracle {
+        _requireBond(msg.sender, minOracleBond, "oracle bond too low");
+        require(newPrice > 0, "Price must be positive");
+        energyPricePerKwh = newPrice;
+        lastEnergyPriceUpdate = block.timestamp;
+        emit EnergyPriceUpdated(newPrice, block.timestamp);
+    }
+
+    /**
+     * @notice Set what fraction of mint fees are routed to the stability pool
+     * @dev Stability pool needs balance for the PI burn path to work.
+     *      100% → all fees to stability pool (no treasury revenue from minting).
+     *      0% → all fees to treasury (stability pool must be funded externally).
+     * @param newShare Fraction in basis points (0–10000)
+     */
+    function setStabilityFeeShare(uint256 newShare) external onlyOwner {
+        require(newShare <= 10000, "Share exceeds 100%");
+        stabilityFeeShare = newShare;
+        emit StabilityFeeShareUpdated(newShare);
+    }
+
+    /**
+     * @notice Atomically transfer both Ownable ownership and DEFAULT_ADMIN_ROLE
+     * @dev Prevents the Ownable owner and AccessControl admin from drifting out of
+     *      sync after a governance handoff. Call this instead of transferOwnership().
+     * @param newAdmin Address that will receive both owner() and DEFAULT_ADMIN_ROLE
+     */
+    function handoffAdmin(address newAdmin) external onlyOwner {
+        require(newAdmin != address(0), "Invalid admin");
+        address oldAdmin = owner();
+        _grantRole(DEFAULT_ADMIN_ROLE, newAdmin);
+        _revokeRole(DEFAULT_ADMIN_ROLE, oldAdmin);
+        _transferOwnership(newAdmin); // emits OwnershipTransferred
+    }
+
     // ============ View Functions ============
 
     /**
@@ -601,7 +668,7 @@ contract SolarPunkCoin is
         view
         returns (uint256)
     {
-        uint256 baseSPK = surplusKwh * 1e18;
+        uint256 baseSPK = surplusKwh * energyPricePerKwh;
         uint256 fee = (baseSPK * mintingFee) / 10000;
         return baseSPK - fee;
     }
@@ -733,22 +800,6 @@ contract SolarPunkCoin is
         } else {
             revokeRole(role, operator);
         }
-    }
-
-    // ============ Future: DAO & Governance Hooks ============
-    // These are placeholders for future governance integration
-
-    /**
-     * @notice Transition to DAO governance (future upgrade)
-     * @dev Will be called when transitioning from multisig to Aragon/Compound DAO
-     */
-    function initializeDAOGovernance(address daoTimeLock)
-        external
-        onlyOwner
-    {
-        // Transfer ownership to DAO timelock
-        // _transferOwnership(daoTimeLock);
-        // Emit governance event
     }
 
     modifier onlyGovernanceApproved(bytes32 actionId) {

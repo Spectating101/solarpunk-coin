@@ -69,21 +69,15 @@ See:
 - [`DEMO_WALKTHROUGH.md`](./DEMO_WALKTHROUGH.md)
 - [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md)
 
-## Canonical non-technical docs
+## Docs
 
 - [`ARCHITECTURE_OVERVIEW.md`](./ARCHITECTURE_OVERVIEW.md)
 - [`CURRENT_STATUS.md`](./CURRENT_STATUS.md)
 - [`ROADMAP.md`](./ROADMAP.md)
-- [`GRANT_OVERVIEW.md`](./GRANT_OVERVIEW.md)
-- [`MILESTONES_AND_BUDGET.md`](./MILESTONES_AND_BUDGET.md)
-- [`WHY_NOW.md`](./WHY_NOW.md)
 - [`AUDIT_READINESS.md`](./AUDIT_READINESS.md)
 - [`THREAT_MODEL.md`](./THREAT_MODEL.md)
 - [`TRUST_ASSUMPTIONS.md`](./TRUST_ASSUMPTIONS.md)
-
-## Technical operations docs
-
 - [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md)
 - [`docs/project/PROJECT_OPERATIONS.md`](./docs/project/PROJECT_OPERATIONS.md)
-- [`GRANT_PROPOSAL.md`](./GRANT_PROPOSAL.md)
-- [`docs/grants/GRANT_READINESS_PACK.md`](./docs/grants/GRANT_READINESS_PACK.md)
+- [`docs/grants/GRANT_PROPOSAL.md`](./docs/grants/GRANT_PROPOSAL.md)
+- [`docs/grants/MILESTONES_AND_BUDGET.md`](./docs/grants/MILESTONES_AND_BUDGET.md)

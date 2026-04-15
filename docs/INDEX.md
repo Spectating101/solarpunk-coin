@@ -1,58 +1,45 @@
 # Docs Index
 
-This file collects the canonical doc entry points and supporting references.
+## Core repo references
+- `README.md` — project overview
+- `CURRENT_STATUS.md` — honest stage snapshot
+- `ARCHITECTURE_OVERVIEW.md` — system design
+- `ROADMAP.md` — milestone plan
+- `DEPLOYMENT_GUIDE.md` — deploy instructions
+- `TESTNET_DEPLOYMENT.md` — testnet proof workflow
+- `DEMO_WALKTHROUGH.md` — local demo commands
+- `CONTRACT_ADDRESSES.md` — deployed addresses (fill when live)
 
-## Canonical Current Docs
-- `README.md`
-- `CURRENT_STATUS.md`
-- `ARCHITECTURE_OVERVIEW.md`
-- `ROADMAP.md`
-- `GRANT_OVERVIEW.md`
-- `MILESTONES_AND_BUDGET.md`
-- `WHY_NOW.md`
+## Security & audit
 - `AUDIT_READINESS.md`
 - `THREAT_MODEL.md`
 - `TRUST_ASSUMPTIONS.md`
-- `docs/project/ROLE_PERMISSION_MATRIX.md`
-- `docs/project/INVARIANT_CHECKLIST.md`
+- `SECURITY_AUDIT_RFP.md`
 - `docs/project/AUDITOR_HANDOFF_CHECKLIST.md`
+- `docs/project/INVARIANT_CHECKLIST.md`
+- `docs/project/ROLE_PERMISSION_MATRIX.md`
+- `docs/project/SECURITY_AUDIT_STATUS.md`
+
+## Governance & operations
 - `docs/project/GOVERNANCE_STATUS.md`
-- `TESTNET_DEPLOYMENT.md`
-- `DEMO_WALKTHROUGH.md`
-- `CONTRACT_ADDRESSES.md`
-- `DEPLOYMENT_GUIDE.md`
-- `GRANT_PROPOSAL.md`
-- `docs/grants/GRANT_READINESS_PACK.md`
 - `docs/project/PROJECT_OPERATIONS.md`
-- `docs/project/PROJECT_READINESS_PACK.md`
+- `docs/project/PUBLIC_PROOF_STATUS.md`
+
+## Contract specifications
+- `docs/specs/PILLAR3_CONTRACT_SPEC.md`
+- `docs/specs/PILLAR3_CONTRACT_NOTES.md`
+- `docs/specs/BASIS_AND_TOLERANCE.md`
+- `docs/specs/IM_CALIBRATION.md`
+- `docs/specs/PILOT_PLAN.md`
+
+## Research & thesis
+- `thesis-draft.md` — main thesis document
+- `thesis_package/FINDINGS.md` — corrected empirical findings
+- `thesis_package/CEIR_ROBUSTNESS_NOTES.md` — Pillar 1 robustness notes
+- `thesis_package/PRICING_ROBUSTNESS_NOTES.md` — Pillar 2 robustness notes
+- `docs/papers/CEIR_SPK_PAPER_OUTLINE.md`
 - `docs/thesis/MASTER_THESIS_PROPOSAL.md`
-- `docs/pitch/PITCH_DECK_OUTLINE.md`
-- `docs/monetization/SERVICES.md`
-- `submissions_log/README.md`
 
-## Thesis + Research Packaging
-- docs/thesis/MASTER_THESIS_PROPOSAL.md
-
-## Specifications
-- docs/specs/PILLAR3_CONTRACT_NOTES.md
-- docs/specs/PILLAR3_CONTRACT_SPEC.md
-
-## Architecture
-- docs/architecture/POLYGON_ARCHITECTURE_EXPLAINED.md
-
-## Notes
-- docs/notes/CEIR_ROBUSTNESS_NOTES.md
-- docs/notes/PRICING_ROBUSTNESS_NOTES.md
-
-## Pitch
-- docs/pitch/PITCH_DECK_OUTLINE.md
-
-## Monetization
-- docs/monetization/SERVICES.md
-
-## Root Quick Links
-- README.md
-- DEPLOYMENT_GUIDE.md
-- GRANT_PROPOSAL.md
-- SOLIDITY_QUICKSTART.md
-- LICENSE
+## Grant materials
+- `docs/grants/GRANT_PROPOSAL.md`
+- `docs/grants/MILESTONES_AND_BUDGET.md`

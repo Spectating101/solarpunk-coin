@@ -245,6 +245,70 @@ describe("SolarPunkOption", () => {
     ).to.be.revertedWith("unsupported role");
   });
 
+  it("settles an expired position and returns remaining margin", async () => {
+    // Use chain timestamp (not wall clock) to avoid drift from evm_increaseTime in prior tests
+    const latestBlock = await ethers.provider.getBlock("latest");
+    const chainNow = latestBlock.timestamp;
+    const shortExpiry = chainNow + 300; // 5 minutes from current chain time
+
+    const expiredId = ethers.id("SERIES_EXPIRED_CALL");
+    await option.createSeries(expiredId, shortExpiry, STRIKE, true, NOTIONAL);
+    await option.connect(oracle).updateIndex(STRIKE, ethers.ZeroHash);
+
+    // Open a long position
+    const margin = 200_000_000n; // 200 USDC
+    await option.connect(trader).modifyPosition(expiredId, 1, margin);
+
+    // Fast-forward past expiry
+    await ethers.provider.send("evm_increaseTime", [400]);
+    await ethers.provider.send("evm_mine");
+
+    // Attempting modifyPosition should now revert with SeriesExpired
+    await expect(
+      option.connect(trader).modifyPosition(expiredId, 0, 1_000_000n)
+    ).to.be.revertedWithCustomError(option, "SeriesExpired");
+
+    // settle() should succeed and return margin
+    const balanceBefore = await usdc.balanceOf(trader.address);
+    const tx = await option.connect(trader).settle(expiredId);
+    const balanceAfter = await usdc.balanceOf(trader.address);
+
+    // Some margin returned (exact amount depends on PnL at current index)
+    expect(balanceAfter).to.be.gt(balanceBefore);
+
+    // Position is cleared
+    const pos = await option.getPosition(trader.address, expiredId);
+    expect(pos.qty).to.equal(0);
+    expect(pos.margin).to.equal(0);
+
+    await expect(tx).to.emit(option, "PositionSettled");
+  });
+
+  it("rejects settle on non-expired series", async () => {
+    const margin = 200_000_000n;
+    await option.connect(trader).modifyPosition(SERIES_ID, 1, margin);
+
+    await expect(
+      option.connect(trader).settle(SERIES_ID)
+    ).to.be.revertedWith("Series not yet expired");
+  });
+
+  it("rejects settle when caller has no position", async () => {
+    const latestBlock = await ethers.provider.getBlock("latest");
+    const chainNow = latestBlock.timestamp;
+    const shortExpiry = chainNow + 300;
+
+    const expiredId = ethers.id("SERIES_EXPIRED_EMPTY");
+    await option.createSeries(expiredId, shortExpiry, STRIKE, true, NOTIONAL);
+
+    await ethers.provider.send("evm_increaseTime", [400]);
+    await ethers.provider.send("evm_mine");
+
+    await expect(
+      option.connect(trader).settle(expiredId)
+    ).to.be.revertedWith("No position to settle");
+  });
+
   it("marks losses for a long put when index rises", async () => {
     const putId = ethers.id("SERIES_JAN_2026_PUT");
     const expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 90;
