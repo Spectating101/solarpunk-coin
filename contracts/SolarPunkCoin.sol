@@ -15,6 +15,10 @@ interface IProtocolTreasuryBondView {
     function keeperBonds(address keeper) external view returns (uint256);
 }
 
+interface IStabilityPool {
+    function withdraw(address token, address to, uint256 amount) external;
+}
+
 /**
  * @title SolarPunkCoin (SPK)
  * @notice Energy-backed stablecoin pegged to renewable energy prices
@@ -571,9 +575,14 @@ contract SolarPunkCoin is
         external
         onlyRole(STABILIZER_ROLE)
     {
-        require(stabilityPool == address(this), "Stability pool external");
         require(to != address(0), "Invalid recipient");
-        _transfer(address(this), to, amount);
+        if (stabilityPool == address(this)) {
+            // Internal pool: coin contract holds inventory directly
+            _transfer(address(this), to, amount);
+        } else {
+            // External StabilityPool contract: delegate to its withdraw function
+            IStabilityPool(stabilityPool).withdraw(address(this), to, amount);
+        }
         emit StabilityPoolDisbursed(to, amount);
     }
 
