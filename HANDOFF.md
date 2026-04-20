@@ -165,14 +165,14 @@ VITE_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
 
 These are explicit known gaps — not bugs, but design decisions appropriate for prototype stage:
 
-| Gap | Impact | Fix before mainnet |
+| Gap | Impact | Status |
 |---|---|---|
-| Single EOA admin | All roles controlled by one key | Transfer to multisig via `handoffAdmin()` |
-| `governanceDelay = 0` | No timelock on parameter changes | Set ≥ 86400s (24h) |
-| Bond requirements = 0 | No slashable stake for operators | Set non-zero minimums |
-| Oracle inputs trusted | No on-chain price verification | Add Chainlink adapter |
-| `stabilityPool = address(this)` | No dedicated contract | Deploy `StabilityPool.sol` |
-| No dispute for settlement index | Oracle controls final PnL | Multi-oracle aggregation |
+| Single EOA admin | All roles controlled by one key | Open — transfer to multisig via `handoffAdmin()` |
+| `governanceDelay = 0` | No timelock on parameter changes | Open — set ≥ 86400s (24h) on all contracts |
+| Bond requirements = 0 | No slashable stake for operators | Open — set non-zero minimums before mainnet |
+| Oracle inputs trusted | No on-chain price verification | Mitigated — `ChainlinkOracleAdapter.sol` written, needs deploy + role grant |
+| `stabilityPool = address(this)` | No dedicated contract | Mitigated — `StabilityPool.sol` written, needs deploy |
+| No dispute for settlement index | Oracle controls final PnL | Open — multi-oracle aggregation is M4 scope |
 
 ---
 
@@ -239,7 +239,7 @@ These are explicit known gaps — not bugs, but design decisions appropriate for
 
 ---
 
-## 10. Contact
+## 11. Contact
 
 - Author: Christopher Ongko
 - Institution: Yuan Ze University, Finance Masters
