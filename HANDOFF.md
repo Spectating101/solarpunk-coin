@@ -3,7 +3,7 @@
 **Date:** 2026-04-20  
 **Author:** Christopher Ongko  
 **Repo:** Solarpunk-bitcoin  
-**Status:** Milestone 2 complete — live on Sepolia testnet
+**Status:** Milestone 2 complete + M3 security architecture live on Sepolia
 
 ---
 
@@ -167,11 +167,11 @@ These are explicit known gaps — not bugs, but design decisions appropriate for
 
 | Gap | Impact | Status |
 |---|---|---|
-| Single EOA admin | All roles controlled by one key | Open — transfer to multisig via `handoffAdmin()` |
-| `governanceDelay = 0` | No timelock on parameter changes | Open — set ≥ 86400s (24h) on all contracts |
-| Bond requirements = 0 | No slashable stake for operators | Open — set non-zero minimums before mainnet |
-| Oracle inputs trusted | No on-chain price verification | Mitigated — `ChainlinkOracleAdapter.sol` written, needs deploy + role grant |
-| `stabilityPool = address(this)` | No dedicated contract | Mitigated — `StabilityPool.sol` written, needs deploy |
+| Single EOA admin | All roles controlled by one key | Open — transfer to Safe multisig via `handoffAdmin()` |
+| `governanceDelay = 0` | No timelock on parameter changes | **CLOSED — 86400s (24h) set on all 3 contracts** |
+| Bond requirements = 0 | No slashable stake for operators | **CLOSED — 100 USDC required for all roles; deployer bonded** |
+| Oracle inputs unverified | No on-chain price verification | **CLOSED — ChainlinkOracleAdapter deployed, ORACLE_ROLE granted; running manual energy price pending real feed** |
+| `stabilityPool = address(this)` | No dedicated contract | **CLOSED — StabilityPool contract deployed and set** |
 | No dispute for settlement index | Oracle controls final PnL | Open — multi-oracle aggregation is M4 scope |
 
 ---
@@ -182,7 +182,7 @@ These are explicit known gaps — not bugs, but design decisions appropriate for
 |---|---|---|
 | M1: Repo credibility | Complete | Apr 2026 |
 | M2: External inspectability | Complete | 2026-04-20 |
-| M3: Security credibility | Not started | — |
+| M3: Security credibility | **Partial — architecture live, audit + multisig remaining** | 2026-04-20 |
 | M4: Pilot counterparty | Not started | — |
 | M5: Mainnet | Gated | — |
 
@@ -230,16 +230,31 @@ These are explicit known gaps — not bugs, but design decisions appropriate for
 - `updateOraclePriceAndAdjust`: avg 65k gas
 - All within safe limits; no urgent optimizations required
 
-## 10. Next engineering work (M3 readiness)
+## 10. M3 security setup (completed 2026-04-20)
 
-1. Set `governanceDelay ≥ 86400` on all contracts and configure bond requirements
-2. Deploy `ChainlinkOracleAdapter.sol` and `StabilityPool.sol` to Sepolia; grant roles
-3. Transfer admin to Safe multisig using `handoffAdmin()`
-4. Tag audit scope commit and approach audit firm (Code4rena recommended for cost)
+Script: `scripts/setup_m3_security.js`  
+Receipt: `state/deployments/sepolia_m3_setup.json`
+
+| Action | Result |
+|---|---|
+| StabilityPool deployed + verified | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` |
+| ChainlinkOracleAdapter deployed + verified | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` |
+| Manual energy price set | $0.05/kWh on adapter |
+| ORACLE_ROLE granted to adapter | On SolarPunkCoin + SolarPunkOption |
+| 100 USDC bond deposited | Deployer is now a bonded keeper |
+| Bond requirements set | 100 USDC for all roles (minter, oracle, liquidator) |
+| setStabilityPool | SolarPunkCoin now points to external contract |
+| Governance delay | 86400s (24h) on all 3 core contracts |
+
+## 11. What remains before M3 is fully complete
+
+1. Transfer admin to Safe multisig using `handoffAdmin()` — closes the single-EOA gap
+2. Tag audit scope commit and approach Code4rena for security review
+3. Connect ChainlinkOracleAdapter to a real Chainlink energy price feed when one becomes available on mainnet
 
 ---
 
-## 11. Contact
+## 12. Contact
 
 - Author: Christopher Ongko
 - Institution: Yuan Ze University, Finance Masters

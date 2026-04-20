@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-04-20T13:19:02.946Z",
+  "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "actions": [
+    {
+      "step": "StabilityPool deployed",
+      "note": "admin = deployer",
+      "tx": "0x9e7bacb747ba9361a42cca977530f646f799e17004e570b40702f88197a7c871"
+    },
+    {
+      "step": "ChainlinkOracleAdapter deployed",
+      "note": "spkCoin=0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F, spkOption=0xe40A88398b5f90D038f7A6F1f122112DCD9e4104",
+      "tx": "0xd951f765ee4d77b3a816483ca666099fd64c171090bbc81f6e2bc3e4e453556c"
+    },
+    {
+      "step": "Manual energy price set",
+      "note": "$0.05/kWh (5e16) — no Chainlink energy feed on Sepolia yet",
+      "tx": "0x5a211161bf32c777456d30a98d9cab36d73a08c7c1324195d4ae6e095b7b63dc"
+    },
+    {
+      "step": "100 USDC bond deposited",
+      "note": "deployer is now a bonded keeper",
+      "tx": "0x5285b7ad02e44f46a91485853753d99126141f7d8a7b556a9137985446b67f16"
+    },
+    {
+      "step": "SolarPunkCoin bond requirements set",
+      "note": "minMinterBond=100 USDC, minOracleBond=100 USDC",
+      "tx": "0x658560da4283e565f9285d1ae0a40caab24bd5a45e1677b89f31101bcd6f5811"
+    },
+    {
+      "step": "SolarPunkOption bond requirements set",
+      "note": "minOracleBond=100 USDC, minLiquidatorBond=100 USDC",
+      "tx": "0xdc7bd506fcb8e020740708f62c369860a4d5bf7be5f66f22bc402ed6499089e2"
+    },
+    {
+      "step": "SolarPunkCoin stability pool updated",
+      "note": "address(this) → 0xb9c2Ac8166edFc899b591bc51746d75bFCEca086",
+      "tx": "0x5e0085ef08b9356afe08c4701b4f088e183b0ada0faf36b66e563497292fdd45"
+    },
+    {
+      "step": "SolarPunkCoin ORACLE_ROLE granted to adapter",
+      "note": "0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9",
+      "tx": "0x82d9bc945abc19cb2f12c95002354e05060cc949304ccfd7c51661f2386670ed"
+    },
+    {
+      "step": "SolarPunkOption ORACLE_ROLE granted to adapter",
+      "note": "0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9",
+      "tx": "0xfcf725803b5309a2f47471a1f881c8e044cfbcd5b96af352b2e1f6e036d726d8"
+    },
+    {
+      "step": "StabilityPool DISBURSER_ROLE granted to deployer",
+      "note": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+      "tx": "0x39ee015bb6e7ffde3f76d9aa0ffd751097f88dc121a6841ed53474f7edccd4a8"
+    },
+    {
+      "step": "SolarPunkCoin governance delay set",
+      "note": "86400s (24h)",
+      "tx": "0xbc8056853194cee90423b694e1145f4c51d109fa2080391f06e344789bbded46"
+    },
+    {
+      "step": "SolarPunkOption governance delay set",
+      "note": "86400s (24h)",
+      "tx": "0x18efdf47163d85d7f75ed63e367c899079c7ed173ef973f61f1c4ce046fddec8"
+    },
+    {
+      "step": "ProtocolTreasury governance delay set",
+      "note": "86400s (24h)",
+      "tx": "0x4894ecce89a48e36aa111c405e40db20810cdf35931d06496db12a1633da757b"
+    }
+  ],
+  "StabilityPool": "0xb9c2Ac8166edFc899b591bc51746d75bFCEca086",
+  "ChainlinkOracleAdapter": "0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9"
+}
