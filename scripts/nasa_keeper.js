@@ -49,6 +49,13 @@ const ELECTRICITY_PRICE_PER_KWH = 0.05;
 // SPK peg target — kept stable at $1.00 for oracle push
 const SPK_PEG_PRICE = ethers.parseEther("1.0");
 
+// The deployed SolarPunkOption uses priceDecimals = 6 (from sepolia_full_deploy.json).
+// All index values pushed via updateIndex must use 6-decimal scaling:
+//   $1.00 = 1_000_000   $1.45 = 1_450_000
+// The interaction proof used this same scale (run_interaction_proof.js:98).
+const PRICE_DECIMALS = 6;
+const PRICE_SCALE = 10 ** PRICE_DECIMALS; // 1_000_000
+
 // Sepolia contract addresses
 const ADDRESSES = {
   SolarPunkCoin:   "0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F",
@@ -180,15 +187,17 @@ async function main() {
   const monthlyMean = MONTHLY_MEAN_GHI[month];
   const normalisedGHI = ghi / monthlyMean;   // 1.0 = average for this month
 
-  // Convert to 1e18 format for on-chain (e.g. 1.15 → 1150000000000000000)
-  const indexWei = BigInt(Math.round(normalisedGHI * 1e18));
+  // Convert to 6-decimal format matching the deployed option's priceDecimals = 6
+  // e.g. normalised index 1.4538 → 1_453_769 (in price scale units)
+  // DO NOT use 1e18 here — that would push values ~1e12x too large vs the strike
+  const indexScaled = BigInt(Math.round(normalisedGHI * PRICE_SCALE));
 
-  // Energy price per kWh stays at the stable Taiwan electricity tariff
+  // Energy price per kWh: SolarPunkCoin uses 1e18 precision for this value
   const energyPriceWei = BigInt(Math.round(ELECTRICITY_PRICE_PER_KWH * 1e18));
 
   console.log(`  Monthly mean GHI for month ${month}: ${monthlyMean.toFixed(2)} kWh/m²/day`);
   console.log(`  Normalised index: ${normalisedGHI.toFixed(4)} (${normalisedGHI > 1 ? "above" : "below"} average)`);
-  console.log(`  Index (wei): ${indexWei}`);
+  console.log(`  Index (6-dec scaled): ${indexScaled}  [priceDecimals=6, e.g. 1.45 → 1_450_000]`);
 
   // Source hash encodes data provenance: lat, lon, date
   const sourceHash = ethers.keccak256(
@@ -205,9 +214,9 @@ async function main() {
 
   console.log("\nPushing to Sepolia…");
 
-  // Option index — driven by real NASA irradiance
+  // Option index — driven by real NASA irradiance, 6-decimal scaled
   process.stdout.write("  updateIndex… ");
-  const tx1 = await option.updateIndex(indexWei, sourceHash);
+  const tx1 = await option.updateIndex(indexScaled, sourceHash);
   await tx1.wait();
   txs.updateIndex = tx1.hash;
   console.log(`${tx1.hash}`);
@@ -257,8 +266,8 @@ async function main() {
     peg_stable:              isPegStable,
     grid_stressed:           gridStressed,
     energy_price_per_kwh:    Number(energyPriceOnChain) / 1e18,
-    cumulative_surplus_kwh:  Number(cumulativeSurplusKwh) / 1e18,
-    option_index:            Number(currentIndex) / 1e18,
+    cumulative_surplus_kwh:  Number(cumulativeSurplusKwh),  // raw kWh integer, not 1e18-scaled
+    option_index:            Number(currentIndex) / PRICE_SCALE,  // 6-decimal scaled
   };
 
   // ── 5. Write log ──────────────────────────────────────────────────────────
@@ -277,10 +286,10 @@ async function main() {
       month:         month,
     },
     index: {
-      normalised:    normalisedGHI,
-      interpretation: normalisedGHI >= 1 ? "above seasonal average" : "below seasonal average",
-      wei:           indexWei.toString(),
-      source_hash:   sourceHash,
+      normalised:      normalisedGHI,
+      interpretation:  normalisedGHI >= 1 ? "above seasonal average" : "below seasonal average",
+      scaled_6dec:     indexScaled.toString(),  // what was pushed on-chain (priceDecimals=6)
+      source_hash:     sourceHash,
     },
     transactions:    txs,
     protocol_state:  state,

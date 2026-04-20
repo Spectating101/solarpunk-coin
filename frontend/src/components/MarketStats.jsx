@@ -28,11 +28,12 @@ function fmtUsdc(bn) {
 }
 
 function fmtKwh(bn) {
-  const raw = fmt18(bn);
+  // cumulativeSurplusKwh is stored as raw integer kWh (not 1e18-scaled)
+  const raw = Number(bn);
   if (raw >= 1e9) return `${(raw / 1e9).toFixed(2)} GWh`;
   if (raw >= 1e6) return `${(raw / 1e6).toFixed(2)} MWh`;
   if (raw >= 1e3) return `${(raw / 1e3).toFixed(2)} kWh`;
-  return `${raw.toFixed(2)} Wh`;
+  return `${raw.toFixed(2)} kWh`;
 }
 
 const MarketStats = () => {
@@ -76,7 +77,7 @@ const MarketStats = () => {
         oraclePrice:    `$${oraclePriceNum.toFixed(4)}`,
         usdcReserve:    `$${fmtUsdc(usdcReserve).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
         reserveRatio:   `${reserveRatioPct.toFixed(1)}%`,
-        surplusKwh:     fmtKwh(cumulativeSurplusKwh),
+        surplusKwh:     fmtKwh(cumulativeSurplusKwh),  // raw kWh integer, not 1e18
         gridStressed,
         pegStable:      isPegStable,
         pegTarget:      `$${fmt18(pegTarget).toFixed(2)}`,

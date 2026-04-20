@@ -317,6 +317,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         _requireIndexSet();
         Series memory s = series[seriesId];
         if (!s.exists) revert InvalidSeries();
+        if (s.expiry <= block.timestamp) revert SeriesExpired(); // use settle() after expiry
 
         Position storage p = positions[msg.sender][seriesId];
         _markToIndex(p, s);

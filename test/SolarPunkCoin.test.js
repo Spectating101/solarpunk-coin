@@ -512,6 +512,36 @@ describe("SolarPunkCoin", function () {
       expect(await spk.balanceOf(treasury.target)).to.equal(expectedTreasuryFee);
     });
 
+    it("Should enforce governance timelock for setStabilityFeeShare when delay is set", async function () {
+      // Enable a 1-hour governance delay
+      await spk.connect(owner).setGovernanceDelay(3600);
+
+      // Direct call should revert — action not queued
+      await expect(
+        spk.connect(owner).setStabilityFeeShare(7500)
+      ).to.be.revertedWith("governance action not queued");
+
+      // Queue the action
+      const actionId = await spk.actionIdSetStabilityFeeShare(7500);
+      await spk.connect(owner).queueGovernanceAction(actionId);
+
+      // Still timelocked
+      await expect(
+        spk.connect(owner).setStabilityFeeShare(7500)
+      ).to.be.revertedWith("governance action timelocked");
+
+      // Advance past delay
+      await ethers.provider.send("evm_increaseTime", [3601]);
+      await ethers.provider.send("evm_mine");
+
+      // Now succeeds
+      await spk.connect(owner).setStabilityFeeShare(7500);
+      expect(await spk.stabilityFeeShare()).to.equal(7500);
+
+      // Reset for other tests
+      await spk.connect(owner).setGovernanceDelay(0);
+    });
+
     it("Should atomically transfer owner and DEFAULT_ADMIN_ROLE via handoffAdmin", async function () {
       const DEFAULT_ADMIN_ROLE = await spk.DEFAULT_ADMIN_ROLE();
 

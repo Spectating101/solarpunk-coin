@@ -625,7 +625,11 @@ contract SolarPunkCoin is
      *      0% → all fees to treasury (stability pool must be funded externally).
      * @param newShare Fraction in basis points (0–10000)
      */
-    function setStabilityFeeShare(uint256 newShare) external onlyOwner {
+    function setStabilityFeeShare(uint256 newShare)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetStabilityFeeShare(newShare))
+    {
         require(newShare <= 10000, "Share exceeds 100%");
         stabilityFeeShare = newShare;
         emit StabilityFeeShareUpdated(newShare);
@@ -771,6 +775,10 @@ contract SolarPunkCoin is
         returns (bytes32)
     {
         return keccak256(abi.encode("UPDATE_RESERVE_PARAMETERS", newMinReserveMarginPercent));
+    }
+
+    function actionIdSetStabilityFeeShare(uint256 newShare) public pure returns (bytes32) {
+        return keccak256(abi.encode("setStabilityFeeShare", newShare));
     }
 
     function actionIdSetStabilityPool(address newPool) public pure returns (bytes32) {

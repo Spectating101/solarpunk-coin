@@ -166,7 +166,7 @@ class SolarPunkChainClient:
             oracle_price_usd          = spk.functions.lastOraclePrice().call()      / _WAD,
             usdc_reserve_usd          = spk.functions.usdcReserve().call()          / _USDC_DEC,
             reserve_ratio_pct         = spk.functions.getReserveRatio().call()      / 100,
-            cumulative_kwh            = spk.functions.cumulativeSurplusKwh().call() / _WAD,
+            cumulative_kwh            = spk.functions.cumulativeSurplusKwh().call(),       # raw kWh integer, not 1e18
             grid_stressed             = spk.functions.gridStressed().call(),
             peg_stable                = spk.functions.isPegStable().call(),
             peg_target_usd            = spk.functions.pegTarget().call()            / _WAD,

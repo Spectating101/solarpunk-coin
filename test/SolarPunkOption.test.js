@@ -309,6 +309,28 @@ describe("SolarPunkOption", () => {
     ).to.be.revertedWith("No position to settle");
   });
 
+  it("rejects withdrawMargin after series expiry", async () => {
+    const latestBlock = await ethers.provider.getBlock("latest");
+    const chainNow = latestBlock.timestamp;
+    const shortExpiry = chainNow + 300;
+
+    const expiredId = ethers.id("SERIES_WITHDRAW_AFTER_EXPIRY");
+    await option.createSeries(expiredId, shortExpiry, STRIKE, true, NOTIONAL);
+    await option.connect(oracle).updateIndex(STRIKE, ethers.ZeroHash);
+
+    // Open position and deposit margin
+    await option.connect(trader).modifyPosition(expiredId, 1, 200_000_000n);
+
+    // Fast-forward past expiry
+    await ethers.provider.send("evm_increaseTime", [400]);
+    await ethers.provider.send("evm_mine");
+
+    // withdrawMargin should revert with SeriesExpired — use settle() instead
+    await expect(
+      option.connect(trader).withdrawMargin(expiredId, 10_000_000n)
+    ).to.be.revertedWithCustomError(option, "SeriesExpired");
+  });
+
   it("marks losses for a long put when index rises", async () => {
     const putId = ethers.id("SERIES_JAN_2026_PUT");
     const expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 90;
