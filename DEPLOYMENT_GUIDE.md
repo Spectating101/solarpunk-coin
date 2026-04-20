@@ -1,161 +1,113 @@
-# DEPLOY TESTNET - 10 MINUTES TOTAL
+# DEPLOYMENT GUIDE
 
-**Stop overthinking. Here's the minimal path.**
+## Current deployment
 
-> Canonical deployment guide. Older testnet/oracle deployment writeups were consolidated here and removed.
+Full stack is live on **Ethereum Sepolia testnet** (deployed 2026-04-20).
 
-**Network:** Polygon Amoy (current testnet, Mumbai was deprecated April 2024)
+| Contract | Address |
+|---|---|
+| MockUSDC | `0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2` |
+| ProtocolTreasury | `0x138e793f095a33D2790349eC1066FED3A756dd2c` |
+| SolarPunkCoin | `0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F` |
+| SolarPunkOption | `0xe40A88398b5f90D038f7A6F1f122112DCD9e4104` |
 
----
-
-## Step 1: Get Testnet POL (5 mins)
-
-**Go here:** https://faucet.polygon.technology/
-
-1. Select "Polygon Amoy"
-2. Enter your wallet address
-3. Click "Submit"
-4. Wait 30 seconds
-5. You'll get testnet POL (enough for deployment)
-
-**Don't have a wallet?** Use MetaMask:
-- Install: https://metamask.io
-- Create wallet
-- Add Polygon Amoy network:
-  - Network Name: Polygon Amoy
-  - RPC: https://rpc-amoy.polygon.technology/
-  - Chain ID: 80002
-  - Currency: POL
-  - Explorer: https://amoy.polygonscan.com/
-- Copy your address
+Receipt: `state/deployments/sepolia_full_deploy.json`
 
 ---
 
-## Step 2: Set Up Private Key (2 mins)
+## Deploy a fresh stack
 
-```bash
-# Copy example
-cp .env.example .env
+### Prerequisites
 
-# Edit .env
-nano .env
-# OR
-code .env
-
-# Replace this line:
-PRIVATE_KEY=your_wallet_private_key_here
-
-# Keep the remaining example values unchanged.
-# Optional:
-# TRADING_FEE_BPS=50
-# SPK_MINTER_BOND_UNITS=0
-# SPK_ORACLE_BOND_UNITS=0
-# ORACLE_BOND_UNITS=0
-# LIQUIDATOR_BOND_UNITS=0
-# GOVERNANCE_ADMIN=0xYourMultisigAddress
-# STRICT_ADMIN_HANDOFF=true
-# OPS_VAULT=0xOpsTreasury
-# AUDIT_VAULT=0xAuditTreasury
-# RESERVE_VAULT=0xReserveVault   # default: ProtocolTreasury address
-# INSURANCE_VAULT=0xInsuranceVault # default: ProtocolTreasury address
-# TREASURY_GOVERNANCE_DELAY_SECONDS=3600
-# SPK_GOVERNANCE_DELAY_SECONDS=3600
-# OPTION_GOVERNANCE_DELAY_SECONDS=3600
+1. Node.js + npm installed
+2. `.env` file with:
+```
+PRIVATE_KEY=0xYourPrivateKey
+SEPOLIA_RPC=https://ethereum-sepolia-rpc.publicnode.com
+etherscan=YourEtherscanAPIKey
 ```
 
-The deployment script reads the Amoy RPC and private key from `.env`.
-If `GOVERNANCE_ADMIN` is set, deploy scripts grant admin/owner controls to that address.
-If `STRICT_ADMIN_HANDOFF=true`, deployer admin roles are renounced after grant.
+3. Testnet ETH on Sepolia — get free ETH from:
+   - `https://cloud.google.com/application/web3/faucet/ethereum/sepolia` (Google login, 0.05 ETH)
+   - `https://sepolia-faucet.pk910.de/` (PoW mining, no login, no rate limit)
 
----
+### Deploy
 
-## Step 3: Deploy (3 mins)
-
-```bash
-./scripts/deploy_amoy.sh
-```
-
-**That's it.** Script will:
-- Compile contracts
-- Deploy the full Amoy stack: MockUSDC + ProtocolTreasury + SolarPunkCoin + SolarPunkOption
-- Set the treasury as the fee sink and insurance fund
-- Configure budget vaults (defaults: reserve/insurance in treasury, ops/audit to governance admin or deployer)
-- Show you the contract addresses
-- Give you the PolygonScan links
-
-If you want the receipt written outside the repo during local validation, set `SPK_DEPLOYMENT_STATE_DIR=/tmp/solarpunk-deploy-state`.
-
-**Output will look like:**
-```
-✅ ProtocolTreasury deployed to: 0x1234567890abcdef...
-✅ SolarPunkCoin deployed to: 0xabcdef1234567890...
-✅ SolarPunkOption deployed to: 0xfedcba0987654321...
-```
-
----
-
-## Step 4: Update README (2 mins)
-
-Copy the deployed addresses and paste the public Amoy links into README.md:
-
-```markdown
-# Replace this line:
-- ✅ **Testnet Deployment**: Polygon Amoy - Full stack deployed via `deploy_amoy.sh`
-
-# With this:
-- ✅ **Testnet Deployment**: Polygon Amoy - Treasury: [`0x1234...`](https://amoy.polygonscan.com/address/0x1234...)
-```
-
-Commit and push:
-```bash
-git add README.md
-git commit -m "Deploy to Polygon Amoy testnet"
-git push origin master
-```
-
----
-
-## DONE. NOW SUBMIT.
-
-**Polygon form:**
-- Website: https://github.com/Spectating101/solarpunk-coin
-- Testnet: Link to Amoy PolygonScan
-- Email: s1133958@mail.yzu.edu.tw
-- Telegram/Twitter: **"Available upon request"** (if not required, skip)
-
-**No social media followers needed.**  
-**No Twitter threads needed.**  
-**No marketing needed.**
-
-Just: Code + Testnet + Submit.
-
----
-
-## Troubleshooting
-
-**"Script fails at compile"**
 ```bash
 npm install
 npx hardhat compile
+npx hardhat run scripts/deploy_testnet_full.js --network sepolia
 ```
 
-**"Insufficient funds"**
-- Go back to faucet, select "Polygon Amoy", get more POL
+Also supports Amoy and Holesky — replace `sepolia` with the target network name.
 
-**"Private key invalid"**
-- Make sure it starts with 0x
-- Copy the FULL key from MetaMask
+### Optional environment variables
 
-**Contract deploys but verification fails**
-- That's fine. Verification is optional.
-- Just submit with the Amoy PolygonScan link
+```bash
+GOVERNANCE_ADMIN=0xYourMultisigAddress   # grants admin to this address post-deploy
+STRICT_ADMIN_HANDOFF=true               # deployer renounces roles after grant
+TRADING_FEE_BPS=50                      # option trading fee (default 50)
+TREASURY_GOVERNANCE_DELAY_SECONDS=86400 # 24h timelock on treasury changes
+SPK_GOVERNANCE_DELAY_SECONDS=86400      # 24h timelock on coin changes
+OPTION_GOVERNANCE_DELAY_SECONDS=86400   # 24h timelock on option changes
+SPK_MINTER_BOND_UNITS=0                 # minimum minter bond in USDC units
+SPK_ORACLE_BOND_UNITS=0                 # minimum oracle bond in USDC units
+RESERVE_VAULT=0xAddress                 # budget vault address (default: treasury)
+INSURANCE_VAULT=0xAddress
+OPS_VAULT=0xAddress
+AUDIT_VAULT=0xAddress
+```
+
+### Verify source on Etherscan
+
+After deploy, run the verify commands printed by the deploy script. Example:
+
+```bash
+npx hardhat verify --network sepolia <TREASURY_ADDRESS> <USDC_ADDRESS>
+npx hardhat verify --network sepolia <SPK_ADDRESS> <USDC_ADDRESS>
+npx hardhat verify --network sepolia <OPTION_ADDRESS> <USDC_ADDRESS> <TREASURY_ADDRESS> 6
+```
+
+### Run interaction proof
+
+After deploy, record on-chain interaction proof:
+
+```bash
+npx hardhat run scripts/run_interaction_proof.js --network sepolia
+```
+
+Output saved to `state/proofs/sepolia_interaction_proof.json`.
 
 ---
 
-## What This Gets You
+## Production deploy checklist
 
-**Before testnet:** Looks like vaporware  
-**After testnet:** Looks like you ship code  
-**Effort:** 10 minutes  
+Before any mainnet or real-money deployment:
 
-**Just deploy and submit.**
+- [ ] External security audit completed with findings resolved
+- [ ] `governanceDelay` set to ≥ 24h on all three contracts
+- [ ] Non-zero bond requirements configured for minter, oracle, and liquidator
+- [ ] Admin transferred to multisig via `handoffAdmin()` (SolarPunkCoin) and `grantRole/renounceRole` (others)
+- [ ] `stabilityPool` pointing to a dedicated address (not `address(this)`)
+- [ ] Budget vaults pointing to real operational addresses (not treasury itself)
+- [ ] Supply cap reviewed and set to appropriate level
+- [ ] Private key for deploy wallet rotated and secured after deployment
+
+---
+
+## Local development
+
+```bash
+# Run all tests
+npx hardhat test --no-compile
+
+# Start local node
+npx hardhat node
+
+# Deploy to localhost
+npx hardhat run scripts/deploy_testnet_full.js --network localhost
+
+# Run demo
+npm run demo:treasury
+npm run model:treasury
+```

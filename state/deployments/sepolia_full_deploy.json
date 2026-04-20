@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-04-20T09:08:49.104Z",
+  "network": "sepolia",
+  "chain_id": 11155111,
+  "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "governance_admin": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "strict_admin_handoff": false,
+  "governance_delays_seconds": {
+    "treasury": 0,
+    "spk": 0,
+    "option": 0
+  },
+  "contracts": {
+    "MockUSDC": {
+      "address": "0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2",
+      "tx": "0x90535c25eff7a55be41144489d35b3a949a4c37e9ef996a2524f825953a13a59"
+    },
+    "ProtocolTreasury": {
+      "address": "0x138e793f095a33D2790349eC1066FED3A756dd2c",
+      "tx": "0x8683a78717cf668d21d6d928fdd32171f02ff2fefa05e5f6514a0de864b5b642"
+    },
+    "SolarPunkCoin": {
+      "address": "0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F",
+      "tx": "0x9b85de0be0eb240d2b27676680de7d74f18bb70f714e28241eb93716ce517216"
+    },
+    "SolarPunkOption": {
+      "address": "0xe40A88398b5f90D038f7A6F1f122112DCD9e4104",
+      "tx": "0x1149d5bf30f5fd89d7f6881a6ed568fcd223a83742ab966ae27c1c0170414c81"
+    }
+  },
+  "price_decimals": 6,
+  "trading_fee_bps": 50,
+  "spk_bond_requirements": {
+    "minter": "0",
+    "oracle": "0"
+  },
+  "bond_requirements": {
+    "oracle": "0",
+    "liquidator": "0"
+  },
+  "insurance_fund": "0x138e793f095a33D2790349eC1066FED3A756dd2c",
+  "budget_vaults": {
+    "reserve": "0x138e793f095a33D2790349eC1066FED3A756dd2c",
+    "insurance": "0x138e793f095a33D2790349eC1066FED3A756dd2c",
+    "ops": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+    "audit": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54"
+  }
+}

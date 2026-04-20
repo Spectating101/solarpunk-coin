@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-04-20T09:21:13.197Z",
+  "network": "sepolia",
+  "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "contracts": {
+    "MockUSDC": "0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2",
+    "ProtocolTreasury": "0x138e793f095a33D2790349eC1066FED3A756dd2c",
+    "SolarPunkCoin": "0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F",
+    "SolarPunkOption": "0xe40A88398b5f90D038f7A6F1f122112DCD9e4104"
+  },
+  "transactions": [
+    {
+      "step": "Mint 500,000 MockUSDC",
+      "tx": "0x4325f8cd6f542c17ec96238c062ceeedf9b343fc7088d18edabd86fd5d2657f2",
+      "explorer": "https://sepolia.etherscan.io/tx/0x4325f8cd6f542c17ec96238c062ceeedf9b343fc7088d18edabd86fd5d2657f2",
+      "note": "Test collateral for reserve and option margin"
+    },
+    {
+      "step": "Deposit 100,000 USDC reserve",
+      "tx": "0xd37a51a937ae32a699d77017bda6dd33a7ef1b78c50d75beb230595a3fde15a7",
+      "explorer": "https://sepolia.etherscan.io/tx/0xd37a51a937ae32a699d77017bda6dd33a7ef1b78c50d75beb230595a3fde15a7",
+      "note": "Establishes reserve ratio — enables minting"
+    },
+    {
+      "step": "Oracle price update → $1.00/SPK",
+      "tx": "0xf8b92efacc6da46df8fea94978f090516c665ee94419daa19200415ea86f8f4b",
+      "explorer": "https://sepolia.etherscan.io/tx/0xf8b92efacc6da46df8fea94978f090516c665ee94419daa19200415ea86f8f4b",
+      "note": "Deployer holds ORACLE_ROLE — triggers PI controller"
+    },
+    {
+      "step": "Mint SPK from 10000 kWh surplus",
+      "tx": "0xb272ce02dad6911c8498006b9a198b32220cb35aa7bfb4df0df0d57a4368db33",
+      "explorer": "https://sepolia.etherscan.io/tx/0xb272ce02dad6911c8498006b9a198b32220cb35aa7bfb4df0df0d57a4368db33",
+      "note": "Received 29770.0 SPK — fee split: 50% stability pool, 50% treasury"
+    },
+    {
+      "step": "Redeem 100 SPK for energy",
+      "tx": "0xfb2811c9ad175987234f9ae177c5babd8a639ca6a04598bf7ce011510b4dc861",
+      "explorer": "https://sepolia.etherscan.io/tx/0xfb2811c9ad175987234f9ae177c5babd8a639ca6a04598bf7ce011510b4dc861",
+      "note": "SPK burned — redemption fee routed to treasury"
+    },
+    {
+      "step": "Open 1-contract long call (SOLAR_CALL_JUN2026_1USD)",
+      "tx": "0x26390f644af9ab5c6686a56761953fe044f57961897c7879fa400574671785f8",
+      "explorer": "https://sepolia.etherscan.io/tx/0x26390f644af9ab5c6686a56761953fe044f57961897c7879fa400574671785f8",
+      "note": "Strike $1.00, notional 10 kWh, margin 20 USDC — IM requirement $15 (150% of $10 exposure)"
+    },
+    {
+      "step": "Mark position to $1.05 index (+5%)",
+      "tx": "0x17b3524c2d14c23df77c19dd6de91c84a3d901cdd0672d33efc2940d94cff961",
+      "explorer": "https://sepolia.etherscan.io/tx/0x17b3524c2d14c23df77c19dd6de91c84a3d901cdd0672d33efc2940d94cff961",
+      "note": "Margin after mark: 20.5 USDC (gain of $0.50 on 10 kWh notional)"
+    }
+  ]
+}

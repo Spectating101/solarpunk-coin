@@ -1,44 +1,47 @@
 # Governance Status
 
-- generated_at: `2026-04-14T12:41:25.412719+00:00`
-- governance_status: `READY_INTERNAL`
-- recommendation: `MAINTAIN`
+- generated_at: 2026-04-20
+- governance_status: READY_INTERNAL
+- recommendation: HARDEN_BEFORE_MAINNET
 
 ## Control Checks
 
-- coin_timelock_controls_present: `True`
-- option_timelock_controls_present: `True`
-- treasury_timelock_controls_present: `True`
-- coin_operator_action_id_present: `True`
-- option_operator_action_id_present: `True`
-- treasury_operator_action_id_present: `True`
-- ops_handbook_present: `True`
-- role_matrix_present: `True`
-- audit_handoff_checklist_present: `True`
-- governance_deploy_wiring_present: `True`
+- coin_timelock_controls_present: true
+- option_timelock_controls_present: true
+- treasury_timelock_controls_present: true
+- coin_operator_action_id_present: true
+- option_operator_action_id_present: true
+- treasury_operator_action_id_present: true
+- ops_handbook_present: true
+- role_matrix_present: true
+- audit_handoff_checklist_present: true
+- handoff_admin_function_present: true
 
-## Latest Deployment Governance Context
+## Current Deployment Governance Context
 
-- network: `localhost`
-- governance_admin: `None`
-- strict_admin_handoff: `None`
-- governance_delays_seconds: `{}`
+- network: sepolia
+- deployer: 0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54
+- governance_admin: deployer (single EOA)
+- strict_admin_handoff: false
+- governance_delays_seconds: 0 (all contracts)
+- bond_requirements: 0 (all roles)
 
-## Governance Cadence
+## What this means
 
-- recommended_review_period_days: `14`
-- required_artifact: `docs/project/GOVERNANCE_STATUS.json`
-- required_artifact: `docs/project/GOVERNANCE_STATUS.md`
-- required_artifact: `docs/project/ROLE_PERMISSION_MATRIX.md`
-- required_artifact: `docs/project/PROJECT_OPERATIONS.md`
-- change_trace_field: `action_id`
-- change_trace_field: `queued_tx_hash`
-- change_trace_field: `executed_tx_hash`
-- change_trace_field: `function_name`
-- change_trace_field: `params_digest`
+Governance infrastructure is implemented and verified. All timelock, role-gating, and
+handoff mechanisms are in place and tested (77/77). However, the current deployment
+uses zero delays and a single EOA admin — appropriate for testnet, not for mainnet.
 
-## Next Actions
+## Required hardening before mainnet
 
-- Refresh governance status artifact every cadence cycle.
-- Use timelock queue/consume for critical parameter changes when governance delay is enabled.
-- Record queue and execution tx hashes for each governance action.
+1. Set governanceDelay >= 86400 (24h) on all three contracts
+2. Set non-zero bond requirements for minter, oracle, liquidator
+3. Transfer admin to multisig via handoffAdmin() (SolarPunkCoin) and role grants (others)
+4. Point stabilityPool to a dedicated address
+5. Configure real budget vault addresses
+
+## Governance Cadence (when active)
+
+- recommended review period: 14 days
+- change trace fields: action_id, queued_tx_hash, executed_tx_hash, function_name
+- all privileged parameter changes must go through timelock queue/consume cycle
