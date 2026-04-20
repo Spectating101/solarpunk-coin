@@ -19,7 +19,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Python SDK | chain_client.py reads all live protocol state |
 | Local demo | Available (`npm run demo:treasury`) |
 | Security audit | Not started — M3 next gate |
-| Multisig admin | Not yet — single EOA; M3 next gate |
+| Multisig admin | **Safe deployed, all 3 contracts handed off — deployer EOA has zero admin** |
 | Pilot counterparties | Not yet secured |
 | Mainnet readiness | NO_GO until audit + multisig |
 
@@ -43,7 +43,7 @@ Prototype complete with proper security architecture live on Sepolia. Governance
 
 | Gap | Status |
 |---|---|
-| Single EOA admin | Open — transfer to Safe multisig via `handoffAdmin()` |
-| No formal audit | Open — M3 scope, Code4rena identified |
-| Chainlink energy feed | Partial — adapter deployed, running manual price; real feed pending |
+| Single EOA admin | **CLOSED — Safe `0xB95586775C73feB0154828c77832E106425C818A` is admin; deployer EOA revoked** |
+| No formal audit | Open — Code4rena identified, pending funding |
+| Chainlink energy feed | Partial — adapter live, running manual price; real feed pending mainnet |
 | No dispute window for settlement index | Open — multi-oracle aggregation is M4 scope |

@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-04-20T13:31:58.878Z",
+  "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "actions": [
+    {
+      "step": "Safe created",
+      "note": "1-of-1 multisig, owner = 0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+      "tx": "0xcb2e976c8bc7ffabbeda4e7f4515b16cbf9622f7e2ea6d3b81e23a67c21654f7"
+    },
+    {
+      "step": "SolarPunkCoin admin transferred",
+      "note": "Ownable owner + DEFAULT_ADMIN_ROLE → 0xb95586775c73feb0154828c77832e106425c818a",
+      "tx": "0x198492c5527d6c31e47eeb3c99e3e525a52313a08b53e2775cad81e131e216de"
+    },
+    {
+      "step": "SolarPunkOption DEFAULT_ADMIN_ROLE granted to Safe",
+      "note": "0xb95586775c73feb0154828c77832e106425c818a",
+      "tx": "0xdc5a056885096fcd614b1842a5382a8d7462812a3fe3c29c390a92c16e609d2a"
+    },
+    {
+      "step": "SolarPunkOption deployer admin revoked",
+      "note": "Safe has role: true | deployer revoked: true",
+      "tx": "0x3345babf6fd7681828737ba7ceb89d7921bd4d0881f8228ad91779bc030e14a9"
+    },
+    {
+      "step": "ProtocolTreasury DEFAULT_ADMIN_ROLE granted to Safe",
+      "note": "0xb95586775c73feb0154828c77832e106425c818a",
+      "tx": "0x4f071bc9306c1742ea1585dfc666b947b9982e7d37970ddf2743e6b751071db4"
+    },
+    {
+      "step": "ProtocolTreasury deployer admin revoked",
+      "note": "Safe has role: true | deployer revoked: true",
+      "tx": "0xc135b4b777f42cb1b937d6b02cd1de57b420f90522d7bea1f2aee304287c68cf"
+    }
+  ],
+  "safeAddress": "0xb95586775c73feb0154828c77832e106425c818a"
+}

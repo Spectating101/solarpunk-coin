@@ -167,7 +167,7 @@ These are explicit known gaps — not bugs, but design decisions appropriate for
 
 | Gap | Impact | Status |
 |---|---|---|
-| Single EOA admin | All roles controlled by one key | Open — transfer to Safe multisig via `handoffAdmin()` |
+| Single EOA admin | All roles controlled by one key | **CLOSED — Safe `0xB95586775C73feB0154828c77832E106425C818A`; deployer EOA revoked from all contracts** |
 | `governanceDelay = 0` | No timelock on parameter changes | **CLOSED — 86400s (24h) set on all 3 contracts** |
 | Bond requirements = 0 | No slashable stake for operators | **CLOSED — 100 USDC required for all roles; deployer bonded** |
 | Oracle inputs unverified | No on-chain price verification | **CLOSED — ChainlinkOracleAdapter deployed, ORACLE_ROLE granted; running manual energy price pending real feed** |
@@ -182,7 +182,7 @@ These are explicit known gaps — not bugs, but design decisions appropriate for
 |---|---|---|
 | M1: Repo credibility | Complete | Apr 2026 |
 | M2: External inspectability | Complete | 2026-04-20 |
-| M3: Security credibility | **Partial — architecture live, audit + multisig remaining** | 2026-04-20 |
+| M3: Security credibility | **Partial — architecture + multisig live, formal audit remaining** | 2026-04-20 |
 | M4: Pilot counterparty | Not started | — |
 | M5: Mainnet | Gated | — |
 
@@ -246,15 +246,29 @@ Receipt: `state/deployments/sepolia_m3_setup.json`
 | setStabilityPool | SolarPunkCoin now points to external contract |
 | Governance delay | 86400s (24h) on all 3 core contracts |
 
-## 11. What remains before M3 is fully complete
+## 11. Safe multisig handoff (completed 2026-04-20)
 
-1. Transfer admin to Safe multisig using `handoffAdmin()` — closes the single-EOA gap
-2. Tag audit scope commit and approach Code4rena for security review
-3. Connect ChainlinkOracleAdapter to a real Chainlink energy price feed when one becomes available on mainnet
+Script: `scripts/setup_multisig_handoff.js`  
+Receipt: `state/deployments/sepolia_multisig_handoff.json`  
+Safe: `0xB95586775C73feB0154828c77832E106425C818A` (1-of-1, deployer as owner)  
+Safe app: `https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A`
+
+| Contract | Action | On-chain verification |
+|---|---|---|
+| SolarPunkCoin | `handoffAdmin(safe)` — Ownable + DEFAULT_ADMIN_ROLE | owner = Safe ✓, deployer admin = false ✓ |
+| SolarPunkOption | grant + revoke DEFAULT_ADMIN_ROLE | Safe has role ✓, deployer revoked ✓ |
+| ProtocolTreasury | grant + revoke DEFAULT_ADMIN_ROLE | Safe has role ✓, deployer revoked ✓ |
+
+The deployer EOA (`0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`) now has **zero admin authority** on any contract. All governance actions must go through the Safe and the 24h timelock queue.
+
+## 12. What remains before M3 is fully complete
+
+1. Formal security audit — Code4rena when funding allows
+2. Connect ChainlinkOracleAdapter to a real energy price feed on mainnet (no feed exists on Sepolia)
 
 ---
 
-## 12. Contact
+## 13. Contact
 
 - Author: Christopher Ongko
 - Institution: Yuan Ze University, Finance Masters

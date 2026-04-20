@@ -23,6 +23,7 @@ Network: Ethereum Sepolia (chain 11155111)
 |---|---|---|
 | StabilityPool | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` | [Verified ✓](https://sepolia.etherscan.io/address/0xb9c2Ac8166edFc899b591bc51746d75bFCEca086#code) |
 | ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` | [Verified ✓](https://sepolia.etherscan.io/address/0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9#code) |
+| Safe multisig (1/1) | `0xB95586775C73feB0154828c77832E106425C818A` | [Etherscan](https://sepolia.etherscan.io/address/0xB95586775C73feB0154828c77832E106425C818A) · [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A) |
 
 ## Test collateral
 
@@ -34,13 +35,14 @@ Network: Ethereum Sepolia (chain 11155111)
 
 | Parameter | Value |
 |---|---|
+| Admin authority | **Safe multisig** `0xB95586775C73feB0154828c77832E106425C818A` (1-of-1, deployer EOA has zero admin) |
 | Governance delay | 86400s (24h) on all 3 core contracts |
 | Min minter bond | 100 USDC |
 | Min oracle bond | 100 USDC (SolarPunkCoin + SolarPunkOption) |
 | Min liquidator bond | 100 USDC |
 | Deployer keeper bond | 100 USDC deposited |
-| Stability pool | External StabilityPool contract (not address(this)) |
-| Oracle adapter | ChainlinkOracleAdapter granted ORACLE_ROLE on both contracts |
+| Stability pool | External StabilityPool contract |
+| Oracle adapter | ChainlinkOracleAdapter holds ORACLE_ROLE on both contracts |
 | Energy price (adapter) | $0.05/kWh (manual — no Chainlink energy feed on Sepolia) |
 
 ## Deployment receipts
