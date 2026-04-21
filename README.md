@@ -84,6 +84,7 @@ See [`ROADMAP.md`](./ROADMAP.md) for the full ladder.
 - [`DEMO_WALKTHROUGH.md`](./DEMO_WALKTHROUGH.md) — testnet proof and local demo commands
 - [`ARCHITECTURE_OVERVIEW.md`](./ARCHITECTURE_OVERVIEW.md) — system design
 - [`ROADMAP.md`](./ROADMAP.md) — milestone plan
+- [`docs/project/DAILY_EXPERIMENT_STATUS.md`](./docs/project/DAILY_EXPERIMENT_STATUS.md) — rolling Sepolia NASA oracle experiment summary
 - [`AUDIT_READINESS.md`](./AUDIT_READINESS.md) — audit-facing context
 - [`THREAT_MODEL.md`](./THREAT_MODEL.md) — attack surface categories
 - [`TRUST_ASSUMPTIONS.md`](./TRUST_ASSUMPTIONS.md) — explicit trust boundaries

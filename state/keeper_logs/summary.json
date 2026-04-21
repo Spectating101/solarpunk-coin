@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-04-20T16:51:07.183569+00:00",
+  "network": "sepolia",
+  "total_successful_runs": 2,
+  "first_successful_run": "2026-04-20",
+  "last_successful_run": "2026-04-21",
+  "current_success_streak_days": 2,
+  "max_missing_gap_days": 0,
+  "peg_stable_rate": 1.0,
+  "index_summary": {
+    "min": 1.4537694704049844,
+    "max": 1.4537694704049844,
+    "avg": 1.4537694704049844
+  },
+  "reserve_ratio_summary_pct": {
+    "min": 10.1,
+    "max": 10.1,
+    "avg": 10.1
+  },
+  "latest_run": {
+    "date": "2026-04-21",
+    "run_at": "2026-04-20T16:38:13.291Z",
+    "keeper": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+    "nasa_date": "2026-04-15",
+    "location": "Taoyuan, Taiwan",
+    "normalised_index": 1.4537694704049844,
+    "scaled_6dec": "1453769",
+    "protocol_state": {
+      "total_supply_spk": 29700.300000000003,
+      "oracle_price_usd": 1,
+      "usdc_reserve_usd": 300000,
+      "reserve_ratio_pct": 10.1,
+      "peg_stable": true,
+      "grid_stressed": false,
+      "energy_price_per_kwh": 0.05,
+      "cumulative_surplus_kwh": 30000,
+      "option_index": 1.453769
+    },
+    "transactions": {
+      "updateIndex": "0xe542244f0c89ecc683f7efdef577e545a6e830680392820af194f9ed4f419bda",
+      "updateEnergyPrice": "0xeb63bffa5a9d48fbb5a1f655803dc9dc2b0c2210528b674248f82235bd38e157",
+      "updateOraclePriceAndAdjust": "0x5d030a12413250b0624fd818d27c63889153926f9352ff46afab72897163642c"
+    },
+    "transaction_urls": {
+      "updateIndex": "https://sepolia.etherscan.io/tx/0xe542244f0c89ecc683f7efdef577e545a6e830680392820af194f9ed4f419bda",
+      "updateEnergyPrice": "https://sepolia.etherscan.io/tx/0xeb63bffa5a9d48fbb5a1f655803dc9dc2b0c2210528b674248f82235bd38e157",
+      "updateOraclePriceAndAdjust": "https://sepolia.etherscan.io/tx/0x5d030a12413250b0624fd818d27c63889153926f9352ff46afab72897163642c"
+    }
+  },
+  "recent_runs": [
+    {
+      "date": "2026-04-20",
+      "nasa_date": "2026-04-15",
+      "normalised_index": 1.4537694704049844,
+      "option_index": 1.4537694704049844,
+      "reserve_ratio_pct": 10.1,
+      "peg_stable": true,
+      "updateIndex_tx": "0xb5e9a2fde6e5a96e8b503eb25085a2f34d9ae6f91a4fe5de6c026a82fdc4c018"
+    },
+    {
+      "date": "2026-04-21",
+      "nasa_date": "2026-04-15",
+      "normalised_index": 1.4537694704049844,
+      "option_index": 1.453769,
+      "reserve_ratio_pct": 10.1,
+      "peg_stable": true,
+      "updateIndex_tx": "0xe542244f0c89ecc683f7efdef577e545a6e830680392820af194f9ed4f419bda"
+    }
+  ]
+}

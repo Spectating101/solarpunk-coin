@@ -38,11 +38,14 @@ jobs:
           SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
         run: npx hardhat run scripts/nasa_keeper.js --network sepolia
 
+      - name: Build rolling experiment summary
+        run: python3 scripts/build_keeper_experiment_status.py
+
       - name: Commit keeper log
         run: |
           git config user.name  "NASA Keeper Bot"
           git config user.email "keeper@solarpunk-protocol.local"
-          git add state/keeper_logs/
+          git add state/keeper_logs/ docs/project/DAILY_EXPERIMENT_STATUS.md
           if git diff --cached --quiet; then
             echo "No new log to commit"
           else

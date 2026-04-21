@@ -8,9 +8,11 @@
  *      SolarPunkCoin.disburseStabilityPool() calls pool.withdraw(),
  *      msg.sender is the SolarPunkCoin contract address.
  *
- * NOTE: StabilityPool's DEFAULT_ADMIN_ROLE is held by the Safe multisig.
- * This script cannot run with the deployer key — it must be executed as a
- * Safe transaction from app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A
+ * NOTE: On the live Sepolia deployment, StabilityPool's DEFAULT_ADMIN_ROLE is
+ * still held by the deployer EOA, not the Safe multisig. This helper was
+ * originally written under the wrong assumption that Safe controlled the pool.
+ * Verify the current admin holder on-chain before deciding whether to execute
+ * through Safe or directly from the deployer wallet.
  *
  * Calls to make via Safe:
  *   StabilityPool.grantRole(DISBURSER_ROLE, SolarPunkCoin)
@@ -50,20 +52,20 @@ async function main() {
     return;
   }
 
-  // Encode calldata for Safe transaction builder
+  // Encode calldata for manual execution or a Safe transaction builder
   const iface = new ethers.Interface(ABI);
   const grantData  = iface.encodeFunctionData("grantRole",  [DISBURSER_ROLE, SPK_COIN]);
   const revokeData = iface.encodeFunctionData("revokeRole", [DISBURSER_ROLE, DEPLOYER_EOA]);
 
-  console.log("\n━━ Safe transactions required ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log(`Safe app: https://app.safe.global/sep:${SAFE}`);
+  console.log("\n━━ Transactions required if state is still broken ━━━━━━━━━━━━");
+  console.log(`Safe app (only if Safe is admin): https://app.safe.global/sep:${SAFE}`);
   console.log("\nTransaction 1 — grantRole(DISBURSER_ROLE, SolarPunkCoin):");
   console.log(`  To:   ${STABILITY_POOL}`);
   console.log(`  Data: ${grantData}`);
   console.log("\nTransaction 2 — revokeRole(DISBURSER_ROLE, deployerEOA):");
   console.log(`  To:   ${STABILITY_POOL}`);
   console.log(`  Data: ${revokeData}`);
-  console.log("\nPaste both into Safe → New Transaction → Transaction Builder.");
+  console.log("\nExecute from whichever account currently holds DEFAULT_ADMIN_ROLE on StabilityPool.");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 }
 
