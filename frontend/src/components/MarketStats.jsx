@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
 import SPK_ABI from '../abi/SolarPunkCoin.json';
+import TREASURY_ABI from '../abi/ProtocolTreasury.json';
 
 // ── Live Sepolia contract addresses ───────────────────────────────────────────
-const SPK_ADDRESS     = '0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F';
-const SEPOLIA_RPC     = 'https://rpc.sepolia.org';
+const SPK_ADDRESS      = '0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F';
+const TREASURY_ADDRESS = '0x138e793f095a33D2790349eC1066FED3A756dd2c';
+const SEPOLIA_RPC      = 'https://rpc.sepolia.org';
 const POLL_INTERVAL   = 30_000; // 30 s
 
 // ── Fallback demo chart data (shown while live data loads) ────────────────────
@@ -45,6 +47,7 @@ const MarketStats = () => {
     try {
       const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC);
       const spk = new ethers.Contract(SPK_ADDRESS, SPK_ABI, provider);
+      const treasury = new ethers.Contract(TREASURY_ADDRESS, TREASURY_ABI.abi, provider);
 
       const [
         totalSupply,
@@ -56,6 +59,7 @@ const MarketStats = () => {
         gridStressed,
         pegTarget,
         isPegStable,
+        insuranceBalance,
       ] = await Promise.all([
         spk.totalSupply(),
         spk.energyPricePerKwh(),
@@ -66,6 +70,7 @@ const MarketStats = () => {
         spk.gridStressed(),
         spk.pegTarget(),
         spk.isPegStable(),
+        treasury.treasuryBalance(await spk.reserveToken()),
       ]);
 
       const oraclePriceNum = fmt18(lastOraclePrice);
@@ -76,6 +81,7 @@ const MarketStats = () => {
         energyPrice:    `$${fmt18(energyPricePerKwh).toFixed(4)}/kWh`,
         oraclePrice:    `$${oraclePriceNum.toFixed(4)}`,
         usdcReserve:    `$${fmtUsdc(usdcReserve).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        insuranceFund:  `$${fmtUsdc(insuranceBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
         reserveRatio:   `${reserveRatioPct.toFixed(1)}%`,
         surplusKwh:     fmtKwh(cumulativeSurplusKwh),  // raw kWh integer, not 1e18
         gridStressed,
@@ -126,8 +132,8 @@ const MarketStats = () => {
     <div className="glass-card" style={{ padding: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <div>
-          <p className="text-muted" style={{ fontSize: '12px', margin: 0 }}>Pillar 2 · Pricing Oracle</p>
-          <h3 style={{ margin: 0 }}>Market Health</h3>
+          <p className="text-muted" style={{ fontSize: '12px', margin: 0 }}>Pillar 2 · NASA POWER Oracle</p>
+          <h3 style={{ margin: 0 }}>Protocol Health</h3>
         </div>
         <div className={badgeClass}>{badgeLabel}</div>
       </div>

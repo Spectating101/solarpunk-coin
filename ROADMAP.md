@@ -20,20 +20,21 @@ Optimize for external proof quality before narrative. Each milestone must produc
 - 7-transaction interaction proof published with verifiable tx hashes
 - `CONTRACT_ADDRESSES.md` and `DEMO_WALKTHROUGH.md` updated with live links
 
-### Milestone 3: Security credibility — NEXT
+### Milestone 3: Security credibility — IN PROGRESS
 
+- **(COMPLETE) Quantitative Stress Testing (April 2026)** — Identified "Gap Risk" and increased default margins to 250% IM / 125% MM. Established a solvency envelope for pilot-scale operations.
+- **(COMPLETE) 24h Governance Timelock & Multisig Handoff** — All core contracts managed by Safe `0xB95586...`.
+- **Milestone 3.5: Risk-Boxed Scaling** — Implement on-chain `maxOpenInterest` caps to align with current $50k Treasury insurance capacity (approx. 25-30 MWh limit).
 - external security audit (target: Code4rena contest, Sherlock, or private firm)
-- configure non-zero governance delays and bond requirements for audit scope
-- publish auditor handoff pack (`docs/project/AUDITOR_HANDOFF_CHECKLIST.md`)
 - resolve any audit findings before pilot engagement
 
-### Milestone 4: Pilot credibility
+### Milestone 4: Pilot Credibility
 
-- approach renewable energy operators or trading desks
-- define concrete pilot integration ask (one settlement cycle)
-- collect at least one signed pilot letter of intent
+- **Pilot Onboarding:** Secure a $125k pilot grant to establish a $125k total insurance reserve, unlocking a 60 MWh risk-boxed pilot capacity.
+- **Counterparty Engagement:** Approach 3-5 renewable energy operators for a single-cycle settlement proof under strict open-interest caps.
+- **Operational Hardening:** Automate oracle updates to sub-hour frequency to reduce residual gap risk.
 
-### Milestone 5: Mainnet
+### Milestone 5: Mainnet launch
 
 - gated on: completed audit, governance hardening, pilot LOI
 - deploy with real governance admin (multisig), non-zero timelock delays, bond requirements enforced

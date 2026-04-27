@@ -24,7 +24,7 @@ const TradingInterface = ({ provider, signer }) => {
   const premiumPerKwh = 0.036;
   const notional = 1000;
   const totalPremium = amount * notional * premiumPerKwh;
-  const requiredMargin = totalPremium * 1.5;
+  const requiredMargin = totalPremium * 2.5; // Updated to 250% based on April 2026 stress tests
 
   const executeTrade = async () => {
     if (!signer) return;
@@ -130,7 +130,7 @@ const TradingInterface = ({ provider, signer }) => {
             <span className="font-mono text-primary">{(amount * notional).toLocaleString()} kWh</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
-            <span className="text-muted">Required Margin (150%)</span>
+            <span className="text-muted">Required Margin (250%)</span>
             <span className="font-mono">${requiredMargin.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
           </div>
            <div style={{ width: '100%', height: '1px', background: 'var(--border)', margin: '8px 0' }}></div>

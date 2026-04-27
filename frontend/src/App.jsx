@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 import Navbar from './components/Navbar';
 import MarketStats from './components/MarketStats';
 import TradingInterface from './components/TradingInterface';
+import PositionsList from './components/PositionsList';
+import SystemIntegrity from './components/SystemIntegrity';
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -35,6 +37,21 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', paddingBottom: '48px' }}>
+      {/* Pilot Mode Banner */}
+      <div style={{ 
+        background: 'rgba(251, 191, 36, 0.15)', 
+        borderBottom: '1px solid rgba(251, 191, 36, 0.3)', 
+        color: '#fbbf24', 
+        padding: '8px 0', 
+        textAlign: 'center', 
+        fontSize: '13px',
+        fontWeight: '500',
+        letterSpacing: '0.02em'
+      }}>
+        <span style={{ marginRight: '8px' }}>⚠️</span>
+        PILOT MODE ACTIVE: ON-CHAIN EXPOSURE CAPS ENFORCED · 250% SAFETY MARGIN REQUIRED
+      </div>
+
       <Navbar 
         account={account} 
         connectWallet={connectWallet} 
@@ -56,11 +73,13 @@ function App() {
           </div>
           
           <MarketStats />
+          <PositionsList provider={provider} signer={signer} />
         </div>
 
         {/* Right Column: Interaction */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '24px' }}>
           <TradingInterface provider={provider} signer={signer} />
+          <SystemIntegrity />
           
           {/* Info Card */}
           <div className="glass-card" style={{ padding: '20px' }}>

@@ -73,6 +73,11 @@ See [`docs/project/ROLE_PERMISSION_MATRIX.md`](./docs/project/ROLE_PERMISSION_MA
 3. Stability pool is `address(this)` at deploy — should point to a dedicated address in production
 4. No multisig on admin roles — single EOA deployer; must be hardened before mainnet
 
+## Known mechanism risks (April 2026 Audit)
+
+1. **Gap Risk & Insolvency**: Stress tests using 200% annual solar volatility revealed an 11% insolvency rate at 150% margin due to oracle latency. Mitigated by increasing default margins to 250% initial / 125% maintenance.
+2. **PI Controller Stability**: Parameter sweep shows 6.6% in-band stability; further tuning required for 80%+ target.
+
 ## Suggested audit firms
 
 - **Code4rena** — public contest, broad community coverage, good for finding edge cases

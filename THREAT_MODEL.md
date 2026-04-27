@@ -131,6 +131,22 @@ Identify high-impact failure or abuse categories before external audit. Each cat
 
 ---
 
+## 9. Gaps & price jumps in high-volatility markets
+
+**Attack:** Not an "attack" per se, but an environmental vulnerability. High annual volatility (>200%) can lead to price "jumps" between oracle updates that bypass the maintenance margin.
+
+**Impact:**
+- Positions become insolvent (negative margin) before they can be liquidated.
+- Protocol insurance fund must cover the deficit to maintain clearinghouse solvency.
+
+**Mitigations in place:**
+- Increased default margins (250% initial, 125% maintenance) based on April 2026 stress tests.
+- Maintenance margin (125%) provides a wider buffer before insolvency (0%) is reached.
+
+**Residual gap:** Extreme, near-instantaneous jumps could still exhaust a 125% buffer. Mitigation requires sub-hour oracle frequency and dynamic margining.
+
+---
+
 ## Out of scope at this stage
 
 - Market liquidity moat assumptions (how deep order books need to be)

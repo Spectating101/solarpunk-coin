@@ -49,8 +49,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     uint256 public currentIndex;
     uint256 public lastIndexUpdate;
 
-    uint256 public initialMarginBps = 15_000; // 150% of exposure
-    uint256 public maintenanceMarginBps = 7_500; // 75% of exposure
+    uint256 public initialMarginBps = 25_000; // 250% of exposure
+    uint256 public maintenanceMarginBps = 12_500; // 125% of exposure
     uint256 public liquidationPenaltyBps = 100; // 1% of remaining margin to insurance fund
     uint256 public tradingFeeBps = 0;
     address public bondSource;

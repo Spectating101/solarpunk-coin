@@ -295,6 +295,22 @@
 | Team Burnout | Medium | 10% | Documentation + Hiring | Month 2+ |
 | Timeline Slippage | Medium | 25% | Project Management | Ongoing |
 | Budget Overrun | Low | 15% | Financial Controls | Ongoing |
+| Gap Risk & Insolvency | High | 10% | Identified Stress Test | April 2026 |
+
+---
+
+## NEW RISKS IDENTIFIED (APRIL 2026)
+
+### Risk 15: Gap Risk & Insolvency in High-Volatility Markets
+**Problem:** In energy markets with >200% annual volatility, price "gaps" can occur between oracle updates that bypass the maintenance margin, causing total insolvency (negative equity).
+
+**Mitigation Strategy:**
+1. **Conservative Defaults:** Increased default `initialMarginBps` to 250% and `maintenanceMarginBps` to 125% based on stress test results (reduced insolvency by ~60%).
+2. **Oracle Frequency:** Target sub-1-hour oracle updates for high-volatility series to reduce gap duration.
+3. **Insurance Fund Sizing:** Ensure `ProtocolTreasury` insurance fund is sized to cover at least a 5% failure rate (the residual insolvency rate at 250% margin).
+4. **Dynamic Margining:** (Future) Implement volatility-indexed margins where Bps scales with observed 7-day variance.
+
+**Funder Message:** "We conducted rigorous jump-diffusion stress tests in April 2026 and proactively increased margin requirements to protect protocol solvency against energy-specific price gaps."
 
 ---
 

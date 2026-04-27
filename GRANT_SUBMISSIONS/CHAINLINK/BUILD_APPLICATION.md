@@ -18,23 +18,23 @@
 
 **Website:** https://github.com/Spectating101/solarpunk-coin
 
-**Current Stage:** Local MVP (46/46 smart contract tests, 8/8 pricing engine tests, testnet deployment ready)
+**Current Stage:** Serious Prototype (77/77 smart contract tests passing, publicly deployed to Sepolia, v0.5.0 library live)
 
 ---
 
 ## PROJECT DESCRIPTION (For Form Field)
 
-SolarPunk Protocol is a derivatives infrastructure for renewable energy markets. Solar farms, wind operators, and hydroelectric plants face 189% annual price volatility but have zero access to hedging tools - they're too small for Wall Street and too niche for existing DeFi.
+SolarPunk Protocol is a derivatives infrastructure for renewable energy markets. Solar farms face 200%+ annual price volatility but have zero access to hedging tools - they're too small for legacy finance and too niche for generic DeFi.
 
 We solve this with three components:
 
-1. **Pricing Oracle**: A Python engine calibrated on NASA POWER satellite data that computes fair option premiums for any location on Earth. Supports binomial trees, Monte Carlo simulation, mean-reversion (Ornstein-Uhlenbeck), and jump-diffusion (Merton) models. Published as a pip-installable package (v0.5.0).
+1. **Pricing Oracle**: A Python engine (v0.5.0) calibrated on NASA POWER satellite data that computes risk-bounded premiums. Supports binomial trees, Monte Carlo, and jump-diffusion (Merton) models tailored for energy price spikes.
 
-2. **Settlement Layer**: Solidity smart contracts implementing a clearinghouse with VaR-based margining, auto-liquidation, and a PI-controlled stablecoin (SPK). 46/46 unit tests passing. Validated via 1000-day multi-agent simulation (93.2% peg stability under normal conditions, 89.5% under combined stress).
+2. **Settlement Layer**: Solidity contracts (0.8.20) implementing a clearinghouse with 250% initial margining, auto-liquidation, and a PI-controlled stablecoin (SPK). 77/77 tests passing. Publicly deployed to Sepolia.
 
-3. **Data Integration**: The protocol fundamentally depends on reliable off-chain data feeds for energy spot prices, solar irradiance, and wholesale electricity rates. This is where Chainlink is architecturally essential - not optional.
+3. **Data Integration**: Our protocol fundamentally depends on reliable off-chain data feeds. We have already deployed a `ChainlinkOracleAdapter` on Sepolia to bridge NASA satellite truth to on-chain settlement.
 
-**Why we cannot function without Chainlink:** Energy derivatives require trusted, tamper-proof price feeds. There are no standardized energy price oracles today. Our protocol needs Chainlink to bridge the gap between NASA satellite data, wholesale electricity markets, and on-chain settlement.
+**Why we cannot function without Chainlink:** Energy derivatives require trusted, physics-anchored data. Our recent stress tests prove that "Gap Risk" (price jumps between updates) is the primary threat to solvency. Chainlink's low-latency automation and data feeds are not optional; they are the protocol's primary security layer.
 
 ---
 
@@ -42,13 +42,13 @@ We solve this with three components:
 
 ### Products We Will Use
 
-| Chainlink Product | Our Use Case | Integration Depth |
+| Chainlink Product | Our Use Case | Integration Status |
 |---|---|---|
-| **Data Feeds** | Energy spot price feeds (solar irradiance, wholesale electricity prices, REC prices) | CORE - primary oracle dependency; protocol cannot function without it |
-| **CCIP** | Cross-chain derivative settlement across Polygon, Arbitrum, Base | HIGH - enables global energy markets |
-| **Automation** | Automated settlement triggers, PI controller supply adjustments, margin call execution | HIGH - replaces manual keeper infrastructure |
-| **VRF** | Fair randomization for derivative settlement ordering, preventing front-running | MEDIUM - ensures fair execution |
-| **Functions** | Off-chain computation for Python pricing engine results, NASA API data fetching | MEDIUM - bridges our pricing oracle to on-chain contracts |
+| **Data Feeds** | Energy spot price feeds (solar irradiance, wholesale electricity) | **LIVE ON SEPOLIA** (Adapter active) |
+| **Automation** | PI controller supply adjustments, margin call execution, settlement triggers | **PLANNED** (Next Milestone) |
+| **Functions** | Off-chain computation for NASA API data fetching and pricing results | **PLANNED** (Next Milestone) |
+| **CCIP** | Cross-chain derivative settlement across Polygon, Arbitrum, Base | **FUTURE** |
+| **VRF** | Fair randomization for derivative settlement ordering | **FUTURE** |
 
 **Total Products: 5** (most BUILD projects use 1-2)
 
@@ -101,13 +101,12 @@ This custom DON (Decentralized Oracle Network) would benefit the entire Chainlin
 
 | Component | Status | Evidence |
 |---|---|---|
-| Smart Contracts | 46/46 tests passing | `npx hardhat test` |
+| Smart Contracts | 77/77 tests passing | `npx hardhat test` |
+| Testnet Deploy | Publicly Deployed | Sepolia Verified (0x1D55C6...) |
 | Pricing Engine | 8/8 tests passing | `pytest energy_derivatives/tests/` |
-| Peg Simulation | 93.2% in-band (baseline) | `python3 scripts/simulate_peg.py` |
-| Economic Simulation | All 6 stress tests passed | `python3 scripts/simulate_economy.py` |
-| API Service | Live with rate limiting, CORS | `uvicorn energy_derivatives.api.main:app` |
-| Docker Deployment | Ready | `docker build -t solarpunk-api .` |
-| Frontend | React/Vite with wallet integration | `cd frontend && npm run dev` |
+| Maturity Report | Stress Test Complete | Risk-Boxed Solvency Envelope defined |
+| API Service | Live v0.5.0 | SaaS-ready with auth/tiers |
+| Frontend | React/Vite | Live on Sepolia with 250% margin logic |
 
 ---
 

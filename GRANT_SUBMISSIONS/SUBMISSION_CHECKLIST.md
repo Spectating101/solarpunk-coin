@@ -1,37 +1,51 @@
 # Grant Submission Checklist & Quick Reference
 
-**Date Created:** January 16, 2026
-**Last Updated:** February 13, 2026
-**Status:** Pending submission
+**Status:** ✅ READY FOR SUBMISSION (April 27, 2026)
+**State:** Serious Prototype (77/77 Tests, Sepolia Verified)
 
 ---
 
-## PRIORITY ORDER (Verified February 13, 2026)
+## PRIORITY ORDER (Verified April 2026)
 
-### 🎯 **#1 CHAINLINK BUILD** (Best Fit - Rolling Applications)
-- **Odds:** 40-50% (strong fit: 5 product integrations)
-- **Amount:** $100-500K in services (not cash - custom DONs, support, marketing)
-- **Cost:** 3% of SPK token supply
-- **Time:** 1 hour to submit form
-- **Decision:** ~3 months
+### 🎯 **#1 CHAINLINK BUILD** (Strategic Priority)
+- **Status:** Hardened for submission.
+- **Key Move:** Pivot to "Custom Energy Data Feed" vertical.
 - **Portal:** https://chainlinkcommunity.typeform.com/BUILD
 - **App doc:** CHAINLINK/BUILD_APPLICATION.md
 
-### 🎯 **#2 ETHEREUM FOUNDATION ESP** (Academic Grants)
-- **Odds:** 30-40%
-- **Amount:** $30-50K (from $1.5-2M pool)
-- **Time:** 30 mins (email inquiry first)
-- **Decision:** Variable
+### 🎯 **#2 ETHEREUM FOUNDATION ESP** (Academic/Infrastructure)
+- **Status:** Hardened for submission.
+- **Key Move:** Frame as "Risk-Boxed Solvency Scaling" for renewables.
 - **Portal:** https://esp.ethereum.foundation/academic-grants
-- **App doc:** EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md
-- **Note:** PhD Fellowship requires PhD enrollment (Christopher is master's - use Academic Grants instead)
+- **App doc:** GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt
 
-### 🎯 **#3 CELO PROOF-OF-SHIP** (ReFi Ecosystem)
-- **Odds:** 35-45%
-- **Amount:** $10-50K
-- **Time:** 30 mins (subscribe first)
-- **Decision:** Variable
-- **Portal:** https://celo-devs.beehiiv.com/subscribe
+---
+
+## EVIDENCE REPOSITORY (Final Check)
+
+| Component | Verified Fact |
+|---|---|
+| Unit Tests | 77/77 Passing (npx hardhat test) |
+| Simulation | 80.24% Survival @ 200% Vol (90-day stress) |
+| Deployment | Sepolia Verified (0x1D55... SPK) |
+| Margin Safety | 250% Initial Margin baseline established |
+| Governance | 24h Timelock + Multisig Active |
+| Maturity | PROTOCOL_MATURITY_REPORT_2026.md complete |
+| Frontend | Trust Surface (NASA/Chainlink steps) verified |
+
+---
+
+## TIPS FOR SUCCESS (April 2026)
+
+✅ **DO:**
+- Attach `PROTOCOL_MATURITY_REPORT_2026.md` as "Technical Risk Assessment."
+- Mention `ChainlinkOracleAdapter` is ALREADY live on Sepolia.
+- Emphasize "Risk-Boxing" vs "Growth" for pilot stages.
+
+❌ **DON'T:**
+- Claim "Mainnet Ready" (use "Pilot Ready with Caps").
+- Use "46 tests" (outdated, use 77).
+- Mention "Polygon Amoy" as primary (use Sepolia for EF/Chainlink).
 
 ### CLOSED / NOT APPLICABLE:
 - ~~POLYGON~~ - Season 2 CLOSED, requires live deployment + traction

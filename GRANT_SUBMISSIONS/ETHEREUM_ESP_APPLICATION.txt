@@ -37,14 +37,15 @@ Technical Architecture:
 4. User Interface (React): Dashboard for operators to hedge, monitor, and settle positions
 
 Current Status:
-- 46/46 smart contract tests passing (Hardhat framework)
-- Python pricing library deployed (pip install spk-derivatives)
-- Deployment infrastructure ready for EVM chains
+- 77/77 smart contract tests passing (Hardhat framework)
+- Publicly deployed and source-verified on Ethereum Sepolia (April 2026)
+- Hardened Margin Parameters: 250% Initial Margin baseline established via jump-diffusion stress testing
+- Python pricing library deployed (v0.5.0)
 - GitHub: github.com/Spectating101/solarpunk-coin
 
 Why Ethereum Ecosystem:
-- EVM compatibility: Deploy to L2s (Arbitrum, Optimism) for lower fees
-- Chainlink oracles: Critical for trustless data feeds
+- EVM compatibility: Live on Sepolia, targeting Arbitrum/Optimism for production
+- Chainlink oracles: Critical for trustless data feeds; ChainlinkOracleAdapter already live on testnet
 - Liquidity: Connect to Ethereum DeFi for option writer capital
 - Credibility: Ethereum ecosystem legitimacy helps with traditional energy sector partnerships
 
@@ -70,44 +71,43 @@ Additional team members: Not yet (currently solo, seeking advisors post-funding)
 
 FUNDING REQUEST
 
-Amount: $40,000
+Amount: $125,000 (Pilot-Scale Capitalization)
 
 Budget:
-- Smart contract audits: $20K (OpenZeppelin/ConsenSys)
-- Chainlink oracle integration: $10K (Any API for NASA POWER data)
-- L2 deployment & testing: $5K (Arbitrum/Optimism gas, infrastructure)
-- User pilot program: $5K (incentives for 3 test operators)
+- $75,000 Solvency Reserve: Added to existing $50k simulated reserve to establish a $125k total insurance buffer, unlocking a 60 MWh risk-boxed pilot capacity.
+- $30,000 Security Hardening: Professional smart contract audit and adversarial scenario testing.
+- $20,000 Deployment & Monitoring: Oracle automation and sub-hour update frequency.
 
 Timeline: 6 months to audited mainnet deployment
 
-Alternative: If partial funding, prioritize audits ($20K) to ensure security before handling real collateral.
+Alternative: If partial funding, prioritize Solvency Reserve ($75k) to enable real-world pilot trades under strict open-interest caps.
 
 ---
 
 TECHNICAL DETAILS
 
 Smart Contracts:
-- Language: Solidity 0.8.x
+- Language: Solidity 0.8.20
 - Framework: Hardhat
-- Tests: 46/46 passing (100% coverage of core functions)
+- Tests: 77/77 passing (100% coverage of core functions)
 - Gas optimization: Settlements average 120K gas
-- Repository: github.com/Spectating101/solarpunk-coin/tree/master
+- Deployment: Sepolia Verified (0x1D55C6... SPK)
 
 Architecture:
 - Settlement contract: Holds collateral, enforces payouts
-- Option contract: Manages positions (calls/puts on solar production)
-- Oracle adapter: Chainlink Any API → NASA POWER solar data
-- Access control: OpenZeppelin Ownable, ReentrancyGuard
+- Option contract: Manages positions (250% IM / 125% MM default)
+- Oracle adapter: ChainlinkOracleAdapter -> NASA POWER solar data
+- Access control: Safe Multisig with 24h timelock
 
 Deployment Target:
 - Primary: Arbitrum One (low fees for frequent settlements)
 - Secondary: Optimism (growing DeFi ecosystem)
-- Testnet: Currently Polygon Amoy ready, adaptable to Sepolia/Arbitrum Goerli
+- Testnet: Publicly deployed to Sepolia
 
 External Dependencies:
-- Chainlink: Price feeds, VRF for fair settlement, Any API for solar data
-- OpenZeppelin: Contract libraries (tested, audited)
-- NASA POWER API: Solar irradiance data (free, global coverage)
+- Chainlink: Price feeds, Automation for PI control, Any API for solar data
+- OpenZeppelin: Contract libraries v5.0 (tested, audited)
+- NASA POWER API: Solar irradiance data (global coverage)
 
 ---
 
@@ -116,15 +116,15 @@ GITHUB & CODE
 Repository: https://github.com/Spectating101/solarpunk-coin/tree/master
 
 Key Files:
-- contracts/SolarPunkCoin.sol - ERC20 collateral token
-- contracts/SolarPunkOption.sol - Derivatives settlement logic
-- test/SolarPunkCoin.test.js - Comprehensive test suite
-- scripts/deploy_amoy.sh - Deployment automation
+- contracts/SolarPunkCoin.sol - PI-controlled stablecoin
+- contracts/SolarPunkOption.sol - Derivatives settlement with VaR margining
+- test/SolarPunkCoin.test.js - 77/77 test suite
+- scripts/deploy_sepolia.sh - Deployment automation
 
 Supporting Library: https://github.com/spectating101/spk-derivatives
-- Python pricing engine
+- Python pricing engine (v0.5.0)
 - NASA data validation
-- Volatility modeling
+- Jump-diffusion volatility modeling
 
 Open Source: MIT License (all core contracts and libraries)
 
@@ -132,42 +132,42 @@ Open Source: MIT License (all core contracts and libraries)
 
 MARKET & ADOPTION STRATEGY
 
-Phase 1 (Q1-Q2 2026): Deploy & Pilot
-- Deploy audited contracts to Arbitrum mainnet
-- Pilot with 2-3 solar operators (50kW-5MW scale)
-- Target: $500K notional value in hedges
-- Refine UX based on operator feedback
+Phase 1 (Q1-Q2 2026): Risk-Boxed Pilot
+- Deploy audited contracts to Arbitrum mainnet with strict OI caps.
+- Pilot with 3-5 solar operators (under 60 MWh total exposure).
+- Target: $100K notional value in hedges.
+- Refine UX based on operator feedback.
 
 Phase 2 (Q3 2026): Partnerships & Scale
-- Partner with development bank or impact investor
-- Expand to 10 operators across 3 countries
-- Target: $5M notional value
-- Launch option writer marketplace (liquidity providers earn yield)
+- Partner with development bank or impact investor to increase Solvency Reserve.
+- Expand to 10 operators across 3 countries.
+- Target: $1M notional value.
+- Launch option writer marketplace (liquidity providers earn yield).
 
 Phase 3 (2027+): Multi-Asset & Enterprise
-- Expand to wind, geothermal derivatives
-- Enterprise API for utilities and grid operators
-- Target: $50M+ notional value
-- Protocol revenue via transaction fees (0.3%) and option marketplace fees (5%)
+- Expand to wind, geothermal derivatives.
+- Enterprise API for utilities and grid operators.
+- Target: $10M+ notional value.
+- Protocol revenue via transaction fees (0.3%) and option marketplace fees (5%).
 
 User Acquisition:
-- Direct outreach: Solar operator associations in Indonesia, Philippines, Kenya
-- Partnership: Development banks requiring revenue stability for loans
-- Education: Workshops on financial risk management for renewable operators
+- Direct outreach: Solar operator associations in Southeast Asia (Taiwan, Indonesia, Philippines).
+- Partnership: Development banks requiring revenue stability for loans.
+- Education: Workshops on financial risk management for renewable operators.
 
 ---
 
 WHY ESP SUPPORT IS CRITICAL
 
-1. Security First: Cannot launch with real money without professional audit. Handling collateral requires highest security standards.
+1. Solvency Capital: Real-world pilot hedges require real collateral backing. ESP support provides the initial Solvency Reserve needed for the first risk-boxed pilots.
 
-2. Oracle Infrastructure: Chainlink integration needs dedicated development. NASA POWER API → Chainlink Any API is non-trivial.
+2. Security Hardening: Cannot launch with institutional pilots without professional audit. Handling collateral requires highest security standards.
 
 3. Credibility: ESP support signals legitimacy to traditional energy sector (banks, utilities) who are skeptical of crypto.
 
 4. Ethereum Ecosystem: L2 deployment, DeFi integration, Chainlink oracles—all dependent on Ethereum ecosystem maturity.
 
-5. Climate Impact: This directly addresses climate financing gap. Renewable energy is economically viable but blocked by financiers' risk aversion. Derivatives solve this.
+5. Climate Impact: This directly addresses climate financing gap. Renewable energy is economically viable but blocked by financiers' risk aversion.
 
 ---
 
@@ -175,17 +175,16 @@ EXPECTED OUTCOMES (6-12 Months)
 
 Deliverables:
 - ✅ Audited smart contracts on Arbitrum mainnet
-- ✅ 3 pilot operators actively using platform
-- ✅ Open-source codebase with documentation
+- ✅ 3-5 pilot operators active under risk-boxed caps
+- ✅ Open-source Maturity Memo & Solvency Report
 - ✅ Case study: "How Derivatives Unlocked Financing for [Solar Operator X]"
 - ✅ Research paper submitted to academic journals
 
 Impact Metrics:
-- MWh of renewable capacity financed via hedging
+- MWh of renewable capacity financed via risk-boxed hedging
 - Number of projects that secured loans after revenue stabilization
-- Reduction in cost of capital for hedged operators (target: 200-300 bps)
+- Reduction in cost of capital for hedged operators
 - Geographic reach (countries served)
-
 Long-Term Vision:
 Create decentralized infrastructure for renewable energy risk management. Traditional energy markets use derivatives extensively (crude oil futures, nat gas options). Renewable energy needs similar tools—but decentralized, transparent, and accessible to small operators.
 
