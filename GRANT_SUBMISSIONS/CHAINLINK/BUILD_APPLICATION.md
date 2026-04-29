@@ -18,7 +18,7 @@
 
 **Website:** https://github.com/Spectating101/solarpunk-coin
 
-**Current Stage:** Serious Prototype (77/77 smart contract tests passing, publicly deployed to Sepolia, v0.5.0 library live)
+**Current Stage:** Live Sepolia testnet pilot. 79/79 smart contract tests passing (50 SPK + 21 Option + 8 Treasury). All 3 core contracts deployed and source-verified. Safe multisig admin handoff complete with 24h governance timelock active. Independent code review complete (Codex, April 2026) with all 5 findings fixed. NASA POWER → Sepolia keeper running daily on GitHub Actions cron. Python pricing library v0.5.0 published.
 
 ---
 
@@ -44,13 +44,13 @@ We solve this with three components:
 
 | Chainlink Product | Our Use Case | Integration Status |
 |---|---|---|
-| **Data Feeds** | Energy spot price feeds (solar irradiance, wholesale electricity) | **LIVE ON SEPOLIA** (Adapter active) |
-| **Automation** | PI controller supply adjustments, margin call execution, settlement triggers | **PLANNED** (Next Milestone) |
-| **Functions** | Off-chain computation for NASA API data fetching and pricing results | **PLANNED** (Next Milestone) |
-| **CCIP** | Cross-chain derivative settlement across Polygon, Arbitrum, Base | **FUTURE** |
-| **VRF** | Fair randomization for derivative settlement ordering | **FUTURE** |
+| **Data Feeds** | Energy spot price feeds + reading any future AggregatorV3 feed (solar irradiance, wholesale electricity) | **LIVE ON SEPOLIA** — `ChainlinkOracleAdapter.sol` deployed at 0x... reads AggregatorV3Interface, normalises decimals to 1e18, includes manual fallback path for energy price |
+| **Automation** | Replace our current GitHub Actions cron keeper with on-chain triggers for daily oracle pushes, margin calls, expiry settlements | **NEXT MILESTONE** (Months 1-2 of grant) |
+| **Functions** | Off-chain computation for direct NASA POWER API fetch with verifiable execution; eliminates the centralised keeper | **NEXT MILESTONE** (Months 1-2) |
+| **CCIP** | Cross-chain derivative settlement when we expand from Arbitrum to additional L2s | **PLANNED** (Months 4-6) |
+| **VRF** | Fair settlement-order randomisation if/when we move to a continuous (rather than European) settlement model | **CONTINGENT** on v2 design |
 
-**Total Products: 5** (most BUILD projects use 1-2)
+**Honest framing:** Today, Data Feeds integration is live (adapter + manual fallback). The other four products are planned milestones, not present claims. Our keeper is currently a cron — replacing it with Automation + Functions is exactly what BUILD support enables, and is the integration we are most committed to.
 
 ### Custom Data Feed Opportunity
 
@@ -67,18 +67,18 @@ This custom DON (Decentralized Oracle Network) would benefit the entire Chainlin
 
 ## TOKEN INFORMATION
 
-**Token:** SPK (SolarPunkCoin)
+**Stablecoin:** SPK (SolarPunkCoin) — energy-backed peg-controlled stablecoin. NOT a governance/utility token; mint/burn supply is determined algorithmically by the PI controller against the energy peg, so allocating SPK supply to a third party is structurally inconsistent with the peg mechanism.
 
-**Type:** Energy-backed stablecoin with PI control mechanism
+**Governance / Utility Token (planned):** A separate $SPNK governance and fee-share token will be introduced at L2 mainnet launch (Month 6 of grant). Its supply will be fixed and unrelated to the SPK peg.
 
-**Total Supply:** 1,000,000,000 (1B cap, dynamic supply via mint/burn)
+**Chainlink Commitment (BUILD-aligned):**
 
-**Token Utility:**
-- Medium of exchange for energy derivative settlement
-- Collateral for margin positions
-- Governance over protocol parameters
+We are open to either of the structures BUILD has used with prior cohorts, whichever the program prefers:
 
-**Chainlink Commitment:** 3% of total token supply (30,000,000 SPK), vested over 5 years to Chainlink service providers. This follows precedent from Dolomite (3%), Folks Finance (3%), and Brickken (3.5%).
+- **Option A — Token allocation:** 3% of $SPNK total supply (governance/utility token), vested over 5 years to Chainlink service providers. This mirrors Dolomite (3%), Folks Finance (3%), and Brickken (3.5%) precedents.
+- **Option B — Protocol fee share:** 5% of all settlement and option-trading fees collected on the protocol, paid in stablecoins (USDC) directly to Chainlink-designated treasury, in perpetuity.
+
+We default to Option A unless BUILD prefers Option B. Either way, the commitment is to a non-peg-bearing instrument so the SPK peg mechanism remains intact.
 
 ---
 
@@ -101,12 +101,15 @@ This custom DON (Decentralized Oracle Network) would benefit the entire Chainlin
 
 | Component | Status | Evidence |
 |---|---|---|
-| Smart Contracts | 77/77 tests passing | `npx hardhat test` |
-| Testnet Deploy | Publicly Deployed | Sepolia Verified (0x1D55C6...) |
+| Smart Contracts | 79/79 tests passing | `npx hardhat test` (50 SPK + 21 Option + 8 Treasury) |
+| Independent Code Review | 5 findings fixed | Codex review, April 2026 — regression tests added |
+| Testnet Deploy | All 3 contracts source-verified | SolarPunkCoin 0x1D55C6...407F, SolarPunkOption 0xe40A88...4104, ProtocolTreasury 0x138e79...dd2c |
+| Multisig + Governance | Active | Safe 0xB95586...818A holds DEFAULT_ADMIN_ROLE; 24h timelock on all parameter changes |
 | Pricing Engine | 8/8 tests passing | `pytest energy_derivatives/tests/` |
-| Maturity Report | Stress Test Complete | Risk-Boxed Solvency Envelope defined |
-| API Service | Live v0.5.0 | SaaS-ready with auth/tiers |
-| Frontend | React/Vite | Live on Sepolia with 250% margin logic |
+| Live Oracle Keeper | Daily NASA POWER push | GitHub Actions cron, 01:00 UTC, source-hash provenance |
+| Maturity Report | 90-day stress test, 80.24% unassisted survival | `PROTOCOL_MATURITY_REPORT_2026.md` |
+| API Service | Live v0.5.0 (PyPI) | SaaS-ready with auth + rate limiting |
+| Frontend | React/Vite | Live Sepolia reads, 30s polling |
 
 ---
 
@@ -151,13 +154,13 @@ SolarPunk Protocol represents a new category for the Chainlink ecosystem: **ener
 ## COPY-PASTE READY: FORM RESPONSES
 
 ### "Describe your project" (Short)
-SolarPunk Protocol is a decentralized derivatives infrastructure for renewable energy hedging. We use NASA satellite data to calibrate location-specific risk models, price energy options using institutional-grade methods (binomial trees, Monte Carlo, mean-reversion), and settle hedges on-chain via Solidity smart contracts with VaR-based margining. 46/46 contract tests and 8/8 pricing engine tests passing.
+SolarPunk Protocol is a decentralized derivatives infrastructure for renewable energy hedging, live on Ethereum Sepolia. We use NASA POWER satellite data to calibrate location-specific risk models, price energy options using institutional-grade methods (binomial trees, Monte Carlo, jump-diffusion), and settle hedges on-chain via Solidity smart contracts with 250% IM / 125% MM VaR-based margining. 79/79 contract tests + 8/8 pricing engine tests passing. Source-verified deployment with Safe multisig admin and 24h governance timelock, running a live daily NASA → on-chain oracle keeper.
 
 ### "How do you use Chainlink?" (Medium)
-We plan to integrate 5 Chainlink products: (1) Data Feeds for energy spot prices and solar irradiance - our core oracle dependency; (2) CCIP for cross-chain derivative settlement; (3) Automation for settlement triggers and margin call execution; (4) VRF for fair settlement ordering; (5) Functions for off-chain pricing computation via our Python engine. Critically, energy price data feeds don't exist as standard Chainlink feeds today - our integration would create a new data vertical for the ecosystem.
+Today: ChainlinkOracleAdapter is deployed on Sepolia, normalising any AggregatorV3 feed to 1e18 with manual fallback for energy price. Planned during the BUILD program: (1) Automation to replace our current GitHub Actions cron keeper with on-chain triggers for daily oracle updates and expiry settlements; (2) Functions to fetch NASA POWER data with verifiable execution, removing the centralised keeper entirely; (3) CCIP for cross-chain settlement once we expand beyond a single L2; (4) VRF if/when we move to continuous (rather than European) settlement. Energy price feeds don't currently exist as standard Chainlink feeds — our integration would create a new energy-data vertical for the broader ecosystem.
 
 ### "Token commitment"
-3% of total SPK supply (30M tokens), vested over 5 years to Chainlink service providers.
+3% of $SPNK governance/utility token supply (planned at L2 mainnet launch), vested over 5 years to Chainlink service providers — OR equivalent 5% of protocol fees in stablecoin, BUILD's preference. SPK stablecoin supply is not pledged because it is algorithmically peg-controlled.
 
 ---
 
@@ -165,7 +168,7 @@ We plan to integrate 5 Chainlink products: (1) Data Feeds for energy spot prices
 
 - [ ] Review terms at https://chainlinklabs.com/build-terms
 - [ ] Ensure GitHub repo is public and links work
-- [ ] Run `npx hardhat test` to confirm 46/46 passing
+- [ ] Run `npx hardhat test` to confirm 79/79 passing
 - [ ] Run `pytest energy_derivatives/tests/` to confirm 8/8 passing
 - [ ] Have token supply allocation document ready
 - [ ] Proofread all form fields

@@ -36,11 +36,18 @@ Technical Architecture:
 3. Oracle Layer: Chainlink integration for solar irradiance data and production metrics
 4. User Interface (React): Dashboard for operators to hedge, monitor, and settle positions
 
-Current Status:
-- 77/77 smart contract tests passing (Hardhat framework)
-- Publicly deployed and source-verified on Ethereum Sepolia (April 2026)
-- Hardened Margin Parameters: 250% Initial Margin baseline established via jump-diffusion stress testing
-- Python pricing library deployed (v0.5.0)
+Current Status (April 2026):
+- 79/79 smart contract tests passing (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury)
+- All 3 core contracts deployed and source-verified on Sepolia
+- Safe multisig admin handoff complete (1-of-1 today, multi-signer post-grant)
+- 24h governance timelock active on all parameter changes
+- StabilityPool + ChainlinkOracleAdapter deployed alongside core contracts
+- Bond escrow active (100 USDC slashable stake required for minter / oracle / liquidator roles)
+- NASA POWER → Sepolia keeper running daily on GitHub Actions cron (real solar data, source-hashed)
+- Codex independent code review complete — 5 findings identified and fixed (regression tests added)
+- Hardened margin parameters: 250% IM / 125% MM baseline established via jump-diffusion stress testing (90-day simulation, 80.24% unassisted survival rate under 200% vol + jumps; full memo at PROTOCOL_MATURITY_REPORT_2026.md)
+- Python pricing library deployed (spk-derivatives v0.5.0, PyPI)
+- Frontend live on Sepolia with on-chain reads (30s polling)
 - GitHub: github.com/Spectating101/solarpunk-coin
 
 Why Ethereum Ecosystem:
@@ -71,16 +78,19 @@ Additional team members: Not yet (currently solo, seeking advisors post-funding)
 
 FUNDING REQUEST
 
-Amount: $125,000 (Pilot-Scale Capitalization)
+Amount: $50,000 (Development, Audit, and Oracle Infrastructure)
 
 Budget:
-- $75,000 Solvency Reserve: Added to existing $50k simulated reserve to establish a $125k total insurance buffer, unlocking a 60 MWh risk-boxed pilot capacity.
-- $30,000 Security Hardening: Professional smart contract audit and adversarial scenario testing.
-- $20,000 Deployment & Monitoring: Oracle automation and sub-hour update frequency.
+- $25,000 Security Audit: Professional smart contract audit (Code4rena, Sherlock, or equivalent) + adversarial scenario testing + fix iteration. Required before mainnet.
+- $15,000 Oracle Infrastructure & Automation: Chainlink Automation integration for sub-hour update frequency, ChainlinkOracleAdapter productionisation, monitoring/alerting infrastructure, NASA → Chainlink Functions migration.
+- $10,000 L2 Mainnet Deployment & Research Output: Gas costs + benchmarking on Arbitrum/Optimism, 3-month risk-boxed pilot operation, public technical report on settlement characteristics.
 
-Timeline: 6 months to audited mainnet deployment
+What this grant DOES NOT fund:
+- Solvency capital (~$125k required for the 60 MWh pilot exposure cap derived in our maturity memo). That capital is being raised separately from development banks and impact investors who fund operational reserves; it is structurally inappropriate for ecosystem grants.
 
-Alternative: If partial funding, prioritize Solvency Reserve ($75k) to enable real-world pilot trades under strict open-interest caps.
+Timeline: 6 months from grant award to audited L2 mainnet deployment under strict open-interest caps.
+
+Alternative: If partial funding, prioritize the audit ($25k). All other items can be staged or self-funded; the audit cannot.
 
 ---
 
@@ -89,15 +99,27 @@ TECHNICAL DETAILS
 Smart Contracts:
 - Language: Solidity 0.8.20
 - Framework: Hardhat
-- Tests: 77/77 passing (100% coverage of core functions)
-- Gas optimization: Settlements average 120K gas
-- Deployment: Sepolia Verified (0x1D55C6... SPK)
+- Tests: 79/79 passing (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury)
+- Independent review: Codex code review (April 2026) — 5 confirmed findings fixed with regression tests
+- Sepolia deployments (all source-verified):
+    SolarPunkCoin    0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F
+    SolarPunkOption  0xe40A88398b5f90D038f7A6F1f122112DCD9e4104
+    ProtocolTreasury 0x138e793f095a33D2790349eC1066FED3A756dd2c
+    StabilityPool    0xb9c2Ac8166edFc899b591bc51746d75bFCEca086
+    Safe (admin)     0xB95586775C73feB0154828c77832E106425C818A
 
 Architecture:
-- Settlement contract: Holds collateral, enforces payouts
-- Option contract: Manages positions (250% IM / 125% MM default)
-- Oracle adapter: ChainlinkOracleAdapter -> NASA POWER solar data
-- Access control: Safe Multisig with 24h timelock
+- SolarPunkCoin: PI-controlled energy-backed stablecoin, oracle-gated minting, fee split between StabilityPool / ProtocolTreasury
+- SolarPunkOption: European cash-settled clearinghouse with 250% IM / 125% MM, auto-liquidation, oracle-bond gating
+- StabilityPool: Dedicated peg-stability vault with DISBURSER_ROLE-gated withdrawals (separated from main contract for blast-radius isolation)
+- ProtocolTreasury: Fee vault with 4-bucket budget split + keeper bond escrow (slashable 100 USDC stakes)
+- ChainlinkOracleAdapter: Reads AggregatorV3Interface, normalises decimals to 1e18, manual energy price fallback
+- Access control: Safe multisig holds DEFAULT_ADMIN_ROLE on all contracts, 86400s (24h) governance timelock on every parameter change
+
+Live operations:
+- Daily NASA POWER GHI fetched for Taoyuan, Taiwan (24.99°N, 121.30°E) and pushed to SolarPunkOption.updateIndex() via GitHub Actions cron at 01:00 UTC
+- Source-hash provenance: each oracle update is keyed to lat, lon, and date
+- Frontend (Vite/React) reads live state via ethers.js JsonRpcProvider with 30s polling
 
 Deployment Target:
 - Primary: Arbitrum One (low fees for frequent settlements)
@@ -118,7 +140,7 @@ Repository: https://github.com/Spectating101/solarpunk-coin/tree/master
 Key Files:
 - contracts/SolarPunkCoin.sol - PI-controlled stablecoin
 - contracts/SolarPunkOption.sol - Derivatives settlement with VaR margining
-- test/SolarPunkCoin.test.js - 77/77 test suite
+- test/SolarPunkCoin.test.js / test/SolarPunkOption.test.js / test/ProtocolTreasury.test.js - 79/79 test suite
 - scripts/deploy_sepolia.sh - Deployment automation
 
 Supporting Library: https://github.com/spectating101/spk-derivatives
@@ -159,15 +181,15 @@ User Acquisition:
 
 WHY ESP SUPPORT IS CRITICAL
 
-1. Solvency Capital: Real-world pilot hedges require real collateral backing. ESP support provides the initial Solvency Reserve needed for the first risk-boxed pilots.
+1. Security Audit: The protocol cannot move from testnet pilot to L2 mainnet without professional review. Custody-bearing contracts handling option settlement and stability pool reserves require the kind of audit only EF-tier funding makes accessible to a solo academic researcher.
 
-2. Security Hardening: Cannot launch with institutional pilots without professional audit. Handling collateral requires highest security standards.
+2. Oracle Productionisation: Today's NASA → Sepolia keeper runs on a centralised GitHub Actions cron. Migrating to Chainlink Automation + Functions removes that single point of failure and turns the oracle layer into something that genuinely belongs on Ethereum.
 
-3. Credibility: ESP support signals legitimacy to traditional energy sector (banks, utilities) who are skeptical of crypto.
+3. L2 Ecosystem Integration: Sepolia is a proving ground; Arbitrum/Optimism is where energy operators in emerging markets can actually use this. ESP support connects this work to the L2 ecosystem and Chainlink BD relationships needed to ship.
 
-4. Ethereum Ecosystem: L2 deployment, DeFi integration, Chainlink oracles—all dependent on Ethereum ecosystem maturity.
+4. Climate Public Good: Energy-revenue derivatives are the missing primitive for renewable project finance. Banks won't lend against weather-dependent cash flows; the protocol turns volatile production into bankable cash flow. The code is MIT, the methods are reproducible, and the data is open NASA POWER.
 
-5. Climate Impact: This directly addresses climate financing gap. Renewable energy is economically viable but blocked by financiers' risk aversion.
+5. Academic Rigor: The work is being done as a Master's thesis with a published Python pricing library, formal stress-test memo, and intended journal submissions. ESP support takes that research from prototype to peer-reviewable infrastructure.
 
 ---
 

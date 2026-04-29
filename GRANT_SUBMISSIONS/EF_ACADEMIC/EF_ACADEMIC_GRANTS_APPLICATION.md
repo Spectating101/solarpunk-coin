@@ -10,14 +10,14 @@
 
 ## IMPORTANT: ELIGIBILITY NOTE
 
-The **EF PhD Fellowship** (deadline April 1, 2026) requires active PhD enrollment - Christopher is a master's student, so **not eligible for the PhD Fellowship specifically**.
+The **EF PhD Fellowship** (deadline April 1, 2026) has passed and requires active PhD enrollment in any case — Christopher is a master's student, so **not eligible for that program** for the 2026 cycle.
 
-However, the **EF Academic Grants Round** accepts master's students with supervisor support. This document is prepared for that program. The next round is expected to open in 2026 with $1.5-2M in available funding.
+The **EF Academic Grants Round** historically accepts master's students with supervisor support. As of April 2026, no Academic Grants Round is currently open; one is expected later in 2026 with ~$1.5-2M available funding.
 
-**Recommended immediate action:**
-1. Email academic-grants@ethereum.org to ask when the next Academic Grants Round opens
+**Recommended immediate action (this week):**
+1. Email academic-grants@ethereum.org with the inquiry below to confirm timing
 2. Request office hours at https://esp.ethereum.foundation/applicants/office-hours/apply
-3. If Christopher enrolls in a PhD program before April 1, the PhD Fellowship also becomes viable
+3. Submit the General ESP application (separate document) in the meantime — it is open year-round and a stronger fit for the implementation work that is already live
 
 ---
 
@@ -44,11 +44,11 @@ We present SolarPunk Protocol, an open-source implementation of a decentralized 
 
 Our contribution is threefold:
 
-1. **Mechanism Design**: We formalize the incentive structure of a decentralized energy derivatives clearinghouse, proving that VaR-based margining with auto-liquidation creates a strategy-proof mechanism where rational participants maintain system solvency.
+1. **Mechanism Design (research goal)**: We will formalise the incentive structure of a decentralised energy derivatives clearinghouse and analyse whether VaR-based margining with auto-liquidation can support strategy-proofness under reasonable rationality assumptions. The implementation enforcing 250% IM / 125% MM is already live on Sepolia; this grant funds the formal analysis of the conditions under which it is incentive-compatible.
 
-2. **Empirical Validation**: We demonstrate through multi-agent simulation (35 agents, 6 stress scenarios, 1000-day horizons) that PI-controlled supply adjustment achieves 93.2% peg stability under normal conditions and survives all tested stress scenarios including coordinated speculative attacks.
+2. **Empirical Validation (in progress)**: We have run a 90-day jump-diffusion stress simulation showing 80.24% unassisted protocol survival under 200% volatility plus stochastic jumps (full memo: PROTOCOL_MATURITY_REPORT_2026.md). Existing multi-agent and peg-stability simulations are at scripts/simulate_economy.py and scripts/simulate_peg.py. The grant funds extending these to adversarial-agent scenarios calibrated against historical ERCOT/CAISO/NEM data.
 
-3. **Implementation**: We provide working Solidity smart contracts (46/46 tests), a Python pricing library (8/8 tests, pip-installable), and a FastAPI service - all open-source under MIT license.
+3. **Implementation**: We provide working Solidity smart contracts (79/79 tests; 50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury), source-verified on Sepolia under Safe multisig governance with a 24h timelock, a Python pricing library (8/8 tests, pip-installable), and a FastAPI service — all open-source under MIT license.
 
 This work contributes to the Ethereum ecosystem by demonstrating how programmable settlement can unlock an entirely new asset class (energy derivatives) that traditional financial infrastructure cannot serve, while providing formal analysis of the mechanism design properties that make it viable.
 
@@ -91,11 +91,18 @@ This work contributes to the Ethereum ecosystem by demonstrating how programmabl
 
 | Artifact | Status | Location |
 |---|---|---|
-| SolarPunkCoin.sol (stablecoin) | 36/36 tests | contracts/SolarPunkCoin.sol |
-| SolarPunkOption.sol (clearinghouse) | 10/10 tests | contracts/SolarPunkOption.sol |
-| Pricing engine (Python) | 8/8 tests, v0.5.0 | energy_derivatives/spk_derivatives/ |
-| Multi-agent simulation | 6 scenarios, all pass | scripts/simulate_economy.py |
+| SolarPunkCoin.sol (stablecoin) | 50 tests passing | contracts/SolarPunkCoin.sol; Sepolia 0x1D55C6...407F |
+| SolarPunkOption.sol (clearinghouse) | 21 tests passing | contracts/SolarPunkOption.sol; Sepolia 0xe40A88...4104 |
+| ProtocolTreasury.sol (fee vault + bond escrow) | 8 tests passing | contracts/ProtocolTreasury.sol; Sepolia 0x138e79...dd2c |
+| StabilityPool.sol (peg-stability vault) | Deployed | Sepolia 0xb9c2Ac...A086 |
+| ChainlinkOracleAdapter.sol | Deployed | Reads AggregatorV3Interface, normalises to 1e18 |
+| Independent code review | 5 findings fixed (April 2026) | Codex review; regression tests added |
+| Safe multisig + 24h governance timelock | Active on all 3 core contracts | Safe 0xB95586...818A |
+| Pricing engine (Python) | 8/8 tests, v0.5.0 | energy_derivatives/spk_derivatives/ (PyPI) |
+| Stress-test memo (90-day, 200% vol + jumps, 80.24% survival) | Complete | PROTOCOL_MATURITY_REPORT_2026.md |
+| Multi-agent simulation | 6 scenarios | scripts/simulate_economy.py, simulate_black_swan.py, stress_test_margin.py |
 | Peg stabilization sim | 78.6% in-band (basic), 93.2% (multi-agent) | scripts/simulate_peg.py |
+| Live oracle keeper | Daily NASA POWER push to Sepolia | scripts/nasa_keeper.js + GitHub Actions cron |
 | FastAPI service | Live with auth + rate limiting | energy_derivatives/api/main.py |
 | Thesis materials | Defense strategy + bibliography | docs/thesis/ |
 
@@ -163,7 +170,7 @@ Dear EF Academic Grants Team,
 
 I am Christopher Ongko, a master's student at Yuan Ze University (Taiwan), researching energy-backed monetary systems and on-chain derivatives for renewable energy hedging (ORCID: 0009-0007-9339-9098).
 
-I have built an open-source prototype (SolarPunk Protocol) with 46/46 Solidity tests, a validated Python pricing engine, and multi-agent economic simulations demonstrating stablecoin stability. The work applies mechanism design to formalize decentralized energy derivatives as programmable settlement infrastructure on Ethereum.
+I have built an open-source prototype (SolarPunk Protocol) with 79/79 Solidity tests, a validated Python pricing engine, and multi-agent economic simulations demonstrating stablecoin stability. The protocol is live on Sepolia under Safe multisig admin with a 24-hour governance timelock, and runs a daily NASA POWER → on-chain oracle keeper. The work applies mechanism design to formalise decentralised energy derivatives as programmable settlement infrastructure on Ethereum.
 
 I would like to apply to the next Academic Grants Round. Could you advise on:
 1. When the next round opens for applications?
