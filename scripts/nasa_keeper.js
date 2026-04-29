@@ -128,6 +128,7 @@ function toISODate(d) {
 
 async function main() {
   const [deployer] = await ethers.getSigners();
+  const keeper = new ethers.NonceManager(deployer);
   console.log(`\nKeeper: ${deployer.address}`);
   console.log(`Network: ${(await ethers.provider.getNetwork()).name}`);
 
@@ -208,8 +209,8 @@ async function main() {
   );
 
   // ── 3. Push to contracts ──────────────────────────────────────────────────
-  const spk    = new ethers.Contract(ADDRESSES.SolarPunkCoin,   SPK_ABI, deployer);
-  const option = new ethers.Contract(ADDRESSES.SolarPunkOption, OPT_ABI, deployer);
+  const spk    = new ethers.Contract(ADDRESSES.SolarPunkCoin,   SPK_ABI, keeper);
+  const option = new ethers.Contract(ADDRESSES.SolarPunkOption, OPT_ABI, keeper);
   const txs    = {};
 
   console.log("\nPushing to Sepolia…");
