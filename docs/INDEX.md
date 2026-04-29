@@ -24,6 +24,8 @@
 - `docs/project/GOVERNANCE_STATUS.md`
 - `docs/project/PROJECT_OPERATIONS.md`
 - `docs/project/PUBLIC_PROOF_STATUS.md`
+- `docs/project/DAILY_EXPERIMENT_STATUS.md`
+- `docs/project/FRONTEND_HANDOFF.md`
 
 ## Contract specifications
 - `docs/specs/PILLAR3_CONTRACT_SPEC.md`
