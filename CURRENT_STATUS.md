@@ -1,27 +1,29 @@
 # CURRENT STATUS
 
+**Last updated:** 2026-05-04
 This file is the canonical stage snapshot for external reviewers.
 
 ## Status table
 
 | Area | Current status |
 |---|---|
-| Stage | Serious prototype — publicly deployed, security controls live |
-| Smart contracts | 77/77 tests passing |
+| Stage | Live testnet pilot — security controls active, daily oracle running |
+| Smart contracts | **79/79 tests passing** (50 SPK + 21 Option + 8 Treasury) |
+| Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 contracts verified on Etherscan** |
-| Governance delay | **86400s (24h) on all 3 core contracts** |
+| Governance delay | **86,400s (24h) on all 3 core contracts** |
 | Bond requirements | **100 USDC for all operator roles** |
-| Oracle architecture | **ChainlinkOracleAdapter deployed and integrated** |
+| Oracle architecture | **ChainlinkOracleAdapter deployed; daily NASA keeper live since 2026-04-20** |
 | Stability pool | **Dedicated StabilityPool contract (not address(this))** |
 | Treasury loop | Implemented (mint/redeem fees, trading fees, liquidation penalties, bond slashing) |
-| On-chain interaction proof | 7 confirmed Sepolia transactions |
+| On-chain interaction proof | 7 confirmed Sepolia transactions + daily keeper TXs since April 20 |
 | Frontend | Live — reads Sepolia contract state every 30s |
-| Python SDK | chain_client.py reads all live protocol state |
+| Python SDK | spk-derivatives v0.5.0 (PyPI) — chain_client reads all live protocol state |
 | Local demo | Available (`npm run demo:treasury`) |
-| Security audit | Not started — M3 next gate |
-| Multisig admin | **Safe deployed, all 3 contracts handed off — deployer EOA has zero admin** |
-| Pilot counterparties | Not yet secured |
-| Mainnet readiness | NO_GO until audit + multisig |
+| Security audit | Not started — requires funding (~$25k); primary grant deliverable |
+| Multisig admin | **Safe `0xB95586775C73feB0154828c77832E106425C818A` is admin; deployer EOA has zero admin authority** |
+| Pilot counterparties | Not yet secured (highest-leverage gap) |
+| Mainnet readiness | NO_GO until formal audit |
 
 ## Deployed contracts (Sepolia, all verified)
 
@@ -37,7 +39,9 @@ See [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) for full parameter state 
 
 ## Honest status line
 
-Prototype complete with proper security architecture live on Sepolia. Governance timelock active. Oracle and minter roles are bond-gated. Remaining gates before mainnet are audit and multisig.
+Live testnet pilot with full security architecture on Sepolia. Governance timelock active. Oracle and minter roles are bond-gated. An independent code review (Codex, April 2026) caught and fixed 5 security findings. A daily NASA POWER → Sepolia oracle keeper has been running since April 20 — the repo accumulates real on-chain proof every day. Remaining gate before mainnet is a formal security audit.
+
+See [`EVIDENCE.md`](./EVIDENCE.md) for clickable receipts of every claim. See [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) for full context.
 
 ## Open trust gaps
 

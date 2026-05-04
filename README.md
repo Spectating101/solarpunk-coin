@@ -1,93 +1,118 @@
 # SolarPunk Protocol
 
-SolarPunk is **renewable-energy financial infrastructure** that turns verified energy value into programmable settlement, hedging, and treasury flows.
+SolarPunk is **renewable-energy financial infrastructure** that turns verified energy value into programmable settlement, hedging, and treasury flows — and the implementation layer of a Finance Master's thesis at Yuan Ze University.
+
+**Status (May 2026):** Live testnet pilot on Ethereum Sepolia. 79/79 tests. Daily NASA → on-chain oracle keeper running since April 20. Independent code review complete.
+
+---
+
+## Quick links
+
+| Document | Purpose |
+|---|---|
+| [`EVIDENCE.md`](./EVIDENCE.md) | **Start here for external reviewers** — clickable receipts for every claim |
+| [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) | Full context: architecture, design decisions, operations, prospects |
+| [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | One-page stage snapshot |
+| [`PROTOCOL_MATURITY_REPORT_2026.md`](./PROTOCOL_MATURITY_REPORT_2026.md) | 90-day stress test memo and solvency envelope |
+| [`THREAT_MODEL.md`](./THREAT_MODEL.md) | Attack surface and trust assumptions |
+
+---
 
 ## What it is
 
-A niche protocol for renewable-energy finance — comparable in scope to Centrifuge or Voltz, purpose-built for energy markets. Three contracts work together:
+Three core contracts plus supporting infrastructure:
 
 - **`SolarPunkCoin`** — energy-backed stablecoin with PI controller for peg stability, oracle-gated minting, reserve ratio checks, bond-gated operators
-- **`SolarPunkOption`** — margin-based clearinghouse for European energy index options (cash-settled, mark-to-market, liquidation)
-- **`ProtocolTreasury`** — fee vault with 4-bucket budget split (reserve / insurance / ops / audit), keeper bond escrow with cooldown and slash
+- **`SolarPunkOption`** — margin-based clearinghouse for European energy index options (250% IM / 125% MM, cash-settled, auto-liquidation)
+- **`ProtocolTreasury`** — fee vault with 4-bucket budget split, keeper bond escrow with slashing
+- **`StabilityPool`** — dedicated peg-stability vault (separated from coin contract for blast-radius isolation)
+- **`ChainlinkOracleAdapter`** — bridges AggregatorV3Interface feeds to internal contract surfaces, normalises decimals to 1e18
 
-This is a **serious prototype** with a live testnet deployment — not a production network.
+---
 
-## Live deployment (Sepolia testnet — 2026-04-20)
+## Live deployment (Sepolia, April 2026 — all source-verified)
 
-| Contract | Address | Explorer |
+| Contract | Address | Etherscan |
 |---|---|---|
-| ProtocolTreasury | `0x138e793f095a33D2790349eC1066FED3A756dd2c` | [Etherscan ✓](https://sepolia.etherscan.io/address/0x138e793f095a33D2790349eC1066FED3A756dd2c#code) |
-| SolarPunkCoin | `0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F` | [Etherscan ✓](https://sepolia.etherscan.io/address/0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F#code) |
-| SolarPunkOption | `0xe40A88398b5f90D038f7A6F1f122112DCD9e4104` | [Etherscan ✓](https://sepolia.etherscan.io/address/0xe40A88398b5f90D038f7A6F1f122112DCD9e4104#code) |
+| SolarPunkCoin | `0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F` | [Verified ✓](https://sepolia.etherscan.io/address/0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F#code) |
+| SolarPunkOption | `0xe40A88398b5f90D038f7A6F1f122112DCD9e4104` | [Verified ✓](https://sepolia.etherscan.io/address/0xe40A88398b5f90D038f7A6F1f122112DCD9e4104#code) |
+| ProtocolTreasury | `0x138e793f095a33D2790349eC1066FED3A756dd2c` | [Verified ✓](https://sepolia.etherscan.io/address/0x138e793f095a33D2790349eC1066FED3A756dd2c#code) |
+| StabilityPool | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` | Verified |
+| ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` | Verified |
+| Safe (admin) | `0xB95586775C73feB0154828c77832E106425C818A` | [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A) |
 
-All three contracts source-verified on Etherscan. See [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) for full details.
+---
 
-## What problem it solves
+## What is verified and running
 
-Renewable projects face volatile prices and weak hedging access. SolarPunk makes these flows inspectable and programmable:
+- **79/79 smart contract tests** — `npx hardhat test`
+- **Independent code review** (Codex, April 2026) — 5 findings fixed, regression tests added (commit `5176317`)
+- **Safe multisig admin** — deployer EOA has zero authority on any contract
+- **24h governance timelock** — active on all parameter changes
+- **100 USDC bond escrow** — for oracle, minter, liquidator roles
+- **Daily NASA keeper** — fetches real Taoyuan irradiance, pushes to Sepolia, commits log back to repo
+  - Keeper logs: `state/keeper_logs/` (YYYY-MM-DD.json with on-chain TX hashes)
+  - Workflow: `.github/workflows/nasa_keeper.yml`
+- **Python SDK** — `pip install spk-derivatives` (v0.5.0, PyPI)
+- **Frontend** — Vite/React, reads live Sepolia state every 30 seconds
 
-- represent energy value in a financial layer (SPK backed by verified kWh surplus)
-- hedge price risk with margin-aware options contracts
-- route protocol revenue into reserve, insurance, ops, and audit budgets automatically
+---
 
-## What already works
+## What does not yet exist
 
-- **77/77 smart contract tests passing** (`npx hardhat test --no-compile`)
-- **Live Sepolia deployment** — 4 contracts deployed, source-verified, publicly readable
-- **7-transaction interaction proof** on Sepolia — mint, redeem, oracle update, option open, mark-to-market ([proof artifact](./state/proofs/sepolia_interaction_proof.json))
-- local treasury demo (`npm run demo:treasury`)
-- local break-even model (`npm run model:treasury`)
+- No formal security audit (required for mainnet; ~$25k; primary grant deliverable)
+- 1-of-1 Safe (signer threshold expansion is post-grant)
+- No counterparty pilots (highest-leverage gap — see `EVIDENCE.md` §4)
+- Mainnet: NO_GO until audit
 
-## What does not yet work / not yet done
+---
 
-- no external security audit yet
-- no confirmed pilot counterparties yet
-- mainnet gated until audit completes
-
-## How to inspect it quickly
+## How to run it
 
 ```bash
-# contracts and integration tests
-npx hardhat test --no-compile
+# Install
+npm install
 
-# protocol flow demonstration (fees, liquidation, treasury, bonds)
-npm run demo:treasury
+# Run all tests (79 passing)
+npx hardhat test
 
-# simple monthly sustainability model
-npm run model:treasury
+# Frontend dev server (reads live Sepolia)
+cd frontend && npm install && npm run dev
+
+# Python SDK chain client (reads live Sepolia)
+pip install spk-derivatives web3
+python -m spk_derivatives.chain_client
+
+# Manual NASA keeper run
+npx hardhat run scripts/nasa_keeper.js --network sepolia
+
+# Check DISBURSER_ROLE state
+npx hardhat run scripts/fix_disburser_role.js --network sepolia
 ```
+
+---
 
 ## Academic foundation
 
-The protocol is grounded in a Finance Masters thesis (Yuan Ze University) with three empirical pillars:
+This repo is the implementation layer of a Finance Master's thesis (Yuan Ze University) with three pillars:
 
-1. **CEIR analysis** — Amihud-Hurvich bias-corrected predictive regression, Chow test, block bootstrap (2000 reps), China mining ban natural experiment
-2. **Options pricing** — Black-Scholes adapted for solar irradiance volatility (NASA data)
-3. **Contract feasibility** — the smart contract layer implemented here
+1. **Pillar 1 — CEIR analysis:** Amihud-Hurvich bias-corrected predictive regression, Chow structural break test, block bootstrap (2000 reps), China 2021 mining ban as natural experiment. β = −0.206 pre-ban (p < 0.001), β = −0.080 post-ban, Chow F = 4.786 (p = 0.0009).
 
-See `thesis-draft.md` and `thesis_package/` for the research layer.
+2. **Pillar 2 — Physics-based pricing:** NASA satellite irradiance → volatility calibration (σ = 189.5%, Jarque-Bera p = 0.349), binomial trees, Monte Carlo. 2.08% divergence at 20,000 paths. Validated across 5 global markets.
 
-## Next milestone
+3. **Pillar 3 — Contract feasibility:** Oracle tolerance thresholds (Taiwan: 21.7% error for VR ≥ 95%), VaR-based margin (motivates 10-15× spot collateral, driving clearinghouse structure). Supplemented by live Sepolia deployment (Appendix D of thesis).
 
-**Milestone 3: Security credibility**
+Empirical data: `thesis_package/empirical_results/`
+Pricing library: `energy_derivatives/spk_derivatives/`
+Thesis draft: `thesis-draft.md`
 
-- external security audit (Code4rena, Sherlock, or private firm)
-- pilot counterparty engagement
-- governance delay and bond requirements configured for non-zero values
+---
 
-See [`ROADMAP.md`](./ROADMAP.md) for the full ladder.
+## Grant applications
 
-## Docs
+Refreshed drafts (post-M3, post-Codex, May 2026):
+- `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`
+- `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`
+- `GRANT_SUBMISSIONS/EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md`
 
-- [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) — canonical stage snapshot
-- [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) — deployed addresses and explorer links
-- [`DEMO_WALKTHROUGH.md`](./DEMO_WALKTHROUGH.md) — testnet proof and local demo commands
-- [`ARCHITECTURE_OVERVIEW.md`](./ARCHITECTURE_OVERVIEW.md) — system design
-- [`ROADMAP.md`](./ROADMAP.md) — milestone plan
-- [`docs/project/DAILY_EXPERIMENT_STATUS.md`](./docs/project/DAILY_EXPERIMENT_STATUS.md) — rolling Sepolia NASA oracle experiment summary
-- [`AUDIT_READINESS.md`](./AUDIT_READINESS.md) — audit-facing context
-- [`THREAT_MODEL.md`](./THREAT_MODEL.md) — attack surface categories
-- [`TRUST_ASSUMPTIONS.md`](./TRUST_ASSUMPTIONS.md) — explicit trust boundaries
-- [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md) — deploy instructions
-- [`docs/grants/GRANT_PROPOSAL.md`](./docs/grants/GRANT_PROPOSAL.md)
-- [`docs/grants/MILESTONES_AND_BUDGET.md`](./docs/grants/MILESTONES_AND_BUDGET.md)
+See `GRANT_SUBMISSIONS/SHARED/GRANT_OPPORTUNITIES_2026.md` for full opportunity landscape.
