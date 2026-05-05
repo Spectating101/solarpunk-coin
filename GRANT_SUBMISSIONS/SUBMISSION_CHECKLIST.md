@@ -170,11 +170,19 @@ They'll send you a link to their formal application portal after initial review.
 
 ## DOCUMENTS REFERENCE
 
+### 📂 CURRENT CANONICAL GRANT PACKET
+- **docs/grants/GRANT_EXECUTION_PLAN.md** - What to submit, in what order, and why
+- **docs/grants/GRANT_BUDGET_AND_MILESTONES.md** - $48k ask, $25k minimum, milestone plan
+- **docs/grants/GRANT_COPY_PASTE_ANSWERS.md** - Field-ready ESP / BUILD / Academic answers
+- **docs/grants/OUTREACH_TEMPLATES.md** - Copy-paste emails
+- **docs/grants/REVIEWER_PACKET.md** - One-page external reviewer packet
+- **docs/grants/APPLICATION_PACKET_CHECKLIST.md** - Claims to use / avoid
+
 ### 📂 SHARED/ (Use for all grants)
 - **GRANT_SPONSORSHIP_PACKAGE.md** - Main application document (296 lines)
 - **BUDGET_BREAKDOWNS.md** - Detailed budget ($50-150K tiers)
 - **GRANT_REQUIREMENTS_CHECKLIST.md** - What each grant needs
-- **GRANT_OPPORTUNITIES_2026.md** - Full analysis of 15 grants
+- **GRANT_OPPORTUNITIES_2026.md** - Historical opportunity scan; do not use over current canonical packet without rechecking official pages
 
 ### 📂 POLYGON/
 - **WHY_POLYGON.md** - 199-word paragraph for "Why Polygon?" field

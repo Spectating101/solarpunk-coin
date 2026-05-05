@@ -6,6 +6,10 @@ Use this checklist before submitting ESP, Chainlink BUILD, academic grants, or e
 
 - GitHub repo: `https://github.com/Spectating101/solarpunk-coin`
 - Reviewer packet: `docs/grants/REVIEWER_PACKET.md`
+- Execution plan: `docs/grants/GRANT_EXECUTION_PLAN.md`
+- Budget and milestones: `docs/grants/GRANT_BUDGET_AND_MILESTONES.md`
+- Copy-paste answers: `docs/grants/GRANT_COPY_PASTE_ANSWERS.md`
+- Outreach templates: `docs/grants/OUTREACH_TEMPLATES.md`
 - Evidence register: `EVIDENCE.md`
 - Current status: `CURRENT_STATUS.md`
 - Audit readiness: `AUDIT_READINESS.md`
@@ -48,10 +52,17 @@ Use this wording:
 3. EF Academic inquiry or office hours if a suitable round is open.
 4. Audit support program only after choosing a specific L2 deployment lane.
 
+## Recommended ask
+
+- Primary ask: `$48,000`
+- Minimum useful ask: `$25,000`
+- Expanded ask: `$75,000-$100,000` only if the program explicitly funds broader pilots
+
+See `docs/grants/GRANT_BUDGET_AND_MILESTONES.md` for full budget and milestone mapping.
+
 ## Highest-leverage next external proof
 
 - A short hosted demo URL.
 - A two-minute walkthrough video using `DEMO_WALKTHROUGH_SCRIPT.md`.
 - One advisor or thesis-supervisor acknowledgement.
 - One solar operator LOI or discovery-call note.
-

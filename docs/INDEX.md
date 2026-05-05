@@ -59,6 +59,10 @@ Use these first when facts conflict elsewhere:
 - `docs/thesis/MASTER_THESIS_PROPOSAL.md`
 
 ## Grant materials
+- `docs/grants/GRANT_EXECUTION_PLAN.md` — prioritized submission plan and decision rules
+- `docs/grants/GRANT_BUDGET_AND_MILESTONES.md` — grant ask, budget, 12-week/6-month milestones
+- `docs/grants/GRANT_COPY_PASTE_ANSWERS.md` — field-ready answers for ESP/BUILD/academic grants
+- `docs/grants/OUTREACH_TEMPLATES.md` — copy-paste emails for ESP, Chainlink, advisor, operators
 - `docs/grants/REVIEWER_PACKET.md` — one-page reviewer orientation
 - `docs/grants/APPLICATION_PACKET_CHECKLIST.md` — claims checklist before submission
 - `docs/grants/DEMO_WALKTHROUGH_SCRIPT.md` — 2-minute demo script
