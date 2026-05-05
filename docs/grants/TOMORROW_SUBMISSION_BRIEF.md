@@ -4,19 +4,20 @@
 
 ## Best Order
 
-1. **Chainlink BUILD** - submit first.
+1. **Chainlink BUILD / Build on Ethereum** - submit first.
 2. **Ethereum ESP Project Feedback / Office Hours** - send as fit-check, then submit full financial request if invited or clearly appropriate.
 3. **Advisor acknowledgement email** - send the same day to create an external academic signal.
 
 ## Why This Order
 
-Chainlink BUILD is the cleanest immediate fit because SolarPunk is fundamentally an oracle-dependent project. The strongest story is the live NASA POWER -> Sepolia keeper and the need to migrate from GitHub Actions to Chainlink Automation / Functions.
+Chainlink BUILD is the cleanest immediate fit because SolarPunk is fundamentally an oracle-dependent project. The strongest story is the live NASA POWER -> Sepolia keeper and the need to migrate from GitHub Actions to Chainlink Automation / Functions. If the Chainlink Build on Ethereum application path is open, use that lane because SolarPunk is already deployed on Ethereum Sepolia and the program is explicitly Ethereum-aligned.
 
-ESP is still worth approaching, but it should not be framed as a generic startup grant. The safer framing is public-good Ethereum research infrastructure: source-verified contracts, public testnet proof, oracle-risk documentation, audit readiness, L2 analysis, and technical reporting.
+ESP is still worth approaching, but it should not be framed as a generic startup grant or as a consumer financial product. The safer framing is public-good Ethereum research infrastructure: source-verified contracts, public testnet proof, oracle-risk documentation, audit readiness, L2 analysis, and technical reporting. Do not route this through a closed or financial-product-excluding academic round unless ESP specifically tells you to.
 
 ## Submission Links
 
 - Chainlink BUILD portal: `https://chainlinkcommunity.typeform.com/BUILD`
+- Chainlink Build on Ethereum: `https://chain.link/economics/build-program/build-ethereum`
 - Chainlink BUILD terms: `https://chainlinklabs.com/build-terms`
 - Ethereum ESP applicant path: `https://esp.ethereum.foundation/applicants/`
 - Public demo: `https://spectating101.github.io/solarpunk-coin/`
@@ -63,4 +64,3 @@ SolarPunk is open-source Ethereum public-good research infrastructure for energy
 - Primary ask: `$48,000`
 - Minimum useful ask: `$25,000`
 - Do not ask ecosystem grants for solvency reserves or option-writer capital.
-

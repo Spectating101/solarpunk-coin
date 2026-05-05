@@ -2,6 +2,7 @@
 # SolarPunk Protocol - Renewable Energy Derivatives
 
 **Application Portal:** https://chainlinkcommunity.typeform.com/BUILD
+**Build on Ethereum:** https://chain.link/economics/build-program/build-ethereum
 **Alt Portal:** https://docs.google.com/forms/d/e/1FAIpQLSciJKkVo28bN6RMsQa0Am8LpTwhOgN5gIeWZZ8rflUDzOHN-g/viewform
 **Program Terms:** https://chainlinklabs.com/build-terms
 **Status:** Rolling applications (no deadline)
@@ -15,6 +16,8 @@
 **One-Line Description:** Decentralized derivatives protocol enabling renewable energy producers to hedge revenue volatility using physics-calibrated pricing and on-chain settlement.
 
 **Category:** DeFi / Real World Assets / Climate
+
+**Best Program Lane:** Chainlink BUILD, preferably Build on Ethereum if available.
 
 **Website:** https://github.com/Spectating101/solarpunk-coin
 

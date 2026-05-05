@@ -7,6 +7,8 @@ https://esp.ethereum.foundation/applicants/
 Recommended use:
 Submit first as ESP Project Feedback / Office Hours if available. If ESP invites a full funding application, adapt this into the financial-support form.
 
+Do not submit this through a closed academic grants round or frame it as a consumer financial product. The fit is open-source Ethereum research infrastructure: oracle-risk documentation, source-verified testnet proof, audit readiness, L2 analysis, and public reporting.
+
 ---
 
 PROJECT NAME
