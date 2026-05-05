@@ -38,6 +38,7 @@ This is strongest as an applied finance thesis with technical artifacts, not as 
 
 This file is the canonical thesis proposal and handoff.
 
+- `docs/thesis/PROFESSOR_PITCH_PACKET.md` - professor-facing email, pitch framing, scope questions, and send checklist.
 - `README.md` - public project overview and demo link.
 - `docs/grants/REVIEWER_PACKET.md` - grant-reviewer evidence packet.
 - `docs/project/PUBLIC_PROOF_STATUS.md` - current public proof and deployment status.
