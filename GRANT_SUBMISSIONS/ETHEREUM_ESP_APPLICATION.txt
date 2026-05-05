@@ -48,6 +48,7 @@ Current Status (May 2026):
 - Margin risk work: live Sepolia currently runs 150% IM / 75% MM; 250% IM / 125% MM is established as the next risk-boxed pilot target via jump-diffusion stress testing (90-day simulation, 80.24% unassisted survival rate under 200% vol + jumps; full memo at PROTOCOL_MATURITY_REPORT_2026.md)
 - Python pricing library deployed (spk-derivatives v0.5.0, PyPI)
 - Frontend live on Sepolia with on-chain reads (30s polling)
+- Public demo: https://spectating101.github.io/solarpunk-coin/demo/
 - GitHub: github.com/Spectating101/solarpunk-coin
 
 Why Ethereum Ecosystem:

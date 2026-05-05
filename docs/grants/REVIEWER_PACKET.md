@@ -15,7 +15,7 @@ SolarPunk is an open-source Ethereum testnet prototype for renewable-energy hedg
 | Tests | 79/79 Hardhat tests passing | `npx hardhat test` |
 | Daily real-data run | NASA POWER -> Sepolia keeper running since 2026-04-20 | [`docs/project/DAILY_EXPERIMENT_STATUS.md`](../project/DAILY_EXPERIMENT_STATUS.md) |
 | Latest keeper tx | 2026-05-05 `updateIndex` tx | [`EVIDENCE.md`](../../EVIDENCE.md) |
-| Frontend demo | Vite/React proof dashboard with live Sepolia reads | `cd frontend && npx -y node@20 ./node_modules/vite/bin/vite.js` |
+| Frontend demo | Vite/React proof dashboard with live Sepolia reads | https://spectating101.github.io/solarpunk-coin/demo/ |
 | Security posture | Independent code review complete; formal audit not yet started | [`AUDIT_READINESS.md`](../../AUDIT_READINESS.md) |
 
 ## Four-click reviewer path
@@ -58,4 +58,3 @@ Grant funding should not be framed as generic runway. It unlocks specific missin
 - Risk-boxed L2 pilot with strict open-interest caps.
 - Partner-facing reporting and pilot documentation.
 - Public technical report connecting thesis, testnet evidence, and production constraints.
-

@@ -4,6 +4,8 @@ SolarPunk is **renewable-energy financial infrastructure** that turns verified e
 
 **Status (May 2026):** Live testnet pilot on Ethereum Sepolia. 79/79 tests. Daily NASA → on-chain oracle keeper running since April 20. Independent code review complete.
 
+**Public demo:** https://spectating101.github.io/solarpunk-coin/demo/
+
 ---
 
 ## Quick links

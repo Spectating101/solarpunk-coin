@@ -18,6 +18,8 @@
 
 **Website:** https://github.com/Spectating101/solarpunk-coin
 
+**Public Demo:** https://spectating101.github.io/solarpunk-coin/demo/
+
 **Current Stage:** Live Sepolia testnet pilot. 79/79 smart contract tests passing (50 SPK + 21 Option + 8 Treasury). All 3 core contracts deployed and source-verified. Safe multisig admin handoff complete with 24h governance timelock active. Independent code review complete (Codex, April 2026) with all 5 findings fixed. NASA POWER → Sepolia keeper running daily on GitHub Actions cron. Python pricing library v0.5.0 published.
 
 ---
