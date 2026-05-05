@@ -18,9 +18,9 @@ const SepoliaProof = () => {
   ];
 
   const keeperTxs = [
-    { fn: 'updateIndex',                 hash: '0x615e06362fbf46d5e02ac5b54277276f565ad13991432cbe6966d199638484ab' },
-    { fn: 'updateEnergyPrice',           hash: '0x64dbd528e5a59d63e440d7b7b868b7ecf8ef036b93867029942f759d74938da9' },
-    { fn: 'updateOraclePriceAndAdjust',  hash: '0x4bce17ac407229402943fc6e6a9e70bda12dd0cc2820d0c4a7e20402a8bcb3a2' },
+    { fn: 'updateIndex',                 hash: '0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d' },
+    { fn: 'updateEnergyPrice',           hash: '0xbbdfdd96f0e25ed88a883967fe6095629fb24efbac05e5b30c5cb499f731c0ec' },
+    { fn: 'updateOraclePriceAndAdjust',  hash: '0x4b4fb472ae6a5fd0f75d130c8beda6df4e74cf54a1cb1aadfc2e351bc4e1a3c2' },
   ];
 
   const ETHERSCAN = 'https://sepolia.etherscan.io';
@@ -29,8 +29,8 @@ const SepoliaProof = () => {
     <div id="proof-onchain">
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={spStyles.sectionTag}>● Live on Sepolia</div>
-        <a href="https://github.com/Spectating101/solarpunk-coin/actions/runs/25115516154" target="_blank" rel="noopener" style={spStyles.smallLink}>
-          Last run · Apr 29 ↗
+        <a href="https://github.com/Spectating101/solarpunk-coin/actions/runs/25357151504" target="_blank" rel="noopener" style={spStyles.smallLink}>
+          Last run · May 5 ↗
         </a>
       </div>
 
@@ -49,13 +49,13 @@ const SepoliaProof = () => {
         <div style={spStyles.health}>
           <div style={spStyles.healthLabel}>Oracles</div>
           <div style={{ ...spStyles.healthValue, color: '#34d399' }}>Fresh</div>
-          <div style={spStyles.healthSub}>SPK 144s · Opt 168s</div>
+          <div style={spStyles.healthSub}>fresh under 24h</div>
         </div>
         <div style={spStyles.divider}/>
         <div style={spStyles.health}>
           <div style={spStyles.healthLabel}>Option index</div>
-          <div style={{ ...spStyles.healthValue, color: '#dde8de' }}>0.246729</div>
-          <div style={spStyles.healthSub}>raw 246729 · dec 6</div>
+          <div style={{ ...spStyles.healthValue, color: '#dde8de' }}>0.371526</div>
+          <div style={spStyles.healthSub}>raw 371526 · dec 6</div>
         </div>
         <div style={spStyles.divider}/>
         <div style={spStyles.health}>
