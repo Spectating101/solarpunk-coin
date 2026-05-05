@@ -1,6 +1,6 @@
 # SolarPunk Grant Execution Plan
 
-**Last updated:** 2026-05-05  
+**Last updated:** 2026-05-06  
 **Purpose:** practical submission plan so external applications can be assembled by copy/paste.
 
 ## Strategy
@@ -15,18 +15,18 @@ Do not apply everywhere with the same story. SolarPunk has three credible grant 
 
 | Priority | Program | Submit now? | Target ask | Why |
 |---|---:|---:|---:|---|
-| 1 | Ethereum Foundation ESP / Wishlist / office hours | Yes | $48,000 | Best fit for open-source Ethereum research infrastructure and audit/oracle hardening. |
-| 2 | Chainlink BUILD | Yes | Support + ecosystem package; no simple cash assumption | Best fit for oracle/data-heavy renewable energy derivatives. |
+| 1 | Chainlink BUILD | Yes | Support + ecosystem package; no simple cash assumption | Cleanest direct application fit for oracle/data-heavy renewable energy derivatives. |
+| 2 | Ethereum Foundation ESP Project Feedback / office hours | Yes | $48,000 if invited into financial-support path | Best Ethereum path, but should be framed first as public-good feedback/Wishlist fit, not generic startup funding. |
 | 3 | EF Academic inquiry | Yes, as inquiry/office-hours path | $30,000-$50,000 | Strong thesis/research angle, but round timing may vary. |
 | 4 | Arbitrum Audit Program | Later | Audit subsidy / ARB support | Only after choosing Arbitrum as the real L2 pilot lane. |
 | 5 | Celo/Prezenti/traction-heavy programs | Later | TBD | Current gap is traction; revisit after pilot/user evidence. |
 
 ## Official Program Notes
 
-Checked on 2026-05-05:
+Checked on 2026-05-06:
 
-- Ethereum ESP is the relevant Ethereum ecosystem path. Use the official applicant path, Wishlist/RFP categories, and office hours rather than treating it as an automatic generic grant.
-- Chainlink BUILD is an ecosystem-support program for early/mid-stage Web3 projects with technical, ecosystem, go-to-market, and service-provider support. Treat it as strategic infrastructure support, not guaranteed cash.
+- Ethereum ESP is the relevant Ethereum ecosystem path, but the current official flow emphasizes application type and fit. Use Project Feedback / Office Hours first unless a specific Wishlist/RFP or financial-support category clearly fits.
+- Chainlink BUILD is an ecosystem-support program for Web3 projects integrating Chainlink services. Treat it as strategic infrastructure support and oracle partnership, not guaranteed cash.
 - Arbitrum audit support is useful only if SolarPunk is genuinely deploying on Arbitrum and can present audit-ready scope.
 - Celo/Prezenti-style programs are currently less favorable because they prioritize traction, transaction volume, or ecosystem-specific deployment.
 
@@ -48,7 +48,7 @@ Use these files:
 
 ## Minimum Before Pressing Submit
 
-- Host the frontend demo publicly or be ready to share local-run instructions.
+- Confirm public demo URL works: `https://spectating101.github.io/solarpunk-coin/`.
 - Record a 2-minute walkthrough using `DEMO_WALKTHROUGH_SCRIPT.md`.
 - Confirm the repo is public and `main` is current.
 - Do one final factual pass against `APPLICATION_PACKET_CHECKLIST.md`.
@@ -58,9 +58,9 @@ Use these files:
 
 ### Day 1
 
-1. Send Ethereum ESP office-hours / inquiry email.
-2. Submit or draft ESP application using `GRANT_COPY_PASTE_ANSWERS.md`.
-3. Submit Chainlink BUILD using the Chainlink-specific answers.
+1. Submit Chainlink BUILD using the Chainlink-specific answers.
+2. Send Ethereum ESP Project Feedback / office-hours request.
+3. If ESP responds positively or the form requires a full funding request, submit the hardened ESP draft in `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`.
 
 ### Day 2-3
 
@@ -86,4 +86,3 @@ Continue aggressively if any two of these occur:
 - Non-deployer testnet interaction.
 
 If none occur after 6-8 weeks of serious outreach, keep SolarPunk as a thesis/portfolio asset and narrow the next push to the highest-response channel.
-

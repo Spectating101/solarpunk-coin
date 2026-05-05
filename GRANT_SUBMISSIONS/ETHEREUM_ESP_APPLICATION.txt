@@ -1,7 +1,11 @@
-ETHEREUM FOUNDATION - ECOSYSTEM SUPPORT PROGRAM (ESP)
-======================================================
+ETHEREUM FOUNDATION ESP / PROJECT FEEDBACK DRAFT
+=================================================
 
-APPLICATION LINK: https://esp.ethereum.foundation/applicants/
+Official starting point:
+https://esp.ethereum.foundation/applicants/
+
+Recommended use:
+Submit first as ESP Project Feedback / Office Hours if available. If ESP invites a full funding application, adapt this into the financial-support form.
 
 ---
 
@@ -10,268 +14,193 @@ SolarPunk Protocol
 
 ---
 
-PROJECT TAGLINE
-Blockchain derivatives that stabilize renewable energy revenue and enable project finance
+ONE-LINE SUMMARY
+Open-source Ethereum testnet infrastructure for renewable-energy data, oracle hardening, and energy-linked settlement research.
 
 ---
 
-PROJECT CATEGORY
-Select: Climate & Sustainability + DeFi/Financial Primitives
+SHORT DESCRIPTION
+
+SolarPunk Protocol is an open-source Sepolia prototype exploring how public renewable-energy data can support transparent, auditable on-chain settlement and hedging primitives.
+
+The project combines:
+
+- source-verified Solidity contracts on Sepolia,
+- a daily NASA POWER -> Sepolia keeper experiment,
+- a Python pricing and margin-analysis library,
+- a React proof dashboard with live contract reads,
+- audit-readiness, trust-assumption, invariant, and threat-model documentation.
+
+SolarPunk is not presented as a production stablecoin, audited protocol, or mainnet financial product. The current contribution is public-good research infrastructure: it makes an energy-indexed settlement mechanism externally inspectable through code, public transactions, committed keeper artifacts, and reproducible documentation.
 
 ---
 
-PROJECT DESCRIPTION (500 words max)
+PROBLEM
 
-SolarPunk Protocol solves a critical barrier to renewable energy deployment: revenue volatility blocks financing.
+Renewable-energy production is physically measurable but financially volatile. Weather, irradiance, curtailment, and regional electricity prices create revenue uncertainty, especially for smaller projects that cannot access institutional hedging infrastructure.
 
-The Problem:
-Solar and wind farms face unpredictable production due to weather. A solar installation may generate 1000 MWh one month, then 700 MWh during monsoons. Banks won't lend against these unstable cash flows, preventing billions in renewable energy projects—especially in emerging markets with highest solar potential.
+At the same time, most DeFi risk infrastructure is generic and speculative. It rarely connects settlement logic to real physical data, conservative basis-risk controls, or transparent oracle provenance.
 
-Our Solution:
-Financial derivatives (put options) that create a revenue floor for renewable producers. Operators purchase insurance that pays out when production drops below target. This transforms volatile revenue into bankable cash flow, unlocking project finance.
-
-Technical Architecture:
-1. Smart Contracts (Solidity): Hold collateral, enforce automated settlements, manage liquidations
-2. Pricing Engine (Python): Calculate premiums using Black-Scholes framework validated on 3 years NASA solar data
-3. Oracle Layer: Chainlink integration for solar irradiance data and production metrics
-4. User Interface (React): Dashboard for operators to hedge, monitor, and settle positions
-
-Current Status (May 2026):
-- 79/79 smart contract tests passing (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury)
-- All 3 core contracts deployed and source-verified on Sepolia
-- Safe multisig admin handoff complete (1-of-1 today, multi-signer post-grant)
-- 24h governance timelock active on all parameter changes
-- StabilityPool + ChainlinkOracleAdapter deployed alongside core contracts
-- Bond escrow active (100 USDC slashable stake required for minter / oracle / liquidator roles)
-- NASA POWER → Sepolia keeper running daily on GitHub Actions cron (real solar data, source-hashed)
-- Codex independent code review complete — 5 findings identified and fixed (regression tests added)
-- Margin risk work: live Sepolia currently runs 150% IM / 75% MM; 250% IM / 125% MM is established as the next risk-boxed pilot target via jump-diffusion stress testing (90-day simulation, 80.24% unassisted survival rate under 200% vol + jumps; full memo at PROTOCOL_MATURITY_REPORT_2026.md)
-- Python pricing library deployed (spk-derivatives v0.5.0, PyPI)
-- Frontend live on Sepolia with on-chain reads (30s polling)
-- Public demo: https://spectating101.github.io/solarpunk-coin/demo/
-- GitHub: github.com/Spectating101/solarpunk-coin
-
-Why Ethereum Ecosystem:
-- EVM compatibility: Live on Sepolia, targeting Arbitrum/Optimism for production
-- Chainlink oracles: Critical for trustless data feeds; ChainlinkOracleAdapter already live on testnet
-- Liquidity: Connect to Ethereum DeFi for option writer capital
-- Credibility: Ethereum ecosystem legitimacy helps with traditional energy sector partnerships
-
-Target Impact:
-Enable financing for $100M+ in renewable energy projects by providing revenue stability that satisfies lender requirements. Focus on emerging markets (Southeast Asia, Sub-Saharan Africa, Latin America) where solar potential is highest but capital access is lowest.
+The research question is whether Ethereum infrastructure can support an open, auditable prototype for energy-linked settlement that is useful for future renewable-energy finance pilots.
 
 ---
 
-TEAM
+SOLUTION
 
-Name: Christopher Ongko
-Role: Solo Founder / Developer
-Background:
-- Finance Master's student, Yuan Ze University (Taiwan)
-- Research focus: Environmental Economics, derivatives pricing
-- Technical: Solidity, Python, React, smart contract testing (Hardhat)
-- GitHub: github.com/Spectating101/solarpunk-coin
-- Email: s1133958@mail.yzu.edu.tw
+SolarPunk builds a testnet proof surface for energy-linked settlement:
 
-Additional team members: Not yet (currently solo, seeking advisors post-funding)
+1. NASA POWER irradiance data is fetched daily for Taoyuan, Taiwan.
+2. The data is normalized into a seasonal solar index.
+3. The index is written to Sepolia through `SolarPunkOption.updateIndex`.
+4. Keeper logs are committed into the repo with transaction hashes.
+5. The public dashboard reads live contract state and links reviewers to the proof path.
+
+The protocol also includes:
+
+- `SolarPunkCoin`: PI-controlled energy-indexed stablecoin prototype.
+- `SolarPunkOption`: margin-based European settlement/clearinghouse prototype.
+- `ProtocolTreasury`: fee vault and slashable role-bond escrow.
+- `StabilityPool`: separated peg-stability vault.
+- `ChainlinkOracleAdapter`: AggregatorV3Interface-compatible adapter with manual fallback.
+
+The next funded phase would harden this prototype through external review, oracle productionization, L2 deployment analysis, and public reporting.
+
+---
+
+CURRENT STATUS
+
+- 79/79 smart contract tests passing.
+- Five source-verified Sepolia contracts.
+- Safe admin handoff complete for the three core contracts.
+- 24h governance timelock active on core parameter changes.
+- ChainlinkOracleAdapter deployed on Sepolia.
+- Daily NASA POWER -> Sepolia keeper running since 2026-04-20.
+- Keeper artifacts committed under `state/keeper_logs/`.
+- Public daily status: `docs/project/DAILY_EXPERIMENT_STATUS.md`.
+- Public demo: https://spectating101.github.io/solarpunk-coin/
+- Reviewer packet: `docs/grants/REVIEWER_PACKET.md`.
+- Audit-readiness, threat model, trust assumptions, and invariant checklist prepared.
+- Python pricing library published as `spk-derivatives`.
+
+Honest limitations:
+
+- No formal smart contract audit yet.
+- No mainnet deployment.
+- No production oracle finality.
+- No signed solar-operator pilot or LOI yet.
+- Safe is currently 1-of-1 and should become multi-signer before serious pilot use.
+- Live Sepolia margin is currently 150% initial / 75% maintenance; 250% / 125% is the next risk-boxed pilot target from stress testing.
+
+---
+
+WHY THIS FITS ETHEREUM
+
+SolarPunk uses Ethereum as a public verification layer for real-world data and settlement logic. The value to the Ethereum ecosystem is not a private trading product; it is open-source infrastructure and research showing how Ethereum can support non-speculative, real-world financial primitives.
+
+Ethereum relevance:
+
+- Public, source-verified smart contracts.
+- Reproducible testnet evidence.
+- Open oracle and settlement assumptions.
+- L2 deployment analysis for low-cost recurring updates.
+- Public reporting that can inform other oracle-dependent RWA and climate-finance projects.
+
+ESP support would help convert a working prototype into a more credible public-good artifact: externally reviewed contracts, hardened oracle flow, documented L2 constraints, and a public technical report.
 
 ---
 
 FUNDING REQUEST
 
-Amount: $50,000 (Development, Audit, and Oracle Infrastructure)
+Primary ask: $48,000
 
 Budget:
-- $25,000 Security Audit: Professional smart contract audit (Code4rena, Sherlock, or equivalent) + adversarial scenario testing + fix iteration. Required before mainnet.
-- $15,000 Oracle Infrastructure & Automation: Chainlink Automation integration for sub-hour update frequency, ChainlinkOracleAdapter productionisation, monitoring/alerting infrastructure, NASA → Chainlink Functions migration.
-- $10,000 L2 Mainnet Deployment & Research Output: Gas costs + benchmarking on Arbitrum/Optimism, 3-month risk-boxed pilot operation, public technical report on settlement characteristics.
 
-What this grant DOES NOT fund:
-- Solvency capital (~$125k required for the 60 MWh pilot exposure cap derived in our maturity memo). That capital is being raised separately from development banks and impact investors who fund operational reserves; it is structurally inappropriate for ecosystem grants.
+- $24,000 smart contract audit / external review and remediation.
+- $10,000 oracle productionization: Chainlink Automation / Functions prototype, stale-data policy, monitoring, and runbooks.
+- $6,000 L2 deployment and monitoring research on Arbitrum / Optimism test environments.
+- $4,000 frontend proof surface, walkthrough video, and documentation QA.
+- $4,000 public technical report and thesis/research outputs.
 
-Timeline: 6 months from grant award to audited L2 mainnet deployment under strict open-interest caps.
+Minimum useful partial grant: $25,000, focused on external review, remediation, and public reporting.
 
-Alternative: If partial funding, prioritize the audit ($25k). All other items can be staged or self-funded; the audit cannot.
-
----
-
-TECHNICAL DETAILS
-
-Smart Contracts:
-- Language: Solidity 0.8.20
-- Framework: Hardhat
-- Tests: 79/79 passing (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury)
-- Independent review: Codex code review (April 2026) — 5 confirmed findings fixed with regression tests
-- Sepolia deployments (all source-verified):
-    SolarPunkCoin    0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F
-    SolarPunkOption  0xe40A88398b5f90D038f7A6F1f122112DCD9e4104
-    ProtocolTreasury 0x138e793f095a33D2790349eC1066FED3A756dd2c
-    StabilityPool    0xb9c2Ac8166edFc899b591bc51746d75bFCEca086
-    Safe (admin)     0xB95586775C73feB0154828c77832E106425C818A
-
-Architecture:
-- SolarPunkCoin: PI-controlled energy-backed stablecoin, oracle-gated minting, fee split between StabilityPool / ProtocolTreasury
-- SolarPunkOption: European cash-settled clearinghouse with live 150% IM / 75% MM on Sepolia, auto-liquidation, oracle-bond gating; next pilot hardening target is 250% / 125%
-- StabilityPool: Dedicated peg-stability vault with DISBURSER_ROLE-gated withdrawals (separated from main contract for blast-radius isolation)
-- ProtocolTreasury: Fee vault with 4-bucket budget split + keeper bond escrow (slashable 100 USDC stakes)
-- ChainlinkOracleAdapter: Reads AggregatorV3Interface, normalises decimals to 1e18, manual energy price fallback
-- Access control: Safe multisig holds DEFAULT_ADMIN_ROLE on all contracts, 86400s (24h) governance timelock on every parameter change
-
-Live operations:
-- Daily NASA POWER GHI fetched for Taoyuan, Taiwan (24.99°N, 121.30°E) and pushed to SolarPunkOption.updateIndex() via GitHub Actions cron at 01:00 UTC
-- Source-hash provenance: each oracle update is keyed to lat, lon, and date
-- Frontend (Vite/React) reads live state via ethers.js JsonRpcProvider with 30s polling
-
-Deployment Target:
-- Primary: Arbitrum One (low fees for frequent settlements)
-- Secondary: Optimism (growing DeFi ecosystem)
-- Testnet: Publicly deployed to Sepolia
-
-External Dependencies:
-- Chainlink: Price feeds, Automation for PI control, Any API for solar data
-- OpenZeppelin: Contract libraries v5.0 (tested, audited)
-- NASA POWER API: Solar irradiance data (global coverage)
+This grant does not fund solvency reserves, option-writer capital, or private liquidity. Those are operational/pilot capital needs and should be raised separately.
 
 ---
 
-GITHUB & CODE
+12-WEEK DELIVERABLE PLAN
 
-Repository: https://github.com/Spectating101/solarpunk-coin/tree/master
+Week 1-2:
+- Freeze audit scope.
+- Publish contract inventory, threat model, trust assumptions, and invariant checklist.
 
-Key Files:
-- contracts/SolarPunkCoin.sol - PI-controlled stablecoin
-- contracts/SolarPunkOption.sol - Derivatives settlement with VaR margining
-- test/SolarPunkCoin.test.js / test/SolarPunkOption.test.js / test/ProtocolTreasury.test.js - 79/79 test suite
-- scripts/deploy_sepolia.sh - Deployment automation
+Week 3-5:
+- External audit/review or contest-style private review.
+- Publish audit status and issue triage.
 
-Supporting Library: https://github.com/spectating101/spk-derivatives
-- Python pricing engine (v0.5.0)
-- NASA data validation
-- Jump-diffusion volatility modeling
+Week 6-7:
+- Remediate findings.
+- Add regression tests.
+- Update audit-readiness packet.
 
-Open Source: MIT License (all core contracts and libraries)
+Week 8-9:
+- Prototype Chainlink Automation / Functions flow.
+- Define stale-data and oracle-failure policy.
+- Add monitoring/runbook documentation.
 
----
+Week 10:
+- Deploy a capped L2 test environment or publish deployment analysis if mainnet is not yet appropriate.
 
-MARKET & ADOPTION STRATEGY
+Week 11:
+- Publish walkthrough video, updated demo, and public technical report draft.
 
-Phase 1 (Q1-Q2 2026): Risk-Boxed Pilot
-- Deploy audited contracts to Arbitrum mainnet with strict OI caps.
-- Pilot with 3-5 solar operators (under 60 MWh total exposure).
-- Target: $100K notional value in hedges.
-- Refine UX based on operator feedback.
-
-Phase 2 (Q3 2026): Partnerships & Scale
-- Partner with development bank or impact investor to increase Solvency Reserve.
-- Expand to 10 operators across 3 countries.
-- Target: $1M notional value.
-- Launch option writer marketplace (liquidity providers earn yield).
-
-Phase 3 (2027+): Multi-Asset & Enterprise
-- Expand to wind, geothermal derivatives.
-- Enterprise API for utilities and grid operators.
-- Target: $10M+ notional value.
-- Protocol revenue via transaction fees (0.3%) and option marketplace fees (5%).
-
-User Acquisition:
-- Direct outreach: Solar operator associations in Southeast Asia (Taiwan, Indonesia, Philippines).
-- Partnership: Development banks requiring revenue stability for loans.
-- Education: Workshops on financial risk management for renewable operators.
+Week 12:
+- Publish final grant report and next-pilot readiness memo.
 
 ---
 
-WHY ESP SUPPORT IS CRITICAL
+TEAM
 
-1. Security Audit: The protocol cannot move from testnet pilot to L2 mainnet without professional review. Custody-bearing contracts handling option settlement and stability pool reserves require the kind of audit only EF-tier funding makes accessible to a solo academic researcher.
+Christopher Ongko
 
-2. Oracle Productionisation: Today's NASA → Sepolia keeper runs on a centralised GitHub Actions cron. Migrating to Chainlink Automation + Functions removes that single point of failure and turns the oracle layer into something that genuinely belongs on Ethereum.
-
-3. L2 Ecosystem Integration: Sepolia is a proving ground; Arbitrum/Optimism is where energy operators in emerging markets can actually use this. ESP support connects this work to the L2 ecosystem and Chainlink BD relationships needed to ship.
-
-4. Climate Public Good: Energy-revenue derivatives are the missing primitive for renewable project finance. Banks won't lend against weather-dependent cash flows; the protocol turns volatile production into bankable cash flow. The code is MIT, the methods are reproducible, and the data is open NASA POWER.
-
-5. Academic Rigor: The work is being done as a Master's thesis with a published Python pricing library, formal stress-test memo, and intended journal submissions. ESP support takes that research from prototype to peer-reviewable infrastructure.
-
----
-
-EXPECTED OUTCOMES (6-12 Months)
-
-Deliverables:
-- ✅ Audited smart contracts on Arbitrum mainnet
-- ✅ 3-5 pilot operators active under risk-boxed caps
-- ✅ Open-source Maturity Memo & Solvency Report
-- ✅ Case study: "How Derivatives Unlocked Financing for [Solar Operator X]"
-- ✅ Research paper submitted to academic journals
-
-Impact Metrics:
-- MWh of renewable capacity financed via risk-boxed hedging
-- Number of projects that secured loans after revenue stabilization
-- Reduction in cost of capital for hedged operators
-- Geographic reach (countries served)
-Long-Term Vision:
-Create decentralized infrastructure for renewable energy risk management. Traditional energy markets use derivatives extensively (crude oil futures, nat gas options). Renewable energy needs similar tools—but decentralized, transparent, and accessible to small operators.
+- Solo founder/developer.
+- Finance master's student at Yuan Ze University, Taiwan.
+- Research focus: environmental/energy finance, derivatives, and programmable settlement.
+- Technical stack: Solidity, Hardhat, Python, React, ethers.js.
+- ORCID: 0009-0007-9339-9098.
+- Email: s1133958@mail.yzu.edu.tw.
 
 ---
 
-ALIGNMENT WITH ETHEREUM VALUES
+LINKS
 
-1. Public Good: Solving climate financing barrier benefits humanity, not just token holders.
-
-2. Open Source: All contracts MIT licensed. Anyone can fork and adapt.
-
-3. Decentralization: No central authority controls settlements. Smart contracts + oracles = trustless.
-
-4. Financial Inclusion: Brings sophisticated risk management to emerging market operators who can't access traditional derivatives markets.
-
-5. Ethereum Ecosystem Growth: Demonstrates real-world utility for DeFi primitives beyond speculation.
-
----
-
-ADDITIONAL INFORMATION
-
-Academic Background:
-- Master's thesis related to environmental economics and renewable finance
-- Research on derivatives pricing for non-traditional assets
-- Familiar with both traditional finance and blockchain technology
-
-Technical Peer Review:
-Available upon request. Can provide:
-- Detailed technical architecture diagrams
-- Pricing model mathematical derivation
-- Gas optimization analysis
-- Security considerations documentation
-
-Previous Validation:
-- Invisible Economy paper submitted to AEDC (African Economic Development Conference)
-- Python library (spk-derivatives) peer-reviewed by academic advisors
-- Smart contract tests reviewed by developer community
-
-References:
-Can provide academic references (thesis advisors) or technical mentors upon request.
+- GitHub: https://github.com/Spectating101/solarpunk-coin
+- Public demo: https://spectating101.github.io/solarpunk-coin/
+- Reviewer packet: docs/grants/REVIEWER_PACKET.md
+- Daily experiment: docs/project/DAILY_EXPERIMENT_STATUS.md
+- Contract addresses: CONTRACT_ADDRESSES.md
+- Audit readiness: AUDIT_READINESS.md
+- Threat model: THREAT_MODEL.md
+- Trust assumptions: TRUST_ASSUMPTIONS.md
 
 ---
 
-CONTACT & NEXT STEPS
+PROJECT FEEDBACK / OFFICE HOURS EMAIL
 
-Email: s1133958@mail.yzu.edu.tw
-GitHub: github.com/Spectating101
-Location: Taiwan (GMT+8, flexible for calls)
-Availability: Thesis phase until June 2026, then full-time
+Subject: Project feedback request: SolarPunk, open-source energy-data settlement prototype on Sepolia
 
-If selected for ESP support, I would appreciate:
-1. Security review guidance (preparation for audits)
-2. Introductions to Chainlink BD (oracle design)
-3. L2 ecosystem connections (Arbitrum/Optimism partnerships)
-4. Climate-focused advisors in Ethereum ecosystem
+Hello ESP team,
 
-Thank you for considering SolarPunk Protocol for Ecosystem Support.
+I am Christopher Ongko, a finance master's student at Yuan Ze University and the developer of SolarPunk Protocol.
 
----
+SolarPunk is an open-source Sepolia prototype for renewable-energy data and settlement research. It has source-verified contracts, 79/79 passing smart contract tests, a daily NASA POWER -> Sepolia keeper, committed transaction artifacts, and a React proof dashboard with live contract reads.
 
-SUBMISSION CHECKLIST:
-☐ Proofread entire application
-☐ Test all GitHub links
-☐ Update any [placeholders]
-☐ Attach any supporting documents (optional: technical diagrams)
-☐ Save draft before submitting
-☐ Screenshot confirmation page after submit
+I am preparing an ESP/Wishlist-style funding request focused on external review, oracle hardening, L2 deployment analysis, and public technical reporting. I would appreciate guidance on whether this fits ESP financial support, Project Feedback, Wishlist/RFP categories, or a more academic route.
+
+GitHub: https://github.com/Spectating101/solarpunk-coin
+Demo: https://spectating101.github.io/solarpunk-coin/
+
+The project does not claim mainnet readiness, production oracle finality, or a completed security audit. The ask is for open-source infrastructure work and public research outputs.
+
+Best,
+Christopher Ongko
+s1133958@mail.yzu.edu.tw

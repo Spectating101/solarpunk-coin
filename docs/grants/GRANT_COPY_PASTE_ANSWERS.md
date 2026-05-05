@@ -94,7 +94,7 @@ Christopher Ongko, solo founder/developer and finance master's student at Yuan Z
 ## Links
 
 - GitHub: `https://github.com/Spectating101/solarpunk-coin`
-- Public demo: `https://spectating101.github.io/solarpunk-coin/demo/`
+- Public demo: `https://spectating101.github.io/solarpunk-coin/`
 - Evidence register: `EVIDENCE.md`
 - Reviewer packet: `docs/grants/REVIEWER_PACKET.md`
 - Daily experiment status: `docs/project/DAILY_EXPERIMENT_STATUS.md`

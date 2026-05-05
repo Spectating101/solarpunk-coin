@@ -47,8 +47,8 @@ Use this wording:
 
 ## Recommended submission order
 
-1. Ethereum ESP general inquiry/application.
-2. Chainlink BUILD.
+1. Chainlink BUILD.
+2. Ethereum ESP Project Feedback / office-hours inquiry.
 3. EF Academic inquiry or office hours if a suitable round is open.
 4. Audit support program only after choosing a specific L2 deployment lane.
 
@@ -66,3 +66,11 @@ See `docs/grants/GRANT_BUDGET_AND_MILESTONES.md` for full budget and milestone m
 - A two-minute walkthrough video using `DEMO_WALKTHROUGH_SCRIPT.md`.
 - One advisor or thesis-supervisor acknowledgement.
 - One solar operator LOI or discovery-call note.
+
+## Last-minute send order for 2026-05-07
+
+1. Open the public demo and verify it loads.
+2. Open `docs/project/DAILY_EXPERIMENT_STATUS.md` and copy the latest keeper stats.
+3. Submit Chainlink BUILD from `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`.
+4. Send ESP Project Feedback / office-hours email from `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`.
+5. Email advisor acknowledgement request from `docs/grants/OUTREACH_TEMPLATES.md`.
