@@ -113,9 +113,8 @@ Thesis draft: `thesis-draft.md`
 
 ## Grant applications
 
-Refreshed drafts (post-M3, post-Codex, May 2026):
+Active submission-ready drafts:
 - `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`
 - `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`
-- `GRANT_SUBMISSIONS/EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md`
 
-See `GRANT_SUBMISSIONS/SHARED/GRANT_OPPORTUNITIES_2026.md` for full opportunity landscape.
+Use `docs/grants/TOMORROW_SUBMISSION_BRIEF.md` as the current send-order guide. Older grant drafts were moved to `docs/archive/legacy-grant-submissions/` and should not be used without a fresh factual pass.

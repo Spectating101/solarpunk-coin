@@ -197,9 +197,10 @@ energy_derivatives/spk_derivatives/   Python SDK
 thesis_package/                 Thesis research code (options_pricing.py, monetary_scorecard.py)
 empirical/                      Pillar 1 CEIR data and analysis
 frontend/                       Vite/React UI with live Sepolia reads
-frontend-claude-design/         Claude design-pass loose JSX components (not yet wired)
+docs/archive/legacy-interface-design/frontend-claude-design/
+                                 Archived Claude design-pass loose JSX components
 docs/                           Project docs (specs, grants, ops, papers, thesis)
-GRANT_SUBMISSIONS/              Grant application drafts (7 programs)
+GRANT_SUBMISSIONS/              Active grant submission drafts
 submissions_log/                Tracker for actual grant submissions (proof-of-upload)
 .github/workflows/              CI + scheduled keeper
 PROTOCOL_MATURITY_REPORT_2026.md  90-day stress test memo
@@ -297,10 +298,10 @@ The memo defines the "risk-boxed pilot" envelope — open-interest caps + 250% I
 
 ### 6.5 Grant draft refresh (2026-04-30)
 
-All three primary drafts updated to reflect post-M3, post-Codex state:
+Primary drafts updated to reflect post-M3, post-Codex state:
 - `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt` — restructured budget (removed Solvency Reserve ask), added all 5 contract addresses, multisig + timelock, NASA keeper, Codex review
 - `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md` — fixed token model (SPK is a peg-controlled stablecoin; pledged $SPNK governance token instead, or 5% protocol fee share)
-- `GRANT_SUBMISSIONS/EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md` — calibrated overclaimed research, updated existing-work table, noted round-not-currently-open
+- Older EF Academic, Energy Web, Gitcoin, Polygon, and shared grant drafts are archived under `docs/archive/legacy-grant-submissions/` and are not current submission copy.
 
 ---
 

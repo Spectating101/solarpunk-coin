@@ -66,9 +66,11 @@ Use these first when facts conflict elsewhere:
 - `docs/grants/REVIEWER_PACKET.md` — one-page reviewer orientation
 - `docs/grants/APPLICATION_PACKET_CHECKLIST.md` — claims checklist before submission
 - `docs/grants/DEMO_WALKTHROUGH_SCRIPT.md` — 2-minute demo script
+- `docs/grants/TOMORROW_SUBMISSION_BRIEF.md` — immediate send-order guide
+- `GRANT_SUBMISSIONS/README.md` — active-vs-archived grant file map
 - `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md` — refreshed grant narrative
-- `GRANT_SUBMISSIONS/EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md` — refreshed academic grant narrative
-- `GRANT_SUBMISSIONS/SUBMISSION_CHECKLIST.md` — submission flow/checklist
+- `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt` — ESP Project Feedback / funding draft
+- `docs/archive/legacy-grant-submissions/` — older drafts retained for reference only
 - `docs/archive/pre-pivot/grants/GRANT_PROPOSAL.md` — historical draft (pre-pivot)
 - `docs/archive/pre-pivot/grants/MILESTONES_AND_BUDGET.md` — historical budget draft (pre-pivot)
 
