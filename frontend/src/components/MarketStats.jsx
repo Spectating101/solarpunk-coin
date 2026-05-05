@@ -3,11 +3,11 @@ import { ethers } from 'ethers';
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
 import SPK_ABI from '../abi/SolarPunkCoin.json';
 import TREASURY_ABI from '../abi/ProtocolTreasury.json';
+import { CONTRACTS, SEPOLIA_RPC_URL } from '../constants/contracts';
 
 // ── Live Sepolia contract addresses ───────────────────────────────────────────
-const SPK_ADDRESS      = '0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F';
-const TREASURY_ADDRESS = '0x138e793f095a33D2790349eC1066FED3A756dd2c';
-const SEPOLIA_RPC      = 'https://rpc.sepolia.org';
+const SPK_ADDRESS      = CONTRACTS.solarPunkCoin;
+const TREASURY_ADDRESS = CONTRACTS.protocolTreasury;
 const POLL_INTERVAL   = 30_000; // 30 s
 
 // ── Fallback demo chart data (shown while live data loads) ────────────────────
@@ -45,10 +45,11 @@ const MarketStats = () => {
 
   const fetchLiveData = useCallback(async () => {
     try {
-      const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC);
+      const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
       const spk = new ethers.Contract(SPK_ADDRESS, SPK_ABI, provider);
       const treasury = new ethers.Contract(TREASURY_ADDRESS, TREASURY_ABI.abi, provider);
 
+      const reserveToken = await treasury.reserveToken();
       const [
         totalSupply,
         energyPricePerKwh,
@@ -70,7 +71,7 @@ const MarketStats = () => {
         spk.gridStressed(),
         spk.pegTarget(),
         spk.isPegStable(),
-        treasury.treasuryBalance(await spk.reserveToken()),
+        treasury.treasuryBalance(reserveToken),
       ]);
 
       const oraclePriceNum = fmt18(lastOraclePrice);
