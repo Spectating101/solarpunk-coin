@@ -1,5 +1,21 @@
 # Docs Index
 
+## Canonical sources (current truth)
+
+Use these first when facts conflict elsewhere:
+
+- `README.md` — public project overview (current stage)
+- `CURRENT_STATUS.md` — canonical stage snapshot for reviewers
+- `EVIDENCE.md` — proof register with links and artifacts
+- `MASTER_HANDOFF.md` — canonical comprehensive handoff
+- `CONTRACT_ADDRESSES.md` — live deployment addresses
+
+## Timeline and precedence rule
+
+- **Pivot date:** 2026-04-20 (Sepolia live + M3 security hardening + multisig handoff)
+- Prefer docs updated **after** the pivot and aligned with Sepolia/79-test state.
+- If a file claims Amoy-primary deployment, 46/55/77 test totals, single-EOA admin, or zero governance delay as current state, treat it as historical unless explicitly refreshed.
+
 ## Core repo references
 - `README.md` — project overview
 - `CURRENT_STATUS.md` — honest stage snapshot
@@ -43,5 +59,14 @@
 - `docs/thesis/MASTER_THESIS_PROPOSAL.md`
 
 ## Grant materials
-- `docs/grants/GRANT_PROPOSAL.md`
-- `docs/grants/MILESTONES_AND_BUDGET.md`
+- `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md` — refreshed grant narrative
+- `GRANT_SUBMISSIONS/EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md` — refreshed academic grant narrative
+- `GRANT_SUBMISSIONS/SUBMISSION_CHECKLIST.md` — submission flow/checklist
+- `docs/archive/pre-pivot/grants/GRANT_PROPOSAL.md` — historical draft (pre-pivot)
+- `docs/archive/pre-pivot/grants/MILESTONES_AND_BUDGET.md` — historical budget draft (pre-pivot)
+
+## Historical snapshots (do not use as current-state source)
+- `docs/archive/pre-pivot/project/PROJECT_OPERATIONS.md`
+- `docs/archive/pre-pivot/project/GOVERNANCE_STATUS.md`
+- `docs/archive/pre-pivot/project/AUDITOR_HANDOFF_CHECKLIST.md`
+- `docs/archive/pre-pivot/project/SECURITY_AUDIT_STATUS.md`

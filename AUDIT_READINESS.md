@@ -1,5 +1,9 @@
 # AUDIT READINESS
 
+> [!NOTE]
+> This is an audit-facing packet and includes some scope-freeze checklist items captured at deploy-time.
+> For current live-state claims, defer to `CURRENT_STATUS.md` and `EVIDENCE.md`.
+
 ## Current state
 
 Contracts are deployed and source-verified on Ethereum Sepolia. This document is the audit-facing protocol context package.
@@ -68,10 +72,10 @@ See [`docs/project/ROLE_PERMISSION_MATRIX.md`](./docs/project/ROLE_PERMISSION_MA
 
 ## Known gaps before audit start
 
-1. Governance delay currently 0 — set non-zero before audit scope freeze
-2. Bond requirements currently 0 — configure realistic minimums before audit scope freeze
-3. Stability pool is `address(this)` at deploy — should point to a dedicated address in production
-4. No multisig on admin roles — single EOA deployer; must be hardened before mainnet
+1. External security audit not yet completed (mainnet gate remains NO_GO until completion)
+2. Production configuration/parameter freeze and tagged audit scope commit are still required before formal audit start
+3. Real counterparty pilot evidence is still pending, which affects operational—not code-level—audit confidence
+4. Post-audit finding remediation and regression-proof updates remain future work until an auditor report exists
 
 ## Known mechanism risks (April 2026 Audit)
 

@@ -1,23 +1,10 @@
-# Security Audit Status
+# Archived Document Notice
 
-- generated_at: `2026-02-12T00:00:00Z`
-- project: `Solarpunk-bitcoin`
+This file was moved to:
+`docs/archive/pre-pivot/project/SECURITY_AUDIT_STATUS.md`
 
-## External Audit
+It is a historical status snapshot and not current-state metadata.
 
-- status: `NOT_STARTED`
-- auditor: `None`
-- report_url: `None`
-- completed_at: `None`
-
-## Findings
-
-- critical_open: `0`
-- high_open: `0`
-- medium_open: `0`
-- low_open: `0`
-- resolved_total: `0`
-
-## Policy
-
-Mainnet expansion gate remains `NO_GO` until external audit is completed and critical/high findings policy is satisfied.
+Use these current sources instead:
+- `CURRENT_STATUS.md`
+- `EVIDENCE.md`
