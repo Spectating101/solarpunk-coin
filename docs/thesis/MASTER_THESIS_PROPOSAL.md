@@ -48,7 +48,7 @@ This file is the canonical thesis proposal and handoff.
 - `docs/papers/CEIR_SPK_PAPER_OUTLINE.md` - journal-paper extraction plan.
 - `empirical/` - CEIR, regression, pricing, and simulation materials.
 - `contracts/` and `test/` - Solidity implementation and tests.
-- `frontend/` and `docs/demo/` - public proof/demo interface.
+- `frontend/` - public proof/demo interface source. GitHub Pages builds the live demo from this app.
 
 ---
 
