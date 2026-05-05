@@ -1,6 +1,6 @@
 # CURRENT STATUS
 
-**Last updated:** 2026-05-04
+**Last updated:** 2026-05-05
 This file is the canonical stage snapshot for external reviewers.
 
 ## Status table
@@ -21,7 +21,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Python SDK | spk-derivatives v0.5.0 (PyPI) — chain_client reads all live protocol state |
 | Local demo | Available (`npm run demo:treasury`) |
 | Security audit | Not started — requires funding (~$25k); primary grant deliverable |
-| Multisig admin | **Safe `0xB95586775C73feB0154828c77832E106425C818A` is admin; deployer EOA has zero admin authority** |
+| Multisig admin | **Safe `0xB95586775C73feB0154828c77832E106425C818A` is admin on the 3 core contracts; StabilityPool admin remains deployer EOA** |
 | Pilot counterparties | Not yet secured (highest-leverage gap) |
 | Mainnet readiness | NO_GO until formal audit |
 
@@ -47,7 +47,7 @@ See [`EVIDENCE.md`](./EVIDENCE.md) for clickable receipts of every claim. See [`
 
 | Gap | Status |
 |---|---|
-| Single EOA admin | **CLOSED — Safe `0xB95586775C73feB0154828c77832E106425C818A` is admin; deployer EOA revoked** |
+| Single EOA admin | **Closed for core contracts — Safe is admin; StabilityPool auxiliary admin remains deployer EOA** |
 | No formal audit | Open — Code4rena identified, pending funding |
 | Chainlink energy feed | Partial — adapter live, running manual price; real feed pending mainnet |
 | No dispute window for settlement index | Open — multi-oracle aggregation is M4 scope |

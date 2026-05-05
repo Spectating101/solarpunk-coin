@@ -35,13 +35,14 @@ Network: Ethereum Sepolia (chain 11155111)
 
 | Parameter | Value |
 |---|---|
-| Admin authority | **Safe multisig** `0xB95586775C73feB0154828c77832E106425C818A` (1-of-1, deployer EOA has zero admin) |
+| Admin authority | **Safe multisig** `0xB95586775C73feB0154828c77832E106425C818A` controls the 3 core contracts; `StabilityPool` admin remains deployer EOA |
 | Governance delay | 86400s (24h) on all 3 core contracts |
 | Min minter bond | 100 USDC |
 | Min oracle bond | 100 USDC (SolarPunkCoin + SolarPunkOption) |
 | Min liquidator bond | 100 USDC |
 | Deployer keeper bond | 100 USDC deposited |
 | Stability pool | External StabilityPool contract |
+| StabilityPool disburser | SolarPunkCoin has `DISBURSER_ROLE`; deployer EOA does not |
 | Oracle adapter | ChainlinkOracleAdapter holds ORACLE_ROLE on both contracts |
 | Energy price (adapter) | $0.05/kWh (manual — no Chainlink energy feed on Sepolia) |
 

@@ -4,10 +4,10 @@ Purpose: give a frontend/design agent enough current context to improve the inte
 
 ## Current state
 
-- Repo branches are aligned: `master`, `origin/master`, and GitHub default branch `main` point to `b8fe2db`.
+- Repo branches are being reconciled after Claude/frontend work and daily keeper commits diverged.
 - The Sepolia prototype is live and externally inspectable.
-- The NASA keeper workflow is active on GitHub Actions and has completed successfully once after branch/secret fixes.
-- Latest successful keeper run: `2026-04-29`.
+- The NASA keeper workflow is active on GitHub Actions and has completed successful scheduled runs through `2026-05-05`.
+- Latest successful keeper run: `2026-05-05`.
 - Local contract tests: `79 passing`.
 
 ## Canonical live addresses
@@ -25,7 +25,7 @@ Purpose: give a frontend/design agent enough current context to improve the inte
 ## Latest proof artifacts
 
 - Daily experiment status: `docs/project/DAILY_EXPERIMENT_STATUS.md`
-- Latest keeper log: `state/keeper_logs/2026-04-29.json`
+- Latest keeper log: `state/keeper_logs/2026-05-05.json`
 - Rolling keeper summary: `state/keeper_logs/summary.json`
 - Public deployment proof: `docs/project/PUBLIC_PROOF_STATUS.md`
 - Interaction proof: `docs/project/INTERACTION_PROOF_REPORT.md`
@@ -35,9 +35,9 @@ Latest keeper txs:
 
 | Action | Tx |
 |---|---|
-| updateIndex | `0x615e06362fbf46d5e02ac5b54277276f565ad13991432cbe6966d199638484ab` |
-| updateEnergyPrice | `0x64dbd528e5a59d63e440d7b7b868b7ecf8ef036b93867029942f759d74938da9` |
-| updateOraclePriceAndAdjust | `0x4bce17ac407229402943fc6e6a9e70bda12dd0cc2820d0c4a7e20402a8bcb3a2` |
+| updateIndex | `0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d` |
+| updateEnergyPrice | `0xbbdfdd96f0e25ed88a883967fe6095629fb24efbac05e5b30c5cb499f731c0ec` |
+| updateOraclePriceAndAdjust | `0x4b4fb472ae6a5fd0f75d130c8beda6df4e74cf54a1cb1aadfc2e351bc4e1a3c2` |
 
 Latest live health after the successful workflow:
 
@@ -47,8 +47,8 @@ Latest live health after the successful workflow:
 - Reserve ratio: `1010%`
 - Grid stressed: `false`
 - Option paused: `false`
-- Option index raw: `246729`
-- Option index interpreted at `priceDecimals = 6`: `0.246729`
+- Option index raw: `371526`
+- Option index interpreted at `priceDecimals = 6`: `0.371526`
 
 ## What broke and what was fixed
 
@@ -138,4 +138,3 @@ SPK_ADDRESS=0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F \
 OPTION_ADDRESS=0xe40A88398b5f90D038f7A6F1f122112DCD9e4104 \
 node scripts/health_check.js
 ```
-

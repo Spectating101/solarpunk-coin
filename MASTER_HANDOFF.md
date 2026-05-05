@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Master Handoff Document
 
-**Date:** 2026-04-30
+**Date:** 2026-05-05
 **Author:** Christopher Ongko (s1133958@mail.yzu.edu.tw)
 **Repo:** Solarpunk-bitcoin
 **GitHub:** https://github.com/Spectating101/solarpunk-coin
@@ -14,13 +14,13 @@ This document is the canonical, comprehensive handoff for the SolarPunk Protocol
 
 SolarPunk is a renewable-energy-backed decentralized derivatives protocol. It exists as **both** a Master's thesis at Yuan Ze University (Finance) **and** a working prototype on Ethereum Sepolia. The two purposes co-evolve — academic justification informs the design; the working implementation backs the academic claims.
 
-**As of 2026-04-30:**
+**As of 2026-05-05:**
 - 5 Solidity contracts deployed and source-verified on Sepolia
 - 79/79 tests passing (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury)
-- Safe multisig holds admin authority on all contracts; deployer EOA has zero authority
+- Safe multisig holds admin authority on the three core contracts; StabilityPool admin remains the deployer EOA
 - 24-hour governance timelock active on every parameter change
 - 100 USDC bond escrow in force for minter / oracle / liquidator roles
-- Daily NASA POWER → Sepolia oracle keeper running on GitHub Actions cron
+- Daily NASA POWER → Sepolia oracle keeper running on GitHub Actions cron, with 9 successful keeper artifacts through 2026-05-05
 - Independent code review (Codex, April 2026) — 5 findings identified and fixed; regression tests added
 - Python pricing library `spk-derivatives` v0.5.0 published on PyPI
 - Frontend (Vite/React) reading live Sepolia state with 30-second polling
@@ -75,7 +75,7 @@ The thesis explains *why* energy-backed derivatives matter (renewables face reve
 | Safe (admin multisig) | `0xB95586775C73feB0154828c77832E106425C818A` | [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A) |
 | MockUSDC (test collateral) | `0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2` | Verified |
 
-**Deployer EOA:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54` — has **zero admin authority** on any core contract following the multisig handoff. Retains DISBURSER_ROLE on StabilityPool only as a residual configuration error; fix script at `scripts/fix_disburser_role.js` (pending Safe execution).
+**Deployer EOA:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54` — has **zero admin authority** on the three core contracts following the multisig handoff. It still holds `DEFAULT_ADMIN_ROLE` on `StabilityPool`, while `DISBURSER_ROLE` is correctly assigned to `SolarPunkCoin` and revoked from the deployer.
 
 ### 2.2 Test posture
 
@@ -94,7 +94,7 @@ Run with `npx hardhat test` (no compile flag needed; full suite ~4 seconds).
 - Governance delay: **86,400 seconds (24 hours)** on all 3 core contracts
 - Initial margin: **250% of exposure**, maintenance margin **125%**
 - Oracle: ORACLE_ROLE granted to ChainlinkOracleAdapter; manual energy price ($0.05/kWh) as fallback
-- StabilityPool: DEFAULT_ADMIN_ROLE on Safe; DISBURSER_ROLE wiring fix pending
+- StabilityPool: DEFAULT_ADMIN_ROLE remains on deployer EOA; DISBURSER_ROLE is correctly assigned to SolarPunkCoin
 
 ### 2.4 Live data flow
 
@@ -152,9 +152,9 @@ Each log file is permanent on-chain proof anchored to source hash `keccak256(NAS
 **Purpose:** isolate peg-stability USDC from the main coin contract. Reduces blast radius if a bug in SolarPunkCoin allows unintended fund movement.
 
 **Roles:**
-- `DEFAULT_ADMIN_ROLE` → Safe multisig
+- `DEFAULT_ADMIN_ROLE` → deployer EOA (auxiliary-contract admin not yet handed to Safe)
 - `DISBURSER_ROLE` → SolarPunkCoin contract (so its `disburseStabilityPool` can call `pool.withdraw`)
-- `PAUSER_ROLE` → Safe
+- `PAUSER_ROLE` → deployer EOA unless explicitly rotated
 - `emergencyWithdraw` → DEFAULT_ADMIN_ROLE only
 
 ### 3.5 ChainlinkOracleAdapter
@@ -178,7 +178,7 @@ scripts/                      Deploy, demo, simulation, interaction proof, keepe
   deploy_sepolia.sh               Sepolia deploy automation
   setup_m3_security.js            M3: governance delay, bonds, StabilityPool, adapter
   setup_multisig_handoff.js       Safe creation + admin handoff
-  fix_disburser_role.js           Generates Safe calldata for DISBURSER_ROLE fix (pending)
+  fix_disburser_role.js           Historical helper for DISBURSER_ROLE state verification
   nasa_keeper.js                  Daily NASA → Sepolia oracle pusher
   run_interaction_proof.js        7-step on-chain demonstration
   simulate_peg.py                 PI controller simulation
@@ -221,7 +221,7 @@ MASTER_HANDOFF.md               This document
 - **Script:** `scripts/nasa_keeper.js`
 - **Secrets required:** `KEEPER_PRIVATE_KEY`, `SEPOLIA_RPC`
 - **Output:** `state/keeper_logs/YYYY-MM-DD.json`, committed back to repo
-- **Most recent run:** 2026-04-29 (commit `b8fe2db`)
+- **Most recent run:** 2026-05-05 (commit `0eac02c` on origin/main before branch merge)
 
 ### 5.2 Frontend dev server
 
@@ -280,7 +280,7 @@ Receipt: `state/deployments/sepolia_multisig_handoff.json`
 | `withdrawMargin` had no expiry guard | Added `SeriesExpired` revert post-expiry; settlement must use `settle()` |
 | `cumulativeSurplusKwh` displayed as 1e18-scaled (wrong; it's raw integer) | Fixed in frontend `MarketStats.jsx`, SDK `chain_client.py`, keeper `nasa_keeper.js` |
 | NASA keeper pushed index at 1e18 scale instead of `priceDecimals = 6` | Changed `PRICE_SCALE = 1_000_000` and rescaled all `updateIndex` calls |
-| `DISBURSER_ROLE` granted to deployer EOA instead of SolarPunkCoin contract | `scripts/fix_disburser_role.js` generates Safe calldata; **execution still pending** |
+| `DISBURSER_ROLE` granted to deployer EOA instead of SolarPunkCoin contract | Fixed live on Sepolia. SolarPunkCoin now has `DISBURSER_ROLE`; deployer EOA no longer has it. |
 
 Two regression tests added (test count went from 77 to 79).
 
@@ -355,7 +355,8 @@ Public-good positioning + grant-program alignment (EF, Gitcoin, Chainlink BUILD 
 
 ### 8.1 Pre-grant submission
 
-- [ ] Execute `scripts/fix_disburser_role.js` calldata via Safe (1 transaction, 5 minutes; user-action-required, can't be automated from CLI). Without this, StabilityPool's `DISBURSER_ROLE` is on the deployer EOA (visible inconsistency on-chain).
+- [ ] Keep the daily keeper running and monitor GitHub Actions for failed cron runs.
+- [ ] Keep grant-facing docs aligned with `EVIDENCE.md`, `CURRENT_STATUS.md`, and the latest `state/keeper_logs/summary.json`.
 
 ### 8.2 Pre-mainnet
 
@@ -408,7 +409,7 @@ npx hardhat run scripts/setup_m3_security.js --network sepolia
 # Multisig handoff (idempotent)
 npx hardhat run scripts/setup_multisig_handoff.js --network sepolia
 
-# Generate DISBURSER_ROLE fix calldata
+# Verify historical DISBURSER_ROLE fix state
 npx hardhat run scripts/fix_disburser_role.js --network sepolia
 
 # Run interaction proof against live deployment

@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Evidence Register
 
-**Last updated:** 2026-05-04
+**Last updated:** 2026-05-05
 **Purpose:** Flat, clickable receipts for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
 
 This document answers: **"Is there actual evidence, or just descriptions of evidence?"**
@@ -62,7 +62,7 @@ All 5 contracts deployed April 2026. Click any Etherscan link to verify source c
 | StabilityPool | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` | [verify](https://sepolia.etherscan.io/address/0xb9c2Ac8166edFc899b591bc51746d75bFCEca086#code) |
 | ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` | [verify](https://sepolia.etherscan.io/address/0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9#code) |
 
-**Admin:** Safe multisig `0xB95586775C73feB0154828c77832E106425C818A` holds DEFAULT_ADMIN_ROLE. Deployer EOA has zero authority. [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A)
+**Admin:** Safe multisig `0xB95586775C73feB0154828c77832E106425C818A` holds DEFAULT_ADMIN_ROLE on the three core contracts. `StabilityPool` remains deployer-administered, but `DISBURSER_ROLE` is correctly assigned to `SolarPunkCoin` and revoked from the deployer. [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A)
 
 ### 2.2 Governance Parameters (on-chain, verifiable)
 
@@ -93,9 +93,10 @@ System that fetches real satellite data and pushes it to the live contracts ever
 
 | Date | NASA date used | GHI (kWh/m²) | Normalised index | On-chain tx |
 |---|---|---|---|---|
-| 2026-04-20 | 2026-04-15 | 4.667 | 1.4538 (above avg) | [0x615e06...](https://sepolia.etherscan.io/tx/0x615e06362fbf46d5e02ac5b54277276f565ad13991432cbe6966d199638484ab) |
+| 2026-04-20 | 2026-04-15 | 4.667 | 1.4538 (above avg) | [0xb5e9a2...](https://sepolia.etherscan.io/tx/0xb5e9a2fde6e5a96e8b503eb25085a2f34d9ae6f91a4fe5de6c026a82fdc4c018) |
 | 2026-04-21 | (see log) | — | — | see `state/keeper_logs/2026-04-21.json` |
 | 2026-04-29 | 2026-04-24 | 0.792 | 0.2467 (below avg) | [0x615e06...](https://sepolia.etherscan.io/tx/0x615e06362fbf46d5e02ac5b54277276f565ad13991432cbe6966d199638484ab) |
+| 2026-05-05 | 2026-04-30 | 1.193 | 0.3715 (below avg) | [0xb616c3...](https://sepolia.etherscan.io/tx/0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d) |
 
 **Log files:** `state/keeper_logs/YYYY-MM-DD.json` — each entry contains: NASA date, GHI value, monthly mean, normalised index, source hash, 3 on-chain TX hashes, and full protocol state snapshot.
 
