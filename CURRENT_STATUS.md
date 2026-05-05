@@ -13,6 +13,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Source verification | **All 5 contracts verified on Etherscan** |
 | Governance delay | **86,400s (24h) on all 3 core contracts** |
 | Bond requirements | **100 USDC for all operator roles** |
+| Option margin | **Live Sepolia config: 150% initial / 75% maintenance; stress-tested next pilot target: 250% / 125% before larger exposure** |
 | Oracle architecture | **ChainlinkOracleAdapter deployed; daily NASA keeper live since 2026-04-20** |
 | Stability pool | **Dedicated StabilityPool contract (not address(this))** |
 | Treasury loop | Implemented (mint/redeem fees, trading fees, liquidation penalties, bond slashing) |

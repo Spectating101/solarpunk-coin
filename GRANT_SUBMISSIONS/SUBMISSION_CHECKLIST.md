@@ -1,7 +1,7 @@
 # Grant Submission Checklist & Quick Reference
 
-**Status:** ✅ READY FOR SUBMISSION (April 27, 2026)
-**State:** Serious Prototype (77/77 Tests, Sepolia Verified)
+**Status:** READY FOR SUBMISSION AFTER FINAL FORM REVIEW (May 5, 2026)
+**State:** Serious Prototype (79/79 Tests, Sepolia Verified, daily keeper running)
 
 ---
 
@@ -25,10 +25,10 @@
 
 | Component | Verified Fact |
 |---|---|
-| Unit Tests | 77/77 Passing (npx hardhat test) |
+| Unit Tests | 79/79 Passing (npx hardhat test) |
 | Simulation | 80.24% Survival @ 200% Vol (90-day stress) |
 | Deployment | Sepolia Verified (0x1D55... SPK) |
-| Margin Safety | 250% Initial Margin baseline established |
+| Margin Safety | Live Sepolia currently 150%/75%; 250%/125% established as next pilot hardening target via stress memo |
 | Governance | 24h Timelock + Multisig Active |
 | Maturity | PROTOCOL_MATURITY_REPORT_2026.md complete |
 | Frontend | Trust Surface (NASA/Chainlink steps) verified |

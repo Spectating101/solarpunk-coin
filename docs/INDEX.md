@@ -59,6 +59,9 @@ Use these first when facts conflict elsewhere:
 - `docs/thesis/MASTER_THESIS_PROPOSAL.md`
 
 ## Grant materials
+- `docs/grants/REVIEWER_PACKET.md` — one-page reviewer orientation
+- `docs/grants/APPLICATION_PACKET_CHECKLIST.md` — claims checklist before submission
+- `docs/grants/DEMO_WALKTHROUGH_SCRIPT.md` — 2-minute demo script
 - `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md` — refreshed grant narrative
 - `GRANT_SUBMISSIONS/EF_ACADEMIC/EF_ACADEMIC_GRANTS_APPLICATION.md` — refreshed academic grant narrative
 - `GRANT_SUBMISSIONS/SUBMISSION_CHECKLIST.md` — submission flow/checklist

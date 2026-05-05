@@ -30,7 +30,7 @@ We solve this with three components:
 
 1. **Pricing Oracle**: A Python engine (v0.5.0) calibrated on NASA POWER satellite data that computes risk-bounded premiums. Supports binomial trees, Monte Carlo, and jump-diffusion (Merton) models tailored for energy price spikes.
 
-2. **Settlement Layer**: Solidity contracts (0.8.20) implementing a clearinghouse with 250% initial margining, auto-liquidation, and a PI-controlled stablecoin (SPK). 77/77 tests passing. Publicly deployed to Sepolia.
+2. **Settlement Layer**: Solidity contracts (0.8.20) implementing a clearinghouse with margin enforcement, auto-liquidation, and a PI-controlled stablecoin (SPK). Live Sepolia is currently configured at 150% initial / 75% maintenance margin; our stress-tested next pilot target is 250% / 125%. 79/79 tests passing. Publicly deployed to Sepolia.
 
 3. **Data Integration**: Our protocol fundamentally depends on reliable off-chain data feeds. We have already deployed a `ChainlinkOracleAdapter` on Sepolia to bridge NASA satellite truth to on-chain settlement.
 
@@ -154,7 +154,7 @@ SolarPunk Protocol represents a new category for the Chainlink ecosystem: **ener
 ## COPY-PASTE READY: FORM RESPONSES
 
 ### "Describe your project" (Short)
-SolarPunk Protocol is a decentralized derivatives infrastructure for renewable energy hedging, live on Ethereum Sepolia. We use NASA POWER satellite data to calibrate location-specific risk models, price energy options using institutional-grade methods (binomial trees, Monte Carlo, jump-diffusion), and settle hedges on-chain via Solidity smart contracts with 250% IM / 125% MM VaR-based margining. 79/79 contract tests + 8/8 pricing engine tests passing. Source-verified deployment with Safe multisig admin and 24h governance timelock, running a live daily NASA → on-chain oracle keeper.
+SolarPunk Protocol is a decentralized derivatives infrastructure for renewable energy hedging, live on Ethereum Sepolia. We use NASA POWER satellite data to calibrate location-specific risk models, price energy options using institutional-grade methods (binomial trees, Monte Carlo, jump-diffusion), and settle hedges on-chain via Solidity smart contracts with VaR-based margining. Live Sepolia is currently configured at 150% IM / 75% MM, with 250% IM / 125% MM established as the next risk-boxed pilot target in the stress memo. 79/79 contract tests + pricing engine tests passing. Source-verified deployment with Safe multisig admin and 24h governance timelock, running a live daily NASA → on-chain oracle keeper.
 
 ### "How do you use Chainlink?" (Medium)
 Today: ChainlinkOracleAdapter is deployed on Sepolia, normalising any AggregatorV3 feed to 1e18 with manual fallback for energy price. Planned during the BUILD program: (1) Automation to replace our current GitHub Actions cron keeper with on-chain triggers for daily oracle updates and expiry settlements; (2) Functions to fetch NASA POWER data with verifiable execution, removing the centralised keeper entirely; (3) CCIP for cross-chain settlement once we expand beyond a single L2; (4) VRF if/when we move to continuous (rather than European) settlement. Energy price feeds don't currently exist as standard Chainlink feeds — our integration would create a new energy-data vertical for the broader ecosystem.

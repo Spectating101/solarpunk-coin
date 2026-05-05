@@ -69,8 +69,8 @@ All 5 contracts deployed April 2026. Click any Etherscan link to verify source c
 | Parameter | Value | How to verify |
 |---|---|---|
 | Governance timelock | 86,400s (24h) on all 3 core contracts | Call `governanceDelay()` on each contract |
-| Initial margin | 250% | Call `initialMarginBps()` on SolarPunkOption (returns 25000) |
-| Maintenance margin | 125% | Call `maintenanceMarginBps()` (returns 12500) |
+| Initial margin | Live Sepolia: 150%; next pilot hardening target: 250% | Call `initialMarginBps()` on SolarPunkOption (currently returns 15000); see maturity memo for 250% stress-tested recommendation |
+| Maintenance margin | Live Sepolia: 75%; next pilot hardening target: 125% | Call `maintenanceMarginBps()` (currently returns 7500); see maturity memo for 125% stress-tested recommendation |
 | Bond requirement | 100 USDC for all roles | Call `bondRequirements(ORACLE_ROLE)` on SolarPunkCoin |
 
 ### 2.3 Interaction Proof — 7 Confirmed Sepolia Transactions

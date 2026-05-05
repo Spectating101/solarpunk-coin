@@ -44,7 +44,7 @@ We present SolarPunk Protocol, an open-source implementation of a decentralized 
 
 Our contribution is threefold:
 
-1. **Mechanism Design (research goal)**: We will formalise the incentive structure of a decentralised energy derivatives clearinghouse and analyse whether VaR-based margining with auto-liquidation can support strategy-proofness under reasonable rationality assumptions. The implementation enforcing 250% IM / 125% MM is already live on Sepolia; this grant funds the formal analysis of the conditions under which it is incentive-compatible.
+1. **Mechanism Design (research goal)**: We will formalise the incentive structure of a decentralised energy derivatives clearinghouse and analyse whether VaR-based margining with auto-liquidation can support strategy-proofness under reasonable rationality assumptions. The implementation is already live on Sepolia with enforceable margining (currently 150% IM / 75% MM); stress testing identifies 250% IM / 125% MM as the next risk-boxed pilot target. This grant funds the formal analysis of the conditions under which these margin regimes are incentive-compatible.
 
 2. **Empirical Validation (in progress)**: We have run a 90-day jump-diffusion stress simulation showing 80.24% unassisted protocol survival under 200% volatility plus stochastic jumps (full memo: PROTOCOL_MATURITY_REPORT_2026.md). Existing multi-agent and peg-stability simulations are at scripts/simulate_economy.py and scripts/simulate_peg.py. The grant funds extending these to adversarial-agent scenarios calibrated against historical ERCOT/CAISO/NEM data.
 

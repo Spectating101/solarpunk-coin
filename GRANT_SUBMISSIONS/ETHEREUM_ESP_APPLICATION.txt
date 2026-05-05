@@ -36,7 +36,7 @@ Technical Architecture:
 3. Oracle Layer: Chainlink integration for solar irradiance data and production metrics
 4. User Interface (React): Dashboard for operators to hedge, monitor, and settle positions
 
-Current Status (April 2026):
+Current Status (May 2026):
 - 79/79 smart contract tests passing (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury)
 - All 3 core contracts deployed and source-verified on Sepolia
 - Safe multisig admin handoff complete (1-of-1 today, multi-signer post-grant)
@@ -45,7 +45,7 @@ Current Status (April 2026):
 - Bond escrow active (100 USDC slashable stake required for minter / oracle / liquidator roles)
 - NASA POWER → Sepolia keeper running daily on GitHub Actions cron (real solar data, source-hashed)
 - Codex independent code review complete — 5 findings identified and fixed (regression tests added)
-- Hardened margin parameters: 250% IM / 125% MM baseline established via jump-diffusion stress testing (90-day simulation, 80.24% unassisted survival rate under 200% vol + jumps; full memo at PROTOCOL_MATURITY_REPORT_2026.md)
+- Margin risk work: live Sepolia currently runs 150% IM / 75% MM; 250% IM / 125% MM is established as the next risk-boxed pilot target via jump-diffusion stress testing (90-day simulation, 80.24% unassisted survival rate under 200% vol + jumps; full memo at PROTOCOL_MATURITY_REPORT_2026.md)
 - Python pricing library deployed (spk-derivatives v0.5.0, PyPI)
 - Frontend live on Sepolia with on-chain reads (30s polling)
 - GitHub: github.com/Spectating101/solarpunk-coin
@@ -110,7 +110,7 @@ Smart Contracts:
 
 Architecture:
 - SolarPunkCoin: PI-controlled energy-backed stablecoin, oracle-gated minting, fee split between StabilityPool / ProtocolTreasury
-- SolarPunkOption: European cash-settled clearinghouse with 250% IM / 125% MM, auto-liquidation, oracle-bond gating
+- SolarPunkOption: European cash-settled clearinghouse with live 150% IM / 75% MM on Sepolia, auto-liquidation, oracle-bond gating; next pilot hardening target is 250% / 125%
 - StabilityPool: Dedicated peg-stability vault with DISBURSER_ROLE-gated withdrawals (separated from main contract for blast-radius isolation)
 - ProtocolTreasury: Fee vault with 4-bucket budget split + keeper bond escrow (slashable 100 USDC stakes)
 - ChainlinkOracleAdapter: Reads AggregatorV3Interface, normalises decimals to 1e18, manual energy price fallback

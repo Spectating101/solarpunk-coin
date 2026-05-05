@@ -13,6 +13,7 @@ SolarPunk is **renewable-energy financial infrastructure** that turns verified e
 | [`EVIDENCE.md`](./EVIDENCE.md) | **Start here for external reviewers** — clickable receipts for every claim |
 | [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) | Full context: architecture, design decisions, operations, prospects |
 | [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | One-page stage snapshot |
+| [`docs/grants/REVIEWER_PACKET.md`](./docs/grants/REVIEWER_PACKET.md) | One-page grant/reviewer packet and demo walkthrough |
 | [`PROTOCOL_MATURITY_REPORT_2026.md`](./PROTOCOL_MATURITY_REPORT_2026.md) | 90-day stress test memo and solvency envelope |
 | [`THREAT_MODEL.md`](./THREAT_MODEL.md) | Attack surface and trust assumptions |
 
@@ -23,7 +24,7 @@ SolarPunk is **renewable-energy financial infrastructure** that turns verified e
 Three core contracts plus supporting infrastructure:
 
 - **`SolarPunkCoin`** — energy-backed stablecoin with PI controller for peg stability, oracle-gated minting, reserve ratio checks, bond-gated operators
-- **`SolarPunkOption`** — margin-based clearinghouse for European energy index options (250% IM / 125% MM, cash-settled, auto-liquidation)
+- **`SolarPunkOption`** — margin-based clearinghouse for European energy index options (live Sepolia config currently 150% IM / 75% MM; stress-tested next pilot target is 250% IM / 125% MM)
 - **`ProtocolTreasury`** — fee vault with 4-bucket budget split, keeper bond escrow with slashing
 - **`StabilityPool`** — dedicated peg-stability vault (separated from coin contract for blast-radius isolation)
 - **`ChainlinkOracleAdapter`** — bridges AggregatorV3Interface feeds to internal contract surfaces, normalises decimals to 1e18

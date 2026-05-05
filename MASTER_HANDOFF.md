@@ -24,7 +24,7 @@ SolarPunk is a renewable-energy-backed decentralized derivatives protocol. It ex
 - Independent code review (Codex, April 2026) — 5 findings identified and fixed; regression tests added
 - Python pricing library `spk-derivatives` v0.5.0 published on PyPI
 - Frontend (Vite/React) reading live Sepolia state with 30-second polling
-- Maturity report (90-day jump-diffusion stress test, 80.24% unassisted survival rate at 250% IM)
+- Maturity report (90-day jump-diffusion stress test, 80.24% unassisted survival rate at recommended 250% IM)
 - 7 grant drafts prepared, 3 refreshed against current state (Ethereum ESP, Chainlink BUILD, EF Academic)
 
 **What this is not yet:**
@@ -50,7 +50,7 @@ The thesis investigates renewable-energy-backed monetary instruments and on-chai
 A three-contract core plus supporting infrastructure:
 
 - **`SolarPunkCoin`** — energy-backed stablecoin with PI peg controller, oracle-gated minting, and mint/burn supply mechanics.
-- **`SolarPunkOption`** — European cash-settled options clearinghouse with margin (250% IM / 125% MM), auto-liquidation, and series-based settlement.
+- **`SolarPunkOption`** — European cash-settled options clearinghouse with margin, auto-liquidation, and series-based settlement. Live Sepolia config is currently 150% IM / 75% MM; the stress-tested next pilot target is 250% IM / 125% MM.
 - **`ProtocolTreasury`** — fee vault with 4-bucket budget split (operations / R&D / insurance / community) and keeper bond escrow with slashing.
 - **`StabilityPool`** — dedicated peg-stability vault with `DISBURSER_ROLE`-gated withdrawals (separated from the main coin contract for blast-radius isolation).
 - **`ChainlinkOracleAdapter`** — bridges `AggregatorV3Interface` feeds to internal contract surfaces; normalizes any decimal count to 1e18; manual fallback for energy price.
@@ -92,7 +92,7 @@ Run with `npx hardhat test` (no compile flag needed; full suite ~4 seconds).
 
 - Bond requirements: **100 USDC** for minter, oracle, liquidator
 - Governance delay: **86,400 seconds (24 hours)** on all 3 core contracts
-- Initial margin: **250% of exposure**, maintenance margin **125%**
+- Initial margin: **150% of exposure**, maintenance margin **75%** on the current Sepolia deployment. The recommended next pilot hardening target is **250% / 125%** per `PROTOCOL_MATURITY_REPORT_2026.md`.
 - Oracle: ORACLE_ROLE granted to ChainlinkOracleAdapter; manual energy price ($0.05/kWh) as fallback
 - StabilityPool: DEFAULT_ADMIN_ROLE remains on deployer EOA; DISBURSER_ROLE is correctly assigned to SolarPunkCoin
 
@@ -133,7 +133,7 @@ Each log file is permanent on-chain proof anchored to source hash `keccak256(NAS
 **Purpose:** European cash-settled options on energy indices. One series per (expiry, strike, type, notional). Long and short positions netted by margin.
 
 **Key mechanisms:**
-- **Margin enforcement:** 250% initial / 125% maintenance, enforced on `modifyPosition`, `withdrawMargin`, and on every `markPosition`.
+- **Margin enforcement:** live Sepolia config is 150% initial / 75% maintenance, enforced on `modifyPosition`, `withdrawMargin`, and on every `markPosition`. The risk-boxed pilot recommendation is to raise this to 250% / 125% before larger exposure.
 - **Mark-to-index:** PnL accrues continuously as the oracle posts new `currentIndex`. `priceDecimals = 6` (e.g., $1.45 = 1,450,000). **The keeper uses this scale, not 1e18.**
 - **Settlement:** `settle(seriesId)` after expiry computes terminal PnL, returns remaining margin, clears position. Pre-expiry, only `modifyPosition` and `withdrawMargin` are valid (the latter rejects with `SeriesExpired` after expiry — fix from Codex review).
 - **Auto-liquidation:** Bonded liquidators can call `liquidate` when margin drops below maintenance. Liquidation penalty routes a portion to liquidator + treasury.
@@ -289,11 +289,11 @@ Two regression tests added (test count went from 77 to 79).
 90-day simulation under 200% volatility + stochastic jumps:
 
 - 150% margin baseline → 11% insolvency rate (legacy)
-- **250% IM / 125% MM → 80.24% unassisted survival rate** (current)
+- **250% IM / 125% MM → 80.24% unassisted survival rate** (recommended next pilot configuration; current Sepolia deployment remains at 150% / 75%)
 - 99% VaR for 100 MWh / $10k notional pilot exposure: **$171,263** insurance fund drain
 - Scaling ratio: $1.71 of insurance capital supports ~1 kWh of risk-boxed exposure
 
-The memo defines the "risk-boxed pilot" envelope — open-interest caps + 250% IM + bonded oracle — under which the protocol is safe to operate before formal audit.
+The memo defines the "risk-boxed pilot" envelope — open-interest caps + 250% IM + bonded oracle — under which the protocol is safer to operate before formal audit. The current Sepolia deployment is a proof surface and has not yet been reparameterized to that envelope.
 
 ### 6.5 Grant draft refresh (2026-04-30)
 
@@ -537,7 +537,7 @@ The protocol is dual-purpose. The thesis justifies the work; the grants are upsi
 | **M1: Repo credibility** | Tests, docs, version control discipline | ✓ Complete (Apr 2026) |
 | **M2: External inspectability** | Sepolia deployment, Etherscan verification, interaction proof | ✓ Complete (2026-04-20) |
 | **M3: Security credibility** | Multisig, timelock, bonds, separated stability pool, oracle adapter, independent code review | ✓ Architecture complete; **formal audit remaining** (gated by funding) |
-| **M3.5: Risk-boxed pilot** | Live operation under open-interest caps and 250% IM | ✓ Ready (per maturity memo) |
+| **M3.5: Risk-boxed pilot** | Live operation under open-interest caps and 250% IM | ⚠ Next pilot target — stress memo ready; current Sepolia remains 150% / 75% |
 | **M4: Pilot counterparty** | LOI from solar operator / development bank; first real-world hedge | ☐ Not started |
 | **M5: Audited L2 mainnet** | Code4rena/Sherlock audit + Arbitrum/Optimism deployment + multi-signer Safe | ☐ Gated on funding |
 | **M6: Production protocol** | Two-sided clearing, multi-oracle, CCIP, full operator marketplace | ☐ v2 scope |
