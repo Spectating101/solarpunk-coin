@@ -15,6 +15,7 @@ SolarPunk is **renewable-energy financial infrastructure** that turns verified e
 | [`EVIDENCE.md`](./EVIDENCE.md) | **Start here for external reviewers** — clickable receipts for every claim |
 | [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) | Full context: architecture, design decisions, operations, prospects |
 | [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | One-page stage snapshot |
+| [`docs/project/REPO_STRUCTURE.md`](./docs/project/REPO_STRUCTURE.md) | What each repo area is, and what is safe/unsafe to clean |
 | [`docs/grants/REVIEWER_PACKET.md`](./docs/grants/REVIEWER_PACKET.md) | One-page grant/reviewer packet and demo walkthrough |
 | [`PROTOCOL_MATURITY_REPORT_2026.md`](./PROTOCOL_MATURITY_REPORT_2026.md) | 90-day stress test memo and solvency envelope |
 | [`THREAT_MODEL.md`](./THREAT_MODEL.md) | Attack surface and trust assumptions |
