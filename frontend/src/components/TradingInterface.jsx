@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 import { ArrowRight, AlertTriangle, CheckCircle, Loader } from 'lucide-react';
 import SolarPunkOptionABI from '../abi/SolarPunkOption.json';
+import { CONTRACTS, LIVE_OPTION_SERIES, SEPOLIA_RPC_URL } from '../constants/contracts';
 
-const CONTRACT_ADDRESS = import.meta.env.VITE_OPTION_ADDRESS || "";
+const CONTRACT_ADDRESS = import.meta.env.VITE_OPTION_ADDRESS || CONTRACTS.solarPunkOption;
 
 // Minimal ERC20 ABI for approve + allowance
 const ERC20_ABI = [
@@ -19,17 +20,79 @@ const TradingInterface = ({ provider, signer }) => {
   const [status, setStatus] = useState(null); // success, error, approving, missing-address, insufficient-balance
   const [txHash, setTxHash] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [series, setSeries] = useState(null);
+  const [seriesStatus, setSeriesStatus] = useState('loading');
 
-  // Pricing (Pillar 2 - in production, fetch from oracle API)
-  const premiumPerKwh = 0.036;
-  const notional = 1000;
-  const totalPremium = amount * notional * premiumPerKwh;
-  const requiredMargin = totalPremium * 2.5; // Updated to 250% based on April 2026 stress tests
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadSeries() {
+      try {
+        const rpcProvider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
+        const option = new ethers.Contract(CONTRACT_ADDRESS, SolarPunkOptionABI.abi, rpcProvider);
+        const [rawSeries, priceDecimals, initialMarginBps] = await Promise.all([
+          option.series(LIVE_OPTION_SERIES.id),
+          option.priceDecimals(),
+          option.initialMarginBps(),
+        ]);
+
+        if (cancelled) return;
+        if (!rawSeries.exists) {
+          setSeries(null);
+          setSeriesStatus('missing');
+          return;
+        }
+
+        const priceScale = 10 ** Number(priceDecimals);
+        const strike = Number(rawSeries.strike) / priceScale;
+        const notional = Number(rawSeries.notional);
+        setSeries({
+          id: LIVE_OPTION_SERIES.id,
+          label: LIVE_OPTION_SERIES.label,
+          expiry: Number(rawSeries.expiry),
+          strike,
+          isCall: rawSeries.isCall,
+          notional,
+          initialMarginBps: Number(initialMarginBps),
+          marginLabel: `${Number(initialMarginBps) / 100}%`,
+          feePerContract: 0,
+        });
+        setSeriesStatus('ok');
+      } catch (error) {
+        if (!cancelled) {
+          setSeries(null);
+          setSeriesStatus('error');
+        }
+      }
+    }
+
+    loadSeries();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const pricing = useMemo(() => {
+    if (!series) {
+      return {
+        coverage: amount * 1000,
+        exposure: 0,
+        requiredMargin: 0,
+        tradingFee: 0,
+      };
+    }
+
+    const coverage = amount * series.notional;
+    const exposure = coverage * series.strike;
+    const requiredMargin = exposure * (series.initialMarginBps / 10_000);
+    const tradingFee = amount * series.feePerContract;
+    return { coverage, exposure, requiredMargin, tradingFee };
+  }, [amount, series]);
 
   const executeTrade = async () => {
     if (!signer) return;
-    if (!CONTRACT_ADDRESS) {
-      setStatus('missing-address');
+    if (!series) {
+      setStatus('missing-series');
       return;
     }
 
@@ -45,14 +108,14 @@ const TradingInterface = ({ provider, signer }) => {
       const collateralAddr = await option.collateral();
       const collateral = new ethers.Contract(collateralAddr, ERC20_ABI, signer);
       const decimals = await collateral.decimals();
-      const marginWei = ethers.parseUnits(requiredMargin.toFixed(Number(decimals)), decimals);
+      const marginWei = ethers.parseUnits(pricing.requiredMargin.toFixed(Number(decimals)), decimals);
 
       // Check balance
       const userAddr = await signer.getAddress();
       const balance = await collateral.balanceOf(userAddr);
       if (balance < marginWei) {
         setStatus('insufficient-balance');
-        setErrorMsg(`Need ${requiredMargin.toFixed(2)} collateral, have ${ethers.formatUnits(balance, decimals)}`);
+        setErrorMsg(`Need ${pricing.requiredMargin.toFixed(2)} collateral, have ${ethers.formatUnits(balance, decimals)}`);
         setLoading(false);
         return;
       }
@@ -65,9 +128,8 @@ const TradingInterface = ({ provider, signer }) => {
         await approveTx.wait();
       }
 
-      // Execute position: open a long put position
-      const seriesId = ethers.id("SERIES_2026_PUT_50");
-      const tx = await option.modifyPosition(seriesId, amount, marginWei);
+      const qtyDelta = BigInt(Math.trunc(amount));
+      const tx = await option.modifyPosition(series.id, qtyDelta, marginWei);
       const receipt = await tx.wait();
 
       setTxHash(receipt.hash);
@@ -85,8 +147,8 @@ const TradingInterface = ({ provider, signer }) => {
   return (
     <div className="glass-card" style={{ height: 'fit-content' }}>
       <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '16px', marginBottom: '24px' }}>
-        <h3 className="text-accent">Hedge Revenue</h3>
-        <p className="text-muted" style={{ fontSize: '14px' }}>Purchase Price Floor (Put Options)</p>
+        <h3 className="text-accent">Hedge Preview</h3>
+        <p className="text-muted" style={{ fontSize: '14px' }}>Live Sepolia option series, with guarded execution.</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -122,21 +184,25 @@ const TradingInterface = ({ provider, signer }) => {
         {/* Pricing Summary */}
         <div style={{ background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '8px', border: '1px solid var(--border)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
-            <span className="text-muted">Premium / kWh</span>
-            <span className="font-mono">${premiumPerKwh}</span>
+            <span className="text-muted">Series</span>
+            <span className="font-mono">{seriesStatus === 'ok' ? series.label : seriesStatus}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
+            <span className="text-muted">Type / Strike</span>
+            <span className="font-mono">{series ? `${series.isCall ? 'Call' : 'Put'} @ ${series.strike.toFixed(2)}` : 'checking...'}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
             <span className="text-muted">Total Coverage</span>
-            <span className="font-mono text-primary">{(amount * notional).toLocaleString()} kWh</span>
+            <span className="font-mono text-primary">{pricing.coverage.toLocaleString()} kWh</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
-            <span className="text-muted">Required Margin (250%)</span>
-            <span className="font-mono">${requiredMargin.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+            <span className="text-muted">Required Margin{series ? ` (${series.marginLabel})` : ''}</span>
+            <span className="font-mono">${pricing.requiredMargin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
           </div>
            <div style={{ width: '100%', height: '1px', background: 'var(--border)', margin: '8px 0' }}></div>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '16px', fontWeight: 'bold' }}>
-            <span>Est. Cost</span>
-            <span>${totalPremium.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+            <span>Protocol Fee Est.</span>
+            <span>${pricing.tradingFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
           </div>
         </div>
 
@@ -145,7 +211,7 @@ const TradingInterface = ({ provider, signer }) => {
           className="btn-primary"
           style={{ justifyContent: 'center', width: '100%', padding: '16px', fontSize: '16px' }}
           onClick={executeTrade}
-          disabled={loading || !signer}
+          disabled={loading || !signer || seriesStatus !== 'ok'}
         >
           {loading ? (
             status === 'approving' ? 'Approving collateral...' : 'Confirming on-chain...'
@@ -170,10 +236,10 @@ const TradingInterface = ({ provider, signer }) => {
             </div>
           </div>
         )}
-        {status === 'missing-address' && (
+        {status === 'missing-series' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fbbf24', background: 'rgba(251, 191, 36, 0.12)', padding: '12px', borderRadius: '8px', fontSize: '14px' }}>
             <AlertTriangle size={16} />
-            Set VITE_OPTION_ADDRESS in frontend/.env to enable trades.
+            No active live option series is configured for execution.
           </div>
         )}
         {status === 'insufficient-balance' && (
@@ -194,8 +260,13 @@ const TradingInterface = ({ provider, signer }) => {
 
         {!signer && (
            <div style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)' }}>
-            Connect wallet to trade
+            Connect wallet to execute. The preview above is read-only.
            </div>
+        )}
+        {seriesStatus === 'error' && (
+          <div style={{ textAlign: 'center', fontSize: '12px', color: '#fbbf24' }}>
+            Could not read live series metadata from Sepolia.
+          </div>
         )}
 
       </div>

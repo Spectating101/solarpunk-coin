@@ -17,10 +17,11 @@ describe('Frontend Integrity Proof', () => {
     expect(screen.getByText(/PROTOCOL STATUS: RISK-BOXED/i)).toBeDefined();
   });
 
-  it('should display the 250% margin requirement in TradingInterface', () => {
+  it('should display the guarded margin requirement in TradingInterface', () => {
     render(<TradingInterface />);
     
-    // Verify the safety margin label we hardened
-    expect(screen.getByText(/Required Margin \(250%\)/i)).toBeDefined();
+    // Verify the execution preview is margin-gated instead of pretending to be a fake trade.
+    expect(screen.getByText(/Required Margin/i)).toBeDefined();
+    expect(screen.getByText(/Protocol Fee Est./i)).toBeDefined();
   });
 });

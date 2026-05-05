@@ -597,8 +597,11 @@ p {
 }
 
 .btn-primary:disabled {
+  border: 1px solid var(--border-strong);
+  background: rgba(52, 211, 153, 0.16);
+  color: var(--muted);
   cursor: not-allowed;
-  opacity: 0.45;
+  opacity: 1;
 }
 
 .status-badge {

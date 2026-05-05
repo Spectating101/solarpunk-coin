@@ -14,6 +14,11 @@ export const SEPOLIA_RPC_URL = normalizeSepoliaRpc(import.meta.env.VITE_RPC_URL)
 export const GITHUB_REPO = "https://github.com/Spectating101/solarpunk-coin";
 export const KEEPER_WORKFLOW = `${GITHUB_REPO}/actions/workflows/nasa_keeper.yml`;
 
+export const LIVE_OPTION_SERIES = {
+  id: "0xd49655e45fedd336468b39b170f4a6fef123c5e96b4b3745a8de5def356a5637",
+  label: "Live Sepolia Series A",
+};
+
 function normalizeSepoliaRpc(url) {
   if (!url || url.includes("rpc.sepolia.org")) {
     return FALLBACK_SEPOLIA_RPC;

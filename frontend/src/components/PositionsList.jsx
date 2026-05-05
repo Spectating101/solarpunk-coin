@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { Shield, ShieldAlert, Zap, Clock } from 'lucide-react';
 import OPTION_ABI from '../abi/SolarPunkOption.json';
+import { CONTRACTS, LIVE_OPTION_SERIES } from '../constants/contracts';
 
-const OPTION_ADDRESS = import.meta.env.VITE_OPTION_ADDRESS || "0xe40A88398b5f90D038f7A6F1f122112DCD9e4104";
-const SERIES_ID = ethers.id("SERIES_2026_PUT_50"); // Same as TradingInterface
+const OPTION_ADDRESS = import.meta.env.VITE_OPTION_ADDRESS || CONTRACTS.solarPunkOption;
+const SERIES_ID = LIVE_OPTION_SERIES.id;
 
 const PositionsList = ({ provider, signer }) => {
   const [position, setPosition] = useState(null);
@@ -13,22 +14,29 @@ const PositionsList = ({ provider, signer }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchPosition = useCallback(async () => {
-    if (!provider || !signer) return;
+    if (!provider || !signer) {
+      setLoading(false);
+      setPosition(null);
+      return;
+    }
     
     try {
       const userAddr = await signer.getAddress();
       const option = new ethers.Contract(OPTION_ADDRESS, OPTION_ABI.abi, provider);
       
-      const [pos, ser, currentIndex] = await Promise.all([
-        option.positions(userAddr, SERIES_ID),
+      const [pos, ser, currentIndex, priceDecimals] = await Promise.all([
+        option.getPosition(userAddr, SERIES_ID),
         option.series(SERIES_ID),
-        option.currentIndex()
+        option.currentIndex(),
+        option.priceDecimals()
       ]);
 
-      if (pos.exists) {
+      const qty = Number(pos.qty);
+      const margin = Number(ethers.formatUnits(pos.margin, 6));
+      if (qty !== 0 || margin > 0) {
         setPosition({
-          qty: Number(pos.qty),
-          margin: Number(ethers.formatUnits(pos.margin, 6)), // USDC decimals
+          qty,
+          margin,
           lastIndex: Number(pos.lastIndex)
         });
       } else {
@@ -42,7 +50,7 @@ const PositionsList = ({ provider, signer }) => {
         isCall: ser.isCall
       });
       
-      setIndex(Number(currentIndex) / 1e6);
+      setIndex(Number(currentIndex) / (10 ** Number(priceDecimals)));
     } catch (err) {
       console.error("Failed to fetch position:", err);
     } finally {
@@ -56,7 +64,13 @@ const PositionsList = ({ provider, signer }) => {
     return () => clearInterval(interval);
   }, [fetchPosition]);
 
-  if (loading) return <div className="text-muted">Loading positions...</div>;
+  if (loading) return <div className="glass-card" style={{ padding: '24px', textAlign: 'center' }}><p className="text-muted">Loading positions...</p></div>;
+  if (!signer) return (
+    <div className="glass-card" style={{ padding: '24px', textAlign: 'center' }}>
+      <Zap size={18} className="text-accent" />
+      <p className="text-muted" style={{ marginTop: '10px' }}>Connect wallet to inspect active hedges.</p>
+    </div>
+  );
   if (!position) return (
     <div className="glass-card" style={{ padding: '24px', textAlign: 'center' }}>
       <p className="text-muted">No active hedges found for this series.</p>
