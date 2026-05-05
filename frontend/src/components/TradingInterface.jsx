@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
-import { ArrowRight, AlertTriangle, CheckCircle, Loader } from 'lucide-react';
+import { ArrowRight, AlertTriangle, CheckCircle, ExternalLink, ShieldCheck } from 'lucide-react';
 import SolarPunkOptionABI from '../abi/SolarPunkOption.json';
-import { CONTRACTS, LIVE_OPTION_SERIES, SEPOLIA_RPC_URL } from '../constants/contracts';
+import { CONTRACTS, LIVE_OPTION_SERIES, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL } from '../constants/contracts';
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_OPTION_ADDRESS || CONTRACTS.solarPunkOption;
 
@@ -89,9 +89,26 @@ const TradingInterface = ({ provider, signer }) => {
     return { coverage, exposure, requiredMargin, tradingFee };
   }, [amount, series]);
 
+  const seriesExpired = series ? series.expiry * 1000 <= Date.now() : false;
+  const canExecute = Boolean(signer && seriesStatus === 'ok' && !seriesExpired && !loading);
+  const readinessItems = [
+    ['Live series loaded', seriesStatus === 'ok'],
+    ['Wallet connected', Boolean(signer)],
+    ['Series not expired', Boolean(series && !seriesExpired)],
+    ['Sepolia guarded flow', true],
+  ];
+
+  const executeLabel = (() => {
+    if (loading) return status === 'approving' ? 'Approving collateral...' : 'Confirming on-chain...';
+    if (!signer) return 'Connect Wallet to Execute';
+    if (seriesStatus !== 'ok') return 'Series Unavailable';
+    if (seriesExpired) return 'Series Expired';
+    return 'Execute Hedge';
+  })();
+
   const executeTrade = async () => {
     if (!signer) return;
-    if (!series) {
+    if (!series || seriesExpired) {
       setStatus('missing-series');
       return;
     }
@@ -148,7 +165,9 @@ const TradingInterface = ({ provider, signer }) => {
     <div className="glass-card" style={{ height: 'fit-content' }}>
       <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '16px', marginBottom: '24px' }}>
         <h3 className="text-accent">Hedge Preview</h3>
-        <p className="text-muted" style={{ fontSize: '14px' }}>Live Sepolia option series, with guarded execution.</p>
+        <p className="text-muted" style={{ fontSize: '14px' }}>
+          Live Sepolia option series, guarded execution, and explicit prototype scope.
+        </p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -196,6 +215,10 @@ const TradingInterface = ({ provider, signer }) => {
             <span className="font-mono text-primary">{pricing.coverage.toLocaleString()} kWh</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
+            <span className="text-muted">Expiry</span>
+            <span className="font-mono">{series ? new Date(series.expiry * 1000).toLocaleDateString() : 'checking...'}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '14px' }}>
             <span className="text-muted">Required Margin{series ? ` (${series.marginLabel})` : ''}</span>
             <span className="font-mono">${pricing.requiredMargin.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
           </div>
@@ -204,6 +227,21 @@ const TradingInterface = ({ provider, signer }) => {
             <span>Protocol Fee Est.</span>
             <span>${pricing.tradingFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
           </div>
+          {series && (
+            <a className="series-link" href={`${SEPOLIA_EXPLORER}/address/${CONTRACT_ADDRESS}`} target="_blank" rel="noreferrer">
+              series {series.id.slice(0, 10)}...{series.id.slice(-8)} <ExternalLink size={12} />
+            </a>
+          )}
+        </div>
+
+        <div className="readiness-card">
+          <div className="readiness-title"><ShieldCheck size={15} /> Execution readiness</div>
+          {readinessItems.map(([label, ok]) => (
+            <div key={label} className="readiness-row">
+              <span>{label}</span>
+              <strong className={ok ? 'ready' : 'not-ready'}>{ok ? 'ready' : 'blocked'}</strong>
+            </div>
+          ))}
         </div>
 
         {/* Action Button */}
@@ -211,15 +249,9 @@ const TradingInterface = ({ provider, signer }) => {
           className="btn-primary"
           style={{ justifyContent: 'center', width: '100%', padding: '16px', fontSize: '16px' }}
           onClick={executeTrade}
-          disabled={loading || !signer || seriesStatus !== 'ok'}
+          disabled={!canExecute}
         >
-          {loading ? (
-            status === 'approving' ? 'Approving collateral...' : 'Confirming on-chain...'
-          ) : (
-            <>
-              Execute Hedge <ArrowRight size={18} />
-            </>
-          )}
+          {executeLabel} {!loading && signer && seriesStatus === 'ok' && !seriesExpired && <ArrowRight size={18} />}
         </button>
 
         {/* Status Messages */}
@@ -239,7 +271,7 @@ const TradingInterface = ({ provider, signer }) => {
         {status === 'missing-series' && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fbbf24', background: 'rgba(251, 191, 36, 0.12)', padding: '12px', borderRadius: '8px', fontSize: '14px' }}>
             <AlertTriangle size={16} />
-            No active live option series is configured for execution.
+            No active executable live option series is available.
           </div>
         )}
         {status === 'insufficient-balance' && (
@@ -268,6 +300,10 @@ const TradingInterface = ({ provider, signer }) => {
             Could not read live series metadata from Sepolia.
           </div>
         )}
+        <div className="scope-note">
+          Demo guardrail: this is a Sepolia prototype. It previews real deployed contract state,
+          but does not represent audited mainnet trading infrastructure.
+        </div>
 
       </div>
     </div>

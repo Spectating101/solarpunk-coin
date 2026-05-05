@@ -557,6 +557,111 @@ p {
   line-height: 1.6;
 }
 
+.proof-path-grid,
+.grant-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.proof-path-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.proof-path-grid div,
+.grant-grid div,
+.readiness-card {
+  border: 1px solid rgba(27, 52, 34, 0.82);
+  border-radius: 7px;
+  background: rgba(7, 13, 8, 0.24);
+}
+
+.proof-path-grid div,
+.grant-grid div {
+  padding: 13px;
+}
+
+.proof-path-grid span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(217, 119, 6, 0.32);
+  border-radius: 50%;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.proof-path-grid strong,
+.grant-grid strong {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.proof-path-grid p,
+.grant-grid span {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.series-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.readiness-card {
+  display: grid;
+  gap: 2px;
+  padding: 13px;
+}
+
+.readiness-title,
+.readiness-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.readiness-title {
+  justify-content: flex-start;
+  margin-bottom: 8px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.readiness-row {
+  padding: 8px 0;
+  border-top: 1px solid rgba(27, 52, 34, 0.62);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.readiness-row strong {
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.ready {
+  color: var(--green);
+}
+
+.not-ready {
+  color: var(--amber);
+}
+
 .tab-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
@@ -643,6 +748,7 @@ p {
 
   .proof-hero,
   .proof-main-grid,
+  .proof-path-grid,
   .proof-main-grid.bottom,
   .tab-grid {
     grid-template-columns: 1fr;

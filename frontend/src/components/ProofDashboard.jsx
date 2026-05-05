@@ -224,6 +224,37 @@ export default function ProofDashboard() {
         />
       </div>
 
+      <div className="panel proof-path-panel">
+        <div className="panel-heading compact">
+          <div>
+            <div className="panel-kicker"><ShieldCheck size={14} /> Reviewer Path</div>
+            <h2>Verify the experiment in four clicks</h2>
+          </div>
+        </div>
+        <div className="proof-path-grid">
+          <div>
+            <span>1</span>
+            <strong>Open keeper run</strong>
+            <p>Inspect the scheduled daily GitHub Action and committed JSON artifact.</p>
+          </div>
+          <div>
+            <span>2</span>
+            <strong>Check NASA input</strong>
+            <p>Compare the NASA date, normalized index, and scaled on-chain value.</p>
+          </div>
+          <div>
+            <span>3</span>
+            <strong>Open Sepolia tx</strong>
+            <p>Confirm `updateIndex` and treasury/oracle updates were posted publicly.</p>
+          </div>
+          <div>
+            <span>4</span>
+            <strong>Read live contracts</strong>
+            <p>Validate reserve ratio, supply, option index, and pause state from RPC.</p>
+          </div>
+        </div>
+      </div>
+
       <div className="proof-main-grid">
         <div className="panel index-panel">
           <div className="panel-heading">

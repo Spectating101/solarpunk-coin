@@ -6,8 +6,8 @@ describe('TradingInterface', () => {
   it('shows connect-wallet prompt and disabled action without signer', () => {
     render(<TradingInterface provider={null} signer={null} />);
 
-    expect(screen.getByText(/connect wallet to execute/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/connect wallet to execute/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/read-only/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /execute hedge/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /connect wallet to execute/i })).toBeDisabled();
   });
 });

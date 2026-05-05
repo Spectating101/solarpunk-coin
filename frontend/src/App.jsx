@@ -141,6 +141,19 @@ function App() {
                 <div><strong>Next real upgrade:</strong> port the hedge flow to exact live series metadata and safer transaction previews.</div>
               </div>
             </div>
+            <div className="panel">
+              <div className="panel-heading compact">
+                <div>
+                  <div className="panel-kicker">Grant packet</div>
+                  <h2>What funding unlocks next</h2>
+                </div>
+              </div>
+              <div className="grant-grid">
+                <div><strong>Security</strong><span>External audit scope, invariant review, and hardened deployment runbooks.</span></div>
+                <div><strong>Oracle</strong><span>Production data adapter design, fallback feeds, and documented freshness guarantees.</span></div>
+                <div><strong>Pilot</strong><span>Partner-facing dashboard, reporting packet, and continuous real-data experiment expansion.</span></div>
+              </div>
+            </div>
           </div>
         )}
       </main>
