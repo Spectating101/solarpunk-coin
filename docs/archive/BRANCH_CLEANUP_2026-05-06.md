@@ -1,9 +1,8 @@
 # Branch Cleanup 2026-05-06
 
-The active branches after cleanup are:
+The active branch after cleanup is:
 
 - `main`
-- `master`
 
 The following stale Claude remote branches were identified as pre-cleanup review/work branches. They were not used as active submission branches and contained older review/wip material that predates the current grant packet, demo URL, thesis hardening, and Sepolia proof framing. They were deleted from `origin` during cleanup; the last known heads are recorded below for traceability.
 
@@ -13,4 +12,4 @@ The following stale Claude remote branches were identified as pre-cleanup review
 | `claude/review-repo-context-011CUveuW3AN2YqXJVw3uJ4u` | `cfa6a97` | Old repository context review branch. |
 | `claude/wip-012T89LLJEKnkBGX6xHR8hBf` | `1a102f7` | Old WIP branch. |
 
-The current canonical state is the tip of `main` / `master`.
+The old duplicate `master` branch was also deleted from `origin` after `main` was confirmed current. The canonical state is the tip of `main`.
