@@ -2,6 +2,8 @@
 
 This document separates active project assets from archived or local-only material. Use it before moving or deleting files.
 
+For the folder-by-folder cleanup judgment, see `docs/project/FOLDER_CLEANUP_ASSESSMENT.md`.
+
 ## Active Reviewer Surface
 
 - `README.md` - public landing page for GitHub reviewers.
