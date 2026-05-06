@@ -10,13 +10,15 @@ Master's Thesis — 2026
 
 ## Abstract
 
-This thesis makes two connected arguments. First, that energy is a stronger foundation for a monetary standard than gold — more measurable, more honest, and more resistant to the political failures that ended the gold standard in 1971. Second, that if energy is the correct monetary base, then every kilowatt-hour of solar, wind, or tidal energy left unharvested is not merely wasted electricity — it is wasted money. These two arguments together reframe the renewable energy transition as a monetary policy question, not just an environmental one.
+This thesis makes three connected arguments. First, that energy is a stronger foundation for a monetary standard than gold — more measurable, more honest, and more resistant to the political failures that ended the gold standard in 1971. Second, that if energy is the correct monetary base, then every kilowatt-hour of solar, wind, or tidal energy left unharvested is not merely wasted electricity — it is wasted money. Third — and as the central contribution — that a credible energy-backed currency is defined not by what its issuer promises but by what its issuer is structurally unable to do: print without verified backing, change parameters unilaterally, underwrite positions without margin, or control the price oracle alone. These three arguments together reframe the renewable energy transition as a monetary policy question and specify the contractual form a sound energy money must take.
 
 The first argument draws on monetary theory (Hayek 1976; Selgin 2015; Soddy 1925) and is tested empirically against Bitcoin data. Bitcoin is the only monetary asset in history that explicitly required energy expenditure for issuance. Using China's 2021 mining ban as a natural experiment, we show that energy costs demonstrably anchored Bitcoin's market value when mining was geographically concentrated — and that this anchor broke when concentration dispersed. The lesson is not that energy money failed: it is that passive, undesigned energy anchoring is fragile. A deliberately designed energy-backed monetary system — where the link between energy and currency is contractual rather than coincidental — can preserve the anchor regardless of geography. We evaluate energy against gold and fiat on seven necessary conditions for a credible monetary standard and find that energy satisfies all seven, gold satisfies three, and fiat satisfies one.
 
 The second argument follows directly. In a gold standard, leaving gold in the ground is an opportunity cost: the foregone value of unmined wealth. By the same logic, in an energy standard, leaving sunlight, wind, and tidal currents unharvested is foregone monetary production. We quantify this using satellite irradiance data (NASA POWER) and LCOE benchmarks (Lazard 2025) across five global markets. The financing gap that prevents renewable deployment in emerging markets — estimated at $1.35 trillion annually (IEA 2023) — is reframed: it is not a clean-energy problem, it is a monetary system design problem. The current monetary architecture does not recognise unharvested energy as lost value. An energy-backed system would.
 
-As a proof of concept, the contractual infrastructure required for an energy-backed monetary standard has been built and deployed to the Ethereum Sepolia testnet (April 2026): five source-verified smart contracts, a governance timelock, satellite-data oracle feeds, and a running daily data pipeline from NASA to on-chain settlement. This demonstrates that the proposed system is not merely theoretically coherent — it is technically buildable today.
+The central contribution is a **constraints-based blueprint** for an energy-backed currency: a specification of what the issuer must be unable to do for the currency to be credibly sound. The four binding constraints — oracle-gated issuance, supply-rule automation, algorithmic clearinghouse settlement, and timelocked governance — are derived from the seven monetary-standard conditions and shown to be jointly necessary. Chapters 2 through 4 establish why such a blueprint is worth building; chapter 5 specifies the blueprint itself; the deployed implementation demonstrates that it is buildable today.
+
+As a proof of concept, the contractual infrastructure has been deployed to the Ethereum Sepolia testnet (April 2026): five source-verified smart contracts, a 24-hour governance timelock, satellite-data oracle feeds, and a running daily data pipeline from NASA to on-chain settlement. This demonstrates that the blueprint is not merely theoretically coherent — it is technically buildable today.
 
 **Keywords:** Energy-backed currency, monetary standard, renewable energy finance, gold standard, commodity money, energy opportunity cost, Bitcoin energy anchoring
 
@@ -63,7 +65,7 @@ As a proof of concept, the contractual infrastructure required for an energy-bac
 
 **6. Conclusions**
 - 6.1 Summary of Arguments
-- 6.2 The Two Claims, Revisited
+- 6.2 The Three Claims, Revisited (the constraints-based blueprint as the central contribution)
 - 6.3 Limitations
 - 6.4 Future Work
 
@@ -124,15 +126,19 @@ In an energy-backed monetary system, that solar farm is not just an electricity 
 
 ### 1.5 Research Questions and Contributions
 
-**Research Question 1:** Does energy satisfy the conditions for a credible monetary standard, and does it satisfy them better than gold?
+**Research Question 1 (primary):** What set of constraints must bind the issuer of an energy-backed currency for the currency to be credibly sound — i.e., demonstrably resistant to the failure modes that ended the gold standard and that characterise fiat?
 
-**Research Question 2:** Does empirical evidence from Bitcoin — the only monetary asset explicitly tied to energy expenditure — support the claim that energy anchors monetary value?
+**Research Question 2:** Does energy satisfy the conditions for a credible monetary standard, and does it satisfy them better than gold?
 
-**Research Question 3:** If energy is money, what is the quantifiable opportunity cost of unharvested renewable energy in current markets?
+**Research Question 3:** Does empirical evidence from Bitcoin — the only monetary asset explicitly tied to energy expenditure — support the claim that energy anchors monetary value?
 
-**Research Question 4:** What institutional and contractual infrastructure is required to make an energy-backed monetary standard operational?
+**Research Question 4:** If energy is money, what is the quantifiable opportunity cost of unharvested renewable energy in current markets?
+
+**Research Question 5:** Is the required contractual infrastructure technically buildable with current technology, and what does a working implementation of it look like?
 
 **Contributions:**
+
+The primary contribution is a **constraints-based blueprint for an energy-backed currency**: a specification of what the issuer must be structurally unable to do — print without verified energy backing, change parameters unilaterally, hold positions without margin, control the price oracle alone — for the currency to be sound rather than nominal. The blueprint is derived from monetary theory (Chapter 2), motivated by empirical evidence (Chapter 3), justified by economic stakes (Chapter 4), and instantiated in a working deployment (Chapter 5). The supporting contributions are:
 
 1. **A systematic monetary theory evaluation of energy as a monetary base,** comparing energy to gold and fiat on seven conditions derived from monetary economics literature. To the author's knowledge, no prior work has conducted a structured multi-condition comparison of energy against gold and fiat using conditions that explicitly include satellite observability and dispersion-proof contractual enforcement — properties that are unique to the post-blockchain, post-satellite era. The comparison builds on Selgin's (2015) synthetic commodity money framework and Hayek's (1976) commodity reserve currency proposal, but extends them to account for conditions that neither author could have anticipated.
 
@@ -141,6 +147,8 @@ In an energy-backed monetary system, that solar farm is not just an electricity 
 3. **A quantification of the opportunity cost of unharvested renewable energy** reframed as foregone monetary production, using satellite data and LCOE benchmarks across five global markets.
 
 4. **A proof of concept implementation** demonstrating that the required contractual infrastructure is technically buildable today, deployed to the Ethereum Sepolia testnet with live satellite data feeds.
+
+The four supporting contributions are, in effect, the evidence base that earns the blueprint the right to be presented as a research contribution rather than an engineering proposal.
 
 ### 1.6 Scope
 
@@ -552,7 +560,7 @@ This thesis has made two connected arguments, supported by three pillars of evid
 
 **Pillar 3 (Chapter 5)** demonstrated that the required contractual infrastructure is technically buildable today — deployed, operating, and producing daily on-chain evidence under live satellite data feeds.
 
-### 6.2 The Two Claims, Revisited
+### 6.2 The Three Claims, Revisited
 
 **Claim 1: Energy can replace gold as the basis of a monetary standard.**
 
@@ -561,6 +569,19 @@ The evidence supports this as a theoretical argument and an empirical motivation
 **Claim 2: If energy is money, then unharvested renewable energy is wasted money.**
 
 This follows logically from Claim 1 and is quantitatively supported by the renewable finance gap data and the LCOE benchmarks. The most important implication — that the renewable finance gap is a monetary system problem, not a climate problem — is a reframing that has real policy consequences if accepted.
+
+**Claim 3 (the binding spine): A credible energy-backed currency is defined by what its issuer cannot do, not by what its issuer promises.**
+
+Claims 1 and 2 are the *case for* an energy-backed monetary standard. Claim 3 is the case for the specific *form* such a standard must take — and is the central contribution of this thesis. The four contractual elements specified in Chapter 5 are not implementation details. They are the binding constraints that distinguish a credibly sound energy currency from a marketed one. Specifically:
+
+- **The issuer cannot mint without verified energy backing** (oracle gating + supply rule). Without this, the standard collapses to fiat with extra steps.
+- **The issuer cannot change monetary parameters unilaterally** (24-hour timelock on every parameter-changing function). Without this, the issuer reproduces the discretion that ended Bretton Woods in 1971.
+- **The issuer cannot underwrite positions without sufficient collateral** (250% initial margin, 125% maintenance margin, algorithmic liquidation). Without this, the clearinghouse becomes a bilateral credit arrangement and the dispersion-proof property is lost.
+- **The issuer cannot act as the sole price oracle** (independent satellite data, source-hash anchored, bonded operator role). Without this, the production-cost floor is asserted rather than verified.
+
+Each constraint is necessary. Removing any one degrades the standard back to either fiat (issuer discretion), bilateral credit (counterparty risk), or rhetoric (unverified backing). The blueprint is the joint specification of all four.
+
+Why this is the spine: Claims 1 and 2 establish that energy money is *desirable*. Claim 3 establishes what energy money must structurally *be* in order to be money rather than marketing. The thesis's monetary-theory chapters earn the right to make Claim 3; the deployed implementation demonstrates it can be built. Both halves are necessary because neither alone resolves the question of how to build sound energy money — the theory without the constraints is unfalsifiable, and the constraints without the theory are arbitrary.
 
 ### 6.3 Limitations
 
