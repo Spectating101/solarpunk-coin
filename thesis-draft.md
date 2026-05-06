@@ -1,4 +1,4 @@
-# ENERGY AS MONEY: The Case for an Energy-Backed Monetary Standard and the Economic Cost of Unharvested Renewables
+# ENERGY AS MONEY: A Constraints-Based Blueprint for a Sound Energy-Backed Currency
 
 **Christopher Ongko**
 **Student ID: 1133958**
@@ -10,17 +10,15 @@ Master's Thesis — 2026
 
 ## Abstract
 
-This thesis makes three connected arguments. First, that energy is a stronger foundation for a monetary standard than gold — more measurable, more honest, and more resistant to the political failures that ended the gold standard in 1971. Second, that if energy is the correct monetary base, then every kilowatt-hour of solar, wind, or tidal energy left unharvested is not merely wasted electricity — it is wasted money. Third — and as the central contribution — that a credible energy-backed currency is defined not by what its issuer promises but by what its issuer is structurally unable to do: print without verified backing, change parameters unilaterally, underwrite positions without margin, or control the price oracle alone. These three arguments together reframe the renewable energy transition as a monetary policy question and specify the contractual form a sound energy money must take.
+This thesis investigates one central question: *what binding constraints must define the issuer of an energy-backed currency for the currency to be credibly sound — that is, demonstrably resistant to the failure modes that ended the gold standard in 1971 and that characterise fiat money since?*
 
-The first argument draws on monetary theory (Hayek 1976; Selgin 2015; Soddy 1925) and is tested empirically against Bitcoin data. Bitcoin is the only monetary asset in history that explicitly required energy expenditure for issuance. Using China's 2021 mining ban as a natural experiment, we show that energy costs demonstrably anchored Bitcoin's market value when mining was geographically concentrated — and that this anchor broke when concentration dispersed. The lesson is not that energy money failed: it is that passive, undesigned energy anchoring is fragile. A deliberately designed energy-backed monetary system — where the link between energy and currency is contractual rather than coincidental — can preserve the anchor regardless of geography. We evaluate energy against gold and fiat on seven necessary conditions for a credible monetary standard and find that energy satisfies all seven, gold satisfies three, and fiat satisfies one.
+The question is worth investigating because two prior findings establish that an energy-backed currency would be both defensible and consequential. **First**, energy is a stronger foundation for a monetary standard than gold. Evaluated against seven conditions for monetary credibility derived from Friedman (1960), Hayek (1943, 1976), Selgin (2015), and Soddy (1925), energy satisfies all seven, gold satisfies two and a half, and fiat satisfies one. The Bitcoin natural experiment of China's 2021 mining ban provides causal empirical support: energy expenditure demonstrably anchored Bitcoin's market value when mining was geographically concentrated (β = −0.206, p < 0.001) and the anchor broke when concentration dissolved (Chow F = 4.786, p = 0.0009). This is the diagnostic signature of *passive* energy anchoring — a fragility a deliberately designed system would not share. **Second**, if energy is monetary value, then unharvested renewable energy is foregone monetary value. The IEA's $1.35 trillion annual renewable finance gap implies approximately $79 billion per year of foregone monetary production under an energy standard, reframing the gap from a climate-policy failure to a monetary-system failure.
 
-The second argument follows directly. In a gold standard, leaving gold in the ground is an opportunity cost: the foregone value of unmined wealth. By the same logic, in an energy standard, leaving sunlight, wind, and tidal currents unharvested is foregone monetary production. We quantify this using satellite irradiance data (NASA POWER) and LCOE benchmarks (Lazard 2025) across five global markets. The financing gap that prevents renewable deployment in emerging markets — estimated at $1.35 trillion annually (IEA 2023) — is reframed: it is not a clean-energy problem, it is a monetary system design problem. The current monetary architecture does not recognise unharvested energy as lost value. An energy-backed system would.
+The central investigation specifies the contractual mechanisms required. The finding is that **four binding constraints are jointly necessary and individually insufficient**: oracle-gated issuance (the issuer cannot mint without verified energy), rule-bound supply (the issuer cannot adjust supply at discretion), algorithmically collateralised settlement (the issuer cannot underwrite positions without margin), and timelocked governance (the issuer cannot change parameters unilaterally). Removing any one constraint degrades the system back to either fiat (if the issuer regains discretion) or bilateral credit (if collateralisation is lost). Together, the four constraints constitute the minimum viable architecture for sound energy money.
 
-The central contribution is a **constraints-based blueprint** for an energy-backed currency: a specification of what the issuer must be unable to do for the currency to be credibly sound. The four binding constraints — oracle-gated issuance, supply-rule automation, algorithmic clearinghouse settlement, and timelocked governance — are derived from the seven monetary-standard conditions and shown to be jointly necessary. Chapters 2 through 4 establish why such a blueprint is worth building; chapter 5 specifies the blueprint itself; the deployed implementation demonstrates that it is buildable today.
+The constraints framework has been instantiated as five source-verified smart contracts on the Ethereum Sepolia testnet (April 2026). A daily NASA POWER satellite oracle keeper has been operational since April 20. Independent code review has been conducted with all findings remediated; 79 of 79 automated tests pass. The deployed implementation demonstrates that the framework is not theoretically coherent only — it is technically buildable today.
 
-As a proof of concept, the contractual infrastructure has been deployed to the Ethereum Sepolia testnet (April 2026): five source-verified smart contracts, a 24-hour governance timelock, satellite-data oracle feeds, and a running daily data pipeline from NASA to on-chain settlement. This demonstrates that the blueprint is not merely theoretically coherent — it is technically buildable today.
-
-**Keywords:** Energy-backed currency, monetary standard, renewable energy finance, gold standard, commodity money, energy opportunity cost, Bitcoin energy anchoring
+**Keywords:** Energy-backed currency, monetary standard, renewable energy finance, gold standard, commodity money, energy opportunity cost, Bitcoin energy anchoring, smart contract governance
 
 **JEL Codes:** E42, E52, G13, Q42, Q47
 
@@ -31,43 +29,48 @@ As a proof of concept, the contractual infrastructure has been deployed to the E
 **1. Introduction**
 - 1.1 The Problem with Money Today
 - 1.2 Gold Worked — Then It Didn't
-- 1.3 The Core Argument: Energy Is Better Money
-- 1.4 The Consequence: Unharvested Energy Is Wasted Money
-- 1.5 Research Questions and Contributions
+- 1.3 Why Energy Is the Right Monetary Base (supporting premise)
+- 1.4 Why the Stakes Are Material (supporting premise)
+- 1.5 The Central Question and Contributions
 - 1.6 Scope
 
-**2. Why Gold Failed and What Energy Offers Instead**
+**2. Why Gold Failed and What Energy Offers Instead** *(supporting investigation: is energy a defensible monetary base?)*
 - 2.1 What Makes a Good Monetary Standard
 - 2.2 The Gold Standard: What Worked and What Broke
 - 2.3 Seven Conditions for a Credible Monetary Standard
 - 2.4 Evaluating Energy Against Those Conditions
 - 2.5 Why Energy Is Not Just Another Commodity
+- 2.6 Investigation Finding
 
-**3. Empirical Evidence: Energy Already Backs Monetary Value (Accidentally)**
+**3. Empirical Evidence: Energy Already Backs Monetary Value (Accidentally)** *(supporting investigation: has energy ever anchored monetary value?)*
 - 3.1 Bitcoin as a Natural Experiment
 - 3.2 Data and Construction
 - 3.3 Results: Energy Anchored Value When Mining Was Concentrated
 - 3.4 The Break: What Happened When Concentration Dissolved
 - 3.5 The Lesson: Passive Anchoring Is Fragile; Designed Anchoring Is Not
+- 3.6 Investigation Finding
 
-**4. The Opportunity Cost of Unharvested Energy**
+**4. The Opportunity Cost of Unharvested Energy** *(supporting investigation: are the stakes material?)*
 - 4.1 The Monetary Reframing
 - 4.2 Measuring What We Leave on the Table
 - 4.3 The Renewable Finance Gap as a Monetary System Problem
 - 4.4 Quantifying the Foregone Value: Five Global Markets
 - 4.5 Policy Implications
+- 4.6 Investigation Finding
 
-**5. Making It Work: The Contractual Infrastructure**
+**5. The Constraints Framework: Specifying and Building Sound Energy Money** *(central investigation: what binding constraints must define the issuer, and can they be built?)*
 - 5.1 Why Pricing Comes Before Policy
 - 5.2 How to Price an Energy-Backed Instrument Without a Liquid Market
-- 5.3 What the Contracts Need to Do
+- 5.3 The Four Binding Constraints (the central specification)
 - 5.4 Proof of Concept: Live Deployment
+- 5.5 Investigation Finding
 
 **6. Conclusions**
-- 6.1 Summary of Arguments
-- 6.2 The Three Claims, Revisited (the constraints-based blueprint as the central contribution)
+- 6.1 Summary of the Investigation
+- 6.2 The Central Finding and Its Supporting Findings
 - 6.3 Limitations
-- 6.4 Future Work
+- 6.4 What Would Falsify This Thesis
+- 6.5 Future Work
 
 References
 
@@ -96,7 +99,9 @@ The gold standard broke for a specific reason: it did not scale. As global trade
 
 The lesson is not that commodity backing is wrong. The lesson is that gold had specific limitations — geographically concentrated supply, slow production growth, impractical physical transfer — that made it unsuitable for a modern global economy. The question is whether there is a commodity that shares gold's virtues but not its limitations.
 
-### 1.3 The Core Argument: Energy Is Better Money
+### 1.3 Why Energy Is the Right Monetary Base (Supporting Premise)
+
+This section establishes the first of two premises the central investigation rests on: that energy is a defensible commodity choice for monetary backing. The full theoretical case is developed in Chapter 2 and the empirical case in Chapter 3; the purpose here is to make the premise visible at the outset.
 
 This thesis argues that energy — specifically, renewable energy captured from sunlight, wind, and tidal forces — is a stronger monetary base than gold. Not because it is more fashionable, and not because it is green. Because it satisfies the conditions for a credible monetary standard better than gold does, on every relevant dimension.
 
@@ -110,9 +115,11 @@ This thesis argues that energy — specifically, renewable energy captured from 
 
 The counterargument — that energy is too volatile to back a currency — is addressed in Chapter 3 and 5. The short answer is that the appropriate pricing and contract structure, calibrated to local conditions using satellite data, can accommodate energy's volatility within a clearinghouse framework. The same counterargument was once made about gold (gold prices fluctuate too) and was answered the same way: the right institutional structure manages the volatility.
 
-### 1.4 The Consequence: Unharvested Energy Is Wasted Money
+### 1.4 Why the Stakes Are Material (Supporting Premise)
 
-If the first argument is correct — if energy is money — then the second argument follows directly and simply.
+This section establishes the second premise: that the central investigation has material economic consequence. The full quantification is developed in Chapter 4; the purpose here is to make the order of magnitude visible at the outset.
+
+If the first premise is correct — if energy is the right monetary base — then a second observation follows directly.
 
 In a gold standard, unmined gold has value. A gold deposit sitting in the ground represents latent wealth. The decision not to mine it is an economic decision with a real opportunity cost. Societies do not generally leave gold in the ground when they need it — the incentive to extract it is built into the monetary system.
 
@@ -124,31 +131,25 @@ This reframing has a direct implication for the renewable energy finance gap. Th
 
 In an energy-backed monetary system, that solar farm is not just an electricity generator. It is a mint. Every kWh it produces is monetary issuance — as legitimate and as valuable as a gold mine. The financing incentive changes completely.
 
-### 1.5 Research Questions and Contributions
+### 1.5 The Central Question and Contributions
 
-**Research Question 1 (primary):** What set of constraints must bind the issuer of an energy-backed currency for the currency to be credibly sound — i.e., demonstrably resistant to the failure modes that ended the gold standard and that characterise fiat?
+**Central question:** *What binding constraints must define the issuer of an energy-backed currency for the currency to be credibly sound, and can those constraints be implemented with current technology?*
 
-**Research Question 2:** Does energy satisfy the conditions for a credible monetary standard, and does it satisfy them better than gold?
+This question is investigated in Chapter 5. Four supporting investigations earn it the right to be asked:
 
-**Research Question 3:** Does empirical evidence from Bitcoin — the only monetary asset explicitly tied to energy expenditure — support the claim that energy anchors monetary value?
+**Supporting investigation 1 (Chapter 2):** Does energy satisfy the necessary conditions for a credible monetary base, and does it satisfy them better than gold?
 
-**Research Question 4:** If energy is money, what is the quantifiable opportunity cost of unharvested renewable energy in current markets?
+**Supporting investigation 2 (Chapter 3):** Has energy expenditure ever, in any actual case, anchored monetary value — and what conditions caused the anchor to hold or fail?
 
-**Research Question 5:** Is the required contractual infrastructure technically buildable with current technology, and what does a working implementation of it look like?
+**Supporting investigation 3 (Chapter 4):** If energy is monetary value, what is the order-of-magnitude opportunity cost of unharvested renewable energy under current monetary architecture?
 
-**Contributions:**
+**Supporting investigation 4 (§5.4):** Is the constraints framework technically buildable today?
 
-The primary contribution is a **constraints-based blueprint for an energy-backed currency**: a specification of what the issuer must be structurally unable to do — print without verified energy backing, change parameters unilaterally, hold positions without margin, control the price oracle alone — for the currency to be sound rather than nominal. The blueprint is derived from monetary theory (Chapter 2), motivated by empirical evidence (Chapter 3), justified by economic stakes (Chapter 4), and instantiated in a working deployment (Chapter 5). The supporting contributions are:
+**Contribution:**
 
-1. **A systematic monetary theory evaluation of energy as a monetary base,** comparing energy to gold and fiat on seven conditions derived from monetary economics literature. To the author's knowledge, no prior work has conducted a structured multi-condition comparison of energy against gold and fiat using conditions that explicitly include satellite observability and dispersion-proof contractual enforcement — properties that are unique to the post-blockchain, post-satellite era. The comparison builds on Selgin's (2015) synthetic commodity money framework and Hayek's (1976) commodity reserve currency proposal, but extends them to account for conditions that neither author could have anticipated.
+The contribution of this thesis is the constraints framework itself: a four-element architecture — oracle-gated issuance, rule-bound supply, algorithmically collateralised settlement, timelocked governance — that is, jointly, the minimum required for an energy-backed currency to be credibly sound. The four supporting investigations are the evidence base that earns the framework the right to be presented as a research contribution rather than an engineering proposal: the theoretical case for energy as a monetary base (Chapter 2), the empirical evidence that energy actually anchors monetary value when allowed to (Chapter 3), the economic stakes of failing to build the framework (Chapter 4), and the feasibility demonstration via deployed implementation (§5.4).
 
-2. **Causal empirical evidence that energy costs anchor monetary value** — using Bitcoin's China mining ban (2021) as a natural experiment with bias-corrected regression. The finding is regime-dependent: the anchor holds under geographic concentration and breaks under dispersion, which is precisely what the designed-system argument predicts.
-
-3. **A quantification of the opportunity cost of unharvested renewable energy** reframed as foregone monetary production, using satellite data and LCOE benchmarks across five global markets.
-
-4. **A proof of concept implementation** demonstrating that the required contractual infrastructure is technically buildable today, deployed to the Ethereum Sepolia testnet with live satellite data feeds.
-
-The four supporting contributions are, in effect, the evidence base that earns the blueprint the right to be presented as a research contribution rather than an engineering proposal.
+To the author's knowledge, no prior work has specified a constraints-based architecture for an energy-backed monetary standard, anchored those constraints to formal monetary-economics conditions, and demonstrated buildability through a working implementation in a single research programme. Each piece exists in fragmentary form in prior literature; integrating them is the contribution.
 
 ### 1.6 Scope
 
@@ -157,6 +158,7 @@ This thesis argues that energy-backed currency is theoretically superior and emp
 ---
 
 ## Chapter 2: Why Gold Failed and What Energy Offers Instead
+*Supporting investigation: is energy a defensible monetary base?*
 
 This chapter investigates two questions. *What properties must a commodity possess in order to serve as a credible monetary base?* And: *against those properties, how does energy compare to gold and to fiat money?* The investigation proceeds by deriving the conditions for credibility independently from the monetary economics literature — Friedman, Hayek, Selgin, Soddy — before evaluating any candidate against them. The conditions therefore precede the evaluation; the evaluation does not assume them. The investigation finds that energy satisfies all seven conditions, gold satisfies two and a half, and fiat satisfies one — a result reported in §2.3 and supported by the per-condition analysis in §2.4.
 
@@ -235,9 +237,14 @@ Three reasons distinguish energy from other commodities:
 
 **Third, renewable energy does not deplete.** Gold is finite — every tonne mined reduces the remaining reserve. Oil is finite. Wheat requires land and water. Renewable energy — solar, wind, tidal — is replenished by the sun continuously. A monetary standard backed by renewable energy does not face the deflationary supply constraint that eventually killed the gold standard.
 
+### 2.6 Investigation Finding
+
+The investigation conducted in this chapter finds that energy satisfies all seven conditions for a credible monetary standard, gold satisfies two and a half, and fiat satisfies one. The result is not marginal: energy outperforms gold systematically, on properties (satellite observability, dispersion-proof contractual enforcement, physics-based price floor) that could not have been satisfied by any commodity prior to the satellite and blockchain eras. This finding establishes that an energy-backed currency is a defensible monetary base. Whether energy expenditure has actually anchored monetary value in any observed case — and what conditions caused the anchor to hold or fail — is the question Chapter 3 takes up.
+
 ---
 
 ## Chapter 3: Empirical Evidence — Energy Already Backs Monetary Value
+*Supporting investigation: has energy expenditure ever, in any actual case, anchored monetary value?*
 
 This chapter investigates whether the theoretical claim of Chapter 2 — that energy can credibly anchor monetary value — is consistent with observed monetary behaviour. The question is sharper than it first appears: *has there ever been a case in which energy expenditure demonstrably anchored a currency's market value, and if so, under what conditions did the anchor hold or fail?* If the answer is "never, anywhere, under any conditions," the theoretical case in Chapter 2 is suggestive but not motivated by evidence. If the answer is "yes, under conditions X but not under conditions Y," then the conditions of failure are themselves informative — they tell us what a deliberately designed energy monetary system would need to provide that the historical case did not.
 
@@ -314,11 +321,16 @@ Bitcoin's energy anchoring was accidental — an emergent property of competitiv
 
 The thesis argues that what Bitcoin discovered by accident, a designed monetary system can preserve by intention. The requirement is not geographic concentration — it is contractual enforcement. Smart contracts that require energy attestation for currency issuance and algorithmically liquidate positions when collateral falls do not care where the energy was produced or where the miners are. The enforcement is in the code, not in the geography.
 
-This is the bridge from Chapter 3 to Chapter 5: the empirical evidence motivates the design; the design solves the fragility.
+### 3.6 Investigation Finding
+
+The investigation conducted in this chapter finds that energy expenditure has, in at least one observed case, anchored monetary value — but only when geographic concentration enforced a shared electricity-price regime. The Bitcoin anchor was statistically significant under concentration (β = −0.206, p < 0.001) and degraded under dispersion (β = −0.080, post-ban; Chow F = 4.786 confirming a discrete structural break). Bootstrap robustness and a Kazakhstan falsification test rule out the most plausible alternative explanations.
+
+The implication for the central question of the thesis is direct. Passive, undesigned energy anchoring is fragile under conditions that any global monetary system must tolerate. A deliberately designed energy-backed currency cannot rely on geographic concentration as the enforcement mechanism. It must instead bind the issuer through contractual constraints that are geography-independent. This is what Chapter 5's central investigation specifies.
 
 ---
 
 ## Chapter 4: The Opportunity Cost of Unharvested Energy
+*Supporting investigation: are the stakes of the central question materially large?*
 
 This chapter asks a single conditional question: *if the theoretical argument of Chapter 2 is accepted, and the empirical evidence of Chapter 3 is read as supportive, what does this framework imply about the economic status of unharvested renewable energy?* The conditional matters. The chapter does not claim that an energy monetary standard exists today and that the renewable finance gap is therefore literal monetary loss. It claims something more careful: that *under the framework being investigated*, unharvested renewable energy is economically equivalent to unmined gold under the gold standard, and the existing $1.35 trillion annual finance gap therefore represents a structurally invisible loss that a different monetary architecture would render visible.
 
@@ -409,9 +421,16 @@ If the analysis in this chapter is accepted, three policy implications follow:
 
 **3. Unharvested renewables should appear on national balance sheets as foregone monetary assets.** Just as gold reserves appear on central bank balance sheets, the monetizable renewable energy potential of a country — its annual solar irradiance, wind resource, and tidal capacity — should be assessable as a monetary asset. Countries with high solar resource but low capture rates are richer than their GDP suggests, in the same way that countries with large gold deposits are richer than their current production rates suggest.
 
+### 4.6 Investigation Finding
+
+The investigation conducted in this chapter finds that, conditional on the framework established in Chapter 2 and the empirical evidence in Chapter 3, the IEA's $1.35 trillion annual renewable finance gap implies on the order of $79 billion per year of foregone monetary production globally. The estimate is illustrative, not audited: it relies on capacity-gap modelling, average capacity factors, and global LCOE benchmarks, each carrying its own uncertainty band.
+
+The contribution of the chapter is the reframing rather than the precision. Under current monetary architecture, unharvested renewable energy has no monetary status and the gap is invisible as economic loss; under the architecture investigated by this thesis, the gap is structurally visible and therefore actionable. This finding establishes that failing to address the central question of the thesis — how to architect sound energy money — has measurable economic consequence at the order-of-magnitude level. It motivates Chapter 5's specification of the constraints framework that would, if built and adopted, render the loss visible.
+
 ---
 
-## Chapter 5: Making It Work — The Contractual Infrastructure
+## Chapter 5: The Constraints Framework — Specifying and Building Sound Energy Money
+*Central investigation: what binding constraints must define the issuer of an energy-backed currency, and can they be built today?*
 
 This chapter investigates the central question of the thesis: *what specific contractual mechanisms must bind the issuer of an energy-backed currency in order to satisfy, jointly, the seven conditions established in Chapter 2 — and can those mechanisms be built and operated with current technology?* The question has two halves. The first is an institutional-design question — what binding constraints on the issuer are jointly necessary and individually insufficient? The second is a feasibility question — can those constraints actually be implemented in working code, with live data, today?
 
@@ -466,9 +485,11 @@ A collar structure (buy put at 0.9K, sell call at 1.1K) generates a net credit a
 
 All five locations achieve a zero-premium collar — the instrument is structurally self-financing across all markets. Germany's low volatility makes it a cheap but thin hedge; Brazil and Taiwan offer the most economically meaningful protection at an affordable premium.
 
-### 5.3 What the Contracts Need to Do
+### 5.3 The Four Binding Constraints (the central specification)
 
-The theoretical argument in Chapter 2 identified four properties that distinguish an energy monetary standard from gold and fiat: verifiable production cost floor, independent observability, dispersion-proof enforcement, and cash settlement without physical delivery. Each of these theoretical requirements maps directly to a contractual element. This section explains each element, why it is necessary, and what failure looks like in its absence.
+This section conducts the central specification investigation. The question is: *given the seven monetary-standard conditions established in Chapter 2 and the dispersion fragility documented in Chapter 3, what specific constraints on the issuer are jointly necessary for an energy-backed currency to satisfy the conditions without depending on geographic concentration?*
+
+The investigation proceeds by examining each Chapter 2 condition that the gold standard could not satisfy on its own — independent observability, dispersion-proof enforcement, credibility under dispersion, physics-based price floor — and asking what contractual mechanism would enforce it without requiring central custodianship. The investigation finds four constraints, presented below in the order in which they bind. Each constraint is presented with: what it does, why it is necessary, what failure looks like in its absence, and which Chapter 2 condition it operationalises.
 
 **Element 1: The Oracle — making energy observable on-chain**
 
@@ -526,16 +547,16 @@ This is the contractual equivalent of Condition 6 (credibility under geographic 
 
 ---
 
-**The four elements as a system:**
+**The four constraints as a joint specification:**
 
-The four elements are not independent. The oracle feeds the currency and the clearinghouse. The currency provides the unit of account for clearinghouse settlement. The clearinghouse generates the fees that fund the insurance pool. The governance mechanism protects all three from unilateral change. Remove any one element and the monetary standard degrades to something weaker:
+The four constraints are not independent specifications running in parallel — they are interlocking. The oracle feeds the currency and the clearinghouse. The currency provides the unit of account in which clearinghouse settlement is denominated. The clearinghouse generates the fees that fund the insurance pool. The governance mechanism binds all three from unilateral change. Removing any one degrades the standard back to a known and worse failure mode:
 
-- No oracle → currency issuance is unverified → same as fiat
-- No supply constraint → issuance is uncapped → same as fiat
-- No clearinghouse → settlement depends on counterparty creditworthiness → same as bilateral contracts
-- No governance delay → parameters can be changed overnight → same as central bank discretion
+- No oracle gating → issuance is unverified → identical to fiat
+- No supply rule → issuance is unbounded → identical to fiat
+- No collateralised settlement → settlement depends on counterparty creditworthiness → identical to bilateral credit, which is precisely what the standard claims to replace
+- No timelocked governance → parameters can be changed overnight → identical to central bank discretion, which is precisely what the standard claims to replace
 
-The four elements together constitute the minimum viable architecture for an energy monetary standard that is meaningfully different from what already exists.
+This is the joint-necessity result. Each constraint addresses one specific failure mode; together the four constitute the minimum viable architecture for sound energy money. The investigation does not claim the four constraints are *sufficient* in the sense that nothing else matters — production deployments will require additional engineering (multi-oracle aggregation, multi-signer governance, cross-chain liquidity) — but those are scaling concerns, not soundness concerns. The four constraints are what makes an energy-backed currency monetarily sound; the rest is what makes it operationally viable at scale.
 
 ### 5.4 Proof of Concept: Live Deployment
 
@@ -556,46 +577,42 @@ The contractual infrastructure has been deployed to the Ethereum Sepolia testnet
 
 The full technical documentation is in Appendix D and at https://github.com/Spectating101/solarpunk-coin.
 
+### 5.5 Investigation Finding
+
+The central investigation of this thesis finds that four binding constraints on the issuer of an energy-backed currency are jointly necessary and individually insufficient for the currency to be credibly sound: oracle-gated issuance, rule-bound supply, algorithmically collateralised settlement, and timelocked governance. Each constraint addresses one failure mode that has been observed in monetary history (oracle capture, issuance discretion, counterparty risk, governance unilateralism). Removing any one re-opens the failure mode it closed; the framework is the joint specification, not a checklist.
+
+The investigation further finds that the framework is implementable today. The five deployed contracts on Ethereum Sepolia, the running NASA POWER oracle keeper, the independent code review, and the 79/79 test pass collectively demonstrate that no element of the framework requires technology that does not yet exist. This finding answers both halves of the chapter's opening question — what mechanisms are required, and whether they can be built — affirmatively. The remaining gates between the deployed system and a production-ready monetary unit (formal security audit, multi-signer governance, multi-oracle aggregation, mainnet deployment) are engineering and capital problems, not research problems.
+
 ---
 
 ## Chapter 6: Conclusions
 
-### 6.1 Summary of Arguments
+### 6.1 Summary of the Investigation
 
-This thesis has made two connected arguments, supported by three pillars of evidence.
+This thesis has investigated one central question — what binding constraints must define the issuer of an energy-backed currency for it to be credibly sound — and four supporting investigations that earn the central question the right to be asked.
 
-**The first argument** is that energy is a superior monetary base to gold. Chapter 2 evaluated energy, gold, and fiat against seven conditions derived from monetary economics literature. Energy satisfies all seven. Gold satisfies two and a half. Fiat satisfies one. The superiority of energy is not marginal — it is systematic, arising from properties that are fundamental to the physics of energy production: satellite observability, thermodynamic irreversibility, and geographic ubiquity.
+**The supporting investigations** established that the central question is both defensible and consequential. Chapter 2 evaluated energy, gold, and fiat against seven conditions derived from monetary economics literature: energy satisfies all seven, gold two and a half, fiat one — establishing that energy is a defensible monetary base. Chapter 3 used Bitcoin's 2021 China mining ban as a natural experiment and found that energy costs anchored Bitcoin's market value during the period of geographic concentration (β = −0.206, p < 0.001) and that the anchor broke when concentration dissolved (Chow F = 4.786, p = 0.0009) — establishing that the failure mode passive anchoring exhibits is precisely the failure mode the constraints framework is designed to eliminate. Chapter 4 reframed the IEA's $1.35 trillion renewable finance gap as a monetary-system failure rather than a climate-policy failure and estimated approximately $79 billion per year of foregone monetary value — establishing that failing to address the central question has material economic consequence.
 
-**The second argument** is that unharvested renewable energy is, under this monetary framing, wasted money. Chapter 4 reframed the $1.35 trillion annual renewable finance gap in emerging markets as a monetary system design failure rather than a climate policy failure. The regions with the highest unharvested renewable potential are the same regions most underserved by the current monetary architecture.
+**The central investigation** in Chapter 5 specified the four binding constraints — oracle-gated issuance, rule-bound supply, algorithmically collateralised settlement, and timelocked governance — that are jointly necessary for an energy-backed currency to be credibly sound. The chapter showed that energy-backed instruments can be priced from satellite data alone (resolving the cold-start pricing problem with physics-based volatility), and demonstrated that the constraints framework is buildable today by reference to a deployed Sepolia implementation operating under live satellite data feeds.
 
-**Pillar 1 (Chapter 3)** provided causal empirical evidence that energy costs anchor monetary value — demonstrated through Bitcoin's China mining ban natural experiment. The anchor was real (β = -0.206, p < 0.001) and broke when geographic concentration dissolved. This is precisely consistent with the argument that passive energy anchoring is fragile and designed contractual anchoring is not.
+### 6.2 The Central Finding and Its Supporting Findings
 
-**Pillar 2 (Chapter 5)** showed that energy-backed instruments can be priced from satellite data without a liquid market. The cold-start problem is solved by physics-based volatility calibration. The pricing is coherent across five global markets.
+**Central finding: A credible energy-backed currency is defined by what its issuer cannot do, not by what its issuer promises. The four binding constraints that constitute this definition are jointly necessary and individually insufficient.**
 
-**Pillar 3 (Chapter 5)** demonstrated that the required contractual infrastructure is technically buildable today — deployed, operating, and producing daily on-chain evidence under live satellite data feeds.
+The four constraints are:
 
-### 6.2 The Three Claims, Revisited
+- **The issuer cannot mint without verified energy backing.** Issuance is gated by an independent oracle that anchors every price update to a satellite-data source hash. Without this, the standard is fiat with extra steps.
+- **The issuer cannot adjust supply at discretion.** Supply changes are computed by an automatic PI controller against the peg, not chosen by a human. Without this, the issuer reproduces the discretion that ended Bretton Woods.
+- **The issuer cannot underwrite positions without sufficient collateral.** Margin requirements (250% initial, 125% maintenance) are enforced continuously and liquidation is algorithmic. Without this, the clearinghouse degrades to bilateral credit and the dispersion-proof property is lost.
+- **The issuer cannot change monetary parameters unilaterally.** Every parameter-changing function is gated by a 24-hour timelock and the admin role lives on a multisig with the deployer's EOA explicitly revoked. Without this, the rules of the system can change overnight, exactly as they did in 1971.
 
-**Claim 1: Energy can replace gold as the basis of a monetary standard.**
+The joint-necessity argument matters as much as the individual constraints. Each constraint addresses one specific failure mode: oracle capture, issuance discretion, counterparty risk, or governance unilateralism. Removing any one re-opens the failure mode it closed. Adding any one without the others does not produce sound money — it produces a single safeguarded surface against three unsafeguarded ones. The framework is the joint specification.
 
-The evidence supports this as a theoretical argument and an empirical motivation. It does not support it as a near-term policy prescription — the institutional and political work required to implement an energy monetary standard at scale is far beyond the scope of a research thesis. But the claim that energy *should* replace gold — that it satisfies the conditions better, that it solves the failures that ended the gold standard, and that the technical infrastructure to make it work exists — is supported.
+**Supporting finding 1: Energy satisfies the necessary conditions for a credible monetary base, and satisfies them better than gold.** Evaluated against seven conditions derived from Friedman, Hayek, Selgin, and Soddy, energy scores 7/7, gold 2.5/7, fiat 1/7. The empirical companion, drawn from Bitcoin's behaviour around the 2021 China mining ban, demonstrates that energy expenditure does in fact anchor monetary value — and that the anchor is fragile under geographic dispersion, which is precisely the failure mode the constraints framework is designed to eliminate. This supporting finding establishes that the central question is worth asking: an energy-backed currency is not an arbitrary choice of monetary base, it is a defensible one.
 
-**Claim 2: If energy is money, then unharvested renewable energy is wasted money.**
+**Supporting finding 2: Under the framework being investigated, unharvested renewable energy is foregone monetary value, on the order of $79 billion per year globally.** This reframes the IEA's $1.35 trillion renewable finance gap from a climate-policy failure to a monetary-system failure. The estimate is illustrative rather than audited; the policy contribution is the reframing, not the precision. This supporting finding establishes that the central question matters: failing to build the constraints framework has measurable economic cost.
 
-This follows logically from Claim 1 and is quantitatively supported by the renewable finance gap data and the LCOE benchmarks. The most important implication — that the renewable finance gap is a monetary system problem, not a climate problem — is a reframing that has real policy consequences if accepted.
-
-**Claim 3 (the binding spine): A credible energy-backed currency is defined by what its issuer cannot do, not by what its issuer promises.**
-
-Claims 1 and 2 are the *case for* an energy-backed monetary standard. Claim 3 is the case for the specific *form* such a standard must take — and is the central contribution of this thesis. The four contractual elements specified in Chapter 5 are not implementation details. They are the binding constraints that distinguish a credibly sound energy currency from a marketed one. Specifically:
-
-- **The issuer cannot mint without verified energy backing** (oracle gating + supply rule). Without this, the standard collapses to fiat with extra steps.
-- **The issuer cannot change monetary parameters unilaterally** (24-hour timelock on every parameter-changing function). Without this, the issuer reproduces the discretion that ended Bretton Woods in 1971.
-- **The issuer cannot underwrite positions without sufficient collateral** (250% initial margin, 125% maintenance margin, algorithmic liquidation). Without this, the clearinghouse becomes a bilateral credit arrangement and the dispersion-proof property is lost.
-- **The issuer cannot act as the sole price oracle** (independent satellite data, source-hash anchored, bonded operator role). Without this, the production-cost floor is asserted rather than verified.
-
-Each constraint is necessary. Removing any one degrades the standard back to either fiat (issuer discretion), bilateral credit (counterparty risk), or rhetoric (unverified backing). The blueprint is the joint specification of all four.
-
-Why this is the spine: Claims 1 and 2 establish that energy money is *desirable*. Claim 3 establishes what energy money must structurally *be* in order to be money rather than marketing. The thesis's monetary-theory chapters earn the right to make Claim 3; the deployed implementation demonstrates it can be built. Both halves are necessary because neither alone resolves the question of how to build sound energy money — the theory without the constraints is unfalsifiable, and the constraints without the theory are arbitrary.
+**Why the hierarchy is structured this way:** the supporting findings are not independently load-bearing for the thesis. They exist to motivate the central finding. A reader who accepts only the supporting findings has accepted a worldview but not a contribution. A reader who accepts the central finding has accepted both the worldview and the specification of how to act on it. The thesis stands or falls on the central finding; the supporting findings are how the central finding earns the right to be heard.
 
 ### 6.3 Limitations
 
@@ -633,13 +650,36 @@ This is a deliberate scoping choice rather than an oversight. The thesis takes t
 
 The Sepolia testnet deployment demonstrates technical buildability, not commercial or regulatory readiness. The system has not been formally audited by a professional security firm. The Safe multisig operates as a 1-of-1 (a single signer), which provides structural separation of admin authority but not the multi-party governance that a production monetary system would require. The oracle relies on a single data source (NASA POWER) and a single keeper script, both of which represent centralisation risks. These are appropriate limitations for a research demonstration; they would need to be resolved before any real-world deployment.
 
-### 6.4 Future Work
+### 6.4 What Would Falsify This Thesis
 
-The most important extension is empirical: testing whether an energy-backed monetary unit, if implemented, would exhibit lower inflation than fiat currencies over comparable horizons. This requires either historical simulation or, eventually, real-world data from early implementations.
+A research thesis that names its falsification conditions in advance is harder to attack but more useful when it survives attack. The central finding of this thesis would be falsified by any of the following:
+
+**1. A demonstration that the four constraints are not jointly necessary.** If a working energy-backed currency could be built, operated at scale, and shown to be credibly sound while violating any one of the four constraints — issuing without oracle gating, allowing discretionary supply, settling without margin, or permitting unilateral governance changes — the joint-necessity claim would fail. The honest expected outcome is that the constraints are necessary in the strict sense for soundness but that real-world implementations will tolerate weakened versions of one or more constraints during a bootstrap phase, accepting reduced credibility in exchange for usability.
+
+**2. A demonstration that the constraints are sufficient but not necessary.** If a working energy-backed currency could be built that satisfied a different set of constraints (e.g., constraints derived from a five-condition rather than seven-condition framework) and achieved credibility equivalent to the four-constraint system, the claim that *these specific* four constraints are the right specification would weaken — though the broader claim that *some* set of binding constraints is necessary would survive.
+
+**3. A demonstration that the seven monetary-standard conditions are themselves wrong.** The constraints framework is derived from the conditions. If the conditions are mis-specified — if, for example, dispersion-proof enforcement is not actually a necessary property of sound money, or if independent observability via satellite is not a meaningful requirement — then the framework derived from them is built on the wrong foundation. This is the deepest possible attack and would require demonstrating both that one of the seven conditions is unnecessary and that no replacement condition is needed.
+
+**4. A demonstration that the empirical link between energy expenditure and monetary value is artefactual.** If the Bitcoin natural experiment result were shown to be driven by a confound the existing analysis did not control for — e.g., if the structural break at June 2021 coincided with another event of equal or greater explanatory power that the falsification tests in §3.4 missed — the empirical motivation for the framework would weaken. The theoretical case in Chapter 2 would survive, but the support that Chapter 3 provides for the framework's relevance would be reduced.
+
+The thesis is *not* falsified by any of the following, which a casual reader might mistake for falsification:
+
+- The fact that no government has adopted an energy monetary standard. (The thesis explicitly does not claim adoption is imminent.)
+- The fact that the deployed implementation is on testnet rather than mainnet. (The thesis claims buildability, not deployment-readiness.)
+- The fact that the $79 billion opportunity cost figure is an order-of-magnitude estimate rather than an audited number. (The thesis explicitly states the precision is illustrative and the contribution is the reframing.)
+- The fact that the thesis does not model the political transition from fiat to energy money. (The transition question is explicitly out of scope.)
+
+Naming these falsification conditions does two things. It forces the central finding to be falsifiable at all (a necessary condition for it to be a research finding rather than a position), and it pre-empts the easy-but-wrong attacks that are not actually attacks on the central claim.
+
+### 6.5 Future Work
+
+The most important extension is empirical: testing whether an energy-backed monetary unit, if implemented, would exhibit lower inflation than fiat currencies over comparable horizons. This requires either historical simulation or, eventually, real-world data from early implementations. The deployed Sepolia system is itself a candidate substrate for the latter once it has accumulated sufficient transaction history.
 
 The second extension is institutional: what regulatory frameworks, international agreements, and central bank collaborations would be required to implement an energy monetary standard at meaningful scale? This is a political economy question that requires expertise beyond financial economics.
 
 The third extension is technical: the current implementation uses a single oracle (NASA POWER) and a single clearinghouse structure. A production system would require multi-oracle aggregation, cross-chain settlement, and liquidity mechanisms that the current testnet deployment does not include.
+
+The fourth extension is the natural follow-on to this thesis specifically: testing the framework against alternative seven-condition formulations, or against five- or nine-condition formulations, to determine whether the four-constraint specification is robust to the choice of starting framework.
 
 ---
 
