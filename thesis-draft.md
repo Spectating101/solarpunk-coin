@@ -85,11 +85,11 @@ Appendix D: Sepolia Testnet Deployment (Technical Proof of Concept)
 
 ### 1.1 The Problem with Money Today
 
-Money is supposed to be a store of value. But every fiat currency in history has lost value over time. The US dollar has lost more than 97% of its purchasing power since 1913. The euro, the yen, the pound — all on the same trajectory. This is not a policy failure in any single country. It is a structural feature of money that is backed by nothing except the promise of a government.
+Money serves three classical functions: store of value, unit of account, and medium of exchange. Of the three, the store-of-value function has been weakest under fiat regimes. The US dollar has lost more than 97% of its purchasing power since 1913, and other major fiat currencies (the euro, yen, pound) exhibit comparable long-run decline. This is not a critique of any particular jurisdiction's monetary policy. It is a feature of monetary systems whose issuance is constrained by institutional credibility rather than by an external, physical production cost.
 
-The problem is not new. For most of human history, money was backed by something physical. Gold. Silver. Grain. The physical backing served as a constraint: you could not print money faster than you could dig it out of the ground. That constraint kept inflation in check. When the constraint was removed — as it finally was, completely, in 1971 when the United States severed the dollar's last link to gold — money became a political instrument. Governments could now create as much of it as they wanted. Most of them did.
+For most of human history, monetary issuance was constrained by the cost of producing the underlying commodity — gold, silver, grain. The physical backing imposed a binding constraint: monetary expansion could not exceed extraction or production rates. That constraint maintained long-run price stability under most conditions, with notable exceptions (debasement under coin clipping, Spanish silver inflation in the sixteenth century). When the last formal commodity link was severed in 1971 with the suspension of dollar-gold convertibility, monetary issuance moved entirely under discretionary institutional control.
 
-This thesis asks a simple question: Is there something better than gold to back a currency? And it argues the answer is yes — energy.
+This thesis investigates whether a different commodity — one whose physical properties differ from gold's in specific, identifiable ways — could serve as a more credible monetary base in the post-satellite, post-blockchain era. The candidate examined here is energy.
 
 ### 1.2 Gold Worked — Then It Didn't
 
@@ -166,7 +166,7 @@ This chapter investigates two questions. *What properties must a commodity posse
 
 A monetary standard is not just a means of payment. It is a commitment device — a way for a monetary authority (or, in a decentralised system, a set of rules) to make a credible promise about the future value of money. The commitment is only as good as the mechanism enforcing it.
 
-Monetary economists have identified several properties that a commodity must have to serve as a credible monetary base. Drawing from Friedman (1960), Hayek (1943, 1976), Selgin (2015), and Soddy (1925), we identify seven necessary conditions. Each is anchored to a specific source in the literature, summarised below:
+Monetary economists have identified several properties that a commodity must have to serve as the basis of a credible commodity-style monetary standard. The qualifier *commodity-style* matters: the conditions developed here are not claimed to be necessary for all conceivable monetary systems — they are the conditions a commodity-backed standard must satisfy in order to provide credibility comparable to or stronger than the historical gold standard. Drawing from Friedman (1960), Hayek (1943, 1976), Selgin (2015), and Soddy (1925), we identify seven such conditions. Each is anchored to a specific source in the literature, summarised below:
 
 1. **Verifiable production cost floor** — the commodity has a real, measurable cost of production that prevents issuance below that floor. *Anchored in:* Selgin (2015, pp. 93–95) on synthetic commodity money requiring a "real production cost"; Hayes (2019) on Bitcoin's marginal cost of production functioning as a price floor.
 
@@ -239,7 +239,7 @@ Three reasons distinguish energy from other commodities:
 
 ### 2.6 Investigation Finding
 
-The investigation conducted in this chapter finds that energy satisfies all seven conditions for a credible monetary standard, gold satisfies two and a half, and fiat satisfies one. The result is not marginal: energy outperforms gold systematically, on properties (satellite observability, dispersion-proof contractual enforcement, physics-based price floor) that could not have been satisfied by any commodity prior to the satellite and blockchain eras. This finding establishes that an energy-backed currency is a defensible monetary base. Whether energy expenditure has actually anchored monetary value in any observed case — and what conditions caused the anchor to hold or fail — is the question Chapter 3 takes up.
+Under the seven-condition framework developed in this chapter, the investigation finds that energy satisfies all seven criteria, gold satisfies two and a half, and fiat satisfies one. The result is not marginal: energy outperforms gold systematically, on properties (satellite observability, dispersion-proof contractual enforcement, physics-based price floor) that could not have been satisfied by any commodity prior to the satellite and blockchain eras. This finding establishes that an energy-backed currency is a defensible monetary base. Whether energy expenditure has actually anchored monetary value in any observed case — and what conditions caused the anchor to hold or fail — is the question Chapter 3 takes up.
 
 ---
 
@@ -266,11 +266,13 @@ This provides a clean before-and-after test. If energy costs anchor Bitcoin valu
 
 **Bitcoin price data:** Daily closing prices from 2019-01-01 to 2024-12-31 (approximately 2,200 daily observations).
 
-**Energy cost ratio (CEIR):** Constructed as the ratio of cumulative energy expenditure to market capitalisation. This captures the fraction of Bitcoin's market value that can be explained by its energy production cost. Formally:
+**Cumulative Energy-Indexed Ratio (CEIR):** Constructed as the ratio of market capitalisation to cumulative energy expenditure. This captures Bitcoin's market value *relative to its energy production cost floor* — high values indicate the market price has run ahead of the production-cost anchor; low values indicate the price has fallen toward or below the anchor. Formally:
 
-> CEIR_t = Cumulative energy cost (USD) / Market cap (USD)
+> CEIR_t = Market cap (USD) / Cumulative energy cost (USD)
 
 where energy cost = daily energy consumption (TWh) × weighted global electricity price (USD/kWh).
+
+This convention follows the marginal-cost-of-production framing used by Hayes (2019), in which the ratio of price to production cost is the natural test variable for whether a production floor anchors market value. Under this convention, mean reversion to the floor predicts a negative coefficient: when CEIR is high (price elevated above floor), subsequent returns are expected to be lower; when CEIR is low (price near or below floor), the supply mechanism (miners exiting unprofitable operations) tightens supply and pushes price back up.
 
 **Electricity price:** Time-varying weighted average across mining geographies, using Cambridge mining distribution data and regional electricity prices.
 
@@ -291,7 +293,7 @@ where energy cost = daily energy consumption (TWh) × weighted global electricit
 | Post-ban baseline | -0.080 | 0.031 | 0.011 | 0.094 |
 | Post-ban + sentiment | -0.098 | 0.034 | 0.004 | 0.156 |
 
-**Interpretation:** Before the ban, a one-standard-deviation decrease in the energy cost ratio predicted 10 percentage points higher 30-day returns (β = -0.206). The energy floor was binding — when production cost was high relative to market price, prices converged upward. After the ban, the coefficient shrank to -0.080 — a 61% reduction in magnitude — and the R² halved.
+**Interpretation:** Before the ban, a one-standard-deviation *increase* in CEIR (Bitcoin price elevated above its energy-cost floor) predicted approximately 10 percentage points lower 30-day returns (β = −0.206). Equivalently, when CEIR was *low* — market price near or below the production-cost floor — subsequent returns were higher, consistent with mean reversion to the floor: unprofitable mining drives miners out, supply tightens, and price recovers. The energy floor was binding under this regime. After the ban, the coefficient shrank to −0.080 — a 61% reduction in magnitude — and the R² halved, indicating that the floor's predictive power on returns weakened substantially.
 
 **Structural break:** Chow test confirms a statistically significant regime change at the ban date (F = 4.786, p = 0.0009). This is not a continuous drift — it is a discrete break coinciding with the geographic dispersion event.
 
@@ -374,7 +376,7 @@ All of these are real barriers. But the deeper issue is that the monetary system
 
 Compare to gold: a gold mine in the same country with the same currency risk and the same political uncertainty would attract capital, because the gold standard era established institutional frameworks (international project finance, commodity-backed lending, reserve recognition) that treat in-ground gold as a balance-sheet asset. No equivalent framework exists for in-ground or in-sky renewable energy.
 
-**The monetary reframing produces a different policy implication:** The renewable finance gap is not primarily a problem to be solved by climate policy, carbon taxes, or subsidies. It is a problem to be solved by redesigning what counts as monetary value.
+**The monetary reframing suggests a different angle on the policy problem.** This chapter does not claim that climate-policy and subsidy approaches to the renewable finance gap are wrong, nor that monetary architecture is the sole or even primary cause of the gap. It claims something narrower: that *under the framework being investigated*, the gap admits a structural interpretation — as a recognition failure of the current monetary system — that climate-policy framings do not capture. The two framings are complements rather than substitutes; the contribution of this chapter is to make the monetary framing visible, not to displace alternatives.
 
 ### 4.4 Quantifying Foregone Value: A Structured Estimate
 
@@ -560,7 +562,7 @@ This is the joint-necessity result. Each constraint addresses one specific failu
 
 ### 5.4 Proof of Concept: Live Deployment
 
-The contractual infrastructure has been deployed to the Ethereum Sepolia testnet (April 2026). This is not the thesis's academic contribution — it is a demonstration that the argument is not merely theoretical.
+A Sepolia testnet implementation of the four-constraint architecture has been deployed (April 2026) to demonstrate that the framework specified in §5.3 is technically buildable with current smart-contract infrastructure. The implementation is not the thesis's academic contribution and is not claimed to be production-ready; its purpose is to settle the buildability question that §5.3 raises. Operational details (full address tables, keeper logs, test transcripts, code-review findings, parameter values) are provided in Appendix D and in the project repository so that any reviewer can verify them independently. The summary that follows reports only what is needed to establish buildability.
 
 **Deployed and source-verified:**
 - SolarPunkCoin: `0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F`
