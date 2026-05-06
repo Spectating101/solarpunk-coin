@@ -154,17 +154,23 @@ This thesis argues that energy-backed currency is theoretically superior and emp
 
 A monetary standard is not just a means of payment. It is a commitment device — a way for a monetary authority (or, in a decentralised system, a set of rules) to make a credible promise about the future value of money. The commitment is only as good as the mechanism enforcing it.
 
-Monetary economists have identified several properties that a commodity must have to serve as a credible monetary base. Drawing from Friedman (1960), Hayek (1976), Selgin (2015), and Soddy (1925), we identify seven necessary conditions:
+Monetary economists have identified several properties that a commodity must have to serve as a credible monetary base. Drawing from Friedman (1960), Hayek (1943, 1976), Selgin (2015), and Soddy (1925), we identify seven necessary conditions. Each is anchored to a specific source in the literature, summarised below:
 
-1. **Verifiable production cost floor** — the commodity has a real, measurable cost of production that prevents issuance below that floor.
-2. **Independent observability** — the quantity and quality of the commodity can be verified by any party without trusting a central authority.
-3. **Scarcity and irreversibility** — the commodity cannot be created at will; production requires real resource expenditure that is irreversible.
-4. **Dispersion-proof enforcement** — the backing mechanism does not depend on geographic concentration of producers or custodians.
-5. **Cash settlement without physical delivery** — value can be transferred digitally without requiring physical movement of the commodity.
-6. **Credibility under geographic dispersion** — the monetary system functions regardless of where producers or users are located.
-7. **Physics-based price floor** — the commodity's value floor derives from physical laws, not from political or social convention.
+1. **Verifiable production cost floor** — the commodity has a real, measurable cost of production that prevents issuance below that floor. *Anchored in:* Selgin (2015, pp. 93–95) on synthetic commodity money requiring a "real production cost"; Hayes (2019) on Bitcoin's marginal cost of production functioning as a price floor.
 
-These conditions are not defined to favour any particular conclusion — they are derived independently from the monetary economics literature and can be evaluated against any proposed monetary standard.
+2. **Independent observability** — the quantity and quality of the commodity can be verified by any party without trusting a central authority. *Anchored in:* Hayek (1976, ch. VIII) on the requirement that holders be able to verify the soundness of money without trusting the issuer; extended here to the satellite era where verification is possible without physical custody.
+
+3. **Scarcity and irreversibility** — the commodity cannot be created at will; production requires real resource expenditure that is irreversible. *Anchored in:* Friedman (1960, ch. 4) on rule-bound supply growth as the core property distinguishing sound from unsound money; Soddy (1925) on the thermodynamic basis of real wealth versus financial claims.
+
+4. **Dispersion-proof enforcement** — the backing mechanism does not depend on geographic concentration of producers or custodians. *Anchored in:* Hayek (1976, chs. III–V) on the failure mode of central-custodian commodity standards; this thesis extends the principle to argue that algorithmic enforcement removes the geographic-concentration vulnerability that Hayek identified but could not technically resolve.
+
+5. **Cash settlement without physical delivery** — value can be transferred digitally without requiring physical movement of the commodity. *Anchored in:* Selgin (2015, p. 96) on synthetic commodity money explicitly designed to separate the unit of account from physical custody.
+
+6. **Credibility under geographic dispersion** — the monetary system functions regardless of where producers or users are located. *Anchored in:* Eichengreen (1992) on the Bretton Woods collapse as a failure of credibility under dispersion; Hayek (1943) on commodity reserve currency as a multi-jurisdictional system.
+
+7. **Physics-based price floor** — the commodity's value floor derives from physical laws, not from political or social convention. *Anchored in:* Soddy (1925) on the physical basis of real wealth; extended here using LCOE methodology (Lazard 2025) which derives directly from irradiance physics, panel efficiency, and capital cost rather than from market convention.
+
+These conditions are not defined to favour any particular conclusion — they are derived from prior monetary economics literature and can be evaluated against any proposed monetary standard. Conditions 2 and 4 are extensions of the prior framework to account for satellite observability and algorithmic enforcement, both of which are technologies that did not exist when Hayek and Selgin formulated their proposals; the extensions are explicit and a reviewer can choose to evaluate energy against the original conditions only (see §6.3 for further discussion of this construction).
 
 ### 2.2 The Gold Standard: What Worked and What Broke
 
@@ -568,7 +574,9 @@ The appropriate response to this limitation is not to abandon the framework but 
 
 **The empirical evidence rests on one asset and one natural experiment.**
 
-Chapter 3's empirical findings are based entirely on Bitcoin price data and the 2021 China mining ban. Bitcoin is the only monetary asset in history that required energy expenditure for issuance at scale, which is why it is uniquely suited to this test. But one asset is a thin empirical base for a general claim about energy-monetary linkages.
+Chapter 3's empirical findings are based entirely on Bitcoin price data and the 2021 China mining ban. This is a real limitation, but it is also a structural one: Bitcoin is the only monetary asset in history whose issuance has been explicitly tied to verifiable energy expenditure at scale. There is no second case in the historical record. Pre-modern commodity monies (gold, silver, wheat) had production costs but those costs were not denominated in energy terms and were not measurable at the resolution required for a regression like the one in Chapter 3. Modern fiat currencies have no production cost at all. The Bitcoin natural experiment is therefore not one of many possible tests — it is the only available test, which is why it is the one this thesis runs.
+
+This framing matters for how the empirical evidence should be weighted. A reviewer who treats "n = 1 asset" as evidence of weakness is treating the empirical question as if alternative tests were available and not chosen. They were not available. The appropriate posture is therefore to acknowledge that the Bitcoin result is suggestive rather than conclusive — it directionally supports the thesis argument but cannot, on its own, prove a general claim about energy-monetary anchoring. Future work that designs new tests as energy-backed instruments are deployed (the SolarPunk Protocol itself becoming one such test bed once it has live transaction history) is the appropriate path to broaden the empirical base.
 
 The post-ban regime, in particular, is still young — approximately three years of data, against which the pre-ban analysis runs eight years. The mechanism inversion finding (sentiment interaction flipping sign) is statistically significant but could partly reflect the cryptocurrency market's maturation between periods rather than purely the geographic dispersion event. The Kazakhstan falsification test strengthens the geographic concentration interpretation, but alternative explanations — regulatory uncertainty globally, the maturation of crypto derivatives markets, the rise of institutional investors — cannot be fully ruled out with available data.
 
@@ -583,6 +591,8 @@ A rigorous quantification of foregone monetary value under an energy standard wo
 **The thesis argues energy should replace gold as a monetary base — but does not model the transition.**
 
 The most practically important question is left unanswered: how would an economy transition from fiat money to an energy monetary standard? The transition problem involves currency substitution dynamics, central bank balance sheet adjustment, international coordination, and the distributional consequences of who holds energy-generating assets at the time of transition. These are serious political economy questions that require expertise well beyond financial economics. This thesis establishes the desirability and feasibility of the destination; it does not provide a roadmap for getting there.
+
+This is a deliberate scoping choice rather than an oversight. The thesis takes the view that the destination question must be settled before the transition question is worth modelling — there is no value in mapping a path to a place that has not been shown to be worth reaching. Chapters 2–5 address the destination question (is energy a coherent monetary base, and is the required infrastructure buildable). The transition question is downstream and would constitute a separate research programme, more properly located in monetary economics and political economy departments than in finance.
 
 **The proof of concept is not production-ready.**
 
@@ -617,6 +627,10 @@ Hayes, A. S. (2019). Bitcoin price and its marginal cost of production: Support 
 Hull, J. C. (2018). *Options, Futures, and Other Derivatives* (10th ed.). Pearson.
 
 IEA. (2023). *Financing Clean Energy Transitions in Emerging and Developing Economies*. International Energy Agency. https://www.iea.org/reports/financing-clean-energy-transitions-in-emerging-and-developing-economies
+
+IEA. (2024). *Electricity 2024: Analysis and Forecast to 2026*. International Energy Agency.
+
+IRENA. (2023). *Renewable Capacity Statistics 2023*. International Renewable Energy Agency, Abu Dhabi.
 
 Jacobson, M. Z., & Delucchi, M. A. (2011). Providing all global energy with wind, water, and solar power. *Energy Policy*, 39(3), 1154–1169.
 
