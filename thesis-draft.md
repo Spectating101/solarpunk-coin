@@ -158,6 +158,8 @@ This thesis argues that energy-backed currency is theoretically superior and emp
 
 ## Chapter 2: Why Gold Failed and What Energy Offers Instead
 
+This chapter investigates two questions. *What properties must a commodity possess in order to serve as a credible monetary base?* And: *against those properties, how does energy compare to gold and to fiat money?* The investigation proceeds by deriving the conditions for credibility independently from the monetary economics literature — Friedman, Hayek, Selgin, Soddy — before evaluating any candidate against them. The conditions therefore precede the evaluation; the evaluation does not assume them. The investigation finds that energy satisfies all seven conditions, gold satisfies two and a half, and fiat satisfies one — a result reported in §2.3 and supported by the per-condition analysis in §2.4.
+
 ### 2.1 What Makes a Good Monetary Standard
 
 A monetary standard is not just a means of payment. It is a commitment device — a way for a monetary authority (or, in a decentralised system, a set of rules) to make a credible promise about the future value of money. The commitment is only as good as the mechanism enforcing it.
@@ -237,6 +239,10 @@ Three reasons distinguish energy from other commodities:
 
 ## Chapter 3: Empirical Evidence — Energy Already Backs Monetary Value
 
+This chapter investigates whether the theoretical claim of Chapter 2 — that energy can credibly anchor monetary value — is consistent with observed monetary behaviour. The question is sharper than it first appears: *has there ever been a case in which energy expenditure demonstrably anchored a currency's market value, and if so, under what conditions did the anchor hold or fail?* If the answer is "never, anywhere, under any conditions," the theoretical case in Chapter 2 is suggestive but not motivated by evidence. If the answer is "yes, under conditions X but not under conditions Y," then the conditions of failure are themselves informative — they tell us what a deliberately designed energy monetary system would need to provide that the historical case did not.
+
+The investigation finds the latter result. Bitcoin's energy-value anchor was real and statistically significant during the period of geographic concentration, and broke when concentration dissolved. This is the empirical signature of *passive* energy anchoring — and it points directly to the design question taken up in Chapter 5.
+
 ### 3.1 Bitcoin as a Natural Experiment
 
 Bitcoin is the only monetary instrument in history designed so that its issuance explicitly requires energy expenditure. Every Bitcoin requires computational work — and computational work requires electricity. In 2021, Bitcoin's annualised energy consumption was approximately 130-150 TWh/year (Cambridge Centre for Alternative Finance 2021), comparable to the electricity consumption of Argentina.
@@ -313,6 +319,10 @@ This is the bridge from Chapter 3 to Chapter 5: the empirical evidence motivates
 ---
 
 ## Chapter 4: The Opportunity Cost of Unharvested Energy
+
+This chapter asks a single conditional question: *if the theoretical argument of Chapter 2 is accepted, and the empirical evidence of Chapter 3 is read as supportive, what does this framework imply about the economic status of unharvested renewable energy?* The conditional matters. The chapter does not claim that an energy monetary standard exists today and that the renewable finance gap is therefore literal monetary loss. It claims something more careful: that *under the framework being investigated*, unharvested renewable energy is economically equivalent to unmined gold under the gold standard, and the existing $1.35 trillion annual finance gap therefore represents a structurally invisible loss that a different monetary architecture would render visible.
+
+The investigation finds that the order of magnitude is large — approximately $79 billion per year of foregone monetary value is implied by the financing-constrained portion of the IEA gap — and that the policy implication of the reframing is meaningful even if the precise figure is treated as illustrative.
 
 ### 4.1 The Monetary Reframing
 
@@ -402,6 +412,10 @@ If the analysis in this chapter is accepted, three policy implications follow:
 ---
 
 ## Chapter 5: Making It Work — The Contractual Infrastructure
+
+This chapter investigates the central question of the thesis: *what specific contractual mechanisms must bind the issuer of an energy-backed currency in order to satisfy, jointly, the seven conditions established in Chapter 2 — and can those mechanisms be built and operated with current technology?* The question has two halves. The first is an institutional-design question — what binding constraints on the issuer are jointly necessary and individually insufficient? The second is a feasibility question — can those constraints actually be implemented in working code, with live data, today?
+
+A prior question must be settled before either half can be addressed: how to price energy-backed instruments in markets where no liquid options market exists to calibrate volatility against. §5.2 settles this question using satellite irradiance as a physics-based volatility source. §5.3 then conducts the institutional-design investigation — examining each of the seven conditions in turn and asking what contractual element would enforce it — and reports the finding that four constraints are jointly necessary. §5.4 reports the feasibility result by reference to the deployed implementation.
 
 ### 5.1 Why Pricing Comes Before Policy
 
