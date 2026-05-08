@@ -10,7 +10,7 @@ Master's Thesis — 2026
 
 ## Abstract
 
-This thesis investigates one central question: *what binding constraints must define the issuer of an energy-backed currency for the currency to be credibly sound — that is, demonstrably resistant to the failure modes that ended the gold standard in 1971 and that characterise fiat money since?*
+This thesis investigates one central question: *what binding constraints must define the issuer of an energy-backed currency for the currency to be credibly sound?* By "credibly sound," the thesis means resistant to the three major failure modes of prior monetary standards: discretionary over-issuance under fiat money, physical-custody fragility under gold, and coordination failure under passive energy anchoring.
 
 The question is worth investigating because two prior findings establish that an energy-backed currency would be both defensible and consequential. **First**, energy is a stronger foundation for a monetary standard than gold. Evaluated against seven conditions for monetary credibility derived from Friedman (1960), Hayek (1943, 1976), Selgin (2015), and Soddy (1925), energy satisfies all seven, gold satisfies two and a half, and fiat satisfies one. The Bitcoin natural experiment of China's 2021 mining ban provides causal empirical support: energy expenditure demonstrably anchored Bitcoin's market value when mining was geographically concentrated (β = −0.206, p < 0.001) and the anchor broke when concentration dissolved (Chow F = 4.786, p = 0.0009). This is the diagnostic signature of *passive* energy anchoring — a fragility a deliberately designed system would not share. **Second**, if energy is monetary value, then unharvested renewable energy is foregone monetary value. The IEA's $1.35 trillion annual renewable finance gap implies approximately $79 billion per year of foregone monetary production under an energy standard, reframing the gap from a climate-policy failure to a monetary-system failure.
 
@@ -62,8 +62,9 @@ The constraints framework has been instantiated as five source-verified smart co
 - 5.1 Why Pricing Comes Before Policy
 - 5.2 How to Price an Energy-Backed Instrument Without a Liquid Market
 - 5.3 The Four Binding Constraints (the central specification)
-- 5.4 Proof of Concept: Live Deployment
-- 5.5 Investigation Finding
+- 5.4 Joint Necessity
+- 5.5 Proof of Concept: Live Deployment
+- 5.6 Investigation Finding
 
 **6. Conclusions**
 - 6.1 Summary of the Investigation
@@ -71,6 +72,7 @@ The constraints framework has been instantiated as five source-verified smart co
 - 6.3 Limitations
 - 6.4 What Would Falsify This Thesis
 - 6.5 Future Work
+- 6.6 Closing Statement
 
 References
 
@@ -194,7 +196,7 @@ The deeper problem is that gold's value is largely conventional. The gold standa
 
 ### 2.3 Seven Conditions for a Credible Monetary Standard
 
-Evaluating the three candidate systems against the seven conditions:
+The scorecard below evaluates *monetary architectures*, not raw commodities. The first column should be read as *"designed energy-backed standard"*, not "energy alone." Raw energy by itself is not money any more than raw gold by itself was money — gold required mints, custodians, and convertibility commitments to function as a monetary base. The architecture being evaluated here pairs energy production with public satellite data, contractual issuance rules, and algorithmic settlement; the comparison is therefore between three architectures (energy-backed standard, gold standard, fiat) rather than three substances. Evaluating the three candidate systems against the seven conditions:
 
 | Condition | Energy | Gold | Fiat |
 |---|---|---|---|
@@ -297,7 +299,7 @@ This convention follows the marginal-cost-of-production framing used by Hayes (2
 
 **Structural break:** Chow test confirms a statistically significant regime change at the ban date (F = 4.786, p = 0.0009). This is not a continuous drift — it is a discrete break coinciding with the geographic dispersion event.
 
-**Why this supports the thesis:** The energy-value relationship did not fail because energy is a bad monetary base. It failed because the mechanism enforcing the relationship — geographic concentration of miners who shared the same electricity market — was dissolved by policy. This is precisely the fragility that a designed, contractually-enforced energy monetary standard avoids. You do not need geographic concentration if you have algorithmic enforcement.
+**Why this supports the thesis:** The correct interpretation is not that every CEIR relationship disappeared after the ban — the post-ban coefficient remains negative and statistically significant at p = 0.011. The stronger and more accurate claim is that the *rational coordination mechanism* weakened and changed character after mining dispersion. The pre-ban regime exhibits a 61% larger coefficient and roughly twice the explanatory power; the post-ban regime retains a residual signal whose economic meaning is materially different (as the mechanism inversion test in §3.4 shows). The energy-value relationship did not fail because energy is a bad monetary base. It weakened because the mechanism enforcing the relationship — geographic concentration of miners sharing a common electricity-cost regime — was dissolved by policy. This is precisely the fragility that a designed, contractually-enforced energy monetary standard avoids. Algorithmic enforcement does not depend on geographic concentration.
 
 ### 3.4 The Break: Mechanism Inversion
 
@@ -471,7 +473,7 @@ This is high volatility by conventional standards — higher than equities, comp
 The 2.08% divergence between binomial and Monte Carlo is within acceptable simulation error for 20,000 paths at σ = 189.5%. Monte Carlo standard error at 20,000 paths is approximately σ_MC / √N ≈ 0.190 / √20,000 ≈ 0.13% of the option value, meaning the 2.08% gap is within the expected stochastic noise band rather than indicating model disagreement. Increasing to 100,000 paths would reduce the divergence to approximately 0.9% but does not change the pricing conclusions — the collar structure, margin requirements, and cross-location results are all insensitive to this level of MC precision. The 2.08% figure is reported as the honest measured result; the aspirational < 1% that appeared in earlier drafts was incorrect and has been removed.
 
 **Structural result — the zero-premium collar:**
-A collar structure (buy put at 0.9K, sell call at 1.1K) generates a net credit at all volatility levels in a log-normal model. This is a structural feature of the log-normal distribution (log(1.1/0.9) > 0), not a threshold finding. The credit grows with volatility: at Taiwan's σ = 189.5%, the net credit is -$0.00219/kWh (negative = income to the buyer). For a solar farm producing 1 MWh per day, this collar generates approximately $0.22/day in structural net income while capping downside risk.
+A collar structure (buy put at 0.9K, sell call at 1.1K) generates a net credit at all volatility levels in a log-normal model. The reason is a log-space asymmetry: in log space, the 1.1K call is closer to spot than the 0.9K put, because log(1.1) ≈ 0.0953 is smaller than log(1/0.9) ≈ 0.1054. Under log-normality, an option's premium scales with its log-distance from the underlying — the closer-to-spot call therefore carries a larger premium than the further-from-spot put, and selling the call against buying the put produces a net credit. This is a structural property of the log-normal pricing model, not a threshold finding that appears only above a specific volatility level. The credit grows with volatility: at Taiwan's σ = 189.5%, the net credit is -$0.00219/kWh (negative = income to the buyer). For a solar farm producing 1 MWh per day, this collar generates approximately $0.22/day in structural net income while capping downside risk.
 
 **Cross-location validation:**
 
@@ -549,18 +551,20 @@ This is the contractual equivalent of Condition 6 (credibility under geographic 
 
 ---
 
-**The four constraints as a joint specification:**
+### 5.4 Joint Necessity
 
-The four constraints are not independent specifications running in parallel — they are interlocking. The oracle feeds the currency and the clearinghouse. The currency provides the unit of account in which clearinghouse settlement is denominated. The clearinghouse generates the fees that fund the insurance pool. The governance mechanism binds all three from unilateral change. Removing any one degrades the standard back to a known and worse failure mode:
+The four constraints are not independent specifications running in parallel — they are interlocking. The oracle feeds verified energy data into the system. The rule-bound supply mechanism uses that data to govern issuance. The clearinghouse enforces settlement against collateral, denominated in the unit of account the supply rule produces. The timelocked governance mechanism binds all three from unilateral change. Each constraint depends on the others to remain meaningful, and removing any one degrades the standard back to a known and worse failure mode:
 
-- No oracle gating → issuance is unverified → identical to fiat
-- No supply rule → issuance is unbounded → identical to fiat
-- No collateralised settlement → settlement depends on counterparty creditworthiness → identical to bilateral credit, which is precisely what the standard claims to replace
-- No timelocked governance → parameters can be changed overnight → identical to central bank discretion, which is precisely what the standard claims to replace
+- **Without oracle-gated issuance** → energy backing is unverifiable → the system depends on trust in the issuer → identical to fiat with extra steps.
+- **Without rule-bound supply** → the issuer regains discretion over monetary expansion → the energy label remains but the constraint is gone → identical to fiat that calls itself energy-backed.
+- **Without algorithmically collateralised settlement** → settlement depends on counterparty creditworthiness → priced instruments degrade to bilateral credit → the dispersion-proof property is lost.
+- **Without timelocked governance** → parameters can be changed overnight by the issuer → the rules become as durable as a sovereign promise → identical to central bank discretion.
 
-This is the joint-necessity result. Each constraint addresses one specific failure mode; together the four constitute the minimum viable architecture for sound energy money. The investigation does not claim the four constraints are *sufficient* in the sense that nothing else matters — production deployments will require additional engineering (multi-oracle aggregation, multi-signer governance, cross-chain liquidity) — but those are scaling concerns, not soundness concerns. The four constraints are what makes an energy-backed currency monetarily sound; the rest is what makes it operationally viable at scale.
+This is the joint-necessity result. Each constraint addresses one specific failure mode that has been observed in monetary history (oracle capture, issuance discretion, counterparty insolvency, governance unilateralism). Removing any one re-opens the failure mode it closed. Adding any one without the others does not produce sound money — it produces a single safeguarded surface against three unsafeguarded ones. The four constraints together constitute the minimum viable architecture for sound energy money.
 
-### 5.4 Proof of Concept: Live Deployment
+The investigation does not claim the four constraints are *sufficient* in the sense that nothing else matters — production deployments will require additional engineering (multi-oracle aggregation, multi-signer governance, cross-chain liquidity, regulatory treatment, counterparty onboarding). But those are scaling, governance, and legal concerns, not soundness concerns. The four constraints are what makes an energy-backed currency monetarily sound. The rest is what makes it operationally viable at scale.
+
+### 5.5 Proof of Concept: Live Deployment
 
 A Sepolia testnet implementation of the four-constraint architecture has been deployed (April 2026) to demonstrate that the framework specified in §5.3 is technically buildable with current smart-contract infrastructure. The implementation is not the thesis's academic contribution and is not claimed to be production-ready; its purpose is to settle the buildability question that §5.3 raises. Operational details (full address tables, keeper logs, test transcripts, code-review findings, parameter values) are provided in Appendix D and in the project repository so that any reviewer can verify them independently. The summary that follows reports only what is needed to establish buildability.
 
@@ -579,7 +583,7 @@ A Sepolia testnet implementation of the four-constraint architecture has been de
 
 The full technical documentation is in Appendix D and at https://github.com/Spectating101/solarpunk-coin.
 
-### 5.5 Investigation Finding
+### 5.6 Investigation Finding
 
 The central investigation of this thesis finds that four binding constraints on the issuer of an energy-backed currency are jointly necessary and individually insufficient for the currency to be credibly sound: oracle-gated issuance, rule-bound supply, algorithmically collateralised settlement, and timelocked governance. Each constraint addresses one failure mode that has been observed in monetary history (oracle capture, issuance discretion, counterparty risk, governance unilateralism). Removing any one re-opens the failure mode it closed; the framework is the joint specification, not a checklist.
 
@@ -654,24 +658,30 @@ The Sepolia testnet deployment demonstrates technical buildability, not commerci
 
 ### 6.4 What Would Falsify This Thesis
 
-A research thesis that names its falsification conditions in advance is harder to attack but more useful when it survives attack. The central finding of this thesis would be falsified by any of the following:
+A research thesis that names its falsification conditions in advance is harder to attack but more useful when it survives attack. The central finding of this thesis — that the four binding constraints are jointly necessary for sound energy money — would be weakened or falsified if any of the following were shown. Each falsification condition is mapped to a specific chapter's claim.
 
-**1. A demonstration that the four constraints are not jointly necessary.** If a working energy-backed currency could be built, operated at scale, and shown to be credibly sound while violating any one of the four constraints — issuing without oracle gating, allowing discretionary supply, settling without margin, or permitting unilateral governance changes — the joint-necessity claim would fail. The honest expected outcome is that the constraints are necessary in the strict sense for soundness but that real-world implementations will tolerate weakened versions of one or more constraints during a bootstrap phase, accepting reduced credibility in exchange for usability.
+**1. (Chapter 2)** If the seven-condition framework for commodity-style monetary credibility is rejected as irrelevant or incoherent — for example, by demonstrating that one of the seven conditions is unnecessary for any commodity standard and no replacement condition is required — then the theoretical comparison loses force and the framework derived from it loses its anchoring.
 
-**2. A demonstration that the constraints are sufficient but not necessary.** If a working energy-backed currency could be built that satisfied a different set of constraints (e.g., constraints derived from a five-condition rather than seven-condition framework) and achieved credibility equivalent to the four-constraint system, the claim that *these specific* four constraints are the right specification would weaken — though the broader claim that *some* set of binding constraints is necessary would survive.
+**2. (Chapter 2)** If energy-backed issuance cannot be reliably verified using public or externally auditable data sources — for example, if satellite irradiance data turns out to be insufficiently tamper-resistant for monetary-grade observability — then the second condition (independent observability) fails for energy specifically and the architecture's claim to satisfy it collapses.
 
-**3. A demonstration that the seven monetary-standard conditions are themselves wrong.** The constraints framework is derived from the conditions. If the conditions are mis-specified — if, for example, dispersion-proof enforcement is not actually a necessary property of sound money, or if independent observability via satellite is not a meaningful requirement — then the framework derived from them is built on the wrong foundation. This is the deepest possible attack and would require demonstrating both that one of the seven conditions is unnecessary and that no replacement condition is needed.
+**3. (Chapter 3)** If the Bitcoin energy-anchor result is shown to be entirely mechanical, spurious, or unrelated to mining concentration — for example, if a confound coinciding with June 2021 explains the structural break with greater statistical force than the geographic-dispersion explanation — then the empirical motivation in Chapter 3 weakens substantially and the bridge from theory to design loses one of its supports.
 
-**4. A demonstration that the empirical link between energy expenditure and monetary value is artefactual.** If the Bitcoin natural experiment result were shown to be driven by a confound the existing analysis did not control for — e.g., if the structural break at June 2021 coincided with another event of equal or greater explanatory power that the falsification tests in §3.4 missed — the empirical motivation for the framework would weaken. The theoretical case in Chapter 2 would survive, but the support that Chapter 3 provides for the framework's relevance would be reduced.
+**4. (Chapter 5, §5.2)** If energy-backed instruments cannot be priced coherently without liquid options markets — for example, if the physics-based volatility approach produces inconsistent or unstable cross-location results when tested against a wider sample — then the cold-start pricing claim fails and the framework lacks a working pricing layer.
 
-The thesis is *not* falsified by any of the following, which a casual reader might mistake for falsification:
+**5. (Chapter 5, §5.3 and §5.4)** If the four constraints can be shown not to actually block the failure modes they are designed to block — for example, by demonstrating that an oracle-gated, rule-bound, collateralised, timelocked system still admits one of the canonical failure modes (oracle capture, issuance discretion, counterparty insolvency, governance unilateralism) through a mechanism the constraints do not foreclose — then the central architectural contribution fails on its own terms.
 
-- The fact that no government has adopted an energy monetary standard. (The thesis explicitly does not claim adoption is imminent.)
-- The fact that the deployed implementation is on testnet rather than mainnet. (The thesis claims buildability, not deployment-readiness.)
-- The fact that the $79 billion opportunity cost figure is an order-of-magnitude estimate rather than an audited number. (The thesis explicitly states the precision is illustrative and the contribution is the reframing.)
-- The fact that the thesis does not model the political transition from fiat to energy money. (The transition question is explicitly out of scope.)
+**6. (Chapter 5, §5.5)** If implementation requires assumptions that cannot be satisfied outside a toy environment — for example, if the four constraints can only operate together at sub-economic scale, or if any of them requires technology that does not yet exist at production scale — then the proof-of-concept result does not generalise and the buildability claim is restricted to the testnet domain.
 
-Naming these falsification conditions does two things. It forces the central finding to be falsifiable at all (a necessary condition for it to be a research finding rather than a position), and it pre-empts the easy-but-wrong attacks that are not actually attacks on the central claim.
+These six conditions are the real vulnerabilities. They are the lines along which a serious reviewer can attack the thesis productively.
+
+The following are *not* falsifications of the thesis, though casual readers sometimes mistake them for such:
+
+- "No government has adopted an energy monetary standard." (The thesis explicitly does not claim adoption is imminent or even likely in the near term.)
+- "The deployed implementation is on testnet rather than mainnet." (The thesis claims buildability, not deployment-readiness; testnet deployment is the appropriate evidence form for the buildability claim.)
+- "The $79 billion opportunity cost figure is an order-of-magnitude estimate rather than an audited number." (The thesis states this explicitly in §4.4 and §6.3; the contribution is the reframing, not the precision.)
+- "The thesis does not model the political transition from fiat to energy money." (The transition question is explicitly out of scope per §1.6 and §6.3.)
+
+Naming the falsification conditions does two things at once. It forces the central finding to be falsifiable, which is a precondition for it to be a research finding rather than a stance. And it pre-empts the easy-but-wrong attacks so that defense time is spent on the real questions.
 
 ### 6.5 Future Work
 
@@ -682,6 +692,18 @@ The second extension is institutional: what regulatory frameworks, international
 The third extension is technical: the current implementation uses a single oracle (NASA POWER) and a single clearinghouse structure. A production system would require multi-oracle aggregation, cross-chain settlement, and liquidity mechanisms that the current testnet deployment does not include.
 
 The fourth extension is the natural follow-on to this thesis specifically: testing the framework against alternative seven-condition formulations, or against five- or nine-condition formulations, to determine whether the four-constraint specification is robust to the choice of starting framework.
+
+### 6.6 Closing Statement
+
+Energy-backed money is not sound because energy is a fashionable asset. It is sound only if the issuer is bound by constraints that prevent the classic failure modes of money — discretionary over-issuance, custody capture, settlement default, and unilateral rule change.
+
+This thesis has shown that those constraints can be defined. It has shown why they matter, by establishing that energy is a defensible monetary base under a structured commodity-style framework and that energy expenditure has empirically anchored monetary value in at least one observed case. It has shown that the instruments such a system requires can be priced from physical data alone, without depending on liquid options markets that do not yet exist. And it has shown that the architecture can be implemented as a working testnet proof of concept using current technology.
+
+The conclusion is therefore limited but strong:
+
+**A sound energy-backed currency is theoretically defensible, empirically motivated, financially priceable, and technically buildable — provided that its issuer is bound by oracle-gated issuance, rule-bound supply, algorithmically collateralised settlement, and timelocked governance.**
+
+That is the blueprint. The rest is implementation, governance, and adoption — all of which are real problems, but none of which are research problems for this thesis to solve.
 
 ---
 
