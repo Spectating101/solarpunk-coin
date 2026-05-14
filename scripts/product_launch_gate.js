@@ -52,7 +52,7 @@ function summarizeNextActions(modes) {
   }
   if (modes.public_testnet_product.status === "launchable") {
     return [
-      "Launch the public testnet product surface now: demo, docs, Sepolia proof, and meter CSV onboarding.",
+      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
       "Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.",
       "Keep paid/mainnet launch blocked until audit, legal scope, and redemption policy are resolved.",
     ];
@@ -176,7 +176,7 @@ function evaluateLaunchGate(options = {}) {
   ];
 
   const modes = {
-    public_testnet_product: mode("public_testnet_product", "Public testnet product", publicTestnetChecks),
+    public_testnet_product: mode("public_testnet_product", "SolarPunk Public Lab", publicTestnetChecks),
     closed_testnet_pilot: mode("closed_testnet_pilot", "Closed testnet pilot", closedPilotChecks),
     paid_mainnet_product: mode("paid_mainnet_product", "Paid/mainnet product", paidMainnetChecks),
   };
@@ -184,7 +184,7 @@ function evaluateLaunchGate(options = {}) {
   return {
     generated_at: new Date().toISOString(),
     decision: modes.public_testnet_product.status === "launchable"
-      ? "Launch the public testnet product surface; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved."
+      ? "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved."
       : "Do not launch yet; public testnet proof surface is blocked.",
     recommended_current_launch: modes.public_testnet_product.status === "launchable" ? "public_testnet_product" : "none",
     next_build_target: modes.closed_testnet_pilot.status === "launchable" ? "paid_mainnet_product" : "closed_testnet_pilot",

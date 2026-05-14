@@ -7,7 +7,7 @@ import {
   Github,
   RadioTower,
   Leaf,
-  Rocket,
+  FlaskConical,
   ShieldCheck,
   Wallet,
 } from 'lucide-react';
@@ -23,7 +23,7 @@ import { GITHUB_REPO, KEEPER_WORKFLOW } from './constants/contracts';
 const tabs = [
   { id: 'proof', label: 'Proof', icon: RadioTower },
   { id: 'mint', label: 'SPK Mint', icon: Leaf },
-  { id: 'launch', label: 'Launch', icon: Rocket },
+  { id: 'launch', label: 'Lab', icon: FlaskConical },
   { id: 'market', label: 'Market', icon: BarChart3 },
   { id: 'hedge', label: 'Hedge', icon: Wallet },
   { id: 'status', label: 'Status', icon: ShieldCheck },

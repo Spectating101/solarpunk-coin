@@ -19,6 +19,8 @@ Use these first when facts conflict elsewhere:
 ## Core repo references
 - `README.md` — project overview
 - `CURRENT_STATUS.md` — honest stage snapshot
+- `docs/product/PUBLIC_LAB.md` — current public lab operating model
+- `docs/product/PRODUCT_LAUNCH_GATE.md` — explicit launch gates and blockers
 - `ARCHITECTURE_OVERVIEW.md` — system design
 - `ROADMAP.md` — milestone plan
 - `DEPLOYMENT_GUIDE.md` — deploy instructions

@@ -80,9 +80,11 @@ Run:
 npm run product:launch-gate
 ```
 
-Current gate result: **launch the public testnet product surface; do not launch paid/mainnet**.
+Current gate result: **launch the SolarPunk Public Lab; do not launch paid/mainnet**.
 
-That means the public demo, Sepolia proof, SPK mint dashboard, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external product surface. A closed pilot is still blocked until there is a governed attested-SPK redeploy plus one real meter or inverter adapter. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, and production deployment exist.
+That means the public demo, Sepolia proof, SPK mint dashboard, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external public lab. A closed pilot is still blocked until there is a governed attested-SPK redeploy plus one real meter or inverter adapter. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, and production deployment exist.
+
+See `docs/product/PUBLIC_LAB.md` for the operating model.
 
 ### Phase 0: Product proof hardening
 

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-05-14T15:44:15.575Z",
-  "decision": "Launch the public testnet product surface; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
+  "generated_at": "2026-05-14T15:51:35.709Z",
+  "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
   "modes": {
     "public_testnet_product": {
       "name": "public_testnet_product",
-      "label": "Public testnet product",
+      "label": "SolarPunk Public Lab",
       "status": "launchable",
       "passed_checks": 5,
       "blocking_checks": 0,
@@ -222,7 +222,7 @@
     }
   },
   "next_actions": [
-    "Launch the public testnet product surface now: demo, docs, Sepolia proof, and meter CSV onboarding.",
+    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
     "Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.",
     "Keep paid/mainnet launch blocked until audit, legal scope, and redemption policy are resolved."
   ]

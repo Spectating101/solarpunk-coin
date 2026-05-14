@@ -1,7 +1,7 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-14T15:44:15.575Z`
-- decision: Launch the public testnet product surface; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
+- generated_at: `2026-05-14T15:51:35.709Z`
+- decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
 
@@ -9,17 +9,17 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| Public testnet product | `launchable` | 5 | 0 |
+| SolarPunk Public Lab | `launchable` | 5 | 0 |
 | Closed testnet pilot | `blocked` | 6 | 2 |
 | Paid/mainnet product | `blocked` | 6 | 6 |
 
 ## Next Actions
 
-- Launch the public testnet product surface now: demo, docs, Sepolia proof, and meter CSV onboarding.
+- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.
 - Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.
 - Keep paid/mainnet launch blocked until audit, legal scope, and redemption policy are resolved.
 
-## Public testnet product
+## SolarPunk Public Lab
 
 - PASS `SPK product proof exists`: Signed meter bundle to SPK mint proof is present.
   Evidence: `docs/product/SPK_ATTESTED_MINT_PROOF.md`

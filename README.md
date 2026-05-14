@@ -1,6 +1,8 @@
 # SolarPunk Protocol
 
-SolarPunk is **renewable-energy monetary infrastructure**. The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.
+SolarPunk is **renewable-energy monetary infrastructure**. The current launch surface is the SolarPunk Public Lab: an open Sepolia/testnet environment for inspecting and reproducing the SPK proof path before any paid or mainnet launch.
+
+The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.
 
 **Status (May 2026):** Live Sepolia prototype for the earlier core contracts, public attested SPK mint proof, 96/96 contract tests, daily NASA -> on-chain oracle keeper running since April 20, independent code review complete.
 
@@ -13,6 +15,8 @@ SolarPunk is **renewable-energy monetary infrastructure**. The primary product i
 | Document | Purpose |
 |---|---|
 | [`EVIDENCE.md`](./EVIDENCE.md) | **Start here for external reviewers** — clickable receipts for every claim |
+| [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) | Current public lab operating model and participation boundary |
+| [`docs/product/PRODUCT_LAUNCH_GATE.md`](./docs/product/PRODUCT_LAUNCH_GATE.md) | Launch gate: public lab/testnet launchable; paid/mainnet blocked |
 | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](./docs/product/SPK_PRODUCT_EMPIRICS.md) | Single-product SPK proof and empirical dossier |
 | [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
 | [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |
@@ -126,6 +130,7 @@ npm run attestations:build
 npm run proof:spk-attested-mint
 npm run proof:spk-public-readback
 npm run product:empirics
+npm run product:launch-gate
 
 # Import a pilot-style meter CSV into signed raw readings
 npm run meter:onboard -- --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --device-address=0x... --capacity-kw=120

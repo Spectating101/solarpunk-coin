@@ -3,8 +3,8 @@ import {
   AlertTriangle,
   CheckCircle2,
   ExternalLink,
+  FlaskConical,
   Lock,
-  Rocket,
   ShieldCheck,
   Wrench,
 } from 'lucide-react';
@@ -13,9 +13,9 @@ import { GITHUB_REPO } from '../constants/contracts';
 
 const modeCopy = {
   public_testnet_product: {
-    title: 'Public Testnet Product',
+    title: 'Public Lab',
     subtitle: 'Launch now',
-    body: 'Demo, Sepolia proof, signed-meter fixture, CSV onboarding path, daily keeper evidence, and public docs.',
+    body: 'Open demo, Sepolia proof, signed-meter fixture, CSV onboarding path, daily keeper evidence, and public docs.',
   },
   closed_testnet_pilot: {
     title: 'Closed Testnet Pilot',
@@ -50,12 +50,12 @@ export default function LaunchConsole() {
     <section className="launch-shell">
       <div className="proof-hero launch-hero">
         <div>
-          <div className="eyebrow"><Rocket size={14} /> Product Launch Track</div>
-          <h1>Launch the testnet product. Do not fake mainnet readiness.</h1>
+          <div className="eyebrow"><FlaskConical size={14} /> SolarPunk Public Lab</div>
+          <h1>Open the lab. Keep real-money launch gated.</h1>
           <p>
-            The current product is externally usable as a public Sepolia proof surface:
-            a reviewer or pilot prospect can inspect the signed-meter path, reproduce the mint,
-            and see the daily real-data keeper. Real-value launch stays gated.
+            The public lab is the launchable product surface before paid production:
+            reviewers, builders, and pilot prospects can inspect the signed-meter path,
+            reproduce the mint, test CSV onboarding, and watch the daily real-data keeper.
           </p>
         </div>
         <div className={`system-tile ${publicMode.status === 'launchable' ? 'good' : 'warn'}`}>
@@ -141,6 +141,9 @@ export default function LaunchConsole() {
             <a href={`${GITHUB_REPO}/blob/main/docs/product/PRODUCT_LAUNCH_GATE.md`} target="_blank" rel="noreferrer">
               Launch gate <ExternalLink size={12} />
             </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB.md`} target="_blank" rel="noreferrer">
+              Public lab model <ExternalLink size={12} />
+            </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PRODUCT_EMPIRICS.md`} target="_blank" rel="noreferrer">
               Product empirics <ExternalLink size={12} />
             </a>
@@ -152,8 +155,8 @@ export default function LaunchConsole() {
             </a>
           </div>
           <div className="scope-note">
-            This is the product answer after grant submissions: keep the public testnet product live,
-            then build toward a closed pilot with one real meter source and governed deployment.
+            This is the product answer after grant submissions: operate SolarPunk as a public lab,
+            collect external proof, then build toward a closed pilot with one real meter source and governed deployment.
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ This file is the canonical stage snapshot for external reviewers.
 
 | Area | Current status |
 |---|---|
-| Stage | SPK product proof phase — public Sepolia attested mint proof live; production-governed redeploy pending |
+| Stage | Public lab phase — public Sepolia attested mint proof live; production-governed redeploy pending |
 | Smart contracts | **96/96 tests passing** |
 | Primary product | SPK attested surplus minting: meter bundle -> source hash -> oracle signature -> SPK mint |
 | Pilot meter adapter | CSV meter/inverter import + meter onboarding scripts now feed the signed-reading verifier |
@@ -20,7 +20,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Stability pool | **Dedicated StabilityPool contract (not address(this))** |
 | Treasury loop | Implemented (mint/redeem fees, trading fees, liquidation penalties, bond slashing) |
 | On-chain interaction proof | 7 confirmed Sepolia transactions + daily keeper TXs since April 20 |
-| Frontend | Live — reads Sepolia contract state every 30s and now foregrounds the `SPK Mint` product path |
+| Frontend | Live — reads Sepolia contract state every 30s and now foregrounds the `SPK Mint` and public lab launch path |
 | Python SDK | spk-derivatives v0.5.0 (PyPI) — chain_client reads all live protocol state |
 | Local demo | Available (`npm run demo:treasury`) |
 | Security audit | Not started — requires funding (~$25k); primary grant deliverable |
@@ -53,9 +53,9 @@ See [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) for full parameter state 
 
 ## Honest status line
 
-The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, and empirical dossier. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, and legal/commercial scope.
+The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, and empirical dossier. The launchable surface is the SolarPunk Public Lab: public demo, reproducible proof, Sepolia readback, daily keeper evidence, and meter CSV onboarding. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, and legal/commercial scope.
 
-See [`EVIDENCE.md`](./EVIDENCE.md) for clickable receipts of every claim. See [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) for full context.
+See [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) for the current public lab model, [`EVIDENCE.md`](./EVIDENCE.md) for clickable receipts of every claim, and [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) for full context.
 
 ## Open trust gaps
 
