@@ -72,6 +72,18 @@ This is the product story that the repo should now support: verified surplus ren
 
 ## Recommended launch sequence
 
+### Current launch decision
+
+Run:
+
+```bash
+npm run product:launch-gate
+```
+
+Current gate result: **launch the public testnet product surface; do not launch paid/mainnet**.
+
+That means the public demo, Sepolia proof, SPK mint dashboard, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external product surface. A closed pilot is still blocked until there is a governed attested-SPK redeploy plus one real meter or inverter adapter. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, and production deployment exist.
+
 ### Phase 0: Product proof hardening
 
 - Run `npm run attestations:fixture`.

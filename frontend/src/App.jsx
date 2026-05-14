@@ -7,6 +7,7 @@ import {
   Github,
   RadioTower,
   Leaf,
+  Rocket,
   ShieldCheck,
   Wallet,
 } from 'lucide-react';
@@ -16,11 +17,13 @@ import PositionsList from './components/PositionsList';
 import SystemIntegrity from './components/SystemIntegrity';
 import MarketStats from './components/MarketStats';
 import SPKMintDemo from './components/SPKMintDemo';
+import LaunchConsole from './components/LaunchConsole';
 import { GITHUB_REPO, KEEPER_WORKFLOW } from './constants/contracts';
 
 const tabs = [
   { id: 'proof', label: 'Proof', icon: RadioTower },
   { id: 'mint', label: 'SPK Mint', icon: Leaf },
+  { id: 'launch', label: 'Launch', icon: Rocket },
   { id: 'market', label: 'Market', icon: BarChart3 },
   { id: 'hedge', label: 'Hedge', icon: Wallet },
   { id: 'status', label: 'Status', icon: ShieldCheck },
@@ -117,6 +120,8 @@ function App() {
         {activeTab === 'proof' && <ProofDashboard />}
 
         {activeTab === 'mint' && <SPKMintDemo />}
+
+        {activeTab === 'launch' && <LaunchConsole />}
 
         {activeTab === 'market' && (
           <div className="tab-grid">

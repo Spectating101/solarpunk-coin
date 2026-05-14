@@ -1,0 +1,229 @@
+{
+  "generated_at": "2026-05-14T15:44:15.575Z",
+  "decision": "Launch the public testnet product surface; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
+  "recommended_current_launch": "public_testnet_product",
+  "next_build_target": "closed_testnet_pilot",
+  "modes": {
+    "public_testnet_product": {
+      "name": "public_testnet_product",
+      "label": "Public testnet product",
+      "status": "launchable",
+      "passed_checks": 5,
+      "blocking_checks": 0,
+      "checks": [
+        {
+          "name": "SPK product proof exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Signed meter bundle to SPK mint proof is present.",
+          "evidence": "docs/product/SPK_ATTESTED_MINT_PROOF.md"
+        },
+        {
+          "name": "Sepolia readback passes",
+          "pass": true,
+          "blocking": true,
+          "message": "Public readback confirms tx success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus.",
+          "evidence": "docs/product/SPK_PUBLIC_READBACK.md"
+        },
+        {
+          "name": "Source verified proof stack",
+          "pass": true,
+          "blocking": true,
+          "message": "Attested SPK proof contracts are source-verified on Sepolia.",
+          "evidence": "docs/project/ATTESTED_SPK_DEPLOYMENT.md"
+        },
+        {
+          "name": "Daily keeper evidence is fresh",
+          "pass": true,
+          "blocking": true,
+          "message": "Latest keeper run is 2026-05-14 (0 days old).",
+          "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
+        },
+        {
+          "name": "Frontend proof surface exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Frontend has proof dashboard and SPK mint product surface.",
+          "evidence": "frontend/src"
+        }
+      ]
+    },
+    "closed_testnet_pilot": {
+      "name": "closed_testnet_pilot",
+      "label": "Closed testnet pilot",
+      "status": "blocked",
+      "passed_checks": 6,
+      "blocking_checks": 2,
+      "checks": [
+        {
+          "name": "SPK product proof exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Signed meter bundle to SPK mint proof is present.",
+          "evidence": "docs/product/SPK_ATTESTED_MINT_PROOF.md"
+        },
+        {
+          "name": "Sepolia readback passes",
+          "pass": true,
+          "blocking": true,
+          "message": "Public readback confirms tx success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus.",
+          "evidence": "docs/product/SPK_PUBLIC_READBACK.md"
+        },
+        {
+          "name": "Source verified proof stack",
+          "pass": true,
+          "blocking": true,
+          "message": "Attested SPK proof contracts are source-verified on Sepolia.",
+          "evidence": "docs/project/ATTESTED_SPK_DEPLOYMENT.md"
+        },
+        {
+          "name": "Daily keeper evidence is fresh",
+          "pass": true,
+          "blocking": true,
+          "message": "Latest keeper run is 2026-05-14 (0 days old).",
+          "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
+        },
+        {
+          "name": "Frontend proof surface exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Frontend has proof dashboard and SPK mint product surface.",
+          "evidence": "frontend/src"
+        },
+        {
+          "name": "Governed attested-SPK deployment",
+          "pass": false,
+          "blocking": true,
+          "message": "Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.",
+          "evidence": "state/deployments/sepolia_attested_spk_deploy.json"
+        },
+        {
+          "name": "Real meter or inverter adapter",
+          "pass": false,
+          "blocking": true,
+          "message": "Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.",
+          "evidence": "docs/project/METER_CSV_IMPORT.md"
+        },
+        {
+          "name": "Pilot terms are drafted",
+          "pass": true,
+          "blocking": false,
+          "message": "Pilot plan exists; it still needs named counterparty details before execution.",
+          "evidence": "docs/specs/PILOT_PLAN.md"
+        },
+        {
+          "name": "Governance runbook exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Governance status includes operations handbook and role matrix.",
+          "evidence": "docs/project/GOVERNANCE_STATUS.md"
+        }
+      ]
+    },
+    "paid_mainnet_product": {
+      "name": "paid_mainnet_product",
+      "label": "Paid/mainnet product",
+      "status": "blocked",
+      "passed_checks": 6,
+      "blocking_checks": 6,
+      "checks": [
+        {
+          "name": "SPK product proof exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Signed meter bundle to SPK mint proof is present.",
+          "evidence": "docs/product/SPK_ATTESTED_MINT_PROOF.md"
+        },
+        {
+          "name": "Sepolia readback passes",
+          "pass": true,
+          "blocking": true,
+          "message": "Public readback confirms tx success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus.",
+          "evidence": "docs/product/SPK_PUBLIC_READBACK.md"
+        },
+        {
+          "name": "Source verified proof stack",
+          "pass": true,
+          "blocking": true,
+          "message": "Attested SPK proof contracts are source-verified on Sepolia.",
+          "evidence": "docs/project/ATTESTED_SPK_DEPLOYMENT.md"
+        },
+        {
+          "name": "Daily keeper evidence is fresh",
+          "pass": true,
+          "blocking": true,
+          "message": "Latest keeper run is 2026-05-14 (0 days old).",
+          "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
+        },
+        {
+          "name": "Frontend proof surface exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Frontend has proof dashboard and SPK mint product surface.",
+          "evidence": "frontend/src"
+        },
+        {
+          "name": "Governed attested-SPK deployment",
+          "pass": false,
+          "blocking": true,
+          "message": "Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.",
+          "evidence": "state/deployments/sepolia_attested_spk_deploy.json"
+        },
+        {
+          "name": "Real meter or inverter adapter",
+          "pass": false,
+          "blocking": true,
+          "message": "Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.",
+          "evidence": "docs/project/METER_CSV_IMPORT.md"
+        },
+        {
+          "name": "Pilot terms are drafted",
+          "pass": true,
+          "blocking": false,
+          "message": "Pilot plan exists; it still needs named counterparty details before execution.",
+          "evidence": "docs/specs/PILOT_PLAN.md"
+        },
+        {
+          "name": "Governance runbook exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Governance status includes operations handbook and role matrix.",
+          "evidence": "docs/project/GOVERNANCE_STATUS.md"
+        },
+        {
+          "name": "External audit complete",
+          "pass": false,
+          "blocking": true,
+          "message": "External audit status is NOT_STARTED; paid/mainnet launch remains blocked.",
+          "evidence": "docs/project/SECURITY_AUDIT_STATUS.json"
+        },
+        {
+          "name": "Legal and commercial scope complete",
+          "pass": false,
+          "blocking": true,
+          "message": "No launch terms file exists for token classification, redemption obligations, user eligibility, and jurisdictional limits.",
+          "evidence": "docs/product/LEGAL_AND_COMMERCIAL_SCOPE.md"
+        },
+        {
+          "name": "Production redemption policy complete",
+          "pass": false,
+          "blocking": true,
+          "message": "No production redemption policy exists for what SPK holders can redeem, from whom, and under which caps.",
+          "evidence": "docs/product/REDEMPTION_POLICY.md"
+        },
+        {
+          "name": "Mainnet or L2 production deployment recorded",
+          "pass": false,
+          "blocking": true,
+          "message": "No production deployment receipt exists.",
+          "evidence": "state/deployments/production_spk_deploy.json"
+        }
+      ]
+    }
+  },
+  "next_actions": [
+    "Launch the public testnet product surface now: demo, docs, Sepolia proof, and meter CSV onboarding.",
+    "Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.",
+    "Keep paid/mainnet launch blocked until audit, legal scope, and redemption policy are resolved."
+  ]
+}

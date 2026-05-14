@@ -301,6 +301,11 @@ p {
   gap: 18px;
 }
 
+.launch-shell {
+  display: grid;
+  gap: 18px;
+}
+
 .proof-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 290px;
@@ -371,6 +376,12 @@ p {
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.launch-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -581,7 +592,8 @@ p {
 .proof-path-grid div,
 .grant-grid div,
 .product-flow-card,
-.readiness-card {
+.readiness-card,
+.launch-mode-card {
   border: 1px solid rgba(27, 52, 34, 0.82);
   border-radius: 7px;
   background: rgba(7, 13, 8, 0.24);
@@ -696,6 +708,71 @@ p {
   display: grid;
   gap: 2px;
   padding: 13px;
+}
+
+.launch-mode-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.launch-mode-card.launchable {
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.launch-mode-card.blocked {
+  border-color: rgba(217, 119, 6, 0.26);
+}
+
+.launch-mode-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.launch-mode-title svg {
+  color: var(--amber);
+}
+
+.launch-mode-card.launchable .launch-mode-title svg {
+  color: var(--green);
+}
+
+.launch-mode-title strong {
+  display: block;
+  color: var(--text);
+}
+
+.launch-mode-title span,
+.launch-mode-card p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.launch-blocker {
+  border: 1px solid rgba(217, 119, 6, 0.22);
+  border-radius: 6px;
+  background: rgba(217, 119, 6, 0.07);
+  padding: 11px;
+}
+
+.launch-blocker span {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.launch-blocker strong {
+  display: block;
+  margin-top: 5px;
+  color: var(--amber);
+}
+
+.launch-blocker p {
+  margin-top: 6px;
 }
 
 .readiness-title,
@@ -822,6 +899,7 @@ p {
   .proof-main-grid,
   .proof-path-grid,
   .product-flow-grid,
+  .launch-mode-grid,
   .proof-main-grid.bottom,
   .tab-grid {
     grid-template-columns: 1fr;
