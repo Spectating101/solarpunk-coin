@@ -91,12 +91,15 @@ These prove the protocol executes correctly end-to-end, not just compiles.
 
 System that fetches real satellite data and pushes it to the live contracts every day. Not a demo — running continuously on GitHub Actions cron at 01:00 UTC.
 
+**Current summary:** 18 successful runs, latest successful run `2026-05-14`, current success streak 16 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
+
 | Date | NASA date used | GHI (kWh/m²) | Normalised index | On-chain tx |
 |---|---|---|---|---|
 | 2026-04-20 | 2026-04-15 | 4.667 | 1.4538 (above avg) | [0xb5e9a2...](https://sepolia.etherscan.io/tx/0xb5e9a2fde6e5a96e8b503eb25085a2f34d9ae6f91a4fe5de6c026a82fdc4c018) |
 | 2026-04-21 | (see log) | — | — | see `state/keeper_logs/2026-04-21.json` |
 | 2026-04-29 | 2026-04-24 | 0.792 | 0.2467 (below avg) | [0x615e06...](https://sepolia.etherscan.io/tx/0x615e06362fbf46d5e02ac5b54277276f565ad13991432cbe6966d199638484ab) |
 | 2026-05-05 | 2026-04-30 | 1.193 | 0.3715 (below avg) | [0xb616c3...](https://sepolia.etherscan.io/tx/0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d) |
+| 2026-05-14 | 2026-05-09 | 2.0808 | 0.5979 (below avg) | [0x20162f...](https://sepolia.etherscan.io/tx/0x20162f08923cddf07e3455ce3eeecfd69ca4bcd7baeead84e6e2b1e4fe6cf856) |
 
 **Log files:** `state/keeper_logs/YYYY-MM-DD.json` — each entry contains: NASA date, GHI value, monthly mean, normalised index, source hash, 3 on-chain TX hashes, and full protocol state snapshot.
 

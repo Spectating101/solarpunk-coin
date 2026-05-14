@@ -25,6 +25,7 @@ ESP is still worth approaching, but it should not be framed as a generic startup
 
 ## Primary Files To Use
 
+- Final command center: `docs/grants/FINAL_SUBMISSION_COMMAND_CENTER_2026-05-14.md`
 - Chainlink application: `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`
 - ESP feedback/funding draft: `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`
 - Copy-paste answers: `docs/grants/GRANT_COPY_PASTE_ANSWERS.md`

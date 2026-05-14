@@ -4,11 +4,11 @@ Purpose: give a frontend/design agent enough current context to improve the inte
 
 ## Current state
 
-- Repo branches are being reconciled after Claude/frontend work and daily keeper commits diverged.
+- Repo branches have been reconciled on `main`; frontend/design work should build from the current pushed repo state.
 - The Sepolia prototype is live and externally inspectable.
-- The NASA keeper workflow is active on GitHub Actions and has completed successful scheduled runs through `2026-05-05`.
-- Latest successful keeper run: `2026-05-05`.
-- Local contract tests: `88 passing`.
+- The NASA keeper workflow is active on GitHub Actions and has completed successful scheduled runs through `2026-05-14`.
+- Latest successful keeper run: `2026-05-14`.
+- Local contract tests: `96 passing`.
 
 ## Canonical live addresses
 
@@ -26,7 +26,7 @@ Purpose: give a frontend/design agent enough current context to improve the inte
 ## Latest proof artifacts
 
 - Daily experiment status: `docs/project/DAILY_EXPERIMENT_STATUS.md`
-- Latest keeper log: `state/keeper_logs/2026-05-05.json`
+- Latest keeper log: `state/keeper_logs/2026-05-14.json`
 - Rolling keeper summary: `state/keeper_logs/summary.json`
 - Public deployment proof: `docs/project/PUBLIC_PROOF_STATUS.md`
 - Interaction proof: `docs/project/INTERACTION_PROOF_REPORT.md`
@@ -36,20 +36,20 @@ Latest keeper txs:
 
 | Action | Tx |
 |---|---|
-| updateIndex | `0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d` |
-| updateEnergyPrice | `0xbbdfdd96f0e25ed88a883967fe6095629fb24efbac05e5b30c5cb499f731c0ec` |
-| updateOraclePriceAndAdjust | `0x4b4fb472ae6a5fd0f75d130c8beda6df4e74cf54a1cb1aadfc2e351bc4e1a3c2` |
+| updateIndex | `0x20162f08923cddf07e3455ce3eeecfd69ca4bcd7baeead84e6e2b1e4fe6cf856` |
+| updateEnergyPrice | `0xb862ce4e450fc8e1e2d105a61dd95cbbbe04feb2eadcafea527411927c60c58c` |
+| updateOraclePriceAndAdjust | `0xef2fe8c1c4dcb1e7295b9e693e7e3d103361faeeae69c86860403828f9e1ca9b` |
 
 Latest live health after the successful workflow:
 
 - Alert status: `OK`
 - SPK oracle stale: `false`
 - Option oracle stale: `false`
-- Reserve ratio: `1010%`
+- Reserve ratio: `10.1x` reserve coverage, approximately `1010%`
 - Grid stressed: `false`
 - Option paused: `false`
-- Option index raw: `371526`
-- Option index interpreted at `priceDecimals = 6`: `0.371526`
+- Option index raw: `597931`
+- Option index interpreted at `priceDecimals = 6`: `0.597931`
 
 ## What broke and what was fixed
 

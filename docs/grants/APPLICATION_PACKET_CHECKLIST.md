@@ -5,6 +5,7 @@ Use this checklist before submitting ESP, Chainlink BUILD, academic grants, or e
 ## Must include
 
 - GitHub repo: `https://github.com/Spectating101/solarpunk-coin`
+- Final submission command center: `docs/grants/FINAL_SUBMISSION_COMMAND_CENTER_2026-05-14.md`
 - Reviewer packet: `docs/grants/REVIEWER_PACKET.md`
 - Execution plan: `docs/grants/GRANT_EXECUTION_PLAN.md`
 - Budget and milestones: `docs/grants/GRANT_BUDGET_AND_MILESTONES.md`
@@ -73,8 +74,9 @@ See `docs/grants/GRANT_BUDGET_AND_MILESTONES.md` for full budget and milestone m
 ## Last-minute send order for 2026-05-15
 
 1. Open the public demo and verify it loads.
-2. Open `docs/product/SPK_PUBLIC_READBACK.md` and confirm all readback checks pass.
-3. Open `docs/project/DAILY_EXPERIMENT_STATUS.md` and copy the latest keeper stats.
-4. Submit Chainlink BUILD from `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`.
-5. Send ESP Project Feedback / office-hours email from `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`.
-6. Email advisor acknowledgement request from `docs/grants/OUTREACH_TEMPLATES.md`.
+2. Open `docs/grants/FINAL_SUBMISSION_COMMAND_CENTER_2026-05-14.md`.
+3. Open `docs/product/SPK_PUBLIC_READBACK.md` and confirm all readback checks pass.
+4. Open `docs/project/DAILY_EXPERIMENT_STATUS.md` and copy the latest keeper stats.
+5. Submit Chainlink BUILD from `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`.
+6. Send ESP Project Feedback / office-hours email from `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`.
+7. Email advisor acknowledgement request from `docs/grants/OUTREACH_TEMPLATES.md`.
