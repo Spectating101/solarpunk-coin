@@ -16,13 +16,16 @@ Use this checklist before submitting ESP, Chainlink BUILD, academic grants, or e
 - Threat model: `THREAT_MODEL.md`
 - Trust assumptions: `TRUST_ASSUMPTIONS.md`
 - Daily experiment status: `docs/project/DAILY_EXPERIMENT_STATUS.md`
+- SPK attested mint proof: `docs/product/SPK_ATTESTED_MINT_PROOF.md`
+- Public SPK readback: `docs/product/SPK_PUBLIC_READBACK.md`
 - Contract addresses: `CONTRACT_ADDRESSES.md`
 - Demo walkthrough script: `docs/grants/DEMO_WALKTHROUGH_SCRIPT.md`
 
 ## Claims allowed
 
-- 79/79 smart contract tests passing.
-- Live source-verified Sepolia deployment.
+- 96/96 smart contract tests passing.
+- Live source-verified Sepolia deployment, including the attested SPK proof stack.
+- Public signed-meter -> attested SPK mint proof and read-only Sepolia readback.
 - Daily NASA POWER -> Sepolia keeper running with committed artifacts.
 - ChainlinkOracleAdapter deployed on Sepolia with AggregatorV3Interface compatibility and manual fallback.
 - Safe admin handoff complete for the three core contracts.
@@ -67,10 +70,11 @@ See `docs/grants/GRANT_BUDGET_AND_MILESTONES.md` for full budget and milestone m
 - One advisor or thesis-supervisor acknowledgement.
 - One solar operator LOI or discovery-call note.
 
-## Last-minute send order for 2026-05-07
+## Last-minute send order for 2026-05-15
 
 1. Open the public demo and verify it loads.
-2. Open `docs/project/DAILY_EXPERIMENT_STATUS.md` and copy the latest keeper stats.
-3. Submit Chainlink BUILD from `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`.
-4. Send ESP Project Feedback / office-hours email from `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`.
-5. Email advisor acknowledgement request from `docs/grants/OUTREACH_TEMPLATES.md`.
+2. Open `docs/product/SPK_PUBLIC_READBACK.md` and confirm all readback checks pass.
+3. Open `docs/project/DAILY_EXPERIMENT_STATUS.md` and copy the latest keeper stats.
+4. Submit Chainlink BUILD from `GRANT_SUBMISSIONS/CHAINLINK/BUILD_APPLICATION.md`.
+5. Send ESP Project Feedback / office-hours email from `GRANT_SUBMISSIONS/ETHEREUM_ESP_APPLICATION.txt`.
+6. Email advisor acknowledgement request from `docs/grants/OUTREACH_TEMPLATES.md`.

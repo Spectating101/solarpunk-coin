@@ -61,6 +61,32 @@ describe("SolarPunkCoin", function () {
   });
 
   describe("Minting: Rule A (Surplus-Only)", function () {
+    async function buildSurplusAttestation(overrides = {}) {
+      const block = await ethers.provider.getBlock("latest");
+      const now = BigInt(block.timestamp);
+      const params = {
+        surplusKwh: 1000n,
+        recipient: user.address,
+        windowStart: now - 3600n,
+        windowEnd: now - 1n,
+        validAfter: now - 60n,
+        validBefore: now + 3600n,
+        sourceHash: ethers.id("meter:TW-TY-0001:2026-05-14"),
+        ...overrides,
+      };
+      const attestationHash = await spk.surplusAttestationHash(
+        params.surplusKwh,
+        params.recipient,
+        params.windowStart,
+        params.windowEnd,
+        params.validAfter,
+        params.validBefore,
+        params.sourceHash
+      );
+      const signature = await (params.signer || oracle).signMessage(ethers.getBytes(attestationHash));
+      return { ...params, attestationHash, signature };
+    }
+
     it("Should mint SPK from surplus with fee", async function () {
       const surplusKwh = 1000;
       const recipient = user.address;
@@ -124,6 +150,204 @@ describe("SolarPunkCoin", function () {
       const balance = await spk.balanceOf(user.address);
       expect(balance).to.equal(expectedAmount);
       expect(await spk.balanceOf(treasury.target)).to.equal(expectedTreasuryFee);
+    });
+
+    it("Should mint from a unique oracle-signed surplus attestation", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const attestation = await buildSurplusAttestation();
+      const expected = await spk.estimateMintAmount(attestation.surplusKwh);
+
+      const tx = await spk.connect(minter).mintFromSurplusAttestation(
+        attestation.surplusKwh,
+        attestation.recipient,
+        attestation.windowStart,
+        attestation.windowEnd,
+        attestation.validAfter,
+        attestation.validBefore,
+        attestation.sourceHash,
+        attestation.signature
+      );
+
+      expect(await spk.balanceOf(user.address)).to.equal(expected);
+      expect(await spk.usedSurplusAttestations(attestation.attestationHash)).to.equal(true);
+      await expect(tx)
+        .to.emit(spk, "SurplusAttestationMinted")
+        .withArgs(
+          attestation.attestationHash,
+          oracle.address,
+          user.address,
+          attestation.surplusKwh,
+          attestation.windowStart,
+          attestation.windowEnd,
+          attestation.sourceHash
+        );
+    });
+
+    it("Should reject replayed surplus attestations", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const attestation = await buildSurplusAttestation();
+
+      await spk.connect(minter).mintFromSurplusAttestation(
+        attestation.surplusKwh,
+        attestation.recipient,
+        attestation.windowStart,
+        attestation.windowEnd,
+        attestation.validAfter,
+        attestation.validBefore,
+        attestation.sourceHash,
+        attestation.signature
+      );
+
+      await expect(
+        spk.connect(minter).mintFromSurplusAttestation(
+          attestation.surplusKwh,
+          attestation.recipient,
+          attestation.windowStart,
+          attestation.windowEnd,
+          attestation.validAfter,
+          attestation.validBefore,
+          attestation.sourceHash,
+          attestation.signature
+        )
+      ).to.be.revertedWith("attestation already used");
+    });
+
+    it("Should reject reused surplus source hashes even when attestation metadata changes", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const attestation = await buildSurplusAttestation();
+
+      await spk.connect(minter).mintFromSurplusAttestation(
+        attestation.surplusKwh,
+        attestation.recipient,
+        attestation.windowStart,
+        attestation.windowEnd,
+        attestation.validAfter,
+        attestation.validBefore,
+        attestation.sourceHash,
+        attestation.signature
+      );
+
+      const secondAttestation = await buildSurplusAttestation({
+        recipient: owner.address,
+        sourceHash: attestation.sourceHash,
+      });
+
+      await expect(
+        spk.connect(minter).mintFromSurplusAttestation(
+          secondAttestation.surplusKwh,
+          secondAttestation.recipient,
+          secondAttestation.windowStart,
+          secondAttestation.windowEnd,
+          secondAttestation.validAfter,
+          secondAttestation.validBefore,
+          secondAttestation.sourceHash,
+          secondAttestation.signature
+        )
+      ).to.be.revertedWith("source hash already used");
+    });
+
+    it("Should reject surplus attestations not signed by an oracle", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const attestation = await buildSurplusAttestation({ signer: user });
+
+      await expect(
+        spk.connect(minter).mintFromSurplusAttestation(
+          attestation.surplusKwh,
+          attestation.recipient,
+          attestation.windowStart,
+          attestation.windowEnd,
+          attestation.validAfter,
+          attestation.validBefore,
+          attestation.sourceHash,
+          attestation.signature
+        )
+      ).to.be.revertedWith("invalid surplus attestor");
+    });
+
+    it("Should reject surplus attestations without a source hash", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const attestation = await buildSurplusAttestation({ sourceHash: ethers.ZeroHash });
+
+      await expect(
+        spk.connect(minter).mintFromSurplusAttestation(
+          attestation.surplusKwh,
+          attestation.recipient,
+          attestation.windowStart,
+          attestation.windowEnd,
+          attestation.validAfter,
+          attestation.validBefore,
+          attestation.sourceHash,
+          attestation.signature
+        )
+      ).to.be.revertedWith("source hash required");
+    });
+
+    it("Should reject surplus attestations with invalid measurement windows", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const block = await ethers.provider.getBlock("latest");
+      const now = BigInt(block.timestamp);
+      const attestation = await buildSurplusAttestation({
+        windowStart: now,
+        windowEnd: now,
+      });
+
+      await expect(
+        spk.connect(minter).mintFromSurplusAttestation(
+          attestation.surplusKwh,
+          attestation.recipient,
+          attestation.windowStart,
+          attestation.windowEnd,
+          attestation.validAfter,
+          attestation.validBefore,
+          attestation.sourceHash,
+          attestation.signature
+        )
+      ).to.be.revertedWith("invalid attestation window");
+    });
+
+    it("Should reject surplus attestations for measurement windows that have not closed", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const block = await ethers.provider.getBlock("latest");
+      const now = BigInt(block.timestamp);
+      const attestation = await buildSurplusAttestation({
+        windowStart: now + 3600n,
+        windowEnd: now + 7200n,
+      });
+
+      await expect(
+        spk.connect(minter).mintFromSurplusAttestation(
+          attestation.surplusKwh,
+          attestation.recipient,
+          attestation.windowStart,
+          attestation.windowEnd,
+          attestation.validAfter,
+          attestation.validBefore,
+          attestation.sourceHash,
+          attestation.signature
+        )
+      ).to.be.revertedWith("attestation window not closed");
+    });
+
+    it("Should reject expired surplus attestations", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const block = await ethers.provider.getBlock("latest");
+      const attestation = await buildSurplusAttestation({
+        validAfter: BigInt(block.timestamp) - 7200n,
+        validBefore: BigInt(block.timestamp) - 3600n,
+      });
+
+      await expect(
+        spk.connect(minter).mintFromSurplusAttestation(
+          attestation.surplusKwh,
+          attestation.recipient,
+          attestation.windowStart,
+          attestation.windowEnd,
+          attestation.validAfter,
+          attestation.validBefore,
+          attestation.sourceHash,
+          attestation.signature
+        )
+      ).to.be.revertedWith("attestation expired");
     });
   });
 

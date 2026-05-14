@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-05-14T10:50:50.522636+00:00",
+  "product": {
+    "name": "SolarPunkCoin (SPK)",
+    "claim": "Accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.",
+    "primary_contract": "contracts/SolarPunkCoin.sol",
+    "primary_function": "mintFromSurplusAttestation"
+  },
+  "meter_to_mint": {
+    "bundle_available": true,
+    "proof_available": true,
+    "bundle_path": "state/attestations/latest_attestation_bundle.json",
+    "proof_path": "state/proofs/sepolia_spk_attested_mint_proof.json",
+    "contract_address": "0x8ceDa149EDE44078bf151b3334513916a84df820",
+    "source_schema": "SPK_RAW_METER_READINGS_V1",
+    "batch_id": "batch_2026_02_12_a",
+    "input_records": 4,
+    "accepted_records": 2,
+    "rejected_records": 2,
+    "verified_signatures": 2,
+    "registered_meters": 2,
+    "total_surplus_kwh": 2606.7,
+    "source_hash": "0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8",
+    "attestation_hash": "0xd3c77958aa6f53cd1a5a8ed52c8898cf1376b8a5751e1598add5ab0c5cea558d",
+    "attestation_hash_consumed": true,
+    "source_hash_consumed": true,
+    "minted_spk": "130.1697",
+    "execution_scope": "attached-network",
+    "tx_hash": "0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d"
+  },
+  "empirical_basis": {
+    "ceir": {
+      "pre_ban_n": 898,
+      "post_ban_n": 1044,
+      "pre_ban_coef": -0.2571314296894859,
+      "post_ban_coef": -0.634254529970368,
+      "chow_pvalue": 1.1102230246251565e-16,
+      "source": "thesis_package/empirical_results/ceir_analysis_summary.csv"
+    },
+    "physical_calibration": {
+      "sigma": 1.8945300006771564,
+      "sigma_percent": "189.5%",
+      "returns": 2166,
+      "jarque_bera_pvalue": 0.3489390132091065,
+      "source": "thesis_package/empirical_results/calibration_diagnostics_real.csv"
+    },
+    "oracle_tolerance": {
+      "location": "Taiwan",
+      "max_error_vr95": "21.7%",
+      "max_error_vr90": "31.5%",
+      "max_error_vr80": "47.2%",
+      "source": "thesis_package/empirical_results/oracle_tolerance.csv"
+    },
+    "pricing_validation": {
+      "markets": 5,
+      "taiwan_spot_usd_per_kwh": 0.0525,
+      "taiwan_sigma": "189%",
+      "taiwan_binomial_call": 0.019172729058128404,
+      "taiwan_monte_carlo_call": 0.01957135237096816,
+      "taiwan_binomial_vs_mc_diff_percent": 2.079116184405453,
+      "taiwan_initial_margin": 0.6332858617042648,
+      "taiwan_hedge_efficiency_6pct_error": 0.9959849435382685,
+      "binomial_convergence_last_steps": 1200,
+      "binomial_convergence_last_price": 0.01918062591394759,
+      "source": "thesis_package/empirical_results/cross_location_pricing.csv"
+    },
+    "monetary_scorecard": {
+      "scores": {
+        "Energy": 7.0,
+        "Gold": 2.0,
+        "Fiat": 1.0
+      },
+      "source": "thesis_package/empirical_results/monetary_scorecard.csv"
+    }
+  },
+  "operational_basis": {
+    "daily_keeper_available": true,
+    "total_successful_runs": 9,
+    "first_successful_run": "2026-04-20",
+    "last_successful_run": "2026-05-05",
+    "current_success_streak_days": 7,
+    "latest_update_index_tx": "0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d",
+    "source": "state/keeper_logs/summary.json"
+  },
+  "scope_limits": [
+    "The older Safe-admin Sepolia deployment predates the signed surplus-attestation mint function; the fresh attested SPK proof deployment is public but not production-governed.",
+    "The current sample meter bundle is a deterministic pilot fixture, not a certified hardware meter feed.",
+    "The code is locally tested, but no formal external smart-contract audit has been completed.",
+    "Legal, utility-interconnection, and commodity/payment classification work remains outside this repository."
+  ]
+}

@@ -8,13 +8,13 @@ SolarPunk Protocol
 
 ## One-Line Description
 
-Open-source Ethereum testnet infrastructure for renewable-energy hedging, using NASA POWER data, source-verified smart contracts, and a live Sepolia oracle experiment.
+Open-source Ethereum testnet infrastructure for renewable-energy attestations, SPK minting, and hedging research, using signed meter data, NASA POWER data, source-verified contracts, and live Sepolia proofs.
 
 ## Short Description
 
-SolarPunk Protocol is a renewable-energy risk infrastructure project that explores how public solar irradiance data can support transparent on-chain hedging. The project combines a Python pricing engine, source-verified Solidity contracts, a daily NASA POWER -> Sepolia oracle keeper, and a React proof dashboard that reads live contract state.
+SolarPunk Protocol is a renewable-energy risk infrastructure project that explores how signed energy data can support transparent on-chain minting and hedging. The project combines a signed-meter attestation pipeline, source-verified Solidity contracts, a public Sepolia SPK mint proof, a daily NASA POWER -> Sepolia oracle keeper, a Python pricing engine, and a React proof dashboard that reads live contract state.
 
-The current system is a serious testnet prototype, not a mainnet product: 79/79 smart contract tests pass, five Sepolia contracts are source-verified, a Safe controls the three core contracts, and daily real-data keeper artifacts are committed to the repo with public transaction hashes. Grant funding would support audit, oracle hardening, Chainlink Automation/Functions work, and a risk-boxed L2 pilot.
+The current system is a serious testnet prototype, not a mainnet product: 96/96 smart contract tests pass, five legacy Sepolia contracts plus three attested SPK proof contracts are source-verified, the public proof mints 130.1697 SPK from 2,606.7 kWh accepted surplus, a read-only Sepolia readback confirms consumed attestation/source hashes, a Safe controls the three legacy core contracts, and daily real-data keeper artifacts are committed to the repo with public transaction hashes. Grant funding would support audit, oracle hardening, Chainlink Automation/Functions work, and a risk-boxed L2 pilot.
 
 ## Problem
 
@@ -22,12 +22,14 @@ Renewable-energy projects face revenue volatility from weather and production va
 
 ## Solution
 
-SolarPunk builds an open-source prototype for energy-linked settlement and hedging. NASA POWER solar irradiance is normalized into an energy index, posted to Sepolia, and made externally inspectable through transaction links, committed keeper artifacts, and live RPC reads. A margin-based option clearinghouse prototype demonstrates how energy derivatives could be settled transparently on Ethereum infrastructure.
+SolarPunk builds an open-source prototype for energy-linked settlement and hedging. Registered meter readings are verified into a surplus bundle, signed by an oracle role, and consumed by `SolarPunkCoin.mintFromSurplusAttestation` with replay protection. NASA POWER solar irradiance is also normalized into an energy index, posted to Sepolia, and made externally inspectable through transaction links, committed keeper artifacts, and live RPC reads. A margin-based option clearinghouse prototype demonstrates how energy derivatives could be settled transparently on Ethereum infrastructure.
 
 ## Current Traction / Evidence
 
-- 79/79 smart contract tests passing.
-- Five source-verified Sepolia contracts.
+- 96/96 smart contract tests passing.
+- Five source-verified legacy Sepolia contracts plus three source-verified attested SPK proof contracts.
+- Public signed-meter -> attested SPK mint proof: 2,606.7 kWh accepted surplus, 130.1697 SPK minted.
+- Public readback checks: 7/7 passed in `docs/product/SPK_PUBLIC_READBACK.md`.
 - Daily NASA POWER -> Sepolia keeper running since 2026-04-20.
 - Latest keeper run recorded in `state/keeper_logs/summary.json`.
 - Public evidence register at `EVIDENCE.md`.

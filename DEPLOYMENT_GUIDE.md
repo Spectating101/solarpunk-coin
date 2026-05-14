@@ -41,6 +41,13 @@ npx hardhat run scripts/deploy_testnet_full.js --network sepolia
 
 Also supports Amoy and Holesky — replace `sepolia` with the target network name.
 
+Optional: deploy the EnergyRevenueFloor pilot module
+
+```bash
+SETTLEMENT_TOKEN_ADDRESS=<USDC-or-settlement-token-address> \
+npx hardhat run scripts/deploy_energy_floor.js --network sepolia
+```
+
 ### Optional environment variables
 
 ```bash
@@ -66,6 +73,7 @@ After deploy, run the verify commands printed by the deploy script. Example:
 npx hardhat verify --network sepolia <TREASURY_ADDRESS> <USDC_ADDRESS>
 npx hardhat verify --network sepolia <SPK_ADDRESS> <USDC_ADDRESS>
 npx hardhat verify --network sepolia <OPTION_ADDRESS> <USDC_ADDRESS> <TREASURY_ADDRESS> 6
+npx hardhat verify --network sepolia <ENERGY_FLOOR_ADDRESS> <SETTLEMENT_TOKEN_ADDRESS> <TREASURY_ADDRESS>
 ```
 
 ### Run interaction proof

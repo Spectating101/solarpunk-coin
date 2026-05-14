@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-05-14T12:58:01.176Z",
+  "network": "sepolia",
+  "chain_id": 11155111,
+  "proof_path": "state/proofs/sepolia_spk_attested_mint_proof.json",
+  "contract": "0x8ceDa149EDE44078bf151b3334513916a84df820",
+  "attestation_hash": "0xd3c77958aa6f53cd1a5a8ed52c8898cf1376b8a5751e1598add5ab0c5cea558d",
+  "source_hash": "0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8",
+  "recipient": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "transaction": {
+    "hash": "0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d",
+    "status": 1,
+    "block_number": 10850713,
+    "block_timestamp": 1778755728,
+    "gas_used": "239354"
+  },
+  "onchain": {
+    "attestation_hash_consumed": true,
+    "source_hash_consumed": true,
+    "recipient_balance_wei": "130169700000000000000",
+    "recipient_balance_spk": "130.1697",
+    "total_supply_wei": "130300000000000000000",
+    "total_supply_spk": "130.3",
+    "cumulative_surplus_kwh": "2606",
+    "energy_price_wei_per_kwh": "50000000000000000",
+    "energy_price_usd_per_kwh": "0.05",
+    "minting_fee_bps": 10,
+    "reserve_ratio_percent": "76745%",
+    "peg_stable": true,
+    "grid_stressed": false
+  },
+  "checks": [
+    {
+      "name": "contract code present",
+      "pass": true,
+      "detail": "0x8ceDa149EDE44078bf151b3334513916a84df820 has 19377 bytes of bytecode"
+    },
+    {
+      "name": "transaction succeeded",
+      "pass": true,
+      "detail": "receipt.status=1"
+    },
+    {
+      "name": "transaction called SPK contract",
+      "pass": true,
+      "detail": "receipt.to=0x8ceDa149EDE44078bf151b3334513916a84df820"
+    },
+    {
+      "name": "attestation hash consumed",
+      "pass": true,
+      "detail": "true"
+    },
+    {
+      "name": "source hash consumed",
+      "pass": true,
+      "detail": "true"
+    },
+    {
+      "name": "recipient balance covers minted amount",
+      "pass": true,
+      "detail": "130169700000000000000 >= 130169700000000000000"
+    },
+    {
+      "name": "cumulative surplus covers proof kWh",
+      "pass": true,
+      "detail": "2606 >= 2606"
+    }
+  ],
+  "all_checks_passed": true
+}

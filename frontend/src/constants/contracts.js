@@ -6,6 +6,11 @@ export const CONTRACTS = {
   oracleAdapter: "0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9",
   safe: "0xB95586775C73feB0154828c77832E106425C818A",
   mockUsdc: "0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2",
+  energyRevenueFloor: "0x0000000000000000000000000000000000000000",
+  attestedSolarPunkCoin: "0x8ceDa149EDE44078bf151b3334513916a84df820",
+  attestedMockUsdc: "0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268",
+  attestedProtocolTreasury: "0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F",
+  attestedMintTx: "0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d",
 };
 
 export const SEPOLIA_EXPLORER = "https://sepolia.etherscan.io";

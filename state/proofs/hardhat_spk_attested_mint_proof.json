@@ -1,0 +1,66 @@
+{
+  "generated_at": "2026-05-14T10:33:52.448Z",
+  "network": "hardhat",
+  "chain_id": 1337,
+  "execution_scope": "local-reproducible",
+  "contracts": {
+    "SolarPunkCoin": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    "MockUSDC": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "ProtocolTreasury": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+  },
+  "source": {
+    "bundle_path": "state/attestations/latest_attestation_bundle.json",
+    "source_schema": "SPK_RAW_METER_READINGS_V1",
+    "batch_id": "batch_2026_02_12_a",
+    "input_records": 4,
+    "accepted_records": 2,
+    "rejected_records": 2,
+    "verified_signatures": 2,
+    "registered_meters": 2,
+    "total_surplus_kwh": 2606.7,
+    "onchain_surplus_kwh": "2606",
+    "unminted_fractional_kwh": 0.7,
+    "source_hash": "0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8",
+    "source_payload": {
+      "schema": "SPK_METER_SURPLUS_SOURCE_V1",
+      "batch_id": "batch_2026_02_12_a",
+      "min_quality_threshold": 0.9,
+      "accepted_record_hashes": [
+        "4584ac821c931b4af028aecd3cf79e7bae33df0562a5cb62a07475b80a7f9397",
+        "5b91153b2b827dbf11a26c41c8b8b0cc293af49535054990516ddcbbafb31a21"
+      ],
+      "rejected_record_count": 2,
+      "total_surplus_kwh": 2606.7
+    },
+    "source_payload_json": "{\"accepted_record_hashes\":[\"4584ac821c931b4af028aecd3cf79e7bae33df0562a5cb62a07475b80a7f9397\",\"5b91153b2b827dbf11a26c41c8b8b0cc293af49535054990516ddcbbafb31a21\"],\"batch_id\":\"batch_2026_02_12_a\",\"min_quality_threshold\":0.9,\"rejected_record_count\":2,\"schema\":\"SPK_METER_SURPLUS_SOURCE_V1\",\"total_surplus_kwh\":2606.7}"
+  },
+  "attestation": {
+    "attestor": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "minter": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "recipient": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+    "window_start": 1770768000,
+    "window_end": 1770854399,
+    "valid_after": 1778754782,
+    "valid_before": 1778841242,
+    "attestation_hash": "0xde934a1674df129d53bcb60d5a4e5018695538ccece9f77297b8ca9f72e6426b",
+    "attestation_hash_consumed": true,
+    "source_hash_consumed": true,
+    "signature": "0x91312450448a62457f2d97d5a7914495e89e1640caceb36d8a92debb7fd846aa2256e506e79f7e64e1c226cacd1b40645f5775b547005418f175d2edadd108d21c"
+  },
+  "mint": {
+    "expected_minted_wei": "130169700000000000000",
+    "minted_spk": "130.1697",
+    "energy_price_wei_per_kwh": "50000000000000000",
+    "energy_price_usd_per_kwh": "0.05",
+    "minting_fee_bps": 10,
+    "recipient_balance_after_wei": "130169700000000000000",
+    "recipient_balance_after_spk": "130.1697",
+    "cumulative_surplus_kwh_after": "2606"
+  },
+  "transaction": {
+    "hash": "0xe855c487da56e819229558bc19ae4bf7ea959d73a6d7ad5e211c0cb01722dbd4",
+    "block_number": 12,
+    "gas_used": "239354",
+    "status": 1
+  }
+}

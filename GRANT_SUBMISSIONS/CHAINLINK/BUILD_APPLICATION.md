@@ -13,7 +13,7 @@
 
 **Project Name:** SolarPunk Protocol
 
-**One-Line Description:** Decentralized derivatives protocol enabling renewable energy producers to hedge revenue volatility using physics-calibrated pricing and on-chain settlement.
+**One-Line Description:** Oracle-verified renewable-energy infrastructure where signed surplus kWh can mint SPK and support future energy hedging products.
 
 **Category:** DeFi / Real World Assets / Climate
 
@@ -23,7 +23,7 @@
 
 **Public Demo:** https://spectating101.github.io/solarpunk-coin/
 
-**Current Stage:** Live Sepolia testnet prototype. 79/79 smart contract tests passing (50 SPK + 21 Option + 8 Treasury). Five contracts are deployed and source-verified. Safe admin handoff is complete for the three core contracts, with 24h governance timelock active. Independent code review complete (Codex, April 2026) with all 5 findings fixed. NASA POWER -> Sepolia keeper running daily on GitHub Actions cron. Python pricing library published.
+**Current Stage:** Live Sepolia testnet prototype. 96/96 smart contract tests passing. Five legacy contracts are source-verified, and the fresh attested SPK proof stack has three additional source-verified contracts. The public SPK proof mints 130.1697 SPK from a signed meter bundle with 2,606.7 kWh accepted surplus, and a read-only Sepolia readback confirms the consumed attestation/source hashes. EnergyRevenueFloor pilot module is implemented but not deployed yet. Safe admin handoff is complete for the three core contracts, with 24h governance timelock active. Independent code review complete (Codex, April 2026) with all 5 findings fixed. NASA POWER -> Sepolia keeper running daily on GitHub Actions cron. Python pricing library published.
 
 ---
 
@@ -35,7 +35,7 @@ We solve this with three components:
 
 1. **Pricing and Margin Engine**: A Python engine calibrated with NASA POWER satellite data and stress scenarios. Supports binomial trees, Monte Carlo, and jump-diffusion style analysis for risk-bounded pilot parameters.
 
-2. **Settlement Layer**: Solidity contracts (0.8.20) implementing a clearinghouse with margin enforcement, auto-liquidation, and a PI-controlled stablecoin (SPK). Live Sepolia is currently configured at 150% initial / 75% maintenance margin; our stress-tested next pilot target is 250% / 125%. 79/79 tests passing. Publicly deployed to Sepolia.
+2. **Settlement Layer**: Solidity contracts (0.8.20) implementing replay-protected SPK attestation minting, a clearinghouse with margin enforcement, auto-liquidation, and a PI-controlled stablecoin (SPK). Live Sepolia is currently configured at 150% initial / 75% maintenance margin; our stress-tested next pilot target is 250% / 125%. 96/96 tests passing. Publicly deployed to Sepolia.
 
 3. **Data Integration**: Our protocol fundamentally depends on reliable off-chain data feeds. We have already deployed a `ChainlinkOracleAdapter` on Sepolia and run a daily NASA POWER -> Sepolia keeper with committed transaction artifacts.
 
@@ -106,9 +106,11 @@ Either way, the commitment would be to a non-peg-bearing instrument or fee strea
 
 | Component | Status | Evidence |
 |---|---|---|
-| Smart Contracts | 79/79 tests passing | `npx hardhat test` (50 SPK + 21 Option + 8 Treasury) |
+| Smart Contracts | 96/96 tests passing | `npx hardhat test` |
+| SPK Attested Mint | Public Sepolia proof live | 4 signed readings, 2 accepted, 2 rejected, 2,606.7 kWh accepted surplus, 130.1697 SPK minted |
+| Public Proof Readback | 7/7 checks passing | `docs/product/SPK_PUBLIC_READBACK.md` confirms tx success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus |
 | Independent Code Review | 5 findings fixed | Codex review, April 2026 — regression tests added |
-| Testnet Deploy | All 3 contracts source-verified | SolarPunkCoin 0x1D55C6...407F, SolarPunkOption 0xe40A88...4104, ProtocolTreasury 0x138e79...dd2c |
+| Testnet Deploy | 5 legacy contracts + 3 attested proof contracts source-verified | SolarPunkCoin legacy 0x1D55C6...407F; attested SPK proof 0x8ceDa1...820 |
 | Multisig + Governance | Active | Safe 0xB95586...818A holds DEFAULT_ADMIN_ROLE; 24h timelock on all parameter changes |
 | Pricing Engine | 8/8 tests passing | `pytest energy_derivatives/tests/` |
 | Live Oracle Keeper | Daily NASA POWER push | GitHub Actions cron, 01:00 UTC, source-hash provenance |
@@ -158,7 +160,7 @@ SolarPunk Protocol represents a new category for the Chainlink ecosystem: **ener
 ## COPY-PASTE READY: FORM RESPONSES
 
 ### "Describe your project" (Short)
-SolarPunk Protocol is a decentralized derivatives infrastructure for renewable energy hedging, live on Ethereum Sepolia. We use NASA POWER satellite data to calibrate location-specific risk models, price energy options using institutional-grade methods (binomial trees, Monte Carlo, jump-diffusion), and settle hedges on-chain via Solidity smart contracts with VaR-based margining. Live Sepolia is currently configured at 150% IM / 75% MM, with 250% IM / 125% MM established as the next risk-boxed pilot target in the stress memo. 79/79 contract tests + pricing engine tests passing. Source-verified deployment with Safe multisig admin and 24h governance timelock, running a live daily NASA → on-chain oracle keeper.
+SolarPunk Protocol is renewable-energy data infrastructure live on Ethereum Sepolia. Registered meter readings can be verified into a surplus bundle, signed by an oracle role, and minted into SPK through a replay-protected contract path; the current public proof mints 130.1697 SPK from 2,606.7 kWh accepted surplus and has a read-only Sepolia readback confirming consumed source/attestation hashes. The repo also uses NASA POWER satellite data to calibrate location-specific risk models and price energy options using binomial trees, Monte Carlo, and stress tests. 96/96 contract tests passing. Source-verified deployments, Safe multisig admin on the legacy core contracts, 24h governance timelock, and a live daily NASA -> on-chain oracle keeper.
 
 ### "How do you use Chainlink?" (Medium)
 Today: ChainlinkOracleAdapter is deployed on Sepolia, normalising any AggregatorV3 feed to 1e18 with manual fallback for energy price. Planned during the BUILD program: (1) Automation to replace our current GitHub Actions cron keeper with on-chain triggers for daily oracle updates and expiry settlements; (2) Functions to fetch NASA POWER data with verifiable execution, removing the centralised keeper entirely; (3) CCIP for cross-chain settlement once we expand beyond a single L2; (4) VRF if/when we move to continuous (rather than European) settlement. Energy price feeds don't currently exist as standard Chainlink feeds — our integration would create a new energy-data vertical for the broader ecosystem.
@@ -172,7 +174,8 @@ We cannot pledge SPK stablecoin supply because SPK is part of the peg-control pr
 
 - [ ] Review terms at https://chainlinklabs.com/build-terms
 - [ ] Ensure GitHub repo is public and links work
-- [ ] Run `npx hardhat test` to confirm 79/79 passing
+- [ ] Run `npx hardhat test` to confirm 96/96 passing
+- [ ] Run `npm run proof:spk-public-readback` to refresh the public readback
 - [ ] Run `pytest energy_derivatives/tests/` to confirm 8/8 passing
 - [ ] Prepare token/fee-share discussion note without promising SPK supply
 - [ ] Proofread all form fields

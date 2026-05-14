@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 interface IProtocolTreasuryBondView {
@@ -158,8 +159,19 @@ contract SolarPunkCoin is
     event GovernanceActionConsumed(bytes32 indexed actionId);
     event EnergyPriceUpdated(uint256 price, uint256 timestamp);
     event StabilityFeeShareUpdated(uint256 newShare);
+    event SurplusAttestationMinted(
+        bytes32 indexed attestationHash,
+        address indexed attestor,
+        address indexed recipient,
+        uint256 surplusKwh,
+        uint64 windowStart,
+        uint64 windowEnd,
+        bytes32 sourceHash
+    );
 
     mapping(bytes32 => uint256) public queuedGovernanceActions;
+    mapping(bytes32 => bool) public usedSurplusAttestations;
+    mapping(bytes32 => bool) public usedSurplusSourceHashes;
 
     // ============ Modifiers ============
     modifier onlyOracle() {
@@ -245,6 +257,91 @@ contract SolarPunkCoin is
         address recipient
     ) external onlyMinter gridNotStressed oracleNotStale returns (uint256) {
         _requireBond(msg.sender, minMinterBond, "minter bond too low");
+        return _mintFromVerifiedSurplus(surplusKwh, recipient);
+    }
+
+    /**
+     * @notice Mint SPK from an oracle-signed surplus energy attestation.
+     * @dev A unique source hash can only be consumed once. The signature binds
+     *      the record to this chain and contract, preventing cross-chain replay.
+     */
+    function mintFromSurplusAttestation(
+        uint256 surplusKwh,
+        address recipient,
+        uint64 windowStart,
+        uint64 windowEnd,
+        uint64 validAfter,
+        uint64 validBefore,
+        bytes32 sourceHash,
+        bytes calldata oracleSignature
+    ) external onlyMinter gridNotStressed oracleNotStale returns (uint256) {
+        _requireBond(msg.sender, minMinterBond, "minter bond too low");
+        require(sourceHash != bytes32(0), "source hash required");
+        require(windowStart < windowEnd, "invalid attestation window");
+        require(windowEnd <= block.timestamp, "attestation window not closed");
+        require(block.timestamp >= validAfter, "attestation not active");
+        require(block.timestamp <= validBefore, "attestation expired");
+
+        bytes32 attestationHash = surplusAttestationHash(
+            surplusKwh,
+            recipient,
+            windowStart,
+            windowEnd,
+            validAfter,
+            validBefore,
+            sourceHash
+        );
+        require(!usedSurplusAttestations[attestationHash], "attestation already used");
+        require(!usedSurplusSourceHashes[sourceHash], "source hash already used");
+
+        bytes32 signedHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", attestationHash));
+        address attestor = ECDSA.recover(signedHash, oracleSignature);
+        require(hasRole(ORACLE_ROLE, attestor), "invalid surplus attestor");
+        _requireBond(attestor, minOracleBond, "oracle bond too low");
+
+        usedSurplusAttestations[attestationHash] = true;
+        usedSurplusSourceHashes[sourceHash] = true;
+        uint256 minted = _mintFromVerifiedSurplus(surplusKwh, recipient);
+
+        emit SurplusAttestationMinted(
+            attestationHash,
+            attestor,
+            recipient,
+            surplusKwh,
+            windowStart,
+            windowEnd,
+            sourceHash
+        );
+
+        return minted;
+    }
+
+    function surplusAttestationHash(
+        uint256 surplusKwh,
+        address recipient,
+        uint64 windowStart,
+        uint64 windowEnd,
+        uint64 validAfter,
+        uint64 validBefore,
+        bytes32 sourceHash
+    ) public view returns (bytes32) {
+        return keccak256(
+            abi.encode(
+                "SPK_SURPLUS_ATTESTATION_V1",
+                block.chainid,
+                address(this),
+                surplusKwh,
+                recipient,
+                windowStart,
+                windowEnd,
+                validAfter,
+                validBefore,
+                sourceHash
+            )
+        );
+    }
+
+    function _mintFromVerifiedSurplus(uint256 surplusKwh, address recipient) internal returns (uint256) {
         require(surplusKwh > 0, "Surplus must be > 0");
         require(recipient != address(0), "Invalid recipient");
 

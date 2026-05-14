@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Evidence Register
 
-**Last updated:** 2026-05-05
+**Last updated:** 2026-05-14
 **Purpose:** Flat, clickable receipts for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
 
 This document answers: **"Is there actual evidence, or just descriptions of evidence?"**
@@ -13,9 +13,9 @@ This document answers: **"Is there actual evidence, or just descriptions of evid
 
 | Claim | Value | Artifact |
 |---|---|---|
-| Pre-ban CEIR coefficient | β = −0.206, SE = 0.042, p < 0.001 | `thesis_package/empirical_results/ceir_analysis_summary.csv` |
-| Post-ban CEIR coefficient | β = −0.080, SE = 0.031, p = 0.011 | Same file |
-| Structural break (Chow test) | F = 4.786, p = 0.0009 | Same file |
+| Pre-ban CEIR coefficient | β = −0.257 | `thesis_package/empirical_results/ceir_analysis_summary.csv` |
+| Post-ban CEIR coefficient | β = −0.634 | Same file |
+| Structural break (Chow test) | p = 1.11e-16 | Same file |
 | Block bootstrap pre-ban 95% CI | [−0.371, −0.002], 97.4% draws β < 0 | `thesis-draft.md` §2.7 |
 | Pre-ban sample size | N = 898 weeks | `thesis_package/empirical_results/ceir_analysis_summary.csv` |
 | Post-ban sample size | N = 1,044 weeks | Same file |
@@ -104,7 +104,46 @@ System that fetches real satellite data and pushes it to the live contracts ever
 
 **Workflow:** `.github/workflows/nasa_keeper.yml` — public, auditable, runs on GitHub's infrastructure.
 
-### 2.5 Test Suite (Reproducible, Run by Anyone)
+### 2.5 SPK Attested Mint Product Proof
+
+This proves the new single-product path on Sepolia: signed raw meter readings -> registry/signature/quality validation -> accepted meter bundle -> deterministic source hash -> oracle signature -> `mintFromSurplusAttestation` -> minted SPK.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Raw signed meter readings | 4 | `data/attestations/raw_meter_readings.json` |
+| Registered meter identities | 2 | `data/attestations/meter_registry.json` |
+| Verified meter signatures | 2 | `state/attestations/latest_attestation_bundle.json` |
+| Accepted sample meter records | 2 | Same file |
+| Rejected sample meter records | 2 (duplicate nonce, low quality) | Same file |
+| Accepted surplus | 2,606.7 kWh | Same file |
+| Attestation-enabled SPK contract | `0x8ceDa149EDE44078bf151b3334513916a84df820` | `docs/project/ATTESTED_SPK_DEPLOYMENT.md` |
+| On-chain integer surplus consumed | 2,606 kWh | `state/proofs/sepolia_spk_attested_mint_proof.json` |
+| Mint result | 130.1697 SPK | Same file |
+| Sepolia mint tx | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` | [Etherscan](https://sepolia.etherscan.io/tx/0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d) |
+| Public readback checks | 7/7 passed | `docs/product/SPK_PUBLIC_READBACK.md` |
+| Source hash | `0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8` | Same file |
+| Product dossier | Generated | `docs/product/SPK_PRODUCT_EMPIRICS.md` |
+
+Scope note: this is a public Sepolia proof stack, not the production-governed deployment and not hardware-certified meter finality.
+
+### 2.6 Pilot Meter CSV Adapter
+
+This is the first practical bridge from a meter/inverter export into the same signed-reading verifier used by the public SPK proof.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Meter onboarding command | Available | `scripts/onboard_meter.js` |
+| CSV import command | Available | `scripts/import_meter_csv.js` |
+| Sample CSV export | 2 rows | `data/attestations/sample_meter_export.csv` |
+| Imported signed readings | 2 rows | `data/attestations/raw_meter_readings_from_csv.json` |
+| CSV-derived accepted records | 2 accepted, 0 rejected | `docs/project/METER_CSV_ATTESTATION_BUNDLE.md` |
+| CSV-derived surplus | 1,985.5 kWh | Same file |
+| Onboarding demo receipt | Generated | `docs/project/METER_ONBOARDING_RECEIPT.md` |
+| Adapter tests | 7 additional Node tests | `test-node/meter_csv_import.test.js`, `test-node/meter_onboarding.test.js` |
+
+Scope note: this is not hardware certification. It is the pilot-ingestion bridge needed before connecting a real meter gateway or inverter API.
+
+### 2.7 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -112,11 +151,11 @@ npm install
 npx hardhat test
 ```
 
-Expected output: **79 passing** (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury), ~4 seconds.
+Expected output: **96 passing**, including signed surplus-attestation replay, reused-source, non-oracle, expired, future-window, empty-source, and invalid-window rejection tests.
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.6 Python Pricing Library (Reproducible)
+### 2.8 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives
@@ -206,6 +245,8 @@ npx hardhat test
 
 | Gap | Priority | What it unlocks |
 |---|---|---|
+| Production-governed attestation-enabled SPK deployment | **Critical** | Converts proof-scoped public stack into pilot-grade governance, source verification, and role separation |
+| Real signed meter adapter | **Critical** | Converts sample bundle into pilot-grade data provenance |
 | Solar operator LOI | **Critical** | Converts pitch from "asserted market" to "demonstrated demand"; doubles grant odds |
 | Formal smart contract audit | High | Required for mainnet; primary grant deliverable |
 | Thesis advisor acknowledgement (public) | High | Academic credibility; EF Academic eligibility |

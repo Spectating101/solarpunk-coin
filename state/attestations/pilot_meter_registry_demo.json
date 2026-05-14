@@ -1,0 +1,30 @@
+{
+  "schema": "SPK_METER_REGISTRY_V1",
+  "generated_at": "2026-05-14T12:15:06.094Z",
+  "meters": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "capacity_kw": 120,
+      "active_after": "2026-01-01T00:00:00Z",
+      "active_until": "2027-01-01T00:00:00Z"
+    },
+    {
+      "meter_id": "TW-TY-0002",
+      "site_id": "taoyuan-rooftop-b",
+      "device_address": "0x8b6541d3F26cc3bA1D5A4E6210501da458C03F19",
+      "capacity_kw": 110,
+      "active_after": "2026-01-01T00:00:00Z",
+      "active_until": "2027-01-01T00:00:00Z"
+    },
+    {
+      "meter_id": "TW-TY-0099",
+      "site_id": "pilot-rooftop-demo",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "capacity_kw": 45,
+      "active_after": "2026-01-01T00:00:00Z",
+      "active_until": "2027-01-01T00:00:00Z"
+    }
+  ]
+}

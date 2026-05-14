@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-05-14T10:43:06.622Z",
+  "source_schema": "SPK_RAW_METER_READINGS_V1",
+  "registry_schema": "SPK_METER_REGISTRY_V1",
+  "batch_id": "batch_2026_02_12_a",
+  "min_quality_threshold": 0.9,
+  "summary": {
+    "input_records": 4,
+    "accepted_records": 2,
+    "rejected_records": 2,
+    "verified_signatures": 2,
+    "registered_meters": 2,
+    "total_surplus_kwh": 2606.7
+  },
+  "accepted_attestations": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-11T00:00:00+00:00",
+      "window_end": "2026-02-11T23:59:59+00:00",
+      "surplus_kwh": 1420.5,
+      "quality_score": 0.98,
+      "source": "edge_meter_gateway_v1",
+      "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "payload_hash": "0x7c04fd8ee0fd101afc3ab9fe16b4b7cd63db80d6ad91c45e86aca8df0f8cd34f",
+      "signature": "0x004a3cefa52199ab32f9952968af1e6a4ca44fd6f867e0923a94ee0fa67b1ef33ca0f1ef72db9b922332d1934365a2b09730cc99ca4109ef38147271019a87711b",
+      "record_hash": "4584ac821c931b4af028aecd3cf79e7bae33df0562a5cb62a07475b80a7f9397"
+    },
+    {
+      "meter_id": "TW-TY-0002",
+      "site_id": "taoyuan-rooftop-b",
+      "window_start": "2026-02-11T00:00:00+00:00",
+      "window_end": "2026-02-11T23:59:59+00:00",
+      "surplus_kwh": 1186.2,
+      "quality_score": 0.95,
+      "source": "edge_meter_gateway_v1",
+      "attestor": "0x8b6541d3F26cc3bA1D5A4E6210501da458C03F19",
+      "device_address": "0x8b6541d3F26cc3bA1D5A4E6210501da458C03F19",
+      "payload_hash": "0xfb81b3b66b26a522cb1dbe9a10a69125cfdb814d0f864e3dbeddc9f7a5d66fca",
+      "signature": "0x8a8e328579be7562b73dd33a19dada08045ffadc2c5261fa6301e19c1bf8ff0c24f5a7b9b0dc7b55c4b879b44d37ed9069688a538d84b41e02d69fe8e20bddc81c",
+      "record_hash": "5b91153b2b827dbf11a26c41c8b8b0cc293af49535054990516ddcbbafb31a21"
+    }
+  ],
+  "rejected_attestations": [
+    {
+      "index": 2,
+      "meter_id": "TW-TY-0001",
+      "reason": "duplicate meter nonce"
+    },
+    {
+      "index": 3,
+      "meter_id": "TW-TY-0002",
+      "reason": "quality_score below threshold (0.9)"
+    }
+  ]
+}

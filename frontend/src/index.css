@@ -296,6 +296,11 @@ p {
   gap: 18px;
 }
 
+.mint-shell {
+  display: grid;
+  gap: 18px;
+}
+
 .proof-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 290px;
@@ -563,21 +568,50 @@ p {
   gap: 10px;
 }
 
+.product-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
 .proof-path-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .proof-path-grid div,
 .grant-grid div,
+.product-flow-card,
 .readiness-card {
   border: 1px solid rgba(27, 52, 34, 0.82);
   border-radius: 7px;
   background: rgba(7, 13, 8, 0.24);
 }
 
+.policy-card .state-list strong {
+  text-align: right;
+}
+
+.policy-card button {
+  width: auto;
+}
+
+.policy-card .tab-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .proof-path-grid div,
-.grant-grid div {
+.grant-grid div,
+.product-flow-card {
   padding: 13px;
+}
+
+.product-flow-card {
+  display: grid;
+  gap: 8px;
+}
+
+.product-flow-card svg {
+  color: var(--amber);
 }
 
 .proof-path-grid span {
@@ -594,19 +628,57 @@ p {
 }
 
 .proof-path-grid strong,
-.grant-grid strong {
+.grant-grid strong,
+.product-flow-card strong {
   display: block;
   color: var(--text);
   font-size: 14px;
 }
 
 .proof-path-grid p,
-.grant-grid span {
+.grant-grid span,
+.product-flow-card p {
   display: block;
   margin-top: 7px;
   color: var(--muted);
   font-size: 12px;
   line-height: 1.55;
+}
+
+.command-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.command-stack code,
+.hash-note {
+  border: 1px solid rgba(27, 52, 34, 0.82);
+  border-radius: 6px;
+  background: rgba(7, 13, 8, 0.34);
+}
+
+.command-stack code {
+  padding: 10px 11px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.hash-note {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px 11px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.hash-note strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: right;
 }
 
 .series-link {
@@ -749,6 +821,7 @@ p {
   .proof-hero,
   .proof-main-grid,
   .proof-path-grid,
+  .product-flow-grid,
   .proof-main-grid.bottom,
   .tab-grid {
     grid-template-columns: 1fr;

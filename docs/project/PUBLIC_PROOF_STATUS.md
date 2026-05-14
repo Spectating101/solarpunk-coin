@@ -31,3 +31,7 @@
 External proof milestone complete. Contracts are deployed, source-verified, and exercised
 on a public testnet with verifiable transaction hashes. Any reviewer can independently
 confirm these transactions on https://sepolia.etherscan.io.
+
+The newer SPK attested-mint proof is tracked separately in
+`docs/project/ATTESTED_SPK_DEPLOYMENT.md` and
+`docs/product/SPK_ATTESTED_MINT_PROOF.md`.

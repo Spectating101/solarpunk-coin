@@ -1,0 +1,46 @@
+# Attested SPK Public Proof Deployment
+
+- generated_at: `2026-05-14T10:48:25.105Z`
+- network: `sepolia`
+- chain_id: `11155111`
+- deployer: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
+- scope: `public-attested-spk-proof`
+
+## Contracts
+
+- MockUSDC: `0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268` ([Verified](https://sepolia.etherscan.io/address/0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268#code))
+- ProtocolTreasury: `0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F` ([Verified](https://sepolia.etherscan.io/address/0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F#code))
+- SolarPunkCoin: `0x8ceDa149EDE44078bf151b3334513916a84df820` ([Verified](https://sepolia.etherscan.io/address/0x8ceDa149EDE44078bf151b3334513916a84df820#code))
+
+## Source Verification
+
+- verified_at: `2026-05-14T10:58:34Z`
+- MockUSDC: verified on Sepolia Etherscan
+- ProtocolTreasury: verified on Sepolia Etherscan
+- SolarPunkCoin: verified on Sepolia Etherscan
+
+## Setup Transactions
+
+- deploy_mock_usdc: `0xece8bb6357b0874a06025b66f33d684c00112aecd104597733d22e7f92551afc` (https://sepolia.etherscan.io/tx/0xece8bb6357b0874a06025b66f33d684c00112aecd104597733d22e7f92551afc)
+- deploy_treasury: `0x2c86acda4cbc66e5368175bac2837c60940635afa5b0bb4fc5e6f6d399fd5715` (https://sepolia.etherscan.io/tx/0x2c86acda4cbc66e5368175bac2837c60940635afa5b0bb4fc5e6f6d399fd5715)
+- deploy_spk: `0xf53a5a45c06cb257243d59879e823c9171af046f5ca10bbce9ac07f3679ba920` (https://sepolia.etherscan.io/tx/0xf53a5a45c06cb257243d59879e823c9171af046f5ca10bbce9ac07f3679ba920)
+- set_treasury: `0x638a4df689da5f5c9d978f7a1256f485489e60a7a766114993f4a20340663f93` (https://sepolia.etherscan.io/tx/0x638a4df689da5f5c9d978f7a1256f485489e60a7a766114993f4a20340663f93)
+- mint_mock_usdc: `0x4fdc591e7bae90d9aa433e8f80f61220be5d6dabdb7f4b7b39e5f8d3f92279c2` (https://sepolia.etherscan.io/tx/0x4fdc591e7bae90d9aa433e8f80f61220be5d6dabdb7f4b7b39e5f8d3f92279c2)
+- approve_reserve: `0x5ea7adbdce7617e48ec8e1c4f5d7027e79173073e60ecde23d2bf6e0c8a5f93f` (https://sepolia.etherscan.io/tx/0x5ea7adbdce7617e48ec8e1c4f5d7027e79173073e60ecde23d2bf6e0c8a5f93f)
+- deposit_reserve: `0xd67ee57c81d7ba281784202ababe7f1c496d9af95add9cf46626303e74cb80b1` (https://sepolia.etherscan.io/tx/0xd67ee57c81d7ba281784202ababe7f1c496d9af95add9cf46626303e74cb80b1)
+- update_energy_price: `0xfaaae277d914e8487912b10a8690731aab2917c97e91daa1769594c3a6f294b6` (https://sepolia.etherscan.io/tx/0xfaaae277d914e8487912b10a8690731aab2917c97e91daa1769594c3a6f294b6)
+- update_oracle_price: `0x5f808e6a02941069bc922636d86ae1e1098197482dda552204183fd643f529f8` (https://sepolia.etherscan.io/tx/0x5f808e6a02941069bc922636d86ae1e1098197482dda552204183fd643f529f8)
+
+## Initial Parameters
+
+- reserve_seed_usdc: `100000.0`
+- energy_price_usd_per_kwh: `0.05`
+- oracle_price_usd: `1`
+- minter: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
+- oracle: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
+
+## Scope Note
+
+- This is a public proof deployment for the attested SPK mint path.
+- It is not the production/governance deployment and does not replace the older Safe-admin Sepolia stack.
+- Run the public proof with `SPK_ADDRESS=<SolarPunkCoin> npx hardhat run scripts/mint_spk_from_meter_bundle.js --network sepolia`.

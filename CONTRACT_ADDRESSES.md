@@ -23,7 +23,17 @@ Network: Ethereum Sepolia (chain 11155111)
 |---|---|---|
 | StabilityPool | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` | [Verified ✓](https://sepolia.etherscan.io/address/0xb9c2Ac8166edFc899b591bc51746d75bFCEca086#code) |
 | ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` | [Verified ✓](https://sepolia.etherscan.io/address/0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9#code) |
+| EnergyRevenueFloor (pilot module) | `0x0000000000000000000000000000000000000000` (not deployed) | — |
 | Safe multisig (1/1) | `0xB95586775C73feB0154828c77832E106425C818A` | [Etherscan](https://sepolia.etherscan.io/address/0xB95586775C73feB0154828c77832E106425C818A) · [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A) |
+
+## Attested SPK proof stack (verified)
+
+| Contract / proof | Address / tx | Etherscan |
+|---|---|---|
+| Attestation-enabled SolarPunkCoin | `0x8ceDa149EDE44078bf151b3334513916a84df820` | [Verified ✓](https://sepolia.etherscan.io/address/0x8ceDa149EDE44078bf151b3334513916a84df820#code) |
+| Proof MockUSDC | `0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268` | [Verified ✓](https://sepolia.etherscan.io/address/0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268#code) |
+| Proof ProtocolTreasury | `0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F` | [Verified ✓](https://sepolia.etherscan.io/address/0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F#code) |
+| Signed-meter SPK mint | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` | [Tx](https://sepolia.etherscan.io/tx/0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d) |
 
 ## Test collateral
 
@@ -50,9 +60,11 @@ Network: Ethereum Sepolia (chain 11155111)
 
 - `state/deployments/sepolia_full_deploy.json` — initial deployment
 - `state/deployments/sepolia_m3_setup.json` — M3 security setup (governance delay, bonds, adapters)
+- `state/deployments/sepolia_attested_spk_deploy.json` — verified attested SPK public proof stack
 
 ## Notes
 
 - MockUSDC is a test token with no real value
 - Chainlink adapter runs in manual energy price mode — no live energy price feed exists on Sepolia; will connect to a real feed for mainnet
 - Mainnet deployment gated on: security audit + multisig admin transfer + pilot counterparty
+- EnergyRevenueFloor is implemented and test-covered in-repo, but currently pending Sepolia deployment (`0x000...0000` placeholder)

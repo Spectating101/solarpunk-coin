@@ -1,8 +1,8 @@
 # SolarPunk Protocol
 
-SolarPunk is **renewable-energy financial infrastructure** that turns verified energy value into programmable settlement, hedging, and treasury flows — and the implementation layer of a Finance Master's thesis at Yuan Ze University.
+SolarPunk is **renewable-energy monetary infrastructure**. The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.
 
-**Status (May 2026):** Live testnet pilot on Ethereum Sepolia. 79/79 tests. Daily NASA → on-chain oracle keeper running since April 20. Independent code review complete.
+**Status (May 2026):** Live Sepolia prototype for the earlier core contracts, public attested SPK mint proof, 96/96 contract tests, daily NASA -> on-chain oracle keeper running since April 20, independent code review complete.
 
 **Public demo:** https://spectating101.github.io/solarpunk-coin/
 
@@ -13,6 +13,13 @@ SolarPunk is **renewable-energy financial infrastructure** that turns verified e
 | Document | Purpose |
 |---|---|
 | [`EVIDENCE.md`](./EVIDENCE.md) | **Start here for external reviewers** — clickable receipts for every claim |
+| [`docs/product/SPK_PRODUCT_EMPIRICS.md`](./docs/product/SPK_PRODUCT_EMPIRICS.md) | Single-product SPK proof and empirical dossier |
+| [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
+| [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |
+| [`docs/project/ATTESTED_SPK_DEPLOYMENT.md`](./docs/project/ATTESTED_SPK_DEPLOYMENT.md) | Public Sepolia proof-stack deployment receipt |
+| [`docs/specs/METER_ATTESTATION_SPEC.md`](./docs/specs/METER_ATTESTATION_SPEC.md) | Signed meter-reading validation spec |
+| [`docs/project/METER_CSV_IMPORT.md`](./docs/project/METER_CSV_IMPORT.md) | Pilot-facing CSV import path for meter/inverter exports |
+| [`docs/project/METER_CSV_ATTESTATION_BUNDLE.md`](./docs/project/METER_CSV_ATTESTATION_BUNDLE.md) | CSV-imported meter bundle receipt |
 | [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) | Full context: architecture, design decisions, operations, prospects |
 | [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | One-page stage snapshot |
 | [`docs/project/REPO_STRUCTURE.md`](./docs/project/REPO_STRUCTURE.md) | What each repo area is, and what is safe/unsafe to clean |
@@ -24,17 +31,27 @@ SolarPunk is **renewable-energy financial infrastructure** that turns verified e
 
 ## What it is
 
-Three core contracts plus supporting infrastructure:
+Primary SPK product path:
 
-- **`SolarPunkCoin`** — energy-backed stablecoin with PI controller for peg stability, oracle-gated minting, reserve ratio checks, bond-gated operators
-- **`SolarPunkOption`** — margin-based clearinghouse for European energy index options (live Sepolia config currently 150% IM / 75% MM; stress-tested next pilot target is 250% IM / 125% MM)
+1. A registered meter signs raw renewable-energy readings.
+2. `scripts/derive_meter_attestations.js` verifies signatures, duplicate nonces, closed windows, quality thresholds, capacity bounds, and energy balance.
+3. `scripts/mint_spk_from_meter_bundle.js` hashes the accepted bundle, signs an oracle attestation, and calls `mintFromSurplusAttestation`.
+4. `SolarPunkCoin` verifies the minter role, oracle signature, closed measurement window, source-hash single use, validity window, attestation replay status, grid stress, oracle freshness, reserve ratio, supply cap, fee split, and recipient before minting SPK.
+
+Supporting modules:
+
+- **`SolarPunkCoin`** — energy-backed token with signed surplus-attestation minting, PI controller, oracle-gated minting, reserve ratio checks, bond-gated operators
+- **`SolarPunkOption`** — margin-based clearinghouse for European energy index options; useful for hedging and stress-testing the same energy-price basis
 - **`ProtocolTreasury`** — fee vault with 4-bucket budget split, keeper bond escrow with slashing
 - **`StabilityPool`** — dedicated peg-stability vault (separated from coin contract for blast-radius isolation)
 - **`ChainlinkOracleAdapter`** — bridges AggregatorV3Interface feeds to internal contract surfaces, normalises decimals to 1e18
+- **`EnergyRevenueFloor`** — secondary pilot module for revenue-floor protection; not the primary product claim
 
 ---
 
-## Live deployment (Sepolia, April 2026 — all source-verified)
+## Live deployment (Sepolia, April 2026)
+
+These public contracts prove the earlier SPK system state and daily keeper path. A separate fresh Sepolia proof stack now proves the signed surplus-attestation mint path publicly.
 
 | Contract | Address | Etherscan |
 |---|---|---|
@@ -43,13 +60,34 @@ Three core contracts plus supporting infrastructure:
 | ProtocolTreasury | `0x138e793f095a33D2790349eC1066FED3A756dd2c` | [Verified ✓](https://sepolia.etherscan.io/address/0x138e793f095a33D2790349eC1066FED3A756dd2c#code) |
 | StabilityPool | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` | Verified |
 | ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` | Verified |
+| EnergyRevenueFloor | `0x0000000000000000000000000000000000000000` (not deployed yet) | — |
 | Safe (admin) | `0xB95586775C73feB0154828c77832E106425C818A` | [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A) |
+
+### Attested SPK public proof stack (Sepolia, May 2026)
+
+| Contract / proof | Address / tx | Link |
+|---|---|---|
+| Attestation-enabled SolarPunkCoin | `0x8ceDa149EDE44078bf151b3334513916a84df820` | [Verified ✓](https://sepolia.etherscan.io/address/0x8ceDa149EDE44078bf151b3334513916a84df820#code) |
+| Proof MockUSDC | `0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268` | [Verified ✓](https://sepolia.etherscan.io/address/0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268#code) |
+| Proof ProtocolTreasury | `0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F` | [Verified ✓](https://sepolia.etherscan.io/address/0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F#code) |
+| Signed-meter SPK mint tx | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` | [Etherscan](https://sepolia.etherscan.io/tx/0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d) |
 
 ---
 
 ## What is verified and running
 
-- **79/79 smart contract tests** — `npx hardhat test`
+- **96/96 smart contract tests** — `npx hardhat test`
+- **Public attested SPK mint proof** — see `docs/product/SPK_ATTESTED_MINT_PROOF.md`
+  - Sample bundle: `4` signed raw readings, `2` accepted, `2` rejected, `2` verified device signatures
+  - Accepted surplus: `2606.7` kWh
+  - On-chain integer mint: `2606` kWh
+  - Mint result: `130.1697` SPK at `$0.05/kWh` after 10 bps mint fee
+  - Public readback: `docs/product/SPK_PUBLIC_READBACK.md` confirms tx success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus
+  - Receipt: `docs/product/SPK_ATTESTED_MINT_PROOF.md`
+- **Pilot meter CSV bridge** — see `docs/project/METER_CSV_IMPORT.md`
+  - Meter onboarding command writes a registry receipt without storing private keys
+  - CSV import signs meter/inverter rows and feeds the same verifier as the public SPK proof
+  - Sample CSV-derived bundle: `2` accepted, `0` rejected, `1,985.5` kWh surplus
 - **Independent code review** (Codex, April 2026) — 5 findings fixed, regression tests added (commit `5176317`)
 - **Safe multisig admin** — deployer EOA has zero authority on any contract
 - **24h governance timelock** — active on all parameter changes
@@ -64,6 +102,8 @@ Three core contracts plus supporting infrastructure:
 
 ## What does not yet exist
 
+- No production-governed redeploy of the latest attestation-enabled `SolarPunkCoin` yet; current fresh Sepolia stack is source-verified but proof-scoped
+- No certified hardware meter adapter or production meter-signing process
 - No formal security audit (required for mainnet; ~$25k; primary grant deliverable)
 - 1-of-1 Safe (signer threshold expansion is post-grant)
 - No counterparty pilots (highest-leverage gap — see `EVIDENCE.md` §4)
@@ -77,8 +117,19 @@ Three core contracts plus supporting infrastructure:
 # Install
 npm install
 
-# Run all tests (79 passing)
+# Run all tests (96 passing)
 npx hardhat test
+
+# Reproduce the SPK product proof
+npm run attestations:fixture
+npm run attestations:build
+npm run proof:spk-attested-mint
+npm run proof:spk-public-readback
+npm run product:empirics
+
+# Import a pilot-style meter CSV into signed raw readings
+npm run meter:onboard -- --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --device-address=0x... --capacity-kw=120
+METER_PRIVATE_KEY=0x... npm run attestations:import-csv -- --csv=data/attestations/sample_meter_export.csv --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a
 
 # Frontend dev server (reads live Sepolia)
 cd frontend && npm install && npm run dev
@@ -100,7 +151,7 @@ npx hardhat run scripts/fix_disburser_role.js --network sepolia
 
 This repo is the implementation layer of a Finance Master's thesis (Yuan Ze University) with three pillars:
 
-1. **Pillar 1 — CEIR analysis:** Amihud-Hurvich bias-corrected predictive regression, Chow structural break test, block bootstrap (2000 reps), China 2021 mining ban as natural experiment. β = −0.206 pre-ban (p < 0.001), β = −0.080 post-ban, Chow F = 4.786 (p = 0.0009).
+1. **Pillar 1 — CEIR analysis:** energy-cost information ratio regression and structural break analysis. Current reproducible CSV summary: pre-ban coefficient = `-0.257`, post-ban coefficient = `-0.634`, Chow p-value = `1.11e-16`, with 898 pre-ban and 1,044 post-ban observations.
 
 2. **Pillar 2 — Physics-based pricing:** NASA satellite irradiance → volatility calibration (σ = 189.5%, Jarque-Bera p = 0.349), binomial trees, Monte Carlo. 2.08% divergence at 20,000 paths. Validated across 5 global markets.
 

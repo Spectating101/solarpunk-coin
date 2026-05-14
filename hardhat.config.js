@@ -18,12 +18,13 @@ fs.mkdirSync(HARDHAT_TMP_BASE, { recursive: true });
 
 module.exports = {
   solidity: {
-    version: "0.8.20",
+    version: "0.8.24",
     settings: {
       optimizer: {
         enabled: true,
         runs: 200,
       },
+      viaIR: true,
     },
   },
   networks: {
@@ -62,7 +63,7 @@ module.exports = {
     sources: "./contracts",
     tests: "./test",
     cache: path.join(HARDHAT_TMP_BASE, "cache"),
-    // Keep artifacts in-repo so offline `--no-compile` tests can run using committed artifacts.
+    // Keep artifact path stable for ABI consumers; `npm test` compiles before running.
     artifacts: "./artifacts",
   },
   mocha: {

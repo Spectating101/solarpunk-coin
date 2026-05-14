@@ -12,6 +12,19 @@ Audit-facing invariant candidates across the current contract system.
 4. `energyPricePerKwh` determines SPK per kWh. `estimateMintAmount` must use the same value as `mintFromSurplus`.
 5. `redeemForEnergy` redemption fee must go entirely to treasury (not split to stability pool).
 
+## Signed surplus attestation invariants
+
+- `mintFromSurplusAttestation` must require valid `MINTER_ROLE` and the same grid/oracle freshness checks as `mintFromSurplus`.
+- `sourceHash` must be non-zero so every attested mint points to an auditable data source.
+- `windowStart < windowEnd` must hold for the measured energy window.
+- `windowEnd <= block.timestamp` must hold so future/unclosed surplus windows cannot mint.
+- `validAfter <= block.timestamp <= validBefore` must hold before the attestation can mint.
+- The recovered signer must hold `ORACLE_ROLE`; non-oracle signatures cannot mint.
+- The attestation hash must bind chain ID, contract address, surplus kWh, recipient, measurement window, validity window, and source hash.
+- `usedSurplusAttestations[attestationHash]` must be set before minting completes so replayed signatures cannot mint twice.
+- `usedSurplusSourceHashes[sourceHash]` must be set before minting completes so the same meter/source bundle cannot mint again with changed metadata.
+- If `minOracleBond` is non-zero, the attestor must satisfy the oracle bond requirement before the mint succeeds.
+
 ## Oracle and control invariants
 
 6. Oracle update paths (`updateOraclePriceAndAdjust`, `updateEnergyPrice`, `setGridStressed`) must be restricted to `ORACLE_ROLE`.

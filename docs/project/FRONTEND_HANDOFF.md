@@ -8,7 +8,7 @@ Purpose: give a frontend/design agent enough current context to improve the inte
 - The Sepolia prototype is live and externally inspectable.
 - The NASA keeper workflow is active on GitHub Actions and has completed successful scheduled runs through `2026-05-05`.
 - Latest successful keeper run: `2026-05-05`.
-- Local contract tests: `79 passing`.
+- Local contract tests: `88 passing`.
 
 ## Canonical live addresses
 
@@ -21,6 +21,7 @@ Purpose: give a frontend/design agent enough current context to improve the inte
 | ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` |
 | Safe multisig | `0xB95586775C73feB0154828c77832E106425C818A` |
 | MockUSDC | `0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2` |
+| EnergyRevenueFloor | Not deployed yet (`0x0000000000000000000000000000000000000000`) |
 
 ## Latest proof artifacts
 

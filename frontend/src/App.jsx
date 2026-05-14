@@ -6,6 +6,7 @@ import {
   Gauge,
   Github,
   RadioTower,
+  Leaf,
   ShieldCheck,
   Wallet,
 } from 'lucide-react';
@@ -14,16 +15,20 @@ import TradingInterface from './components/TradingInterface';
 import PositionsList from './components/PositionsList';
 import SystemIntegrity from './components/SystemIntegrity';
 import MarketStats from './components/MarketStats';
+import SPKMintDemo from './components/SPKMintDemo';
 import { GITHUB_REPO, KEEPER_WORKFLOW } from './constants/contracts';
 
 const tabs = [
   { id: 'proof', label: 'Proof', icon: RadioTower },
+  { id: 'mint', label: 'SPK Mint', icon: Leaf },
   { id: 'market', label: 'Market', icon: BarChart3 },
   { id: 'hedge', label: 'Hedge', icon: Wallet },
   { id: 'status', label: 'Status', icon: ShieldCheck },
 ];
 
 function App() {
+  const TEST_COUNT = 96;
+
   const [activeTab, setActiveTab] = useState('proof');
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
@@ -81,7 +86,7 @@ function App() {
           <div className="sidebar-card-title"><Gauge size={14} /> Live Experiment</div>
           <div className="sidebar-row"><span>Network</span><strong>Sepolia</strong></div>
           <div className="sidebar-row"><span>Keeper</span><strong>Daily</strong></div>
-          <div className="sidebar-row"><span>Tests</span><strong>79 passing</strong></div>
+          <div className="sidebar-row"><span>Tests</span><strong>{TEST_COUNT} passing</strong></div>
         </div>
 
         <div className="sidebar-links">
@@ -111,6 +116,8 @@ function App() {
 
         {activeTab === 'proof' && <ProofDashboard />}
 
+        {activeTab === 'mint' && <SPKMintDemo />}
+
         {activeTab === 'market' && (
           <div className="tab-grid">
             <MarketStats />
@@ -136,9 +143,9 @@ function App() {
                 </div>
               </div>
               <div className="scope-list">
-                <div><strong>Shows:</strong> live Sepolia reads, keeper artifacts, NASA-derived index history, explorer links.</div>
+                <div><strong>Shows:</strong> live Sepolia reads, keeper artifacts, NASA-derived index history, SPK mint proof path, explorer links.</div>
                 <div><strong>Does not claim:</strong> mainnet readiness, formal audit completion, or production oracle finality.</div>
-                <div><strong>Next real upgrade:</strong> port the hedge flow to exact live series metadata and safer transaction previews.</div>
+                <div><strong>Next real upgrade:</strong> move the attestation-enabled SPK stack from proof-scoped deployment to governed pilot deployment and hardware-backed meter adapters.</div>
               </div>
             </div>
             <div className="panel">
@@ -151,7 +158,7 @@ function App() {
               <div className="grant-grid">
                 <div><strong>Security</strong><span>External audit scope, invariant review, and hardened deployment runbooks.</span></div>
                 <div><strong>Oracle</strong><span>Production data adapter design, fallback feeds, and documented freshness guarantees.</span></div>
-                <div><strong>Pilot</strong><span>Partner-facing dashboard, reporting packet, and continuous real-data experiment expansion.</span></div>
+                <div><strong>Meter Proof</strong><span>Partner-facing adapter, signed meter bundles, and continuous real-data experiment expansion.</span></div>
               </div>
             </div>
           </div>

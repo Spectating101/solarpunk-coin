@@ -10,8 +10,9 @@ I am Christopher Ongko, a finance master's student at Yuan Ze University and the
 
 SolarPunk is an open-source Ethereum testnet prototype for renewable-energy hedging. It combines:
 
-- 79/79 passing smart contract tests,
-- source-verified Sepolia contracts,
+- 96/96 passing smart contract tests,
+- source-verified Sepolia contracts, including the attested SPK proof stack,
+- a public signed-meter -> attested SPK mint proof and read-only Sepolia readback,
 - a daily NASA POWER -> Sepolia oracle keeper,
 - a React proof dashboard with live contract reads,
 - audit-readiness, threat model, trust assumptions, and public evidence register.
@@ -45,8 +46,9 @@ The project depends on reliable oracle infrastructure:
 
 Current proof:
 
-- 79/79 smart contract tests passing.
-- Source-verified Sepolia contracts.
+- 96/96 smart contract tests passing.
+- Source-verified Sepolia contracts, including the attested SPK proof stack.
+- Public signed-meter -> attested SPK mint proof and read-only Sepolia readback.
 - Daily keeper artifacts and transaction hashes.
 - Live frontend proof dashboard.
 - Audit-readiness and threat model docs.
@@ -67,8 +69,9 @@ I am preparing external grant applications for SolarPunk Protocol, the implement
 
 The project now has:
 
-- 79/79 smart contract tests passing,
+- 96/96 smart contract tests passing,
 - source-verified Sepolia deployment,
+- public signed-meter -> attested SPK mint proof and read-only Sepolia readback,
 - daily NASA POWER -> on-chain oracle experiment,
 - public evidence register,
 - frontend proof dashboard,
@@ -103,4 +106,3 @@ If useful, I can share a short demo and evidence packet. Any feedback would help
 
 Best,  
 Christopher Ongko
-

@@ -30,6 +30,10 @@ function short(value, head = 6, tail = 4) {
   return `${value.slice(0, head)}...${value.slice(-tail)}`;
 }
 
+const isZeroAddress = (address) => {
+  return !address || /^0x0{40}$/i.test(address);
+};
+
 function txUrl(hash) {
   return `${SEPOLIA_EXPLORER}/tx/${hash}`;
 }
@@ -140,25 +144,26 @@ function useLiveProtocolState() {
   return state;
 }
 
-const contractRows = [
-  ['SolarPunkCoin', CONTRACTS.solarPunkCoin],
-  ['SolarPunkOption', CONTRACTS.solarPunkOption],
-  ['ProtocolTreasury', CONTRACTS.protocolTreasury],
-  ['StabilityPool', CONTRACTS.stabilityPool],
-  ['OracleAdapter', CONTRACTS.oracleAdapter],
-  ['Safe', CONTRACTS.safe],
-  ['MockUSDC', CONTRACTS.mockUsdc],
-];
-
 const proofLinks = [
   ['GitHub repo', GITHUB_REPO],
+  ['SPK product empirics', `${GITHUB_REPO}/blob/main/docs/product/SPK_PRODUCT_EMPIRICS.md`],
+  ['SPK attested mint proof', `${GITHUB_REPO}/blob/main/docs/product/SPK_ATTESTED_MINT_PROOF.md`],
   ['NASA keeper workflow', KEEPER_WORKFLOW],
   ['Daily status doc', `${GITHUB_REPO}/blob/main/docs/project/DAILY_EXPERIMENT_STATUS.md`],
-  ['Evidence register', `${GITHUB_REPO}/blob/main/EVIDENCE.md`],
 ];
 
 export default function ProofDashboard() {
   const live = useLiveProtocolState();
+  const contractRows = [
+    ['SolarPunkCoin', CONTRACTS.solarPunkCoin],
+    ['SolarPunkOption', CONTRACTS.solarPunkOption],
+    ['ProtocolTreasury', CONTRACTS.protocolTreasury],
+    ['StabilityPool', CONTRACTS.stabilityPool],
+    ['OracleAdapter', CONTRACTS.oracleAdapter],
+    ['Safe', CONTRACTS.safe],
+    ['MockUSDC', CONTRACTS.mockUsdc],
+    ['EnergyRevenueFloor (pilot)', CONTRACTS.energyRevenueFloor],
+  ];
   const latestRun = keeperSummary.latest_run;
   const latestNasaDate = latestRun.nasa?.date ?? latestRun.nasa_date ?? latestRun.date;
   const latestIndex = latestRun.protocol_state?.option_index ?? latestRun.option_index ?? latestRun.normalised_index;
@@ -179,10 +184,10 @@ export default function ProofDashboard() {
       <div className="proof-hero">
         <div>
           <div className="eyebrow"><RadioTower size={14} /> Live Sepolia Prototype</div>
-          <h1>Solar revenue hedging, visible on-chain.</h1>
+          <h1>Energy-backed SPK, visible on-chain.</h1>
           <p>
-            A working testnet protocol that turns NASA POWER irradiance into a market index,
-            posts it to Sepolia, and leaves a public transaction trail for reviewers.
+            A working testnet protocol that publishes real solar data on-chain, plus a public
+            proof showing how accepted surplus kWh becomes signed, replay-protected SPK.
           </p>
         </div>
         <div className={`system-tile ${systemTone}`}>
@@ -234,13 +239,13 @@ export default function ProofDashboard() {
         <div className="proof-path-grid">
           <div>
             <span>1</span>
-            <strong>Open keeper run</strong>
-            <p>Inspect the scheduled daily GitHub Action and committed JSON artifact.</p>
+            <strong>Open SPK product proof</strong>
+            <p>Inspect the generated meter-bundle to attested-mint receipt.</p>
           </div>
           <div>
             <span>2</span>
             <strong>Check NASA input</strong>
-            <p>Compare the NASA date, normalized index, and scaled on-chain value.</p>
+            <p>Compare the daily NASA date, normalized index, and scaled on-chain value.</p>
           </div>
           <div>
             <span>3</span>
@@ -325,15 +330,24 @@ export default function ProofDashboard() {
             </div>
           </div>
           <div className="contract-list">
-            {contractRows.map(([name, address]) => (
-              <div key={address} className="contract-row">
-                <span>{name}</span>
-                <div>
-                  <a href={addressUrl(address)} target="_blank" rel="noreferrer">{short(address)}</a>
-                  <CopyButton value={address} />
+            {contractRows.map(([name, address]) => {
+              const waiting = isZeroAddress(address);
+              return (
+                <div key={name} className="contract-row">
+                  <span>{name}</span>
+                  <div>
+                    {waiting ? (
+                      <strong style={{ color: 'var(--amber)' }}>Pending deployment</strong>
+                    ) : (
+                      <>
+                        <a href={addressUrl(address)} target="_blank" rel="noreferrer">{short(address)}</a>
+                        <CopyButton value={address} />
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

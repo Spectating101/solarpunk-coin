@@ -134,7 +134,7 @@ def _to_md(bundle: Dict[str, Any]) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate and normalize meter attestations into a deterministic bundle.")
     parser.add_argument("--input", default="data/attestations/sample_meter_attestations.json")
-    parser.add_argument("--out-json", default="artifacts/attestations/latest_attestation_bundle.json")
+    parser.add_argument("--out-json", default="state/attestations/latest_attestation_bundle.json")
     parser.add_argument("--out-md", default="docs/project/METER_ATTESTATION_BUNDLE.md")
     parser.add_argument("--min-quality", type=float, default=0.9)
     args = parser.parse_args()

@@ -1,0 +1,96 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "settlementTokenAddress", "type": "address" },
+        { "internalType": "address", "name": "treasury_", "type": "address" }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    { "inputs": [], "name": "REPORTER_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "LIQUIDITY_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "AUDITOR_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "PAUSER_ROLE", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" },
+
+    { "inputs": [], "name": "settlementToken", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "treasury", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "settlementTokenDecimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "totalLockedLiquidity", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "nextPolicyId", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "nextProducerCounter", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "maxPremiumBps", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "minPremiumBps", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "maxReportDriftSeconds", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "reportSubmissionWindowSeconds", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "disputeWindowSeconds", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "bytes32", "name": "producerId", "type": "bytes32" }], "name": "producerExists", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "address", "name": "operator", "type": "address" }], "name": "reportNonces", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+
+    { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "start", "type": "uint256" }, { "internalType": "uint256", "name": "limit", "type": "uint256" }], "name": "getProducerIds", "outputs": [{ "internalType": "bytes32[]", "name": "ids", "type": "bytes32[]" }, { "internalType": "uint256", "name": "nextStart", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "address", "name": "payer", "type": "address" }, { "internalType": "uint256", "name": "start", "type": "uint256" }, { "internalType": "uint256", "name": "limit", "type": "uint256" }], "name": "getPolicyIdsForPayer", "outputs": [{ "internalType": "uint256[]", "name": "ids", "type": "uint256[]" }, { "internalType": "uint256", "name": "nextStart", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "string", "name": "siteName", "type": "string" }, { "internalType": "string", "name": "location", "type": "string" }, { "internalType": "uint256", "name": "capacityKw", "type": "uint256" }, { "internalType": "uint32", "name": "heartbeatSeconds", "type": "uint32" }], "name": "registerProducer", "outputs": [{ "internalType": "bytes32", "name": "producerId", "type": "bytes32" }], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "bytes32", "name": "producerId", "type": "bytes32" }, { "internalType": "string", "name": "siteName", "type": "string" }, { "internalType": "string", "name": "location", "type": "string" }, { "internalType": "uint256", "name": "capacityKw", "type": "uint256" }, { "internalType": "uint32", "name": "heartbeatSeconds", "type": "uint32" }, { "internalType": "bool", "name": "active", "type": "bool" }], "name": "setProducerMetadata", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "bytes32", "name": "producerId", "type": "bytes32" }], "name": "setProducerHeartbeat", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "targetKwh", "type": "uint256" }, { "internalType": "uint256", "name": "floorPricePerKwh", "type": "uint256" }, { "internalType": "uint256", "name": "premiumBps", "type": "uint256" }], "name": "estimatePolicy", "outputs": [{ "internalType": "uint256", "name": "maxPayout", "type": "uint256" }, { "internalType": "uint256", "name": "premium", "type": "uint256" }, { "internalType": "uint256", "name": "minPremiumBpsValue", "type": "uint256" }, { "internalType": "uint256", "name": "maxPremiumBpsValue", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "bytes32", "name": "producerId", "type": "bytes32" }, { "internalType": "uint64", "name": "periodStart", "type": "uint64" }, { "internalType": "uint64", "name": "periodEnd", "type": "uint64" }, { "internalType": "uint256", "name": "targetKwh", "type": "uint256" }, { "internalType": "uint256", "name": "floorPricePerKwh", "type": "uint256" }, { "internalType": "uint256", "name": "premiumBps", "type": "uint256" }, { "internalType": "address", "name": "payer", "type": "address" }], "name": "openFloorPolicy", "outputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }], "name": "cancelPolicy", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }, { "internalType": "uint256", "name": "realizedKwh", "type": "uint256" }, { "internalType": "uint64", "name": "measuredAt", "type": "uint64" }, { "internalType": "uint256", "name": "reporterNonce", "type": "uint256" }, { "internalType": "bytes32", "name": "sourceHash", "type": "bytes32" }, { "internalType": "bytes", "name": "reporterSig", "type": "bytes" }], "name": "submitSignedProductionReport", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }, { "internalType": "uint256", "name": "realizedKwh", "type": "uint256" }, { "internalType": "uint64", "name": "measuredAt", "type": "uint64" }, { "internalType": "bytes32", "name": "sourceHash", "type": "bytes32" }], "name": "submitManualProductionReport", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }, { "internalType": "string", "name": "reason", "type": "string" }], "name": "requestDispute", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }, { "internalType": "uint256", "name": "realizedKwh", "type": "uint256" }, { "internalType": "bytes32", "name": "sourceHash", "type": "bytes32" }], "name": "resolveDispute", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }], "name": "finalizePolicy", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }], "name": "expirePolicy", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "depositLiquidity", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }, { "internalType": "address", "name": "destination", "type": "address" }], "name": "withdrawLiquidity", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [], "name": "freeLiquidity", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "bytes32", "name": "producerId", "type": "bytes32" }], "name": "heartbeatIsFresh", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }], "name": "policyState", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [], "name": "pause", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [], "name": "unpause", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+
+    { "inputs": [{ "internalType": "address", "name": "role", "type": "bytes32" }, { "internalType": "address", "name": "account", "type": "address" }], "name": "hasRole", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+    { "inputs": [{ "internalType": "bytes32", "name": "policyId", "type": "bytes32" }], "name": "producers", "outputs": [
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "string", "name": "siteName", "type": "string" },
+      { "internalType": "string", "name": "location", "type": "string" },
+      { "internalType": "uint256", "name": "capacityKw", "type": "uint256" },
+      { "internalType": "uint32", "name": "heartbeatSeconds", "type": "uint32" },
+      { "internalType": "bool", "name": "active", "type": "bool" },
+      { "internalType": "uint64", "name": "totalPolicies", "type": "uint64" },
+      { "internalType": "uint64", "name": "createdAt", "type": "uint64" },
+      { "internalType": "uint64", "name": "lastReportAt", "type": "uint64" }
+    ], "stateMutability": "view", "type": "function" },
+
+    { "inputs": [{ "internalType": "uint256", "name": "policyId", "type": "uint256" }], "name": "policies", "outputs": [
+      { "internalType": "bytes32", "name": "producerId", "type": "bytes32" },
+      { "internalType": "address", "name": "payer", "type": "address" },
+      { "internalType": "uint64", "name": "periodStart", "type": "uint64" },
+      { "internalType": "uint64", "name": "periodEnd", "type": "uint64" },
+      { "internalType": "uint64", "name": "reportDeadline", "type": "uint64" },
+      { "internalType": "uint64", "name": "disputeDeadline", "type": "uint64" },
+      { "internalType": "uint256", "name": "targetKwh", "type": "uint256" },
+      { "internalType": "uint256", "name": "floorPricePerKwh", "type": "uint256" },
+      { "internalType": "uint256", "name": "premiumBps", "type": "uint256" },
+      { "internalType": "uint256", "name": "premiumPaid", "type": "uint256" },
+      { "internalType": "uint256", "name": "maxPayout", "type": "uint256" },
+      { "internalType": "uint256", "name": "lockedLiquidity", "type": "uint256" },
+      { "internalType": "uint256", "name": "realizedKwh", "type": "uint256" },
+      { "internalType": "uint256", "name": "payout", "type": "uint256" },
+      { "internalType": "uint64", "name": "reportAt", "type": "uint64" },
+      { "internalType": "uint64", "name": "settledAt", "type": "uint64" },
+      { "internalType": "address", "name": "reporter", "type": "address" },
+      { "internalType": "bytes32", "name": "sourceHash", "type": "bytes32" },
+      { "internalType": "uint8", "name": "state", "type": "uint8" },
+      { "internalType": "bool", "name": "disputed", "type": "bool" }
+    ], "stateMutability": "view", "type": "function" },
+
+    { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "producerId", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "string", "name": "siteName", "type": "string" }, { "internalType": "string", "name": "location", "type": "string" }, { "internalType": "uint256", "name": "capacityKw", "type": "uint256" }, { "internalType": "uint32", "name": "heartbeatSeconds", "type": "uint32" }], "name": "ProducerRegistered", "type": "event" },
+    { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "producerId", "type": "bytes32" }, { "internalType": "string", "name": "siteName", "type": "string" }, { "internalType": "string", "name": "location", "type": "string" }, { "internalType": "uint256", "name": "capacityKw", "type": "uint256" }, { "internalType": "uint32", "name": "heartbeatSeconds", "type": "uint32" }, { "internalType": "bool", "name": "active", "type": "bool" }], "name": "ProducerUpdated", "type": "event" },
+    { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "bytes32", "name": "producerId", "type": "bytes32" }, { "internalType": "uint64", "name": "lastReportAt", "type": "uint64" }], "name": "ProducerHeartbeat", "type": "event" },
+    { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }, { "internalType": "uint256", "name": "beforeLocked", "type": "uint256" }], "name": "LiquidityDeposited", "type": "event" },
+    { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "destination", "type": "address" }, { "internalType": "uint256", "name": "beforeLocked", "type": "uint256" }], "name": "LiquidityWithdrawn", "type": "event" },
+    { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "uint256", "name": "policyId", "type": "uint256" }, { "indexed": true, "internalType": "bytes32", "name": "producerId", "type": "bytes32" }, { "indexed": true, "internalType": "address", "name": "payer", "type": "address" }, { "internalType": "uint64", "name": "periodStart", "type": "uint64" }, { "internalType": "uint256", "name": "targetKwh", "type": "uint256" }, { "internalType": "uint256", "name": "floorPricePerKwh", "type": "uint256" }, { "internalType": "uint256", "name": "premium", "type": "uint256" }, { "internalType": "uint256", "name": "maxPayout", "type": "uint256" }, { "internalType": "uint256", "name": "premiumBps", "type": "uint256" }], "name": "PolicyOpened", "type": "event" },
+    { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "uint256", "name": "policyId", "type": "uint256" }, { "internalType": "uint256", "name": "realizedKwh", "type": "uint256" }, { "internalType": "uint64", "name": "measuredAt", "type": "uint64" }, { "indexed": true, "internalType": "address", "name": "reporter", "type": "address" }, { "internalType": "bytes32", "name": "sourceHash", "type": "bytes32" }], "name": "PolicyReportSubmitted", "type": "event" }
+  ]
+}

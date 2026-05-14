@@ -28,6 +28,8 @@ SolarPunk Protocol is an open-source Sepolia prototype exploring how public rene
 The project combines:
 
 - source-verified Solidity contracts on Sepolia,
+- a signed meter -> surplus attestation -> SPK mint proof on Sepolia,
+- a read-only public proof readback confirming consumed attestation and source hashes,
 - a daily NASA POWER -> Sepolia keeper experiment,
 - a Python pricing and margin-analysis library,
 - a React proof dashboard with live contract reads,
@@ -51,11 +53,12 @@ SOLUTION
 
 SolarPunk builds a testnet proof surface for energy-linked settlement:
 
-1. NASA POWER irradiance data is fetched daily for Taoyuan, Taiwan.
-2. The data is normalized into a seasonal solar index.
-3. The index is written to Sepolia through `SolarPunkOption.updateIndex`.
-4. Keeper logs are committed into the repo with transaction hashes.
-5. The public dashboard reads live contract state and links reviewers to the proof path.
+1. Registered meter devices sign raw renewable-energy readings.
+2. The attestation pipeline verifies signatures, duplicate nonces, closed windows, quality thresholds, capacity bounds, and energy balance.
+3. Accepted surplus is reduced to a deterministic source hash.
+4. An oracle role signs the surplus amount, recipient, measurement window, validity window, chain ID, contract address, and source hash.
+5. `SolarPunkCoin.mintFromSurplusAttestation` verifies the signature and replay guards before minting SPK.
+6. NASA POWER irradiance data is also fetched daily and written to Sepolia through the older keeper path, keeping an independent real-data experiment running.
 
 The protocol also includes:
 
@@ -71,14 +74,19 @@ The next funded phase would harden this prototype through external review, oracl
 
 CURRENT STATUS
 
-- 79/79 smart contract tests passing.
-- Five source-verified Sepolia contracts.
+- 96/96 smart contract tests passing.
+- Five source-verified legacy Sepolia contracts plus three source-verified contracts in the fresh attested SPK proof stack.
+- Public Sepolia attested SPK mint proof: 4 signed raw readings, 2 accepted, 2 rejected, 2,606.7 kWh accepted surplus, 130.1697 SPK minted.
+- Public readback confirms transaction success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus.
+- EnergyRevenueFloor pilot module is implemented (contract + frontend console) but not yet deployed on Sepolia.
 - Safe admin handoff complete for the three core contracts.
 - 24h governance timelock active on core parameter changes.
 - ChainlinkOracleAdapter deployed on Sepolia.
 - Daily NASA POWER -> Sepolia keeper running since 2026-04-20.
 - Keeper artifacts committed under `state/keeper_logs/`.
 - Public daily status: `docs/project/DAILY_EXPERIMENT_STATUS.md`.
+- Public attested mint proof: `docs/product/SPK_ATTESTED_MINT_PROOF.md`.
+- Public readback: `docs/product/SPK_PUBLIC_READBACK.md`.
 - Public demo: https://spectating101.github.io/solarpunk-coin/
 - Reviewer packet: `docs/grants/REVIEWER_PACKET.md`.
 - Audit-readiness, threat model, trust assumptions, and invariant checklist prepared.
@@ -89,6 +97,7 @@ Honest limitations:
 - No formal smart contract audit yet.
 - No mainnet deployment.
 - No production oracle finality.
+- Attested SPK proof stack is source-verified but not yet production-governed.
 - No signed solar-operator pilot or LOI yet.
 - Safe is currently 1-of-1 and should become multi-signer before serious pilot use.
 - Live Sepolia margin is currently 150% initial / 75% maintenance; 250% / 125% is the next risk-boxed pilot target from stress testing.
@@ -194,7 +203,7 @@ Hello ESP team,
 
 I am Christopher Ongko, a finance master's student at Yuan Ze University and the developer of SolarPunk Protocol.
 
-SolarPunk is an open-source Sepolia prototype for renewable-energy data and settlement research. It has source-verified contracts, 79/79 passing smart contract tests, a daily NASA POWER -> Sepolia keeper, committed transaction artifacts, and a React proof dashboard with live contract reads.
+SolarPunk is an open-source Sepolia prototype for renewable-energy data and settlement research. It has source-verified contracts, 96/96 passing smart contract tests, a signed meter -> attested SPK mint proof on Sepolia, a read-only public proof readback, a daily NASA POWER -> Sepolia keeper, committed transaction artifacts, and a React proof dashboard with live contract reads.
 
 I am preparing an ESP/Wishlist-style funding request focused on external review, oracle hardening, L2 deployment analysis, and public technical reporting. I would appreciate guidance on whether this fits ESP financial support, Project Feedback, Wishlist/RFP categories, or a more academic route.
 
