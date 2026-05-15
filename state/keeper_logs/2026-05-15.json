@@ -1,0 +1,36 @@
+{
+  "date": "2026-05-15",
+  "run_at": "2026-05-15T04:42:24.641Z",
+  "keeper": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "nasa": {
+    "date": "2026-05-10",
+    "location": "Taoyuan, Taiwan",
+    "lat": 24.99,
+    "lon": 121.3,
+    "ghi_kwh_m2": 2.2685,
+    "monthly_mean": 3.48,
+    "month": 5
+  },
+  "index": {
+    "normalised": 0.651867816091954,
+    "interpretation": "below seasonal average",
+    "scaled_6dec": "651868",
+    "source_hash": "0xb9247a373acc894f61ffff74bafcb9583e875fd30f626233a82f0b2541d8be41"
+  },
+  "transactions": {
+    "updateIndex": "0x8b39e789e5d3444e48ebcd24008cdd31cc4453c482bc66e155503a4df309083b",
+    "updateEnergyPrice": "0xb1d50d715e7804a18b97096ea98b68780b2c7b80853b3972efabca77310a66bb",
+    "updateOraclePriceAndAdjust": "0xc916c242a0e1e364cf6329dadd8ad9c9335824dc6fdd53699bc2b94eed9ec42a"
+  },
+  "protocol_state": {
+    "total_supply_spk": 29700.300000000003,
+    "oracle_price_usd": 1,
+    "usdc_reserve_usd": 300000,
+    "reserve_ratio_pct": 10.1,
+    "peg_stable": true,
+    "grid_stressed": false,
+    "energy_price_per_kwh": 0.05,
+    "cumulative_surplus_kwh": 30000,
+    "option_index": 0.651868
+  }
+}
