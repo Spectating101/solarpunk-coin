@@ -4,12 +4,13 @@ import {
   CheckCircle2,
   ExternalLink,
   FlaskConical,
+  MessageSquarePlus,
   Lock,
   ShieldCheck,
   Wrench,
 } from 'lucide-react';
 import launchGate from '../../../state/product/launch_gate.json';
-import { GITHUB_REPO } from '../constants/contracts';
+import { GITHUB_REPO, PUBLIC_LAB_INQUIRY_URL } from '../constants/contracts';
 
 const modeCopy = {
   public_testnet_product: {
@@ -138,11 +139,17 @@ export default function LaunchConsole() {
             </div>
           </div>
           <div className="proof-links">
+            <a href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer" className="proof-link-primary">
+              Open pilot inquiry <MessageSquarePlus size={12} />
+            </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/PRODUCT_LAUNCH_GATE.md`} target="_blank" rel="noreferrer">
               Launch gate <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB.md`} target="_blank" rel="noreferrer">
               Public lab model <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB_SOCIAL_KIT.md`} target="_blank" rel="noreferrer">
+              Social kit <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PRODUCT_EMPIRICS.md`} target="_blank" rel="noreferrer">
               Product empirics <ExternalLink size={12} />

@@ -20,6 +20,7 @@ The lab exists to answer one question:
 | Daily data experiment | NASA POWER -> Sepolia keeper | `docs/project/DAILY_EXPERIMENT_STATUS.md` |
 | Meter CSV import | Pilot-style adapter path | `docs/project/METER_CSV_IMPORT.md` |
 | Product launch gate | Explicit launch status | `docs/product/PRODUCT_LAUNCH_GATE.md` |
+| Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
 | Evidence register | Reviewer receipts | `EVIDENCE.md` |
 
 ## What A Lab Participant Can Do
@@ -29,6 +30,10 @@ The lab exists to answer one question:
 3. Import a sample meter/inverter CSV and derive an attestation bundle.
 4. Review the daily NASA keeper logs and transaction hashes.
 5. Open a GitHub issue using the public lab pilot template if they have a real meter export, inverter export, research collaboration, or integration question.
+
+Direct inquiry link:
+
+`https://github.com/Spectating101/solarpunk-coin/issues/new?template=public-lab-pilot.md`
 
 ## What The Lab Does Not Do
 
@@ -72,6 +77,17 @@ Then keep the public lab honest:
 - Keep stale claims out of the frontend.
 - Treat external replies, real meter exports, and pilot discussions as evidence artifacts.
 - Do not change the paid/mainnet gate from blocked until the missing controls are actually present.
+
+## Social Validation Loop
+
+Use social channels to create public receipts, not hype.
+
+1. Publish the public lab announcement from `docs/product/PUBLIC_LAB_SOCIAL_KIT.md`.
+2. Ask for one of three concrete responses: inspect the proof, open an issue, or share a meter/inverter export format.
+3. Record meaningful replies as follow-up issues, not as private memory.
+4. Convert one real data conversation into the next closed-pilot artifact.
+
+If using OpenClaw or another agent tool, use it only to draft, queue, and monitor posts. Do not let an agent autonomously make claims about yield, investment value, mainnet readiness, medical/energy safety, or legal status.
 
 ## Next Build Target
 

@@ -20,6 +20,7 @@ Use these first when facts conflict elsewhere:
 - `README.md` — project overview
 - `CURRENT_STATUS.md` — honest stage snapshot
 - `docs/product/PUBLIC_LAB.md` — current public lab operating model
+- `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` — social validation copy and guardrails
 - `docs/product/PRODUCT_LAUNCH_GATE.md` — explicit launch gates and blockers
 - `ARCHITECTURE_OVERVIEW.md` — system design
 - `ROADMAP.md` — milestone plan

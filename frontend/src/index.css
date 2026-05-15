@@ -555,6 +555,12 @@ p {
   font-size: 12px;
 }
 
+.proof-links a.proof-link-primary {
+  border-color: rgba(52, 211, 153, 0.32);
+  background: var(--green-dim);
+  color: var(--green);
+}
+
 .icon-button {
   width: 28px;
   height: 26px;
