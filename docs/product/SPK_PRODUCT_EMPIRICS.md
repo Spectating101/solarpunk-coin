@@ -1,6 +1,6 @@
 # SPK Product Empirics
 
-- generated_at: `2026-05-14T13:07:37.680968+00:00`
+- generated_at: `2026-05-15T16:22:05.934389+00:00`
 - product: `SolarPunkCoin (SPK)`
 - primary_contract: `contracts/SolarPunkCoin.sol`
 - primary_function: `mintFromSurplusAttestation`
@@ -48,7 +48,7 @@ The narrow product path is:
 | Oracle tolerance | `Taiwan VR>=95% max error=21.7%` | Defines how much source-data error the economics can tolerate before risk controls fail. |
 | Pricing validation | `5 markets`, `Taiwan binomial/MC diff=2.07912%`, `hedge eff=0.995985` | Shows the pricing layer is not a one-location toy and converges across methods. |
 | Monetary scorecard | `Energy=7`, `Gold=2`, `Fiat=1` | Explains why the product is energy-minted money, not just another collateral wrapper. |
-| Daily live-data keeper | `runs=18`, `latest=2026-05-14` | Demonstrates recurring real-data ingestion and public transaction artifacts on Sepolia. |
+| Daily live-data keeper | `runs=19`, `latest=2026-05-15` | Demonstrates recurring real-data ingestion and public transaction artifacts on Sepolia. |
 
 ## Product Interpretation
 

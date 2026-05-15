@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T13:07:37.680968+00:00",
+  "generated_at": "2026-05-15T16:22:05.934389+00:00",
   "product": {
     "name": "SolarPunkCoin (SPK)",
     "claim": "Accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.",
@@ -75,11 +75,11 @@
   },
   "operational_basis": {
     "daily_keeper_available": true,
-    "total_successful_runs": 18,
+    "total_successful_runs": 19,
     "first_successful_run": "2026-04-20",
-    "last_successful_run": "2026-05-14",
-    "current_success_streak_days": 16,
-    "latest_update_index_tx": "0x20162f08923cddf07e3455ce3eeecfd69ca4bcd7baeead84e6e2b1e4fe6cf856",
+    "last_successful_run": "2026-05-15",
+    "current_success_streak_days": 17,
+    "latest_update_index_tx": "0x8b39e789e5d3444e48ebcd24008cdd31cc4453c482bc66e155503a4df309083b",
     "source": "state/keeper_logs/summary.json"
   },
   "scope_limits": [

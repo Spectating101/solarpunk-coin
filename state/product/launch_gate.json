@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T15:51:35.709Z",
+  "generated_at": "2026-05-15T16:22:05.931Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -36,7 +36,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-14 (0 days old).",
+          "message": "Latest keeper run is 2026-05-15 (0 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -80,7 +80,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-14 (0 days old).",
+          "message": "Latest keeper run is 2026-05-15 (0 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -152,7 +152,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-14 (0 days old).",
+          "message": "Latest keeper run is 2026-05-15 (0 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
