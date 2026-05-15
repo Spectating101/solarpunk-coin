@@ -10,6 +10,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Stage | Public lab phase — public Sepolia attested mint proof live; production-governed redeploy pending |
 | Smart contracts | **96/96 tests passing** |
 | Primary product | SPK attested surplus minting: meter bundle -> source hash -> oracle signature -> SPK mint |
+| Currency-system lab | Four-layer lab artifact generated: public proof, pilot surrogate, receipt surrogate, settlement surrogate |
 | Pilot meter adapter | CSV meter/inverter import + meter onboarding scripts now feed the signed-reading verifier |
 | Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 legacy Sepolia contracts verified on Etherscan**; all 3 fresh attested SPK proof contracts also verified |

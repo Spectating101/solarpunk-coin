@@ -29,6 +29,7 @@ Do not say:
 - GitHub: `https://github.com/Spectating101/solarpunk-coin`
 - Public lab model: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PUBLIC_LAB.md`
 - Product launch gate: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PRODUCT_LAUNCH_GATE.md`
+- Currency system lab: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/CURRENCY_SYSTEM_LAB.md`
 - SPK product proof: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_ATTESTED_MINT_PROOF.md`
 - Public readback: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_PUBLIC_READBACK.md`
 - Pilot inquiry: `https://github.com/Spectating101/solarpunk-coin/issues/new?template=public-lab-pilot.md`
@@ -42,6 +43,7 @@ It is a public Sepolia proof that signed renewable-energy meter data can mint SP
 
 What is public:
 - signed meter -> source hash -> SPK mint proof
+- four-layer currency-system lab with labelled simulation boundaries
 - 7/7 Sepolia readback checks
 - daily NASA POWER -> Sepolia keeper logs
 - CSV path for meter/inverter exports
@@ -100,6 +102,7 @@ SolarPunk Public Lab is a public testnet proof that signed renewable-energy mete
 
 Current proof surface:
 - public Sepolia mint tx
+- four-layer currency-system lab
 - source-verified contracts
 - read-only on-chain readback checks
 - daily NASA POWER -> Sepolia keeper logs

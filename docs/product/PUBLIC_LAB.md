@@ -20,6 +20,7 @@ The lab exists to answer one question:
 | Daily data experiment | NASA POWER -> Sepolia keeper | `docs/project/DAILY_EXPERIMENT_STATUS.md` |
 | Meter CSV import | Pilot-style adapter path | `docs/project/METER_CSV_IMPORT.md` |
 | Product launch gate | Explicit launch status | `docs/product/PRODUCT_LAUNCH_GATE.md` |
+| Currency system lab | Four-layer compressed currency prototype | `docs/product/CURRENCY_SYSTEM_LAB.md` |
 | Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
 | Evidence register | Reviewer receipts | `EVIDENCE.md` |
 
@@ -66,6 +67,7 @@ Run this loop while looking for partners, grants, and pilot users:
 
 ```bash
 npm run product:launch-gate
+npm run product:currency-lab
 npm run product:empirics
 npm test
 npm run attestations:test
@@ -98,5 +100,6 @@ It is:
 1. Governed attested-SPK redeploy on Sepolia.
 2. One real meter or inverter CSV/API adapter.
 3. Public lab receipt showing that real export flowing through the same attestation pipeline.
+4. Replacement of the currency-system lab's simulated layers with real pilot receipts.
 
 That converts the lab from "public proof" to "closed pilot candidate."

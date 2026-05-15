@@ -22,6 +22,7 @@ Use these first when facts conflict elsewhere:
 - `docs/product/PUBLIC_LAB.md` — current public lab operating model
 - `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` — social validation copy and guardrails
 - `docs/product/PRODUCT_LAUNCH_GATE.md` — explicit launch gates and blockers
+- `docs/product/CURRENCY_SYSTEM_LAB.md` — compressed four-layer currency-system lab
 - `ARCHITECTURE_OVERVIEW.md` — system design
 - `ROADMAP.md` — milestone plan
 - `DEPLOYMENT_GUIDE.md` — deploy instructions

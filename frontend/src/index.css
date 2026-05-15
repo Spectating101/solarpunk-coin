@@ -306,6 +306,11 @@ p {
   gap: 18px;
 }
 
+.currency-shell {
+  display: grid;
+  gap: 18px;
+}
+
 .proof-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 290px;
@@ -382,6 +387,12 @@ p {
 .launch-mode-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.currency-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -781,6 +792,46 @@ p {
   margin-top: 6px;
 }
 
+.ledger-list {
+  display: grid;
+  gap: 8px;
+}
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 28px 86px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(27, 52, 34, 0.82);
+  border-radius: 6px;
+  background: rgba(7, 13, 8, 0.3);
+  padding: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.ledger-row span,
+.ledger-row code,
+.ledger-row b {
+  font-family: var(--font-mono);
+}
+
+.ledger-row strong {
+  color: var(--green);
+}
+
+.ledger-row code {
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ledger-row b {
+  color: var(--amber);
+  font-weight: 700;
+}
+
 .readiness-title,
 .readiness-row {
   display: flex;
@@ -906,6 +957,7 @@ p {
   .proof-path-grid,
   .product-flow-grid,
   .launch-mode-grid,
+  .currency-layer-grid,
   .proof-main-grid.bottom,
   .tab-grid {
     grid-template-columns: 1fr;
@@ -932,7 +984,8 @@ p {
 
   .metric-grid,
   .run-strip,
-  .proof-links {
+  .proof-links,
+  .ledger-row {
     grid-template-columns: 1fr;
   }
 }

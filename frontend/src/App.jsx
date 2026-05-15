@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import {
   BarChart3,
   BookOpen,
+  Coins,
   Gauge,
   Github,
   RadioTower,
@@ -18,11 +19,13 @@ import SystemIntegrity from './components/SystemIntegrity';
 import MarketStats from './components/MarketStats';
 import SPKMintDemo from './components/SPKMintDemo';
 import LaunchConsole from './components/LaunchConsole';
+import CurrencyLab from './components/CurrencyLab';
 import { GITHUB_REPO, KEEPER_WORKFLOW } from './constants/contracts';
 
 const tabs = [
   { id: 'proof', label: 'Proof', icon: RadioTower },
   { id: 'mint', label: 'SPK Mint', icon: Leaf },
+  { id: 'currency', label: 'Currency', icon: Coins },
   { id: 'launch', label: 'Lab', icon: FlaskConical },
   { id: 'market', label: 'Market', icon: BarChart3 },
   { id: 'hedge', label: 'Hedge', icon: Wallet },
@@ -122,6 +125,8 @@ function App() {
         {activeTab === 'mint' && <SPKMintDemo />}
 
         {activeTab === 'launch' && <LaunchConsole />}
+
+        {activeTab === 'currency' && <CurrencyLab />}
 
         {activeTab === 'market' && (
           <div className="tab-grid">
