@@ -14,7 +14,7 @@ Open-source Ethereum testnet infrastructure for renewable-energy attestations, S
 
 SolarPunk Protocol is a renewable-energy risk infrastructure project that explores how signed energy data can support transparent on-chain minting and hedging. The project combines a signed-meter attestation pipeline, source-verified Solidity contracts, a public Sepolia SPK mint proof, a daily NASA POWER -> Sepolia oracle keeper, a Python pricing engine, and a React proof dashboard that reads live contract state.
 
-The current system is a serious testnet prototype, not a mainnet product: 96/96 smart contract tests pass, five legacy Sepolia contracts plus three attested SPK proof contracts are source-verified, the public proof mints 130.1697 SPK from 2,606.7 kWh accepted surplus, a read-only Sepolia readback confirms consumed attestation/source hashes, a Safe controls the three legacy core contracts, and daily real-data keeper artifacts are committed to the repo with public transaction hashes. Grant funding would support audit, oracle hardening, Chainlink Automation/Functions work, and a risk-boxed L2 pilot.
+The current system is a serious testnet prototype, not a mainnet product: 102/102 smart contract tests pass, five legacy Sepolia contracts plus three attested SPK proof contracts are source-verified, the public proof mints 130.1697 SPK from 2,606.7 kWh accepted surplus, a read-only Sepolia readback confirms consumed attestation/source hashes, a Safe controls the three legacy core contracts, and daily real-data keeper artifacts are committed to the repo with public transaction hashes. Grant funding would support audit, oracle hardening, Chainlink Automation/Functions work, and a risk-boxed L2 pilot.
 
 ## Problem
 
@@ -26,7 +26,7 @@ SolarPunk builds an open-source prototype for energy-linked settlement and hedgi
 
 ## Current Traction / Evidence
 
-- 96/96 smart contract tests passing.
+- 102/102 smart contract tests passing.
 - Five source-verified legacy Sepolia contracts plus three source-verified attested SPK proof contracts.
 - Public signed-meter -> attested SPK mint proof: 2,606.7 kWh accepted surplus, 130.1697 SPK minted.
 - Public readback checks: 7/7 passed in `docs/product/SPK_PUBLIC_READBACK.md`.

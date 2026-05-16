@@ -16,7 +16,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | Public proof readback | Read-only Sepolia check of tx success, consumed attestation hash, consumed source hash, and recipient balance | [`docs/product/SPK_PUBLIC_READBACK.md`](../product/SPK_PUBLIC_READBACK.md) |
 | Pilot meter import | Meter onboarding + CSV import path for inverter/meter exports | [`docs/project/METER_CSV_IMPORT.md`](../project/METER_CSV_IMPORT.md) |
 | Product empirics | Single-product empirical dossier tying thesis evidence to SPK | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](../product/SPK_PRODUCT_EMPIRICS.md) |
-| Tests | 96/96 Hardhat tests passing | `npx hardhat test` |
+| Tests | 102/102 Hardhat tests passing | `npx hardhat test` |
 | Daily real-data run | NASA POWER -> Sepolia keeper running since 2026-04-20 | [`docs/project/DAILY_EXPERIMENT_STATUS.md`](../project/DAILY_EXPERIMENT_STATUS.md) |
 | Latest keeper tx | 2026-05-14 `updateIndex` tx | [`EVIDENCE.md`](../../EVIDENCE.md) |
 | Frontend demo | Vite/React proof dashboard with live Sepolia reads | https://spectating101.github.io/solarpunk-coin/ |

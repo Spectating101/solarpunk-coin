@@ -4,7 +4,7 @@ SolarPunk is **renewable-energy monetary infrastructure**. The current launch su
 
 The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.
 
-**Status (May 2026):** Live Sepolia prototype for the earlier core contracts, public attested SPK mint proof, 96/96 contract tests, daily NASA -> on-chain oracle keeper running since April 20, independent code review complete.
+**Status (May 2026):** Live Sepolia prototype for the earlier core contracts, public attested SPK mint proof, 102/102 contract tests, daily NASA -> on-chain oracle keeper running since April 20, independent code review complete.
 
 **Public demo:** https://spectating101.github.io/solarpunk-coin/
 
@@ -19,6 +19,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/PUBLIC_LAB_SOCIAL_KIT.md`](./docs/product/PUBLIC_LAB_SOCIAL_KIT.md) | Public announcement copy, social guardrails, and validation metrics |
 | [`docs/product/PRODUCT_LAUNCH_GATE.md`](./docs/product/PRODUCT_LAUNCH_GATE.md) | Launch gate: public lab/testnet launchable; paid/mainnet blocked |
 | [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: proof, pilot surrogate, receipt surrogate, settlement surrogate |
+| [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
 | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](./docs/product/SPK_PRODUCT_EMPIRICS.md) | Single-product SPK proof and empirical dossier |
 | [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
 | [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |
@@ -47,6 +48,7 @@ Primary SPK product path:
 Supporting modules:
 
 - **`SolarPunkCoin`** — energy-backed token with signed surplus-attestation minting, PI controller, oracle-gated minting, reserve ratio checks, bond-gated operators
+- **`SolarPunkCurrencySystem`** — SPK invoice-settlement and energy-redemption registry; transfers SPK against hashed invoices, burns SPK into owed-kWh receipts, and records fulfillment/shortfall/dispute states
 - **`SolarPunkOption`** — margin-based clearinghouse for European energy index options; useful for hedging and stress-testing the same energy-price basis
 - **`ProtocolTreasury`** — fee vault with 4-bucket budget split, keeper bond escrow with slashing
 - **`StabilityPool`** — dedicated peg-stability vault (separated from coin contract for blast-radius isolation)
@@ -82,7 +84,7 @@ These public contracts prove the earlier SPK system state and daily keeper path.
 
 ## What is verified and running
 
-- **96/96 smart contract tests** — `npx hardhat test`
+- **102/102 smart contract tests** — `npx hardhat test`
 - **Public attested SPK mint proof** — see `docs/product/SPK_ATTESTED_MINT_PROOF.md`
   - Sample bundle: `4` signed raw readings, `2` accepted, `2` rejected, `2` verified device signatures
   - Accepted surplus: `2606.7` kWh
@@ -123,7 +125,7 @@ These public contracts prove the earlier SPK system state and daily keeper path.
 # Install
 npm install
 
-# Run all tests (96 passing)
+# Run all tests (102 passing)
 npx hardhat test
 
 # Reproduce the SPK product proof
@@ -134,6 +136,7 @@ npm run proof:spk-public-readback
 npm run product:empirics
 npm run product:launch-gate
 npm run product:currency-lab
+npm run product:currency-framework
 
 # Import a pilot-style meter CSV into signed raw readings
 npm run meter:onboard -- --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --device-address=0x... --capacity-kw=120

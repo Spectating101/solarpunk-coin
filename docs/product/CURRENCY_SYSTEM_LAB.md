@@ -1,6 +1,6 @@
 # SolarPunk Currency System Lab
 
-- generated_at: `2026-05-15T16:57:48.079Z`
+- generated_at: `2026-05-16T06:08:44.382Z`
 - thesis: Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.
 
 ## Source Evidence
@@ -8,6 +8,7 @@
 | Item | Value |
 |---|---:|
 | SPK contract | `0x8ceDa149EDE44078bf151b3334513916a84df820` |
+| Currency framework contract | `contracts/SolarPunkCurrencySystem.sol` |
 | Mint tx | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` |
 | Accepted surplus | `2606.7` kWh |
 | Minted SPK | `130.1697` |
@@ -21,8 +22,8 @@
 |---:|---|---|---|---|
 | 1 | Public lab primitive | `real_public_testnet` | Signed meter fixture data has produced a replay-protected SPK mint on Sepolia with public readback. | none |
 | 2 | Closed pilot surrogate | `simulated_from_public_fixture` | The same accepted bundle is treated as a named pilot stand-in to exercise the operating loop. | Governed attested-SPK redeploy plus one real meter or inverter export. |
-| 3 | Redeemable energy receipt surrogate | `lab_model_only` | SPK is mapped to a bounded energy-credit equivalent at the observed energy price, with redemption represented as a ledger burn. | Legal/commercial redemption terms and a real operator obligation. |
-| 4 | Networked settlement asset surrogate | `lab_model_only` | The minted SPK is circulated across a producer, gateway, maintenance provider, buyer, and merchant while preserving accounting conservation. | External counterparties and real transactions. |
+| 3 | Redeemable energy receipt framework | `local_contract_tested` | SPK can be transferred into SolarPunkCurrencySystem, burned through redeemForEnergy, and recorded as an owed-kWh receipt with fulfillment/shortfall/dispute states. | Deploy beside the attested SPK proof stack and bind to one real redemption operator. |
+| 4 | Networked settlement framework | `local_contract_tested` | SPK invoice settlement is implemented as a replay-protected payment router while the lab ledger models multi-party circulation and conservation. | Deploy and run one real invoice/counterparty settlement. |
 
 ## Settlement Ledger
 
@@ -52,6 +53,7 @@
 ## Claim Boundaries
 
 - Layer 1 is public Sepolia evidence.
-- Layers 2-4 are compressed lab models, not proof of real commercial adoption.
+- Layer 2 is still a compressed pilot surrogate.
+- Layers 3-4 now have local contract/test coverage, but no public deployment or real commercial adoption.
 - No token sale, mainnet readiness, yield, audit completion, or legal redemption claim is made.
-- The purpose is to test whether the currency-system logic is coherent enough to recruit real pilot evidence.
+- The purpose is to test whether the currency-system logic is coherent enough to start a field receipt loop.

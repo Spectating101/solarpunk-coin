@@ -130,7 +130,7 @@ Reason: user explicitly marked these as separate academic research assets.
 
 Last checked:
 
-- `npm test`: 96 passing
+- `npm test`: 102 passing
 - `npm run attestations:test`: 14 passing
 - `npm run proof:spk-public-readback`: passing
 - frontend build: passing

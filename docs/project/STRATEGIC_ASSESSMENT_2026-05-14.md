@@ -39,7 +39,7 @@ This is now backed by code, tests, a source-verified Sepolia proof stack, a publ
 ### Evidence Surface
 
 - `README.md`, `EVIDENCE.md`, `CURRENT_STATUS.md`, `docs/grants/REVIEWER_PACKET.md`, and `docs/product/` now point at the SPK product path.
-- Contract tests pass: `96/96`.
+- Contract tests pass: `102/102`.
 - Node attestation tests pass: `14/14`.
 - Frontend build and tests pass.
 - Sepolia readback passes.

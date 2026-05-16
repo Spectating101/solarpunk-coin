@@ -21,6 +21,7 @@ The lab exists to answer one question:
 | Meter CSV import | Pilot-style adapter path | `docs/project/METER_CSV_IMPORT.md` |
 | Product launch gate | Explicit launch status | `docs/product/PRODUCT_LAUNCH_GATE.md` |
 | Currency system lab | Four-layer compressed currency prototype | `docs/product/CURRENCY_SYSTEM_LAB.md` |
+| Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 | Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
 | Evidence register | Reviewer receipts | `EVIDENCE.md` |
 
@@ -68,6 +69,7 @@ Run this loop while looking for partners, grants, and pilot users:
 ```bash
 npm run product:launch-gate
 npm run product:currency-lab
+npm run product:currency-framework
 npm run product:empirics
 npm test
 npm run attestations:test

@@ -17,7 +17,7 @@ test("currency lab keeps real proof separate from simulated layers", () => {
   assert.equal(report.layers.length, 4);
   assert.equal(report.layers[0].status, "real_public_testnet");
   assert.equal(report.layers[1].status, "simulated_from_public_fixture");
-  assert.equal(report.layers[2].status, "lab_model_only");
-  assert.equal(report.layers[3].status, "lab_model_only");
+  assert.equal(report.layers[2].status, "local_contract_tested");
+  assert.equal(report.layers[3].status, "local_contract_tested");
   assert.equal(report.ledger.accounting.conservation_pass, true);
 });

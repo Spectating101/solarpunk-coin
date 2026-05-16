@@ -127,6 +127,7 @@ function buildCurrencyLab(options = {}) {
     thesis: "Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.",
     source_evidence: {
       spk_contract: meter.contract_address,
+      currency_framework_contract: "contracts/SolarPunkCurrencySystem.sol",
       mint_tx: meter.tx_hash,
       source_hash: meter.source_hash,
       attestation_hash: meter.attestation_hash,
@@ -156,27 +157,28 @@ function buildCurrencyLab(options = {}) {
       },
       {
         id: 3,
-        name: "Redeemable energy receipt surrogate",
-        status: "lab_model_only",
-        claim: "SPK is mapped to a bounded energy-credit equivalent at the observed energy price, with redemption represented as a ledger burn.",
-        evidence: ["state/product/currency_system_lab.json"],
-        blocker_to_upgrade: "Legal/commercial redemption terms and a real operator obligation.",
+        name: "Redeemable energy receipt framework",
+        status: "local_contract_tested",
+        claim: "SPK can be transferred into SolarPunkCurrencySystem, burned through redeemForEnergy, and recorded as an owed-kWh receipt with fulfillment/shortfall/dispute states.",
+        evidence: ["contracts/SolarPunkCurrencySystem.sol", "test/SolarPunkCurrencySystem.test.js"],
+        blocker_to_upgrade: "Deploy beside the attested SPK proof stack and bind to one real redemption operator.",
       },
       {
         id: 4,
-        name: "Networked settlement asset surrogate",
-        status: "lab_model_only",
-        claim: "The minted SPK is circulated across a producer, gateway, maintenance provider, buyer, and merchant while preserving accounting conservation.",
-        evidence: ["state/product/currency_system_lab.json"],
-        blocker_to_upgrade: "External counterparties and real transactions.",
+        name: "Networked settlement framework",
+        status: "local_contract_tested",
+        claim: "SPK invoice settlement is implemented as a replay-protected payment router while the lab ledger models multi-party circulation and conservation.",
+        evidence: ["contracts/SolarPunkCurrencySystem.sol", "state/product/currency_system_lab.json"],
+        blocker_to_upgrade: "Deploy and run one real invoice/counterparty settlement.",
       },
     ],
     ledger,
     claim_boundaries: [
       "Layer 1 is public Sepolia evidence.",
-      "Layers 2-4 are compressed lab models, not proof of real commercial adoption.",
+      "Layer 2 is still a compressed pilot surrogate.",
+      "Layers 3-4 now have local contract/test coverage, but no public deployment or real commercial adoption.",
       "No token sale, mainnet readiness, yield, audit completion, or legal redemption claim is made.",
-      "The purpose is to test whether the currency-system logic is coherent enough to recruit real pilot evidence.",
+      "The purpose is to test whether the currency-system logic is coherent enough to start a field receipt loop.",
     ],
   };
 }
@@ -193,6 +195,7 @@ function writeMarkdown(filePath, report) {
   lines.push("| Item | Value |");
   lines.push("|---|---:|");
   lines.push(`| SPK contract | \`${report.source_evidence.spk_contract}\` |`);
+  lines.push(`| Currency framework contract | \`${report.source_evidence.currency_framework_contract}\` |`);
   lines.push(`| Mint tx | \`${report.source_evidence.mint_tx}\` |`);
   lines.push(`| Accepted surplus | \`${report.source_evidence.accepted_surplus_kwh}\` kWh |`);
   lines.push(`| Minted SPK | \`${report.source_evidence.minted_spk}\` |`);

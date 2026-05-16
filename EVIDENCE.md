@@ -146,7 +146,21 @@ This is the first practical bridge from a meter/inverter export into the same si
 
 Scope note: this is not hardware certification. It is the pilot-ingestion bridge needed before connecting a real meter gateway or inverter API.
 
-### 2.7 Test Suite (Reproducible, Run by Anyone)
+### 2.7 SPK Currency Framework Contract
+
+This is the first internal currency-framework layer around SPK. It does not mint SPK; it uses SPK as the settlement asset.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Invoice settlement | Implemented with hashed invoice replay protection | `contracts/SolarPunkCurrencySystem.sol` |
+| Energy redemption receipt | Implemented: transfer SPK into registry, burn via `redeemForEnergy`, record owed kWh | Same file |
+| Delivery resolution | Pending, fulfilled, shortfall, disputed states | Same file |
+| Contract tests | 6 additional Hardhat tests | `test/SolarPunkCurrencySystem.test.js` |
+| Internal readiness report | 7/7 checks pass | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
+
+Scope note: this is a local contract/test/readiness layer, not a deployed Sepolia/mainnet currency stack yet.
+
+### 2.8 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -154,11 +168,11 @@ npm install
 npx hardhat test
 ```
 
-Expected output: **96 passing**, including signed surplus-attestation replay, reused-source, non-oracle, expired, future-window, empty-source, and invalid-window rejection tests.
+Expected output: **102 passing**, including signed surplus-attestation replay, reused-source, non-oracle, expired, future-window, empty-source, invalid-window rejection tests, and SPK currency-framework settlement/redemption tests.
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.8 Python Pricing Library (Reproducible)
+### 2.9 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives

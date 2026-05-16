@@ -8,16 +8,18 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import currencyLab from '../../../state/product/currency_system_lab.json';
+import currencyFramework from '../../../state/product/currency_framework_readiness.json';
 import { GITHUB_REPO } from '../constants/contracts';
 
 const statusCopy = {
   real_public_testnet: 'Real public proof',
   simulated_from_public_fixture: 'Pilot surrogate',
+  local_contract_tested: 'Local contract tested',
   lab_model_only: 'Lab model only',
 };
 
 function statusClass(status) {
-  return status === 'real_public_testnet' ? 'launchable' : 'blocked';
+  return status === 'real_public_testnet' || status === 'local_contract_tested' ? 'launchable' : 'blocked';
 }
 
 function formatNumber(value, digits = 4) {
@@ -36,8 +38,8 @@ export default function CurrencyLab() {
           <h1>Better currency thesis, compressed into one lab run.</h1>
           <p>
             This is the fast path across the first four layers: public proof, pilot surrogate,
-            redeemable receipt surrogate, and network settlement surrogate. Layer 1 is public Sepolia evidence.
-            Layers 2-4 are deliberately labelled as lab models until real counterparties exist.
+            redeemable receipt framework, and network settlement framework. Layer 1 is public Sepolia evidence.
+            Layers 3-4 now have local contract coverage, while Layer 2 still waits for a real field receipt loop.
           </p>
         </div>
         <div className={`system-tile ${accounting.conservation_pass ? 'good' : 'warn'}`}>
@@ -73,6 +75,13 @@ export default function CurrencyLab() {
           <div className="metric-label">Daily Keeper Runs</div>
           <div className="metric-value">{currencyLab.source_evidence.daily_keeper_runs}</div>
           <div className="metric-sub">latest {currencyLab.source_evidence.latest_keeper_run}</div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Framework Readiness</div>
+          <div className="metric-value">
+            {currencyFramework.readiness.passed}/{currencyFramework.readiness.total}
+          </div>
+          <div className="metric-sub">{currencyFramework.current_internal_stage.replaceAll('_', ' ')}</div>
         </div>
       </div>
 
@@ -139,6 +148,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/state/product/currency_system_lab.json`} target="_blank" rel="noreferrer">
               JSON receipt <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/CURRENCY_FRAMEWORK_READINESS.md`} target="_blank" rel="noreferrer">
+              Framework readiness <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

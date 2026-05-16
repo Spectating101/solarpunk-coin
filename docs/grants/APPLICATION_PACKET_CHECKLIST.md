@@ -24,7 +24,7 @@ Use this checklist before submitting ESP, Chainlink BUILD, academic grants, or e
 
 ## Claims allowed
 
-- 96/96 smart contract tests passing.
+- 102/102 smart contract tests passing.
 - Live source-verified Sepolia deployment, including the attested SPK proof stack.
 - Public signed-meter -> attested SPK mint proof and read-only Sepolia readback.
 - Daily NASA POWER -> Sepolia keeper running with committed artifacts.

@@ -6,7 +6,7 @@ Energy-backed stablecoin on Polygon. Mints SPK based on verified renewable energ
 
 ### Prerequisites
 
-- Node.js 16.x (recommended for current Hardhat toolchain)
+- Node.js 20-22 (see root `.nvmrc`)
 - npm or yarn
 - Hardhat
 - Python 3.8+ (for simulation)
@@ -56,6 +56,15 @@ Implements 10 failure-mode mitigations (Rules A-J):
 | **J** | Decentralized Governance | Role-based access, DAO upgrade path |
 
 ### Core Functions
+
+### Currency Framework: SolarPunkCurrencySystem.sol
+
+`SolarPunkCurrencySystem` is the local currency-framework layer around SPK. It does not mint new SPK. It only consumes existing SPK through two flows:
+
+- `settleInvoice(payee, spkAmount, invoiceHash)` transfers SPK from payer to payee and records a replay-protected invoice hash.
+- `openRedemption(beneficiary, spkAmount, minKwhWad, sourceHash)` transfers SPK into the registry, calls `SolarPunkCoin.redeemForEnergy()`, burns the SPK, and records an owed-kWh redemption receipt.
+- `resolveRedemption(redemptionId, deliveredKwhWad, resolutionHash)` records fulfillment or shortfall.
+- `disputeRedemption(redemptionId, disputeHash)` lets the redeemer or beneficiary move a receipt into dispute before operator resolution.
 
 #### Minting (Rule A)
 
