@@ -178,7 +178,23 @@ This expands the product proof from "solar-only story" into a resource benchmark
 
 Scope note: NASA resource estimates, capacity-factor models, and oil unit conversions are benchmarking inputs only. SPK issuance still requires the signed meter-attestation path.
 
-### 2.9 Test Suite (Reproducible, Run by Anyone)
+### 2.9 Energy-Standard Economics
+
+This is the raw economic/finance spine of the system: the gold-standard analogy, the issuance equation, the kWh/SPK basis, capacity scenarios, velocity sensitivity, and the finance risk register.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Core framing | Energy-standard cryptocurrency: verified renewable-energy surplus replaces gold as the backing base | `docs/product/ENERGY_STANDARD_ECONOMICS.md` |
+| Issuance equation | `gross_spk = accepted_surplus_kwh * energy_price_usd_per_kwh` | Same file |
+| Current convertibility basis | `$0.05/kWh`, so `1 SPK = 20 kWh` basis | `state/product/energy_standard_economics.json` |
+| Proof formula check | `2606 kWh * $0.05/kWh * (1 - 10 bps) = 130.1697 SPK` | Same file |
+| 10 kW annual sensitivity | `10,038.12 kWh/year` -> `501.404094 SPK/year` at current basis | `state/product/energy_standard_scenarios.csv` |
+| Utility-scale reference sensitivity | `100,381,200 kWh/year` -> `5,014,040.94 SPK/year` at current basis | Same file |
+| Monetary function readiness | Issuance discipline implemented; unit of account, medium of exchange, deferred payment, and backing transparency partial; store of value not proven | `docs/product/ENERGY_STANDARD_ECONOMICS.md` |
+
+Scope note: this is not a claim of legal money status, investment return, or production redemption. It is a testable monetary model over the existing proof stack.
+
+### 2.10 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -190,7 +206,7 @@ Expected output: **102 passing**, including signed surplus-attestation replay, r
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.10 Python Pricing Library (Reproducible)
+### 2.11 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives

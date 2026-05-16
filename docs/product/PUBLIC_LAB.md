@@ -25,6 +25,7 @@ The lab exists to answer one question:
 | Field receipt loop | Local mint -> settlement -> redemption -> delivery receipt | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Theory and comparables | External anchors and honest positioning | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
 | Multi-resource benchmark | NASA solar/wind data, PV conversion/cost model, renewable benchmark matrix, oil-only comparison | `docs/product/RESOURCE_BENCHMARK_LAB.md` |
+| Energy-standard economics | Gold-standard mapping, issuance equations, kWh/SPK convertibility, scenarios, velocity, and finance risks | `docs/product/ENERGY_STANDARD_ECONOMICS.md` |
 | Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
 | Evidence register | Reviewer receipts | `EVIDENCE.md` |
 
@@ -75,6 +76,7 @@ npm run product:currency-lab
 npm run product:currency-framework
 npm run product:field-receipt
 npm run product:resource-benchmark
+npm run product:energy-standard
 npm run product:empirics
 npm test
 npm run attestations:test

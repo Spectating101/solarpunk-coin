@@ -1,0 +1,351 @@
+{
+  "generated_at": "2026-05-16T15:02:36.887Z",
+  "title": "SolarPunk Energy Standard Economics",
+  "one_line": "SolarPunk is an energy-standard cryptocurrency: a modern gold-standard system where verified renewable-energy surplus replaces gold as the backing base.",
+  "thesis": "SPK supply should expand only when productive energy surplus is measured, admitted, signed, and converted through a transparent issuance rule.",
+  "monetary_equations": {
+    "issuance": "gross_spk = accepted_surplus_kwh * energy_price_usd_per_kwh",
+    "net_issuance": "net_spk = gross_spk * (1 - mint_fee_bps / 10000)",
+    "convertibility": "owed_kwh = redeemed_spk / energy_price_usd_per_kwh",
+    "settlement_velocity": "effective_settlement_volume = circulating_spk * velocity",
+    "fee_capture": "protocol_currency_fee = mint_fee_spk + redemption_fee_spk; settlement transfers currently have no protocol fee in SolarPunkCurrencySystem"
+  },
+  "current_monetary_state": {
+    "energy_price_usd_per_kwh": 0.05,
+    "kwh_per_1_spk_at_current_basis": 20,
+    "accepted_surplus_kwh_fixture": 2606.7,
+    "public_or_local_minted_spk": 130.1697,
+    "issuance_formula_net_spk": 130.1697,
+    "issuance_formula_delta_spk": 0,
+    "active_supply_spk_lab": 110.1697,
+    "active_supply_energy_equivalent_kwh_lab": 2203.394,
+    "redeemed_spk_lab": 20,
+    "redeemed_energy_equivalent_kwh_lab": 400,
+    "settlement_volume_spk_lab": 83,
+    "settlement_velocity_ratio_lab": 0.6376
+  },
+  "proof_issuance_math": {
+    "source": "state/product/field_receipt_loop.json + state/product/currency_system_lab.json",
+    "surplus_kwh": 2606,
+    "energy_price_usd_per_kwh": 0.05,
+    "gross_issuance_spk": 130.3,
+    "mint_fee_bps": 10,
+    "mint_fee_spk": 0.1303,
+    "net_issuance_spk": 130.1697,
+    "implied_kwh_per_net_spk": 20.02002,
+    "observed_minted_spk": 130.1697,
+    "observed_matches_formula": true
+  },
+  "empirical_foundation": {
+    "ceir_pre_ban_coefficient": -0.257131,
+    "ceir_post_ban_coefficient": -0.634255,
+    "chow_pvalue": 1.1102230246251565e-16,
+    "interpretation": "The thesis evidence motivates energy as an economically meaningful crypto variable; it does not by itself prove SPK demand or legal currency status."
+  },
+  "solar_resource_basis": {
+    "source": "state/product/resource_benchmark_lab.json",
+    "location": {
+      "name": "Taoyuan, Taiwan",
+      "latitude": 24.99,
+      "longitude": 121.3
+    },
+    "standard_system_kw_dc": 10,
+    "panel_area_m2": 50,
+    "latest_day_kwh": 28.0068,
+    "annualized_kwh": 10038.12,
+    "installed_cost_usd_before_incentives": 31500,
+    "cost_basis_boundary": "This is a sizing assumption from the resource benchmark, not a vendor quote or investment-return promise."
+  },
+  "price_basis_sensitivity": [
+    {
+      "energy_price_usd_per_kwh": 0.05,
+      "kwh_per_spk": 20,
+      "annual_gross_issuance_spk_10kw": 501.906,
+      "annual_net_issuance_spk_10kw": 501.404094,
+      "mint_fee_spk_10kw": 0.501906,
+      "simple_payback_years_10kw_before_incentives": 62.76
+    },
+    {
+      "energy_price_usd_per_kwh": 0.1,
+      "kwh_per_spk": 10,
+      "annual_gross_issuance_spk_10kw": 1003.812,
+      "annual_net_issuance_spk_10kw": 1002.808188,
+      "mint_fee_spk_10kw": 1.003812,
+      "simple_payback_years_10kw_before_incentives": 31.38
+    },
+    {
+      "energy_price_usd_per_kwh": 0.2,
+      "kwh_per_spk": 5,
+      "annual_gross_issuance_spk_10kw": 2007.624,
+      "annual_net_issuance_spk_10kw": 2005.616376,
+      "mint_fee_spk_10kw": 2.007624,
+      "simple_payback_years_10kw_before_incentives": 15.69
+    },
+    {
+      "energy_price_usd_per_kwh": 0.35,
+      "kwh_per_spk": 2.8571,
+      "annual_gross_issuance_spk_10kw": 3513.342,
+      "annual_net_issuance_spk_10kw": 3509.828658,
+      "mint_fee_spk_10kw": 3.513342,
+      "simple_payback_years_10kw_before_incentives": 8.97
+    }
+  ],
+  "capacity_scenarios": [
+    {
+      "id": "single_rooftop_10kw",
+      "label": "Single rooftop",
+      "interpretation": "One normal home-scale solar system.",
+      "capacity_kw": 10,
+      "scale_vs_10kw_system": 1,
+      "average_daily_kwh": 27.5,
+      "latest_daily_kwh": 28.01,
+      "annual_kwh": 10038.12,
+      "gross_issuance_spk": 501.906,
+      "net_issuance_spk": 501.404094,
+      "mint_fee_spk": 0.501906,
+      "same_cost_capex_usd": 31500,
+      "simple_payback_years": 62.76,
+      "settlement_capacity_spk_by_velocity": {
+        "0.5x": 250.7,
+        "1x": 501.4,
+        "3x": 1504.21,
+        "10x": 5014.04
+      },
+      "redemption_fee_spk_by_redemption_fraction": {
+        "25pct_redeemed": 0.1254,
+        "50pct_redeemed": 0.2507,
+        "100pct_redeemed": 0.5014
+      },
+      "boundary": "This is a solar production and issuance sensitivity. Actual SPK minting requires accepted signed meter or inverter surplus attestations."
+    },
+    {
+      "id": "neighborhood_250kw",
+      "label": "Neighborhood cluster",
+      "interpretation": "A small bundle of homes, shops, or campus roofs.",
+      "capacity_kw": 250,
+      "scale_vs_10kw_system": 25,
+      "average_daily_kwh": 687.54,
+      "latest_daily_kwh": 700.17,
+      "annual_kwh": 250953,
+      "gross_issuance_spk": 12547.65,
+      "net_issuance_spk": 12535.10235,
+      "mint_fee_spk": 12.54765,
+      "same_cost_capex_usd": 787500,
+      "simple_payback_years": 62.76,
+      "settlement_capacity_spk_by_velocity": {
+        "0.5x": 6267.55,
+        "1x": 12535.1,
+        "3x": 37605.31,
+        "10x": 125351.02
+      },
+      "redemption_fee_spk_by_redemption_fraction": {
+        "25pct_redeemed": 3.1338,
+        "50pct_redeemed": 6.2676,
+        "100pct_redeemed": 12.5351
+      },
+      "boundary": "This is a solar production and issuance sensitivity. Actual SPK minting requires accepted signed meter or inverter surplus attestations."
+    },
+    {
+      "id": "commercial_1mw",
+      "label": "Commercial portfolio",
+      "interpretation": "Warehouse, school, factory, or small operator portfolio.",
+      "capacity_kw": 1000,
+      "scale_vs_10kw_system": 100,
+      "average_daily_kwh": 2750.17,
+      "latest_daily_kwh": 2800.68,
+      "annual_kwh": 1003812,
+      "gross_issuance_spk": 50190.6,
+      "net_issuance_spk": 50140.4094,
+      "mint_fee_spk": 50.1906,
+      "same_cost_capex_usd": 3150000,
+      "simple_payback_years": 62.76,
+      "settlement_capacity_spk_by_velocity": {
+        "0.5x": 25070.2,
+        "1x": 50140.41,
+        "3x": 150421.23,
+        "10x": 501404.09
+      },
+      "redemption_fee_spk_by_redemption_fraction": {
+        "25pct_redeemed": 12.5351,
+        "50pct_redeemed": 25.0702,
+        "100pct_redeemed": 50.1404
+      },
+      "boundary": "This is a solar production and issuance sensitivity. Actual SPK minting requires accepted signed meter or inverter surplus attestations."
+    },
+    {
+      "id": "microgrid_5mw",
+      "label": "Community microgrid",
+      "interpretation": "A serious local energy economy, still below utility scale.",
+      "capacity_kw": 5000,
+      "scale_vs_10kw_system": 500,
+      "average_daily_kwh": 13750.85,
+      "latest_daily_kwh": 14003.4,
+      "annual_kwh": 5019060,
+      "gross_issuance_spk": 250953,
+      "net_issuance_spk": 250702.047,
+      "mint_fee_spk": 250.953,
+      "same_cost_capex_usd": 15750000,
+      "simple_payback_years": 62.76,
+      "settlement_capacity_spk_by_velocity": {
+        "0.5x": 125351.02,
+        "1x": 250702.05,
+        "3x": 752106.14,
+        "10x": 2507020.47
+      },
+      "redemption_fee_spk_by_redemption_fraction": {
+        "25pct_redeemed": 62.6755,
+        "50pct_redeemed": 125.351,
+        "100pct_redeemed": 250.702
+      },
+      "boundary": "This is a solar production and issuance sensitivity. Actual SPK minting requires accepted signed meter or inverter surplus attestations."
+    },
+    {
+      "id": "utility_100mw",
+      "label": "Utility-scale reference",
+      "interpretation": "Large reference case for monetary scale, not a launch claim.",
+      "capacity_kw": 100000,
+      "scale_vs_10kw_system": 10000,
+      "average_daily_kwh": 275017,
+      "latest_daily_kwh": 280068,
+      "annual_kwh": 100381200,
+      "gross_issuance_spk": 5019060,
+      "net_issuance_spk": 5014040.94,
+      "mint_fee_spk": 5019.06,
+      "same_cost_capex_usd": 315000000,
+      "simple_payback_years": 62.76,
+      "settlement_capacity_spk_by_velocity": {
+        "0.5x": 2507020.47,
+        "1x": 5014040.94,
+        "3x": 15042122.82,
+        "10x": 50140409.4
+      },
+      "redemption_fee_spk_by_redemption_fraction": {
+        "25pct_redeemed": 1253.5102,
+        "50pct_redeemed": 2507.0205,
+        "100pct_redeemed": 5014.0409
+      },
+      "boundary": "This is a solar production and issuance sensitivity. Actual SPK minting requires accepted signed meter or inverter surplus attestations."
+    }
+  ],
+  "gold_standard_mapping": [
+    {
+      "gold_standard": "Gold reserve base",
+      "energy_standard": "Verified renewable surplus base",
+      "implementation": "signed meter/inverter data, source hashes, oracle attestation, replay protection",
+      "remaining_risk": "meter custody, data quality, basis mismatch, and operator honesty"
+    },
+    {
+      "gold_standard": "Assay and vault custody",
+      "energy_standard": "Measurement, signature, and registry custody",
+      "implementation": "meter registry, accepted bundle, consumed source hash, accepted kWh",
+      "remaining_risk": "hardware certification and no-double-counting registry discipline"
+    },
+    {
+      "gold_standard": "Convertibility promise",
+      "energy_standard": "Redemption into owed-kWh receipt",
+      "implementation": "redeemForEnergy, burn accounting, fulfillment/shortfall/dispute states",
+      "remaining_risk": "legal redemption terms and real delivery counterparty"
+    },
+    {
+      "gold_standard": "Scarce mine output constrains issuance",
+      "energy_standard": "Measured productive surplus constrains issuance",
+      "implementation": "mintFromSurplusAttestation accepts only admissible surplus evidence",
+      "remaining_risk": "governance must not weaken admissibility rules"
+    }
+  ],
+  "monetary_function_readiness": [
+    {
+      "function": "Issuance discipline",
+      "status": "implemented_in_proof_stack",
+      "evidence": "SPK mints from signed surplus attestation with source-hash replay protection."
+    },
+    {
+      "function": "Unit of account",
+      "status": "partial",
+      "evidence": "Prototype uses a USD/kWh basis; the deeper energy standard is kWh-per-SPK convertibility."
+    },
+    {
+      "function": "Medium of exchange",
+      "status": "local_lab",
+      "evidence": "SolarPunkCurrencySystem settles hashed invoices in SPK locally."
+    },
+    {
+      "function": "Store of value",
+      "status": "not_proven",
+      "evidence": "Needs real redemption terms, liquidity, governance, audit, and user demand."
+    },
+    {
+      "function": "Standard of deferred payment",
+      "status": "partial",
+      "evidence": "Redemption receipts can record owed kWh with fulfillment, shortfall, and dispute states."
+    },
+    {
+      "function": "Reserve/backing transparency",
+      "status": "partial",
+      "evidence": "Energy evidence and public readback exist; production-grade registry, audit, and operator controls are still open."
+    }
+  ],
+  "finance_risk_register": [
+    {
+      "risk": "Basis risk",
+      "meaning": "A generic kWh estimate is not always deliverable where and when the holder needs energy.",
+      "control": "Move toward time/location/source-tagged receipts."
+    },
+    {
+      "risk": "Oracle and meter risk",
+      "meaning": "Bad hardware, bad signatures, duplicate claims, or compromised operators can corrupt issuance.",
+      "control": "Hardware-backed meters, no-double-counting registry, multi-oracle checks, and slashing."
+    },
+    {
+      "risk": "Redemption mismatch",
+      "meaning": "Issued SPK may circulate faster or farther than the operator's real delivery ability.",
+      "control": "Caps, redemption queues, insurance fund, shortfall rules, and local delivery domains."
+    },
+    {
+      "risk": "Price-basis governance",
+      "meaning": "Changing USD/kWh basis changes issuance volume and kWh-per-SPK convertibility.",
+      "control": "Transparent governance delay, public parameter history, and basis-policy disclosure."
+    },
+    {
+      "risk": "Regulatory classification",
+      "meaning": "SPK could be treated as prepaid energy credit, commodity receipt, stablecoin-like token, security, or another instrument.",
+      "control": "Legal scope before paid/mainnet launch."
+    }
+  ],
+  "hard_boundaries": [
+    "This is an economic framework and sensitivity model, not a claim of legal money status.",
+    "The protocol does not create energy; it creates an issuance rule over verified productive energy surplus.",
+    "NASA/resource estimates can size the backing base, but cannot mint SPK.",
+    "The current redemption loop is local/lab evidence unless a real operator accepts the obligation.",
+    "The same-cost capex sensitivity is not a vendor quote, project-finance model, or expected return promise."
+  ],
+  "next_finance_build_targets": [
+    "Add time/location/vintage tags to SPK issuance and redemption receipts.",
+    "Build a monetary stress harness for redemption waves, velocity spikes, oracle errors, and shortfalls.",
+    "Define an explicit reserve/insurance fund policy tied to outstanding owed-kWh exposure.",
+    "Write a legally cautious redemption policy for pilot operators.",
+    "Replace the resource benchmark with one real generator export and rerun the same issuance model."
+  ],
+  "references": [
+    {
+      "name": "BIS unified ledger/tokenisation framing",
+      "url": "https://www.bis.org/publ/arpdf/ar2023e3.htm",
+      "relevance": "Programmable settlement and tokenised claims framing."
+    },
+    {
+      "name": "FSB global stablecoin recommendations",
+      "url": "https://www.fsb.org/2023/07/high-level-recommendations-for-the-regulation-supervision-and-oversight-of-global-stablecoin-arrangements-final-report/",
+      "relevance": "Governance, redemption, risk management, and disclosure requirements for stable-value systems."
+    },
+    {
+      "name": "US EPA renewable energy certificates",
+      "url": "https://www.epa.gov/green-power-markets/renewable-energy-certificates-recs",
+      "relevance": "Renewable generation attributes, certificate tracking, ownership, and retirement discipline."
+    },
+    {
+      "name": "NASA POWER Daily API",
+      "url": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+      "relevance": "Empirical resource basis for solar and wind benchmark sizing."
+    }
+  ]
+}

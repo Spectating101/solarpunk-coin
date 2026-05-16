@@ -1,0 +1,6 @@
+id,label,capacity_kw,annual_kwh,gross_issuance_spk,net_issuance_spk,mint_fee_spk,same_cost_capex_usd,simple_payback_years
+single_rooftop_10kw,Single rooftop,10,10038.12,501.906,501.404094,0.501906,31500,62.76
+neighborhood_250kw,Neighborhood cluster,250,250953,12547.65,12535.10235,12.54765,787500,62.76
+commercial_1mw,Commercial portfolio,1000,1003812,50190.6,50140.4094,50.1906,3150000,62.76
+microgrid_5mw,Community microgrid,5000,5019060,250953,250702.047,250.953,15750000,62.76
+utility_100mw,Utility-scale reference,100000,100381200,5019060,5014040.94,5019.06,315000000,62.76

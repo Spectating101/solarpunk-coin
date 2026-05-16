@@ -11,6 +11,7 @@ import currencyLab from '../../../state/product/currency_system_lab.json';
 import currencyFramework from '../../../state/product/currency_framework_readiness.json';
 import fieldReceipt from '../../../state/product/field_receipt_loop.json';
 import resourceBenchmark from '../../../state/product/resource_benchmark_lab.json';
+import energyStandard from '../../../state/product/energy_standard_economics.json';
 import { GITHUB_REPO } from '../constants/contracts';
 
 const statusCopy = {
@@ -52,11 +53,11 @@ export default function CurrencyLab() {
       <div className="proof-hero currency-hero">
         <div>
           <div className="eyebrow"><Coins size={14} /> Currency System Lab</div>
-          <h1>Better currency thesis, compressed into one lab run.</h1>
+          <h1>Energy-standard cryptocurrency, compressed into one lab run.</h1>
           <p>
-            This is the fast path across the first four layers: public proof, pilot surrogate,
-            local field receipt loop, redeemable receipt framework, and network settlement framework.
-            Layer 1 is public Sepolia evidence; Layer 2 now runs fully inside the repo without external dependencies.
+            SolarPunk rebuilds the gold-standard idea around verified renewable-energy surplus.
+            The lab shows the monetary path: admissible energy proof, SPK issuance, circulation,
+            redemption into owed-kWh receipts, and delivery accounting.
           </p>
         </div>
         <div className={`system-tile ${accounting.conservation_pass ? 'good' : 'warn'}`}>
@@ -67,12 +68,29 @@ export default function CurrencyLab() {
           <div className="system-grid">
             <span>Conservation</span><strong>{String(accounting.conservation_pass)}</strong>
             <span>Velocity</span><strong>{accounting.velocity_ratio}</strong>
+            <span>Energy basis</span><strong>{formatNumber(energyStandard.current_monetary_state.kwh_per_1_spk_at_current_basis)} kWh/SPK</strong>
             <span>Active supply</span><strong>{formatNumber(accounting.active_supply_spk)} SPK</strong>
           </div>
         </div>
       </div>
 
       <div className="metric-grid">
+        <div className="metric-card metric-good">
+          <div className="metric-label">Energy Standard Basis</div>
+          <div className="metric-value">{formatNumber(energyStandard.current_monetary_state.kwh_per_1_spk_at_current_basis)} kWh</div>
+          <div className="metric-sub">
+            per 1 SPK at ${formatNumber(energyStandard.current_monetary_state.energy_price_usd_per_kwh, 2)}/kWh basis
+          </div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">10 kW Annual Issuance</div>
+          <div className="metric-value">
+            {formatNumber(energyStandard.capacity_scenarios[0].net_issuance_spk)} SPK
+          </div>
+          <div className="metric-sub">
+            {formatNumber(energyStandard.capacity_scenarios[0].annual_kwh, 0)} kWh/year sensitivity
+          </div>
+        </div>
         <div className="metric-card metric-good">
           <div className="metric-label">Minted From Energy</div>
           <div className="metric-value">{formatNumber(accounting.minted_spk)} SPK</div>
@@ -200,6 +218,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/RESOURCE_BENCHMARK_LAB.md`} target="_blank" rel="noreferrer">
               Resource benchmark <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/ENERGY_STANDARD_ECONOMICS.md`} target="_blank" rel="noreferrer">
+              Energy economics <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

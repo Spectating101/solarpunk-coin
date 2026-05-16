@@ -28,6 +28,7 @@ Deployed contracts: see [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md)
 npx hardhat test                # 102/102 contract tests
 npm run product:field-receipt   # local mint -> settlement -> redemption -> delivery receipt
 npm run product:resource-benchmark # NASA solar/wind + PV/cost + renewable benchmark matrix
+npm run product:energy-standard  # gold-standard mapping + SPK issuance economics
 npm run demo:treasury           # protocol flow simulation
 npm run model:treasury          # break-even model
 ```

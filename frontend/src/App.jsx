@@ -33,7 +33,7 @@ const tabs = [
 ];
 
 function App() {
-  const TEST_COUNT = 96;
+  const TEST_COUNT = 102;
 
   const [activeTab, setActiveTab] = useState('proof');
   const [account, setAccount] = useState(null);

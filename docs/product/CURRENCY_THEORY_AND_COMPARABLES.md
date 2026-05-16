@@ -5,7 +5,9 @@
 
 ## Core Position
 
-SolarPunk is strongest when framed as an **energy-denominated settlement and receipt system**, not as a generic reward token and not yet as a universal replacement currency.
+SolarPunk is strongest when framed as an **energy-standard cryptocurrency** with settlement and receipt mechanics: a modern gold-standard design where verified renewable-energy surplus replaces gold as the backing base.
+
+It should not be framed as a generic reward token and not yet as a universal replacement currency.
 
 The defensible thesis is:
 
@@ -59,6 +61,7 @@ This is compatible with tokenisation literature because the value is not merely 
 | Physics-based pricing is plausible | Medium-strong | NASA irradiance calibration, binomial/MC convergence, and cross-location runs support cold-start pricing. |
 | Signed meter data can feed SPK minting | Medium | The signature and replay mechanics work, but current meter data is fixture/sample data. |
 | SPK is not solar-only in principle | Medium internally | `RESOURCE_BENCHMARK_LAB.md` now benchmarks solar, wind, geothermal, tidal, hydro, biogas/biomass, and oil comparison; only signed renewable surplus can mint. |
+| Energy-standard economics is now explicit | Medium internally | `ENERGY_STANDARD_ECONOMICS.md` defines issuance equations, kWh/SPK basis, gold-standard mapping, velocity sensitivity, and finance risks. |
 | SPK can clear an internal receipt loop | Strong internally | The local field receipt loop executes mint, settlement, redemption, and delivery resolution without external dependencies. |
 | SPK is ready for real-world currency launch | Weak | No real meter export loop, no legal redemption terms, no audited deployment, no real operator obligation. |
 
