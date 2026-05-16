@@ -54,7 +54,8 @@ function summarizeNextActions(modes) {
     return [
       "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
       "Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.",
-      "Keep paid/mainnet launch blocked until audit, legal scope, and redemption policy are resolved.",
+      "Use the monetary stress harness to size any named reserve before promising redemption.",
+      "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, and shortfall policy are resolved.",
     ];
   }
   return [
@@ -71,6 +72,8 @@ function evaluateLaunchGate(options = {}) {
   const readback = readJson(root, "state/proofs/sepolia_spk_public_readback.json", {});
   const keeper = readJson(root, "state/keeper_logs/summary.json", {});
   const deployment = readJson(root, "state/deployments/sepolia_attested_spk_deploy.json", {});
+  const pilotCsv = readJson(root, "state/product/pilot_csv_receipt.json", {});
+  const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const audit = readJson(root, "docs/project/SECURITY_AUDIT_STATUS.json", {});
   const governance = readJson(root, "docs/project/GOVERNANCE_STATUS.json", {});
 
@@ -116,6 +119,18 @@ function evaluateLaunchGate(options = {}) {
       "Frontend has proof dashboard and SPK mint product surface.",
       "frontend/src"
     ),
+    check(
+      "Pilot CSV receipt exists",
+      Boolean(pilotCsv.mint_preview?.can_mint_from_receipt && Number(pilotCsv.attestation_bundle?.summary?.accepted_records || 0) > 0),
+      "Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.",
+      "docs/product/PILOT_CSV_RECEIPT.md"
+    ),
+    check(
+      "Monetary stress harness passes",
+      Boolean(monetaryStress.summary?.all_conservation_checks_pass),
+      "Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.",
+      "docs/product/MONETARY_STRESS_HARNESS.md"
+    ),
   ];
 
   const closedPilotChecks = [
@@ -144,6 +159,13 @@ function evaluateLaunchGate(options = {}) {
       Boolean(governance.checks?.ops_handbook_present && governance.checks?.role_matrix_present),
       "Governance status includes operations handbook and role matrix.",
       "docs/project/GOVERNANCE_STATUS.md"
+    ),
+    check(
+      "Pilot-stack deploy/readback scaffold exists",
+      exists(root, "scripts/deploy_pilot_stack.js") && exists(root, "scripts/read_pilot_stack.js"),
+      "Governed SPK + treasury + currency-system pilot stack has deployment and readback scripts.",
+      "docs/project/PILOT_STACK_DEPLOYMENT.md",
+      false
     ),
   ];
 

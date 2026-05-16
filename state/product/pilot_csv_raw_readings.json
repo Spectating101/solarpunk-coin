@@ -1,0 +1,44 @@
+{
+  "schema": "SPK_RAW_METER_READINGS_V1",
+  "generated_at": "2026-05-16T16:24:44.662Z",
+  "batch_id": "sample_meter_export",
+  "min_quality_threshold": 0.9,
+  "import_adapter": {
+    "schema": "SPK_METER_CSV_IMPORT_V1",
+    "source_file": "data/attestations/sample_meter_export.csv",
+    "unsigned": false,
+    "signer_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258"
+  },
+  "readings": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-12T00:00:00Z",
+      "window_end": "2026-02-12T23:59:59Z",
+      "generation_kwh": 1420.4,
+      "site_load_kwh": 390.1,
+      "export_kwh": 845.3,
+      "curtailed_kwh": 185,
+      "quality_score": 0.97,
+      "source": "solar_inverter_csv_v1",
+      "nonce": "TW-TY-0001:csv:2026-02-12",
+      "payload_hash": "0xa3c2e1d15f3890d1aa78af7780547dcbcb5aa72d6b9f5df712cd937d66940b63",
+      "signature": "0xa9a0af2f5819bb7d53cd1d7a9d4606c8c283220f5066c467a79edb31fdff5e5a2bddd7988ac05953bd4badc4ed1493538ce2166b99772411aac9a2fd68bb85ee1c"
+    },
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-13T00:00:00Z",
+      "window_end": "2026-02-13T23:59:59Z",
+      "generation_kwh": 1315.8,
+      "site_load_kwh": 360.6,
+      "export_kwh": 781.2,
+      "curtailed_kwh": 174,
+      "quality_score": 0.96,
+      "source": "solar_inverter_csv_v1",
+      "nonce": "TW-TY-0001:csv:2026-02-13",
+      "payload_hash": "0xe2198955cf324d59453ca8d7cf5ed640d54682980456503cc228fb7940ae2678",
+      "signature": "0xd4de175740e297605d257be36b26d432cfb18723b83e83714060eab74276f0523229c909e3c540c58a49676d2ef13889be4fbbcafdaae4c06bc6c0406604adc21b"
+    }
+  ]
+}

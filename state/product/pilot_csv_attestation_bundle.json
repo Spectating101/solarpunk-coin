@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-05-16T16:24:44.673Z",
+  "source_schema": "SPK_RAW_METER_READINGS_V1",
+  "registry_schema": "SPK_METER_REGISTRY_V1",
+  "batch_id": "sample_meter_export",
+  "min_quality_threshold": 0.9,
+  "summary": {
+    "input_records": 2,
+    "accepted_records": 2,
+    "rejected_records": 0,
+    "verified_signatures": 2,
+    "registered_meters": 2,
+    "total_surplus_kwh": 1985.5
+  },
+  "accepted_attestations": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-12T00:00:00+00:00",
+      "window_end": "2026-02-12T23:59:59+00:00",
+      "surplus_kwh": 1030.3,
+      "quality_score": 0.97,
+      "source": "solar_inverter_csv_v1",
+      "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "payload_hash": "0xa3c2e1d15f3890d1aa78af7780547dcbcb5aa72d6b9f5df712cd937d66940b63",
+      "signature": "0xa9a0af2f5819bb7d53cd1d7a9d4606c8c283220f5066c467a79edb31fdff5e5a2bddd7988ac05953bd4badc4ed1493538ce2166b99772411aac9a2fd68bb85ee1c",
+      "record_hash": "72ec01503bbd288de13bcaff05f65836dfc1d17155730c682233094502c1f84b"
+    },
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-13T00:00:00+00:00",
+      "window_end": "2026-02-13T23:59:59+00:00",
+      "surplus_kwh": 955.2,
+      "quality_score": 0.96,
+      "source": "solar_inverter_csv_v1",
+      "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "payload_hash": "0xe2198955cf324d59453ca8d7cf5ed640d54682980456503cc228fb7940ae2678",
+      "signature": "0xd4de175740e297605d257be36b26d432cfb18723b83e83714060eab74276f0523229c909e3c540c58a49676d2ef13889be4fbbcafdaae4c06bc6c0406604adc21b",
+      "record_hash": "3dc17d95af32c86d5d8d63e561e46dd0283978d4bcf4ccf57f6e7cf2edb64b75"
+    }
+  ],
+  "rejected_attestations": []
+}

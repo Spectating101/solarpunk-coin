@@ -13,7 +13,7 @@ Use these first when facts conflict elsewhere:
 ## Timeline and precedence rule
 
 - **Pivot date:** 2026-04-20 (Sepolia live + M3 security hardening + multisig handoff)
-- Prefer docs updated **after** the pivot and aligned with Sepolia/79-test state.
+- Prefer docs updated **after** the pivot and aligned with Sepolia/102-test state.
 - If a file claims Amoy-primary deployment, 46/55/77 test totals, single-EOA admin, or zero governance delay as current state, treat it as historical unless explicitly refreshed.
 
 ## Core repo references
@@ -25,6 +25,10 @@ Use these first when facts conflict elsewhere:
 - `docs/product/CURRENCY_SYSTEM_LAB.md` — compressed four-layer currency-system lab
 - `docs/product/CURRENCY_FRAMEWORK_READINESS.md` — internal SPK currency-framework readiness checks
 - `docs/product/FIELD_RECEIPT_LOOP.md` — local no-external-dependency field receipt loop
+- `docs/product/PILOT_CSV_RECEIPT.md` — pilot CSV receipt: signed readings, accepted bundle, source hash, SPK mint preview
+- `docs/product/MONETARY_STRESS_HARNESS.md` — redemption-wave and shortfall stress harness for the SPK currency model
+- `docs/product/PILOT_OPERATOR_PACKET.md` — operator-facing CSV/export handoff
+- `docs/product/PILOT_REVIEWER_PACKET.md` — reviewer-facing pilot proof checklist
 - `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` — theory anchors and comparable energy/token systems
 - `docs/product/RESOURCE_BENCHMARK_LAB.md` — NASA solar/wind resource benchmark, standard PV conversion, install-cost assumption, renewable benchmark matrix, and oil-only comparison
 - `docs/product/ENERGY_STANDARD_ECONOMICS.md` — economic/finance spine for energy-standard cryptocurrency: equations, gold-standard mapping, scenarios, velocity, risk register
@@ -51,6 +55,8 @@ Use these first when facts conflict elsewhere:
 - `docs/project/PUBLIC_PROOF_STATUS.md`
 - `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - `docs/project/FRONTEND_HANDOFF.md`
+- `docs/project/PILOT_STACK_DEPLOYMENT.md`
+- `docs/project/PILOT_STACK_READBACK.md` — generated only after readback against Sepolia or a persistent local network
 
 ## Contract specifications
 - `docs/specs/PILLAR3_CONTRACT_SPEC.md`

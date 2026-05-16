@@ -8,7 +8,7 @@
 
 This document is the canonical, comprehensive handoff for the SolarPunk Protocol. It describes the project's purpose, current state, architecture, operations, design decisions and their rationale, outstanding items, and the strategic outlook (both grant prospects and career/value prospects). Anyone reading this without prior context should be able to fully orient themselves.
 
-**2026-05-16 delta:** For the freshest reviewer-facing status, read `CURRENT_STATUS.md` and `EVIDENCE.md` first. Since this handoff was written, the repo added the attestation-enabled SPK proof stack, `SolarPunkCurrencySystem`, the local field receipt loop, the currency framework readiness reports, the multi-resource benchmark lab (`docs/product/RESOURCE_BENCHMARK_LAB.md`), and the energy-standard economics spine (`docs/product/ENERGY_STANDARD_ECONOMICS.md`) covering the gold-standard mapping, issuance equations, kWh/SPK convertibility, capacity scenarios, settlement velocity, and finance risks.
+**2026-05-17 delta:** For the freshest reviewer-facing status, read `CURRENT_STATUS.md` and `EVIDENCE.md` first. Since this handoff was written, the repo added the attestation-enabled SPK proof stack, `SolarPunkCurrencySystem`, the local field receipt loop, the currency framework readiness reports, the multi-resource benchmark lab (`docs/product/RESOURCE_BENCHMARK_LAB.md`), the energy-standard economics spine (`docs/product/ENERGY_STANDARD_ECONOMICS.md`), the pilot CSV receipt (`docs/product/PILOT_CSV_RECEIPT.md`), the monetary stress harness (`docs/product/MONETARY_STRESS_HARNESS.md`), and the governed pilot-stack deploy/readback scaffold (`scripts/deploy_pilot_stack.js`, `scripts/read_pilot_stack.js`).
 
 ---
 

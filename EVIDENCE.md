@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Evidence Register
 
-**Last updated:** 2026-05-16
+**Last updated:** 2026-05-17
 **Purpose:** Flat, clickable receipts for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
 
 This document answers: **"Is there actual evidence, or just descriptions of evidence?"**
@@ -91,7 +91,7 @@ These prove the protocol executes correctly end-to-end, not just compiles.
 
 System that fetches real satellite data and pushes it to the live contracts every day. Not a demo — running continuously on GitHub Actions cron at 01:00 UTC.
 
-**Current summary:** 18 successful runs, latest successful run `2026-05-14`, current success streak 16 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
+**Current summary:** 20 successful runs, latest successful run `2026-05-16`, current success streak 18 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
 
 | Date | NASA date used | GHI (kWh/m²) | Normalised index | On-chain tx |
 |---|---|---|---|---|
@@ -100,6 +100,7 @@ System that fetches real satellite data and pushes it to the live contracts ever
 | 2026-04-29 | 2026-04-24 | 0.792 | 0.2467 (below avg) | [0x615e06...](https://sepolia.etherscan.io/tx/0x615e06362fbf46d5e02ac5b54277276f565ad13991432cbe6966d199638484ab) |
 | 2026-05-05 | 2026-04-30 | 1.193 | 0.3715 (below avg) | [0xb616c3...](https://sepolia.etherscan.io/tx/0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d) |
 | 2026-05-14 | 2026-05-09 | 2.0808 | 0.5979 (below avg) | [0x20162f...](https://sepolia.etherscan.io/tx/0x20162f08923cddf07e3455ce3eeecfd69ca4bcd7baeead84e6e2b1e4fe6cf856) |
+| 2026-05-16 | 2026-05-11 | 3.2566 | 0.9358 (near avg) | [0xcb92e9...](https://sepolia.etherscan.io/tx/0xcb92e9b6583c5831b6d5148442d8b821d062475bed74f16ff5daf0bcb6689be8) |
 
 **Log files:** `state/keeper_logs/YYYY-MM-DD.json` — each entry contains: NASA date, GHI value, monthly mean, normalised index, source hash, 3 on-chain TX hashes, and full protocol state snapshot.
 
@@ -194,7 +195,54 @@ This is the raw economic/finance spine of the system: the gold-standard analogy,
 
 Scope note: this is not a claim of legal money status, investment return, or production redemption. It is a testable monetary model over the existing proof stack.
 
-### 2.10 Test Suite (Reproducible, Run by Anyone)
+### 2.10 Pilot CSV Receipt
+
+This turns a practical meter/inverter CSV export into the same evidence shape reviewers need: accepted rows, rejected rows, surplus kWh, source hash, and mint preview.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Receipt generator | Available | `scripts/pilot_csv_receipt.js` |
+| Sample CSV rows | 2 | `data/attestations/sample_meter_export.csv` |
+| Accepted rows | 2 accepted, 0 rejected | `docs/product/PILOT_CSV_RECEIPT.md` |
+| Accepted surplus | 1,985.5 kWh | Same file |
+| On-chain integer surplus preview | 1,985 kWh | Same file |
+| Net SPK preview | 99.15075 SPK | Same file |
+| Private-key boundary | No private key written to repo outputs | `state/product/pilot_csv_receipt.json` |
+| Tests | 4 Node tests | `test-node/pilot_csv_receipt.test.js` |
+
+Scope note: this is an operator-style ingestion receipt, not certified hardware finality or an on-chain mint.
+
+### 2.11 Monetary Stress Harness
+
+This exposes the economic side of the currency claim: redeemed SPK becomes owed kWh, physical delivery shortfalls become dollar liabilities, and reserve gaps are visible.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Stress generator | Available | `scripts/monetary_stress_harness.js` |
+| Scenario count | 5 | `docs/product/MONETARY_STRESS_HARNESS.md` |
+| Conservation checks | All pass | `state/product/monetary_stress_harness.json` |
+| Worst modeled shortfall liability | $4,011.232752 | Same file |
+| Worst additional buffer required | $3,940.985988 | Same file |
+| Scenario CSV | Generated | `state/product/monetary_stress_scenarios.csv` |
+| Tests | 5 Node tests | `test-node/monetary_stress_harness.test.js` |
+
+Scope note: this is an internal stress model, not a solvency guarantee. It intentionally shows where named reserve capital is required.
+
+### 2.12 Governed Pilot Stack Scaffold
+
+This is the deploy/readback path for moving from proof-scoped SPK to a governed testnet pilot stack that includes settlement and redemption.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Deployment script | Available | `scripts/deploy_pilot_stack.js` |
+| Readback script | Available | `scripts/read_pilot_stack.js` |
+| Local deploy receipt | Generated on Hardhat | `docs/project/PILOT_STACK_DEPLOYMENT.md` |
+| Stack contracts | MockUSDC, ProtocolTreasury, SolarPunkCoin, SolarPunkCurrencySystem | Same file |
+| Test coverage | Markdown/readback helper tests | `test-node/pilot_stack_scripts.test.js` |
+
+Scope note: the local Hardhat receipt proves the deploy script executes. Persistent readback is for Sepolia or a long-running local node.
+
+### 2.13 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -206,7 +254,7 @@ Expected output: **102 passing**, including signed surplus-attestation replay, r
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.11 Python Pricing Library (Reproducible)
+### 2.14 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives

@@ -11,7 +11,7 @@ Optimize for external proof quality before narrative. Each milestone must produc
 - aligned README and status docs to current truth
 - removed stale and contradictory claims
 - clear architecture and scope docs in place
-- 77/77 tests passing
+- 102/102 contract tests passing
 
 ### Milestone 2: External inspectability — COMPLETE (2026-04-20)
 
@@ -30,6 +30,9 @@ Optimize for external proof quality before narrative. Each milestone must produc
 
 ### Milestone 4: Pilot Credibility
 
+- **Pilot CSV receipt path:** Convert operator-style meter/inverter CSV exports into signed readings, accepted bundle, deterministic source hash, and SPK mint preview.
+- **Monetary stress harness:** Size redemption shortfall exposure, fee buffers, and additional named reserve requirements before promising any real-value redemption.
+- **Governed pilot-stack scaffold:** Deploy/readback scripts now cover MockUSDC, ProtocolTreasury, SolarPunkCoin, and SolarPunkCurrencySystem together.
 - **Pilot Onboarding:** Secure a $125k pilot grant to establish a $125k total insurance reserve, unlocking a 60 MWh risk-boxed pilot capacity.
 - **Counterparty Engagement:** Approach 3-5 renewable energy operators for a single-cycle settlement proof under strict open-interest caps.
 - **Operational Hardening:** Automate oracle updates to sub-hour frequency to reduce residual gap risk.
@@ -43,5 +46,6 @@ Optimize for external proof quality before narrative. Each milestone must produc
 
 Milestone 1: **complete**
 Milestone 2: **complete**
-Milestone 3: in progress — audit firm shortlisting
-Milestone 4+: pending
+Milestone 3: in progress — audit firm shortlisting and production governance hardening
+Milestone 4: in progress — pilot CSV receipt, stress harness, and pilot-stack scaffold complete; real operator export still pending
+Milestone 5: pending

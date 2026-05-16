@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Reviewer Packet
 
-**Last updated:** 2026-05-14
+**Last updated:** 2026-05-17
 **Purpose:** one-page orientation for grant reviewers, advisors, and ecosystem partners.
 
 ## One-line summary
@@ -15,26 +15,32 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | SPK product proof | Signed raw meter readings -> verified bundle -> source hash -> oracle signature -> Sepolia SPK mint | [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](../product/SPK_ATTESTED_MINT_PROOF.md) |
 | Public proof readback | Read-only Sepolia check of tx success, consumed attestation hash, consumed source hash, and recipient balance | [`docs/product/SPK_PUBLIC_READBACK.md`](../product/SPK_PUBLIC_READBACK.md) |
 | Pilot meter import | Meter onboarding + CSV import path for inverter/meter exports | [`docs/project/METER_CSV_IMPORT.md`](../project/METER_CSV_IMPORT.md) |
+| Pilot CSV receipt | CSV export -> signed readings -> accepted bundle -> source hash -> SPK mint preview | [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) |
+| Monetary stress harness | Redemption-wave and physical-shortfall scenarios with explicit reserve gaps | [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) |
+| Governed pilot-stack scaffold | Deploy/readback scripts for SPK + treasury + currency system pilot stack | [`docs/project/PILOT_STACK_DEPLOYMENT.md`](../project/PILOT_STACK_DEPLOYMENT.md) |
 | Product empirics | Single-product empirical dossier tying thesis evidence to SPK | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](../product/SPK_PRODUCT_EMPIRICS.md) |
 | Tests | 102/102 Hardhat tests passing | `npx hardhat test` |
 | Daily real-data run | NASA POWER -> Sepolia keeper running since 2026-04-20 | [`docs/project/DAILY_EXPERIMENT_STATUS.md`](../project/DAILY_EXPERIMENT_STATUS.md) |
-| Latest keeper tx | 2026-05-14 `updateIndex` tx | [`EVIDENCE.md`](../../EVIDENCE.md) |
+| Latest keeper tx | 2026-05-16 `updateIndex` tx | [`EVIDENCE.md`](../../EVIDENCE.md) |
 | Frontend demo | Vite/React proof dashboard with live Sepolia reads | https://spectating101.github.io/solarpunk-coin/ |
 | Security posture | Independent code review complete; formal audit not yet started | [`AUDIT_READINESS.md`](../../AUDIT_READINESS.md) |
 
-## Four-click reviewer path
+## Reviewer path
 
 1. Open [`docs/product/SPK_PRODUCT_EMPIRICS.md`](../product/SPK_PRODUCT_EMPIRICS.md) and read the product claim.
 2. Open [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](../product/SPK_ATTESTED_MINT_PROOF.md) and confirm the meter-to-mint receipt.
 3. Open [`docs/product/SPK_PUBLIC_READBACK.md`](../product/SPK_PUBLIC_READBACK.md) and confirm the Sepolia replay guards are consumed.
-4. Open [`EVIDENCE.md`](../../EVIDENCE.md) and inspect the daily keeper and Sepolia transaction trail.
+4. Open [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) and confirm the operator-style CSV bridge.
+5. Open [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) and inspect the shortfall/reserve table.
+6. Open [`EVIDENCE.md`](../../EVIDENCE.md) and inspect the daily keeper and Sepolia transaction trail.
 
 ## What is real today
 
 - Real NASA POWER data is ingested daily and pushed to Sepolia.
 - The latest SPK contract can mint from signed surplus-energy attestations and reject replayed, reused-source, non-oracle, expired, future-window, zero-source, or invalid-window attestations.
 - The sample meter pipeline verifies 2 device signatures, rejects duplicate/low-quality readings, accepts 2,606.7 kWh, and the Sepolia proof mints 130.1697 SPK from 2,606 on-chain kWh.
-- The pilot CSV bridge imports meter/inverter rows into signed raw readings and derives a 1,985.5 kWh accepted-surplus bundle.
+- The pilot CSV bridge imports meter/inverter rows into signed raw readings, derives a 1,985.5 kWh accepted-surplus bundle, and previews 99.15075 SPK.
+- The monetary stress harness maps redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 - Source-verified contracts are deployed and externally inspectable.
 - The repo contains on-chain transaction receipts, keeper artifacts, tests, threat model, trust assumptions, audit handoff, and grant drafts.
 - The frontend demo now foregrounds the SPK mint product path and distinguishes the proof-scoped attested stack from the older legacy Sepolia stack.

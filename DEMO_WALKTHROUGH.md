@@ -27,6 +27,9 @@ Deployed contracts: see [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md)
 ```bash
 npx hardhat test                # 102/102 contract tests
 npm run product:field-receipt   # local mint -> settlement -> redemption -> delivery receipt
+npm run product:pilot-csv       # CSV export -> signed readings -> source hash -> SPK mint preview
+npm run product:monetary-stress # redemption-wave and shortfall reserve table
+npm run deploy:pilot-stack:hardhat # executes governed pilot-stack deploy script locally
 npm run product:resource-benchmark # NASA solar/wind + PV/cost + renewable benchmark matrix
 npm run product:energy-standard  # gold-standard mapping + SPK issuance economics
 npm run demo:treasury           # protocol flow simulation
@@ -41,7 +44,21 @@ npm run model:treasury          # break-even model
 4. **Energy redemption** — SPK burned, fee routed to treasury
 5. **Options clearinghouse** — position opened with margin, marked to index, PnL accrued correctly
 
-## What the local demo proves
+## What the product-lab demo proves
+
+`npm run product:pilot-csv` shows:
+1. a meter/inverter CSV can become canonical raw readings
+2. the same verifier accepts/rejects rows using signatures, quality, and energy-balance rules
+3. the accepted bundle produces a deterministic source hash
+4. the SPK mint preview is calculated without storing private keys in repo outputs
+
+`npm run product:monetary-stress` shows:
+1. issued SPK equals active supply plus redeemed SPK in every scenario
+2. redeemed SPK maps into owed kWh at the current energy basis
+3. delivery shortfalls become explicit reserve requirements
+4. the model does not pretend protocol fees alone can cover every physical shortfall
+
+## What the local treasury demo proves
 
 `npm run demo:treasury` shows:
 1. mint flow and fee capture

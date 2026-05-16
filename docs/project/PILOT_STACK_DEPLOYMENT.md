@@ -1,0 +1,64 @@
+# SolarPunk Governed Pilot Stack Deployment
+
+- generated_at: `2026-05-16T16:25:43.077Z`
+- network: `hardhat`
+- chain_id: `1337`
+- scope: `governed-pilot-testnet-stack`
+- deployer: `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`
+- governance_admin: `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`
+- strict_admin_handoff: `false`
+
+## Contracts
+
+| Contract | Address | Deploy tx |
+|---|---|---|
+| MockUSDC | `0x5FbDB2315678afecb367f032d93F642f64180aa3` | `0xb60d61e4b553fd3f1eb71f60256febc555b3a0254cb3030b0e403de9eaaaab90` |
+| ProtocolTreasury | `0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` | `0x1ade4596a9df0c38aa2b7c6fc5c5834a52e9de49684c888cfbd28f2896983889` |
+| SolarPunkCoin | `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0` | `0xef747f3141a99065ca25768efca257a230940165620cc0dd15e38c0c3a60903a` |
+| SolarPunkCurrencySystem | `0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9` | `0x60eadaffcd9b86153edfbe4348a794a0079bfe1f2e97eb35987e1d146b946a8b` |
+
+## Roles
+
+| Role | Address |
+|---|---|
+| minter | `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` |
+| oracle | `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` |
+| reserve_manager | `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` |
+| stabilizer | `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` |
+| currency_operator | `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266` |
+
+## Initial Parameters
+
+- reserve_seed_usdc: `100000.0`
+- energy_price_usd_per_kwh: `0.05`
+- oracle_price_usd: `1.0`
+- spk_governance_delay_seconds: `0`
+- treasury_governance_delay_seconds: `0`
+
+## Setup Transactions
+
+- deploy_mock_usdc: `0xb60d61e4b553fd3f1eb71f60256febc555b3a0254cb3030b0e403de9eaaaab90`
+- deploy_treasury: `0x1ade4596a9df0c38aa2b7c6fc5c5834a52e9de49684c888cfbd28f2896983889`
+- deploy_spk: `0xef747f3141a99065ca25768efca257a230940165620cc0dd15e38c0c3a60903a`
+- deploy_currency_system: `0x60eadaffcd9b86153edfbe4348a794a0079bfe1f2e97eb35987e1d146b946a8b`
+- set_treasury: `0xe364e2cec71791afb8597347c316c8873333a3f2b54074cafbbeb37c72e3bf07`
+- mint_mock_usdc: `0x65eff4e6ceb499e9b84fd51085206b30e7fde0cdb2ebb40f9ae0d6f23e4455ed`
+- approve_reserve: `0x5950e7e6c0dc1c7528cce24a1408bd311c1611fe5ef346134e14c3820293ebbe`
+- deposit_reserve: `0x7995b6127c985a60db5676e6e74fa8555cf25a0eecb958746f206b825f6b0478`
+- update_energy_price: `0xf93ba790022573675031a932ab7b8c3ca5b51333074c47de9d495a069b3a19e3`
+- update_oracle_price: `0xb773b1cae48eb71768e6302809350bdcc0b8a002cc06542efc0c8f1b74eaeed3`
+
+## Scope Boundary
+
+- This is a governed public-testnet or local pilot stack receipt, not a mainnet deployment.
+- Real-value use remains blocked until audit, legal/commercial scope, production oracle policy, and redemption terms exist.
+- A pilot CSV receipt can feed this stack only after a matching signed meter bundle is accepted.
+
+## Next Commands
+
+```bash
+# hardhat receipts prove the deploy script executes, but a separate hardhat run starts a fresh in-memory chain.
+# Use readback against Sepolia or a persistent localhost node after deploying there.
+PILOT_STACK_RECEIPT=state/deployments/sepolia_pilot_stack.json PILOT_NETWORK=sepolia npm run pilot-stack:readback
+npm run product:pilot-csv
+```

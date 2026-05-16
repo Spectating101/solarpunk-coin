@@ -21,6 +21,10 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: public proof, local field receipt, redemption framework, settlement framework |
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
 | [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
+| [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV receipt: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
+| [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
+| [`docs/product/PILOT_OPERATOR_PACKET.md`](./docs/product/PILOT_OPERATOR_PACKET.md) | What a real meter/inverter operator should send and what SolarPunk returns |
+| [`docs/product/PILOT_REVIEWER_PACKET.md`](./docs/product/PILOT_REVIEWER_PACKET.md) | One-page pilot proof checklist for skeptical reviewers |
 | [`docs/product/CURRENCY_THEORY_AND_COMPARABLES.md`](./docs/product/CURRENCY_THEORY_AND_COMPARABLES.md) | Theory anchors and comparable systems: RECs, SolarCoin, Powerledger, Energy Web, stablecoin frameworks |
 | [`docs/product/RESOURCE_BENCHMARK_LAB.md`](./docs/product/RESOURCE_BENCHMARK_LAB.md) | Multi-resource benchmark: NASA solar/wind, standard PV conversion, install cost, geothermal/tidal/hydro/biomass benchmarks, oil comparison |
 | [`docs/product/ENERGY_STANDARD_ECONOMICS.md`](./docs/product/ENERGY_STANDARD_ECONOMICS.md) | Economic/finance spine: gold-standard mapping, issuance equations, kWh/SPK convertibility, scale scenarios, velocity, and risk register |
@@ -28,6 +32,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
 | [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |
 | [`docs/project/ATTESTED_SPK_DEPLOYMENT.md`](./docs/project/ATTESTED_SPK_DEPLOYMENT.md) | Public Sepolia proof-stack deployment receipt |
+| [`docs/project/PILOT_STACK_DEPLOYMENT.md`](./docs/project/PILOT_STACK_DEPLOYMENT.md) | Local governed-pilot-stack deployment receipt and Sepolia deployment command |
 | [`docs/specs/METER_ATTESTATION_SPEC.md`](./docs/specs/METER_ATTESTATION_SPEC.md) | Signed meter-reading validation spec |
 | [`docs/project/METER_CSV_IMPORT.md`](./docs/project/METER_CSV_IMPORT.md) | Pilot-facing CSV import path for meter/inverter exports |
 | [`docs/project/METER_CSV_ATTESTATION_BUNDLE.md`](./docs/project/METER_CSV_ATTESTATION_BUNDLE.md) | CSV-imported meter bundle receipt |
@@ -100,6 +105,16 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Meter onboarding command writes a registry receipt without storing private keys
   - CSV import signs meter/inverter rows and feeds the same verifier as the public SPK proof
   - Sample CSV-derived bundle: `2` accepted, `0` rejected, `1,985.5` kWh surplus
+- **Pilot CSV receipt** — see `docs/product/PILOT_CSV_RECEIPT.md`
+  - Sample CSV -> `2` accepted rows -> `1,985.5` kWh surplus -> deterministic source hash
+  - Mint preview: `99.15075 SPK` at `$0.05/kWh` after 10 bps mint fee
+  - Explicit boundary: no private key written, unsigned mode cannot mint, no hardware-finality claim
+- **Monetary stress harness** — see `docs/product/MONETARY_STRESS_HARNESS.md`
+  - Stresses redemption waves, delivery shortfalls, fee buffers, and additional reserve requirements
+  - All conservation checks pass; shortfall scenarios intentionally expose where named reserve capital is needed
+- **Governed pilot-stack scaffold** — see `docs/project/PILOT_STACK_DEPLOYMENT.md`
+  - Deploys MockUSDC, ProtocolTreasury, SolarPunkCoin, and SolarPunkCurrencySystem together
+  - Includes role assignment, reserve seeding, energy price basis, optional strict admin handoff, and readback script for persistent networks
 - **Independent code review** (Codex, April 2026) — 5 findings fixed, regression tests added (commit `5176317`)
 - **Safe multisig admin** — deployer EOA has zero authority on any contract
 - **24h governance timelock** — active on all parameter changes
@@ -148,6 +163,9 @@ npm run product:currency-framework
 npm run product:field-receipt
 npm run product:resource-benchmark
 npm run product:energy-standard
+npm run product:pilot-csv
+npm run product:monetary-stress
+npm run deploy:pilot-stack:hardhat
 
 # Import a pilot-style meter CSV into signed raw readings
 npm run meter:onboard -- --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --device-address=0x... --capacity-kw=120

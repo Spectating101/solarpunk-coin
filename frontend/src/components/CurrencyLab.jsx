@@ -12,6 +12,8 @@ import currencyFramework from '../../../state/product/currency_framework_readine
 import fieldReceipt from '../../../state/product/field_receipt_loop.json';
 import resourceBenchmark from '../../../state/product/resource_benchmark_lab.json';
 import energyStandard from '../../../state/product/energy_standard_economics.json';
+import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
+import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import { GITHUB_REPO } from '../constants/contracts';
 
 const statusCopy = {
@@ -47,6 +49,11 @@ export default function CurrencyLab() {
   const solarResource = resourceBenchmark.resources.find((resource) => resource.id === 'solar_pv_rooftop');
   const windResource = resourceBenchmark.resources.find((resource) => resource.id === 'wind_turbine');
   const oilResource = resourceBenchmark.resources.find((resource) => resource.id === 'oil_barrel');
+  const worstStress = monetaryStress.scenarios.reduce((worst, scenario) => (
+    Number(scenario.additional_buffer_required_usd || 0) > Number(worst.additional_buffer_required_usd || 0)
+      ? scenario
+      : worst
+  ), monetaryStress.scenarios[0]);
 
   return (
     <section className="currency-shell">
@@ -96,6 +103,13 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatNumber(accounting.minted_spk)} SPK</div>
           <div className="metric-sub">{formatNumber(currencyLab.source_evidence.accepted_surplus_kwh, 1)} accepted kWh</div>
         </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Pilot CSV Bridge</div>
+          <div className="metric-value">{formatNumber(pilotCsvReceipt.mint_preview.net_spk, 5)} SPK</div>
+          <div className="metric-sub">
+            {pilotCsvReceipt.attestation_bundle.summary.accepted_records} accepted rows, {formatNumber(pilotCsvReceipt.attestation_bundle.summary.total_surplus_kwh, 1)} kWh surplus
+          </div>
+        </div>
         <div className="metric-card metric-amber">
           <div className="metric-label">Redeemed Lab Credit</div>
           <div className="metric-value">{formatNumber(accounting.redeemed_energy_kwh_equivalent)} kWh</div>
@@ -123,6 +137,13 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatNumber(fieldReceipt.accounting.delivered_kwh)} kWh</div>
           <div className="metric-sub">
             {formatNumber(fieldReceipt.accounting.settlement_volume_spk)} SPK settled, no external dependency
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Worst Stress Buffer</div>
+          <div className="metric-value">{formatUsd(monetaryStress.summary.worst_additional_buffer_required_usd, 0)}</div>
+          <div className="metric-sub">
+            {worstStress.label}: {worstStress.status.replaceAll('_', ' ')}
           </div>
         </div>
         <div className="metric-card metric-good">
@@ -216,11 +237,17 @@ export default function CurrencyLab() {
             <a href={`${GITHUB_REPO}/blob/main/docs/product/FIELD_RECEIPT_LOOP.md`} target="_blank" rel="noreferrer">
               Field receipt loop <ExternalLink size={12} />
             </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/PILOT_CSV_RECEIPT.md`} target="_blank" rel="noreferrer">
+              Pilot CSV receipt <ExternalLink size={12} />
+            </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/RESOURCE_BENCHMARK_LAB.md`} target="_blank" rel="noreferrer">
               Resource benchmark <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/ENERGY_STANDARD_ECONOMICS.md`} target="_blank" rel="noreferrer">
               Energy economics <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/MONETARY_STRESS_HARNESS.md`} target="_blank" rel="noreferrer">
+              Monetary stress <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

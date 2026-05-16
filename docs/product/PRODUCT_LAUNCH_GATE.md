@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-16T06:12:59.907Z`
+- generated_at: `2026-05-16T16:24:49.651Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,15 +9,16 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 5 | 0 |
-| Closed testnet pilot | `blocked` | 6 | 2 |
-| Paid/mainnet product | `blocked` | 6 | 6 |
+| SolarPunk Public Lab | `launchable` | 7 | 0 |
+| Closed testnet pilot | `blocked` | 8 | 2 |
+| Paid/mainnet product | `blocked` | 8 | 6 |
 
 ## Next Actions
 
 - Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.
 - Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.
-- Keep paid/mainnet launch blocked until audit, legal scope, and redemption policy are resolved.
+- Use the monetary stress harness to size any named reserve before promising redemption.
+- Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, and shortfall policy are resolved.
 
 ## SolarPunk Public Lab
 
@@ -31,6 +32,10 @@
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
+- PASS `Pilot CSV receipt exists`: Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.
+  Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
+- PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
+  Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 
 ## Closed testnet pilot
 
@@ -44,6 +49,10 @@
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
+- PASS `Pilot CSV receipt exists`: Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.
+  Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
+- PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
+  Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.
@@ -52,6 +61,8 @@
   Evidence: `docs/specs/PILOT_PLAN.md`
 - PASS `Governance runbook exists`: Governance status includes operations handbook and role matrix.
   Evidence: `docs/project/GOVERNANCE_STATUS.md`
+- PASS `Pilot-stack deploy/readback scaffold exists`: Governed SPK + treasury + currency-system pilot stack has deployment and readback scripts.
+  Evidence: `docs/project/PILOT_STACK_DEPLOYMENT.md`
 
 ## Paid/mainnet product
 
@@ -65,6 +76,10 @@
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
+- PASS `Pilot CSV receipt exists`: Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.
+  Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
+- PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
+  Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.
@@ -73,6 +88,8 @@
   Evidence: `docs/specs/PILOT_PLAN.md`
 - PASS `Governance runbook exists`: Governance status includes operations handbook and role matrix.
   Evidence: `docs/project/GOVERNANCE_STATUS.md`
+- PASS `Pilot-stack deploy/readback scaffold exists`: Governed SPK + treasury + currency-system pilot stack has deployment and readback scripts.
+  Evidence: `docs/project/PILOT_STACK_DEPLOYMENT.md`
 - BLOCK `External audit complete`: External audit status is NOT_STARTED; paid/mainnet launch remains blocked.
   Evidence: `docs/project/SECURITY_AUDIT_STATUS.json`
 - BLOCK `Legal and commercial scope complete`: No launch terms file exists for token classification, redemption obligations, user eligibility, and jurisdictional limits.

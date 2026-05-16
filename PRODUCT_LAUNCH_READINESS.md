@@ -1,6 +1,6 @@
 # Product Launch Readiness
 
-**Last updated:** 2026-05-14
+**Last updated:** 2026-05-17
 
 ## Product thesis
 
@@ -20,10 +20,13 @@ This is the product story that the repo should now support: verified surplus ren
 
 | Layer | Status | Product meaning |
 |---|---|---|
-| Contracts | `96/96` tests passing | The SPK mint and safety paths are covered locally |
+| Contracts | `102/102` tests passing | The SPK mint, treasury, option, stability, and currency-framework paths are covered locally |
 | SPK attested minting | Implemented in `SolarPunkCoin` | Surplus minting is no longer just a trusted minter call |
 | Meter ingestion | `scripts/derive_meter_attestations.js` verifies signed raw readings into `state/attestations/` | The data side now has registered meter identities and signature checks |
 | Meter CSV import | `scripts/import_meter_csv.js` canonicalizes and signs inverter/meter CSV exports | First pilot-facing bridge from real meter exports into the attestation pipeline |
+| Pilot CSV receipt | `scripts/pilot_csv_receipt.js` generates raw readings, accepted bundle, source hash, and mint preview | First end-to-end operator-style CSV proof surface |
+| Monetary stress harness | `scripts/monetary_stress_harness.js` generates redemption-wave and shortfall scenarios | Shows where SPK needs named reserve capital instead of pretending physical shortfalls can be printed away |
+| Pilot stack scaffold | `scripts/deploy_pilot_stack.js` and `scripts/read_pilot_stack.js` | Deploy/readback path for SPK + treasury + currency system under pilot governance |
 | Product proof | `docs/product/SPK_ATTESTED_MINT_PROOF.md` generated | Sample bundle minted `130.1697` SPK on Sepolia from `2606` on-chain kWh |
 | Empirical dossier | `docs/product/SPK_PRODUCT_EMPIRICS.md` generated | The thesis evidence is now tied to the single SPK product claim |
 | Meter spec | `docs/specs/METER_ATTESTATION_SPEC.md` added | Defines the adapter/oracle contract for signed reading validation |
@@ -40,6 +43,8 @@ This is the product story that the repo should now support: verified surplus ren
 - The mint path still respects oracle freshness, grid stress, reserve ratio, supply cap, recipient validity, fee split, and minter/oracle role checks.
 - The meter bundle pipeline verifies device signatures, rejects duplicate/low-quality readings, and produces deterministic record hashes plus a product-level source hash.
 - The generated product proof demonstrates the full path from sample meter records to a public Sepolia SPK mint, with deterministic local reproduction still available.
+- The pilot CSV receipt demonstrates a realistic operator/export path: `1,985.5` accepted kWh becomes a deterministic source hash and `99.15075 SPK` mint preview without writing private keys to repo outputs.
+- The monetary stress harness keeps the economics honest by converting redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 
 ## Hard blockers before real paid launch
 
@@ -68,7 +73,7 @@ This is the product story that the repo should now support: verified surplus ren
 
 5. **Liquidity and redemption policy**
 
-   The repo has reserve and redemption mechanics, but a paid launch needs a clear answer for what SPK holders can redeem, from whom, under what terms, and with what operational limits.
+   The repo has reserve and redemption mechanics plus a stress harness, but a paid launch needs a clear answer for what SPK holders can redeem, from whom, under what terms, and with what named reserve or insurance buffer.
 
 ## Recommended launch sequence
 
@@ -82,7 +87,7 @@ npm run product:launch-gate
 
 Current gate result: **launch the SolarPunk Public Lab; do not launch paid/mainnet**.
 
-That means the public demo, Sepolia proof, SPK mint dashboard, currency-system lab, resource benchmark lab, energy-standard economics, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external public lab. A closed pilot is still blocked until there is a governed attested-SPK redeploy plus one real meter or inverter adapter. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, and production deployment exist.
+That means the public demo, Sepolia proof, SPK mint dashboard, currency-system lab, pilot CSV receipt, monetary stress harness, resource benchmark lab, energy-standard economics, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external public lab. A closed pilot is still blocked until there is a governed attested-SPK redeploy plus one real meter or inverter adapter. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, named reserve/shortfall policy, and production deployment exist.
 
 See `docs/product/PUBLIC_LAB.md` for the operating model.
 
@@ -92,6 +97,8 @@ See `docs/product/PUBLIC_LAB.md` for the operating model.
 - Run `npm run attestations:build`.
 - Run `npm run proof:spk-attested-mint`.
 - Run `npm run product:empirics`.
+- Run `npm run product:pilot-csv`.
+- Run `npm run product:monetary-stress`.
 - Keep `docs/product/SPK_PRODUCT_EMPIRICS.md` as the grant/reviewer anchor.
 - Keep `EnergyRevenueFloor` as a secondary module, not the product headline.
 
@@ -101,6 +108,7 @@ Target outcome: anyone can reproduce the core SPK product path and compare it to
 
 - Move from proof-scoped deployment to governed deployment of latest `SolarPunkCoin`.
 - Configure Safe/admin, minter, oracle, treasury, reserve token, and initial reserve.
+- Use `npm run deploy:pilot-stack:sepolia` and `npm run pilot-stack:readback` for the governed SPK + treasury + currency-system stack.
 - Run the meter-bundle mint script against Sepolia.
 - Verify source and publish Etherscan receipts.
 - Update frontend constants to point at the redeployed SPK address.
