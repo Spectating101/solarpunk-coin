@@ -1,0 +1,1085 @@
+{
+  "generated_at": "2026-05-16T18:22:21.237Z",
+  "title": "SolarPunk Empirical Finance Backtest",
+  "thesis": "This backtest asks whether the energy-standard monetary mechanics survive contact with historical resource data and conventional project-finance ratios.",
+  "input_basis": {
+    "resource_source": "NASA POWER Daily API",
+    "resource_query_url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=121.3&latitude=24.99&start=20240101&end=20260516&format=JSON",
+    "resource_parameter": "ALLSKY_SFC_SW_DWN",
+    "location": {
+      "name": "Taoyuan, Taiwan",
+      "latitude": 24.99,
+      "longitude": 121.3
+    },
+    "start": "20240101",
+    "end": "20260516",
+    "observed_days": 861,
+    "first_date": "2024-01-01",
+    "last_date": "2026-05-11",
+    "solar_model": "daily_ac_kwh = GHI_kWh_m2_day * kWdc * (1 - PVWatts_loss_pct)",
+    "finance_assumptions": {
+      "energy_price_usd_per_kwh": 0.05,
+      "retail_offset_usd_per_kwh": 0.12,
+      "export_credit_usd_per_kwh": 0.05,
+      "mint_fee_bps": 10,
+      "debt_share": 0.7,
+      "debt_interest_rate": 0.08,
+      "debt_tenor_years": 10
+    },
+    "capex_assumption_usd_per_wdc": 3.15
+  },
+  "finance_claims": {
+    "empirical_days": 861,
+    "first_date": "2024-01-01",
+    "last_date": "2026-05-11",
+    "p50_rooftop_annual_value_usd": 1067.8381,
+    "p50_rooftop_dscr": 0.325,
+    "p10_rooftop_dscr": 0.2679,
+    "rooftop_monthly_revenue_at_risk_usd": 27.9216,
+    "empirical_status": "resource_real_but_finance_requires_better_tariff_capex_or_capital_structure"
+  },
+  "archetypes": [
+    {
+      "id": "rooftop_home_10kw",
+      "label": "10 kW solar home",
+      "interpretation": "Home-scale system using most output onsite and exporting surplus.",
+      "capacity_kw": 10,
+      "self_consumption_fraction": 0.55,
+      "observed_days": 861,
+      "first_date": "2024-01-01",
+      "last_date": "2026-05-11",
+      "daily_generation_distribution": {
+        "mean_kwh": 32.0317,
+        "stddev_kwh": 14.2563,
+        "coefficient_of_variation": 0.445068,
+        "p05_kwh": 11.2058,
+        "p25_kwh": 20.0475,
+        "p50_kwh": 31.0942,
+        "p75_kwh": 44.2934,
+        "p95_kwh": 55.3892,
+        "longest_below_p25_run_days": 8
+      },
+      "monthly_distribution": {
+        "months": 29,
+        "p05_energy_value_usd": 55.154,
+        "p50_energy_value_usd": 83.0756,
+        "p95_energy_value_usd": 127.6396,
+        "p05_net_spk_issued": 14.0082,
+        "p50_net_spk_issued": 21.0998,
+        "monthly_revenue_at_risk_usd_vs_p50": 27.9216
+      },
+      "annual_distribution": {
+        "years": 3,
+        "p10_energy_value_usd": 880.2654,
+        "p50_energy_value_usd": 1067.8381,
+        "p90_energy_value_usd": 1074.4595,
+        "p50_net_spk_issued": 271.212764
+      },
+      "capital_model": {
+        "capex_usd": 31500,
+        "debt_principal_usd": 22050,
+        "annual_debt_service_usd": 3286.1,
+        "p50_simple_payback_years": 29.5,
+        "p10_simple_payback_years": 35.78,
+        "p50_dscr": 0.325,
+        "p10_dscr": 0.2679,
+        "monthly_reserve_target_usd": 27.92
+      }
+    },
+    {
+      "id": "neighborhood_cluster_250kw",
+      "label": "250 kW neighborhood cluster",
+      "interpretation": "Aggregated rooftops or campus-scale load with higher daytime self-use.",
+      "capacity_kw": 250,
+      "self_consumption_fraction": 0.65,
+      "observed_days": 861,
+      "first_date": "2024-01-01",
+      "last_date": "2026-05-11",
+      "daily_generation_distribution": {
+        "mean_kwh": 800.7935,
+        "stddev_kwh": 356.4075,
+        "coefficient_of_variation": 0.445068,
+        "p05_kwh": 280.145,
+        "p25_kwh": 501.1865,
+        "p50_kwh": 777.354,
+        "p75_kwh": 1107.336,
+        "p95_kwh": 1384.729,
+        "longest_below_p25_run_days": 8
+      },
+      "monthly_distribution": {
+        "months": 29,
+        "p05_energy_value_usd": 1487.9118,
+        "p50_energy_value_usd": 2241.1634,
+        "p95_energy_value_usd": 3443.3844,
+        "p05_net_spk_issued": 272.3813,
+        "p50_net_spk_issued": 410.2737,
+        "monthly_revenue_at_risk_usd_vs_p50": 753.2516
+      },
+      "annual_distribution": {
+        "years": 3,
+        "p10_energy_value_usd": 23747.2728,
+        "p50_energy_value_usd": 28807.4958,
+        "p90_energy_value_usd": 28986.1253,
+        "p50_net_spk_issued": 5273.581632
+      },
+      "capital_model": {
+        "capex_usd": 787500,
+        "debt_principal_usd": 551250,
+        "annual_debt_service_usd": 82152.51,
+        "p50_simple_payback_years": 27.34,
+        "p10_simple_payback_years": 33.16,
+        "p50_dscr": 0.3507,
+        "p10_dscr": 0.2891,
+        "monthly_reserve_target_usd": 753.25
+      }
+    },
+    {
+      "id": "commercial_portfolio_1mw",
+      "label": "1 MW commercial portfolio",
+      "interpretation": "Commercial operator portfolio with substantial onsite load.",
+      "capacity_kw": 1000,
+      "self_consumption_fraction": 0.75,
+      "observed_days": 861,
+      "first_date": "2024-01-01",
+      "last_date": "2026-05-11",
+      "daily_generation_distribution": {
+        "mean_kwh": 3203.1739,
+        "stddev_kwh": 1425.63,
+        "coefficient_of_variation": 0.445068,
+        "p05_kwh": 1120.58,
+        "p25_kwh": 2004.746,
+        "p50_kwh": 3109.416,
+        "p75_kwh": 4429.344,
+        "p95_kwh": 5538.916,
+        "longest_below_p25_run_days": 8
+      },
+      "monthly_distribution": {
+        "months": 29,
+        "p05_energy_value_usd": 6387.8938,
+        "p50_energy_value_usd": 9621.7488,
+        "p95_energy_value_usd": 14783.1164,
+        "p05_net_spk_issued": 778.2324,
+        "p50_net_spk_issued": 1172.2106,
+        "monthly_revenue_at_risk_usd_vs_p50": 3233.855
+      },
+      "annual_distribution": {
+        "years": 3,
+        "p10_energy_value_usd": 101951.6422,
+        "p50_energy_value_usd": 123676.1601,
+        "p90_energy_value_usd": 124443.051,
+        "p50_net_spk_issued": 15067.376088
+      },
+      "capital_model": {
+        "capex_usd": 3150000,
+        "debt_principal_usd": 2205000,
+        "annual_debt_service_usd": 328610.02,
+        "p50_simple_payback_years": 25.47,
+        "p10_simple_payback_years": 30.9,
+        "p50_dscr": 0.3764,
+        "p10_dscr": 0.3103,
+        "monthly_reserve_target_usd": 3233.86
+      }
+    }
+  ],
+  "monthly_rows": [
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-01",
+      "days": 31,
+      "generation_kwh": 727.1988,
+      "surplus_kwh": 327.2395,
+      "net_spk_issued": 16.34561,
+      "energy_value_usd": 64.357091
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-02",
+      "days": 29,
+      "generation_kwh": 848.8888,
+      "surplus_kwh": 382,
+      "net_spk_issued": 19.0809,
+      "energy_value_usd": 75.126656
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-03",
+      "days": 31,
+      "generation_kwh": 938.7072,
+      "surplus_kwh": 422.4182,
+      "net_spk_issued": 21.09979,
+      "energy_value_usd": 83.075588
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-04",
+      "days": 30,
+      "generation_kwh": 982.5448,
+      "surplus_kwh": 442.1452,
+      "net_spk_issued": 22.08515,
+      "energy_value_usd": 86.955219
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-05",
+      "days": 31,
+      "generation_kwh": 1086.0046,
+      "surplus_kwh": 488.7021,
+      "net_spk_issued": 24.410667,
+      "energy_value_usd": 96.111403
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-06",
+      "days": 30,
+      "generation_kwh": 1202.4778,
+      "surplus_kwh": 541.115,
+      "net_spk_issued": 27.028692,
+      "energy_value_usd": 106.419285
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-07",
+      "days": 31,
+      "generation_kwh": 1472.0534,
+      "surplus_kwh": 662.424,
+      "net_spk_issued": 33.088081,
+      "energy_value_usd": 130.276725
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-08",
+      "days": 31,
+      "generation_kwh": 1400.1368,
+      "surplus_kwh": 630.0615,
+      "net_spk_issued": 31.471576,
+      "energy_value_usd": 123.912106
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-09",
+      "days": 30,
+      "generation_kwh": 1203.6096,
+      "surplus_kwh": 541.6243,
+      "net_spk_issued": 27.054133,
+      "energy_value_usd": 106.519443
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-10",
+      "days": 31,
+      "generation_kwh": 898.3397,
+      "surplus_kwh": 404.2528,
+      "net_spk_issued": 20.192428,
+      "energy_value_usd": 79.503059
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-11",
+      "days": 30,
+      "generation_kwh": 677.8305,
+      "surplus_kwh": 305.0237,
+      "net_spk_issued": 15.235935,
+      "energy_value_usd": 59.988
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024-12",
+      "days": 31,
+      "generation_kwh": 628.175,
+      "surplus_kwh": 282.6787,
+      "net_spk_issued": 14.119802,
+      "energy_value_usd": 55.593483
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-01",
+      "days": 31,
+      "generation_kwh": 694.9746,
+      "surplus_kwh": 312.7386,
+      "net_spk_issued": 15.621292,
+      "energy_value_usd": 61.505255
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-02",
+      "days": 28,
+      "generation_kwh": 627.511,
+      "surplus_kwh": 282.38,
+      "net_spk_issued": 14.104879,
+      "energy_value_usd": 55.534727
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-03",
+      "days": 31,
+      "generation_kwh": 976.1138,
+      "surplus_kwh": 439.2512,
+      "net_spk_issued": 21.940596,
+      "energy_value_usd": 86.386068
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-04",
+      "days": 30,
+      "generation_kwh": 1012.2148,
+      "surplus_kwh": 455.4967,
+      "net_spk_issued": 22.75206,
+      "energy_value_usd": 89.581016
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-05",
+      "days": 31,
+      "generation_kwh": 1125.6626,
+      "surplus_kwh": 506.5482,
+      "net_spk_issued": 25.30208,
+      "energy_value_usd": 99.621139
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-06",
+      "days": 30,
+      "generation_kwh": 1356.4737,
+      "surplus_kwh": 610.4132,
+      "net_spk_issued": 30.490139,
+      "energy_value_usd": 120.04792
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-07",
+      "days": 31,
+      "generation_kwh": 1162.4018,
+      "surplus_kwh": 523.0808,
+      "net_spk_issued": 26.127887,
+      "energy_value_usd": 102.872562
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-08",
+      "days": 31,
+      "generation_kwh": 1470.3343,
+      "surplus_kwh": 661.6504,
+      "net_spk_issued": 33.049439,
+      "energy_value_usd": 130.124583
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-09",
+      "days": 30,
+      "generation_kwh": 1271.0258,
+      "surplus_kwh": 571.9616,
+      "net_spk_issued": 28.569484,
+      "energy_value_usd": 112.48579
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-10",
+      "days": 31,
+      "generation_kwh": 1090.5651,
+      "surplus_kwh": 490.7543,
+      "net_spk_issued": 24.513178,
+      "energy_value_usd": 96.515013
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-11",
+      "days": 30,
+      "generation_kwh": 728.0708,
+      "surplus_kwh": 327.6319,
+      "net_spk_issued": 16.365212,
+      "energy_value_usd": 64.434268
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025-12",
+      "days": 31,
+      "generation_kwh": 644.1417,
+      "surplus_kwh": 289.8638,
+      "net_spk_issued": 14.478695,
+      "energy_value_usd": 57.00654
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2026-01",
+      "days": 31,
+      "generation_kwh": 620.3412,
+      "surplus_kwh": 279.1535,
+      "net_spk_issued": 13.943721,
+      "energy_value_usd": 54.900197
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2026-02",
+      "days": 28,
+      "generation_kwh": 676.8071,
+      "surplus_kwh": 304.5632,
+      "net_spk_issued": 15.212932,
+      "energy_value_usd": 59.89743
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2026-03",
+      "days": 31,
+      "generation_kwh": 867.1724,
+      "surplus_kwh": 390.2276,
+      "net_spk_issued": 19.491866,
+      "energy_value_usd": 76.744758
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2026-04",
+      "days": 29,
+      "generation_kwh": 887.0307,
+      "surplus_kwh": 399.1638,
+      "net_spk_issued": 19.938234,
+      "energy_value_usd": 78.502213
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2026-05",
+      "days": 11,
+      "generation_kwh": 302.5188,
+      "surplus_kwh": 136.1334,
+      "net_spk_issued": 6.799866,
+      "energy_value_usd": 26.77291
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-01",
+      "days": 31,
+      "generation_kwh": 18179.97,
+      "surplus_kwh": 6362.9895,
+      "net_spk_issued": 317.831327,
+      "energy_value_usd": 1736.187136
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-02",
+      "days": 29,
+      "generation_kwh": 21222.22,
+      "surplus_kwh": 7427.777,
+      "net_spk_issued": 371.017461,
+      "energy_value_usd": 2026.72201
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-03",
+      "days": 31,
+      "generation_kwh": 23467.68,
+      "surplus_kwh": 8213.688,
+      "net_spk_issued": 410.273713,
+      "energy_value_usd": 2241.163437
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-04",
+      "days": 30,
+      "generation_kwh": 24563.621,
+      "surplus_kwh": 8597.2674,
+      "net_spk_issued": 429.433505,
+      "energy_value_usd": 2345.825805
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-05",
+      "days": 31,
+      "generation_kwh": 27150.114,
+      "surplus_kwh": 9502.5399,
+      "net_spk_issued": 474.651867,
+      "energy_value_usd": 2592.835888
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-06",
+      "days": 30,
+      "generation_kwh": 30061.945,
+      "surplus_kwh": 10521.6807,
+      "net_spk_issued": 525.557954,
+      "energy_value_usd": 2870.915747
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-07",
+      "days": 31,
+      "generation_kwh": 36801.335,
+      "surplus_kwh": 12880.4672,
+      "net_spk_issued": 643.37934,
+      "energy_value_usd": 3514.527492
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-08",
+      "days": 31,
+      "generation_kwh": 35003.419,
+      "surplus_kwh": 12251.1966,
+      "net_spk_issued": 611.947273,
+      "energy_value_usd": 3342.826512
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-09",
+      "days": 30,
+      "generation_kwh": 30090.239,
+      "surplus_kwh": 10531.5836,
+      "net_spk_issued": 526.052601,
+      "energy_value_usd": 2873.617827
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-10",
+      "days": 31,
+      "generation_kwh": 22458.4915,
+      "surplus_kwh": 7860.472,
+      "net_spk_issued": 392.630578,
+      "energy_value_usd": 2144.785939
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-11",
+      "days": 30,
+      "generation_kwh": 16945.7625,
+      "surplus_kwh": 5931.0169,
+      "net_spk_issued": 296.254294,
+      "energy_value_usd": 1618.320317
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024-12",
+      "days": 31,
+      "generation_kwh": 15704.374,
+      "surplus_kwh": 5496.5309,
+      "net_spk_issued": 274.551719,
+      "energy_value_usd": 1499.767717
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-01",
+      "days": 31,
+      "generation_kwh": 17374.365,
+      "surplus_kwh": 6081.0278,
+      "net_spk_issued": 303.747337,
+      "energy_value_usd": 1659.25186
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-02",
+      "days": 28,
+      "generation_kwh": 15687.776,
+      "surplus_kwh": 5490.7216,
+      "net_spk_issued": 274.261542,
+      "energy_value_usd": 1498.182606
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-03",
+      "days": 31,
+      "generation_kwh": 24402.844,
+      "surplus_kwh": 8540.9954,
+      "net_spk_issued": 426.622717,
+      "energy_value_usd": 2330.4716
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-04",
+      "days": 30,
+      "generation_kwh": 25305.371,
+      "surplus_kwh": 8856.8798,
+      "net_spk_issued": 442.401149,
+      "energy_value_usd": 2416.662931
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-05",
+      "days": 31,
+      "generation_kwh": 28141.565,
+      "surplus_kwh": 9849.5477,
+      "net_spk_issued": 491.984911,
+      "energy_value_usd": 2687.519457
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-06",
+      "days": 30,
+      "generation_kwh": 33911.8425,
+      "surplus_kwh": 11869.1449,
+      "net_spk_issued": 592.863787,
+      "energy_value_usd": 3238.580963
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-07",
+      "days": 31,
+      "generation_kwh": 29060.045,
+      "surplus_kwh": 10171.0158,
+      "net_spk_issued": 508.042237,
+      "energy_value_usd": 2775.234295
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-08",
+      "days": 31,
+      "generation_kwh": 36758.3565,
+      "surplus_kwh": 12865.4248,
+      "net_spk_issued": 642.627966,
+      "energy_value_usd": 3510.423044
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-09",
+      "days": 30,
+      "generation_kwh": 31775.6455,
+      "surplus_kwh": 11121.4759,
+      "net_spk_issued": 555.517719,
+      "energy_value_usd": 3034.574147
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-10",
+      "days": 31,
+      "generation_kwh": 27264.1285,
+      "surplus_kwh": 9542.445,
+      "net_spk_issued": 476.645128,
+      "energy_value_usd": 2603.724268
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-11",
+      "days": 30,
+      "generation_kwh": 18201.771,
+      "surplus_kwh": 6370.6199,
+      "net_spk_issued": 318.212462,
+      "energy_value_usd": 1738.269131
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025-12",
+      "days": 31,
+      "generation_kwh": 16103.543,
+      "surplus_kwh": 5636.2401,
+      "net_spk_issued": 281.530191,
+      "energy_value_usd": 1537.888358
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2026-01",
+      "days": 31,
+      "generation_kwh": 15508.5305,
+      "surplus_kwh": 5427.9857,
+      "net_spk_issued": 271.127886,
+      "energy_value_usd": 1481.06466
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2026-02",
+      "days": 28,
+      "generation_kwh": 16920.1775,
+      "surplus_kwh": 5922.0621,
+      "net_spk_issued": 295.807007,
+      "energy_value_usd": 1615.87695
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2026-03",
+      "days": 31,
+      "generation_kwh": 21679.31,
+      "surplus_kwh": 7587.7585,
+      "net_spk_issued": 379.008536,
+      "energy_value_usd": 2070.374101
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2026-04",
+      "days": 29,
+      "generation_kwh": 22175.7665,
+      "surplus_kwh": 7761.5183,
+      "net_spk_issued": 387.687836,
+      "energy_value_usd": 2117.785701
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2026-05",
+      "days": 11,
+      "generation_kwh": 7562.969,
+      "surplus_kwh": 2647.0391,
+      "net_spk_issued": 132.219605,
+      "energy_value_usd": 722.26354
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-01",
+      "days": 31,
+      "generation_kwh": 72719.88,
+      "surplus_kwh": 18179.97,
+      "net_spk_issued": 908.089501,
+      "energy_value_usd": 7453.7877
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-02",
+      "days": 29,
+      "generation_kwh": 84888.88,
+      "surplus_kwh": 21222.22,
+      "net_spk_issued": 1060.049889,
+      "energy_value_usd": 8701.1102
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-03",
+      "days": 31,
+      "generation_kwh": 93870.72,
+      "surplus_kwh": 23467.68,
+      "net_spk_issued": 1172.210616,
+      "energy_value_usd": 9621.7488
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-04",
+      "days": 30,
+      "generation_kwh": 98254.484,
+      "surplus_kwh": 24563.621,
+      "net_spk_issued": 1226.952869,
+      "energy_value_usd": 10071.08461
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-05",
+      "days": 31,
+      "generation_kwh": 108600.456,
+      "surplus_kwh": 27150.114,
+      "net_spk_issued": 1356.148197,
+      "energy_value_usd": 11131.54674
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-06",
+      "days": 30,
+      "generation_kwh": 120247.78,
+      "surplus_kwh": 30061.945,
+      "net_spk_issued": 1501.594154,
+      "energy_value_usd": 12325.39745
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-07",
+      "days": 31,
+      "generation_kwh": 147205.34,
+      "surplus_kwh": 36801.335,
+      "net_spk_issued": 1838.226682,
+      "energy_value_usd": 15088.54735
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-08",
+      "days": 31,
+      "generation_kwh": 140013.676,
+      "surplus_kwh": 35003.419,
+      "net_spk_issued": 1748.420778,
+      "energy_value_usd": 14351.40179
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-09",
+      "days": 30,
+      "generation_kwh": 120360.956,
+      "surplus_kwh": 30090.239,
+      "net_spk_issued": 1503.007438,
+      "energy_value_usd": 12336.99799
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-10",
+      "days": 31,
+      "generation_kwh": 89833.966,
+      "surplus_kwh": 22458.4915,
+      "net_spk_issued": 1121.801649,
+      "energy_value_usd": 9207.981515
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-11",
+      "days": 30,
+      "generation_kwh": 67783.05,
+      "surplus_kwh": 16945.7625,
+      "net_spk_issued": 846.440834,
+      "energy_value_usd": 6947.762625
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024-12",
+      "days": 31,
+      "generation_kwh": 62817.496,
+      "surplus_kwh": 15704.374,
+      "net_spk_issued": 784.433481,
+      "energy_value_usd": 6438.79334
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-01",
+      "days": 31,
+      "generation_kwh": 69497.46,
+      "surplus_kwh": 17374.365,
+      "net_spk_issued": 867.849533,
+      "energy_value_usd": 7123.48965
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-02",
+      "days": 28,
+      "generation_kwh": 62751.104,
+      "surplus_kwh": 15687.776,
+      "net_spk_issued": 783.604408,
+      "energy_value_usd": 6431.98816
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-03",
+      "days": 31,
+      "generation_kwh": 97611.376,
+      "surplus_kwh": 24402.844,
+      "net_spk_issued": 1218.922056,
+      "energy_value_usd": 10005.16604
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-04",
+      "days": 30,
+      "generation_kwh": 101221.484,
+      "surplus_kwh": 25305.371,
+      "net_spk_issued": 1264.00328,
+      "energy_value_usd": 10375.20211
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-05",
+      "days": 31,
+      "generation_kwh": 112566.26,
+      "surplus_kwh": 28141.565,
+      "net_spk_issued": 1405.671173,
+      "energy_value_usd": 11538.04165
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-06",
+      "days": 30,
+      "generation_kwh": 135647.37,
+      "surplus_kwh": 33911.8425,
+      "net_spk_issued": 1693.896532,
+      "energy_value_usd": 13903.855425
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-07",
+      "days": 31,
+      "generation_kwh": 116240.18,
+      "surplus_kwh": 29060.045,
+      "net_spk_issued": 1451.549248,
+      "energy_value_usd": 11914.61845
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-08",
+      "days": 31,
+      "generation_kwh": 147033.426,
+      "surplus_kwh": 36758.3565,
+      "net_spk_issued": 1836.079906,
+      "energy_value_usd": 15070.926165
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-09",
+      "days": 30,
+      "generation_kwh": 127102.582,
+      "surplus_kwh": 31775.6455,
+      "net_spk_issued": 1587.193491,
+      "energy_value_usd": 13028.014655
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-10",
+      "days": 31,
+      "generation_kwh": 109056.514,
+      "surplus_kwh": 27264.1285,
+      "net_spk_issued": 1361.843218,
+      "energy_value_usd": 11178.292685
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-11",
+      "days": 30,
+      "generation_kwh": 72807.084,
+      "surplus_kwh": 18201.771,
+      "net_spk_issued": 909.178463,
+      "energy_value_usd": 7462.72611
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025-12",
+      "days": 31,
+      "generation_kwh": 64414.172,
+      "surplus_kwh": 16103.543,
+      "net_spk_issued": 804.371973,
+      "energy_value_usd": 6602.45263
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2026-01",
+      "days": 31,
+      "generation_kwh": 62034.122,
+      "surplus_kwh": 15508.5305,
+      "net_spk_issued": 774.651098,
+      "energy_value_usd": 6358.497505
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2026-02",
+      "days": 28,
+      "generation_kwh": 67680.71,
+      "surplus_kwh": 16920.1775,
+      "net_spk_issued": 845.162869,
+      "energy_value_usd": 6937.272775
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2026-03",
+      "days": 31,
+      "generation_kwh": 86717.24,
+      "surplus_kwh": 21679.31,
+      "net_spk_issued": 1082.881539,
+      "energy_value_usd": 8888.5171
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2026-04",
+      "days": 29,
+      "generation_kwh": 88703.066,
+      "surplus_kwh": 22175.7665,
+      "net_spk_issued": 1107.679535,
+      "energy_value_usd": 9092.064265
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2026-05",
+      "days": 11,
+      "generation_kwh": 30251.876,
+      "surplus_kwh": 7562.969,
+      "net_spk_issued": 377.770303,
+      "energy_value_usd": 3100.81729
+    }
+  ],
+  "annual_rows": [
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2024",
+      "days": 366,
+      "generation_kwh": 12065.9668,
+      "surplus_kwh": 5429.6851,
+      "net_spk_issued": 271.212764,
+      "energy_value_usd": 1067.838058,
+      "annualized_generation_kwh": 12065.9668,
+      "annualized_energy_value_usd": 1067.838058,
+      "annualized_net_spk_issued": 271.212764
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2025",
+      "days": 365,
+      "generation_kwh": 12159.4901,
+      "surplus_kwh": 5471.7706,
+      "net_spk_issued": 273.314941,
+      "energy_value_usd": 1076.114881,
+      "annualized_generation_kwh": 12159.4901,
+      "annualized_energy_value_usd": 1076.114881,
+      "annualized_net_spk_issued": 273.314941
+    },
+    {
+      "site_id": "rooftop_home_10kw",
+      "period": "2026",
+      "days": 130,
+      "generation_kwh": 3353.8701,
+      "surplus_kwh": 1509.2416,
+      "net_spk_issued": 75.386619,
+      "energy_value_usd": 296.817508,
+      "annualized_generation_kwh": 9416.6353,
+      "annualized_energy_value_usd": 833.372234,
+      "annualized_net_spk_issued": 211.66243
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2024",
+      "days": 366,
+      "generation_kwh": 301649.171,
+      "surplus_kwh": 105577.2098,
+      "net_spk_issued": 5273.581632,
+      "energy_value_usd": 28807.495827,
+      "annualized_generation_kwh": 301649.171,
+      "annualized_energy_value_usd": 28807.495827,
+      "annualized_net_spk_issued": 5273.581632
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2025",
+      "days": 365,
+      "generation_kwh": 303987.253,
+      "surplus_kwh": 106395.5385,
+      "net_spk_issued": 5314.457146,
+      "energy_value_usd": 29030.78266,
+      "annualized_generation_kwh": 303987.253,
+      "annualized_energy_value_usd": 29030.78266,
+      "annualized_net_spk_issued": 5314.457146
+    },
+    {
+      "site_id": "neighborhood_cluster_250kw",
+      "period": "2026",
+      "days": 130,
+      "generation_kwh": 83846.7535,
+      "surplus_kwh": 29346.3637,
+      "net_spk_issued": 1465.85087,
+      "energy_value_usd": 8007.364952,
+      "annualized_generation_kwh": 235415.8848,
+      "annualized_energy_value_usd": 22482.216981,
+      "annualized_net_spk_issued": 4115.658212
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2024",
+      "days": 366,
+      "generation_kwh": 1206596.684,
+      "surplus_kwh": 301649.171,
+      "net_spk_issued": 15067.376088,
+      "energy_value_usd": 123676.16011,
+      "annualized_generation_kwh": 1206596.684,
+      "annualized_energy_value_usd": 123676.16011,
+      "annualized_net_spk_issued": 15067.376088
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2025",
+      "days": 365,
+      "generation_kwh": 1215949.012,
+      "surplus_kwh": 303987.253,
+      "net_spk_issued": 15184.163281,
+      "energy_value_usd": 124634.77373,
+      "annualized_generation_kwh": 1215949.012,
+      "annualized_energy_value_usd": 124634.77373,
+      "annualized_net_spk_issued": 15184.163281
+    },
+    {
+      "site_id": "commercial_portfolio_1mw",
+      "period": "2026",
+      "days": 130,
+      "generation_kwh": 335387.014,
+      "surplus_kwh": 83846.7535,
+      "net_spk_issued": 4188.145344,
+      "energy_value_usd": 34377.168935,
+      "annualized_generation_kwh": 941663.5393,
+      "annualized_energy_value_usd": 96520.512779,
+      "annualized_net_spk_issued": 11759.023466
+    }
+  ],
+  "hard_boundaries": [
+    "NASA irradiance is real public resource data, not signed meter production.",
+    "PV conversion, tariffs, export credit, debt terms, capex, and self-consumption are explicit assumptions.",
+    "This improves empirical finance evidence but does not prove customer demand, legal redemption, or real revenue.",
+    "SPK minting still requires accepted signed meter or inverter surplus attestations."
+  ]
+}

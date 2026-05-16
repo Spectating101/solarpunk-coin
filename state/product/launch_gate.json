@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T17:37:58.468Z",
+  "generated_at": "2026-05-16T18:22:25.383Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 9,
+      "passed_checks": 10,
       "blocking_checks": 0,
       "checks": [
         {
@@ -73,6 +73,13 @@
           "blocking": true,
           "message": "Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.",
           "evidence": "docs/product/SPK_FINANCE_DOSSIER.md"
+        },
+        {
+          "name": "Empirical finance backtest exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.",
+          "evidence": "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
         }
       ]
     },
@@ -80,7 +87,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 10,
+      "passed_checks": 11,
       "blocking_checks": 2,
       "checks": [
         {
@@ -147,6 +154,13 @@
           "evidence": "docs/product/SPK_FINANCE_DOSSIER.md"
         },
         {
+          "name": "Empirical finance backtest exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.",
+          "evidence": "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
+        },
+        {
           "name": "Governed attested-SPK deployment",
           "pass": false,
           "blocking": true,
@@ -187,7 +201,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 10,
+      "passed_checks": 11,
       "blocking_checks": 6,
       "checks": [
         {
@@ -252,6 +266,13 @@
           "blocking": true,
           "message": "Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.",
           "evidence": "docs/product/SPK_FINANCE_DOSSIER.md"
+        },
+        {
+          "name": "Empirical finance backtest exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.",
+          "evidence": "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
         },
         {
           "name": "Governed attested-SPK deployment",

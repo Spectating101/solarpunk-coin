@@ -262,7 +262,28 @@ This turns the currency model into finance language: income statement, active-su
 
 Scope note: this is a finance model, not investment advice, not a securities offering, and not current realized revenue. It intentionally shows that the protocol is not self-funding under current fee policy.
 
-### 2.14 Governed Pilot Stack Scaffold
+### 2.14 Empirical Finance Backtest
+
+This tests the energy-money thesis against historical resource data instead of only recent keeper samples or hand-built scenarios.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Backtest generator | Available | `scripts/empirical_finance_backtest.js` |
+| Public resource source | NASA POWER Daily API, `ALLSKY_SFC_SW_DWN` | `state/product/empirical_finance_backtest.json` |
+| Location and window | Taoyuan, Taiwan, `2024-01-01` -> `2026-05-11` | Same file |
+| Observed days | 861 | Same file |
+| Archetypes | 10 kW home, 250 kW neighborhood cluster, 1 MW commercial portfolio | `docs/product/EMPIRICAL_FINANCE_BACKTEST.md` |
+| 10 kW p50 annual energy value | $1,067.84 | Same file |
+| 10 kW p50 DSCR | 0.325x under stated capex/tariff/debt assumptions | Same file |
+| 10 kW p10 DSCR | 0.2679x | Same file |
+| 10 kW monthly revenue-at-risk | $27.92 vs p50 | Same file |
+| Status | `resource_real_but_finance_requires_better_tariff_capex_or_capital_structure` | Same file |
+| Monthly CSV | Generated | `state/product/empirical_finance_backtest_monthly.csv` |
+| Tests | 3 Node tests | `test-node/empirical_finance_backtest.test.js` |
+
+Scope note: this is stronger resource/finance evidence, not customer-demand proof or signed meter production. It intentionally shows that the physical resource model is plausible while raw economics under current assumptions are not enough for a paid product.
+
+### 2.15 Governed Pilot Stack Scaffold
 
 This is the deploy/readback path for moving from proof-scoped SPK to a governed testnet pilot stack that includes settlement and redemption.
 
@@ -276,7 +297,7 @@ This is the deploy/readback path for moving from proof-scoped SPK to a governed 
 
 Scope note: the local Hardhat receipt proves the deploy script executes. Persistent readback is for Sepolia or a long-running local node.
 
-### 2.15 Test Suite (Reproducible, Run by Anyone)
+### 2.16 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -288,7 +309,7 @@ Expected output: **102 passing**, including signed surplus-attestation replay, r
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.15 Python Pricing Library (Reproducible)
+### 2.17 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives

@@ -76,6 +76,7 @@ function evaluateLaunchGate(options = {}) {
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
+  const empiricalBacktest = readJson(root, "state/product/empirical_finance_backtest.json", {});
   const audit = readJson(root, "docs/project/SECURITY_AUDIT_STATUS.json", {});
   const governance = readJson(root, "docs/project/GOVERNANCE_STATUS.json", {});
 
@@ -148,6 +149,16 @@ function evaluateLaunchGate(options = {}) {
       ),
       "Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.",
       "docs/product/SPK_FINANCE_DOSSIER.md"
+    ),
+    check(
+      "Empirical finance backtest exists",
+      Boolean(
+        Number(empiricalBacktest.finance_claims?.empirical_days || 0) >= 365 &&
+        empiricalBacktest.finance_claims?.empirical_status &&
+        Number(empiricalBacktest.archetypes?.length || 0) > 0
+      ),
+      "Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.",
+      "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
     ),
   ];
 

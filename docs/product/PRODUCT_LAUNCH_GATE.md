@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-16T17:37:58.468Z`
+- generated_at: `2026-05-16T18:22:25.383Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,9 +9,9 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 9 | 0 |
-| Closed testnet pilot | `blocked` | 10 | 2 |
-| Paid/mainnet product | `blocked` | 10 | 6 |
+| SolarPunk Public Lab | `launchable` | 10 | 0 |
+| Closed testnet pilot | `blocked` | 11 | 2 |
+| Paid/mainnet product | `blocked` | 11 | 6 |
 
 ## Next Actions
 
@@ -40,6 +40,8 @@
   Evidence: `docs/product/ENERGY_MONEY_SIMULATION.md`
 - PASS `SPK finance dossier exists`: Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.
   Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
+- PASS `Empirical finance backtest exists`: Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.
+  Evidence: `docs/product/EMPIRICAL_FINANCE_BACKTEST.md`
 
 ## Closed testnet pilot
 
@@ -61,6 +63,8 @@
   Evidence: `docs/product/ENERGY_MONEY_SIMULATION.md`
 - PASS `SPK finance dossier exists`: Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.
   Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
+- PASS `Empirical finance backtest exists`: Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.
+  Evidence: `docs/product/EMPIRICAL_FINANCE_BACKTEST.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.
@@ -92,6 +96,8 @@
   Evidence: `docs/product/ENERGY_MONEY_SIMULATION.md`
 - PASS `SPK finance dossier exists`: Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.
   Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
+- PASS `Empirical finance backtest exists`: Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.
+  Evidence: `docs/product/EMPIRICAL_FINANCE_BACKTEST.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.

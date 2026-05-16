@@ -16,6 +16,7 @@ import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
+import empiricalFinanceBacktest from '../../../state/product/empirical_finance_backtest.json';
 import { GITHUB_REPO } from '../constants/contracts';
 import EnergyMoneyWorkbench from './EnergyMoneyWorkbench';
 
@@ -52,6 +53,8 @@ export default function CurrencyLab() {
   const solarResource = resourceBenchmark.resources.find((resource) => resource.id === 'solar_pv_rooftop');
   const windResource = resourceBenchmark.resources.find((resource) => resource.id === 'wind_turbine');
   const oilResource = resourceBenchmark.resources.find((resource) => resource.id === 'oil_barrel');
+  const empiricalPrimary = empiricalFinanceBacktest.archetypes.find((item) => item.id === 'rooftop_home_10kw') ||
+    empiricalFinanceBacktest.archetypes[0];
   const worstStress = monetaryStress.scenarios.reduce((worst, scenario) => (
     Number(scenario.additional_buffer_required_usd || 0) > Number(worst.additional_buffer_required_usd || 0)
       ? scenario
@@ -158,6 +161,27 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatUsd(spkFinanceDossier.stress_capital_stack.minimum_finance_stack_usd, 0)}</div>
           <div className="metric-sub">
             runway, audit, legal, oracle, working capital, stress buffer
+          </div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Empirical Backtest</div>
+          <div className="metric-value">{formatNumber(empiricalFinanceBacktest.finance_claims.empirical_days, 0)} days</div>
+          <div className="metric-sub">
+            NASA POWER {empiricalFinanceBacktest.finance_claims.first_date} to {empiricalFinanceBacktest.finance_claims.last_date}
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">P50 Rooftop DSCR</div>
+          <div className="metric-value">{formatNumber(empiricalFinanceBacktest.finance_claims.p50_rooftop_dscr, 4)}x</div>
+          <div className="metric-sub">
+            real resource data; finance still needs better tariff, capex, or capital structure
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Monthly Revenue-at-Risk</div>
+          <div className="metric-value">{formatUsd(empiricalFinanceBacktest.finance_claims.rooftop_monthly_revenue_at_risk_usd, 2)}</div>
+          <div className="metric-sub">
+            {empiricalPrimary.label}: p50 minus p05 monthly energy value
           </div>
         </div>
         <div className="metric-card">
@@ -294,6 +318,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_FINANCE_DOSSIER.md`} target="_blank" rel="noreferrer">
               Finance dossier <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/EMPIRICAL_FINANCE_BACKTEST.md`} target="_blank" rel="noreferrer">
+              Empirical backtest <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

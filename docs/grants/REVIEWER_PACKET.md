@@ -19,6 +19,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | Monetary stress harness | Redemption-wave and physical-shortfall scenarios with explicit reserve gaps | [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) |
 | Energy-money simulation | Measured keeper resource signals drive SPK issuance, settlement, redemption, and reserve modeling | [`docs/product/ENERGY_MONEY_SIMULATION.md`](../product/ENERGY_MONEY_SIMULATION.md) |
 | SPK finance dossier | Income statement, balance-sheet liability, break-even fee-base gap, reserve coverage, and closed-pilot finance stack | [`docs/product/SPK_FINANCE_DOSSIER.md`](../product/SPK_FINANCE_DOSSIER.md) |
+| Empirical finance backtest | 861-day NASA POWER historical resource-to-finance backtest for DSCR, payback, and reserve-at-risk | [`docs/product/EMPIRICAL_FINANCE_BACKTEST.md`](../product/EMPIRICAL_FINANCE_BACKTEST.md) |
 | Governed pilot-stack scaffold | Deploy/readback scripts for SPK + treasury + currency system pilot stack | [`docs/project/PILOT_STACK_DEPLOYMENT.md`](../project/PILOT_STACK_DEPLOYMENT.md) |
 | Product empirics | Single-product empirical dossier tying thesis evidence to SPK | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](../product/SPK_PRODUCT_EMPIRICS.md) |
 | Tests | 102/102 Hardhat tests passing | `npx hardhat test` |
@@ -45,6 +46,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - The energy-money simulation uses recent real keeper-index days to project 15,216.48 SPK annualized issuance across transparent rooftop/neighborhood/commercial archetypes.
 - The monetary stress harness maps redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 - The SPK finance dossier shows annualized protocol fee revenue, active-supply liability, fee break-even gap, and a closed-pilot finance stack instead of hiding the non-self-funding stage.
+- The empirical finance backtest uses 861 observed NASA POWER daily records and shows p50 10 kW rooftop DSCR of `0.325x`, proving the resource model is grounded while exposing the tariff/capex/capital-structure blocker.
 - Source-verified contracts are deployed and externally inspectable.
 - The repo contains on-chain transaction receipts, keeper artifacts, tests, threat model, trust assumptions, audit handoff, and grant drafts.
 - The frontend demo now foregrounds the SPK mint product path and distinguishes the proof-scoped attested stack from the older legacy Sepolia stack.
