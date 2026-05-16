@@ -1,6 +1,6 @@
 # SolarPunk Currency System Lab
 
-- generated_at: `2026-05-16T06:08:44.382Z`
+- generated_at: `2026-05-16T06:13:00.073Z`
 - thesis: Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.
 
 ## Source Evidence
@@ -13,8 +13,8 @@
 | Accepted surplus | `2606.7` kWh |
 | Minted SPK | `130.1697` |
 | Energy price | `$0.05/kWh` |
-| Daily keeper runs | `19` |
-| Latest keeper run | `2026-05-15` |
+| Daily keeper runs | `20` |
+| Latest keeper run | `2026-05-16` |
 
 ## Four-Layer Thunder Path
 

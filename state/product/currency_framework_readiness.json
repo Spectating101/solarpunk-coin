@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T06:12:08.335Z",
+  "generated_at": "2026-05-16T06:13:00.241Z",
   "title": "SolarPunk Currency Framework Readiness",
   "current_internal_stage": "currency_framework_lab_ready",
   "launch_gate_context": "public_testnet_product",
@@ -78,7 +78,7 @@
     "redeemed_energy_kwh_lab": 400,
     "settlement_volume_spk_lab": 83,
     "velocity_ratio_lab": 0.6376,
-    "daily_keeper_runs": 19
+    "daily_keeper_runs": 20
   },
   "internal_boundary": "This is an internal engineering-readiness artifact. It measures whether the currency mechanism is coherent, testable, and empirically instrumented; it does not assert legal, audit, market, or mainnet readiness.",
   "next_build_targets": [

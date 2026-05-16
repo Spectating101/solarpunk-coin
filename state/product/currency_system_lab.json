@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T06:08:44.382Z",
+  "generated_at": "2026-05-16T06:13:00.073Z",
   "title": "SolarPunk Currency System Lab",
   "thesis": "Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.",
   "source_evidence": {
@@ -11,8 +11,8 @@
     "accepted_surplus_kwh": 2606.7,
     "minted_spk": "130.1697",
     "energy_price_usd_per_kwh": 0.05,
-    "daily_keeper_runs": 19,
-    "latest_keeper_run": "2026-05-15",
+    "daily_keeper_runs": 20,
+    "latest_keeper_run": "2026-05-16",
     "launch_gate": "public_testnet_product"
   },
   "layers": [

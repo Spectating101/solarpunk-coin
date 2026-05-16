@@ -1,6 +1,6 @@
 # SolarPunk Currency Framework Readiness
 
-- generated_at: `2026-05-16T06:12:08.335Z`
+- generated_at: `2026-05-16T06:13:00.241Z`
 - current_internal_stage: `currency_framework_lab_ready`
 - launch_gate_context: `public_testnet_product`
 - readiness: `7/7` checks
@@ -43,7 +43,7 @@ Treat SPK as an energy-denominated settlement asset: surplus attestations create
 | redeemed_energy_kwh_lab | `400` |
 | settlement_volume_spk_lab | `83` |
 | velocity_ratio_lab | `0.6376` |
-| daily_keeper_runs | `19` |
+| daily_keeper_runs | `20` |
 
 ## Next Internal Build Targets
 
