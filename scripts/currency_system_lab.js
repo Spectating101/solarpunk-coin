@@ -128,6 +128,7 @@ function buildCurrencyLab(options = {}) {
     source_evidence: {
       spk_contract: meter.contract_address,
       currency_framework_contract: "contracts/SolarPunkCurrencySystem.sol",
+      field_receipt_loop: "docs/product/FIELD_RECEIPT_LOOP.md",
       mint_tx: meter.tx_hash,
       source_hash: meter.source_hash,
       attestation_hash: meter.attestation_hash,
@@ -149,11 +150,11 @@ function buildCurrencyLab(options = {}) {
       },
       {
         id: 2,
-        name: "Closed pilot surrogate",
-        status: "simulated_from_public_fixture",
-        claim: "The same accepted bundle is treated as a named pilot stand-in to exercise the operating loop.",
-        evidence: ["state/attestations/latest_attestation_bundle.json", "docs/project/METER_CSV_IMPORT.md"],
-        blocker_to_upgrade: "Governed attested-SPK redeploy plus one real meter or inverter export.",
+        name: "Local field receipt loop",
+        status: "local_field_receipt_loop",
+        claim: "The accepted meter bundle now runs through a local end-to-end loop: SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution.",
+        evidence: ["docs/product/FIELD_RECEIPT_LOOP.md", "state/product/field_receipt_loop.json"],
+        blocker_to_upgrade: "Replace fixture meter data with one real meter or inverter export.",
       },
       {
         id: 3,
@@ -175,10 +176,10 @@ function buildCurrencyLab(options = {}) {
     ledger,
     claim_boundaries: [
       "Layer 1 is public Sepolia evidence.",
-      "Layer 2 is still a compressed pilot surrogate.",
+      "Layer 2 is a deterministic local field-receipt loop, not a real external pilot.",
       "Layers 3-4 now have local contract/test coverage, but no public deployment or real commercial adoption.",
       "No token sale, mainnet readiness, yield, audit completion, or legal redemption claim is made.",
-      "The purpose is to test whether the currency-system logic is coherent enough to start a field receipt loop.",
+      "The purpose is to move from local field receipt coherence to a real meter export loop.",
     ],
   };
 }
@@ -196,6 +197,7 @@ function writeMarkdown(filePath, report) {
   lines.push("|---|---:|");
   lines.push(`| SPK contract | \`${report.source_evidence.spk_contract}\` |`);
   lines.push(`| Currency framework contract | \`${report.source_evidence.currency_framework_contract}\` |`);
+  lines.push(`| Field receipt loop | \`${report.source_evidence.field_receipt_loop}\` |`);
   lines.push(`| Mint tx | \`${report.source_evidence.mint_tx}\` |`);
   lines.push(`| Accepted surplus | \`${report.source_evidence.accepted_surplus_kwh}\` kWh |`);
   lines.push(`| Minted SPK | \`${report.source_evidence.minted_spk}\` |`);

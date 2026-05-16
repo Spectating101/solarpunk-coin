@@ -22,6 +22,7 @@ The lab exists to answer one question:
 | Product launch gate | Explicit launch status | `docs/product/PRODUCT_LAUNCH_GATE.md` |
 | Currency system lab | Four-layer compressed currency prototype | `docs/product/CURRENCY_SYSTEM_LAB.md` |
 | Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
+| Field receipt loop | Local mint -> settlement -> redemption -> delivery receipt | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
 | Evidence register | Reviewer receipts | `EVIDENCE.md` |
 
@@ -70,6 +71,7 @@ Run this loop while looking for partners, grants, and pilot users:
 npm run product:launch-gate
 npm run product:currency-lab
 npm run product:currency-framework
+npm run product:field-receipt
 npm run product:empirics
 npm test
 npm run attestations:test

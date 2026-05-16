@@ -41,12 +41,14 @@ function score(items) {
 function evaluateCurrencyFramework(options = {}) {
   const root = options.root || ROOT;
   const currencyLab = readJson(root, "state/product/currency_system_lab.json", {});
+  const fieldReceipt = readJson(root, "state/product/field_receipt_loop.json", {});
   const launchGate = readJson(root, "state/product/launch_gate.json", {});
   const product = readJson(root, "state/proofs/spk_product_empirics.json", {});
   const testSource = readText(root, "test/SolarPunkCurrencySystem.test.js");
   const contractSource = readText(root, "contracts/SolarPunkCurrencySystem.sol");
   const sourceEvidence = currencyLab.source_evidence || {};
   const accounting = currencyLab.ledger?.accounting || {};
+  const fieldAccounting = fieldReceipt.accounting || {};
 
   const checks = [
     item(
@@ -94,6 +96,17 @@ function evaluateCurrencyFramework(options = {}) {
       "The new currency mechanics are covered by settlement, burn/redemption, replay, slippage, fulfillment, shortfall, dispute, and re-resolution accounting tests."
     ),
     item(
+      "Field receipt loop",
+      fieldReceipt.execution_scope === "local_deterministic_no_external_dependencies" &&
+        fieldReceipt.dependencies?.external_network_required === false &&
+        fieldAccounting.conservation_pass === true &&
+        fieldAccounting.delivery_fulfilled === true &&
+        Number(fieldAccounting.owed_kwh || 0) === Number(fieldAccounting.delivered_kwh || 0),
+      "local_end_to_end_receipt",
+      "docs/product/FIELD_RECEIPT_LOOP.md",
+      "The repo can run the whole internal currency path with no external dependency: signed meter surplus, SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution."
+    ),
+    item(
       "Empirical feed continuity",
       Number(product.operational_basis?.total_successful_runs || sourceEvidence.daily_keeper_runs || 0) >= 14,
       "running_experiment",
@@ -105,11 +118,6 @@ function evaluateCurrencyFramework(options = {}) {
   const readiness = score(checks);
   const nextBuildTargets = [
     {
-      name: "Field receipt loop",
-      status: "next_internal_target",
-      description: "Feed a real meter/inverter CSV into the attestation path, mint SPK, settle one invoice through SolarPunkCurrencySystem, and open one redemption receipt.",
-    },
-    {
       name: "Currency stress harness",
       status: "next_internal_target",
       description: "Simulate multi-actor payment velocity, redemption load, reserve ratio, and delivery shortfalls under daily energy-price scenarios.",
@@ -119,6 +127,11 @@ function evaluateCurrencyFramework(options = {}) {
       status: "next_internal_target",
       description: "Add a deployment script and public readback for SolarPunkCurrencySystem beside the attestation-enabled SPK proof stack.",
     },
+    {
+      name: "Real meter export loop",
+      status: "next_internal_target",
+      description: "Replace the fixture meter bundle with a real inverter or utility export while keeping the same field receipt script and accounting checks.",
+    },
   ];
 
   return {
@@ -126,7 +139,7 @@ function evaluateCurrencyFramework(options = {}) {
     title: "SolarPunk Currency Framework Readiness",
     current_internal_stage:
       readiness.passed === readiness.total
-        ? "currency_framework_lab_ready"
+        ? "field_receipt_loop_ready"
         : "currency_framework_lab_incomplete",
     launch_gate_context: launchGate.recommended_current_launch || "unknown",
     design_thesis:
@@ -151,6 +164,11 @@ function evaluateCurrencyFramework(options = {}) {
       redeemed_energy_kwh_lab: accounting.redeemed_energy_kwh_equivalent || null,
       settlement_volume_spk_lab: accounting.settlement_volume_spk || null,
       velocity_ratio_lab: accounting.velocity_ratio || null,
+      field_receipt_minted_spk: fieldAccounting.minted_spk || null,
+      field_receipt_settlement_volume_spk: fieldAccounting.settlement_volume_spk || null,
+      field_receipt_redeemed_spk: fieldAccounting.redeemed_spk || null,
+      field_receipt_owed_kwh: fieldAccounting.owed_kwh || null,
+      field_receipt_delivered_kwh: fieldAccounting.delivered_kwh || null,
       daily_keeper_runs: product.operational_basis?.total_successful_runs || sourceEvidence.daily_keeper_runs || null,
     },
     internal_boundary:

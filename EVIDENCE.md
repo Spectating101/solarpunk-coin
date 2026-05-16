@@ -156,7 +156,8 @@ This is the first internal currency-framework layer around SPK. It does not mint
 | Energy redemption receipt | Implemented: transfer SPK into registry, burn via `redeemForEnergy`, record owed kWh | Same file |
 | Delivery resolution | Pending, fulfilled, shortfall, disputed states | Same file |
 | Contract tests | 6 additional Hardhat tests | `test/SolarPunkCurrencySystem.test.js` |
-| Internal readiness report | 7/7 checks pass | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
+| Local field receipt loop | 130.1697 SPK minted, 75 SPK settled, 20 SPK redeemed, 400 kWh delivered | `docs/product/FIELD_RECEIPT_LOOP.md` |
+| Internal readiness report | 8/8 checks pass | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 
 Scope note: this is a local contract/test/readiness layer, not a deployed Sepolia/mainnet currency stack yet.
 

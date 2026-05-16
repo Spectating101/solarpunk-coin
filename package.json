@@ -30,6 +30,8 @@
     "product:currency-lab:test": "node --test test-node/currency_system_lab.test.js",
     "product:currency-framework": "node scripts/currency_framework_readiness.js",
     "product:currency-framework:test": "node --test test-node/currency_framework_readiness.test.js",
+    "product:field-receipt": "hardhat run scripts/run_currency_field_receipt_loop.js",
+    "product:field-receipt:test": "node --test test-node/field_receipt_loop.test.js",
     "proof:interaction": "hardhat run scripts/build_interaction_proof.js --network ${PROOF_NETWORK:-amoy}",
     "proof:publish": "python3 scripts/publish_proof_surface.py --network ${PROOF_NETWORK:-amoy}",
     "node": "hardhat node",

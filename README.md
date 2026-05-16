@@ -18,8 +18,9 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) | Current public lab operating model and participation boundary |
 | [`docs/product/PUBLIC_LAB_SOCIAL_KIT.md`](./docs/product/PUBLIC_LAB_SOCIAL_KIT.md) | Public announcement copy, social guardrails, and validation metrics |
 | [`docs/product/PRODUCT_LAUNCH_GATE.md`](./docs/product/PRODUCT_LAUNCH_GATE.md) | Launch gate: public lab/testnet launchable; paid/mainnet blocked |
-| [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: proof, pilot surrogate, receipt surrogate, settlement surrogate |
+| [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: public proof, local field receipt, redemption framework, settlement framework |
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
+| [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
 | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](./docs/product/SPK_PRODUCT_EMPIRICS.md) | Single-product SPK proof and empirical dossier |
 | [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
 | [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |
@@ -137,6 +138,7 @@ npm run product:empirics
 npm run product:launch-gate
 npm run product:currency-lab
 npm run product:currency-framework
+npm run product:field-receipt
 
 # Import a pilot-style meter CSV into signed raw readings
 npm run meter:onboard -- --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --device-address=0x... --capacity-kw=120

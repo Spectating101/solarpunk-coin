@@ -9,17 +9,21 @@ import {
 } from 'lucide-react';
 import currencyLab from '../../../state/product/currency_system_lab.json';
 import currencyFramework from '../../../state/product/currency_framework_readiness.json';
+import fieldReceipt from '../../../state/product/field_receipt_loop.json';
 import { GITHUB_REPO } from '../constants/contracts';
 
 const statusCopy = {
   real_public_testnet: 'Real public proof',
   simulated_from_public_fixture: 'Pilot surrogate',
+  local_field_receipt_loop: 'Local receipt loop',
   local_contract_tested: 'Local contract tested',
   lab_model_only: 'Lab model only',
 };
 
 function statusClass(status) {
-  return status === 'real_public_testnet' || status === 'local_contract_tested' ? 'launchable' : 'blocked';
+  return status === 'real_public_testnet' ||
+    status === 'local_contract_tested' ||
+    status === 'local_field_receipt_loop' ? 'launchable' : 'blocked';
 }
 
 function formatNumber(value, digits = 4) {
@@ -38,8 +42,8 @@ export default function CurrencyLab() {
           <h1>Better currency thesis, compressed into one lab run.</h1>
           <p>
             This is the fast path across the first four layers: public proof, pilot surrogate,
-            redeemable receipt framework, and network settlement framework. Layer 1 is public Sepolia evidence.
-            Layers 3-4 now have local contract coverage, while Layer 2 still waits for a real field receipt loop.
+            local field receipt loop, redeemable receipt framework, and network settlement framework.
+            Layer 1 is public Sepolia evidence; Layer 2 now runs fully inside the repo without external dependencies.
           </p>
         </div>
         <div className={`system-tile ${accounting.conservation_pass ? 'good' : 'warn'}`}>
@@ -82,6 +86,13 @@ export default function CurrencyLab() {
             {currencyFramework.readiness.passed}/{currencyFramework.readiness.total}
           </div>
           <div className="metric-sub">{currencyFramework.current_internal_stage.replaceAll('_', ' ')}</div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Field Receipt Loop</div>
+          <div className="metric-value">{formatNumber(fieldReceipt.accounting.delivered_kwh)} kWh</div>
+          <div className="metric-sub">
+            {formatNumber(fieldReceipt.accounting.settlement_volume_spk)} SPK settled, no external dependency
+          </div>
         </div>
       </div>
 
@@ -151,6 +162,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/CURRENCY_FRAMEWORK_READINESS.md`} target="_blank" rel="noreferrer">
               Framework readiness <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/FIELD_RECEIPT_LOOP.md`} target="_blank" rel="noreferrer">
+              Field receipt loop <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

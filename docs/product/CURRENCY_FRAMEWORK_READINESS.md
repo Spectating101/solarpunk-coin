@@ -1,9 +1,9 @@
 # SolarPunk Currency Framework Readiness
 
-- generated_at: `2026-05-16T06:13:00.241Z`
-- current_internal_stage: `currency_framework_lab_ready`
+- generated_at: `2026-05-16T06:59:52.577Z`
+- current_internal_stage: `field_receipt_loop_ready`
 - launch_gate_context: `public_testnet_product`
-- readiness: `7/7` checks
+- readiness: `8/8` checks
 
 ## Thesis
 
@@ -30,6 +30,7 @@ Treat SPK as an energy-denominated settlement asset: surplus attestations create
 | Redemption receipt contract | `implemented` | PASS | `contracts/SolarPunkCurrencySystem.sol` | SPK can be transferred into a registry, burned through redeemForEnergy, and converted into an owed-kWh receipt. |
 | Delivery resolution and dispute state | `implemented` | PASS | `contracts/SolarPunkCurrencySystem.sol` | The framework can track pending, fulfilled, shortfall, and disputed redemption states. |
 | Contract regression tests | `tested` | PASS | `test/SolarPunkCurrencySystem.test.js` | The new currency mechanics are covered by settlement, burn/redemption, replay, slippage, fulfillment, shortfall, dispute, and re-resolution accounting tests. |
+| Field receipt loop | `local_end_to_end_receipt` | PASS | `docs/product/FIELD_RECEIPT_LOOP.md` | The repo can run the whole internal currency path with no external dependency: signed meter surplus, SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution. |
 | Empirical feed continuity | `running_experiment` | PASS | `docs/project/DAILY_EXPERIMENT_STATUS.md` | The daily data loop is long enough to support continuing empirical claims instead of a one-off demo. |
 
 ## Current Quantitative State
@@ -43,13 +44,18 @@ Treat SPK as an energy-denominated settlement asset: surplus attestations create
 | redeemed_energy_kwh_lab | `400` |
 | settlement_volume_spk_lab | `83` |
 | velocity_ratio_lab | `0.6376` |
+| field_receipt_minted_spk | `130.1697` |
+| field_receipt_settlement_volume_spk | `75` |
+| field_receipt_redeemed_spk | `20` |
+| field_receipt_owed_kwh | `400` |
+| field_receipt_delivered_kwh | `400` |
 | daily_keeper_runs | `20` |
 
 ## Next Internal Build Targets
 
-- `Field receipt loop` (next_internal_target): Feed a real meter/inverter CSV into the attestation path, mint SPK, settle one invoice through SolarPunkCurrencySystem, and open one redemption receipt.
 - `Currency stress harness` (next_internal_target): Simulate multi-actor payment velocity, redemption load, reserve ratio, and delivery shortfalls under daily energy-price scenarios.
 - `Deployable currency stack` (next_internal_target): Add a deployment script and public readback for SolarPunkCurrencySystem beside the attestation-enabled SPK proof stack.
+- `Real meter export loop` (next_internal_target): Replace the fixture meter bundle with a real inverter or utility export while keeping the same field receipt script and accounting checks.
 
 ## Boundary
 
