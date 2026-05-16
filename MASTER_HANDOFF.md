@@ -8,6 +8,8 @@
 
 This document is the canonical, comprehensive handoff for the SolarPunk Protocol. It describes the project's purpose, current state, architecture, operations, design decisions and their rationale, outstanding items, and the strategic outlook (both grant prospects and career/value prospects). Anyone reading this without prior context should be able to fully orient themselves.
 
+**2026-05-16 delta:** For the freshest reviewer-facing status, read `CURRENT_STATUS.md` and `EVIDENCE.md` first. Since this handoff was written, the repo added the attestation-enabled SPK proof stack, `SolarPunkCurrencySystem`, the local field receipt loop, the currency framework readiness reports, and the multi-resource benchmark lab (`docs/product/RESOURCE_BENCHMARK_LAB.md`) covering NASA solar/wind, standard PV conversion/cost assumptions, renewable benchmarks, and oil as a non-mint benchmark only.
+
 ---
 
 ## 0. Executive Summary

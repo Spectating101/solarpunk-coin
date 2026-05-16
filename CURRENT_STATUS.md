@@ -14,6 +14,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Currency-framework contract | `SolarPunkCurrencySystem` implemented locally: SPK invoice settlement, redemption burn into owed-kWh receipt, fulfillment/shortfall/dispute states |
 | Field receipt loop | Local no-external-dependency run: signed meter surplus -> SPK mint -> 75 SPK settled -> 20 SPK redeemed -> 400 kWh delivered |
 | Theory/comparables anchor | Added: SPK positioned as an energy-denominated settlement and receipt system anchored to RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, FSB stablecoin risk controls |
+| Multi-resource benchmark lab | Added: NASA POWER solar/wind/temperature fetch, standard 10 kWdc PV conversion, $3.15/Wdc install-cost assumption, renewable benchmark matrix, and oil-only energy-unit comparison |
 | Pilot meter adapter | CSV meter/inverter import + meter onboarding scripts now feed the signed-reading verifier |
 | Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 legacy Sepolia contracts verified on Etherscan**; all 3 fresh attested SPK proof contracts also verified |
@@ -57,7 +58,7 @@ See [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) for full parameter state 
 
 ## Honest status line
 
-The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, empirical dossier, and a local SPK currency-framework contract for invoice settlement plus redemption receipts. The launchable surface is the SolarPunk Public Lab: public demo, reproducible proof, Sepolia readback, daily keeper evidence, and meter CSV onboarding. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, and legal/commercial scope.
+The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, empirical dossier, resource benchmark lab, and a local SPK currency-framework contract for invoice settlement plus redemption receipts. The launchable surface is the SolarPunk Public Lab: public demo, reproducible proof, Sepolia readback, daily keeper evidence, NASA/PV/wind resource benchmarks, and meter CSV onboarding. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, and legal/commercial scope.
 
 See [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) for the current public lab model, [`EVIDENCE.md`](./EVIDENCE.md) for clickable receipts of every claim, and [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) for full context.
 

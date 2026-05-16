@@ -26,6 +26,7 @@ Use these first when facts conflict elsewhere:
 - `docs/product/CURRENCY_FRAMEWORK_READINESS.md` — internal SPK currency-framework readiness checks
 - `docs/product/FIELD_RECEIPT_LOOP.md` — local no-external-dependency field receipt loop
 - `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` — theory anchors and comparable energy/token systems
+- `docs/product/RESOURCE_BENCHMARK_LAB.md` — NASA solar/wind resource benchmark, standard PV conversion, install-cost assumption, renewable benchmark matrix, and oil-only comparison
 - `ARCHITECTURE_OVERVIEW.md` — system design
 - `ROADMAP.md` — milestone plan
 - `DEPLOYMENT_GUIDE.md` — deploy instructions

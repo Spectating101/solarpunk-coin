@@ -58,6 +58,7 @@ This is compatible with tokenisation literature because the value is not merely 
 | Energy-cost / Bitcoin relationship motivates the thesis | Medium-strong | CEIR results and structural-break evidence are real, but sensitive to specification. |
 | Physics-based pricing is plausible | Medium-strong | NASA irradiance calibration, binomial/MC convergence, and cross-location runs support cold-start pricing. |
 | Signed meter data can feed SPK minting | Medium | The signature and replay mechanics work, but current meter data is fixture/sample data. |
+| SPK is not solar-only in principle | Medium internally | `RESOURCE_BENCHMARK_LAB.md` now benchmarks solar, wind, geothermal, tidal, hydro, biogas/biomass, and oil comparison; only signed renewable surplus can mint. |
 | SPK can clear an internal receipt loop | Strong internally | The local field receipt loop executes mint, settlement, redemption, and delivery resolution without external dependencies. |
 | SPK is ready for real-world currency launch | Weak | No real meter export loop, no legal redemption terms, no audited deployment, no real operator obligation. |
 
@@ -68,8 +69,9 @@ This is compatible with tokenisation literature because the value is not merely 
 3. **No-double-counting registry logic.** Move closer to REC/I-REC discipline: unique issuance, transfer, retirement, and claim state.
 4. **Redemption policy.** Define what a holder can redeem, who owes delivery, how shortfall is handled, and what caps apply.
 5. **Stress harness.** Simulate redemption waves, delivery shortfalls, oracle drift, reserve changes, and payment velocity.
-6. **Public deployable currency stack.** Deploy `SolarPunkCurrencySystem` beside the attested SPK proof stack and publish readbacks.
-7. **Operator governance.** Establish who can resolve deliveries, how disputes escalate, and how malicious/failed operators are penalized.
+6. **Resource-specific data adapters.** Replace solar/wind resource benchmarks with actual generator exports for at least one renewable source.
+7. **Public deployable currency stack.** Deploy `SolarPunkCurrencySystem` beside the attested SPK proof stack and publish readbacks.
+8. **Operator governance.** Establish who can resolve deliveries, how disputes escalate, and how malicious/failed operators are penalized.
 
 ## Comparable Positioning
 

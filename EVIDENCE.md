@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Evidence Register
 
-**Last updated:** 2026-05-14
+**Last updated:** 2026-05-16
 **Purpose:** Flat, clickable receipts for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
 
 This document answers: **"Is there actual evidence, or just descriptions of evidence?"**
@@ -162,7 +162,23 @@ This is the first internal currency-framework layer around SPK. It does not mint
 
 Scope note: this is a local contract/test/readiness layer, not a deployed Sepolia/mainnet currency stack yet.
 
-### 2.8 Test Suite (Reproducible, Run by Anyone)
+### 2.8 Multi-Resource Benchmark Lab
+
+This expands the product proof from "solar-only story" into a resource benchmark layer while preserving the SPK mint rule: estimates do not mint; accepted signed meter/inverter surplus attestations mint.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| NASA POWER live fetch | `ALLSKY_SFC_SW_DWN`, `WS10M`, `T2M` for Taoyuan, 2026-05-01 -> 2026-05-11 | `state/product/resource_benchmark_lab.json` |
+| Standard PV model | 10 kWdc, 20% module efficiency, 50 m2 panel area, 14% PVWatts-style loss | `docs/product/RESOURCE_BENCHMARK_LAB.md` |
+| Latest solar production estimate | 2026-05-11 GHI `3.2566 kWh/m2/day` -> `28.0068 kWh/day` AC | Same file |
+| Residential installed-cost assumption | `$3.15/Wdc`, `$31,500` before incentives for 10 kWdc | Same file |
+| Wind resource-density estimate | NASA WS10M -> recoverable kWh/day per 50 m2 swept-area model | Same file |
+| Geothermal/tidal/hydro/biomass | Benchmark-only capacity-factor models; require site data and metered generation before SPK use | Same file |
+| Oil comparison | `1699.81 kWh` thermal per barrel; explicitly `not_eligible` for SPK minting | Same file |
+
+Scope note: NASA resource estimates, capacity-factor models, and oil unit conversions are benchmarking inputs only. SPK issuance still requires the signed meter-attestation path.
+
+### 2.9 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -174,7 +190,7 @@ Expected output: **102 passing**, including signed surplus-attestation replay, r
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.9 Python Pricing Library (Reproducible)
+### 2.10 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives

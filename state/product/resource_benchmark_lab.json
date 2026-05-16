@@ -1,0 +1,281 @@
+{
+  "generated_at": "2026-05-16T07:30:22.728Z",
+  "title": "SolarPunk Multi-Resource Benchmark Lab",
+  "thesis": "Expand SPK from a solar-only narrative into a measured renewable-resource framework while preserving the rule that only signed surplus-energy attestations can mint.",
+  "location": {
+    "name": "Taoyuan, Taiwan",
+    "latitude": 24.99,
+    "longitude": 121.3
+  },
+  "data_fetch": {
+    "status": "live_nasa_power",
+    "nasa_url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN%2CWS10M%2CT2M&community=RE&longitude=121.3&latitude=24.99&start=20260501&end=20260511&format=JSON",
+    "requested_parameters": [
+      "ALLSKY_SFC_SW_DWN",
+      "WS10M",
+      "T2M"
+    ],
+    "requested_start": "2026-05-01",
+    "requested_end": "2026-05-11",
+    "observations": {
+      "ghi_days": 11,
+      "ws10m_days": 11,
+      "t2m_days": 11
+    }
+  },
+  "nasa_grid_cell_estimate": {
+    "source_resolution_note": "NASA POWER Daily API docs warn that repeated point requests map to a 0.5 degree by 0.5 degree global grid cell.",
+    "assumed_cell_degrees": 0.5,
+    "approximate_latitude_span_km": 55.66,
+    "approximate_longitude_span_km": 50.45,
+    "approximate_cell_area_km2": 2808
+  },
+  "solar": {
+    "evidence_status": "measured_resource_estimate",
+    "measured_input": true,
+    "source_parameter": "NASA POWER ALLSKY_SFC_SW_DWN",
+    "conversion_model": "daily_ac_kwh = NASA_GHI_kWh_m2_day * system_kWdc * (1 - PVWatts_loss_pct)",
+    "standard_system": {
+      "system_kw_dc": 10,
+      "module_efficiency": 0.2,
+      "module_efficiency_pct": 20,
+      "panel_area_m2": 50,
+      "panel_area_formula": "area_m2 = kWdc / module_efficiency, assuming 1 kW/m2 STC irradiance",
+      "pvwatts_loss_pct": 14,
+      "performance_ratio": 0.86
+    },
+    "nasa_window": {
+      "days": 11,
+      "latest_date": "2026-05-11",
+      "latest_ghi_kwh_m2_day": 3.2566,
+      "average_ghi_kwh_m2_day": 3.1979
+    },
+    "production_estimate": {
+      "latest_day_ac_kwh": 28.0068,
+      "average_window_day_ac_kwh": 27.5017,
+      "annualized_ac_kwh_from_window_average": 10038.12
+    },
+    "cost_model": {
+      "residential_installed_cost_usd_per_wdc_assumption": 3.15,
+      "installed_cost_usd_before_incentives": 31500,
+      "source_note": "Uses the DOE/NREL Q1 2024 residential PV benchmark as an assumption, not a quote."
+    },
+    "spk_value_model": {
+      "mint_fee_bps": 10,
+      "can_mint_from_model_estimate": false,
+      "mint_rule": "NASA/PVWatts-style production estimates can size the opportunity, but SPK minting still requires accepted signed meter or inverter surplus attestations.",
+      "price_sensitivity": [
+        {
+          "energy_price_usd_per_kwh": 0.05,
+          "latest_day_value_usd": 1.4003,
+          "latest_day_spk_after_mint_fee": 1.3989,
+          "annualized_value_usd": 501.91,
+          "simple_capex_payback_years_before_incentives": 62.76
+        },
+        {
+          "energy_price_usd_per_kwh": 0.1,
+          "latest_day_value_usd": 2.8007,
+          "latest_day_spk_after_mint_fee": 2.7979,
+          "annualized_value_usd": 1003.81,
+          "simple_capex_payback_years_before_incentives": 31.38
+        },
+        {
+          "energy_price_usd_per_kwh": 0.2,
+          "latest_day_value_usd": 5.6014,
+          "latest_day_spk_after_mint_fee": 5.5958,
+          "annualized_value_usd": 2007.62,
+          "simple_capex_payback_years_before_incentives": 15.69
+        }
+      ]
+    }
+  },
+  "wind": {
+    "evidence_status": "measured_resource_density",
+    "measured_input": true,
+    "source_parameter": "NASA POWER WS10M",
+    "conversion_model": "recoverable_power_density = 0.5 * air_density * wind_speed_hub_height^3 * Cp * availability",
+    "assumptions": {
+      "air_density_kg_m3": 1.225,
+      "power_coefficient": 0.35,
+      "availability": 0.9,
+      "wind_shear_alpha": 0.14,
+      "reference_height_m": 10,
+      "hub_height_m": 30,
+      "swept_area_m2": 50
+    },
+    "nasa_window": {
+      "days": 11,
+      "latest_date": "2026-05-11",
+      "average_ws10m_ms": 2.8209
+    },
+    "latest_day": {
+      "wind_speed_10m_ms": 1.76,
+      "wind_speed_hub_height_ms": 2.0526,
+      "raw_power_density_w_m2": 5.2971,
+      "recoverable_power_density_w_m2": 1.6686,
+      "recoverable_kwh_per_swept_m2_day": 0.040046,
+      "recoverable_kwh_day_for_assumed_swept_area": 2.0023
+    },
+    "average_window_day": {
+      "wind_speed_10m_ms": 2.8209,
+      "wind_speed_hub_height_ms": 3.2899,
+      "raw_power_density_w_m2": 21.8104,
+      "recoverable_power_density_w_m2": 6.8703,
+      "recoverable_kwh_per_swept_m2_day": 0.164887,
+      "recoverable_kwh_day_for_assumed_swept_area": 8.2443
+    },
+    "spk_bridge": "Wind is SPK-eligible only after a real turbine/meter produces signed generation/export readings; NASA wind speed is resource evidence, not mint evidence."
+  },
+  "ambient_temperature_c": {
+    "source_parameter": "NASA POWER T2M",
+    "measured_input": true,
+    "days": 11,
+    "latest": {
+      "date": "2026-05-11",
+      "celsius": 22.74
+    },
+    "average_celsius": 21.5627
+  },
+  "resources": [
+    {
+      "id": "solar_pv_rooftop",
+      "label": "Solar PV rooftop",
+      "type": "renewable_measured_estimate",
+      "evidence_status": "measured_resource_estimate",
+      "measured_input": true,
+      "benchmark_output_kwh_day": 28.0068,
+      "annualized_output_kwh": 10038.12,
+      "installed_cost_usd_before_incentives": 31500,
+      "mint_eligibility": "eligible_after_signed_meter_attestation",
+      "can_mint_from_model_estimate": false,
+      "next_data_needed": "Real inverter or revenue-grade meter export for the same site."
+    },
+    {
+      "id": "wind_turbine",
+      "label": "Wind turbine",
+      "type": "renewable_resource_density",
+      "evidence_status": "measured_resource_density",
+      "measured_input": true,
+      "benchmark_output_kwh_day": 8.2443,
+      "annualized_output_kwh": 3009.17,
+      "mint_eligibility": "eligible_after_signed_meter_attestation",
+      "can_mint_from_model_estimate": false,
+      "next_data_needed": "Turbine power curve, hub-height wind study, and metered generation/export."
+    },
+    {
+      "id": "geothermal",
+      "label": "Geothermal",
+      "type": "renewable_benchmark",
+      "evidence_status": "dispatchable_benchmark_only",
+      "measured_input": false,
+      "benchmark_capacity_kw": 10,
+      "assumed_capacity_factor": 0.9,
+      "benchmark_output_kwh_day": 216,
+      "annualized_output_kwh": 78840,
+      "mint_eligibility": "eligible_after_signed_meter_attestation_and_resource_policy",
+      "can_mint_from_model_estimate": false,
+      "next_data_needed": "Site reservoir data, plant technology, interconnection, and metered generation."
+    },
+    {
+      "id": "tidal",
+      "label": "Tidal / marine",
+      "type": "renewable_benchmark",
+      "evidence_status": "site_resource_required",
+      "measured_input": false,
+      "benchmark_capacity_kw": 10,
+      "assumed_capacity_factor": 0.35,
+      "benchmark_output_kwh_day": 84,
+      "annualized_output_kwh": 30660,
+      "mint_eligibility": "eligible_after_signed_meter_attestation_and_resource_policy",
+      "can_mint_from_model_estimate": false,
+      "next_data_needed": "Bathymetry, tidal-current measurements, permits, turbine curve, and metered generation."
+    },
+    {
+      "id": "hydro",
+      "label": "Small hydro",
+      "type": "renewable_benchmark",
+      "evidence_status": "site_resource_required",
+      "measured_input": false,
+      "benchmark_capacity_kw": 10,
+      "assumed_capacity_factor": 0.5,
+      "benchmark_output_kwh_day": 120,
+      "annualized_output_kwh": 43800,
+      "mint_eligibility": "eligible_after_signed_meter_attestation_and_resource_policy",
+      "can_mint_from_model_estimate": false,
+      "next_data_needed": "Flow-duration curve, head, permits, turbine curve, and metered generation."
+    },
+    {
+      "id": "biogas_biomass",
+      "label": "Biogas / biomass",
+      "type": "renewable_benchmark",
+      "evidence_status": "fuel_chain_required",
+      "measured_input": false,
+      "benchmark_capacity_kw": 10,
+      "assumed_capacity_factor": 0.8,
+      "benchmark_output_kwh_day": 192,
+      "annualized_output_kwh": 70080,
+      "mint_eligibility": "eligible_after_signed_meter_attestation_and_resource_policy",
+      "can_mint_from_model_estimate": false,
+      "next_data_needed": "Renewable fuel provenance, emissions boundary, generator metering, and policy review."
+    },
+    {
+      "id": "oil_barrel",
+      "label": "Crude oil benchmark",
+      "type": "fossil_benchmark_only",
+      "evidence_status": "unit_conversion_benchmark",
+      "measured_input": false,
+      "btu_per_barrel_assumption": 5800000,
+      "kwh_thermal_per_barrel": 1699.81,
+      "assumed_electric_conversion_efficiency": 0.33,
+      "kwh_electric_equivalent_at_assumed_efficiency": 560.94,
+      "mint_eligibility": "not_eligible",
+      "can_mint_from_model_estimate": false,
+      "policy_reason": "Oil is included only to compare energy units and fossil baselines; it is not renewable and cannot mint SPK."
+    }
+  ],
+  "protocol_bridge_to_spk": [
+    "resource_data_or_site_model",
+    "real_meter_or_inverter_export",
+    "signed_meter_reading",
+    "derive_meter_attestations",
+    "accepted_surplus_kwh",
+    "mintFromSurplusAttestation",
+    "SolarPunkCurrencySystem_invoice_settlement",
+    "redemption_burn_into_owed_kwh_receipt",
+    "delivery_resolution"
+  ],
+  "hard_boundaries": [
+    "A NASA resource estimate is not mint evidence.",
+    "A capacity-factor benchmark is not mint evidence.",
+    "Oil is a fossil benchmark only and is never SPK mint-eligible under the renewable surplus thesis.",
+    "All SPK issuance still needs accepted signed meter or inverter surplus attestations.",
+    "Installation cost is an assumption for sizing, not a vendor quote or investment return promise."
+  ],
+  "references": [
+    {
+      "name": "NASA POWER Daily API",
+      "url": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+      "used_for": "ALLSKY_SFC_SW_DWN, WS10M, T2M daily point data and 0.5 degree grid-cell warning."
+    },
+    {
+      "name": "NREL PVWatts V8 API",
+      "url": "https://developer.nrel.gov/docs/solar/pvwatts/v8/",
+      "used_for": "PVWatts-style PV system capacity/loss modelling conventions."
+    },
+    {
+      "name": "DOE Solar Photovoltaic System Cost Benchmarks",
+      "url": "https://www.energy.gov/eere/solar/solar-photovoltaic-system-cost-benchmarks",
+      "used_for": "Residential PV installed-cost benchmark assumption."
+    },
+    {
+      "name": "NREL Annual Technology Baseline 2024",
+      "url": "https://atb.nrel.gov/electricity/2024/index",
+      "used_for": "Technology-wide electricity cost/performance benchmark framing."
+    },
+    {
+      "name": "EIA Energy Conversion Calculators",
+      "url": "https://www.eia.gov/energyexplained/units-and-calculators/energy-conversion-calculators.php",
+      "used_for": "Btu/kWh conversion anchor for fossil energy-unit comparison."
+    }
+  ]
+}

@@ -22,6 +22,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
 | [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
 | [`docs/product/CURRENCY_THEORY_AND_COMPARABLES.md`](./docs/product/CURRENCY_THEORY_AND_COMPARABLES.md) | Theory anchors and comparable systems: RECs, SolarCoin, Powerledger, Energy Web, stablecoin frameworks |
+| [`docs/product/RESOURCE_BENCHMARK_LAB.md`](./docs/product/RESOURCE_BENCHMARK_LAB.md) | Multi-resource benchmark: NASA solar/wind, standard PV conversion, install cost, geothermal/tidal/hydro/biomass benchmarks, oil comparison |
 | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](./docs/product/SPK_PRODUCT_EMPIRICS.md) | Single-product SPK proof and empirical dossier |
 | [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
 | [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |
@@ -105,6 +106,9 @@ These public contracts prove the earlier SPK system state and daily keeper path.
 - **Daily NASA keeper** — fetches real Taoyuan irradiance, pushes to Sepolia, commits log back to repo
   - Keeper logs: `state/keeper_logs/` (YYYY-MM-DD.json with on-chain TX hashes)
   - Workflow: `.github/workflows/nasa_keeper.yml`
+- **Multi-resource benchmark lab** — fetches NASA POWER solar/wind/temperature data for Taoyuan and converts it into a 10 kWdc PV output/cost model, wind resource-density model, renewable benchmark matrix, and oil-only energy-unit comparison
+  - Solar: latest 2026-05-11 NASA GHI `3.2566 kWh/m2/day` -> `28.0068 kWh/day` on a 10 kWdc / 50 m2 / 14% loss model
+  - Oil: `1699.81 kWh` thermal per barrel benchmark only; not SPK mint-eligible
 - **Python SDK** — `pip install spk-derivatives` (v0.5.0, PyPI)
 - **Frontend** — Vite/React, reads live Sepolia state every 30 seconds
 
@@ -140,6 +144,7 @@ npm run product:launch-gate
 npm run product:currency-lab
 npm run product:currency-framework
 npm run product:field-receipt
+npm run product:resource-benchmark
 
 # Import a pilot-style meter CSV into signed raw readings
 npm run meter:onboard -- --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --device-address=0x... --capacity-kw=120

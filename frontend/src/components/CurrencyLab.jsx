@@ -10,6 +10,7 @@ import {
 import currencyLab from '../../../state/product/currency_system_lab.json';
 import currencyFramework from '../../../state/product/currency_framework_readiness.json';
 import fieldReceipt from '../../../state/product/field_receipt_loop.json';
+import resourceBenchmark from '../../../state/product/resource_benchmark_lab.json';
 import { GITHUB_REPO } from '../constants/contracts';
 
 const statusCopy = {
@@ -31,8 +32,20 @@ function formatNumber(value, digits = 4) {
   return Number(value).toLocaleString(undefined, { maximumFractionDigits: digits });
 }
 
+function formatUsd(value, digits = 0) {
+  if (!Number.isFinite(Number(value))) return 'n/a';
+  return Number(value).toLocaleString(undefined, {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: digits,
+  });
+}
+
 export default function CurrencyLab() {
   const { accounting } = currencyLab.ledger;
+  const solarResource = resourceBenchmark.resources.find((resource) => resource.id === 'solar_pv_rooftop');
+  const windResource = resourceBenchmark.resources.find((resource) => resource.id === 'wind_turbine');
+  const oilResource = resourceBenchmark.resources.find((resource) => resource.id === 'oil_barrel');
 
   return (
     <section className="currency-shell">
@@ -93,6 +106,25 @@ export default function CurrencyLab() {
           <div className="metric-sub">
             {formatNumber(fieldReceipt.accounting.settlement_volume_spk)} SPK settled, no external dependency
           </div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Measured Solar Benchmark</div>
+          <div className="metric-value">{formatNumber(resourceBenchmark.solar.production_estimate.latest_day_ac_kwh)} kWh/day</div>
+          <div className="metric-sub">
+            10 kWdc, {formatNumber(resourceBenchmark.solar.standard_system.panel_area_m2, 0)} m2, {formatUsd(solarResource?.installed_cost_usd_before_incentives)}
+          </div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-label">Measured Wind Density</div>
+          <div className="metric-value">{formatNumber(windResource?.benchmark_output_kwh_day)} kWh/day</div>
+          <div className="metric-sub">
+            {formatNumber(resourceBenchmark.wind.nasa_window.average_ws10m_ms)} m/s NASA WS10M, 50 m2 swept-area model
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Oil Benchmark Only</div>
+          <div className="metric-value">{formatNumber(oilResource?.kwh_thermal_per_barrel, 0)} kWh</div>
+          <div className="metric-sub">thermal per barrel; not SPK mint-eligible</div>
         </div>
       </div>
 
@@ -165,6 +197,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/FIELD_RECEIPT_LOOP.md`} target="_blank" rel="noreferrer">
               Field receipt loop <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/RESOURCE_BENCHMARK_LAB.md`} target="_blank" rel="noreferrer">
+              Resource benchmark <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

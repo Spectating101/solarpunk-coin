@@ -24,6 +24,7 @@ The lab exists to answer one question:
 | Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 | Field receipt loop | Local mint -> settlement -> redemption -> delivery receipt | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Theory and comparables | External anchors and honest positioning | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
+| Multi-resource benchmark | NASA solar/wind data, PV conversion/cost model, renewable benchmark matrix, oil-only comparison | `docs/product/RESOURCE_BENCHMARK_LAB.md` |
 | Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
 | Evidence register | Reviewer receipts | `EVIDENCE.md` |
 
@@ -73,6 +74,7 @@ npm run product:launch-gate
 npm run product:currency-lab
 npm run product:currency-framework
 npm run product:field-receipt
+npm run product:resource-benchmark
 npm run product:empirics
 npm test
 npm run attestations:test
@@ -105,6 +107,7 @@ It is:
 1. Governed attested-SPK redeploy on Sepolia.
 2. One real meter or inverter CSV/API adapter.
 3. Public lab receipt showing that real export flowing through the same attestation pipeline.
-4. Replacement of the currency-system lab's simulated layers with real pilot receipts.
+4. Resource benchmark loop extended from NASA/PV/wind estimates to actual generator exports.
+5. Replacement of the currency-system lab's simulated layers with real pilot receipts.
 
 That converts the lab from "public proof" to "closed pilot candidate."
