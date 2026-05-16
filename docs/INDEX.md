@@ -25,6 +25,7 @@ Use these first when facts conflict elsewhere:
 - `docs/product/CURRENCY_SYSTEM_LAB.md` — compressed four-layer currency-system lab
 - `docs/product/CURRENCY_FRAMEWORK_READINESS.md` — internal SPK currency-framework readiness checks
 - `docs/product/FIELD_RECEIPT_LOOP.md` — local no-external-dependency field receipt loop
+- `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` — theory anchors and comparable energy/token systems
 - `ARCHITECTURE_OVERVIEW.md` — system design
 - `ROADMAP.md` — milestone plan
 - `DEPLOYMENT_GUIDE.md` — deploy instructions

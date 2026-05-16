@@ -13,6 +13,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Currency-system lab | Four-layer lab artifact generated: public proof, local field receipt loop, redemption framework, settlement framework |
 | Currency-framework contract | `SolarPunkCurrencySystem` implemented locally: SPK invoice settlement, redemption burn into owed-kWh receipt, fulfillment/shortfall/dispute states |
 | Field receipt loop | Local no-external-dependency run: signed meter surplus -> SPK mint -> 75 SPK settled -> 20 SPK redeemed -> 400 kWh delivered |
+| Theory/comparables anchor | Added: SPK positioned as an energy-denominated settlement and receipt system anchored to RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, FSB stablecoin risk controls |
 | Pilot meter adapter | CSV meter/inverter import + meter onboarding scripts now feed the signed-reading verifier |
 | Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 legacy Sepolia contracts verified on Etherscan**; all 3 fresh attested SPK proof contracts also verified |

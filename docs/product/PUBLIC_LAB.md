@@ -23,6 +23,7 @@ The lab exists to answer one question:
 | Currency system lab | Four-layer compressed currency prototype | `docs/product/CURRENCY_SYSTEM_LAB.md` |
 | Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 | Field receipt loop | Local mint -> settlement -> redemption -> delivery receipt | `docs/product/FIELD_RECEIPT_LOOP.md` |
+| Theory and comparables | External anchors and honest positioning | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
 | Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
 | Evidence register | Reviewer receipts | `EVIDENCE.md` |
 

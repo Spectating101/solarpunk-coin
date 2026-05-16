@@ -21,6 +21,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: public proof, local field receipt, redemption framework, settlement framework |
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
 | [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
+| [`docs/product/CURRENCY_THEORY_AND_COMPARABLES.md`](./docs/product/CURRENCY_THEORY_AND_COMPARABLES.md) | Theory anchors and comparable systems: RECs, SolarCoin, Powerledger, Energy Web, stablecoin frameworks |
 | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](./docs/product/SPK_PRODUCT_EMPIRICS.md) | Single-product SPK proof and empirical dossier |
 | [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
 | [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |

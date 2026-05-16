@@ -158,6 +158,7 @@ This is the first internal currency-framework layer around SPK. It does not mint
 | Contract tests | 6 additional Hardhat tests | `test/SolarPunkCurrencySystem.test.js` |
 | Local field receipt loop | 130.1697 SPK minted, 75 SPK settled, 20 SPK redeemed, 400 kWh delivered | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Internal readiness report | 8/8 checks pass | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
+| Theory/comparables anchor | Positions SPK against RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, and FSB stablecoin controls | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
 
 Scope note: this is a local contract/test/readiness layer, not a deployed Sepolia/mainnet currency stack yet.
 
