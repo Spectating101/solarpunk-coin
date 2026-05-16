@@ -14,6 +14,7 @@ import resourceBenchmark from '../../../state/product/resource_benchmark_lab.jso
 import energyStandard from '../../../state/product/energy_standard_economics.json';
 import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
+import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import { GITHUB_REPO } from '../constants/contracts';
 
 const statusCopy = {
@@ -119,6 +120,13 @@ export default function CurrencyLab() {
           <div className="metric-label">Settlement Volume</div>
           <div className="metric-value">{formatNumber(accounting.settlement_volume_spk)} SPK</div>
           <div className="metric-sub">producer, gateway, maintenance, buyer, merchant</div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Energy-Money Simulation</div>
+          <div className="metric-value">{formatNumber(energyMoneySimulation.annualized_totals.issued_spk, 0)} SPK</div>
+          <div className="metric-sub">
+            annualized across {energyMoneySimulation.input_basis.observed_days} real keeper-index days
+          </div>
         </div>
         <div className="metric-card">
           <div className="metric-label">Daily Keeper Runs</div>
@@ -248,6 +256,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/MONETARY_STRESS_HARNESS.md`} target="_blank" rel="noreferrer">
               Monetary stress <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/ENERGY_MONEY_SIMULATION.md`} target="_blank" rel="noreferrer">
+              Energy-money sim <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

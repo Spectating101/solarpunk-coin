@@ -17,6 +17,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | Pilot meter import | Meter onboarding + CSV import path for inverter/meter exports | [`docs/project/METER_CSV_IMPORT.md`](../project/METER_CSV_IMPORT.md) |
 | Pilot CSV receipt | CSV export -> signed readings -> accepted bundle -> source hash -> SPK mint preview | [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) |
 | Monetary stress harness | Redemption-wave and physical-shortfall scenarios with explicit reserve gaps | [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) |
+| Energy-money simulation | Measured keeper resource signals drive SPK issuance, settlement, redemption, and reserve modeling | [`docs/product/ENERGY_MONEY_SIMULATION.md`](../product/ENERGY_MONEY_SIMULATION.md) |
 | Governed pilot-stack scaffold | Deploy/readback scripts for SPK + treasury + currency system pilot stack | [`docs/project/PILOT_STACK_DEPLOYMENT.md`](../project/PILOT_STACK_DEPLOYMENT.md) |
 | Product empirics | Single-product empirical dossier tying thesis evidence to SPK | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](../product/SPK_PRODUCT_EMPIRICS.md) |
 | Tests | 102/102 Hardhat tests passing | `npx hardhat test` |
@@ -40,6 +41,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - The latest SPK contract can mint from signed surplus-energy attestations and reject replayed, reused-source, non-oracle, expired, future-window, zero-source, or invalid-window attestations.
 - The sample meter pipeline verifies 2 device signatures, rejects duplicate/low-quality readings, accepts 2,606.7 kWh, and the Sepolia proof mints 130.1697 SPK from 2,606 on-chain kWh.
 - The pilot CSV bridge imports meter/inverter rows into signed raw readings, derives a 1,985.5 kWh accepted-surplus bundle, and previews 99.15075 SPK.
+- The energy-money simulation uses recent real keeper-index days to project 15,216.48 SPK annualized issuance across transparent rooftop/neighborhood/commercial archetypes.
 - The monetary stress harness maps redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 - Source-verified contracts are deployed and externally inspectable.
 - The repo contains on-chain transaction receipts, keeper artifacts, tests, threat model, trust assumptions, audit handoff, and grant drafts.

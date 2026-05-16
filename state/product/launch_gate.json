@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T16:24:49.651Z",
+  "generated_at": "2026-05-16T16:51:03.423Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 7,
+      "passed_checks": 8,
       "blocking_checks": 0,
       "checks": [
         {
@@ -59,6 +59,13 @@
           "blocking": true,
           "message": "Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.",
           "evidence": "docs/product/MONETARY_STRESS_HARNESS.md"
+        },
+        {
+          "name": "Energy-money simulation exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.",
+          "evidence": "docs/product/ENERGY_MONEY_SIMULATION.md"
         }
       ]
     },
@@ -66,7 +73,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 8,
+      "passed_checks": 9,
       "blocking_checks": 2,
       "checks": [
         {
@@ -119,6 +126,13 @@
           "evidence": "docs/product/MONETARY_STRESS_HARNESS.md"
         },
         {
+          "name": "Energy-money simulation exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.",
+          "evidence": "docs/product/ENERGY_MONEY_SIMULATION.md"
+        },
+        {
           "name": "Governed attested-SPK deployment",
           "pass": false,
           "blocking": true,
@@ -159,7 +173,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 8,
+      "passed_checks": 9,
       "blocking_checks": 6,
       "checks": [
         {
@@ -210,6 +224,13 @@
           "blocking": true,
           "message": "Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.",
           "evidence": "docs/product/MONETARY_STRESS_HARNESS.md"
+        },
+        {
+          "name": "Energy-money simulation exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.",
+          "evidence": "docs/product/ENERGY_MONEY_SIMULATION.md"
         },
         {
           "name": "Governed attested-SPK deployment",

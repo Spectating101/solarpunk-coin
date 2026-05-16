@@ -228,7 +228,24 @@ This exposes the economic side of the currency claim: redeemed SPK becomes owed 
 
 Scope note: this is an internal stress model, not a solvency guarantee. It intentionally shows where named reserve capital is required.
 
-### 2.12 Governed Pilot Stack Scaffold
+### 2.12 Energy-Money Simulation
+
+This is the more direct "new currency system" model: real keeper-index resource signals feed a transparent monetary simulation for issuance, circulation, redemption, active supply, and reserve needs.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Simulation generator | Available | `scripts/energy_money_simulation.js` |
+| Resource signal | Recent real NASA POWER-derived Sepolia keeper-index days | `state/keeper_logs/summary.json` |
+| Archetypes | 10 kW home, 250 kW neighborhood cluster, 1 MW commercial portfolio | `docs/product/ENERGY_MONEY_SIMULATION.md` |
+| Observed-window issued SPK | 583.645668 SPK | `state/product/energy_money_simulation.json` |
+| Annualized issued SPK projection | 15,216.476344 SPK | Same file |
+| Conservation check | Pass | Same file |
+| Daily simulation CSV | Generated | `state/product/energy_money_simulation_daily.csv` |
+| Tests | 4 Node tests | `test-node/energy_money_simulation.test.js` |
+
+Scope note: NASA/keeper resource signals are real; self-consumption, redemption, velocity, and shortfall values are explicit assumptions. Model-estimated surplus cannot mint SPK until replaced by signed meter/inverter attestations.
+
+### 2.13 Governed Pilot Stack Scaffold
 
 This is the deploy/readback path for moving from proof-scoped SPK to a governed testnet pilot stack that includes settlement and redemption.
 
@@ -242,7 +259,7 @@ This is the deploy/readback path for moving from proof-scoped SPK to a governed 
 
 Scope note: the local Hardhat receipt proves the deploy script executes. Persistent readback is for Sepolia or a long-running local node.
 
-### 2.13 Test Suite (Reproducible, Run by Anyone)
+### 2.14 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -254,7 +271,7 @@ Expected output: **102 passing**, including signed surplus-attestation replay, r
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.14 Python Pricing Library (Reproducible)
+### 2.15 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives

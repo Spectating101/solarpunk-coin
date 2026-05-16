@@ -23,6 +23,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV receipt: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
+| [`docs/product/ENERGY_MONEY_SIMULATION.md`](./docs/product/ENERGY_MONEY_SIMULATION.md) | Energy-standard monetary simulation: measured resource signal -> SPK issuance -> settlement -> redemption risk |
 | [`docs/product/PILOT_OPERATOR_PACKET.md`](./docs/product/PILOT_OPERATOR_PACKET.md) | What a real meter/inverter operator should send and what SolarPunk returns |
 | [`docs/product/PILOT_REVIEWER_PACKET.md`](./docs/product/PILOT_REVIEWER_PACKET.md) | One-page pilot proof checklist for skeptical reviewers |
 | [`docs/product/CURRENCY_THEORY_AND_COMPARABLES.md`](./docs/product/CURRENCY_THEORY_AND_COMPARABLES.md) | Theory anchors and comparable systems: RECs, SolarCoin, Powerledger, Energy Web, stablecoin frameworks |
@@ -112,6 +113,9 @@ These public contracts prove the earlier SPK system state and daily keeper path.
 - **Monetary stress harness** — see `docs/product/MONETARY_STRESS_HARNESS.md`
   - Stresses redemption waves, delivery shortfalls, fee buffers, and additional reserve requirements
   - All conservation checks pass; shortfall scenarios intentionally expose where named reserve capital is needed
+- **Energy-money simulation** — see `docs/product/ENERGY_MONEY_SIMULATION.md`
+  - Uses real NASA/Sepolia keeper resource-index days plus explicit site assumptions
+  - Simulates SPK issuance, settlement velocity, redemption claims, active supply, and reserve gaps across rooftop, neighborhood, and commercial archetypes
 - **Governed pilot-stack scaffold** — see `docs/project/PILOT_STACK_DEPLOYMENT.md`
   - Deploys MockUSDC, ProtocolTreasury, SolarPunkCoin, and SolarPunkCurrencySystem together
   - Includes role assignment, reserve seeding, energy price basis, optional strict admin handoff, and readback script for persistent networks
@@ -165,6 +169,7 @@ npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv
 npm run product:monetary-stress
+npm run product:energy-money-sim
 npm run deploy:pilot-stack:hardhat
 
 # Import a pilot-style meter CSV into signed raw readings

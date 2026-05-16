@@ -74,6 +74,7 @@ function evaluateLaunchGate(options = {}) {
   const deployment = readJson(root, "state/deployments/sepolia_attested_spk_deploy.json", {});
   const pilotCsv = readJson(root, "state/product/pilot_csv_receipt.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
+  const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const audit = readJson(root, "docs/project/SECURITY_AUDIT_STATUS.json", {});
   const governance = readJson(root, "docs/project/GOVERNANCE_STATUS.json", {});
 
@@ -130,6 +131,12 @@ function evaluateLaunchGate(options = {}) {
       Boolean(monetaryStress.summary?.all_conservation_checks_pass),
       "Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.",
       "docs/product/MONETARY_STRESS_HARNESS.md"
+    ),
+    check(
+      "Energy-money simulation exists",
+      Boolean(energyMoneySimulation.totals?.conservation_pass && Number(energyMoneySimulation.totals?.issued_spk || 0) > 0),
+      "Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.",
+      "docs/product/ENERGY_MONEY_SIMULATION.md"
     ),
   ];
 

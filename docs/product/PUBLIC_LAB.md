@@ -25,6 +25,7 @@ The lab exists to answer one question:
 | Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 | Field receipt loop | Local mint -> settlement -> redemption -> delivery receipt | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Monetary stress harness | Redemption-wave, shortfall, and reserve-gap table | `docs/product/MONETARY_STRESS_HARNESS.md` |
+| Energy-money simulation | Measured resource signal -> SPK issuance -> settlement -> redemption-risk model | `docs/product/ENERGY_MONEY_SIMULATION.md` |
 | Pilot packets | Operator handoff and reviewer checklist | `docs/product/PILOT_OPERATOR_PACKET.md`, `docs/product/PILOT_REVIEWER_PACKET.md` |
 | Theory and comparables | External anchors and honest positioning | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
 | Multi-resource benchmark | NASA solar/wind data, PV conversion/cost model, renewable benchmark matrix, oil-only comparison | `docs/product/RESOURCE_BENCHMARK_LAB.md` |
@@ -83,6 +84,7 @@ npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv
 npm run product:monetary-stress
+npm run product:energy-money-sim
 npm run pilot-stack:test
 npm run product:empirics
 npm test
