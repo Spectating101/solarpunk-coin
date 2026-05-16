@@ -16,6 +16,7 @@ import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import { GITHUB_REPO } from '../constants/contracts';
+import EnergyMoneyWorkbench from './EnergyMoneyWorkbench';
 
 const statusCopy = {
   real_public_testnet: 'Real public proof',
@@ -81,6 +82,8 @@ export default function CurrencyLab() {
           </div>
         </div>
       </div>
+
+      <EnergyMoneyWorkbench />
 
       <div className="metric-grid">
         <div className="metric-card metric-good">

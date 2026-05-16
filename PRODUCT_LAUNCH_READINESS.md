@@ -31,7 +31,7 @@ This is the product story that the repo should now support: verified surplus ren
 | Product proof | `docs/product/SPK_ATTESTED_MINT_PROOF.md` generated | Sample bundle minted `130.1697` SPK on Sepolia from `2606` on-chain kWh |
 | Empirical dossier | `docs/product/SPK_PRODUCT_EMPIRICS.md` generated | The thesis evidence is now tied to the single SPK product claim |
 | Meter spec | `docs/specs/METER_ATTESTATION_SPEC.md` added | Defines the adapter/oracle contract for signed reading validation |
-| Frontend | Primary `SPK Mint` tab added | Demo UI explains the mint path instead of foregrounding the revenue floor |
+| Frontend | Primary `SPK Mint` tab plus interactive `Currency` workbench | Demo UI explains verified minting and lets reviewers vary generator scale, self-use, redemption, velocity, shortfall, and reserve assumptions |
 | Live proof | Sepolia core contracts + daily NASA keeper + fresh attested SPK proof stack | Public evidence exists for both old keeper path and new signed-meter mint path |
 | Security | Code review + tests, no formal audit | Not ready for unaudited real-value mainnet funds |
 | Counterparties | None confirmed | Biggest non-code blocker |

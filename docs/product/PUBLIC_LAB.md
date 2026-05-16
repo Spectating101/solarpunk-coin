@@ -14,7 +14,7 @@ The lab exists to answer one question:
 
 | Surface | Status | Where |
 |---|---|---|
-| Frontend demo | Live public interface | `https://spectating101.github.io/solarpunk-coin/` |
+| Frontend demo | Live public interface with SPK mint proof and interactive energy-money workbench | `https://spectating101.github.io/solarpunk-coin/` |
 | SPK attested mint proof | Public Sepolia transaction | `docs/product/SPK_ATTESTED_MINT_PROOF.md` |
 | Read-only on-chain readback | 7/7 checks passing | `docs/product/SPK_PUBLIC_READBACK.md` |
 | Daily data experiment | NASA POWER -> Sepolia keeper | `docs/project/DAILY_EXPERIMENT_STATUS.md` |

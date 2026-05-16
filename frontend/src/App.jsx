@@ -23,9 +23,9 @@ import CurrencyLab from './components/CurrencyLab';
 import { GITHUB_REPO, KEEPER_WORKFLOW } from './constants/contracts';
 
 const tabs = [
-  { id: 'proof', label: 'Proof', icon: RadioTower },
-  { id: 'mint', label: 'SPK Mint', icon: Leaf },
   { id: 'currency', label: 'Currency', icon: Coins },
+  { id: 'mint', label: 'SPK Mint', icon: Leaf },
+  { id: 'proof', label: 'Proof', icon: RadioTower },
   { id: 'launch', label: 'Lab', icon: FlaskConical },
   { id: 'market', label: 'Market', icon: BarChart3 },
   { id: 'hedge', label: 'Hedge', icon: Wallet },
@@ -35,7 +35,7 @@ const tabs = [
 function App() {
   const TEST_COUNT = 102;
 
-  const [activeTab, setActiveTab] = useState('proof');
+  const [activeTab, setActiveTab] = useState('currency');
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);

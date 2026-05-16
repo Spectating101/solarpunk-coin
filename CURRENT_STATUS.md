@@ -30,7 +30,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Stability pool | **Dedicated StabilityPool contract (not address(this))** |
 | Treasury loop | Implemented (mint/redeem fees, trading fees, liquidation penalties, bond slashing) |
 | On-chain interaction proof | 7 confirmed Sepolia transactions + daily keeper TXs since April 20 |
-| Frontend | Live — reads Sepolia contract state every 30s and now foregrounds the `SPK Mint` and public lab launch path |
+| Frontend | Live — reads Sepolia contract state every 30s and now foregrounds the `SPK Mint`, public lab launch path, and interactive energy-money workbench |
 | Python SDK | spk-derivatives v0.5.0 (PyPI) — chain_client reads all live protocol state |
 | Local demo | Available (`npm run demo:treasury`) |
 | Security audit | Not started — requires funding (~$25k); primary grant deliverable |

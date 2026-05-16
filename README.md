@@ -131,7 +131,7 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Oil: `1699.81 kWh` thermal per barrel benchmark only; not SPK mint-eligible
 - **Energy-standard economics** — translates the proof stack into the monetary equation: accepted surplus kWh * energy price -> SPK issuance; at `$0.05/kWh`, `1 SPK = 20 kWh` basis and the proof mint formula matches `130.1697 SPK`
 - **Python SDK** — `pip install spk-derivatives` (v0.5.0, PyPI)
-- **Frontend** — Vite/React, reads live Sepolia state every 30 seconds
+- **Frontend** — Vite/React, reads live Sepolia state every 30 seconds, and includes an interactive energy-money workbench for SPK issuance, settlement, redemption, and reserve-risk scenarios
 
 ---
 
