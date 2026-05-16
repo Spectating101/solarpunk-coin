@@ -15,6 +15,7 @@ import energyStandard from '../../../state/product/energy_standard_economics.jso
 import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
+import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
 import { GITHUB_REPO } from '../constants/contracts';
 import EnergyMoneyWorkbench from './EnergyMoneyWorkbench';
 
@@ -129,6 +130,34 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatNumber(energyMoneySimulation.annualized_totals.issued_spk, 0)} SPK</div>
           <div className="metric-sub">
             annualized across {energyMoneySimulation.input_basis.observed_days} real keeper-index days
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Protocol Fee Revenue</div>
+          <div className="metric-value">{formatUsd(spkFinanceDossier.annualized_income_statement.total_protocol_fee_revenue_usd, 2)}</div>
+          <div className="metric-sub">
+            annualized at current 10 bps mint/redemption policy
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Fee Base Gap</div>
+          <div className="metric-value">{formatNumber(spkFinanceDossier.break_even_analysis.fee_base_gap_multiple, 0)}x</div>
+          <div className="metric-sub">
+            gap to cover {formatUsd(spkFinanceDossier.annualized_income_statement.annual_operating_expense_assumption_usd, 0)} annual opex assumption
+          </div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Balance Sheet Liability</div>
+          <div className="metric-value">{formatUsd(spkFinanceDossier.balance_sheet_view.outstanding_energy_liability_usd_at_basis, 0)}</div>
+          <div className="metric-sub">
+            {formatNumber(spkFinanceDossier.balance_sheet_view.outstanding_energy_claim_kwh, 0)} kWh active-supply claim
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Closed-Pilot Finance Stack</div>
+          <div className="metric-value">{formatUsd(spkFinanceDossier.stress_capital_stack.minimum_finance_stack_usd, 0)}</div>
+          <div className="metric-sub">
+            runway, audit, legal, oracle, working capital, stress buffer
           </div>
         </div>
         <div className="metric-card">
@@ -262,6 +291,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/ENERGY_MONEY_SIMULATION.md`} target="_blank" rel="noreferrer">
               Energy-money sim <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_FINANCE_DOSSIER.md`} target="_blank" rel="noreferrer">
+              Finance dossier <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />

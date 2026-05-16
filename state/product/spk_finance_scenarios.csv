@@ -1,0 +1,4 @@
+id,label,annual_issued_spk,annual_settlement_volume_spk,annual_redeemed_spk,annual_protocol_fee_revenue_usd,annual_shortfall_liability_usd,operator_reserve_usd,reserve_coverage_ratio,finance_status
+rooftop_home_10kw,10 kW solar home,200.216787,300.325181,70.075907,0.270293,0.7008,5,7.520395,solvent_mechanics_but_not_self_funding
+neighborhood_cluster_250kw,250 kW neighborhood cluster,3893.104261,9732.760874,1946.55217,5.839656,58.396611,500,8.662141,solvent_mechanics_but_not_self_funding
+commercial_portfolio_1mw,1 MW commercial portfolio,11123.155296,33369.465836,5005.419887,16.128575,250.270984,5000,20.042789,solvent_mechanics_but_not_self_funding

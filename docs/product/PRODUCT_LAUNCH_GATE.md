@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-16T16:51:03.423Z`
+- generated_at: `2026-05-16T17:37:58.468Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,9 +9,9 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 8 | 0 |
-| Closed testnet pilot | `blocked` | 9 | 2 |
-| Paid/mainnet product | `blocked` | 9 | 6 |
+| SolarPunk Public Lab | `launchable` | 9 | 0 |
+| Closed testnet pilot | `blocked` | 10 | 2 |
+| Paid/mainnet product | `blocked` | 10 | 6 |
 
 ## Next Actions
 
@@ -38,6 +38,8 @@
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
   Evidence: `docs/product/ENERGY_MONEY_SIMULATION.md`
+- PASS `SPK finance dossier exists`: Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.
+  Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
 
 ## Closed testnet pilot
 
@@ -57,6 +59,8 @@
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
   Evidence: `docs/product/ENERGY_MONEY_SIMULATION.md`
+- PASS `SPK finance dossier exists`: Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.
+  Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.
@@ -86,6 +90,8 @@
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
   Evidence: `docs/product/ENERGY_MONEY_SIMULATION.md`
+- PASS `SPK finance dossier exists`: Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.
+  Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.

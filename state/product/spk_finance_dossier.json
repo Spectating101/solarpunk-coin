@@ -1,0 +1,172 @@
+{
+  "generated_at": "2026-05-16T17:35:12.933Z",
+  "title": "SolarPunk SPK Finance Dossier",
+  "finance_thesis": "The finance-heavy SolarPunk claim is not that code prints money. It is that verified energy surplus can be converted into an inspectable monetary balance sheet with explicit issuance, redemption liabilities, fee income, reserve capital, and stress gaps.",
+  "input_basis": {
+    "energy_money_simulation": "state/product/energy_money_simulation.json",
+    "monetary_stress_harness": "state/product/monetary_stress_harness.json",
+    "energy_standard_economics": "state/product/energy_standard_economics.json",
+    "currency_system_lab": "state/product/currency_system_lab.json",
+    "launch_gate": "state/product/launch_gate.json"
+  },
+  "explicit_finance_assumptions": {
+    "annualOperatingExpenseUsd": 120000,
+    "runwayMonths": 6,
+    "auditReserveUsd": 25000,
+    "legalScopingReserveUsd": 15000,
+    "oracleOpsReserveUsd": 20000,
+    "pilotWorkingCapitalUsd": 50000,
+    "stressCapitalMultiplier": 1.25,
+    "targetLiquidityPctOfActiveSupply": 0.1
+  },
+  "monetary_unit_economics": {
+    "energy_price_usd_per_kwh": 0.05,
+    "kwh_per_spk": 20,
+    "implied_spk_unit_usd": 1,
+    "mint_fee_bps": 10,
+    "redemption_fee_bps": 10,
+    "settlement_fee_bps": 0,
+    "gross_spk_per_kwh": 0.05,
+    "net_spk_per_kwh_after_mint_fee": 0.04995,
+    "fee_revenue_usd_per_kwh_minted": 0.00005
+  },
+  "annualized_income_statement": {
+    "annual_issued_spk": 15216.476344,
+    "annual_redeemed_spk": 7022.047964,
+    "annual_settlement_volume_spk": 43402.551891,
+    "mint_fee_revenue_usd": 15.216476,
+    "redemption_fee_revenue_usd": 7.022048,
+    "settlement_fee_revenue_usd": 0,
+    "total_protocol_fee_revenue_usd": 22.238524,
+    "annual_operating_expense_assumption_usd": 120000,
+    "annual_net_operating_result_usd": -119977.761476,
+    "opex_coverage_ratio": 0.000185
+  },
+  "break_even_analysis": {
+    "current_effective_fee_base_usd": 65641.076199,
+    "current_effective_fee_rate": 0.00033879,
+    "required_fee_base_usd_at_current_policy": 354201975.99,
+    "fee_base_gap_multiple": 5396.04,
+    "break_even_annual_mint_only_spk": 120000000,
+    "break_even_annual_redeem_only_spk": 120000000,
+    "interpretation": "At the current 10 bps mint/redemption fee policy, SPK protocol fees are not a near-term operating revenue engine. The finance case must therefore emphasize balance-sheet discipline, risk pricing, pilot/service revenue, partner capital, and structured energy contracts."
+  },
+  "balance_sheet_view": {
+    "active_supply_spk": 8194.428381,
+    "outstanding_energy_claim_kwh": 163888.5676,
+    "outstanding_energy_liability_usd_at_basis": 8194.428381,
+    "annual_redeemed_spk": 7022.047964,
+    "annual_redeemed_energy_kwh": 140440.9593,
+    "annual_shortfall_liability_usd_in_base_simulation": 309.368395,
+    "named_operator_reserve_usd_in_base_simulation": 5505,
+    "base_simulation_reserve_coverage_ratio": 17.794319,
+    "settlement_velocity_ratio": 5.2966
+  },
+  "stress_capital_stack": {
+    "worst_stress_additional_buffer_required_usd": 3940.985988,
+    "stress_capital_multiplier": 1.25,
+    "stress_capital_reserve_usd": 4926.232485,
+    "active_supply_liquidity_reserve_usd": 819.442838,
+    "runway_reserve_usd": 60000,
+    "audit_reserve_usd": 25000,
+    "legal_scoping_reserve_usd": 15000,
+    "oracle_ops_reserve_usd": 20000,
+    "pilot_working_capital_usd": 50000,
+    "minimum_finance_stack_usd": 175745.675323,
+    "interpretation": "This is an internal finance stack for a closed pilot, not a token-sale target and not customer collateral unless legally segregated."
+  },
+  "archetype_finance": [
+    {
+      "id": "rooftop_home_10kw",
+      "label": "10 kW solar home",
+      "capacity_kw": 10,
+      "annual_issued_spk": 200.216787,
+      "annual_settlement_volume_spk": 300.325181,
+      "annual_redeemed_spk": 70.075907,
+      "annual_protocol_fee_revenue_usd": 0.270293,
+      "annual_shortfall_liability_usd": 0.7008,
+      "operator_reserve_usd": 5,
+      "reserve_gap_usd": 0,
+      "reserve_coverage_ratio": 7.520395,
+      "finance_status": "solvent_mechanics_but_not_self_funding"
+    },
+    {
+      "id": "neighborhood_cluster_250kw",
+      "label": "250 kW neighborhood cluster",
+      "capacity_kw": 250,
+      "annual_issued_spk": 3893.104261,
+      "annual_settlement_volume_spk": 9732.760874,
+      "annual_redeemed_spk": 1946.55217,
+      "annual_protocol_fee_revenue_usd": 5.839656,
+      "annual_shortfall_liability_usd": 58.396611,
+      "operator_reserve_usd": 500,
+      "reserve_gap_usd": 0,
+      "reserve_coverage_ratio": 8.662141,
+      "finance_status": "solvent_mechanics_but_not_self_funding"
+    },
+    {
+      "id": "commercial_portfolio_1mw",
+      "label": "1 MW commercial portfolio",
+      "capacity_kw": 1000,
+      "annual_issued_spk": 11123.155296,
+      "annual_settlement_volume_spk": 33369.465836,
+      "annual_redeemed_spk": 5005.419887,
+      "annual_protocol_fee_revenue_usd": 16.128575,
+      "annual_shortfall_liability_usd": 250.270984,
+      "operator_reserve_usd": 5000,
+      "reserve_gap_usd": 0,
+      "reserve_coverage_ratio": 20.042789,
+      "finance_status": "solvent_mechanics_but_not_self_funding"
+    }
+  ],
+  "readiness_checks": [
+    {
+      "id": "asset_liability_mapping",
+      "pass": true,
+      "finding": "Active SPK supply is mapped to an energy-denominated redemption liability."
+    },
+    {
+      "id": "conservation_checked",
+      "pass": true,
+      "finding": "Minted SPK, redeemed SPK, active supply, owed kWh, delivered kWh, and shortfall kWh reconcile in the current artifacts."
+    },
+    {
+      "id": "stress_capital_named",
+      "pass": false,
+      "finding": "Worst stress still needs $3,940.99 of named buffer before it can be treated as finance-ready."
+    },
+    {
+      "id": "fee_model_self_funding",
+      "pass": false,
+      "finding": "Current annualized fee revenue is $22.24 against an explicit $120,000 annual operating-budget assumption."
+    },
+    {
+      "id": "launch_gate_blocks_real_money",
+      "pass": true,
+      "finding": "The launch gate still blocks paid/mainnet use until audit, legal, redemption, and production deployment requirements are met."
+    }
+  ],
+  "finance_readiness": {
+    "passed": 3,
+    "total": 5,
+    "blockers": [
+      "stress_capital_named",
+      "fee_model_self_funding"
+    ],
+    "stage": "finance_model_ready_but_capital_and_revenue_blocked"
+  },
+  "finance_next_steps": [
+    "Replace generic operating-budget assumptions with a real pilot budget and signed operator cost sheet.",
+    "Add a tariff/PPA module: contracted energy price, market price, curtailment value, and basis risk.",
+    "Separate protocol fees from actual business revenue: pilot setup fees, monitoring SaaS, oracle service fees, and structured energy receipts.",
+    "Define legal reserve segregation: what is protocol-owned, operator-owned, customer collateral, insurance, or grant-funded infrastructure.",
+    "Add scenario probability weights only after real production, tariff, and redemption data exist."
+  ],
+  "hard_boundaries": [
+    "This dossier is a finance model, not investment advice, not a securities offering, and not a solvency guarantee.",
+    "Protocol fee revenue is modeled from current fee policy and simulated volume; it is not current realized revenue.",
+    "Operating expense, legal, oracle, pilot working-capital, and runway assumptions are explicit internal planning inputs.",
+    "Reserve capital for redemptions or shortfalls must be legally and operationally segregated before any paid product.",
+    "SPK should not be marketed as yield-bearing, risk-free, or fully redeemable until legal terms, counterparties, reserves, and audit are complete."
+  ]
+}

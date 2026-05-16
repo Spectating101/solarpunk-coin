@@ -42,6 +42,8 @@
     "product:monetary-stress:test": "node --test test-node/monetary_stress_harness.test.js",
     "product:energy-money-sim": "node scripts/energy_money_simulation.js",
     "product:energy-money-sim:test": "node --test test-node/energy_money_simulation.test.js",
+    "product:finance-dossier": "node scripts/spk_finance_dossier.js",
+    "product:finance-dossier:test": "node --test test-node/spk_finance_dossier.test.js",
     "deploy:pilot-stack:hardhat": "hardhat run scripts/deploy_pilot_stack.js",
     "deploy:pilot-stack:sepolia": "hardhat run scripts/deploy_pilot_stack.js --network sepolia",
     "pilot-stack:readback": "hardhat run scripts/read_pilot_stack.js --network ${PILOT_NETWORK:-sepolia}",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T16:51:03.423Z",
+  "generated_at": "2026-05-16T17:37:58.468Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 8,
+      "passed_checks": 9,
       "blocking_checks": 0,
       "checks": [
         {
@@ -66,6 +66,13 @@
           "blocking": true,
           "message": "Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.",
           "evidence": "docs/product/ENERGY_MONEY_SIMULATION.md"
+        },
+        {
+          "name": "SPK finance dossier exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.",
+          "evidence": "docs/product/SPK_FINANCE_DOSSIER.md"
         }
       ]
     },
@@ -73,7 +80,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 9,
+      "passed_checks": 10,
       "blocking_checks": 2,
       "checks": [
         {
@@ -133,6 +140,13 @@
           "evidence": "docs/product/ENERGY_MONEY_SIMULATION.md"
         },
         {
+          "name": "SPK finance dossier exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.",
+          "evidence": "docs/product/SPK_FINANCE_DOSSIER.md"
+        },
+        {
           "name": "Governed attested-SPK deployment",
           "pass": false,
           "blocking": true,
@@ -173,7 +187,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 9,
+      "passed_checks": 10,
       "blocking_checks": 6,
       "checks": [
         {
@@ -231,6 +245,13 @@
           "blocking": true,
           "message": "Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.",
           "evidence": "docs/product/ENERGY_MONEY_SIMULATION.md"
+        },
+        {
+          "name": "SPK finance dossier exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Finance dossier exposes income statement, break-even fee-base gap, balance-sheet liability, and closed-pilot finance stack.",
+          "evidence": "docs/product/SPK_FINANCE_DOSSIER.md"
         },
         {
           "name": "Governed attested-SPK deployment",

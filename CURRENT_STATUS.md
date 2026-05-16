@@ -16,6 +16,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Pilot CSV receipt | Added: sample meter/inverter CSV -> signed readings -> accepted bundle -> deterministic source hash -> 99.15075 SPK mint preview |
 | Monetary stress harness | Added: redemption-wave and physical-shortfall scenarios with conservation checks, fee buffers, and explicit additional reserve requirements |
 | Energy-money simulation | Added: real keeper-index resource signal -> explicit surplus assumptions -> SPK issuance -> settlement velocity -> redemption/reserve model |
+| SPK finance dossier | Added: annualized income statement, balance-sheet liability view, break-even fee-base gap, reserve coverage, and closed-pilot finance stack |
 | Governed pilot-stack scaffold | Added: deploy/readback scripts for MockUSDC + ProtocolTreasury + SolarPunkCoin + SolarPunkCurrencySystem under pilot governance roles |
 | Theory/comparables anchor | Added: SPK positioned as an energy-denominated settlement and receipt system anchored to RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, FSB stablecoin risk controls |
 | Multi-resource benchmark lab | Added: NASA POWER solar/wind/temperature fetch, standard 10 kWdc PV conversion, $3.15/Wdc install-cost assumption, renewable benchmark matrix, and oil-only energy-unit comparison |

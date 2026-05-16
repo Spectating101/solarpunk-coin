@@ -245,7 +245,24 @@ This is the more direct "new currency system" model: real keeper-index resource 
 
 Scope note: NASA/keeper resource signals are real; self-consumption, redemption, velocity, and shortfall values are explicit assumptions. Model-estimated surplus cannot mint SPK until replaced by signed meter/inverter attestations.
 
-### 2.13 Governed Pilot Stack Scaffold
+### 2.13 SPK Finance Dossier
+
+This turns the currency model into finance language: income statement, active-supply liability, fee break-even gap, reserve coverage, stress capital, and closed-pilot finance stack.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Finance generator | Available | `scripts/spk_finance_dossier.js` |
+| Annualized protocol fee revenue | $22.238524 at current 10 bps mint/redemption policy | `state/product/spk_finance_dossier.json` |
+| Annual operating expense assumption | $120,000 | Same file |
+| Required fee base at current policy | $354,201,975.99 | Same file |
+| Active-supply liability at basis | $8,194.428381 / 163,888.5676 kWh | Same file |
+| Minimum closed-pilot finance stack | $175,745.675323 | Same file |
+| Finance readiness | 3/5, blocked on named stress capital and self-funding fee economics | `docs/product/SPK_FINANCE_DOSSIER.md` |
+| Tests | 4 Node tests | `test-node/spk_finance_dossier.test.js` |
+
+Scope note: this is a finance model, not investment advice, not a securities offering, and not current realized revenue. It intentionally shows that the protocol is not self-funding under current fee policy.
+
+### 2.14 Governed Pilot Stack Scaffold
 
 This is the deploy/readback path for moving from proof-scoped SPK to a governed testnet pilot stack that includes settlement and redemption.
 
@@ -259,7 +276,7 @@ This is the deploy/readback path for moving from proof-scoped SPK to a governed 
 
 Scope note: the local Hardhat receipt proves the deploy script executes. Persistent readback is for Sepolia or a long-running local node.
 
-### 2.14 Test Suite (Reproducible, Run by Anyone)
+### 2.15 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin

@@ -26,6 +26,7 @@ The lab exists to answer one question:
 | Field receipt loop | Local mint -> settlement -> redemption -> delivery receipt | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Monetary stress harness | Redemption-wave, shortfall, and reserve-gap table | `docs/product/MONETARY_STRESS_HARNESS.md` |
 | Energy-money simulation | Measured resource signal -> SPK issuance -> settlement -> redemption-risk model | `docs/product/ENERGY_MONEY_SIMULATION.md` |
+| SPK finance dossier | Income statement, balance-sheet liability, fee break-even gap, reserve coverage, and pilot finance stack | `docs/product/SPK_FINANCE_DOSSIER.md` |
 | Pilot packets | Operator handoff and reviewer checklist | `docs/product/PILOT_OPERATOR_PACKET.md`, `docs/product/PILOT_REVIEWER_PACKET.md` |
 | Theory and comparables | External anchors and honest positioning | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
 | Multi-resource benchmark | NASA solar/wind data, PV conversion/cost model, renewable benchmark matrix, oil-only comparison | `docs/product/RESOURCE_BENCHMARK_LAB.md` |

@@ -27,6 +27,7 @@ This is the product story that the repo should now support: verified surplus ren
 | Pilot CSV receipt | `scripts/pilot_csv_receipt.js` generates raw readings, accepted bundle, source hash, and mint preview | First end-to-end operator-style CSV proof surface |
 | Monetary stress harness | `scripts/monetary_stress_harness.js` generates redemption-wave and shortfall scenarios | Shows where SPK needs named reserve capital instead of pretending physical shortfalls can be printed away |
 | Energy-money simulation | `scripts/energy_money_simulation.js` uses real keeper-index resource days plus explicit assumptions | Shows SPK as an energy-standard monetary system, not merely a pilot receipt generator |
+| SPK finance dossier | `scripts/spk_finance_dossier.js` turns simulation/stress artifacts into income statement, balance sheet, break-even, and finance-stack views | Makes the finance blockers explicit: current fee policy is not self-funding and stress capital must be named |
 | Pilot stack scaffold | `scripts/deploy_pilot_stack.js` and `scripts/read_pilot_stack.js` | Deploy/readback path for SPK + treasury + currency system under pilot governance |
 | Product proof | `docs/product/SPK_ATTESTED_MINT_PROOF.md` generated | Sample bundle minted `130.1697` SPK on Sepolia from `2606` on-chain kWh |
 | Empirical dossier | `docs/product/SPK_PRODUCT_EMPIRICS.md` generated | The thesis evidence is now tied to the single SPK product claim |
