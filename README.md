@@ -25,7 +25,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
 | [`docs/product/ENERGY_MONEY_SIMULATION.md`](./docs/product/ENERGY_MONEY_SIMULATION.md) | Energy-standard monetary simulation: measured resource signal -> SPK issuance -> settlement -> redemption risk |
 | [`docs/product/SPK_FINANCE_DOSSIER.md`](./docs/product/SPK_FINANCE_DOSSIER.md) | Finance dossier: income statement, balance-sheet liability, break-even fee base, reserve coverage, and closed-pilot finance stack |
-| [`docs/product/EMPIRICAL_FINANCE_BACKTEST.md`](./docs/product/EMPIRICAL_FINANCE_BACKTEST.md) | 861-day NASA POWER historical resource-to-finance backtest: DSCR, payback, reserve-at-risk, and finance blockers |
+| [`docs/product/EMPIRICAL_FINANCE_BACKTEST.md`](./docs/product/EMPIRICAL_FINANCE_BACKTEST.md) | 862-day NASA POWER historical resource-to-finance backtest: DSCR, payback, reserve-at-risk, and finance blockers |
 | [`docs/product/ECONOMIC_LAUNCH_READINESS.md`](./docs/product/ECONOMIC_LAUNCH_READINESS.md) | Economic launch gate: required realized $/kWh, max capex, support gaps, sensitivity paths, and paid-launch blocker |
 | [`docs/product/PILOT_OPERATOR_PACKET.md`](./docs/product/PILOT_OPERATOR_PACKET.md) | What a real meter/inverter operator should send and what SolarPunk returns |
 | [`docs/product/PILOT_REVIEWER_PACKET.md`](./docs/product/PILOT_REVIEWER_PACKET.md) | One-page pilot proof checklist for skeptical reviewers |
@@ -133,8 +133,8 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Solar: latest 2026-05-11 NASA GHI `3.2566 kWh/m2/day` -> `28.0068 kWh/day` on a 10 kWdc / 50 m2 / 14% loss model
   - Oil: `1699.81 kWh` thermal per barrel benchmark only; not SPK mint-eligible
 - **Energy-standard economics** — translates the proof stack into the monetary equation: accepted surplus kWh * energy price -> SPK issuance; at `$0.05/kWh`, `1 SPK = 20 kWh` basis and the proof mint formula matches `130.1697 SPK`
-- **Empirical finance backtest** — converts 861 observed NASA POWER daily irradiance records for Taoyuan into project-finance distributions across 10 kW, 250 kW, and 1 MW archetypes; current assumptions produce a 10 kW p50 DSCR of `0.325x`, so the resource model is real but paid launch still needs better tariff/PPA, lower capex, incentives, or different capital structure
-- **Economic launch readiness** — turns the empirical backtest into launch thresholds: current best p50 DSCR is `0.3764x`, paid launch is economically blocked, and the lowest absolute pilot path needs about `$0.3304/kWh` realized value or support terms before it clears DSCR/payback targets
+- **Empirical finance backtest** — converts 862 observed NASA POWER daily irradiance records for Taoyuan into project-finance distributions across 10 kW, 250 kW, and 1 MW archetypes; current assumptions produce a 10 kW p50 DSCR of `0.325x`, so the resource model is real but paid launch still needs better tariff/PPA, lower capex, incentives, or different capital structure
+- **Economic launch readiness** — turns the empirical backtest into launch thresholds: current best p50 DSCR is `0.3764x`, paid launch is economically blocked, and the lowest absolute pilot path needs about `$0.33/kWh` realized value or support terms before it clears DSCR/payback targets
 - **Python SDK** — `pip install spk-derivatives` (v0.5.0, PyPI)
 - **Frontend** — Vite/React, reads live Sepolia state every 30 seconds, and includes an interactive energy-money workbench for SPK issuance, settlement, redemption, and reserve-risk scenarios
 

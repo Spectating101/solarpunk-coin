@@ -91,7 +91,7 @@ These prove the protocol executes correctly end-to-end, not just compiles.
 
 System that fetches real satellite data and pushes it to the live contracts every day. Not a demo — running continuously on GitHub Actions cron at 01:00 UTC.
 
-**Current summary:** 20 successful runs, latest successful run `2026-05-16`, current success streak 18 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
+**Current summary:** 21 successful runs, latest successful run `2026-05-17`, current success streak 19 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
 
 | Date | NASA date used | GHI (kWh/m²) | Normalised index | On-chain tx |
 |---|---|---|---|---|
@@ -101,6 +101,7 @@ System that fetches real satellite data and pushes it to the live contracts ever
 | 2026-05-05 | 2026-04-30 | 1.193 | 0.3715 (below avg) | [0xb616c3...](https://sepolia.etherscan.io/tx/0xb616c3c4b4eec4f078d8665f6fe46ed7821d2cb136408f61d687371c043aeb4d) |
 | 2026-05-14 | 2026-05-09 | 2.0808 | 0.5979 (below avg) | [0x20162f...](https://sepolia.etherscan.io/tx/0x20162f08923cddf07e3455ce3eeecfd69ca4bcd7baeead84e6e2b1e4fe6cf856) |
 | 2026-05-16 | 2026-05-11 | 3.2566 | 0.9358 (near avg) | [0xcb92e9...](https://sepolia.etherscan.io/tx/0xcb92e9b6583c5831b6d5148442d8b821d062475bed74f16ff5daf0bcb6689be8) |
+| 2026-05-17 | 2026-05-12 | 3.9612 | 1.1383 (above avg) | [0x1a8a0d...](https://sepolia.etherscan.io/tx/0x1a8a0d8cfc39c18402c3624522b13210aa86058e62926ae32beb078f15af01a0) |
 
 **Log files:** `state/keeper_logs/YYYY-MM-DD.json` — each entry contains: NASA date, GHI value, monthly mean, normalised index, source hash, 3 on-chain TX hashes, and full protocol state snapshot.
 
@@ -270,8 +271,8 @@ This tests the energy-money thesis against historical resource data instead of o
 |---|---|---|
 | Backtest generator | Available | `scripts/empirical_finance_backtest.js` |
 | Public resource source | NASA POWER Daily API, `ALLSKY_SFC_SW_DWN` | `state/product/empirical_finance_backtest.json` |
-| Location and window | Taoyuan, Taiwan, `2024-01-01` -> `2026-05-11` | Same file |
-| Observed days | 861 | Same file |
+| Location and window | Taoyuan, Taiwan, `2024-01-01` -> `2026-05-12` | Same file |
+| Observed days | 862 | Same file |
 | Archetypes | 10 kW home, 250 kW neighborhood cluster, 1 MW commercial portfolio | `docs/product/EMPIRICAL_FINANCE_BACKTEST.md` |
 | 10 kW p50 annual energy value | $1,067.84 | Same file |
 | 10 kW p50 DSCR | 0.325x under stated capex/tariff/debt assumptions | Same file |
@@ -290,17 +291,17 @@ This converts empirical resource economics into actual launch thresholds instead
 | Claim | Value | Artifact |
 |---|---|---|
 | Launch economics generator | Available | `scripts/economic_launch_readiness.js` |
-| Empirical input | 861-day NASA POWER finance backtest | `state/product/empirical_finance_backtest.json` |
+| Empirical input | 862-day NASA POWER finance backtest | `state/product/empirical_finance_backtest.json` |
 | Public-lab economic status | `economic_evidence_ready` | `docs/product/ECONOMIC_LAUNCH_READINESS.md` |
 | Closed-pilot economic status | `requires_anchor_tariff_ppa_capex_reduction_or_support_capital` | Same file |
 | Paid/mainnet economic status | `blocked_by_unit_economics_and_protocol_revenue` | Same file |
 | Best current p50 DSCR | 0.3764x, 1 MW commercial portfolio | `state/product/economic_launch_readiness.json` |
 | Lowest absolute pilot support path | 10 kW solar home | Same file |
-| Required realized value for 10 kW path | $0.3304/kWh | Same file |
+| Required realized value for 10 kW path | $0.3298/kWh | Same file |
 | 10 kW annual support gap | $2,875 | Same file |
-| 10 kW capital support gap | $23,062 | Same file |
+| 10 kW capital support gap | $23,046 | Same file |
 | Protocol fee opex coverage | 0.0185% | Same file |
-| Sensitivity grid | 1,080 tested rows; 828 threshold-positive mechanical scenarios | `state/product/economic_launch_sensitivity.csv` |
+| Sensitivity grid | 1,080 tested rows; 829 threshold-positive mechanical scenarios | `state/product/economic_launch_sensitivity.csv` |
 | Tests | 3 Node tests | `test-node/economic_launch_readiness.test.js` |
 
 Scope note: this is a launch-readiness threshold model, not a revenue forecast. It shows what signed tariff/PPA, capex, support capital, debt/equity, and service-revenue terms must beat before launch economics are defensible.

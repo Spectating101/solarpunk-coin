@@ -50,7 +50,7 @@ This is the product story that the repo should now support: verified surplus ren
 - The pilot CSV receipt demonstrates a realistic operator/export path: `1,985.5` accepted kWh becomes a deterministic source hash and `99.15075 SPK` mint preview without writing private keys to repo outputs.
 - The monetary stress harness keeps the economics honest by converting redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 - The energy-money simulation uses recent real keeper-index days to model SPK issuance, settlement velocity, redemption claims, active supply, and reserve gaps across rooftop, neighborhood, and commercial archetypes.
-- The empirical finance backtest uses 861 observed NASA POWER daily records to estimate annual energy value, DSCR, payback, and monthly revenue-at-risk across 10 kW, 250 kW, and 1 MW archetypes.
+- The empirical finance backtest uses 862 observed NASA POWER daily records to estimate annual energy value, DSCR, payback, and monthly revenue-at-risk across 10 kW, 250 kW, and 1 MW archetypes.
 - The economic launch-readiness gate turns those empirical values into required realized energy value, maximum viable capex, annual support gap, capital support gap, sensitivity paths, and launch-mode blockers.
 
 ## Hard blockers before real paid launch

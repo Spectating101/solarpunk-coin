@@ -1,6 +1,6 @@
 # SolarPunk Economic Launch Readiness
 
-- generated_at: `2026-05-17T05:01:50.317Z`
+- generated_at: `2026-05-17T05:03:35.149Z`
 - thesis: This artifact converts the empirical resource backtest into launch economics: DSCR targets, required realized $/kWh, capex ceiling, support capital, sensitivity paths, and explicit launch decisions.
 
 ## Decision
@@ -17,8 +17,8 @@ The empirical economics are now measurable and externally inspectable, but curre
 
 | Item | Value |
 |---|---:|
-| Empirical window | 2024-01-01 -> 2026-05-11 |
-| Empirical days | 861 |
+| Empirical window | 2024-01-01 -> 2026-05-12 |
+| Empirical days | 862 |
 | Target p50 DSCR | 1.2x |
 | Target p10 DSCR | 1x |
 | Target max simple payback | 15 years |
@@ -27,9 +27,9 @@ The empirical economics are now measurable and externally inspectable, but curre
 
 | Archetype | Current p50 DSCR | Current p10 DSCR | Current payback | Required realized value | Required value multiplier | Max launch capex | Annual support gap | Capital support gap | Status |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| 10 kW solar home | 0.325x | 0.2679x | 29.5y | $0.3304/kWh | 3.73x | $0.8438/Wdc | $2,875 | $23,062 | `needs_anchor_tariff_ppa_capex_reduction_or_support_capital` |
-| 250 kW neighborhood cluster | 0.3507x | 0.2891x | 27.34y | $0.3304/kWh | 3.46x | $0.9105/Wdc | $69,776 | $559,863 | `needs_anchor_tariff_ppa_capex_reduction_or_support_capital` |
-| 1 MW commercial portfolio | 0.3764x | 0.3103x | 25.47y | $0.3304/kWh | 3.22x | $0.9773/Wdc | $270,656 | $2,172,709 | `needs_anchor_tariff_ppa_capex_reduction_or_support_capital` |
+| 10 kW solar home | 0.325x | 0.2684x | 29.5y | $0.3298/kWh | 3.73x | $0.8454/Wdc | $2,875 | $23,046 | `needs_anchor_tariff_ppa_capex_reduction_or_support_capital` |
+| 250 kW neighborhood cluster | 0.3507x | 0.2896x | 27.34y | $0.3298/kWh | 3.45x | $0.9122/Wdc | $69,776 | $559,441 | `needs_anchor_tariff_ppa_capex_reduction_or_support_capital` |
+| 1 MW commercial portfolio | 0.3764x | 0.3108x | 25.47y | $0.3298/kWh | 3.22x | $0.9791/Wdc | $270,656 | $2,170,898 | `needs_anchor_tariff_ppa_capex_reduction_or_support_capital` |
 
 ## Best Near-Term Economic Paths
 
@@ -37,8 +37,8 @@ The lowest absolute support path is **10 kW solar home**. The best scaled econom
 
 | Path | Required value | Value multiplier | Max launch capex | Annual support gap | Capital support gap |
 |---|---:|---:|---:|---:|---:|
-| 10 kW solar home | $0.3304/kWh | 3.73x | $0.8438/Wdc | $2,875 | $23,062 |
-| 1 MW commercial portfolio | $0.3304/kWh | 3.22x | $0.9773/Wdc | $270,656 | $2,172,709 |
+| 10 kW solar home | $0.3298/kWh | 3.73x | $0.8454/Wdc | $2,875 | $23,046 |
+| 1 MW commercial portfolio | $0.3298/kWh | 3.22x | $0.9791/Wdc | $270,656 | $2,170,898 |
 
 ## Protocol Revenue Gap
 
@@ -52,22 +52,22 @@ The lowest absolute support path is **10 kW solar home**. The best scaled econom
 
 ## Minimum Viable Sensitivity Rows
 
-Tested 1,080 combinations; 828 clear the launch economics thresholds.
+Tested 1,080 combinations; 829 clear the launch economics thresholds.
 
 | Archetype | Value multiplier | Capex reduction | Debt share | Debt rate | P50 DSCR | P10 DSCR | Payback |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | 1 MW commercial portfolio | 1.5x | 15% | 30% | 8% | 1.55x | 1.28x | 14.43y |
 | 1 MW commercial portfolio | 1x | 45% | 30% | 8% | 1.6x | 1.32x | 14.01y |
 | 1 MW commercial portfolio | 1.5x | 15% | 30% | 6% | 1.7x | 1.4x | 14.43y |
-| 1 MW commercial portfolio | 1x | 45% | 30% | 6% | 1.75x | 1.44x | 14.01y |
-| 1 MW commercial portfolio | 1.5x | 15% | 30% | 4% | 1.87x | 1.54x | 14.43y |
+| 1 MW commercial portfolio | 1x | 45% | 30% | 6% | 1.75x | 1.45x | 14.01y |
+| 1 MW commercial portfolio | 1.5x | 15% | 30% | 4% | 1.87x | 1.55x | 14.43y |
 | 10 kW solar home | 2x | 0% | 30% | 8% | 1.52x | 1.25x | 14.75y |
 | 250 kW neighborhood cluster | 2x | 0% | 30% | 8% | 1.64x | 1.35x | 13.67y |
 | 1 MW commercial portfolio | 2x | 0% | 30% | 8% | 1.76x | 1.45x | 12.73y |
 
 ## Readiness Checks
 
-- PASS empirical_resource_window: 861 observed NASA POWER days are available for launch economics.
+- PASS empirical_resource_window: 862 observed NASA POWER days are available for launch economics.
 - BLOCKED project_finance_targets: Best current p50 DSCR is 0.3764x; target is 1.2x.
 - BLOCKED protocol_fee_self_funding: Protocol fee revenue covers 0.0185% of the current operating-budget assumption.
 - PASS minimum_viable_scenario_exists: Sensitivity grid contains launch-economics-positive scenarios once tariff/value, capex, and capital terms improve.

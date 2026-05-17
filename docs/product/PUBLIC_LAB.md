@@ -27,7 +27,7 @@ The lab exists to answer one question:
 | Monetary stress harness | Redemption-wave, shortfall, and reserve-gap table | `docs/product/MONETARY_STRESS_HARNESS.md` |
 | Energy-money simulation | Measured resource signal -> SPK issuance -> settlement -> redemption-risk model | `docs/product/ENERGY_MONEY_SIMULATION.md` |
 | SPK finance dossier | Income statement, balance-sheet liability, fee break-even gap, reserve coverage, and pilot finance stack | `docs/product/SPK_FINANCE_DOSSIER.md` |
-| Empirical finance backtest | 861-day NASA POWER historical resource-to-finance backtest with DSCR, payback, and reserve-at-risk | `docs/product/EMPIRICAL_FINANCE_BACKTEST.md` |
+| Empirical finance backtest | 862-day NASA POWER historical resource-to-finance backtest with DSCR, payback, and reserve-at-risk | `docs/product/EMPIRICAL_FINANCE_BACKTEST.md` |
 | Economic launch readiness | Required realized $/kWh, max capex, support gaps, sensitivity paths, and economic launch blockers | `docs/product/ECONOMIC_LAUNCH_READINESS.md` |
 | Pilot packets | Operator handoff and reviewer checklist | `docs/product/PILOT_OPERATOR_PACKET.md`, `docs/product/PILOT_REVIEWER_PACKET.md` |
 | Theory and comparables | External anchors and honest positioning | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |

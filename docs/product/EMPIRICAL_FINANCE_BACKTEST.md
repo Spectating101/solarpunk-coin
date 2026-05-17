@@ -1,6 +1,6 @@
 # SolarPunk Empirical Finance Backtest
 
-- generated_at: `2026-05-16T18:22:21.237Z`
+- generated_at: `2026-05-17T05:03:28.266Z`
 - thesis: This backtest asks whether the energy-standard monetary mechanics survive contact with historical resource data and conventional project-finance ratios.
 
 ## Input Basis
@@ -8,10 +8,10 @@
 | Item | Value |
 |---|---|
 | Resource source | NASA POWER Daily API |
-| Resource query | https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=121.3&latitude=24.99&start=20240101&end=20260516&format=JSON |
+| Resource query | https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=121.3&latitude=24.99&start=20240101&end=20260517&format=JSON |
 | Location | Taoyuan, Taiwan (24.99, 121.3) |
-| Window | 2024-01-01 -> 2026-05-11 |
-| Observed days | 861 |
+| Window | 2024-01-01 -> 2026-05-12 |
+| Observed days | 862 |
 | Solar model | `daily_ac_kwh = GHI_kWh_m2_day * kWdc * (1 - PVWatts_loss_pct)` |
 | Energy basis | $0.05/kWh |
 | Retail offset | $0.12/kWh |
@@ -22,10 +22,10 @@
 
 | Claim | Value |
 |---|---:|
-| Empirical days | 861 |
+| Empirical days | 862 |
 | Rooftop p50 annual energy value | $1,067.84 |
 | Rooftop p50 DSCR | 0.325x |
-| Rooftop p10 DSCR | 0.2679x |
+| Rooftop p10 DSCR | 0.2684x |
 | Rooftop monthly revenue-at-risk vs p50 | $27.92 |
 | Empirical status | `resource_real_but_finance_requires_better_tariff_capex_or_capital_structure` |
 
@@ -38,9 +38,9 @@ The product implication is direct: paid launch needs at least one of better tari
 
 | Archetype | P50 annual value | P10 annual value | P50 DSCR | P10 DSCR | P50 payback | Monthly reserve target | Daily CV | Longest below-P25 run |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 10 kW solar home | $1,067.84 | $880.27 | 0.325x | 0.2679x | 29.5y | $27.92 | 0.4451 | 8d |
-| 250 kW neighborhood cluster | $28,807.5 | $23,747.27 | 0.3507x | 0.2891x | 27.34y | $753.25 | 0.4451 | 8d |
-| 1 MW commercial portfolio | $123,676.16 | $101,951.64 | 0.3764x | 0.3103x | 25.47y | $3,233.86 | 0.4451 | 8d |
+| 10 kW solar home | $1,067.84 | $881.9 | 0.325x | 0.2684x | 29.5y | $27.92 | 0.4448 | 8d |
+| 250 kW neighborhood cluster | $28,807.5 | $23,791.27 | 0.3507x | 0.2896x | 27.34y | $753.25 | 0.4448 | 8d |
+| 1 MW commercial portfolio | $123,676.16 | $102,140.53 | 0.3764x | 0.3108x | 25.47y | $3,233.86 | 0.4448 | 8d |
 
 ## Hard Boundaries
 

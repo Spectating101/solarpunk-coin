@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-16T18:22:21.237Z",
+  "generated_at": "2026-05-17T05:03:28.266Z",
   "title": "SolarPunk Empirical Finance Backtest",
   "thesis": "This backtest asks whether the energy-standard monetary mechanics survive contact with historical resource data and conventional project-finance ratios.",
   "input_basis": {
     "resource_source": "NASA POWER Daily API",
-    "resource_query_url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=121.3&latitude=24.99&start=20240101&end=20260516&format=JSON",
+    "resource_query_url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=121.3&latitude=24.99&start=20240101&end=20260517&format=JSON",
     "resource_parameter": "ALLSKY_SFC_SW_DWN",
     "location": {
       "name": "Taoyuan, Taiwan",
@@ -12,10 +12,10 @@
       "longitude": 121.3
     },
     "start": "20240101",
-    "end": "20260516",
-    "observed_days": 861,
+    "end": "20260517",
+    "observed_days": 862,
     "first_date": "2024-01-01",
-    "last_date": "2026-05-11",
+    "last_date": "2026-05-12",
     "solar_model": "daily_ac_kwh = GHI_kWh_m2_day * kWdc * (1 - PVWatts_loss_pct)",
     "finance_assumptions": {
       "energy_price_usd_per_kwh": 0.05,
@@ -29,12 +29,12 @@
     "capex_assumption_usd_per_wdc": 3.15
   },
   "finance_claims": {
-    "empirical_days": 861,
+    "empirical_days": 862,
     "first_date": "2024-01-01",
-    "last_date": "2026-05-11",
+    "last_date": "2026-05-12",
     "p50_rooftop_annual_value_usd": 1067.8381,
     "p50_rooftop_dscr": 0.325,
-    "p10_rooftop_dscr": 0.2679,
+    "p10_rooftop_dscr": 0.2684,
     "rooftop_monthly_revenue_at_risk_usd": 27.9216,
     "empirical_status": "resource_real_but_finance_requires_better_tariff_capex_or_capital_structure"
   },
@@ -45,18 +45,18 @@
       "interpretation": "Home-scale system using most output onsite and exporting surplus.",
       "capacity_kw": 10,
       "self_consumption_fraction": 0.55,
-      "observed_days": 861,
+      "observed_days": 862,
       "first_date": "2024-01-01",
-      "last_date": "2026-05-11",
+      "last_date": "2026-05-12",
       "daily_generation_distribution": {
-        "mean_kwh": 32.0317,
-        "stddev_kwh": 14.2563,
-        "coefficient_of_variation": 0.445068,
-        "p05_kwh": 11.2058,
-        "p25_kwh": 20.0475,
-        "p50_kwh": 31.0942,
-        "p75_kwh": 44.2934,
-        "p95_kwh": 55.3892,
+        "mean_kwh": 32.0341,
+        "stddev_kwh": 14.2482,
+        "coefficient_of_variation": 0.444782,
+        "p05_kwh": 11.2097,
+        "p25_kwh": 20.064,
+        "p50_kwh": 31.1075,
+        "p75_kwh": 44.2853,
+        "p95_kwh": 55.3829,
         "longest_below_p25_run_days": 8
       },
       "monthly_distribution": {
@@ -70,7 +70,7 @@
       },
       "annual_distribution": {
         "years": 3,
-        "p10_energy_value_usd": 880.2654,
+        "p10_energy_value_usd": 881.8963,
         "p50_energy_value_usd": 1067.8381,
         "p90_energy_value_usd": 1074.4595,
         "p50_net_spk_issued": 271.212764
@@ -80,9 +80,9 @@
         "debt_principal_usd": 22050,
         "annual_debt_service_usd": 3286.1,
         "p50_simple_payback_years": 29.5,
-        "p10_simple_payback_years": 35.78,
+        "p10_simple_payback_years": 35.72,
         "p50_dscr": 0.325,
-        "p10_dscr": 0.2679,
+        "p10_dscr": 0.2684,
         "monthly_reserve_target_usd": 27.92
       }
     },
@@ -92,18 +92,18 @@
       "interpretation": "Aggregated rooftops or campus-scale load with higher daytime self-use.",
       "capacity_kw": 250,
       "self_consumption_fraction": 0.65,
-      "observed_days": 861,
+      "observed_days": 862,
       "first_date": "2024-01-01",
-      "last_date": "2026-05-11",
+      "last_date": "2026-05-12",
       "daily_generation_distribution": {
-        "mean_kwh": 800.7935,
-        "stddev_kwh": 356.4075,
-        "coefficient_of_variation": 0.445068,
-        "p05_kwh": 280.145,
-        "p25_kwh": 501.1865,
-        "p50_kwh": 777.354,
-        "p75_kwh": 1107.336,
-        "p95_kwh": 1384.729,
+        "mean_kwh": 800.8525,
+        "stddev_kwh": 356.2049,
+        "coefficient_of_variation": 0.444782,
+        "p05_kwh": 280.2428,
+        "p25_kwh": 501.6004,
+        "p50_kwh": 777.6872,
+        "p75_kwh": 1107.1318,
+        "p95_kwh": 1384.572,
         "longest_below_p25_run_days": 8
       },
       "monthly_distribution": {
@@ -117,7 +117,7 @@
       },
       "annual_distribution": {
         "years": 3,
-        "p10_energy_value_usd": 23747.2728,
+        "p10_energy_value_usd": 23791.2694,
         "p50_energy_value_usd": 28807.4958,
         "p90_energy_value_usd": 28986.1253,
         "p50_net_spk_issued": 5273.581632
@@ -127,9 +127,9 @@
         "debt_principal_usd": 551250,
         "annual_debt_service_usd": 82152.51,
         "p50_simple_payback_years": 27.34,
-        "p10_simple_payback_years": 33.16,
+        "p10_simple_payback_years": 33.1,
         "p50_dscr": 0.3507,
-        "p10_dscr": 0.2891,
+        "p10_dscr": 0.2896,
         "monthly_reserve_target_usd": 753.25
       }
     },
@@ -139,18 +139,18 @@
       "interpretation": "Commercial operator portfolio with substantial onsite load.",
       "capacity_kw": 1000,
       "self_consumption_fraction": 0.75,
-      "observed_days": 861,
+      "observed_days": 862,
       "first_date": "2024-01-01",
-      "last_date": "2026-05-11",
+      "last_date": "2026-05-12",
       "daily_generation_distribution": {
-        "mean_kwh": 3203.1739,
-        "stddev_kwh": 1425.63,
-        "coefficient_of_variation": 0.445068,
-        "p05_kwh": 1120.58,
-        "p25_kwh": 2004.746,
-        "p50_kwh": 3109.416,
-        "p75_kwh": 4429.344,
-        "p95_kwh": 5538.916,
+        "mean_kwh": 3203.4099,
+        "stddev_kwh": 1424.8196,
+        "coefficient_of_variation": 0.444782,
+        "p05_kwh": 1120.9713,
+        "p25_kwh": 2006.4015,
+        "p50_kwh": 3110.749,
+        "p75_kwh": 4428.527,
+        "p95_kwh": 5538.2882,
         "longest_below_p25_run_days": 8
       },
       "monthly_distribution": {
@@ -164,7 +164,7 @@
       },
       "annual_distribution": {
         "years": 3,
-        "p10_energy_value_usd": 101951.6422,
+        "p10_energy_value_usd": 102140.5284,
         "p50_energy_value_usd": 123676.1601,
         "p90_energy_value_usd": 124443.051,
         "p50_net_spk_issued": 15067.376088
@@ -174,9 +174,9 @@
         "debt_principal_usd": 2205000,
         "annual_debt_service_usd": 328610.02,
         "p50_simple_payback_years": 25.47,
-        "p10_simple_payback_years": 30.9,
+        "p10_simple_payback_years": 30.84,
         "p50_dscr": 0.3764,
-        "p10_dscr": 0.3103,
+        "p10_dscr": 0.3108,
         "monthly_reserve_target_usd": 3233.86
       }
     }
@@ -437,11 +437,11 @@
     {
       "site_id": "rooftop_home_10kw",
       "period": "2026-05",
-      "days": 11,
-      "generation_kwh": 302.5188,
-      "surplus_kwh": 136.1334,
-      "net_spk_issued": 6.799866,
-      "energy_value_usd": 26.77291
+      "days": 12,
+      "generation_kwh": 336.5851,
+      "surplus_kwh": 151.4633,
+      "net_spk_issued": 7.565592,
+      "energy_value_usd": 29.787779
     },
     {
       "site_id": "neighborhood_cluster_250kw",
@@ -698,11 +698,11 @@
     {
       "site_id": "neighborhood_cluster_250kw",
       "period": "2026-05",
-      "days": 11,
-      "generation_kwh": 7562.969,
-      "surplus_kwh": 2647.0391,
-      "net_spk_issued": 132.219605,
-      "energy_value_usd": 722.26354
+      "days": 12,
+      "generation_kwh": 8414.627,
+      "surplus_kwh": 2945.1194,
+      "net_spk_issued": 147.108716,
+      "energy_value_usd": 803.596879
     },
     {
       "site_id": "commercial_portfolio_1mw",
@@ -959,11 +959,11 @@
     {
       "site_id": "commercial_portfolio_1mw",
       "period": "2026-05",
-      "days": 11,
-      "generation_kwh": 30251.876,
-      "surplus_kwh": 7562.969,
-      "net_spk_issued": 377.770303,
-      "energy_value_usd": 3100.81729
+      "days": 12,
+      "generation_kwh": 33658.508,
+      "surplus_kwh": 8414.627,
+      "net_spk_issued": 420.31062,
+      "energy_value_usd": 3449.99707
     }
   ],
   "annual_rows": [
@@ -994,14 +994,14 @@
     {
       "site_id": "rooftop_home_10kw",
       "period": "2026",
-      "days": 130,
-      "generation_kwh": 3353.8701,
-      "surplus_kwh": 1509.2416,
-      "net_spk_issued": 75.386619,
-      "energy_value_usd": 296.817508,
-      "annualized_generation_kwh": 9416.6353,
-      "annualized_energy_value_usd": 833.372234,
-      "annualized_net_spk_issued": 211.66243
+      "days": 131,
+      "generation_kwh": 3387.9365,
+      "surplus_kwh": 1524.5714,
+      "net_spk_issued": 76.152345,
+      "energy_value_usd": 299.832377,
+      "annualized_generation_kwh": 9439.6704,
+      "annualized_energy_value_usd": 835.410821,
+      "annualized_net_spk_issued": 212.180198
     },
     {
       "site_id": "neighborhood_cluster_250kw",
@@ -1030,14 +1030,14 @@
     {
       "site_id": "neighborhood_cluster_250kw",
       "period": "2026",
-      "days": 130,
-      "generation_kwh": 83846.7535,
-      "surplus_kwh": 29346.3637,
-      "net_spk_issued": 1465.85087,
-      "energy_value_usd": 8007.364952,
-      "annualized_generation_kwh": 235415.8848,
-      "annualized_energy_value_usd": 22482.216981,
-      "annualized_net_spk_issued": 4115.658212
+      "days": 131,
+      "generation_kwh": 84698.4115,
+      "surplus_kwh": 29644.444,
+      "net_spk_issued": 1480.739981,
+      "energy_value_usd": 8088.698291,
+      "annualized_generation_kwh": 235991.7572,
+      "annualized_energy_value_usd": 22537.212796,
+      "annualized_net_spk_issued": 4125.725901
     },
     {
       "site_id": "commercial_portfolio_1mw",
@@ -1066,14 +1066,14 @@
     {
       "site_id": "commercial_portfolio_1mw",
       "period": "2026",
-      "days": 130,
-      "generation_kwh": 335387.014,
-      "surplus_kwh": 83846.7535,
-      "net_spk_issued": 4188.145344,
-      "energy_value_usd": 34377.168935,
-      "annualized_generation_kwh": 941663.5393,
-      "annualized_energy_value_usd": 96520.512779,
-      "annualized_net_spk_issued": 11759.023466
+      "days": 131,
+      "generation_kwh": 338793.646,
+      "surplus_kwh": 84698.4115,
+      "net_spk_issued": 4230.685661,
+      "energy_value_usd": 34726.348715,
+      "annualized_generation_kwh": 943967.0289,
+      "annualized_energy_value_usd": 96756.620465,
+      "annualized_net_spk_issued": 11787.788292
     }
   ],
   "hard_boundaries": [

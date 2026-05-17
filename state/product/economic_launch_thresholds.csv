@@ -1,4 +1,4 @@
 id,label,capacity_kw,current_p50_dscr,current_p10_dscr,current_p50_payback_years,required_realized_value_usd_per_kwh,required_value_multiplier,max_launch_capex_usd_per_wdc,annual_support_required_usd,capital_support_required_usd,finance_gap_status
-rooftop_home_10kw,10 kW solar home,10,0.325,0.2679,29.5,0.330377,3.7331,0.8438,2875.48,23061.93,needs_anchor_tariff_ppa_capex_reduction_or_support_capital
-neighborhood_cluster_250kw,250 kW neighborhood cluster,250,0.3507,0.2891,27.34,0.330378,3.4595,0.9105,69775.52,559862.67,needs_anchor_tariff_ppa_capex_reduction_or_support_capital
-commercial_portfolio_1mw,1 MW commercial portfolio,1000,0.3764,0.3103,25.47,0.330377,3.2232,0.9773,270655.86,2172708.83,needs_anchor_tariff_ppa_capex_reduction_or_support_capital
+rooftop_home_10kw,10 kW solar home,10,0.325,0.2684,29.5,0.329767,3.7262,0.8454,2875.48,23046.29,needs_anchor_tariff_ppa_capex_reduction_or_support_capital
+neighborhood_cluster_250kw,250 kW neighborhood cluster,250,0.3507,0.2896,27.34,0.329767,3.4531,0.9122,69775.52,559440.92,needs_anchor_tariff_ppa_capex_reduction_or_support_capital
+commercial_portfolio_1mw,1 MW commercial portfolio,1000,0.3764,0.3108,25.47,0.329767,3.2172,0.9791,270655.86,2170898.2,needs_anchor_tariff_ppa_capex_reduction_or_support_capital
