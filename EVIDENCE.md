@@ -283,7 +283,29 @@ This tests the energy-money thesis against historical resource data instead of o
 
 Scope note: this is stronger resource/finance evidence, not customer-demand proof or signed meter production. It intentionally shows that the physical resource model is plausible while raw economics under current assumptions are not enough for a paid product.
 
-### 2.15 Governed Pilot Stack Scaffold
+### 2.15 Economic Launch Readiness
+
+This converts empirical resource economics into actual launch thresholds instead of leaving the finance conclusion qualitative.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Launch economics generator | Available | `scripts/economic_launch_readiness.js` |
+| Empirical input | 861-day NASA POWER finance backtest | `state/product/empirical_finance_backtest.json` |
+| Public-lab economic status | `economic_evidence_ready` | `docs/product/ECONOMIC_LAUNCH_READINESS.md` |
+| Closed-pilot economic status | `requires_anchor_tariff_ppa_capex_reduction_or_support_capital` | Same file |
+| Paid/mainnet economic status | `blocked_by_unit_economics_and_protocol_revenue` | Same file |
+| Best current p50 DSCR | 0.3764x, 1 MW commercial portfolio | `state/product/economic_launch_readiness.json` |
+| Lowest absolute pilot support path | 10 kW solar home | Same file |
+| Required realized value for 10 kW path | $0.3304/kWh | Same file |
+| 10 kW annual support gap | $2,875 | Same file |
+| 10 kW capital support gap | $23,062 | Same file |
+| Protocol fee opex coverage | 0.0185% | Same file |
+| Sensitivity grid | 1,080 tested rows; 828 threshold-positive mechanical scenarios | `state/product/economic_launch_sensitivity.csv` |
+| Tests | 3 Node tests | `test-node/economic_launch_readiness.test.js` |
+
+Scope note: this is a launch-readiness threshold model, not a revenue forecast. It shows what signed tariff/PPA, capex, support capital, debt/equity, and service-revenue terms must beat before launch economics are defensible.
+
+### 2.16 Governed Pilot Stack Scaffold
 
 This is the deploy/readback path for moving from proof-scoped SPK to a governed testnet pilot stack that includes settlement and redemption.
 
@@ -297,7 +319,7 @@ This is the deploy/readback path for moving from proof-scoped SPK to a governed 
 
 Scope note: the local Hardhat receipt proves the deploy script executes. Persistent readback is for Sepolia or a long-running local node.
 
-### 2.16 Test Suite (Reproducible, Run by Anyone)
+### 2.17 Test Suite (Reproducible, Run by Anyone)
 
 ```bash
 git clone https://github.com/Spectating101/solarpunk-coin
@@ -309,7 +331,7 @@ Expected output: **102 passing**, including signed surplus-attestation replay, r
 
 All tests are integration tests against deployed Hardhat local node — not mocks of the contracts under test.
 
-### 2.17 Python Pricing Library (Reproducible)
+### 2.18 Python Pricing Library (Reproducible)
 
 ```bash
 pip install spk-derivatives

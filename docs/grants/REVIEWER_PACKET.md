@@ -20,6 +20,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | Energy-money simulation | Measured keeper resource signals drive SPK issuance, settlement, redemption, and reserve modeling | [`docs/product/ENERGY_MONEY_SIMULATION.md`](../product/ENERGY_MONEY_SIMULATION.md) |
 | SPK finance dossier | Income statement, balance-sheet liability, break-even fee-base gap, reserve coverage, and closed-pilot finance stack | [`docs/product/SPK_FINANCE_DOSSIER.md`](../product/SPK_FINANCE_DOSSIER.md) |
 | Empirical finance backtest | 861-day NASA POWER historical resource-to-finance backtest for DSCR, payback, and reserve-at-risk | [`docs/product/EMPIRICAL_FINANCE_BACKTEST.md`](../product/EMPIRICAL_FINANCE_BACKTEST.md) |
+| Economic launch readiness | Empirical launch thresholds: required realized $/kWh, max capex, support gaps, sensitivity paths, and paid-launch blocker | [`docs/product/ECONOMIC_LAUNCH_READINESS.md`](../product/ECONOMIC_LAUNCH_READINESS.md) |
 | Governed pilot-stack scaffold | Deploy/readback scripts for SPK + treasury + currency system pilot stack | [`docs/project/PILOT_STACK_DEPLOYMENT.md`](../project/PILOT_STACK_DEPLOYMENT.md) |
 | Product empirics | Single-product empirical dossier tying thesis evidence to SPK | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](../product/SPK_PRODUCT_EMPIRICS.md) |
 | Tests | 102/102 Hardhat tests passing | `npx hardhat test` |
@@ -47,6 +48,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - The monetary stress harness maps redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 - The SPK finance dossier shows annualized protocol fee revenue, active-supply liability, fee break-even gap, and a closed-pilot finance stack instead of hiding the non-self-funding stage.
 - The empirical finance backtest uses 861 observed NASA POWER daily records and shows p50 10 kW rooftop DSCR of `0.325x`, proving the resource model is grounded while exposing the tariff/capex/capital-structure blocker.
+- The economic launch-readiness gate shows exactly what must change before launch economics clear: the best current p50 DSCR is `0.3764x`, the lowest absolute 10 kW pilot path needs roughly `$0.3304/kWh` realized value, and protocol fees cover only `0.0185%` of the current opex assumption.
 - Source-verified contracts are deployed and externally inspectable.
 - The repo contains on-chain transaction receipts, keeper artifacts, tests, threat model, trust assumptions, audit handoff, and grant drafts.
 - The frontend demo now foregrounds the SPK mint product path and distinguishes the proof-scoped attested stack from the older legacy Sepolia stack.

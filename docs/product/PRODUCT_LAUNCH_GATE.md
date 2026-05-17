@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-16T18:22:25.383Z`
+- generated_at: `2026-05-17T05:01:50.494Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,16 +9,17 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 10 | 0 |
-| Closed testnet pilot | `blocked` | 11 | 2 |
-| Paid/mainnet product | `blocked` | 11 | 6 |
+| SolarPunk Public Lab | `launchable` | 11 | 0 |
+| Closed testnet pilot | `blocked` | 12 | 3 |
+| Paid/mainnet product | `blocked` | 12 | 8 |
 
 ## Next Actions
 
 - Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.
-- Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.
+- Next build target: governed attested-SPK redeploy, one real meter or inverter adapter, and anchor economics that clear the launch-readiness thresholds.
+- Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.
 - Use the monetary stress harness to size any named reserve before promising redemption.
-- Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, and shortfall policy are resolved.
+- Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, economic terms, and shortfall policy are resolved.
 
 ## SolarPunk Public Lab
 
@@ -28,7 +29,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-16 (0 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-16 (1 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -42,6 +43,8 @@
   Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
 - PASS `Empirical finance backtest exists`: Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.
   Evidence: `docs/product/EMPIRICAL_FINANCE_BACKTEST.md`
+- PASS `Economic launch readiness exists`: Empirical resource economics are converted into DSCR targets, required realized $/kWh, capex ceilings, support gaps, and launch decisions.
+  Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 
 ## Closed testnet pilot
 
@@ -51,7 +54,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-16 (0 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-16 (1 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -65,10 +68,14 @@
   Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
 - PASS `Empirical finance backtest exists`: Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.
   Evidence: `docs/product/EMPIRICAL_FINANCE_BACKTEST.md`
+- PASS `Economic launch readiness exists`: Empirical resource economics are converted into DSCR targets, required realized $/kWh, capex ceilings, support gaps, and launch decisions.
+  Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.
   Evidence: `docs/project/METER_CSV_IMPORT.md`
+- BLOCK `Anchor economics or support terms`: Current economics need anchor tariff/PPA, capex reduction, or support capital; best current p50 DSCR is 0.3764x and the lowest absolute pilot support gap is $2875.48.
+  Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 - PASS `Pilot terms are drafted`: Pilot plan exists; it still needs named counterparty details before execution.
   Evidence: `docs/specs/PILOT_PLAN.md`
 - PASS `Governance runbook exists`: Governance status includes operations handbook and role matrix.
@@ -84,7 +91,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-16 (0 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-16 (1 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -98,10 +105,14 @@
   Evidence: `docs/product/SPK_FINANCE_DOSSIER.md`
 - PASS `Empirical finance backtest exists`: Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.
   Evidence: `docs/product/EMPIRICAL_FINANCE_BACKTEST.md`
+- PASS `Economic launch readiness exists`: Empirical resource economics are converted into DSCR targets, required realized $/kWh, capex ceilings, support gaps, and launch decisions.
+  Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 - BLOCK `Governed attested-SPK deployment`: Current attested deployment scope is public-attested-spk-proof; closed pilot needs governed Safe/admin role separation.
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.
   Evidence: `docs/project/METER_CSV_IMPORT.md`
+- BLOCK `Anchor economics or support terms`: Current economics need anchor tariff/PPA, capex reduction, or support capital; best current p50 DSCR is 0.3764x and the lowest absolute pilot support gap is $2875.48.
+  Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 - PASS `Pilot terms are drafted`: Pilot plan exists; it still needs named counterparty details before execution.
   Evidence: `docs/specs/PILOT_PLAN.md`
 - PASS `Governance runbook exists`: Governance status includes operations handbook and role matrix.
@@ -110,6 +121,8 @@
   Evidence: `docs/project/PILOT_STACK_DEPLOYMENT.md`
 - BLOCK `External audit complete`: External audit status is NOT_STARTED; paid/mainnet launch remains blocked.
   Evidence: `docs/project/SECURITY_AUDIT_STATUS.json`
+- BLOCK `Paid launch economics ready`: Paid launch economics status is blocked_by_unit_economics_and_protocol_revenue.
+  Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 - BLOCK `Legal and commercial scope complete`: No launch terms file exists for token classification, redemption obligations, user eligibility, and jurisdictional limits.
   Evidence: `docs/product/LEGAL_AND_COMMERCIAL_SCOPE.md`
 - BLOCK `Production redemption policy complete`: No production redemption policy exists for what SPK holders can redeem, from whom, and under which caps.

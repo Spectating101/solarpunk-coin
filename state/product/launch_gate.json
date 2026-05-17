@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T18:22:25.383Z",
+  "generated_at": "2026-05-17T05:01:50.494Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 10,
+      "passed_checks": 11,
       "blocking_checks": 0,
       "checks": [
         {
@@ -36,7 +36,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-16 (0 days old).",
+          "message": "Latest keeper run is 2026-05-16 (1 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -80,6 +80,13 @@
           "blocking": true,
           "message": "Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.",
           "evidence": "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
+        },
+        {
+          "name": "Economic launch readiness exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Empirical resource economics are converted into DSCR targets, required realized $/kWh, capex ceilings, support gaps, and launch decisions.",
+          "evidence": "docs/product/ECONOMIC_LAUNCH_READINESS.md"
         }
       ]
     },
@@ -87,8 +94,8 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 11,
-      "blocking_checks": 2,
+      "passed_checks": 12,
+      "blocking_checks": 3,
       "checks": [
         {
           "name": "SPK product proof exists",
@@ -115,7 +122,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-16 (0 days old).",
+          "message": "Latest keeper run is 2026-05-16 (1 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -161,6 +168,13 @@
           "evidence": "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
         },
         {
+          "name": "Economic launch readiness exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Empirical resource economics are converted into DSCR targets, required realized $/kWh, capex ceilings, support gaps, and launch decisions.",
+          "evidence": "docs/product/ECONOMIC_LAUNCH_READINESS.md"
+        },
+        {
           "name": "Governed attested-SPK deployment",
           "pass": false,
           "blocking": true,
@@ -173,6 +187,13 @@
           "blocking": true,
           "message": "Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.",
           "evidence": "docs/project/METER_CSV_IMPORT.md"
+        },
+        {
+          "name": "Anchor economics or support terms",
+          "pass": false,
+          "blocking": true,
+          "message": "Current economics need anchor tariff/PPA, capex reduction, or support capital; best current p50 DSCR is 0.3764x and the lowest absolute pilot support gap is $2875.48.",
+          "evidence": "docs/product/ECONOMIC_LAUNCH_READINESS.md"
         },
         {
           "name": "Pilot terms are drafted",
@@ -201,8 +222,8 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 11,
-      "blocking_checks": 6,
+      "passed_checks": 12,
+      "blocking_checks": 8,
       "checks": [
         {
           "name": "SPK product proof exists",
@@ -229,7 +250,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-16 (0 days old).",
+          "message": "Latest keeper run is 2026-05-16 (1 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -275,6 +296,13 @@
           "evidence": "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
         },
         {
+          "name": "Economic launch readiness exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Empirical resource economics are converted into DSCR targets, required realized $/kWh, capex ceilings, support gaps, and launch decisions.",
+          "evidence": "docs/product/ECONOMIC_LAUNCH_READINESS.md"
+        },
+        {
           "name": "Governed attested-SPK deployment",
           "pass": false,
           "blocking": true,
@@ -287,6 +315,13 @@
           "blocking": true,
           "message": "Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.",
           "evidence": "docs/project/METER_CSV_IMPORT.md"
+        },
+        {
+          "name": "Anchor economics or support terms",
+          "pass": false,
+          "blocking": true,
+          "message": "Current economics need anchor tariff/PPA, capex reduction, or support capital; best current p50 DSCR is 0.3764x and the lowest absolute pilot support gap is $2875.48.",
+          "evidence": "docs/product/ECONOMIC_LAUNCH_READINESS.md"
         },
         {
           "name": "Pilot terms are drafted",
@@ -317,6 +352,13 @@
           "evidence": "docs/project/SECURITY_AUDIT_STATUS.json"
         },
         {
+          "name": "Paid launch economics ready",
+          "pass": false,
+          "blocking": true,
+          "message": "Paid launch economics status is blocked_by_unit_economics_and_protocol_revenue.",
+          "evidence": "docs/product/ECONOMIC_LAUNCH_READINESS.md"
+        },
+        {
           "name": "Legal and commercial scope complete",
           "pass": false,
           "blocking": true,
@@ -342,8 +384,9 @@
   },
   "next_actions": [
     "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
-    "Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.",
+    "Next build target: governed attested-SPK redeploy, one real meter or inverter adapter, and anchor economics that clear the launch-readiness thresholds.",
+    "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
     "Use the monetary stress harness to size any named reserve before promising redemption.",
-    "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, and shortfall policy are resolved."
+    "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, economic terms, and shortfall policy are resolved."
   ]
 }

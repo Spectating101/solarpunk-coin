@@ -53,9 +53,10 @@ function summarizeNextActions(modes) {
   if (modes.public_testnet_product.status === "launchable") {
     return [
       "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
-      "Next build target: governed attested-SPK redeploy plus one real meter or inverter adapter.",
+      "Next build target: governed attested-SPK redeploy, one real meter or inverter adapter, and anchor economics that clear the launch-readiness thresholds.",
+      "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
-      "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, and shortfall policy are resolved.",
+      "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, economic terms, and shortfall policy are resolved.",
     ];
   }
   return [
@@ -77,6 +78,7 @@ function evaluateLaunchGate(options = {}) {
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
   const empiricalBacktest = readJson(root, "state/product/empirical_finance_backtest.json", {});
+  const economicLaunch = readJson(root, "state/product/economic_launch_readiness.json", {});
   const audit = readJson(root, "docs/project/SECURITY_AUDIT_STATUS.json", {});
   const governance = readJson(root, "docs/project/GOVERNANCE_STATUS.json", {});
 
@@ -86,6 +88,8 @@ function evaluateLaunchGate(options = {}) {
   const keeperAgeDays = daysSince(keeperLastDate, now);
   const deploymentScope = deployment.scope || "unknown";
   const deploymentContracts = deployment.contracts || {};
+  const lowestEconomicSupport = economicLaunch.lowest_absolute_support_archetype || {};
+  const bestEconomicArchetype = economicLaunch.best_current_archetype || {};
   const auditStatus = audit.external_audit?.status || "UNKNOWN";
   const isFixtureBatch = String(meterToMint.batch_id || "").startsWith("batch_2026_02_12");
   const allContractsVerified = Boolean(deployment.source_verification?.contracts_verified)
@@ -160,6 +164,16 @@ function evaluateLaunchGate(options = {}) {
       "Historical NASA POWER resource data is converted into project-finance distributions, DSCR, payback, and reserve-at-risk values.",
       "docs/product/EMPIRICAL_FINANCE_BACKTEST.md"
     ),
+    check(
+      "Economic launch readiness exists",
+      Boolean(
+        economicLaunch.launch_decision?.public_lab === "economic_evidence_ready" &&
+        Number(economicLaunch.input_basis?.empirical_days || 0) >= 365 &&
+        economicLaunch.readiness?.stage
+      ),
+      "Empirical resource economics are converted into DSCR targets, required realized $/kWh, capex ceilings, support gaps, and launch decisions.",
+      "docs/product/ECONOMIC_LAUNCH_READINESS.md"
+    ),
   ];
 
   const closedPilotChecks = [
@@ -175,6 +189,12 @@ function evaluateLaunchGate(options = {}) {
       !isFixtureBatch,
       `Current batch ${meterToMint.batch_id || "unknown"} is fixture/proof data; closed pilot needs one real meter or inverter export.`,
       "docs/project/METER_CSV_IMPORT.md"
+    ),
+    check(
+      "Anchor economics or support terms",
+      economicLaunch.launch_decision?.closed_pilot !== "requires_anchor_tariff_ppa_capex_reduction_or_support_capital",
+      `Current economics need anchor tariff/PPA, capex reduction, or support capital; best current p50 DSCR is ${bestEconomicArchetype.current_p50_dscr || "unknown"}x and the lowest absolute pilot support gap is ${lowestEconomicSupport.annual_support_required_usd ? `$${lowestEconomicSupport.annual_support_required_usd}` : "unknown"}.`,
+      "docs/product/ECONOMIC_LAUNCH_READINESS.md"
     ),
     check(
       "Pilot terms are drafted",
@@ -205,6 +225,12 @@ function evaluateLaunchGate(options = {}) {
       auditStatus === "COMPLETE",
       `External audit status is ${auditStatus}; paid/mainnet launch remains blocked.`,
       "docs/project/SECURITY_AUDIT_STATUS.json"
+    ),
+    check(
+      "Paid launch economics ready",
+      economicLaunch.launch_decision?.paid_mainnet === "economics_ready_but_non_economic_gates_still_apply",
+      `Paid launch economics status is ${economicLaunch.launch_decision?.paid_mainnet || "unknown"}.`,
+      "docs/product/ECONOMIC_LAUNCH_READINESS.md"
     ),
     check(
       "Legal and commercial scope complete",

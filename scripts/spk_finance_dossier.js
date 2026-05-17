@@ -309,7 +309,7 @@ function buildSpkFinanceDossier(options = {}) {
     },
     finance_next_steps: [
       "Replace generic operating-budget assumptions with a real pilot budget and signed operator cost sheet.",
-      "Add a tariff/PPA module: contracted energy price, market price, curtailment value, and basis risk.",
+      "Use the economic launch-readiness module to convert tariff/PPA, capex, and capital-structure terms into DSCR and support-gap thresholds.",
       "Separate protocol fees from actual business revenue: pilot setup fees, monitoring SaaS, oracle service fees, and structured energy receipts.",
       "Define legal reserve segregation: what is protocol-owned, operator-owned, customer collateral, insurance, or grant-funded infrastructure.",
       "Add scenario probability weights only after real production, tariff, and redemption data exist.",

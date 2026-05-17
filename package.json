@@ -46,6 +46,8 @@
     "product:finance-dossier:test": "node --test test-node/spk_finance_dossier.test.js",
     "product:empirical-backtest": "node scripts/empirical_finance_backtest.js",
     "product:empirical-backtest:test": "node --test test-node/empirical_finance_backtest.test.js",
+    "product:economic-launch": "node scripts/economic_launch_readiness.js",
+    "product:economic-launch:test": "node --test test-node/economic_launch_readiness.test.js",
     "deploy:pilot-stack:hardhat": "hardhat run scripts/deploy_pilot_stack.js",
     "deploy:pilot-stack:sepolia": "hardhat run scripts/deploy_pilot_stack.js --network sepolia",
     "pilot-stack:readback": "hardhat run scripts/read_pilot_stack.js --network ${PILOT_NETWORK:-sepolia}",

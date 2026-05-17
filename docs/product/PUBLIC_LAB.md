@@ -28,6 +28,7 @@ The lab exists to answer one question:
 | Energy-money simulation | Measured resource signal -> SPK issuance -> settlement -> redemption-risk model | `docs/product/ENERGY_MONEY_SIMULATION.md` |
 | SPK finance dossier | Income statement, balance-sheet liability, fee break-even gap, reserve coverage, and pilot finance stack | `docs/product/SPK_FINANCE_DOSSIER.md` |
 | Empirical finance backtest | 861-day NASA POWER historical resource-to-finance backtest with DSCR, payback, and reserve-at-risk | `docs/product/EMPIRICAL_FINANCE_BACKTEST.md` |
+| Economic launch readiness | Required realized $/kWh, max capex, support gaps, sensitivity paths, and economic launch blockers | `docs/product/ECONOMIC_LAUNCH_READINESS.md` |
 | Pilot packets | Operator handoff and reviewer checklist | `docs/product/PILOT_OPERATOR_PACKET.md`, `docs/product/PILOT_REVIEWER_PACKET.md` |
 | Theory and comparables | External anchors and honest positioning | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
 | Multi-resource benchmark | NASA solar/wind data, PV conversion/cost model, renewable benchmark matrix, oil-only comparison | `docs/product/RESOURCE_BENCHMARK_LAB.md` |
@@ -88,6 +89,7 @@ npm run product:pilot-csv
 npm run product:monetary-stress
 npm run product:energy-money-sim
 npm run product:empirical-backtest
+npm run product:economic-launch
 npm run pilot-stack:test
 npm run product:empirics
 npm test
@@ -120,9 +122,10 @@ It is:
 
 1. Governed attested-SPK redeploy on Sepolia using the pilot-stack deploy/readback scripts.
 2. One real meter or inverter CSV/API adapter.
-3. Public lab receipt showing that real export flowing through the same attestation pipeline.
-4. Resource benchmark loop extended from NASA/PV/wind estimates to actual generator exports.
-5. Named shortfall/reserve policy using the monetary stress harness as the sizing table.
-6. Replacement of the currency-system lab's simulated layers with real pilot receipts.
+3. Signed tariff/PPA/support economics that clear the economic launch-readiness thresholds.
+4. Public lab receipt showing that real export flowing through the same attestation pipeline.
+5. Resource benchmark loop extended from NASA/PV/wind estimates to actual generator exports.
+6. Named shortfall/reserve policy using the monetary stress harness as the sizing table.
+7. Replacement of the currency-system lab's simulated layers with real pilot receipts.
 
 That converts the lab from "public proof" to "closed pilot candidate."

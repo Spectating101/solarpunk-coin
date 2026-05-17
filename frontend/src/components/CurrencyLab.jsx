@@ -17,6 +17,7 @@ import monetaryStress from '../../../state/product/monetary_stress_harness.json'
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
 import empiricalFinanceBacktest from '../../../state/product/empirical_finance_backtest.json';
+import economicLaunchReadiness from '../../../state/product/economic_launch_readiness.json';
 import { GITHUB_REPO } from '../constants/contracts';
 import EnergyMoneyWorkbench from './EnergyMoneyWorkbench';
 
@@ -55,6 +56,8 @@ export default function CurrencyLab() {
   const oilResource = resourceBenchmark.resources.find((resource) => resource.id === 'oil_barrel');
   const empiricalPrimary = empiricalFinanceBacktest.archetypes.find((item) => item.id === 'rooftop_home_10kw') ||
     empiricalFinanceBacktest.archetypes[0];
+  const lowestEconomicSupport = economicLaunchReadiness.lowest_absolute_support_archetype;
+  const bestScaledEconomics = economicLaunchReadiness.best_scaled_archetype;
   const worstStress = monetaryStress.scenarios.reduce((worst, scenario) => (
     Number(scenario.additional_buffer_required_usd || 0) > Number(worst.additional_buffer_required_usd || 0)
       ? scenario
@@ -182,6 +185,27 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatUsd(empiricalFinanceBacktest.finance_claims.rooftop_monthly_revenue_at_risk_usd, 2)}</div>
           <div className="metric-sub">
             {empiricalPrimary.label}: p50 minus p05 monthly energy value
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Economic Launch Gate</div>
+          <div className="metric-value">{economicLaunchReadiness.launch_decision.public_lab.replaceAll('_', ' ')}</div>
+          <div className="metric-sub">
+            closed pilot: {economicLaunchReadiness.launch_decision.closed_pilot.replaceAll('_', ' ')}
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Required Launch Value</div>
+          <div className="metric-value">{formatUsd(lowestEconomicSupport.required_realized_value_usd_per_kwh, 4)}/kWh</div>
+          <div className="metric-sub">
+            {lowestEconomicSupport.label}: {formatNumber(lowestEconomicSupport.required_value_multiplier, 2)}x current value
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Best Scaled Economics</div>
+          <div className="metric-value">{formatNumber(bestScaledEconomics.current_p50_dscr, 4)}x DSCR</div>
+          <div className="metric-sub">
+            needs max capex {formatUsd(bestScaledEconomics.max_launch_capex_usd_per_wdc, 4)}/Wdc or support terms
           </div>
         </div>
         <div className="metric-card">
@@ -321,6 +345,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/EMPIRICAL_FINANCE_BACKTEST.md`} target="_blank" rel="noreferrer">
               Empirical backtest <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/ECONOMIC_LAUNCH_READINESS.md`} target="_blank" rel="noreferrer">
+              Economic launch <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`} target="_blank" rel="noreferrer">
               Public readback <ExternalLink size={12} />
