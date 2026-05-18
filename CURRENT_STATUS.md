@@ -23,7 +23,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Empirical finance backtest | Added: 862-day NASA POWER historical irradiance backtest translating resource variability into DSCR, payback, and monthly reserve-at-risk |
 | Economic launch readiness | Added: empirical DSCR/payback launch gate with required realized value, max capex, support gaps, and sensitivity paths |
 | Governed pilot-stack scaffold | Added: deploy/readback scripts for MockUSDC + ProtocolTreasury + SolarPunkCoin + SolarPunkCurrencySystem under pilot governance roles |
-| Theory/comparables anchor | Added: SPK positioned as an energy-denominated settlement and receipt system anchored to RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, FSB stablecoin risk controls |
+| Theory/comparables anchor | Added: SPK positioned as an energy-standard cryptocurrency anchored to RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, FSB stablecoin risk controls |
 | Multi-resource benchmark lab | Added: NASA POWER solar/wind/temperature fetch, standard 10 kWdc PV conversion, $3.15/Wdc install-cost assumption, renewable benchmark matrix, and oil-only energy-unit comparison |
 | Energy-standard economics | Added: gold-standard mapping, issuance equations, kWh/SPK convertibility, capacity scenarios, settlement velocity, fee sensitivity, and finance risk register |
 | Pilot meter adapter | CSV meter/inverter import, meter onboarding scripts, and inverter/meter adapter now feed the signed-reading verifier |

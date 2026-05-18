@@ -5,13 +5,13 @@
 
 ## Core Position
 
-SolarPunk is strongest when framed as an **energy-standard cryptocurrency** with settlement and receipt mechanics: a modern gold-standard design where verified renewable-energy surplus replaces gold as the backing base.
+SolarPunk is strongest when framed as an **energy-standard cryptocurrency**: a modern gold-standard design where verified renewable-energy surplus replaces gold as the backing base and mints SPK.
 
 It should not be framed as a generic reward token and not yet as a universal replacement currency.
 
 The defensible thesis is:
 
-> Verified surplus energy creates SPK supply; SPK circulates as a settlement asset; redemption burns SPK into owed-kWh receipts; delivery resolution measures whether real energy obligations clear.
+> Verified surplus energy creates SPK supply; SPK circulates as a cryptocurrency; redemption burns SPK into owed-kWh claims; delivery resolution measures whether real energy obligations clear.
 
 That puts SolarPunk between four established categories:
 
@@ -80,7 +80,7 @@ This is compatible with tokenisation literature because the value is not merely 
 
 SolarPunk should position itself as:
 
-> A programmable energy-backed settlement receipt system.
+> A cryptocurrency minted from verified renewable-energy surplus.
 
 Not:
 
@@ -92,7 +92,7 @@ Not:
 
 The current strongest claim is:
 
-> SolarPunk now demonstrates the internal mechanics required for an energy-backed currency experiment: admissible energy evidence, replay-protected issuance, payment circulation, redemption burn, owed-kWh receipt, delivery resolution, and accounting conservation.
+> SolarPunk now demonstrates the internal mechanics required for an energy-backed cryptocurrency experiment: admissible energy evidence, replay-protected issuance, payment circulation, redemption burn, owed-kWh claim tracking, delivery resolution, and accounting conservation.
 
 ## References
 

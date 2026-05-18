@@ -64,7 +64,7 @@ Primary SPK product path:
 Supporting modules:
 
 - **`SolarPunkCoin`** — energy-backed token with signed surplus-attestation minting, PI controller, oracle-gated minting, reserve ratio checks, bond-gated operators
-- **`SolarPunkCurrencySystem`** — SPK invoice-settlement and energy-redemption registry; transfers SPK against hashed invoices, burns SPK into owed-kWh receipts, and records fulfillment/shortfall/dispute states
+- **`SolarPunkCurrencySystem`** — SPK invoice-settlement and energy-redemption registry; transfers SPK against hashed invoices, burns SPK into owed-kWh claims, and records fulfillment/shortfall/dispute states
 - **`SolarPunkOption`** — margin-based clearinghouse for European energy index options; useful for hedging and stress-testing the same energy-price basis
 - **`ProtocolTreasury`** — fee vault with 4-bucket budget split, keeper bond escrow with slashing
 - **`StabilityPool`** — dedicated peg-stability vault (separated from coin contract for blast-radius isolation)

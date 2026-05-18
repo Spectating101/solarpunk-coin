@@ -109,7 +109,7 @@ The capex column deliberately uses the same cost assumption from the resource be
 | Oracle and meter risk | Bad hardware, bad signatures, duplicate claims, or compromised operators can corrupt issuance. | Hardware-backed meters, no-double-counting registry, multi-oracle checks, and slashing. |
 | Redemption mismatch | Issued SPK may circulate faster or farther than the operator's real delivery ability. | Caps, redemption queues, insurance fund, shortfall rules, and local delivery domains. |
 | Price-basis governance | Changing USD/kWh basis changes issuance volume and kWh-per-SPK convertibility. | Transparent governance delay, public parameter history, and basis-policy disclosure. |
-| Regulatory classification | SPK could be treated as prepaid energy credit, commodity receipt, stablecoin-like token, security, or another instrument. | Legal scope before paid/mainnet launch. |
+| Regulatory classification | SPK could be treated as a cryptocurrency, prepaid energy credit, commodity-linked token, stablecoin-like token, security, or another instrument. | Legal scope before paid/mainnet launch. |
 
 ## Hard Boundaries
 

@@ -76,7 +76,7 @@ export default function CurrencyLab() {
           <p>
             SolarPunk rebuilds the gold-standard idea around verified renewable-energy surplus.
             The lab shows the monetary path: admissible energy proof, SPK issuance, circulation,
-            redemption into owed-kWh receipts, and delivery accounting.
+            redemption into energy claims, and delivery accounting.
           </p>
         </div>
         <div className={`system-tile ${accounting.conservation_pass ? 'good' : 'warn'}`}>
@@ -320,7 +320,7 @@ export default function CurrencyLab() {
           </div>
           <div className="scope-note">
             This ledger is not a claim of external adoption. It is a conservation-checked model showing
-            how the same minted SPK could become a receipt and settlement unit once real counterparties exist.
+            how the same minted SPK could move through settlement once real counterparties exist.
           </div>
         </div>
 

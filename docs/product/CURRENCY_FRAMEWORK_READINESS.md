@@ -7,7 +7,7 @@
 
 ## Thesis
 
-Treat SPK as an energy-denominated settlement asset: surplus attestations create supply, invoice settlement creates circulation, redemption burns supply into owed-kWh receipts, and delivery resolution measures whether the system clears real obligations.
+Treat SPK as an energy-denominated cryptocurrency: surplus attestations create supply, invoice settlement creates circulation, redemption burns supply into owed-kWh claims, and delivery resolution measures whether the system clears real obligations.
 
 ## Mechanism Path
 

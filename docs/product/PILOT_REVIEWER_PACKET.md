@@ -2,7 +2,7 @@
 
 ## One-Line Claim
 
-SolarPunk is an energy-standard cryptocurrency lab: signed renewable-energy surplus can be converted into a deterministic source hash, an oracle-attested SPK mint, a settlement/redemption receipt, and a stress-tested shortfall table.
+SolarPunk is an energy-standard cryptocurrency lab: signed renewable-energy surplus can mint SPK, move through settlement, and be stress-tested against energy-delivery shortfalls.
 
 ## What To Verify First
 

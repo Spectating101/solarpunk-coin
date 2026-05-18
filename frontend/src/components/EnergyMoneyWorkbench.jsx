@@ -188,7 +188,7 @@ export default function EnergyMoneyWorkbench() {
               max={100}
               step={1}
               suffix="%"
-              helper="Issued SPK converted back into owed-kWh receipts."
+              helper="Issued SPK converted back into owed-kWh claims."
               onChange={(value) => updateControl('redemptionPct', value)}
             />
             <Slider
