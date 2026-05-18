@@ -73,11 +73,11 @@ function evaluateCurrencyFramework(options = {}) {
       "SPK can now be routed as payment against hashed invoices with replay protection."
     ),
     item(
-      "Redemption receipt contract",
+      "Energy claim contract",
       exists(root, "contracts/SolarPunkCurrencySystem.sol") && contractSource.includes("openRedemption"),
       "implemented",
       "contracts/SolarPunkCurrencySystem.sol",
-      "SPK can be transferred into a registry, burned through redeemForEnergy, and converted into an owed-kWh receipt."
+      "SPK can be transferred into a registry, burned through redeemForEnergy, and converted into an owed-kWh claim."
     ),
     item(
       "Delivery resolution and dispute state",
@@ -96,15 +96,15 @@ function evaluateCurrencyFramework(options = {}) {
       "The new currency mechanics are covered by settlement, burn/redemption, replay, slippage, fulfillment, shortfall, dispute, and re-resolution accounting tests."
     ),
     item(
-      "Field receipt loop",
+      "Local SPK loop",
       fieldReceipt.execution_scope === "local_deterministic_no_external_dependencies" &&
         fieldReceipt.dependencies?.external_network_required === false &&
         fieldAccounting.conservation_pass === true &&
         fieldAccounting.delivery_fulfilled === true &&
         Number(fieldAccounting.owed_kwh || 0) === Number(fieldAccounting.delivered_kwh || 0),
-      "local_end_to_end_receipt",
+      "local_end_to_end_spk_loop",
       "docs/product/FIELD_RECEIPT_LOOP.md",
-      "The repo can run the whole internal currency path with no external dependency: signed meter surplus, SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution."
+      "The repo can run the whole internal currency path with no external dependency: signed meter surplus, SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution."
     ),
     item(
       "Empirical feed continuity",
@@ -130,7 +130,7 @@ function evaluateCurrencyFramework(options = {}) {
     {
       name: "Real meter export loop",
       status: "next_internal_target",
-      description: "Replace the fixture meter bundle with a real inverter or utility export while keeping the same field receipt script and accounting checks.",
+      description: "Replace the fixture meter bundle with a real inverter or utility export while keeping the same local SPK script and accounting checks.",
     },
   ];
 
@@ -139,18 +139,18 @@ function evaluateCurrencyFramework(options = {}) {
     title: "SolarPunk Currency Framework Readiness",
     current_internal_stage:
       readiness.passed === readiness.total
-        ? "field_receipt_loop_ready"
+        ? "local_spk_loop_ready"
         : "currency_framework_lab_incomplete",
     launch_gate_context: launchGate.recommended_current_launch || "unknown",
     design_thesis:
-      "Treat SPK as an energy-denominated settlement asset: surplus attestations create supply, invoice settlement creates circulation, redemption burns supply into owed-kWh receipts, and delivery resolution measures whether the system clears real obligations.",
+      "Treat SPK as an energy-denominated cryptocurrency: surplus attestations create supply, invoice settlement creates circulation, redemption burns supply into owed-kWh claims, and delivery resolution measures whether the system clears real obligations.",
     mechanism_path: [
       "meter_or_inverter_reading",
       "signed_surplus_attestation",
       "spk_mint",
       "invoice_settlement",
       "redemption_burn",
-      "owed_kwh_receipt",
+      "owed_kwh_claim",
       "delivery_resolution",
       "empirical_readiness_update",
     ],
@@ -178,7 +178,7 @@ function evaluateCurrencyFramework(options = {}) {
       {
         name: "BIS unified ledger/tokenisation framing",
         url: "https://www.bis.org/publ/arpdf/ar2023e3.htm",
-        relevance: "Separates asset records, settlement assets, and programmable rules.",
+        relevance: "Separates asset records, money/settlement instruments, and programmable rules.",
       },
       {
         name: "NIST Smart Grid program",

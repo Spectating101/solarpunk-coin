@@ -1,6 +1,6 @@
-# SolarPunk Pilot CSV Receipt
+# SolarPunk Pilot CSV Proof
 
-- generated_at: `2026-05-16T16:24:44.674Z`
+- generated_at: `2026-05-18T16:12:55.145Z`
 - execution_mode: `dev_fixture_signed_sample`
 - csv_path: `data/attestations/sample_meter_export.csv`
 - registry_path: `data/attestations/meter_registry.json`
@@ -32,7 +32,7 @@ Show that a meter or inverter CSV export can become signed raw readings, an acce
 | Energy price basis | `$0.05/kWh` |
 | Mint fee | `10 bps` |
 | Net SPK preview | `99.15075 SPK` |
-| Can mint from receipt | `true` |
+| Can mint SPK from bundle | `true` |
 
 ## Rejections
 
@@ -44,7 +44,7 @@ Use the generated attestation bundle with scripts/mint_spk_from_meter_bundle.js 
 
 ## Hard Boundaries
 
-- This receipt does not certify hardware finality.
+- This proof does not certify hardware finality.
 - A CSV export is pilot evidence only when the device key and operator custody are credible.
 - Unsigned mode is useful for schema review but cannot mint SPK.
 - A mint preview is not an on-chain mint; public proof still requires a transaction against an attestation-enabled SPK deployment.

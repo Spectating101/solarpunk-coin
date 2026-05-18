@@ -109,7 +109,7 @@ function upsertMeter(registry, meter, options = {}) {
 
 function toMarkdown(result) {
   const lines = [
-    "# Meter Onboarding Receipt",
+    "# Meter Onboarding Output",
     "",
     `- generated_at: \`${result.generated_at}\``,
     `- registry_path: \`${result.registry_path}\``,
@@ -172,7 +172,7 @@ function main() {
   console.log(`wrote: ${receiptPath}`);
   console.log(`meter: ${meter.meter_id} (${meter.device_address})`);
   if (generated.private_key) {
-    console.log("generated development private key; see receipt custody note");
+    console.log("generated development private key; see output custody note");
   }
 }
 

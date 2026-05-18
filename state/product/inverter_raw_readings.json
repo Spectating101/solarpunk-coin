@@ -1,7 +1,7 @@
 {
   "schema": "SPK_RAW_METER_READINGS_V1",
-  "generated_at": "2026-05-18T09:53:40.453Z",
-  "batch_id": "inverter_adapter_sample_2026_02_14",
+  "generated_at": "2026-05-18T16:12:55.411Z",
+  "batch_id": "sample-cumulative_1779120775411",
   "min_quality_threshold": 0.9,
   "import_adapter": {
     "schema": "SPK_INVERTER_METER_ADAPTER_V1",

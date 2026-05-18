@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-16T07:00:44.115Z",
+  "generated_at": "2026-05-18T16:12:55.547Z",
   "title": "SolarPunk Currency System Lab",
   "thesis": "Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.",
   "source_evidence": {
     "spk_contract": "0x8ceDa149EDE44078bf151b3334513916a84df820",
     "currency_framework_contract": "contracts/SolarPunkCurrencySystem.sol",
-    "field_receipt_loop": "docs/product/FIELD_RECEIPT_LOOP.md",
+    "local_spk_loop": "docs/product/FIELD_RECEIPT_LOOP.md",
     "mint_tx": "0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d",
     "source_hash": "0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8",
     "attestation_hash": "0xd3c77958aa6f53cd1a5a8ed52c8898cf1376b8a5751e1598add5ab0c5cea558d",
@@ -30,9 +30,9 @@
     },
     {
       "id": 2,
-      "name": "Local field receipt loop",
-      "status": "local_field_receipt_loop",
-      "claim": "The accepted meter bundle now runs through a local end-to-end loop: SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution.",
+      "name": "Local SPK settlement loop",
+      "status": "local_spk_settlement_loop",
+      "claim": "The accepted meter bundle now runs through a local end-to-end loop: SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution.",
       "evidence": [
         "docs/product/FIELD_RECEIPT_LOOP.md",
         "state/product/field_receipt_loop.json"
@@ -41,9 +41,9 @@
     },
     {
       "id": 3,
-      "name": "Redeemable energy receipt framework",
+      "name": "Redeemable SPK framework",
       "status": "local_contract_tested",
-      "claim": "SPK can be transferred into SolarPunkCurrencySystem, burned through redeemForEnergy, and recorded as an owed-kWh receipt with fulfillment/shortfall/dispute states.",
+      "claim": "SPK can be transferred into SolarPunkCurrencySystem, burned through redeemForEnergy, and recorded as an owed-kWh claim with fulfillment/shortfall/dispute states.",
       "evidence": [
         "contracts/SolarPunkCurrencySystem.sol",
         "test/SolarPunkCurrencySystem.test.js"
@@ -149,9 +149,9 @@
   },
   "claim_boundaries": [
     "Layer 1 is public Sepolia evidence.",
-    "Layer 2 is a deterministic local field-receipt loop, not a real external pilot.",
+    "Layer 2 is a deterministic local SPK loop, not a real external pilot.",
     "Layers 3-4 now have local contract/test coverage, but no public deployment or real commercial adoption.",
     "No token sale, mainnet readiness, yield, audit completion, or legal redemption claim is made.",
-    "The purpose is to move from local field receipt coherence to a real meter export loop."
+    "The purpose is to move from local SPK coherence to a real meter export loop."
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18T10:49:53.669Z",
+  "generated_at": "2026-05-18T16:12:56.598Z",
   "title": "SolarPunk Closed Pilot Execution Package",
   "purpose": "Remove vague blockers by converting the path from public lab to closed pilot into concrete inputs, commands, caps, and acceptance criteria.",
   "current_decision": {
@@ -49,7 +49,7 @@
       "status": "execution_package_ready_external_inputs_needed",
       "value_claim": "Named operator, capped testnet SPK flow, governed deployment, no public real-money exposure.",
       "can_accept_real_value": false,
-      "execution_command": "Run governed redeploy/readback, operator adapter receipt, hardware provenance model, economics refresh, then product launch gate.",
+      "execution_command": "Run governed redeploy/readback, operator adapter output, hardware provenance model, economics refresh, then product launch gate.",
       "success_definition": "Governed attested-SPK deployment, L2+ hardware source, and signed economics/support terms clear launch gate.",
       "current_hardware_level": "L0",
       "target_hardware_level": "L2",
@@ -79,7 +79,7 @@
         "generation_resource",
         "capacity_kw"
       ],
-      "why": "Binds the pilot receipt to a named physical generator without publishing private customer data."
+      "why": "Binds the pilot proof to a named physical generator without publishing private customer data."
     },
     {
       "category": "device_identity",

@@ -1,6 +1,6 @@
 # SolarPunk Energy Standard Economics
 
-- generated_at: `2026-05-16T15:02:36.887Z`
+- generated_at: `2026-05-18T16:12:55.990Z`
 - one_line: SolarPunk is an energy-standard cryptocurrency: a modern gold-standard system where verified renewable-energy surplus replaces gold as the backing base.
 
 ## Core Thesis
@@ -56,7 +56,7 @@ This is the economic/finance spine of the project. The technical system exists t
 |---|---|---|---|
 | Gold reserve base | Verified renewable surplus base | signed meter/inverter data, source hashes, oracle attestation, replay protection | meter custody, data quality, basis mismatch, and operator honesty |
 | Assay and vault custody | Measurement, signature, and registry custody | meter registry, accepted bundle, consumed source hash, accepted kWh | hardware certification and no-double-counting registry discipline |
-| Convertibility promise | Redemption into owed-kWh receipt | redeemForEnergy, burn accounting, fulfillment/shortfall/dispute states | legal redemption terms and real delivery counterparty |
+| Convertibility promise | Redemption into owed-kWh claim | redeemForEnergy, burn accounting, fulfillment/shortfall/dispute states | legal redemption terms and real delivery counterparty |
 | Scarce mine output constrains issuance | Measured productive surplus constrains issuance | mintFromSurplusAttestation accepts only admissible surplus evidence | governance must not weaken admissibility rules |
 
 ## Capacity And Issuance Scenarios
@@ -98,14 +98,14 @@ The capex column deliberately uses the same cost assumption from the resource be
 | Unit of account | `partial` | Prototype uses a USD/kWh basis; the deeper energy standard is kWh-per-SPK convertibility. |
 | Medium of exchange | `local_lab` | SolarPunkCurrencySystem settles hashed invoices in SPK locally. |
 | Store of value | `not_proven` | Needs real redemption terms, liquidity, governance, audit, and user demand. |
-| Standard of deferred payment | `partial` | Redemption receipts can record owed kWh with fulfillment, shortfall, and dispute states. |
+| Standard of deferred payment | `partial` | SPK redemption records can track owed kWh with fulfillment, shortfall, and dispute states. |
 | Reserve/backing transparency | `partial` | Energy evidence and public readback exist; production-grade registry, audit, and operator controls are still open. |
 
 ## Finance Risk Register
 
 | Risk | Meaning | Control |
 |---|---|---|
-| Basis risk | A generic kWh estimate is not always deliverable where and when the holder needs energy. | Move toward time/location/source-tagged receipts. |
+| Basis risk | A generic kWh estimate is not always deliverable where and when the holder needs energy. | Move toward time/location/source-tagged SPK claims. |
 | Oracle and meter risk | Bad hardware, bad signatures, duplicate claims, or compromised operators can corrupt issuance. | Hardware-backed meters, no-double-counting registry, multi-oracle checks, and slashing. |
 | Redemption mismatch | Issued SPK may circulate faster or farther than the operator's real delivery ability. | Caps, redemption queues, insurance fund, shortfall rules, and local delivery domains. |
 | Price-basis governance | Changing USD/kWh basis changes issuance volume and kWh-per-SPK convertibility. | Transparent governance delay, public parameter history, and basis-policy disclosure. |
@@ -121,7 +121,7 @@ The capex column deliberately uses the same cost assumption from the resource be
 
 ## Next Finance Build Targets
 
-- Add time/location/vintage tags to SPK issuance and redemption receipts.
+- Add time/location/vintage tags to SPK issuance and redemption claims.
 - Build a monetary stress harness for redemption waves, velocity spikes, oracle errors, and shortfalls.
 - Define an explicit reserve/insurance fund policy tied to outstanding owed-kWh exposure.
 - Write a legally cautious redemption policy for pilot operators.

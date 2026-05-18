@@ -50,14 +50,14 @@
 
 ## Scope Boundary
 
-- This is a governed public-testnet or local pilot stack receipt, not a mainnet deployment.
+- This is a governed public-testnet or local pilot stack output, not a mainnet deployment.
 - Real-value use remains blocked until audit, legal/commercial scope, production oracle policy, and redemption terms exist.
-- A pilot CSV receipt can feed this stack only after a matching signed meter bundle is accepted.
+- A pilot CSV proof can feed this stack only after a matching signed meter bundle is accepted.
 
 ## Next Commands
 
 ```bash
-# hardhat receipts prove the deploy script executes, but a separate hardhat run starts a fresh in-memory chain.
+# hardhat outputs prove the deploy script executes, but a separate hardhat run starts a fresh in-memory chain.
 # Use readback against Sepolia or a persistent localhost node after deploying there.
 PILOT_STACK_RECEIPT=state/deployments/sepolia_pilot_stack.json PILOT_NETWORK=sepolia npm run pilot-stack:readback
 npm run product:pilot-csv

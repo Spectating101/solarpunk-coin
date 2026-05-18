@@ -8,7 +8,7 @@
 
 This document is the canonical, comprehensive handoff for the SolarPunk Protocol. It describes the project's purpose, current state, architecture, operations, design decisions and their rationale, outstanding items, and the strategic outlook (both grant prospects and career/value prospects). Anyone reading this without prior context should be able to fully orient themselves.
 
-**2026-05-18 delta:** For the freshest reviewer-facing status, read `CURRENT_STATUS.md` and `EVIDENCE.md` first. Since this handoff was written, the repo added the attestation-enabled SPK proof stack, `SolarPunkCurrencySystem`, the local field receipt loop, the currency framework readiness reports, the multi-resource benchmark lab (`docs/product/RESOURCE_BENCHMARK_LAB.md`), the energy-standard economics spine (`docs/product/ENERGY_STANDARD_ECONOMICS.md`), the pilot CSV receipt (`docs/product/PILOT_CSV_RECEIPT.md`), the inverter/meter adapter receipt (`docs/product/INVERTER_METER_ADAPTER.md`), the hardware provenance model (`docs/product/HARDWARE_PROVENANCE_MODEL.md`), the closed-pilot execution package (`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`), the energy-money simulation (`docs/product/ENERGY_MONEY_SIMULATION.md`), the monetary stress harness (`docs/product/MONETARY_STRESS_HARNESS.md`), and the governed pilot-stack deploy/readback scaffold (`scripts/deploy_pilot_stack.js`, `scripts/read_pilot_stack.js`).
+**2026-05-18 delta:** For the freshest reviewer-facing status, read `CURRENT_STATUS.md` and `EVIDENCE.md` first. Since this handoff was written, the repo added the attestation-enabled SPK proof stack, `SolarPunkCurrencySystem`, the local SPK loop, the currency framework readiness reports, the multi-resource benchmark lab (`docs/product/RESOURCE_BENCHMARK_LAB.md`), the energy-standard economics spine (`docs/product/ENERGY_STANDARD_ECONOMICS.md`), the pilot CSV proof (`docs/product/PILOT_CSV_RECEIPT.md`), the inverter/meter adapter output (`docs/product/INVERTER_METER_ADAPTER.md`), the public solar replay (`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`), the hardware provenance model (`docs/product/HARDWARE_PROVENANCE_MODEL.md`), the closed-pilot execution package (`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`), the energy-money simulation (`docs/product/ENERGY_MONEY_SIMULATION.md`), the monetary stress harness (`docs/product/MONETARY_STRESS_HARNESS.md`), and the governed pilot-stack deploy/readback scaffold (`scripts/deploy_pilot_stack.js`, `scripts/read_pilot_stack.js`).
 
 ---
 
@@ -189,7 +189,7 @@ scripts/                      Deploy, demo, simulation, interaction proof, keepe
   stress_test_margin.py           90-day jump-diffusion stress test (basis for maturity memo)
   pi_tuning.py                    Parameter sweep for PI gains
 state/
-  deployments/                    Deployment receipts (Sepolia, Amoy, localhost)
+  deployments/                    Deployment outputs (Sepolia, Amoy, localhost)
   proofs/                         Interaction proof artifacts
   keeper_logs/                    Daily NASA→Sepolia keeper output (YYYY-MM-DD.json)
 energy_derivatives/spk_derivatives/   Python SDK
@@ -250,7 +250,7 @@ Returns a `ProtocolState` dataclass with all live values (supply, oracle price, 
 
 ### 6.1 M3 security setup (2026-04-20)
 
-Receipt: `state/deployments/sepolia_m3_setup.json`
+Output: `state/deployments/sepolia_m3_setup.json`
 
 | Action | Result |
 |---|---|
@@ -265,7 +265,7 @@ Receipt: `state/deployments/sepolia_m3_setup.json`
 
 ### 6.2 Safe multisig handoff (2026-04-20)
 
-Receipt: `state/deployments/sepolia_multisig_handoff.json`
+Output: `state/deployments/sepolia_multisig_handoff.json`
 
 | Contract | Action | Result |
 |---|---|---|

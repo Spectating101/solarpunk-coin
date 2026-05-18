@@ -30,7 +30,7 @@ Optimize for external proof quality before narrative. Each milestone must produc
 
 ### Milestone 4: Pilot Credibility
 
-- **Pilot CSV receipt path:** Convert operator-style meter/inverter CSV exports into signed readings, accepted bundle, deterministic source hash, and SPK mint preview.
+- **Pilot CSV proof path:** Convert operator-style meter/inverter CSV exports into signed readings, accepted bundle, deterministic source hash, and SPK mint preview.
 - **Monetary stress harness:** Size redemption shortfall exposure, fee buffers, and additional named reserve requirements before promising any real-value redemption.
 - **Governed pilot-stack scaffold:** Deploy/readback scripts now cover MockUSDC, ProtocolTreasury, SolarPunkCoin, and SolarPunkCurrencySystem together.
 - **Pilot Onboarding:** Secure a $125k pilot grant to establish a $125k total insurance reserve, unlocking a 60 MWh risk-boxed pilot capacity.

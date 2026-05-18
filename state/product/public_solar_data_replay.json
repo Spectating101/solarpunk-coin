@@ -1,0 +1,255 @@
+{
+  "generated_at": "2026-05-18T00:00:00.000Z",
+  "title": "SolarPunk Public Solar Data Replay",
+  "plain_english": "This replays public historical rooftop-solar data through the SPK mint math. It proves the coin logic can ingest real-world solar profiles, but it is not a live meter proof.",
+  "source": {
+    "dataset_name": "Ausgrid Solar home electricity data",
+    "official_page": "https://www.ausgrid.com.au/Industry/Our-Research/Data-to-share/Solar-home-electricity-data",
+    "data_gov_au": "https://data.gov.au/data/dataset/nsw-solar-home-electricty-data",
+    "pvdaq_systems_csv": "https://oedi-data-lake.s3.amazonaws.com/pvdaq/csv/systems_20250729.csv",
+    "sample_note": "The checked-in sample mirrors the public Ausgrid wide-row format for customer 1 over three historical days.",
+    "csv_path": "data/public/ausgrid_sample.csv",
+    "csv_url": null,
+    "customer_id": "1",
+    "original_window_start": "2012-07-01",
+    "original_window_end": "2012-07-03"
+  },
+  "replay_summary": {
+    "accepted_days": 3,
+    "generator_capacity_kw": 3.78,
+    "total_generation_kwh": 29.775,
+    "total_gross_consumption_kwh": 76.935,
+    "total_solar_self_consumed_kwh": 11.06,
+    "total_export_surplus_kwh": 18.715,
+    "average_export_ratio": 0.633574,
+    "accepted_records": 3,
+    "rejected_records": 0,
+    "verified_signatures": 3
+  },
+  "lab_signing_boundary": {
+    "original_dataset_device_signatures_present": false,
+    "lab_signature_used_for_replay": true,
+    "signer_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+    "can_claim_live_hardware_provenance": false,
+    "useful_for_spk_economic_model": true
+  },
+  "daily_replay": [
+    {
+      "original_date": "2012-07-01",
+      "customer_id": "1",
+      "postcode": "2076",
+      "generator_capacity_kw": 3.78,
+      "generation_kwh": 8.726,
+      "gross_consumption_kwh": 22.796,
+      "solar_self_consumed_kwh": 2.391,
+      "export_kwh": 6.335,
+      "imported_grid_kwh": 20.405,
+      "surplus_kwh": 6.335,
+      "self_consumption_ratio": 0.274009,
+      "export_ratio": 0.725991,
+      "interval_count": 48,
+      "quality_score": 0.93
+    },
+    {
+      "original_date": "2012-07-02",
+      "customer_id": "1",
+      "postcode": "2076",
+      "generator_capacity_kw": 3.78,
+      "generation_kwh": 9.833,
+      "gross_consumption_kwh": 22.324,
+      "solar_self_consumed_kwh": 4.175,
+      "export_kwh": 5.658,
+      "imported_grid_kwh": 18.149,
+      "surplus_kwh": 5.658,
+      "self_consumption_ratio": 0.424591,
+      "export_ratio": 0.575409,
+      "interval_count": 48,
+      "quality_score": 0.93
+    },
+    {
+      "original_date": "2012-07-03",
+      "customer_id": "1",
+      "postcode": "2076",
+      "generator_capacity_kw": 3.78,
+      "generation_kwh": 11.216,
+      "gross_consumption_kwh": 31.815,
+      "solar_self_consumed_kwh": 4.494,
+      "export_kwh": 6.722,
+      "imported_grid_kwh": 27.321,
+      "surplus_kwh": 6.722,
+      "self_consumption_ratio": 0.400678,
+      "export_ratio": 0.599322,
+      "interval_count": 48,
+      "quality_score": 0.93
+    }
+  ],
+  "registry": {
+    "schema": "SPK_PUBLIC_SOLAR_REPLAY_REGISTRY_V1",
+    "generated_at": "2026-05-18T00:00:00.000Z",
+    "boundary": "Lab registry for public historical data replay. This does not represent original meter-device signatures from the public dataset.",
+    "meters": [
+      {
+        "meter_id": "PUBLIC-AUSGRID-0001",
+        "site_id": "ausgrid-public-home-1",
+        "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+        "capacity_kw": 3.78,
+        "active_after": "2010-01-01T00:00:00Z",
+        "active_until": "2035-01-01T00:00:00Z"
+      }
+    ]
+  },
+  "raw_readings": {
+    "schema": "SPK_RAW_METER_READINGS_V1",
+    "generated_at": "2026-05-18T16:12:36.818Z",
+    "batch_id": "public_ausgrid_customer_1_replay",
+    "min_quality_threshold": 0.9,
+    "import_adapter": {
+      "schema": "SPK_PUBLIC_SOLAR_DATA_REPLAY_V1",
+      "source_file": "data/public/ausgrid_sample.csv",
+      "unsigned": false,
+      "signer_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "provenance_status": "public_historical_dataset_lab_signed_replay",
+      "original_dataset_signatures_present": false
+    },
+    "readings": [
+      {
+        "meter_id": "PUBLIC-AUSGRID-0001",
+        "site_id": "ausgrid-public-home-1",
+        "window_start": "2012-07-01T00:00:00Z",
+        "window_end": "2012-07-01T23:59:59Z",
+        "generation_kwh": 8.726,
+        "site_load_kwh": 2.391,
+        "export_kwh": 6.335,
+        "curtailed_kwh": 0,
+        "quality_score": 0.93,
+        "source": "public_ausgrid_solar_replay_v1",
+        "nonce": "PUBLIC-AUSGRID-0001:ausgrid:2012-07-01:0",
+        "payload_hash": "0xd45f674d885230ad01bb323d368f88231f14dd44de500e774073c1432906f7d4",
+        "signature": "0x665ee7a93664873a4820d9efc4fe135fe7cca5dadd10b6e7beec77e3278301ff7be33ba181d5defe985def9ec6387c5573420e96d95c94dcaf2dc3c87bef5fe71b"
+      },
+      {
+        "meter_id": "PUBLIC-AUSGRID-0001",
+        "site_id": "ausgrid-public-home-1",
+        "window_start": "2012-07-02T00:00:00Z",
+        "window_end": "2012-07-02T23:59:59Z",
+        "generation_kwh": 9.833,
+        "site_load_kwh": 4.175,
+        "export_kwh": 5.658,
+        "curtailed_kwh": 0,
+        "quality_score": 0.93,
+        "source": "public_ausgrid_solar_replay_v1",
+        "nonce": "PUBLIC-AUSGRID-0001:ausgrid:2012-07-02:1",
+        "payload_hash": "0xf6721628984e6b4320308a5a97e7148bc161bf3ce614cbdacf61eedbc8cf9a70",
+        "signature": "0x23648e31987b7893ef0330805e5c17bee7448bf90d26f11a32814dbda726bab7412d7381e67a0c400476ae498f509415c44dfb61993a4da47078dd94ddec197f1c"
+      },
+      {
+        "meter_id": "PUBLIC-AUSGRID-0001",
+        "site_id": "ausgrid-public-home-1",
+        "window_start": "2012-07-03T00:00:00Z",
+        "window_end": "2012-07-03T23:59:59Z",
+        "generation_kwh": 11.216,
+        "site_load_kwh": 4.494,
+        "export_kwh": 6.722,
+        "curtailed_kwh": 0,
+        "quality_score": 0.93,
+        "source": "public_ausgrid_solar_replay_v1",
+        "nonce": "PUBLIC-AUSGRID-0001:ausgrid:2012-07-03:2",
+        "payload_hash": "0xc7349a6eaf397ae5f0b6714420cdaf89c64281ebbe88cc141eb0f1f78529e76a",
+        "signature": "0x639a62f5c02a837388b48192bed54a17a6c9777a92f16ec362274ac8359feb3a7fc2deb58edf9eb8bddcbe4dbe58e82fbf1b4fb0c70c791346840b8b56c792d41b"
+      }
+    ]
+  },
+  "attestation_bundle": {
+    "generated_at": "2026-05-18T16:12:36.830Z",
+    "source_schema": "SPK_RAW_METER_READINGS_V1",
+    "registry_schema": "SPK_PUBLIC_SOLAR_REPLAY_REGISTRY_V1",
+    "batch_id": "public_ausgrid_customer_1_replay",
+    "min_quality_threshold": 0.9,
+    "summary": {
+      "input_records": 3,
+      "accepted_records": 3,
+      "rejected_records": 0,
+      "verified_signatures": 3,
+      "registered_meters": 1,
+      "total_surplus_kwh": 18.715
+    },
+    "accepted_attestations": [
+      {
+        "meter_id": "PUBLIC-AUSGRID-0001",
+        "site_id": "ausgrid-public-home-1",
+        "window_start": "2012-07-01T00:00:00+00:00",
+        "window_end": "2012-07-01T23:59:59+00:00",
+        "surplus_kwh": 6.335,
+        "quality_score": 0.93,
+        "source": "public_ausgrid_solar_replay_v1",
+        "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+        "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+        "payload_hash": "0xd45f674d885230ad01bb323d368f88231f14dd44de500e774073c1432906f7d4",
+        "signature": "0x665ee7a93664873a4820d9efc4fe135fe7cca5dadd10b6e7beec77e3278301ff7be33ba181d5defe985def9ec6387c5573420e96d95c94dcaf2dc3c87bef5fe71b",
+        "record_hash": "7a6a120f0babdf455bf0db567c13b9c4b1511c7c89678606c04bcb5dd7ef1c97"
+      },
+      {
+        "meter_id": "PUBLIC-AUSGRID-0001",
+        "site_id": "ausgrid-public-home-1",
+        "window_start": "2012-07-02T00:00:00+00:00",
+        "window_end": "2012-07-02T23:59:59+00:00",
+        "surplus_kwh": 5.658,
+        "quality_score": 0.93,
+        "source": "public_ausgrid_solar_replay_v1",
+        "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+        "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+        "payload_hash": "0xf6721628984e6b4320308a5a97e7148bc161bf3ce614cbdacf61eedbc8cf9a70",
+        "signature": "0x23648e31987b7893ef0330805e5c17bee7448bf90d26f11a32814dbda726bab7412d7381e67a0c400476ae498f509415c44dfb61993a4da47078dd94ddec197f1c",
+        "record_hash": "516d1c9a0b91eeee1854f772978071c36d162166ac8125509e572c2739aaff9c"
+      },
+      {
+        "meter_id": "PUBLIC-AUSGRID-0001",
+        "site_id": "ausgrid-public-home-1",
+        "window_start": "2012-07-03T00:00:00+00:00",
+        "window_end": "2012-07-03T23:59:59+00:00",
+        "surplus_kwh": 6.722,
+        "quality_score": 0.93,
+        "source": "public_ausgrid_solar_replay_v1",
+        "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+        "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+        "payload_hash": "0xc7349a6eaf397ae5f0b6714420cdaf89c64281ebbe88cc141eb0f1f78529e76a",
+        "signature": "0x639a62f5c02a837388b48192bed54a17a6c9777a92f16ec362274ac8359feb3a7fc2deb58edf9eb8bddcbe4dbe58e82fbf1b4fb0c70c791346840b8b56c792d41b",
+        "record_hash": "525df0c3b09b142aad6cbfc1e49ec101d993ac3db65e30c3629ff92ce8d025d2"
+      }
+    ],
+    "rejected_attestations": []
+  },
+  "mint_preview": {
+    "source_payload": {
+      "schema": "SPK_METER_SURPLUS_SOURCE_V1",
+      "batch_id": "public_ausgrid_customer_1_replay",
+      "min_quality_threshold": 0.9,
+      "accepted_record_hashes": [
+        "516d1c9a0b91eeee1854f772978071c36d162166ac8125509e572c2739aaff9c",
+        "525df0c3b09b142aad6cbfc1e49ec101d993ac3db65e30c3629ff92ce8d025d2",
+        "7a6a120f0babdf455bf0db567c13b9c4b1511c7c89678606c04bcb5dd7ef1c97"
+      ],
+      "rejected_record_count": 0,
+      "total_surplus_kwh": 18.715
+    },
+    "source_hash": "0x46dc49c48485208ccf6c43836cec0e6fb9230ffbd14815031ea21d9747302953",
+    "source_payload_json": "{\"accepted_record_hashes\":[\"516d1c9a0b91eeee1854f772978071c36d162166ac8125509e572c2739aaff9c\",\"525df0c3b09b142aad6cbfc1e49ec101d993ac3db65e30c3629ff92ce8d025d2\",\"7a6a120f0babdf455bf0db567c13b9c4b1511c7c89678606c04bcb5dd7ef1c97\"],\"batch_id\":\"public_ausgrid_customer_1_replay\",\"min_quality_threshold\":0.9,\"rejected_record_count\":0,\"schema\":\"SPK_METER_SURPLUS_SOURCE_V1\",\"total_surplus_kwh\":18.715}",
+    "onchain_surplus_kwh": 18,
+    "unminted_fractional_kwh": 0.715,
+    "energy_price_usd_per_kwh": 0.05,
+    "mint_fee_bps": 10,
+    "gross_spk": 0.9,
+    "mint_fee_spk": 0.0009,
+    "net_spk": 0.8991,
+    "window_start": 1341100800,
+    "window_end": 1341359999,
+    "can_mint_spk_from_bundle": true,
+    "can_mint_from_receipt": true
+  },
+  "hard_boundaries": [
+    "This is public historical data, not a live operator meter feed.",
+    "The lab signs normalized rows only so the existing SPK verifier can replay the math.",
+    "This cannot upgrade hardware provenance beyond public-lab evidence.",
+    "SPK real-value minting still needs a named operator, live meter or inverter source, custody, and legal/commercial terms."
+  ]
+}

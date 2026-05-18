@@ -1,6 +1,6 @@
 {
   "schema": "SPK_RAW_METER_READINGS_V1",
-  "generated_at": "2026-05-16T16:24:44.662Z",
+  "generated_at": "2026-05-18T16:12:55.136Z",
   "batch_id": "sample_meter_export",
   "min_quality_threshold": 0.9,
   "import_adapter": {

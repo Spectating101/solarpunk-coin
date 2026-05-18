@@ -23,7 +23,7 @@ SolarPunk is an energy-standard cryptocurrency lab: signed renewable-energy surp
 - Public proof mint: `2,606` on-chain kWh -> `130.1697 SPK`.
 - Pilot CSV sample: `1,985.5 kWh` accepted surplus -> `99.15075 SPK` mint preview.
 - Energy-money simulation: `15,216.476344 SPK` annualized issuance projection across transparent rooftop/neighborhood/commercial archetypes.
-- Field receipt loop: `130.1697 SPK` minted, `75 SPK` settled, `20 SPK` redeemed, `400 kWh` delivered.
+- Local SPK loop: `130.1697 SPK` minted, `75 SPK` settled, `20 SPK` redeemed, `400 kWh` delivered.
 - Monetary stress harness: all conservation checks pass; shortfall cases show explicit extra reserve requirements instead of assuming money can be printed through physical delivery gaps.
 
 ## What Is Still Blocked

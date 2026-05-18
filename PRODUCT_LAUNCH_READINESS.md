@@ -24,12 +24,13 @@ This is the product story that the repo should now support: verified surplus ren
 | SPK attested minting | Implemented in `SolarPunkCoin` | Surplus minting is no longer just a trusted minter call |
 | Meter ingestion | `scripts/derive_meter_attestations.js` verifies signed raw readings into `state/attestations/` | The data side now has registered meter identities and signature checks |
 | Meter CSV import | `scripts/import_meter_csv.js` canonicalizes and signs inverter/meter CSV exports | First pilot-facing bridge from real meter exports into the attestation pipeline |
-| Pilot CSV receipt | `scripts/pilot_csv_receipt.js` generates raw readings, accepted bundle, source hash, and mint preview | First end-to-end operator-style CSV proof surface |
+| Pilot CSV proof | `scripts/pilot_csv_receipt.js` generates raw readings, accepted bundle, source hash, and mint preview | First end-to-end operator-style CSV proof surface |
 | Inverter/meter adapter | `scripts/inverter_meter_adapter.js` normalizes cumulative counter snapshots and Fronius PowerFlow intervals | First direct hardware-facing adapter path; sample mode proves the verifier bridge, real operator mode still needs hardware custody |
+| Public solar data replay | `scripts/public_solar_data_replay.js` normalizes public historical Ausgrid rooftop-solar rows into SPK verifier inputs | Shows SPK mint math against real-world public solar profiles without pretending this is live hardware proof |
 | Hardware provenance model | `scripts/hardware_provenance_model.js` generates L0-L4 hardware tiers, risk haircuts, issuance caps, and upgrade evidence | Prevents the hardware gap from being hand-waved; current adapter sample is L0 with 0 kWh real-value cap |
 | Closed pilot execution package | `scripts/closed_pilot_execution_package.js` generates operator intake, execution modes, action queue, and acceptance criteria | Converts remaining pilot obstacles into named inputs, commands, owners, and success definitions |
 | Monetary stress harness | `scripts/monetary_stress_harness.js` generates redemption-wave and shortfall scenarios | Shows where SPK needs named reserve capital instead of pretending physical shortfalls can be printed away |
-| Energy-money simulation | `scripts/energy_money_simulation.js` uses real keeper-index resource days plus explicit assumptions | Shows SPK as an energy-standard monetary system, not merely a pilot receipt generator |
+| Energy-money simulation | `scripts/energy_money_simulation.js` uses real keeper-index resource days plus explicit assumptions | Shows SPK as an energy-standard monetary system, not merely a pilot proof generator |
 | SPK finance dossier | `scripts/spk_finance_dossier.js` turns simulation/stress artifacts into income statement, balance sheet, break-even, and finance-stack views | Makes the finance blockers explicit: current fee policy is not self-funding and stress capital must be named |
 | Empirical finance backtest | `scripts/empirical_finance_backtest.js` converts historical NASA POWER irradiance into project-finance distributions | Shows that real resource data supports the energy model, but the current 10 kW finance case has only `0.325x` p50 DSCR under stated assumptions |
 | Economic launch readiness | `scripts/economic_launch_readiness.js` converts empirical finance into launch thresholds and sensitivity paths | Shows the exact economics needed before a closed pilot or paid launch can be defended |
@@ -50,8 +51,9 @@ This is the product story that the repo should now support: verified surplus ren
 - The mint path still respects oracle freshness, grid stress, reserve ratio, supply cap, recipient validity, fee split, and minter/oracle role checks.
 - The meter bundle pipeline verifies device signatures, rejects duplicate/low-quality readings, and produces deterministic record hashes plus a product-level source hash.
 - The generated product proof demonstrates the full path from sample meter records to a public Sepolia SPK mint, with deterministic local reproduction still available.
-- The pilot CSV receipt demonstrates a realistic operator/export path: `1,985.5` accepted kWh becomes a deterministic source hash and `99.15075 SPK` mint preview without writing private keys to repo outputs.
+- The pilot CSV proof demonstrates a realistic operator/export path: `1,985.5` accepted kWh becomes a deterministic source hash and `99.15075 SPK` mint preview without writing private keys to repo outputs.
 - The inverter/meter adapter demonstrates the direct hardware-facing path: cumulative counter snapshots become `1` signed interval, `996.2` accepted surplus kWh, and an accepted attestation bundle. Fronius PowerFlow polling is wired for LAN inverter tests, but sample mode is not real hardware provenance.
+- The public solar data replay demonstrates that public historical rooftop-solar profiles can be normalized into the same verifier shape and SPK mint preview while staying clearly outside live-hardware provenance.
 - The hardware provenance model makes the physical-data gap explicit: L0 sample data is public-lab only, L2 is the minimum closed-pilot target, L3/L4 are the revenue-grade or utility-corroborated targets for real-value scale.
 - The closed-pilot execution package turns the next lane into an action queue: collect L2 operator source, run the adapter, redeploy governed pilot stack, secure anchor economics, and rerun gates.
 - The monetary stress harness keeps the economics honest by converting redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
@@ -82,7 +84,7 @@ This is the product story that the repo should now support: verified surplus ren
 
 4. **Legal and commercial structure**
 
-   SPK can look like a tokenized energy receipt, payment instrument, commodity-linked product, or loyalty/reward mechanism depending on how it is sold and redeemed. Launch terms must be narrowed before taking real customer money.
+   SPK can look like a cryptocurrency, payment instrument, commodity-linked product, prepaid energy credit, or loyalty/reward mechanism depending on how it is sold and redeemed. Launch terms must be narrowed before taking real customer money.
 
 5. **Liquidity and redemption policy**
 
@@ -100,7 +102,7 @@ npm run product:launch-gate
 
 Current gate result: **launch the SolarPunk Public Lab; do not launch paid/mainnet**.
 
-That means the public demo, Sepolia proof, SPK mint dashboard, currency-system lab, pilot CSV receipt, inverter/meter adapter receipt, energy-money simulation, empirical finance backtest, economic launch-readiness gate, monetary stress harness, resource benchmark lab, energy-standard economics, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external public lab. A closed pilot is still blocked until there is a governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics or support terms. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, named reserve/shortfall policy, production deployment, and self-consistent unit economics exist.
+That means the public demo, Sepolia proof, SPK mint dashboard, currency-system lab, pilot CSV proof, inverter/meter adapter output, energy-money simulation, empirical finance backtest, economic launch-readiness gate, monetary stress harness, resource benchmark lab, energy-standard economics, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external public lab. A closed pilot is still blocked until there is a governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics or support terms. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, named reserve/shortfall policy, production deployment, and self-consistent unit economics exist.
 
 See `docs/product/PUBLIC_LAB.md` for the operating model.
 
@@ -129,7 +131,7 @@ Target outcome: anyone can reproduce the core SPK product path and compare it to
 - Configure Safe/admin, minter, oracle, treasury, reserve token, and initial reserve.
 - Use `npm run deploy:pilot-stack:sepolia` and `npm run pilot-stack:readback` for the governed SPK + treasury + currency-system stack.
 - Run the meter-bundle mint script against Sepolia.
-- Verify source and publish Etherscan receipts.
+- Verify source and publish Etherscan proof links.
 - Update frontend constants to point at the redeployed SPK address.
 
 Target outcome: public explorer proof under pilot-grade governance that verified surplus kWh can mint SPK.

@@ -16,6 +16,7 @@ import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
 import inverterMeterAdapter from '../../../state/product/inverter_meter_adapter_receipt.json';
 import hardwareProvenance from '../../../state/product/hardware_provenance_model.json';
 import closedPilotPackage from '../../../state/product/closed_pilot_execution_package.json';
+import publicSolarReplay from '../../../state/product/public_solar_data_replay.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
@@ -27,7 +28,8 @@ import EnergyMoneyWorkbench from './EnergyMoneyWorkbench';
 const statusCopy = {
   real_public_testnet: 'Real public proof',
   simulated_from_public_fixture: 'Pilot surrogate',
-  local_field_receipt_loop: 'Local receipt loop',
+  local_field_receipt_loop: 'Local SPK loop',
+  local_spk_settlement_loop: 'Local SPK loop',
   local_contract_tested: 'Local contract tested',
   lab_model_only: 'Lab model only',
 };
@@ -35,7 +37,8 @@ const statusCopy = {
 function statusClass(status) {
   return status === 'real_public_testnet' ||
     status === 'local_contract_tested' ||
-    status === 'local_field_receipt_loop' ? 'launchable' : 'blocked';
+    status === 'local_field_receipt_loop' ||
+    status === 'local_spk_settlement_loop' ? 'launchable' : 'blocked';
 }
 
 function formatNumber(value, digits = 4) {
@@ -129,6 +132,13 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatNumber(inverterMeterAdapter.mint_readiness.accepted_surplus_kwh, 1)} kWh</div>
           <div className="metric-sub">
             {inverterMeterAdapter.attestation_bundle.summary.accepted_records} signed interval, {inverterMeterAdapter.source.interval_method.replaceAll('_', ' ')}
+          </div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Public Solar Replay</div>
+          <div className="metric-value">{formatNumber(publicSolarReplay.mint_preview.net_spk, 5)} SPK</div>
+          <div className="metric-sub">
+            {publicSolarReplay.replay_summary.accepted_days} historical Ausgrid days, {formatNumber(publicSolarReplay.replay_summary.total_export_surplus_kwh, 2)} kWh export surplus
           </div>
         </div>
         <div className="metric-card metric-amber">
@@ -245,7 +255,7 @@ export default function CurrencyLab() {
           <div className="metric-sub">{currencyFramework.current_internal_stage.replaceAll('_', ' ')}</div>
         </div>
         <div className="metric-card metric-good">
-          <div className="metric-label">Field Receipt Loop</div>
+          <div className="metric-label">Local SPK Loop</div>
           <div className="metric-value">{formatNumber(fieldReceipt.accounting.delivered_kwh)} kWh</div>
           <div className="metric-sub">
             {formatNumber(fieldReceipt.accounting.settlement_volume_spk)} SPK settled, no external dependency
@@ -341,19 +351,22 @@ export default function CurrencyLab() {
               Currency lab <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/state/product/currency_system_lab.json`} target="_blank" rel="noreferrer">
-              JSON receipt <ExternalLink size={12} />
+              JSON proof <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/CURRENCY_FRAMEWORK_READINESS.md`} target="_blank" rel="noreferrer">
               Framework readiness <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/FIELD_RECEIPT_LOOP.md`} target="_blank" rel="noreferrer">
-              Field receipt loop <ExternalLink size={12} />
+              Local SPK loop <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/PILOT_CSV_RECEIPT.md`} target="_blank" rel="noreferrer">
-              Pilot CSV receipt <ExternalLink size={12} />
+              Pilot CSV proof <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/INVERTER_METER_ADAPTER.md`} target="_blank" rel="noreferrer">
               Inverter adapter <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`} target="_blank" rel="noreferrer">
+              Public solar replay <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/HARDWARE_PROVENANCE_MODEL.md`} target="_blank" rel="noreferrer">
               Hardware provenance <ExternalLink size={12} />

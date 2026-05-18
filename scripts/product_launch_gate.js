@@ -52,7 +52,7 @@ function summarizeNextActions(modes) {
   }
   if (modes.public_testnet_product.status === "launchable") {
     return [
-      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, hardware provenance model, and closed-pilot execution package.",
+      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.",
       "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
       "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
@@ -77,6 +77,7 @@ function evaluateLaunchGate(options = {}) {
   const inverterAdapter = readJson(root, "state/product/inverter_meter_adapter_receipt.json", {});
   const hardwareProvenance = readJson(root, "state/product/hardware_provenance_model.json", {});
   const closedPilotPackage = readJson(root, "state/product/closed_pilot_execution_package.json", {});
+  const publicSolarReplay = readJson(root, "state/product/public_solar_data_replay.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
@@ -134,13 +135,16 @@ function evaluateLaunchGate(options = {}) {
       "frontend/src"
     ),
     check(
-      "Pilot CSV receipt exists",
-      Boolean(pilotCsv.mint_preview?.can_mint_from_receipt && Number(pilotCsv.attestation_bundle?.summary?.accepted_records || 0) > 0),
-      "Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.",
+      "Pilot CSV proof exists",
+      Boolean(
+        (pilotCsv.mint_preview?.can_mint_spk_from_bundle ?? pilotCsv.mint_preview?.can_mint_from_receipt) &&
+          Number(pilotCsv.attestation_bundle?.summary?.accepted_records || 0) > 0
+      ),
+      "Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.",
       "docs/product/PILOT_CSV_RECEIPT.md"
     ),
     check(
-      "Inverter/meter adapter receipt exists",
+      "Inverter/meter adapter output exists",
       Boolean(inverterAdapterAccepted && inverterAdapter.mint_readiness?.can_mint_from_adapter),
       "Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.",
       "docs/product/INVERTER_METER_ADAPTER.md"
@@ -156,6 +160,17 @@ function evaluateLaunchGate(options = {}) {
       closedPilotPackageReady,
       "Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.",
       "docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md"
+    ),
+    check(
+      "Public solar data replay exists",
+      Boolean(
+        Number(publicSolarReplay.replay_summary?.accepted_days || 0) > 0 &&
+          Number(publicSolarReplay.replay_summary?.total_export_surplus_kwh || 0) > 0 &&
+          (publicSolarReplay.mint_preview?.can_mint_spk_from_bundle ??
+            publicSolarReplay.mint_preview?.can_mint_from_receipt)
+      ),
+      "Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.",
+      "docs/product/PUBLIC_SOLAR_DATA_REPLAY.md"
     ),
     check(
       "Monetary stress harness passes",
@@ -278,7 +293,7 @@ function evaluateLaunchGate(options = {}) {
     check(
       "Mainnet or L2 production deployment recorded",
       exists(root, "state/deployments/production_spk_deploy.json"),
-      "No production deployment receipt exists.",
+      "No production deployment proof exists.",
       "state/deployments/production_spk_deploy.json"
     ),
   ];

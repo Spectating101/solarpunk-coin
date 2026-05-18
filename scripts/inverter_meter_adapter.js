@@ -393,7 +393,7 @@ async function buildAdapterReceipt(options = {}) {
 
   return {
     generated_at: generatedAt,
-    title: "SolarPunk Inverter/Meter Adapter Receipt",
+    title: "SolarPunk Inverter/Meter Adapter Output",
     purpose:
       "Normalize a meter or inverter interval into signed raw readings, then run the same attestation verifier used by SPK minting.",
     source: {
@@ -439,7 +439,7 @@ async function buildAdapterReceipt(options = {}) {
 
 function toMarkdown(receipt) {
   const lines = [];
-  lines.push("# SolarPunk Inverter/Meter Adapter Receipt");
+  lines.push("# SolarPunk Inverter/Meter Adapter Output");
   lines.push("");
   lines.push(`- generated_at: \`${receipt.generated_at}\``);
   lines.push(`- provider: \`${receipt.source.provider}\``);

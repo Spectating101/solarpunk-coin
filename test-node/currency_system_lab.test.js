@@ -16,7 +16,7 @@ test("currency lab keeps real proof separate from simulated layers", () => {
   const report = buildCurrencyLab({ now: new Date("2026-05-15T00:00:00Z") });
   assert.equal(report.layers.length, 4);
   assert.equal(report.layers[0].status, "real_public_testnet");
-  assert.equal(report.layers[1].status, "local_field_receipt_loop");
+  assert.equal(report.layers[1].status, "local_spk_settlement_loop");
   assert.equal(report.layers[2].status, "local_contract_tested");
   assert.equal(report.layers[3].status, "local_contract_tested");
   assert.equal(report.ledger.accounting.conservation_pass, true);

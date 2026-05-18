@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-16T16:24:44.674Z",
-  "title": "SolarPunk Pilot CSV Receipt",
+  "generated_at": "2026-05-18T16:12:55.145Z",
+  "title": "SolarPunk Pilot CSV Proof",
   "purpose": "Show that a meter or inverter CSV export can become signed raw readings, an accepted surplus bundle, a deterministic source hash, and an SPK mint preview.",
   "execution_mode": "dev_fixture_signed_sample",
   "input": {
@@ -15,7 +15,7 @@
   },
   "raw_readings": {
     "schema": "SPK_RAW_METER_READINGS_V1",
-    "generated_at": "2026-05-16T16:24:44.662Z",
+    "generated_at": "2026-05-18T16:12:55.136Z",
     "batch_id": "sample_meter_export",
     "min_quality_threshold": 0.9,
     "import_adapter": {
@@ -58,7 +58,7 @@
     ]
   },
   "attestation_bundle": {
-    "generated_at": "2026-05-16T16:24:44.673Z",
+    "generated_at": "2026-05-18T16:12:55.145Z",
     "source_schema": "SPK_RAW_METER_READINGS_V1",
     "registry_schema": "SPK_METER_REGISTRY_V1",
     "batch_id": "sample_meter_export",
@@ -126,11 +126,12 @@
     "net_spk": 99.15075,
     "window_start": 1770854400,
     "window_end": 1771027199,
+    "can_mint_spk_from_bundle": true,
     "can_mint_from_receipt": true
   },
   "next_step_command": "Use the generated attestation bundle with scripts/mint_spk_from_meter_bundle.js against a local or governed Sepolia SPK stack.",
   "hard_boundaries": [
-    "This receipt does not certify hardware finality.",
+    "This proof does not certify hardware finality.",
     "A CSV export is pilot evidence only when the device key and operator custody are credible.",
     "Unsigned mode is useful for schema review but cannot mint SPK.",
     "A mint preview is not an on-chain mint; public proof still requires a transaction against an attestation-enabled SPK deployment.",

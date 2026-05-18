@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T16:24:49.413Z",
+  "generated_at": "2026-05-18T16:12:55.831Z",
   "title": "SolarPunk Monetary Stress Harness",
   "thesis": "SPK is not abstract money printing: every issued unit creates an energy-denominated redemption claim, so stress testing must expose redemption waves, physical delivery shortfalls, and the reserve buffer required to clear them.",
   "base_monetary_state": {
@@ -21,7 +21,7 @@
   "scenarios": [
     {
       "id": "current_field_receipt_loop",
-      "label": "Current local field receipt loop",
+      "label": "Current local SPK loop",
       "source": "state/product/field_receipt_loop.json",
       "supply_source": "field_receipt",
       "interpretation": "Existing deterministic local loop: mint, settlement, redemption, and full delivery resolution.",
@@ -187,7 +187,7 @@
     "Cap real redemptions to deliverable metered generation or contracted energy volume.",
     "Maintain a named insurance/reserve buffer sized to the stress table, not just protocol fee assumptions.",
     "Separate CSV import evidence from hardware-certified meter finality until device custody is independently proven.",
-    "Publish every pilot receipt with source hash, accepted records, rejected records, mint preview, and delivery resolution.",
+    "Publish every pilot proof with source hash, accepted records, rejected records, mint preview, and delivery resolution.",
     "Keep mainnet or paid use blocked until audit, legal redemption terms, and dispute/shortfall procedures exist."
   ],
   "hard_boundaries": [

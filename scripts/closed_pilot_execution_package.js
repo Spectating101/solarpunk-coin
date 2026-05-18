@@ -48,7 +48,7 @@ function buildOperatorIntake(economic) {
       category: "site_identity",
       required: true,
       fields: ["operator_name", "site_id", "location_country_region", "generation_resource", "capacity_kw"],
-      why: "Binds the pilot receipt to a named physical generator without publishing private customer data.",
+      why: "Binds the pilot proof to a named physical generator without publishing private customer data.",
     },
     {
       category: "device_identity",
@@ -115,7 +115,7 @@ function buildExecutionModes(launchGate, hardware, economic) {
       status: closedPilotStatus === "launchable" ? "ready_now" : "execution_package_ready_external_inputs_needed",
       value_claim: "Named operator, capped testnet SPK flow, governed deployment, no public real-money exposure.",
       can_accept_real_value: false,
-      execution_command: "Run governed redeploy/readback, operator adapter receipt, hardware provenance model, economics refresh, then product launch gate.",
+      execution_command: "Run governed redeploy/readback, operator adapter output, hardware provenance model, economics refresh, then product launch gate.",
       success_definition: "Governed attested-SPK deployment, L2+ hardware source, and signed economics/support terms clear launch gate.",
       current_hardware_level: currentHardware,
       target_hardware_level: "L2",

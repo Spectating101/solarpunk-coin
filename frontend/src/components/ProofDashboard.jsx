@@ -240,7 +240,7 @@ export default function ProofDashboard() {
           <div>
             <span>1</span>
             <strong>Open SPK product proof</strong>
-            <p>Inspect the generated meter-bundle to attested-mint receipt.</p>
+            <p>Inspect the generated meter-bundle to attested-mint proof.</p>
           </div>
           <div>
             <span>2</span>
@@ -355,7 +355,7 @@ export default function ProofDashboard() {
           <div className="panel-heading compact">
             <div>
               <div className="panel-kicker"><Database size={14} /> Proof Trail</div>
-              <h2>Reviewer receipts</h2>
+              <h2>Reviewer proof links</h2>
             </div>
           </div>
           <div className="tx-list">

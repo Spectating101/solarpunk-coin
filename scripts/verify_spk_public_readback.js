@@ -38,7 +38,7 @@ function toMarkdown(readback) {
   const lines = [
     "# SPK Public Readback",
     "",
-    "This receipt is a read-only Sepolia verification of the attested SPK mint proof.",
+    "This proof is a read-only Sepolia verification of the attested SPK mint path.",
     "",
     "## Target",
     "",

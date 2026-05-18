@@ -75,7 +75,7 @@ These are useful, but should not be the headline:
    - This is the biggest non-code gap for grants and business credibility.
 
 5. Legal/commercial framing.
-   - SPK could be interpreted as an energy receipt, reward token, payment instrument, commodity-linked product, or security-like instrument depending on launch terms.
+   - SPK could be interpreted as a cryptocurrency, reward token, payment instrument, commodity-linked product, prepaid energy credit, or security-like instrument depending on launch terms.
    - Real launch should not proceed until the claim is narrowed.
 
 ### Important But Not Immediate

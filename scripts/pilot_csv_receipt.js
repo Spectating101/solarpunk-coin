@@ -94,6 +94,7 @@ function mintPreviewFromBundle(bundle, options = {}) {
     net_spk: fixed(netSpk, 6),
     window_start: accepted.length ? Math.min(...accepted.map((row) => unixFromIso(row.window_start))) : null,
     window_end: accepted.length ? Math.max(...accepted.map((row) => unixFromIso(row.window_end))) : null,
+    can_mint_spk_from_bundle: accepted.length > 0 && onchainSurplusKwh > 0,
     can_mint_from_receipt: accepted.length > 0 && onchainSurplusKwh > 0,
   };
 }
@@ -143,7 +144,7 @@ async function buildPilotCsvReceipt(options = {}) {
 
   return {
     generated_at: (options.generatedAt || new Date()).toISOString(),
-    title: "SolarPunk Pilot CSV Receipt",
+    title: "SolarPunk Pilot CSV Proof",
     purpose:
       "Show that a meter or inverter CSV export can become signed raw readings, an accepted surplus bundle, a deterministic source hash, and an SPK mint preview.",
     execution_mode: mode,
@@ -160,11 +161,11 @@ async function buildPilotCsvReceipt(options = {}) {
     raw_readings: payload,
     attestation_bundle: bundle,
     mint_preview: mintPreview,
-    next_step_command: mintPreview.can_mint_from_receipt
+    next_step_command: mintPreview.can_mint_spk_from_bundle
       ? "Use the generated attestation bundle with scripts/mint_spk_from_meter_bundle.js against a local or governed Sepolia SPK stack."
       : "Fix rejected readings or provide a matching meter signature before attempting SPK minting.",
     hard_boundaries: [
-      "This receipt does not certify hardware finality.",
+      "This proof does not certify hardware finality.",
       "A CSV export is pilot evidence only when the device key and operator custody are credible.",
       "Unsigned mode is useful for schema review but cannot mint SPK.",
       "A mint preview is not an on-chain mint; public proof still requires a transaction against an attestation-enabled SPK deployment.",
@@ -175,7 +176,7 @@ async function buildPilotCsvReceipt(options = {}) {
 
 function toMarkdown(receipt) {
   const lines = [];
-  lines.push("# SolarPunk Pilot CSV Receipt");
+  lines.push("# SolarPunk Pilot CSV Proof");
   lines.push("");
   lines.push(`- generated_at: \`${receipt.generated_at}\``);
   lines.push(`- execution_mode: \`${receipt.execution_mode}\``);
@@ -209,7 +210,7 @@ function toMarkdown(receipt) {
   lines.push(`| Energy price basis | \`$${receipt.mint_preview.energy_price_usd_per_kwh}/kWh\` |`);
   lines.push(`| Mint fee | \`${receipt.mint_preview.mint_fee_bps} bps\` |`);
   lines.push(`| Net SPK preview | \`${receipt.mint_preview.net_spk} SPK\` |`);
-  lines.push(`| Can mint from receipt | \`${receipt.mint_preview.can_mint_from_receipt}\` |`);
+  lines.push(`| Can mint SPK from bundle | \`${receipt.mint_preview.can_mint_spk_from_bundle}\` |`);
   lines.push("");
   lines.push("## Rejections");
   lines.push("");

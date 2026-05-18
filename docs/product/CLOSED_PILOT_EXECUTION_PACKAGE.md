@@ -1,6 +1,6 @@
 # SolarPunk Closed Pilot Execution Package
 
-- generated_at: `2026-05-18T10:49:53.669Z`
+- generated_at: `2026-05-18T16:12:56.598Z`
 - public_lab: `launchable`
 - closed_testnet_pilot: `blocked`
 - paid_mainnet_product: `blocked`
@@ -45,7 +45,7 @@ There are no undefined blockers left in this package. Anything not launchable is
 
 | Category | Required | Fields | Why |
 |---|---:|---|---|
-| site_identity | true | operator_name, site_id, location_country_region, generation_resource, capacity_kw | Binds the pilot receipt to a named physical generator without publishing private customer data. |
+| site_identity | true | operator_name, site_id, location_country_region, generation_resource, capacity_kw | Binds the pilot proof to a named physical generator without publishing private customer data. |
 | device_identity | true | meter_or_inverter_model, serial_or_anonymized_serial_hash, commissioning_date, rated_capacity_kw | Moves hardware provenance from sample L0 toward live-source L2. |
 | interval_counters | true | window_start, window_end, generation_kwh_total_start/end, site_load_kwh_total_start/end, export_kwh_total_start/end, curtailed_kwh_total_start/end_or_zero | Cumulative counters let the adapter reject non-monotonic data and derive deterministic surplus. |
 | signing_and_custody | true | registered_device_address, who_controls_gateway_key, key_rotation_contact, revocation_contact | The protocol can verify signatures only if signer custody and revocation are defined. |

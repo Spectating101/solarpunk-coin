@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-05-18T16:12:36.830Z",
+  "source_schema": "SPK_RAW_METER_READINGS_V1",
+  "registry_schema": "SPK_PUBLIC_SOLAR_REPLAY_REGISTRY_V1",
+  "batch_id": "public_ausgrid_customer_1_replay",
+  "min_quality_threshold": 0.9,
+  "summary": {
+    "input_records": 3,
+    "accepted_records": 3,
+    "rejected_records": 0,
+    "verified_signatures": 3,
+    "registered_meters": 1,
+    "total_surplus_kwh": 18.715
+  },
+  "accepted_attestations": [
+    {
+      "meter_id": "PUBLIC-AUSGRID-0001",
+      "site_id": "ausgrid-public-home-1",
+      "window_start": "2012-07-01T00:00:00+00:00",
+      "window_end": "2012-07-01T23:59:59+00:00",
+      "surplus_kwh": 6.335,
+      "quality_score": 0.93,
+      "source": "public_ausgrid_solar_replay_v1",
+      "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "payload_hash": "0xd45f674d885230ad01bb323d368f88231f14dd44de500e774073c1432906f7d4",
+      "signature": "0x665ee7a93664873a4820d9efc4fe135fe7cca5dadd10b6e7beec77e3278301ff7be33ba181d5defe985def9ec6387c5573420e96d95c94dcaf2dc3c87bef5fe71b",
+      "record_hash": "7a6a120f0babdf455bf0db567c13b9c4b1511c7c89678606c04bcb5dd7ef1c97"
+    },
+    {
+      "meter_id": "PUBLIC-AUSGRID-0001",
+      "site_id": "ausgrid-public-home-1",
+      "window_start": "2012-07-02T00:00:00+00:00",
+      "window_end": "2012-07-02T23:59:59+00:00",
+      "surplus_kwh": 5.658,
+      "quality_score": 0.93,
+      "source": "public_ausgrid_solar_replay_v1",
+      "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "payload_hash": "0xf6721628984e6b4320308a5a97e7148bc161bf3ce614cbdacf61eedbc8cf9a70",
+      "signature": "0x23648e31987b7893ef0330805e5c17bee7448bf90d26f11a32814dbda726bab7412d7381e67a0c400476ae498f509415c44dfb61993a4da47078dd94ddec197f1c",
+      "record_hash": "516d1c9a0b91eeee1854f772978071c36d162166ac8125509e572c2739aaff9c"
+    },
+    {
+      "meter_id": "PUBLIC-AUSGRID-0001",
+      "site_id": "ausgrid-public-home-1",
+      "window_start": "2012-07-03T00:00:00+00:00",
+      "window_end": "2012-07-03T23:59:59+00:00",
+      "surplus_kwh": 6.722,
+      "quality_score": 0.93,
+      "source": "public_ausgrid_solar_replay_v1",
+      "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "payload_hash": "0xc7349a6eaf397ae5f0b6714420cdaf89c64281ebbe88cc141eb0f1f78529e76a",
+      "signature": "0x639a62f5c02a837388b48192bed54a17a6c9777a92f16ec362274ac8359feb3a7fc2deb58edf9eb8bddcbe4dbe58e82fbf1b4fb0c70c791346840b8b56c792d41b",
+      "record_hash": "525df0c3b09b142aad6cbfc1e49ec101d993ac3db65e30c3629ff92ce8d025d2"
+    }
+  ],
+  "rejected_attestations": []
+}

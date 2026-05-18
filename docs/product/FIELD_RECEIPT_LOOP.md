@@ -1,6 +1,6 @@
-# SolarPunk Field Receipt Loop
+# SolarPunk Local SPK Loop
 
-This is the first internal end-to-end currency receipt loop. It intentionally uses only local repo assets and a local Hardhat chain: no external API, no public network, no grant approval, and no real counterparty dependency.
+This is the first internal end-to-end SPK currency loop. It intentionally uses only local repo assets and a local Hardhat chain: no external API, no public network, no grant approval, and no real counterparty dependency.
 
 ## Run
 
@@ -39,7 +39,7 @@ This is the first internal end-to-end currency receipt loop. It intentionally us
 | signed_surplus_mint | 130.1697 SPK minted to producer | `0x9adada86223343a74811ee8970e96c8d08429f325e10b70072eb7bf43fd5a2fc` |
 | field_service_invoice_settlement | 25 SPK paid to field service provider | `0x7a14b27975ffde956490e8fb4ce28317128b966b25dba3b55558d710afabecf7` |
 | energy_credit_settlement | 50 SPK paid to energy buyer as redeemable credit balance | `0x78a656f8f33d93d6e4a4766272e56b5561345e0c016a47e61eef0ae36556a651` |
-| redemption_opened | 20 SPK burned into 400 owed kWh receipt | `0x0b0fee74f385be5aca453d8a532ff1a0f050290066633ad64db79df554f1fbf4` |
+| redemption_opened | 20 SPK burned into 400 owed kWh claim | `0x0b0fee74f385be5aca453d8a532ff1a0f050290066633ad64db79df554f1fbf4` |
 | delivery_resolved | 400 kWh fulfilled | `0x32587a565c96f19c905eb7fdcb8b83ca207578d585959d5f890c410fb363cec9` |
 
 ## Accounting
@@ -68,7 +68,7 @@ This is the first internal end-to-end currency receipt loop. It intentionally us
 
 ## Boundary
 
-- This is a deterministic local field-receipt experiment, not public network evidence.
+- This is a deterministic local SPK experiment, not public network evidence.
 - It relies only on repo fixtures, local Hardhat contracts, and local signers.
-- It proves the internal clearing loop from signed meter surplus to SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution.
+- It proves the internal clearing loop from signed meter surplus to SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution.
 - It does not prove hardware certification, legal redemption enforceability, real customer demand, audit completion, or mainnet readiness.

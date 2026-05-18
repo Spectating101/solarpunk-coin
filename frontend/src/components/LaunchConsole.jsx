@@ -134,7 +134,7 @@ export default function LaunchConsole() {
         <div className="panel">
           <div className="panel-heading compact">
             <div>
-              <div className="panel-kicker"><ShieldCheck size={14} /> Launch Receipts</div>
+              <div className="panel-kicker"><ShieldCheck size={14} /> Launch Proof</div>
               <h2>Product evidence to show</h2>
             </div>
           </div>

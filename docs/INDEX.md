@@ -24,11 +24,12 @@ Use these first when facts conflict elsewhere:
 - `docs/product/PRODUCT_LAUNCH_GATE.md` — explicit launch gates and blockers
 - `docs/product/CURRENCY_SYSTEM_LAB.md` — compressed four-layer currency-system lab
 - `docs/product/CURRENCY_FRAMEWORK_READINESS.md` — internal SPK currency-framework readiness checks
-- `docs/product/FIELD_RECEIPT_LOOP.md` — local no-external-dependency field receipt loop
-- `docs/product/INVERTER_METER_ADAPTER.md` — direct inverter/meter adapter receipt: cumulative snapshots/Fronius PowerFlow into signed attestations
+- `docs/product/FIELD_RECEIPT_LOOP.md` — local no-external-dependency SPK loop
+- `docs/product/INVERTER_METER_ADAPTER.md` — direct inverter/meter adapter output: cumulative snapshots/Fronius PowerFlow into signed attestations
+- `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` — public historical solar data replay into SPK mint math
 - `docs/product/HARDWARE_PROVENANCE_MODEL.md` — hardware assurance tiers, risk haircuts, issuance caps, and upgrade checklist
 - `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md` — closed-pilot operator intake, action queue, commands, owners, and acceptance criteria
-- `docs/product/PILOT_CSV_RECEIPT.md` — pilot CSV receipt: signed readings, accepted bundle, source hash, SPK mint preview
+- `docs/product/PILOT_CSV_RECEIPT.md` — pilot CSV proof: signed readings, accepted bundle, source hash, SPK mint preview
 - `docs/product/MONETARY_STRESS_HARNESS.md` — redemption-wave and shortfall stress harness for the SPK currency model
 - `docs/product/ENERGY_MONEY_SIMULATION.md` — measured-resource energy-standard monetary simulation
 - `docs/product/PILOT_OPERATOR_PACKET.md` — operator-facing CSV/export handoff

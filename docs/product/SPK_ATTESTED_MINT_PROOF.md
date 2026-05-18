@@ -1,6 +1,6 @@
 # SPK Attested Mint Proof
 
-This receipt proves the product-critical path: signed raw meter readings -> verified surplus bundle -> deterministic source hash -> oracle signature -> replay-protected SPK mint.
+This proof shows the product-critical path: signed raw meter readings -> verified surplus bundle -> deterministic source hash -> oracle signature -> replay-protected SPK mint.
 
 ## Run
 

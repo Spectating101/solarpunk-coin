@@ -85,7 +85,7 @@ area_m2 = kWdc / module_efficiency, assuming 1 kW/m2 STC irradiance
 5. `accepted_surplus_kwh`
 6. `mintFromSurplusAttestation`
 7. `SolarPunkCurrencySystem_invoice_settlement`
-8. `redemption_burn_into_owed_kwh_receipt`
+8. `redemption_burn_into_owed_kwh_claim`
 9. `delivery_resolution`
 
 ## Hard Boundaries

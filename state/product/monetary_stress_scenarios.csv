@@ -1,5 +1,5 @@
 id,label,issued_spk,active_after_redemption_spk,settlement_volume_spk,redeemed_spk,owed_kwh,delivered_kwh,shortfall_kwh,shortfall_liability_usd,fee_buffer_usd,additional_buffer_required_usd,status
-current_field_receipt_loop,Current local field receipt loop,130.1697,110.1697,82.996201,20,400,400,0,0,0.1503,0,passes_full_delivery
+current_field_receipt_loop,Current local SPK loop,130.1697,110.1697,82.996201,20,400,400,0,0,0.1503,0,passes_full_delivery
 pilot_csv_full_redemption,Pilot CSV full redemption,99.15075,0,99.15075,99.15075,1983.015,1983.015,0,0,0.198401,0,passes_full_delivery
 pilot_csv_75pct_redeem_5pct_shortfall,Pilot CSV redemption wave,99.15075,24.787688,297.45225,74.363062,1487.26125,1412.898187,74.363063,3.718153,0.173613,3.54454,pilot_requires_named_reserve
 single_rooftop_annual_100pct_redeem_15pct_shortfall,10 kW annual rooftop stress,501.404094,0,501.404094,501.404094,10028.08188,8523.869598,1504.212282,75.210614,1.00331,74.207304,unsafe_without_external_reserve

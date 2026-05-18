@@ -323,7 +323,7 @@ function buildEnergyStandardEconomics(options = {}) {
       },
       {
         gold_standard: "Convertibility promise",
-        energy_standard: "Redemption into owed-kWh receipt",
+        energy_standard: "Redemption into owed-kWh claim",
         implementation: "redeemForEnergy, burn accounting, fulfillment/shortfall/dispute states",
         remaining_risk: "legal redemption terms and real delivery counterparty",
       },
@@ -358,7 +358,7 @@ function buildEnergyStandardEconomics(options = {}) {
       {
         function: "Standard of deferred payment",
         status: "partial",
-        evidence: "Redemption receipts can record owed kWh with fulfillment, shortfall, and dispute states.",
+        evidence: "SPK redemption records can track owed kWh with fulfillment, shortfall, and dispute states.",
       },
       {
         function: "Reserve/backing transparency",
@@ -370,7 +370,7 @@ function buildEnergyStandardEconomics(options = {}) {
       {
         risk: "Basis risk",
         meaning: "A generic kWh estimate is not always deliverable where and when the holder needs energy.",
-        control: "Move toward time/location/source-tagged receipts.",
+        control: "Move toward time/location/source-tagged SPK claims.",
       },
       {
         risk: "Oracle and meter risk",
@@ -389,7 +389,7 @@ function buildEnergyStandardEconomics(options = {}) {
       },
       {
         risk: "Regulatory classification",
-        meaning: "SPK could be treated as prepaid energy credit, commodity receipt, stablecoin-like token, security, or another instrument.",
+        meaning: "SPK could be treated as a cryptocurrency, prepaid energy credit, commodity-linked token, stablecoin-like token, security, or another instrument.",
         control: "Legal scope before paid/mainnet launch.",
       },
     ],
@@ -401,7 +401,7 @@ function buildEnergyStandardEconomics(options = {}) {
       "The same-cost capex sensitivity is not a vendor quote, project-finance model, or expected return promise.",
     ],
     next_finance_build_targets: [
-      "Add time/location/vintage tags to SPK issuance and redemption receipts.",
+      "Add time/location/vintage tags to SPK issuance and redemption claims.",
       "Build a monetary stress harness for redemption waves, velocity spikes, oracle errors, and shortfalls.",
       "Define an explicit reserve/insurance fund policy tied to outstanding owed-kWh exposure.",
       "Write a legally cautious redemption policy for pilot operators.",

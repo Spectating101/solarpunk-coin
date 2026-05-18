@@ -445,7 +445,7 @@ function buildResourceBenchmarkLab(options = {}) {
       "accepted_surplus_kwh",
       "mintFromSurplusAttestation",
       "SolarPunkCurrencySystem_invoice_settlement",
-      "redemption_burn_into_owed_kwh_receipt",
+      "redemption_burn_into_owed_kwh_claim",
       "delivery_resolution",
     ],
     hard_boundaries: [

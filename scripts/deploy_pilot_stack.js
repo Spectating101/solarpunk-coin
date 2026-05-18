@@ -98,7 +98,7 @@ function toMarkdown(receipt) {
   lines.push("");
   lines.push("```bash");
   if (receipt.network === "hardhat") {
-    lines.push("# hardhat receipts prove the deploy script executes, but a separate hardhat run starts a fresh in-memory chain.");
+    lines.push("# hardhat outputs prove the deploy script executes, but a separate hardhat run starts a fresh in-memory chain.");
     lines.push("# Use readback against Sepolia or a persistent localhost node after deploying there.");
     lines.push("PILOT_STACK_RECEIPT=state/deployments/sepolia_pilot_stack.json PILOT_NETWORK=sepolia npm run pilot-stack:readback");
   } else {
@@ -301,9 +301,9 @@ async function main() {
     },
     transactions,
     boundaries: [
-      "This is a governed public-testnet or local pilot stack receipt, not a mainnet deployment.",
+      "This is a governed public-testnet or local pilot stack output, not a mainnet deployment.",
       "Real-value use remains blocked until audit, legal/commercial scope, production oracle policy, and redemption terms exist.",
-      "A pilot CSV receipt can feed this stack only after a matching signed meter bundle is accepted.",
+      "A pilot CSV proof can feed this stack only after a matching signed meter bundle is accepted.",
     ],
   };
 

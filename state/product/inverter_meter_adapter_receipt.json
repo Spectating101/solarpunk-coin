@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-18T09:53:40.453Z",
-  "title": "SolarPunk Inverter/Meter Adapter Receipt",
+  "generated_at": "2026-05-18T16:12:55.411Z",
+  "title": "SolarPunk Inverter/Meter Adapter Output",
   "purpose": "Normalize a meter or inverter interval into signed raw readings, then run the same attestation verifier used by SPK minting.",
   "source": {
     "provider": "sample-cumulative",
@@ -48,8 +48,8 @@
   },
   "raw_readings": {
     "schema": "SPK_RAW_METER_READINGS_V1",
-    "generated_at": "2026-05-18T09:53:40.453Z",
-    "batch_id": "inverter_adapter_sample_2026_02_14",
+    "generated_at": "2026-05-18T16:12:55.411Z",
+    "batch_id": "sample-cumulative_1779120775411",
     "min_quality_threshold": 0.9,
     "import_adapter": {
       "schema": "SPK_INVERTER_METER_ADAPTER_V1",
@@ -78,10 +78,10 @@
     ]
   },
   "attestation_bundle": {
-    "generated_at": "2026-05-18T09:53:40.462Z",
+    "generated_at": "2026-05-18T16:12:55.417Z",
     "source_schema": "SPK_RAW_METER_READINGS_V1",
     "registry_schema": "SPK_METER_REGISTRY_V1",
-    "batch_id": "inverter_adapter_sample_2026_02_14",
+    "batch_id": "sample-cumulative_1779120775411",
     "min_quality_threshold": 0.9,
     "summary": {
       "input_records": 1,

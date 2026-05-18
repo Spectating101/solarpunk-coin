@@ -40,7 +40,7 @@ function writeMarkdown(filePath, proof) {
   const lines = [];
   lines.push("# SPK Attested Mint Proof");
   lines.push("");
-  lines.push("This receipt proves the product-critical path: signed raw meter readings -> verified surplus bundle -> deterministic source hash -> oracle signature -> replay-protected SPK mint.");
+  lines.push("This proof shows the product-critical path: signed raw meter readings -> verified surplus bundle -> deterministic source hash -> oracle signature -> replay-protected SPK mint.");
   lines.push("");
   lines.push("## Run");
   lines.push("");

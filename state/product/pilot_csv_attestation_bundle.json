@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T16:24:44.673Z",
+  "generated_at": "2026-05-18T16:12:55.145Z",
   "source_schema": "SPK_RAW_METER_READINGS_V1",
   "registry_schema": "SPK_METER_REGISTRY_V1",
   "batch_id": "sample_meter_export",

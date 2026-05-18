@@ -1,4 +1,4 @@
-# Meter Onboarding Receipt
+# Meter Onboarding Output
 
 - generated_at: `2026-05-14T12:15:06.094Z`
 - registry_path: `state/attestations/pilot_meter_registry_demo.json`

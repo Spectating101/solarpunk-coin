@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-18T10:49:58.446Z`
+- generated_at: `2026-05-18T16:12:56.743Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,13 +9,13 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 14 | 0 |
-| Closed testnet pilot | `blocked` | 15 | 4 |
-| Paid/mainnet product | `blocked` | 15 | 9 |
+| SolarPunk Public Lab | `launchable` | 15 | 0 |
+| Closed testnet pilot | `blocked` | 16 | 4 |
+| Paid/mainnet product | `blocked` | 16 | 9 |
 
 ## Next Actions
 
-- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, hardware provenance model, and closed-pilot execution package.
+- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.
 - Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.
 - Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.
 - Use the monetary stress harness to size any named reserve before promising redemption.
@@ -33,14 +33,16 @@
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
-- PASS `Pilot CSV receipt exists`: Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.
+- PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
-- PASS `Inverter/meter adapter receipt exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
+- PASS `Inverter/meter adapter output exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
 - PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
   Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - PASS `Closed pilot execution package exists`: Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
+- PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
+  Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -64,14 +66,16 @@
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
-- PASS `Pilot CSV receipt exists`: Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.
+- PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
-- PASS `Inverter/meter adapter receipt exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
+- PASS `Inverter/meter adapter output exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
 - PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
   Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - PASS `Closed pilot execution package exists`: Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
+- PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
+  Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -109,14 +113,16 @@
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
-- PASS `Pilot CSV receipt exists`: Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.
+- PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
-- PASS `Inverter/meter adapter receipt exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
+- PASS `Inverter/meter adapter output exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
 - PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
   Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - PASS `Closed pilot execution package exists`: Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
+- PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
+  Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -149,5 +155,5 @@
   Evidence: `docs/product/LEGAL_AND_COMMERCIAL_SCOPE.md`
 - BLOCK `Production redemption policy complete`: No production redemption policy exists for what SPK holders can redeem, from whom, and under which caps.
   Evidence: `docs/product/REDEMPTION_POLICY.md`
-- BLOCK `Mainnet or L2 production deployment recorded`: No production deployment receipt exists.
+- BLOCK `Mainnet or L2 production deployment recorded`: No production deployment proof exists.
   Evidence: `state/deployments/production_spk_deploy.json`

@@ -14,17 +14,18 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 
 | Document | Purpose |
 |---|---|
-| [`EVIDENCE.md`](./EVIDENCE.md) | **Start here for external reviewers** — clickable receipts for every claim |
+| [`EVIDENCE.md`](./EVIDENCE.md) | **Start here for external reviewers** — clickable proof links for every claim |
 | [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) | Current public lab operating model and participation boundary |
 | [`docs/product/PUBLIC_LAB_SOCIAL_KIT.md`](./docs/product/PUBLIC_LAB_SOCIAL_KIT.md) | Public announcement copy, social guardrails, and validation metrics |
 | [`docs/product/PRODUCT_LAUNCH_GATE.md`](./docs/product/PRODUCT_LAUNCH_GATE.md) | Launch gate: public lab/testnet launchable; paid/mainnet blocked |
-| [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: public proof, local field receipt, redemption framework, settlement framework |
+| [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: public proof, local SPK loop, redemption framework, settlement framework |
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
-| [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
-| [`docs/product/INVERTER_METER_ADAPTER.md`](./docs/product/INVERTER_METER_ADAPTER.md) | Inverter/meter adapter receipt: cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle |
+| [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end SPK loop: signed meter surplus -> mint -> settlement -> redemption -> delivery |
+| [`docs/product/INVERTER_METER_ADAPTER.md`](./docs/product/INVERTER_METER_ADAPTER.md) | Inverter/meter adapter output: cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle |
 | [`docs/product/HARDWARE_PROVENANCE_MODEL.md`](./docs/product/HARDWARE_PROVENANCE_MODEL.md) | Hardware assurance tiers: evidence score, risk haircut, issuance cap, and upgrade checklist for real meter/inverter data |
 | [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](./docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md) | Closed-pilot execution package: operator intake, action queue, commands, caps, and acceptance criteria |
-| [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV receipt: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
+| [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV proof: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
+| [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](./docs/product/PUBLIC_SOLAR_DATA_REPLAY.md) | Public historical solar replay: Ausgrid rooftop data -> normalized surplus -> SPK mint preview |
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
 | [`docs/product/ENERGY_MONEY_SIMULATION.md`](./docs/product/ENERGY_MONEY_SIMULATION.md) | Energy-standard monetary simulation: measured resource signal -> SPK issuance -> settlement -> redemption risk |
 | [`docs/product/SPK_FINANCE_DOSSIER.md`](./docs/product/SPK_FINANCE_DOSSIER.md) | Finance dossier: income statement, balance-sheet liability, break-even fee base, reserve coverage, and closed-pilot finance stack |
@@ -36,13 +37,13 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/RESOURCE_BENCHMARK_LAB.md`](./docs/product/RESOURCE_BENCHMARK_LAB.md) | Multi-resource benchmark: NASA solar/wind, standard PV conversion, install cost, geothermal/tidal/hydro/biomass benchmarks, oil comparison |
 | [`docs/product/ENERGY_STANDARD_ECONOMICS.md`](./docs/product/ENERGY_STANDARD_ECONOMICS.md) | Economic/finance spine: gold-standard mapping, issuance equations, kWh/SPK convertibility, scale scenarios, velocity, and risk register |
 | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](./docs/product/SPK_PRODUCT_EMPIRICS.md) | Single-product SPK proof and empirical dossier |
-| [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint receipt |
+| [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](./docs/product/SPK_ATTESTED_MINT_PROOF.md) | Reproducible meter-bundle -> oracle-signature -> SPK mint proof |
 | [`docs/product/SPK_PUBLIC_READBACK.md`](./docs/product/SPK_PUBLIC_READBACK.md) | Read-only Sepolia verification of consumed attestation/source hashes |
-| [`docs/project/ATTESTED_SPK_DEPLOYMENT.md`](./docs/project/ATTESTED_SPK_DEPLOYMENT.md) | Public Sepolia proof-stack deployment receipt |
-| [`docs/project/PILOT_STACK_DEPLOYMENT.md`](./docs/project/PILOT_STACK_DEPLOYMENT.md) | Local governed-pilot-stack deployment receipt and Sepolia deployment command |
+| [`docs/project/ATTESTED_SPK_DEPLOYMENT.md`](./docs/project/ATTESTED_SPK_DEPLOYMENT.md) | Public Sepolia proof-stack deployment output |
+| [`docs/project/PILOT_STACK_DEPLOYMENT.md`](./docs/project/PILOT_STACK_DEPLOYMENT.md) | Local governed-pilot-stack deployment output and Sepolia deployment command |
 | [`docs/specs/METER_ATTESTATION_SPEC.md`](./docs/specs/METER_ATTESTATION_SPEC.md) | Signed meter-reading validation spec |
 | [`docs/project/METER_CSV_IMPORT.md`](./docs/project/METER_CSV_IMPORT.md) | Pilot-facing CSV import path for meter/inverter exports |
-| [`docs/project/METER_CSV_ATTESTATION_BUNDLE.md`](./docs/project/METER_CSV_ATTESTATION_BUNDLE.md) | CSV-imported meter bundle receipt |
+| [`docs/project/METER_CSV_ATTESTATION_BUNDLE.md`](./docs/project/METER_CSV_ATTESTATION_BUNDLE.md) | CSV-imported meter bundle proof |
 | [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) | Full context: architecture, design decisions, operations, prospects |
 | [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | One-page stage snapshot |
 | [`docs/project/REPO_STRUCTURE.md`](./docs/project/REPO_STRUCTURE.md) | What each repo area is, and what is safe/unsafe to clean |
@@ -107,15 +108,19 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - On-chain integer mint: `2606` kWh
   - Mint result: `130.1697` SPK at `$0.05/kWh` after 10 bps mint fee
   - Public readback: `docs/product/SPK_PUBLIC_READBACK.md` confirms tx success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus
-  - Receipt: `docs/product/SPK_ATTESTED_MINT_PROOF.md`
+  - Proof: `docs/product/SPK_ATTESTED_MINT_PROOF.md`
 - **Pilot meter CSV bridge** — see `docs/project/METER_CSV_IMPORT.md`
-  - Meter onboarding command writes a registry receipt without storing private keys
+  - Meter onboarding command writes registry output without storing private keys
   - CSV import signs meter/inverter rows and feeds the same verifier as the public SPK proof
   - Sample CSV-derived bundle: `2` accepted, `0` rejected, `1,985.5` kWh surplus
 - **Inverter/meter adapter bridge** — see `docs/product/INVERTER_METER_ADAPTER.md`
   - Cumulative inverter/meter snapshots normalize into `SPK_RAW_METER_READINGS_V1`
-  - Sample adapter receipt: `1` accepted signed interval, `996.2` kWh accepted surplus
+  - Sample adapter output: `1` accepted signed interval, `996.2` kWh accepted surplus
   - Fronius PowerFlow mode can poll a LAN inverter with `--host`, while production minting should prefer cumulative counters and hardware/gateway key custody
+- **Public solar data replay** — see `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
+  - Public historical Ausgrid rooftop-solar data replays through the same verifier shape
+  - Current sample: `3` historical days, export surplus normalized into an SPK mint preview
+  - Explicit boundary: this proves model behavior on real-world public solar profiles, not live hardware provenance
 - **Hardware provenance model** — see `docs/product/HARDWARE_PROVENANCE_MODEL.md`
   - Current adapter sample is `L0`: acceptable for public lab, `0` kWh real-value cap
   - Closed pilot requires `L2` or better: named operator, live inverter/gateway counters, signed intervals, and archived raw source files
@@ -124,7 +129,7 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Public lab is `ready_now`; operator shadow pilot is `ready_when_operator_file_arrives`
   - External inputs are mapped to owners, commands, and acceptance criteria instead of left as vague blockers
   - Current economics target for the 10 kW path is about `$0.3298/kWh` or `$2,875.48/year` equivalent support
-- **Pilot CSV receipt** — see `docs/product/PILOT_CSV_RECEIPT.md`
+- **Pilot CSV proof** — see `docs/product/PILOT_CSV_RECEIPT.md`
   - Sample CSV -> `2` accepted rows -> `1,985.5` kWh surplus -> deterministic source hash
   - Mint preview: `99.15075 SPK` at `$0.05/kWh` after 10 bps mint fee
   - Explicit boundary: no private key written, unsigned mode cannot mint, no hardware-finality claim
@@ -188,6 +193,7 @@ npm run product:field-receipt
 npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv
+npm run product:public-solar-replay
 npm run product:monetary-stress
 npm run product:energy-money-sim
 npm run product:empirical-backtest

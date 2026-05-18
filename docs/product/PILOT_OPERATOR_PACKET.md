@@ -4,7 +4,7 @@
 
 This packet is for one renewable-energy operator, homeowner, researcher, or integrator who can share a meter or inverter export.
 
-The goal is narrow: convert one CSV export into a public lab receipt that shows accepted readings, rejected readings, surplus kWh, source hash, and SPK mint preview. It is not a paid pilot, token sale, or legal redemption offer.
+The goal is narrow: convert one CSV export into public lab proof that shows accepted readings, rejected readings, surplus kWh, source hash, and SPK mint preview. It is not a paid pilot, token sale, or legal redemption offer.
 
 ## What To Send
 
@@ -35,7 +35,7 @@ Running the pilot path produces:
 - `state/product/pilot_csv_raw_readings.json` — canonical raw readings generated from the CSV.
 - `state/product/pilot_csv_attestation_bundle.json` — accepted/rejected verifier result.
 - `state/product/pilot_csv_receipt.json` — reviewer-facing summary with mint preview.
-- `docs/product/PILOT_CSV_RECEIPT.md` — human-readable receipt.
+- `docs/product/PILOT_CSV_RECEIPT.md` — human-readable proof.
 
 The current sample run accepts `2` rows, records `1,985.5 kWh` surplus, floors on-chain surplus to `1,985 kWh`, and previews `99.15075 SPK` at the `$0.05/kWh` basis after 10 bps mint fee.
 

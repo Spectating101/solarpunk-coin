@@ -1,6 +1,6 @@
 # SolarPunk Currency System Lab
 
-- generated_at: `2026-05-16T07:00:44.115Z`
+- generated_at: `2026-05-18T16:12:55.547Z`
 - thesis: Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.
 
 ## Source Evidence
@@ -9,7 +9,7 @@
 |---|---:|
 | SPK contract | `0x8ceDa149EDE44078bf151b3334513916a84df820` |
 | Currency framework contract | `contracts/SolarPunkCurrencySystem.sol` |
-| Field receipt loop | `docs/product/FIELD_RECEIPT_LOOP.md` |
+| Local SPK loop | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Mint tx | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` |
 | Accepted surplus | `2606.7` kWh |
 | Minted SPK | `130.1697` |
@@ -22,8 +22,8 @@
 | Layer | Name | Status | Claim | Upgrade blocker |
 |---:|---|---|---|---|
 | 1 | Public lab primitive | `real_public_testnet` | Signed meter fixture data has produced a replay-protected SPK mint on Sepolia with public readback. | none |
-| 2 | Local field receipt loop | `local_field_receipt_loop` | The accepted meter bundle now runs through a local end-to-end loop: SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution. | Replace fixture meter data with one real meter or inverter export. |
-| 3 | Redeemable energy receipt framework | `local_contract_tested` | SPK can be transferred into SolarPunkCurrencySystem, burned through redeemForEnergy, and recorded as an owed-kWh receipt with fulfillment/shortfall/dispute states. | Deploy beside the attested SPK proof stack and bind to one real redemption operator. |
+| 2 | Local SPK settlement loop | `local_spk_settlement_loop` | The accepted meter bundle now runs through a local end-to-end loop: SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution. | Replace fixture meter data with one real meter or inverter export. |
+| 3 | Redeemable SPK framework | `local_contract_tested` | SPK can be transferred into SolarPunkCurrencySystem, burned through redeemForEnergy, and recorded as an owed-kWh claim with fulfillment/shortfall/dispute states. | Deploy beside the attested SPK proof stack and bind to one real redemption operator. |
 | 4 | Networked settlement framework | `local_contract_tested` | SPK invoice settlement is implemented as a replay-protected payment router while the lab ledger models multi-party circulation and conservation. | Deploy and run one real invoice/counterparty settlement. |
 
 ## Settlement Ledger
@@ -54,7 +54,7 @@
 ## Claim Boundaries
 
 - Layer 1 is public Sepolia evidence.
-- Layer 2 is a deterministic local field-receipt loop, not a real external pilot.
+- Layer 2 is a deterministic local SPK loop, not a real external pilot.
 - Layers 3-4 now have local contract/test coverage, but no public deployment or real commercial adoption.
 - No token sale, mainnet readiness, yield, audit completion, or legal redemption claim is made.
-- The purpose is to move from local field receipt coherence to a real meter export loop.
+- The purpose is to move from local SPK coherence to a real meter export loop.

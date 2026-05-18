@@ -19,11 +19,12 @@ The lab exists to answer one question:
 | Read-only on-chain readback | 7/7 checks passing | `docs/product/SPK_PUBLIC_READBACK.md` |
 | Daily data experiment | NASA POWER -> Sepolia keeper | `docs/project/DAILY_EXPERIMENT_STATUS.md` |
 | Meter CSV import | Pilot-style adapter path | `docs/project/METER_CSV_IMPORT.md` |
-| Pilot CSV receipt | CSV export -> accepted bundle -> source hash -> mint preview | `docs/product/PILOT_CSV_RECEIPT.md` |
+| Pilot CSV proof | CSV export -> accepted bundle -> source hash -> mint preview | `docs/product/PILOT_CSV_RECEIPT.md` |
+| Public solar data replay | Ausgrid historical rooftop-solar data -> normalized export surplus -> SPK mint preview | `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` |
 | Product launch gate | Explicit launch status | `docs/product/PRODUCT_LAUNCH_GATE.md` |
 | Currency system lab | Four-layer compressed currency prototype | `docs/product/CURRENCY_SYSTEM_LAB.md` |
 | Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
-| Field receipt loop | Local mint -> settlement -> redemption -> delivery receipt | `docs/product/FIELD_RECEIPT_LOOP.md` |
+| Local SPK loop | Local mint -> settlement -> redemption -> delivery accounting | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Monetary stress harness | Redemption-wave, shortfall, and reserve-gap table | `docs/product/MONETARY_STRESS_HARNESS.md` |
 | Energy-money simulation | Measured resource signal -> SPK issuance -> settlement -> redemption-risk model | `docs/product/ENERGY_MONEY_SIMULATION.md` |
 | SPK finance dossier | Income statement, balance-sheet liability, fee break-even gap, reserve coverage, and pilot finance stack | `docs/product/SPK_FINANCE_DOSSIER.md` |
@@ -34,14 +35,14 @@ The lab exists to answer one question:
 | Multi-resource benchmark | NASA solar/wind data, PV conversion/cost model, renewable benchmark matrix, oil-only comparison | `docs/product/RESOURCE_BENCHMARK_LAB.md` |
 | Energy-standard economics | Gold-standard mapping, issuance equations, kWh/SPK convertibility, scenarios, velocity, and finance risks | `docs/product/ENERGY_STANDARD_ECONOMICS.md` |
 | Social validation kit | Ready-to-post public lab copy and guardrails | `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` |
-| Evidence register | Reviewer receipts | `EVIDENCE.md` |
+| Evidence register | Reviewer proof links | `EVIDENCE.md` |
 
 ## What A Lab Participant Can Do
 
 1. Inspect the frontend demo and source-verified Sepolia contracts.
 2. Re-run the local meter-bundle to SPK mint proof.
 3. Import a sample meter/inverter CSV and derive an attestation bundle.
-4. Re-run the pilot CSV receipt and monetary stress harness.
+4. Re-run the pilot CSV proof and monetary stress harness.
 5. Review the daily NASA keeper logs and transaction hashes.
 6. Open a GitHub issue using the public lab pilot template if they have a real meter export, inverter export, research collaboration, or integration question.
 
@@ -86,6 +87,7 @@ npm run product:field-receipt
 npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv
+npm run product:public-solar-replay
 npm run product:monetary-stress
 npm run product:energy-money-sim
 npm run product:empirical-backtest
@@ -105,7 +107,7 @@ Then keep the public lab honest:
 
 ## Social Validation Loop
 
-Use social channels to create public receipts, not hype.
+Use social channels to create public proof links, not hype.
 
 1. Publish the public lab announcement from `docs/product/PUBLIC_LAB_SOCIAL_KIT.md`.
 2. Ask for one of three concrete responses: inspect the proof, open an issue, or share a meter/inverter export format.
@@ -123,9 +125,9 @@ It is:
 1. Governed attested-SPK redeploy on Sepolia using the pilot-stack deploy/readback scripts.
 2. One real meter or inverter CSV/API adapter.
 3. Signed tariff/PPA/support economics that clear the economic launch-readiness thresholds.
-4. Public lab receipt showing that real export flowing through the same attestation pipeline.
+4. Public lab proof showing that real export flowing through the same attestation pipeline.
 5. Resource benchmark loop extended from NASA/PV/wind estimates to actual generator exports.
 6. Named shortfall/reserve policy using the monetary stress harness as the sizing table.
-7. Replacement of the currency-system lab's simulated layers with real pilot receipts.
+7. Replacement of the currency-system lab's simulated layers with real pilot evidence.
 
 That converts the lab from "public proof" to "closed pilot candidate."

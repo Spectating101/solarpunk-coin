@@ -12,7 +12,7 @@ const DEFAULT_CONFIG = {
   scenarioConfigs: [
     {
       id: "current_field_receipt_loop",
-      label: "Current local field receipt loop",
+      label: "Current local SPK loop",
       source: "state/product/field_receipt_loop.json",
       supplySource: "field_receipt",
       velocity: 0.6376,
@@ -291,7 +291,7 @@ function buildMonetaryStressHarness(options = {}) {
       "Cap real redemptions to deliverable metered generation or contracted energy volume.",
       "Maintain a named insurance/reserve buffer sized to the stress table, not just protocol fee assumptions.",
       "Separate CSV import evidence from hardware-certified meter finality until device custody is independently proven.",
-      "Publish every pilot receipt with source hash, accepted records, rejected records, mint preview, and delivery resolution.",
+      "Publish every pilot proof with source hash, accepted records, rejected records, mint preview, and delivery resolution.",
       "Keep mainnet or paid use blocked until audit, legal redemption terms, and dispute/shortfall procedures exist.",
     ],
     hard_boundaries: [

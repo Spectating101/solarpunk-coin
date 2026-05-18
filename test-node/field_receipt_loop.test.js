@@ -9,7 +9,7 @@ function readJson(relativePath) {
   return JSON.parse(fs.readFileSync(path.join(ROOT, relativePath), "utf-8"));
 }
 
-test("field receipt loop is fully local and dependency-free", () => {
+test("local SPK loop is fully local and dependency-free", () => {
   const receipt = readJson("state/product/field_receipt_loop.json");
 
   assert.equal(receipt.execution_scope, "local_deterministic_no_external_dependencies");
@@ -19,7 +19,7 @@ test("field receipt loop is fully local and dependency-free", () => {
   assert.equal(receipt.dependencies.real_counterparty_required, false);
 });
 
-test("field receipt loop preserves SPK and kWh accounting", () => {
+test("local SPK loop preserves SPK and kWh accounting", () => {
   const receipt = readJson("state/product/field_receipt_loop.json");
 
   assert.equal(receipt.source.accepted_records, 2);
@@ -35,7 +35,7 @@ test("field receipt loop preserves SPK and kWh accounting", () => {
   assert.equal(receipt.accounting.delivery_fulfilled, true);
 });
 
-test("field receipt loop includes the complete currency mechanism path", () => {
+test("local SPK loop includes the complete currency mechanism path", () => {
   const receipt = readJson("state/product/field_receipt_loop.json");
   const stepNames = receipt.flow.map((step) => step.name);
 

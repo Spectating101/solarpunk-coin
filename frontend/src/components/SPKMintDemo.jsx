@@ -234,7 +234,7 @@ export default function SPKMintDemo() {
         <div className="panel">
           <div className="panel-heading compact">
             <div>
-              <div className="panel-kicker"><ShieldCheck size={14} /> Reviewer Receipts</div>
+              <div className="panel-kicker"><ShieldCheck size={14} /> Reviewer Proof</div>
               <h2>Proof artifacts</h2>
             </div>
           </div>

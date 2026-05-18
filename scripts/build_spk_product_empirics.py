@@ -278,7 +278,7 @@ def write_markdown(payload: Dict[str, Any]) -> None:
     "",
     "## Product Interpretation",
     "",
-    "The repo now supports one coherent story: SPK is a programmable receipt for verified surplus renewable energy, with monetary logic, oracle controls, reserve controls, and empirical energy-pricing research around that one minting claim.",
+    "The repo now supports one coherent story: SPK is a crypto coin minted from verified surplus renewable energy, with monetary logic, oracle controls, reserve controls, and empirical energy-pricing research around that one minting claim.",
     "",
     "The revenue-floor and option code remain useful, but they are supporting modules: they stress-test, hedge, and commercialize the same energy-price basis. They are no longer the primary product claim.",
     "",

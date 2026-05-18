@@ -15,7 +15,7 @@ function readJson(relativePath) {
   return JSON.parse(fs.readFileSync(path.join(ROOT, relativePath), "utf-8"));
 }
 
-test("pilot CSV receipt converts signed CSV rows into mint preview", async () => {
+test("pilot CSV proof converts signed CSV rows into mint preview", async () => {
   const receipt = await buildPilotCsvReceipt({
     now: "2026-05-16T00:00:00Z",
     generatedAt: new Date("2026-05-16T00:00:00Z"),
@@ -28,7 +28,7 @@ test("pilot CSV receipt converts signed CSV rows into mint preview", async () =>
   assert.equal(receipt.attestation_bundle.summary.total_surplus_kwh, 1985.5);
   assert.equal(receipt.mint_preview.onchain_surplus_kwh, 1985);
   assert.equal(receipt.mint_preview.net_spk, 99.15075);
-  assert.equal(receipt.mint_preview.can_mint_from_receipt, true);
+  assert.equal(receipt.mint_preview.can_mint_spk_from_bundle, true);
   assert.equal(receipt.input.private_key_written_to_repo, false);
 });
 
@@ -41,7 +41,7 @@ test("pilot CSV unsigned mode remains review-only and cannot mint", async () => 
 
   assert.equal(receipt.execution_mode, "unsigned_review");
   assert.equal(receipt.attestation_bundle.summary.accepted_records, 0);
-  assert.equal(receipt.mint_preview.can_mint_from_receipt, false);
+  assert.equal(receipt.mint_preview.can_mint_spk_from_bundle, false);
   assert.deepEqual(
     receipt.attestation_bundle.rejected_attestations.map((item) => item.reason),
     ["invalid meter signature", "invalid meter signature"]
@@ -59,7 +59,7 @@ test("pilot CSV unsigned flag wins even if a private key is present", async () =
   assert.equal(receipt.execution_mode, "unsigned_review");
   assert.equal(receipt.input.unsigned, true);
   assert.equal(receipt.attestation_bundle.summary.accepted_records, 0);
-  assert.equal(receipt.mint_preview.can_mint_from_receipt, false);
+  assert.equal(receipt.mint_preview.can_mint_spk_from_bundle, false);
 });
 
 test("mint preview floors fractional kWh before SPK issuance math", async () => {
@@ -84,6 +84,6 @@ test("generated pilot CSV artifact keeps private-key and hardware boundaries exp
   const receipt = readJson("state/product/pilot_csv_receipt.json");
 
   assert.equal(receipt.input.private_key_written_to_repo, false);
-  assert.ok(receipt.hard_boundaries.includes("This receipt does not certify hardware finality."));
+  assert.ok(receipt.hard_boundaries.includes("This proof does not certify hardware finality."));
   assert.ok(receipt.hard_boundaries.includes("No private key is written to repo outputs."));
 });

@@ -1,7 +1,7 @@
 # SolarPunk Protocol — Evidence Register
 
 **Last updated:** 2026-05-18
-**Purpose:** Flat, clickable receipts for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
+**Purpose:** Flat, clickable proof links for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
 
 This document answers: **"Is there actual evidence, or just descriptions of evidence?"**
 
@@ -144,7 +144,7 @@ This is the first practical bridge from a meter/inverter export into the same si
 | Imported signed readings | 2 rows | `data/attestations/raw_meter_readings_from_csv.json` |
 | CSV-derived accepted records | 2 accepted, 0 rejected | `docs/project/METER_CSV_ATTESTATION_BUNDLE.md` |
 | CSV-derived surplus | 1,985.5 kWh | Same file |
-| Onboarding demo receipt | Generated | `docs/project/METER_ONBOARDING_RECEIPT.md` |
+| Onboarding demo output | Generated | `docs/project/METER_ONBOARDING_RECEIPT.md` |
 | Adapter tests | 11 additional Node tests | `test-node/meter_csv_import.test.js`, `test-node/meter_onboarding.test.js`, `test-node/inverter_meter_adapter.test.js` |
 
 Scope note: this is not hardware certification. It is the pilot-ingestion bridge needed before connecting a real meter gateway or inverter API.
@@ -167,7 +167,23 @@ This adds the first direct hardware-facing adapter path. It can normalize cumula
 
 Scope note: sample mode proves the integration path only. A closed pilot still needs a real operator meter or inverter source, hardware/gateway key custody, tamper-evident logs, and sign-convention validation.
 
-### 2.6c Hardware Provenance Model
+### 2.6c Public Solar Data Replay
+
+This uses public historical rooftop-solar data to test SPK mint math against real-world solar profiles without claiming live hardware provenance.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Replay generator | Available | `scripts/public_solar_data_replay.js` |
+| Source dataset | Ausgrid Solar home electricity data | `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` |
+| Sample historical days | 3 | Same file |
+| Accepted verifier records | Generated | `state/product/public_solar_data_attestation_bundle.json` |
+| Mint preview | Generated | `state/product/public_solar_data_replay.json` |
+| Daily replay CSV | Generated | `state/product/public_solar_data_replay_daily.csv` |
+| Tests | 4 Node tests | `test-node/public_solar_data_replay.test.js` |
+
+Scope note: this is public historical data re-signed by the lab for replay through the existing verifier. It is useful economic/model evidence, not live meter proof.
+
+### 2.6d Hardware Provenance Model
 
 This converts the physical hardware gap into an explicit risk model instead of a vague blocker. The model ranks meter/inverter evidence from L0 sample data through L4 utility-corroborated data, then applies risk haircuts and kWh/day caps to the current adapter surplus basis.
 
@@ -185,7 +201,7 @@ This converts the physical hardware gap into an explicit risk model instead of a
 
 Scope note: this model does not certify hardware. It makes the certification gap measurable and gives a concrete upgrade path.
 
-### 2.6d Closed Pilot Execution Package
+### 2.6e Closed Pilot Execution Package
 
 This turns the remaining path from public lab to closed pilot into an operator intake checklist, action queue, command set, acceptance criteria, and owner map.
 
@@ -204,15 +220,15 @@ Scope note: this does not make the closed pilot launchable by itself. It removes
 
 ### 2.7 SPK Currency Framework Contract
 
-This is the first internal currency-framework layer around SPK. It does not mint SPK; it uses SPK as the settlement asset.
+This is the first internal currency-framework layer around SPK. It does not mint SPK; it uses SPK as the cryptocurrency moving through settlement.
 
 | Claim | Value | Artifact |
 |---|---|---|
 | Invoice settlement | Implemented with hashed invoice replay protection | `contracts/SolarPunkCurrencySystem.sol` |
-| Energy redemption receipt | Implemented: transfer SPK into registry, burn via `redeemForEnergy`, record owed kWh | Same file |
+| Energy claim tracking | Implemented: transfer SPK into registry, burn via `redeemForEnergy`, record owed kWh | Same file |
 | Delivery resolution | Pending, fulfilled, shortfall, disputed states | Same file |
 | Contract tests | 6 additional Hardhat tests | `test/SolarPunkCurrencySystem.test.js` |
-| Local field receipt loop | 130.1697 SPK minted, 75 SPK settled, 20 SPK redeemed, 400 kWh delivered | `docs/product/FIELD_RECEIPT_LOOP.md` |
+| Local SPK settlement loop | 130.1697 SPK minted, 75 SPK settled, 20 SPK redeemed, 400 kWh delivered | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Internal readiness report | 8/8 checks pass | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 | Theory/comparables anchor | Positions SPK against RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, and FSB stablecoin controls | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
 
@@ -250,13 +266,13 @@ This is the raw economic/finance spine of the system: the gold-standard analogy,
 
 Scope note: this is not a claim of legal money status, investment return, or production redemption. It is a testable monetary model over the existing proof stack.
 
-### 2.10 Pilot CSV Receipt
+### 2.10 Pilot CSV Proof
 
 This turns a practical meter/inverter CSV export into the same evidence shape reviewers need: accepted rows, rejected rows, surplus kWh, source hash, and mint preview.
 
 | Claim | Value | Artifact |
 |---|---|---|
-| Receipt generator | Available | `scripts/pilot_csv_receipt.js` |
+| Proof generator | Available | `scripts/pilot_csv_receipt.js` |
 | Sample CSV rows | 2 | `data/attestations/sample_meter_export.csv` |
 | Accepted rows | 2 accepted, 0 rejected | `docs/product/PILOT_CSV_RECEIPT.md` |
 | Accepted surplus | 1,985.5 kWh | Same file |
@@ -265,7 +281,7 @@ This turns a practical meter/inverter CSV export into the same evidence shape re
 | Private-key boundary | No private key written to repo outputs | `state/product/pilot_csv_receipt.json` |
 | Tests | 4 Node tests | `test-node/pilot_csv_receipt.test.js` |
 
-Scope note: this is an operator-style ingestion receipt, not certified hardware finality or an on-chain mint.
+Scope note: this is operator-style ingestion evidence, not certified hardware finality or an on-chain mint.
 
 ### 2.11 Monetary Stress Harness
 
@@ -368,11 +384,11 @@ This is the deploy/readback path for moving from proof-scoped SPK to a governed 
 |---|---|---|
 | Deployment script | Available | `scripts/deploy_pilot_stack.js` |
 | Readback script | Available | `scripts/read_pilot_stack.js` |
-| Local deploy receipt | Generated on Hardhat | `docs/project/PILOT_STACK_DEPLOYMENT.md` |
+| Local deploy output | Generated on Hardhat | `docs/project/PILOT_STACK_DEPLOYMENT.md` |
 | Stack contracts | MockUSDC, ProtocolTreasury, SolarPunkCoin, SolarPunkCurrencySystem | Same file |
 | Test coverage | Markdown/readback helper tests | `test-node/pilot_stack_scripts.test.js` |
 
-Scope note: the local Hardhat receipt proves the deploy script executes. Persistent readback is for Sepolia or a long-running local node.
+Scope note: the local Hardhat output proves the deploy script executes. Persistent readback is for Sepolia or a long-running local node.
 
 ### 2.17 Test Suite (Reproducible, Run by Anyone)
 

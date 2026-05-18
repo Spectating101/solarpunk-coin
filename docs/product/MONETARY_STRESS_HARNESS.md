@@ -1,6 +1,6 @@
 # SolarPunk Monetary Stress Harness
 
-- generated_at: `2026-05-16T16:24:49.413Z`
+- generated_at: `2026-05-18T16:12:55.831Z`
 - thesis: SPK is not abstract money printing: every issued unit creates an energy-denominated redemption claim, so stress testing must expose redemption waves, physical delivery shortfalls, and the reserve buffer required to clear them.
 
 ## Base Monetary State
@@ -26,7 +26,7 @@
 
 | Scenario | Issued SPK | Redeemed SPK | Owed kWh | Delivered kWh | Shortfall kWh | Shortfall liability | Additional buffer needed | Status |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
-| Current local field receipt loop | 130.1697 | 20 | 400 | 400 | 0 | $0 | $0 | `passes_full_delivery` |
+| Current local SPK loop | 130.1697 | 20 | 400 | 400 | 0 | $0 | $0 | `passes_full_delivery` |
 | Pilot CSV full redemption | 99.1508 | 99.1508 | 1,983.02 | 1,983.02 | 0 | $0 | $0 | `passes_full_delivery` |
 | Pilot CSV redemption wave | 99.1508 | 74.3631 | 1,487.26 | 1,412.9 | 74.36 | $3.72 | $3.54 | `pilot_requires_named_reserve` |
 | 10 kW annual rooftop stress | 501.4041 | 501.4041 | 10,028.08 | 8,523.87 | 1,504.21 | $75.21 | $74.21 | `unsafe_without_external_reserve` |
@@ -47,7 +47,7 @@
 - Cap real redemptions to deliverable metered generation or contracted energy volume.
 - Maintain a named insurance/reserve buffer sized to the stress table, not just protocol fee assumptions.
 - Separate CSV import evidence from hardware-certified meter finality until device custody is independently proven.
-- Publish every pilot receipt with source hash, accepted records, rejected records, mint preview, and delivery resolution.
+- Publish every pilot proof with source hash, accepted records, rejected records, mint preview, and delivery resolution.
 - Keep mainnet or paid use blocked until audit, legal redemption terms, and dispute/shortfall procedures exist.
 
 ## Hard Boundaries

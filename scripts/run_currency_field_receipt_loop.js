@@ -121,9 +121,9 @@ async function deployStack(deployer, minter, oracle, admin) {
 
 function writeMarkdown(filePath, receipt) {
   const lines = [];
-  lines.push("# SolarPunk Field Receipt Loop");
+  lines.push("# SolarPunk Local SPK Loop");
   lines.push("");
-  lines.push("This is the first internal end-to-end currency receipt loop. It intentionally uses only local repo assets and a local Hardhat chain: no external API, no public network, no grant approval, and no real counterparty dependency.");
+  lines.push("This is the first internal end-to-end SPK currency loop. It intentionally uses only local repo assets and a local Hardhat chain: no external API, no public network, no grant approval, and no real counterparty dependency.");
   lines.push("");
   lines.push("## Run");
   lines.push("");
@@ -271,7 +271,7 @@ async function main() {
 
   const receipt = {
     generated_at: new Date().toISOString(),
-    title: "SolarPunk Field Receipt Loop",
+    title: "SolarPunk Local SPK Loop",
     execution_scope: "local_deterministic_no_external_dependencies",
     network: hre.network.name,
     chain_id: Number(chain.chainId),
@@ -331,7 +331,7 @@ async function main() {
       },
       {
         name: "redemption_opened",
-        result: `${formatUnits(redemptionAmount)} SPK burned into ${formatUnits(owedKwhWad, 4)} owed kWh receipt`,
+        result: `${formatUnits(redemptionAmount)} SPK burned into ${formatUnits(owedKwhWad, 4)} owed kWh claim`,
         tx_hash: redemptionReceipt.hash,
         source_hash: redemptionSourceHash,
       },
@@ -361,9 +361,9 @@ async function main() {
       energy_buyer: formatUnits(buyerBalance),
     },
     claim_boundaries: [
-      "This is a deterministic local field-receipt experiment, not public network evidence.",
+      "This is a deterministic local SPK experiment, not public network evidence.",
       "It relies only on repo fixtures, local Hardhat contracts, and local signers.",
-      "It proves the internal clearing loop from signed meter surplus to SPK mint, invoice settlement, redemption burn, owed-kWh receipt, and delivery resolution.",
+      "It proves the internal clearing loop from signed meter surplus to SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution.",
       "It does not prove hardware certification, legal redemption enforceability, real customer demand, audit completion, or mainnet readiness.",
     ],
   };

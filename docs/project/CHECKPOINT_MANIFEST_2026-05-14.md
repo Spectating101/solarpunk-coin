@@ -46,13 +46,13 @@ Reason: these are the executable proof path and pilot-ingestion bridge.
 - `state/proofs/sepolia_spk_public_readback.json`
 - `state/proofs/spk_product_empirics.json`
 
-Reason: these are reviewer receipts for the public Sepolia proof and meter-bundle pipeline.
+Reason: these are reviewer proof files for the public Sepolia proof and meter-bundle pipeline.
 
 Optional:
 
 - `state/proofs/hardhat_spk_attested_mint_proof.json`
 
-Reason: useful as a local reproducibility receipt, but not required for external reviewers because the Sepolia proof is stronger.
+Reason: useful as a local reproducibility proof, but not required for external reviewers because the Sepolia proof is stronger.
 
 ### Product / Reviewer Documentation
 
