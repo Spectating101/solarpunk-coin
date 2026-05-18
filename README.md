@@ -22,6 +22,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
 | [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
 | [`docs/product/INVERTER_METER_ADAPTER.md`](./docs/product/INVERTER_METER_ADAPTER.md) | Inverter/meter adapter receipt: cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle |
+| [`docs/product/HARDWARE_PROVENANCE_MODEL.md`](./docs/product/HARDWARE_PROVENANCE_MODEL.md) | Hardware assurance tiers: evidence score, risk haircut, issuance cap, and upgrade checklist for real meter/inverter data |
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV receipt: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
 | [`docs/product/ENERGY_MONEY_SIMULATION.md`](./docs/product/ENERGY_MONEY_SIMULATION.md) | Energy-standard monetary simulation: measured resource signal -> SPK issuance -> settlement -> redemption risk |
@@ -114,6 +115,10 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Cumulative inverter/meter snapshots normalize into `SPK_RAW_METER_READINGS_V1`
   - Sample adapter receipt: `1` accepted signed interval, `996.2` kWh accepted surplus
   - Fronius PowerFlow mode can poll a LAN inverter with `--host`, while production minting should prefer cumulative counters and hardware/gateway key custody
+- **Hardware provenance model** — see `docs/product/HARDWARE_PROVENANCE_MODEL.md`
+  - Current adapter sample is `L0`: acceptable for public lab, `0` kWh real-value cap
+  - Closed pilot requires `L2` or better: named operator, live inverter/gateway counters, signed intervals, and archived raw source files
+  - Real-value scale requires `L3/L4`: revenue-grade or utility-corroborated metering plus audit/legal/reserve controls
 - **Pilot CSV receipt** — see `docs/product/PILOT_CSV_RECEIPT.md`
   - Sample CSV -> `2` accepted rows -> `1,985.5` kWh surplus -> deterministic source hash
   - Mint preview: `99.15075 SPK` at `$0.05/kWh` after 10 bps mint fee

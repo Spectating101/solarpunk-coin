@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18T10:00:46.303Z",
+  "generated_at": "2026-05-18T10:16:01.935Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 12,
+      "passed_checks": 13,
       "blocking_checks": 0,
       "checks": [
         {
@@ -61,6 +61,13 @@
           "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
+          "name": "Hardware provenance model exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.",
+          "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
+        },
+        {
           "name": "Monetary stress harness passes",
           "pass": true,
           "blocking": true,
@@ -101,8 +108,8 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 13,
-      "blocking_checks": 3,
+      "passed_checks": 14,
+      "blocking_checks": 4,
       "checks": [
         {
           "name": "SPK product proof exists",
@@ -154,6 +161,13 @@
           "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
+          "name": "Hardware provenance model exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.",
+          "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
+        },
+        {
           "name": "Monetary stress harness passes",
           "pass": true,
           "blocking": true,
@@ -201,6 +215,13 @@
           "blocking": true,
           "message": "Current public mint batch batch_2026_02_12_a is fixture/proof data and inverter adapter real_operator_source is false; closed pilot needs one real operator meter or inverter export.",
           "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
+        },
+        {
+          "name": "Hardware provenance clears pilot tier",
+          "pass": false,
+          "blocking": true,
+          "message": "Current hardware level is L0 (Adapter sample or fixture); closed pilot needs L2 or better real-operator evidence.",
+          "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
         },
         {
           "name": "Anchor economics or support terms",
@@ -236,8 +257,8 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 13,
-      "blocking_checks": 8,
+      "passed_checks": 14,
+      "blocking_checks": 9,
       "checks": [
         {
           "name": "SPK product proof exists",
@@ -289,6 +310,13 @@
           "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
+          "name": "Hardware provenance model exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.",
+          "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
+        },
+        {
           "name": "Monetary stress harness passes",
           "pass": true,
           "blocking": true,
@@ -336,6 +364,13 @@
           "blocking": true,
           "message": "Current public mint batch batch_2026_02_12_a is fixture/proof data and inverter adapter real_operator_source is false; closed pilot needs one real operator meter or inverter export.",
           "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
+        },
+        {
+          "name": "Hardware provenance clears pilot tier",
+          "pass": false,
+          "blocking": true,
+          "message": "Current hardware level is L0 (Adapter sample or fixture); closed pilot needs L2 or better real-operator evidence.",
+          "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
         },
         {
           "name": "Anchor economics or support terms",
@@ -404,7 +439,7 @@
     }
   },
   "next_actions": [
-    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
+    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, and hardware provenance model.",
     "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
     "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
     "Use the monetary stress harness to size any named reserve before promising redemption.",

@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-18T10:00:46.303Z`
+- generated_at: `2026-05-18T10:16:01.935Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,13 +9,13 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 12 | 0 |
-| Closed testnet pilot | `blocked` | 13 | 3 |
-| Paid/mainnet product | `blocked` | 13 | 8 |
+| SolarPunk Public Lab | `launchable` | 13 | 0 |
+| Closed testnet pilot | `blocked` | 14 | 4 |
+| Paid/mainnet product | `blocked` | 14 | 9 |
 
 ## Next Actions
 
-- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.
+- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, and hardware provenance model.
 - Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.
 - Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.
 - Use the monetary stress harness to size any named reserve before promising redemption.
@@ -37,6 +37,8 @@
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
 - PASS `Inverter/meter adapter receipt exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
+- PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
+  Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -64,6 +66,8 @@
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
 - PASS `Inverter/meter adapter receipt exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
+- PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
+  Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -78,6 +82,8 @@
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current public mint batch batch_2026_02_12_a is fixture/proof data and inverter adapter real_operator_source is false; closed pilot needs one real operator meter or inverter export.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
+- BLOCK `Hardware provenance clears pilot tier`: Current hardware level is L0 (Adapter sample or fixture); closed pilot needs L2 or better real-operator evidence.
+  Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - BLOCK `Anchor economics or support terms`: Current economics need anchor tariff/PPA, capex reduction, or support capital; best current p50 DSCR is 0.3764x and the lowest absolute pilot support gap is $2875.48.
   Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 - PASS `Pilot terms are drafted`: Pilot plan exists; it still needs named counterparty details before execution.
@@ -103,6 +109,8 @@
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
 - PASS `Inverter/meter adapter receipt exists`: Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
+- PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
+  Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -117,6 +125,8 @@
   Evidence: `state/deployments/sepolia_attested_spk_deploy.json`
 - BLOCK `Real meter or inverter adapter`: Current public mint batch batch_2026_02_12_a is fixture/proof data and inverter adapter real_operator_source is false; closed pilot needs one real operator meter or inverter export.
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
+- BLOCK `Hardware provenance clears pilot tier`: Current hardware level is L0 (Adapter sample or fixture); closed pilot needs L2 or better real-operator evidence.
+  Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
 - BLOCK `Anchor economics or support terms`: Current economics need anchor tariff/PPA, capex reduction, or support capital; best current p50 DSCR is 0.3764x and the lowest absolute pilot support gap is $2875.48.
   Evidence: `docs/product/ECONOMIC_LAUNCH_READINESS.md`
 - PASS `Pilot terms are drafted`: Pilot plan exists; it still needs named counterparty details before execution.

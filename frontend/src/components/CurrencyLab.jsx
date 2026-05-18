@@ -14,6 +14,7 @@ import resourceBenchmark from '../../../state/product/resource_benchmark_lab.jso
 import energyStandard from '../../../state/product/energy_standard_economics.json';
 import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
 import inverterMeterAdapter from '../../../state/product/inverter_meter_adapter_receipt.json';
+import hardwareProvenance from '../../../state/product/hardware_provenance_model.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
@@ -127,6 +128,13 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatNumber(inverterMeterAdapter.mint_readiness.accepted_surplus_kwh, 1)} kWh</div>
           <div className="metric-sub">
             {inverterMeterAdapter.attestation_bundle.summary.accepted_records} signed interval, {inverterMeterAdapter.source.interval_method.replaceAll('_', ' ')}
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Hardware Provenance</div>
+          <div className="metric-value">{hardwareProvenance.current_hardware_level}</div>
+          <div className="metric-sub">
+            {hardwareProvenance.current_hardware_label}; real-value cap {formatNumber(hardwareProvenance.thresholds.current_real_value_kwh_cap, 1)} kWh
           </div>
         </div>
         <div className="metric-card metric-amber">
@@ -338,6 +346,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/INVERTER_METER_ADAPTER.md`} target="_blank" rel="noreferrer">
               Inverter adapter <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/HARDWARE_PROVENANCE_MODEL.md`} target="_blank" rel="noreferrer">
+              Hardware provenance <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/RESOURCE_BENCHMARK_LAB.md`} target="_blank" rel="noreferrer">
               Resource benchmark <ExternalLink size={12} />

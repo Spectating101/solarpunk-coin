@@ -1,0 +1,241 @@
+{
+  "generated_at": "2026-05-18T10:13:02.155Z",
+  "title": "SolarPunk Hardware Provenance Model",
+  "purpose": "Make physical hardware risk explicit before treating meter or inverter data as real-value SPK mint input.",
+  "source_artifact": "state/product/inverter_meter_adapter_receipt.json",
+  "current_hardware_level": "L0",
+  "current_hardware_label": "Adapter sample or fixture",
+  "current_source": {
+    "provider": "sample-cumulative",
+    "mode": "sample_cumulative_snapshot_pair",
+    "evidence_grade": "adapter_sample_or_review",
+    "real_operator_source": false,
+    "accepted_surplus_kwh": 996.2
+  },
+  "launch_decision": {
+    "public_lab": "acceptable_for_testnet_and_demo",
+    "closed_pilot": "blocked_until_real_operator_L2_or_better_evidence",
+    "paid_launch": "blocked_until_L4_or_equivalent_plus_non_hardware_gates"
+  },
+  "thresholds": {
+    "minimum_closed_pilot_level": "L2",
+    "minimum_revenue_grade_pilot_level": "L3",
+    "minimum_paid_launch_hardware_level": "L4_or_equivalent",
+    "current_real_value_kwh_cap": 0
+  },
+  "levels": [
+    {
+      "id": "L0",
+      "label": "Adapter sample or fixture",
+      "stage": "public_lab_only",
+      "evidence_score": 32,
+      "measurement_uncertainty_pct": 5,
+      "custody_risk_pct": 100,
+      "real_value_haircut_pct": 100,
+      "max_real_value_kwh_per_day": 0,
+      "closed_pilot_acceptable": false,
+      "paid_launch_acceptable": false,
+      "what_it_proves": "Software normalization, signing, replay protection, and verifier compatibility.",
+      "missing": [
+        "No real operator source",
+        "No hardware serial or model identity",
+        "No tamper-evident physical chain",
+        "No utility or revenue-grade corroboration"
+      ],
+      "simulation": {
+        "accepted_surplus_kwh": 996.2,
+        "measurement_uncertainty_band_kwh": 49.81,
+        "risk_reserve_kwh": 996.2,
+        "risk_adjusted_real_value_kwh": 0,
+        "capped_out_kwh": 0,
+        "testnet_or_lab_kwh": 996.2
+      }
+    },
+    {
+      "id": "L1",
+      "label": "Operator-signed export",
+      "stage": "shadow_pilot_or_review",
+      "evidence_score": 52,
+      "measurement_uncertainty_pct": 3,
+      "custody_risk_pct": 35,
+      "real_value_haircut_pct": 60,
+      "max_real_value_kwh_per_day": 250,
+      "closed_pilot_acceptable": false,
+      "paid_launch_acceptable": false,
+      "what_it_proves": "A named operator can export and sign production/load/export data.",
+      "missing": [
+        "Manual export can be curated before signing",
+        "Device key may be operator custody rather than hardware custody",
+        "Meter accuracy class may be unknown",
+        "Audit trail may not prove uninterrupted measurement"
+      ],
+      "simulation": {
+        "accepted_surplus_kwh": 996.2,
+        "measurement_uncertainty_band_kwh": 29.886,
+        "risk_reserve_kwh": 597.72,
+        "risk_adjusted_real_value_kwh": 250,
+        "capped_out_kwh": 148.48,
+        "testnet_or_lab_kwh": 996.2
+      }
+    },
+    {
+      "id": "L2",
+      "label": "Live inverter or gateway signed counter",
+      "stage": "closed_pilot_candidate",
+      "evidence_score": 70,
+      "measurement_uncertainty_pct": 1.5,
+      "custody_risk_pct": 15,
+      "real_value_haircut_pct": 30,
+      "max_real_value_kwh_per_day": 2500,
+      "closed_pilot_acceptable": true,
+      "paid_launch_acceptable": false,
+      "what_it_proves": "Automated inverter/gateway polling with signed interval records and duplicate-window controls.",
+      "missing": [
+        "Inverter telemetry is not always revenue-grade billing data",
+        "LAN/API sign convention must be validated",
+        "Gateway key custody and firmware update process need controls",
+        "Utility settlement data is still external corroboration"
+      ],
+      "simulation": {
+        "accepted_surplus_kwh": 996.2,
+        "measurement_uncertainty_band_kwh": 14.943,
+        "risk_reserve_kwh": 298.86,
+        "risk_adjusted_real_value_kwh": 697.34,
+        "capped_out_kwh": 0,
+        "testnet_or_lab_kwh": 996.2
+      }
+    },
+    {
+      "id": "L3",
+      "label": "Revenue-grade meter with gateway custody",
+      "stage": "risk_boxed_pilot",
+      "evidence_score": 84,
+      "measurement_uncertainty_pct": 0.5,
+      "custody_risk_pct": 6,
+      "real_value_haircut_pct": 12,
+      "max_real_value_kwh_per_day": 10000,
+      "closed_pilot_acceptable": true,
+      "paid_launch_acceptable": false,
+      "what_it_proves": "A meter with known accuracy class signs or feeds a controlled gateway with auditable logs.",
+      "missing": [
+        "Still needs third-party audit of the adapter and custody process",
+        "Still needs legal terms for energy/redemption claims",
+        "Still needs dispute and rollback procedure"
+      ],
+      "simulation": {
+        "accepted_surplus_kwh": 996.2,
+        "measurement_uncertainty_band_kwh": 4.981,
+        "risk_reserve_kwh": 119.544,
+        "risk_adjusted_real_value_kwh": 876.656,
+        "capped_out_kwh": 0,
+        "testnet_or_lab_kwh": 996.2
+      }
+    },
+    {
+      "id": "L4",
+      "label": "Utility or settlement-corroborated meter",
+      "stage": "production_candidate_after_audit",
+      "evidence_score": 93,
+      "measurement_uncertainty_pct": 0.2,
+      "custody_risk_pct": 2,
+      "real_value_haircut_pct": 5,
+      "max_real_value_kwh_per_day": 50000,
+      "closed_pilot_acceptable": true,
+      "paid_launch_acceptable": true,
+      "what_it_proves": "On-site measurement is corroborated by utility/settlement-grade records or equivalent external attestations.",
+      "missing": [
+        "Paid launch still requires audit, legal scope, reserve policy, and production governance",
+        "Environmental claims still need REC/T-REC/EAC ownership and retirement handling"
+      ],
+      "simulation": {
+        "accepted_surplus_kwh": 996.2,
+        "measurement_uncertainty_band_kwh": 1.9924,
+        "risk_reserve_kwh": 49.81,
+        "risk_adjusted_real_value_kwh": 946.39,
+        "capped_out_kwh": 0,
+        "testnet_or_lab_kwh": 996.2
+      }
+    }
+  ],
+  "checklist": [
+    {
+      "item": "Device identity",
+      "required_for": "L2+",
+      "evidence": "meter/inverter model, serial, site ID, rated capacity, commissioning date, operator identity"
+    },
+    {
+      "item": "Counter integrity",
+      "required_for": "L2+",
+      "evidence": "cumulative generation/load/export counters, monotonicity checks, duplicate-window rejection, reset detection"
+    },
+    {
+      "item": "Key custody",
+      "required_for": "L2+",
+      "evidence": "device or gateway private key not stored in repo, signer address registered, rotation/revocation process"
+    },
+    {
+      "item": "Accuracy basis",
+      "required_for": "L3+",
+      "evidence": "revenue-grade meter certificate or stated ANSI/IEC accuracy class; calibration date where available"
+    },
+    {
+      "item": "External corroboration",
+      "required_for": "L4",
+      "evidence": "utility bill, Green Button/ESPI export, REC/T-REC/EAC certificate, or settlement statement for the same site/window"
+    },
+    {
+      "item": "Dispute process",
+      "required_for": "closed pilot",
+      "evidence": "operator contact, source archive retention, correction workflow, and mint reversal or reserve-offset policy"
+    }
+  ],
+  "risk_register": [
+    {
+      "risk": "Telemetry overstatement",
+      "mitigation": "Prefer cumulative counters; reject non-monotonic counters; cap minting per device per day; hold risk reserve."
+    },
+    {
+      "risk": "Wrong import/export sign convention",
+      "mitigation": "Require a one-day shadow comparison against inverter dashboard, meter screen, or utility net-meter record."
+    },
+    {
+      "risk": "Gateway key compromise",
+      "mitigation": "Register signer address, rotate keys, revoke stale devices, and require operator archive logs for disputed windows."
+    },
+    {
+      "risk": "Physical bypass or meter tampering",
+      "mitigation": "Move from L2 inverter telemetry to L3 revenue-grade meter or L4 utility corroboration before real value scale."
+    },
+    {
+      "risk": "Environmental claim double counting",
+      "mitigation": "Treat SPK minting as metered settlement proof; handle REC/T-REC/EAC ownership and retirement separately."
+    }
+  ],
+  "sources": [
+    {
+      "name": "Fronius Solar API JSON",
+      "url": "https://www.fronius.com/en/help-center/solar-energy/products/monitoring-control/solutions/open-interfaces/fronius-solar-api-json-",
+      "relevance": "Local inverter/Datamanager JSON API for inverter, meter, and component data."
+    },
+    {
+      "name": "SunSpec specifications",
+      "url": "https://sunspec.org/specifications/",
+      "relevance": "Open DER interoperability specifications and information models for inverters, meters, batteries, and smart-grid applications."
+    },
+    {
+      "name": "IEC 62053-22:2020",
+      "url": "https://webstore.iec.ch/en/publication/29987",
+      "relevance": "Static AC active-energy meter requirements for classes 0.1S, 0.2S, and 0.5S."
+    },
+    {
+      "name": "ANSI C12.1/C12.20 metering accuracy classes",
+      "url": "https://blog.ansi.org/ansi/ansi-c12-20-2015-electric-meters-accuracy-classes/",
+      "relevance": "US electric-meter code and 0.1, 0.2, and 0.5 accuracy class framing."
+    },
+    {
+      "name": "NIST Green Button Initiative",
+      "url": "https://www.nist.gov/el/smart-grid-menu/hot-topics/green-button-initiative",
+      "relevance": "Utility customer energy-usage data access through the ESPI/Green Button standard."
+    }
+  ]
+}

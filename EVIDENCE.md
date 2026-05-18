@@ -167,6 +167,24 @@ This adds the first direct hardware-facing adapter path. It can normalize cumula
 
 Scope note: sample mode proves the integration path only. A closed pilot still needs a real operator meter or inverter source, hardware/gateway key custody, tamper-evident logs, and sign-convention validation.
 
+### 2.6c Hardware Provenance Model
+
+This converts the physical hardware gap into an explicit risk model instead of a vague blocker. The model ranks meter/inverter evidence from L0 sample data through L4 utility-corroborated data, then applies risk haircuts and kWh/day caps to the current adapter surplus basis.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Hardware model generator | Available | `scripts/hardware_provenance_model.js` |
+| Current hardware tier | L0 adapter sample or fixture | `docs/product/HARDWARE_PROVENANCE_MODEL.md` |
+| Current real-value kWh cap | 0 kWh | Same file |
+| Minimum closed-pilot tier | L2 live inverter/gateway signed counter | Same file |
+| Minimum revenue-grade pilot tier | L3 revenue-grade meter with gateway custody | Same file |
+| Minimum paid-launch hardware tier | L4 or equivalent utility/settlement corroboration | Same file |
+| Hardware tier CSV | Generated | `state/product/hardware_provenance_tiers.csv` |
+| Tests | 4 Node tests | `test-node/hardware_provenance_model.test.js` |
+| Standards anchors | Fronius API, SunSpec, IEC 62053-22, ANSI C12.1/C12.20, NIST Green Button | `docs/product/HARDWARE_PROVENANCE_MODEL.md` |
+
+Scope note: this model does not certify hardware. It makes the certification gap measurable and gives a concrete upgrade path.
+
 ### 2.7 SPK Currency Framework Contract
 
 This is the first internal currency-framework layer around SPK. It does not mint SPK; it uses SPK as the settlement asset.

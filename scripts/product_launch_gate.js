@@ -52,7 +52,7 @@ function summarizeNextActions(modes) {
   }
   if (modes.public_testnet_product.status === "launchable") {
     return [
-      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
+      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, and hardware provenance model.",
       "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
       "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
@@ -75,6 +75,7 @@ function evaluateLaunchGate(options = {}) {
   const deployment = readJson(root, "state/deployments/sepolia_attested_spk_deploy.json", {});
   const pilotCsv = readJson(root, "state/product/pilot_csv_receipt.json", {});
   const inverterAdapter = readJson(root, "state/product/inverter_meter_adapter_receipt.json", {});
+  const hardwareProvenance = readJson(root, "state/product/hardware_provenance_model.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
@@ -95,6 +96,7 @@ function evaluateLaunchGate(options = {}) {
   const isFixtureBatch = String(meterToMint.batch_id || "").startsWith("batch_2026_02_12");
   const inverterAdapterAccepted = Number(inverterAdapter.attestation_bundle?.summary?.accepted_records || 0) > 0;
   const inverterAdapterRealSource = Boolean(inverterAdapter.hardware_provenance?.real_operator_source);
+  const hardwareModelReady = hardwareProvenance.launch_decision?.public_lab === "acceptable_for_testnet_and_demo";
   const allContractsVerified = Boolean(deployment.source_verification?.contracts_verified)
     || Object.values(deploymentContracts).every((item) => item && item.verified);
 
@@ -140,6 +142,12 @@ function evaluateLaunchGate(options = {}) {
       Boolean(inverterAdapterAccepted && inverterAdapter.mint_readiness?.can_mint_from_adapter),
       "Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.",
       "docs/product/INVERTER_METER_ADAPTER.md"
+    ),
+    check(
+      "Hardware provenance model exists",
+      hardwareModelReady,
+      "Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.",
+      "docs/product/HARDWARE_PROVENANCE_MODEL.md"
     ),
     check(
       "Monetary stress harness passes",
@@ -198,6 +206,12 @@ function evaluateLaunchGate(options = {}) {
       !isFixtureBatch || inverterAdapterRealSource,
       `Current public mint batch ${meterToMint.batch_id || "unknown"} is fixture/proof data and inverter adapter real_operator_source is ${inverterAdapterRealSource}; closed pilot needs one real operator meter or inverter export.`,
       "docs/product/INVERTER_METER_ADAPTER.md"
+    ),
+    check(
+      "Hardware provenance clears pilot tier",
+      hardwareProvenance.launch_decision?.closed_pilot !== "blocked_until_real_operator_L2_or_better_evidence",
+      `Current hardware level is ${hardwareProvenance.current_hardware_level || "unknown"} (${hardwareProvenance.current_hardware_label || "unknown"}); closed pilot needs L2 or better real-operator evidence.`,
+      "docs/product/HARDWARE_PROVENANCE_MODEL.md"
     ),
     check(
       "Anchor economics or support terms",
