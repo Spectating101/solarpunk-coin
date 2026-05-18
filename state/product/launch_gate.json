@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18T10:16:01.935Z",
+  "generated_at": "2026-05-18T10:49:58.446Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 13,
+      "passed_checks": 14,
       "blocking_checks": 0,
       "checks": [
         {
@@ -68,6 +68,13 @@
           "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
         },
         {
+          "name": "Closed pilot execution package exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.",
+          "evidence": "docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md"
+        },
+        {
           "name": "Monetary stress harness passes",
           "pass": true,
           "blocking": true,
@@ -108,7 +115,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 14,
+      "passed_checks": 15,
       "blocking_checks": 4,
       "checks": [
         {
@@ -166,6 +173,13 @@
           "blocking": true,
           "message": "Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.",
           "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
+        },
+        {
+          "name": "Closed pilot execution package exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.",
+          "evidence": "docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md"
         },
         {
           "name": "Monetary stress harness passes",
@@ -257,7 +271,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 14,
+      "passed_checks": 15,
       "blocking_checks": 9,
       "checks": [
         {
@@ -315,6 +329,13 @@
           "blocking": true,
           "message": "Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.",
           "evidence": "docs/product/HARDWARE_PROVENANCE_MODEL.md"
+        },
+        {
+          "name": "Closed pilot execution package exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.",
+          "evidence": "docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md"
         },
         {
           "name": "Monetary stress harness passes",
@@ -439,7 +460,7 @@
     }
   },
   "next_actions": [
-    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, and hardware provenance model.",
+    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, hardware provenance model, and closed-pilot execution package.",
     "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
     "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
     "Use the monetary stress harness to size any named reserve before promising redemption.",

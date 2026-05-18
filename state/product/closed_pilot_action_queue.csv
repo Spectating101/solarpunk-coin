@@ -1,0 +1,7 @@
+"id","owner","status","command_or_artifact","acceptance_criteria"
+"publish_public_lab","SolarPunk","ready_now","docs/product/PRODUCT_LAUNCH_GATE.md","Public Lab gate remains launchable with 0 blocking checks."
+"collect_l2_operator_source","Operator or site owner","external_input_needed","docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md#operator-intake","Cumulative counters, device identity, signer custody, and operator identity are provided for one closed interval."
+"run_operator_adapter","SolarPunk","ready_after_operator_source","npm run meter:inverter-adapter -- --provider=cumulative-json --real-operator-source","Accepted records > 0, rejected records = 0 or explained, hardware provenance upgrades to L2+."
+"governed_attested_spk_redeploy","SolarPunk","internal_execution_needed","npm run deploy:pilot-stack:sepolia && npm run pilot-stack:readback","Deployment scope is governed-attested-spk-pilot with source verification and role readback."
+"anchor_economics_terms","Operator/SolarPunk","external_terms_needed","state/product/economic_launch_readiness.json","At minimum, the 10 kW path needs about $0.3298/kWh realized value or $2,875.48/year support equivalent under current assumptions."
+"rerun_gate","SolarPunk","ready_after_inputs","npm run product:hardware-provenance && npm run product:economic-launch && npm run product:launch-gate","Closed pilot gate moves from blocked to launchable, while paid/mainnet remains separately gated."

@@ -1,0 +1,188 @@
+{
+  "generated_at": "2026-05-18T10:49:53.669Z",
+  "title": "SolarPunk Closed Pilot Execution Package",
+  "purpose": "Remove vague blockers by converting the path from public lab to closed pilot into concrete inputs, commands, caps, and acceptance criteria.",
+  "current_decision": {
+    "public_lab": "launchable",
+    "closed_testnet_pilot": "blocked",
+    "paid_mainnet_product": "blocked",
+    "internal_execution_package_ready": true,
+    "external_inputs_remaining": 2
+  },
+  "current_evidence": {
+    "latest_keeper_run": "2026-05-18",
+    "inverter_adapter_accepted_surplus_kwh": 996.2,
+    "hardware_level": "L0",
+    "hardware_label": "Adapter sample or fixture",
+    "current_real_value_kwh_cap": 0,
+    "current_risk_adjusted_kwh": 0,
+    "l2_target_risk_adjusted_kwh": 697.34
+  },
+  "economics_target": {
+    "archetype": "10 kW solar home",
+    "required_realized_value_usd_per_kwh": 0.329767,
+    "current_p50_realized_value_usd_per_kwh": 0.0885,
+    "required_value_multiplier": 3.7262,
+    "annual_support_required_usd": 2875.48,
+    "capital_support_required_usd": 23046.29,
+    "max_launch_capex_usd_per_wdc": 0.8454
+  },
+  "execution_modes": [
+    {
+      "id": "public_lab",
+      "status": "ready_now",
+      "value_claim": "External demo, grant/reviewer proof, reproducible testnet lab.",
+      "can_accept_real_value": false,
+      "execution_command": "Open frontend demo and run npm run product:launch-gate",
+      "success_definition": "Reviewer can inspect Sepolia proof, adapter sample, hardware model, economics model, and frontend without trusting private claims."
+    },
+    {
+      "id": "operator_shadow_pilot",
+      "status": "ready_when_operator_file_arrives",
+      "value_claim": "Use a real operator export or LAN inverter source for evidence, but no paid mint/redeem obligation.",
+      "can_accept_real_value": false,
+      "execution_command": "METER_PRIVATE_KEY=0x... npm run meter:inverter-adapter -- --provider=cumulative-json --start=data/inverter/operator_start.json --end=data/inverter/operator_end.json --meter-id=OPERATOR-METER-001 --site-id=operator-site-a --real-operator-source",
+      "success_definition": "Hardware model upgrades from L0 to at least L2 and the verifier accepts signed, monotonic, closed-window readings."
+    },
+    {
+      "id": "closed_testnet_pilot",
+      "status": "execution_package_ready_external_inputs_needed",
+      "value_claim": "Named operator, capped testnet SPK flow, governed deployment, no public real-money exposure.",
+      "can_accept_real_value": false,
+      "execution_command": "Run governed redeploy/readback, operator adapter receipt, hardware provenance model, economics refresh, then product launch gate.",
+      "success_definition": "Governed attested-SPK deployment, L2+ hardware source, and signed economics/support terms clear launch gate.",
+      "current_hardware_level": "L0",
+      "target_hardware_level": "L2",
+      "target_hardware_risk_adjusted_kwh": 697.34,
+      "economics_ready": false,
+      "hardware_ready": false
+    },
+    {
+      "id": "risk_boxed_revenue_grade_pilot",
+      "status": "designed_not_ready",
+      "value_claim": "L3 revenue-grade or L4 utility-corroborated source with audit/legal/reserve guardrails.",
+      "can_accept_real_value": false,
+      "execution_command": "Upgrade operator evidence to L3/L4, complete audit/legal/reserve policy, then reassess paid launch gate.",
+      "success_definition": "Revenue-grade/utility corroboration plus non-hardware launch gates; until then, no paid/mainnet claims.",
+      "target_hardware_level": "L3_or_L4",
+      "target_hardware_risk_adjusted_kwh": 876.656
+    }
+  ],
+  "operator_intake": [
+    {
+      "category": "site_identity",
+      "required": true,
+      "fields": [
+        "operator_name",
+        "site_id",
+        "location_country_region",
+        "generation_resource",
+        "capacity_kw"
+      ],
+      "why": "Binds the pilot receipt to a named physical generator without publishing private customer data."
+    },
+    {
+      "category": "device_identity",
+      "required": true,
+      "fields": [
+        "meter_or_inverter_model",
+        "serial_or_anonymized_serial_hash",
+        "commissioning_date",
+        "rated_capacity_kw"
+      ],
+      "why": "Moves hardware provenance from sample L0 toward live-source L2."
+    },
+    {
+      "category": "interval_counters",
+      "required": true,
+      "fields": [
+        "window_start",
+        "window_end",
+        "generation_kwh_total_start/end",
+        "site_load_kwh_total_start/end",
+        "export_kwh_total_start/end",
+        "curtailed_kwh_total_start/end_or_zero"
+      ],
+      "why": "Cumulative counters let the adapter reject non-monotonic data and derive deterministic surplus."
+    },
+    {
+      "category": "signing_and_custody",
+      "required": true,
+      "fields": [
+        "registered_device_address",
+        "who_controls_gateway_key",
+        "key_rotation_contact",
+        "revocation_contact"
+      ],
+      "why": "The protocol can verify signatures only if signer custody and revocation are defined."
+    },
+    {
+      "category": "economics",
+      "required": true,
+      "fields": [
+        "current_export_credit_or_tariff_usd_per_kwh",
+        "retail_offset_usd_per_kwh",
+        "ppa_or_fit_terms_if_any",
+        "capex_usd_or_usd_per_wdc",
+        "support_subsidy_or_grant_terms_if_any"
+      ],
+      "why": "The current lowest-support archetype still needs about $0.3298/kWh or equivalent capex/support terms."
+    },
+    {
+      "category": "corroboration",
+      "required": false,
+      "fields": [
+        "utility_bill_or_green_button_export",
+        "REC_TREC_EAC_record_if_any",
+        "inverter_dashboard_screenshot_hash",
+        "meter_screen_photo_hash"
+      ],
+      "why": "Optional at L2, but needed to move toward L3/L4 real-value credibility."
+    }
+  ],
+  "action_queue": [
+    {
+      "id": "publish_public_lab",
+      "owner": "SolarPunk",
+      "status": "ready_now",
+      "command_or_artifact": "docs/product/PRODUCT_LAUNCH_GATE.md",
+      "acceptance_criteria": "Public Lab gate remains launchable with 0 blocking checks."
+    },
+    {
+      "id": "collect_l2_operator_source",
+      "owner": "Operator or site owner",
+      "status": "external_input_needed",
+      "command_or_artifact": "docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md#operator-intake",
+      "acceptance_criteria": "Cumulative counters, device identity, signer custody, and operator identity are provided for one closed interval."
+    },
+    {
+      "id": "run_operator_adapter",
+      "owner": "SolarPunk",
+      "status": "ready_after_operator_source",
+      "command_or_artifact": "npm run meter:inverter-adapter -- --provider=cumulative-json --real-operator-source",
+      "acceptance_criteria": "Accepted records > 0, rejected records = 0 or explained, hardware provenance upgrades to L2+."
+    },
+    {
+      "id": "governed_attested_spk_redeploy",
+      "owner": "SolarPunk",
+      "status": "internal_execution_needed",
+      "command_or_artifact": "npm run deploy:pilot-stack:sepolia && npm run pilot-stack:readback",
+      "acceptance_criteria": "Deployment scope is governed-attested-spk-pilot with source verification and role readback."
+    },
+    {
+      "id": "anchor_economics_terms",
+      "owner": "Operator/SolarPunk",
+      "status": "external_terms_needed",
+      "command_or_artifact": "state/product/economic_launch_readiness.json",
+      "acceptance_criteria": "At minimum, the 10 kW path needs about $0.3298/kWh realized value or $2,875.48/year support equivalent under current assumptions."
+    },
+    {
+      "id": "rerun_gate",
+      "owner": "SolarPunk",
+      "status": "ready_after_inputs",
+      "command_or_artifact": "npm run product:hardware-provenance && npm run product:economic-launch && npm run product:launch-gate",
+      "acceptance_criteria": "Closed pilot gate moves from blocked to launchable, while paid/mainnet remains separately gated."
+    }
+  ],
+  "no_excuse_boundary": "There are no undefined blockers left in this package. Anything not launchable is mapped to a named input, command, acceptance criterion, and owner. The package still refuses to mislabel sample data as real hardware proof."
+}

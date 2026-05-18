@@ -185,6 +185,23 @@ This converts the physical hardware gap into an explicit risk model instead of a
 
 Scope note: this model does not certify hardware. It makes the certification gap measurable and gives a concrete upgrade path.
 
+### 2.6d Closed Pilot Execution Package
+
+This turns the remaining path from public lab to closed pilot into an operator intake checklist, action queue, command set, acceptance criteria, and owner map.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Execution package generator | Available | `scripts/closed_pilot_execution_package.js` |
+| Public lab mode | `ready_now` | `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md` |
+| Operator shadow pilot mode | `ready_when_operator_file_arrives` | Same file |
+| Internal execution package | Ready | `state/product/closed_pilot_execution_package.json` |
+| External inputs remaining | 2 mapped inputs | Same file |
+| Operator intake categories | Site identity, device identity, interval counters, signing/custody, economics, corroboration | Same file |
+| Action queue CSV | Generated | `state/product/closed_pilot_action_queue.csv` |
+| Tests | 3 Node tests | `test-node/closed_pilot_execution_package.test.js` |
+
+Scope note: this does not make the closed pilot launchable by itself. It removes undefined blockers by converting each remaining item into an owner, command, and acceptance criterion.
+
 ### 2.7 SPK Currency Framework Contract
 
 This is the first internal currency-framework layer around SPK. It does not mint SPK; it uses SPK as the settlement asset.

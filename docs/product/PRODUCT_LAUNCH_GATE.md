@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-18T10:16:01.935Z`
+- generated_at: `2026-05-18T10:49:58.446Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,13 +9,13 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 13 | 0 |
-| Closed testnet pilot | `blocked` | 14 | 4 |
-| Paid/mainnet product | `blocked` | 14 | 9 |
+| SolarPunk Public Lab | `launchable` | 14 | 0 |
+| Closed testnet pilot | `blocked` | 15 | 4 |
+| Paid/mainnet product | `blocked` | 15 | 9 |
 
 ## Next Actions
 
-- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, and hardware provenance model.
+- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, hardware provenance model, and closed-pilot execution package.
 - Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.
 - Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.
 - Use the monetary stress harness to size any named reserve before promising redemption.
@@ -39,6 +39,8 @@
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
 - PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
   Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
+- PASS `Closed pilot execution package exists`: Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.
+  Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -68,6 +70,8 @@
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
 - PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
   Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
+- PASS `Closed pilot execution package exists`: Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.
+  Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -111,6 +115,8 @@
   Evidence: `docs/product/INVERTER_METER_ADAPTER.md`
 - PASS `Hardware provenance model exists`: Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.
   Evidence: `docs/product/HARDWARE_PROVENANCE_MODEL.md`
+- PASS `Closed pilot execution package exists`: Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.
+  Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.

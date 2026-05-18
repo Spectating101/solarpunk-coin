@@ -15,6 +15,7 @@ import energyStandard from '../../../state/product/energy_standard_economics.jso
 import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
 import inverterMeterAdapter from '../../../state/product/inverter_meter_adapter_receipt.json';
 import hardwareProvenance from '../../../state/product/hardware_provenance_model.json';
+import closedPilotPackage from '../../../state/product/closed_pilot_execution_package.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
@@ -135,6 +136,13 @@ export default function CurrencyLab() {
           <div className="metric-value">{hardwareProvenance.current_hardware_level}</div>
           <div className="metric-sub">
             {hardwareProvenance.current_hardware_label}; real-value cap {formatNumber(hardwareProvenance.thresholds.current_real_value_kwh_cap, 1)} kWh
+          </div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Pilot Execution Package</div>
+          <div className="metric-value">{closedPilotPackage.current_decision.internal_execution_package_ready ? 'Ready' : 'Open'}</div>
+          <div className="metric-sub">
+            {closedPilotPackage.current_decision.external_inputs_remaining} external inputs mapped to owners and commands
           </div>
         </div>
         <div className="metric-card metric-amber">
@@ -349,6 +357,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/HARDWARE_PROVENANCE_MODEL.md`} target="_blank" rel="noreferrer">
               Hardware provenance <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`} target="_blank" rel="noreferrer">
+              Pilot execution <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/RESOURCE_BENCHMARK_LAB.md`} target="_blank" rel="noreferrer">
               Resource benchmark <ExternalLink size={12} />

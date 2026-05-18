@@ -52,7 +52,7 @@ function summarizeNextActions(modes) {
   }
   if (modes.public_testnet_product.status === "launchable") {
     return [
-      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, and hardware provenance model.",
+      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, hardware provenance model, and closed-pilot execution package.",
       "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
       "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
@@ -76,6 +76,7 @@ function evaluateLaunchGate(options = {}) {
   const pilotCsv = readJson(root, "state/product/pilot_csv_receipt.json", {});
   const inverterAdapter = readJson(root, "state/product/inverter_meter_adapter_receipt.json", {});
   const hardwareProvenance = readJson(root, "state/product/hardware_provenance_model.json", {});
+  const closedPilotPackage = readJson(root, "state/product/closed_pilot_execution_package.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
@@ -97,6 +98,7 @@ function evaluateLaunchGate(options = {}) {
   const inverterAdapterAccepted = Number(inverterAdapter.attestation_bundle?.summary?.accepted_records || 0) > 0;
   const inverterAdapterRealSource = Boolean(inverterAdapter.hardware_provenance?.real_operator_source);
   const hardwareModelReady = hardwareProvenance.launch_decision?.public_lab === "acceptable_for_testnet_and_demo";
+  const closedPilotPackageReady = Boolean(closedPilotPackage.current_decision?.internal_execution_package_ready);
   const allContractsVerified = Boolean(deployment.source_verification?.contracts_verified)
     || Object.values(deploymentContracts).every((item) => item && item.verified);
 
@@ -148,6 +150,12 @@ function evaluateLaunchGate(options = {}) {
       hardwareModelReady,
       "Hardware assurance tiers, risk haircuts, issuance caps, and pilot upgrade evidence are explicit.",
       "docs/product/HARDWARE_PROVENANCE_MODEL.md"
+    ),
+    check(
+      "Closed pilot execution package exists",
+      closedPilotPackageReady,
+      "Closed-pilot path is mapped to concrete operator inputs, commands, acceptance criteria, and owners.",
+      "docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md"
     ),
     check(
       "Monetary stress harness passes",
