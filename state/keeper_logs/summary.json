@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-05-17T04:46:37.684898+00:00",
+  "generated_at": "2026-05-18T05:01:13.659842+00:00",
   "network": "sepolia",
-  "total_successful_runs": 21,
+  "total_successful_runs": 22,
   "first_successful_run": "2026-04-20",
-  "last_successful_run": "2026-05-17",
-  "current_success_streak_days": 19,
+  "last_successful_run": "2026-05-18",
+  "current_success_streak_days": 20,
   "max_missing_gap_days": 7,
   "peg_stable_rate": 1.0,
   "index_summary": {
     "min": 0.2392528735632184,
     "max": 1.7158878504672896,
-    "avg": 0.9713046514126115
+    "avg": 0.9442704274455805
   },
   "reserve_ratio_summary_pct": {
     "min": 10.1,
@@ -18,13 +18,13 @@
     "avg": 10.1
   },
   "latest_run": {
-    "date": "2026-05-17",
-    "run_at": "2026-05-17T04:46:37.613Z",
+    "date": "2026-05-18",
+    "run_at": "2026-05-18T05:01:13.583Z",
     "keeper": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
-    "nasa_date": "2026-05-12",
+    "nasa_date": "2026-05-13",
     "location": "Taoyuan, Taiwan",
-    "normalised_index": 1.1382758620689655,
-    "scaled_6dec": "1138276",
+    "normalised_index": 0.37655172413793103,
+    "scaled_6dec": "376552",
     "protocol_state": {
       "total_supply_spk": 29700.300000000003,
       "oracle_price_usd": 1,
@@ -34,29 +34,20 @@
       "grid_stressed": false,
       "energy_price_per_kwh": 0.05,
       "cumulative_surplus_kwh": 30000,
-      "option_index": 1.138276
+      "option_index": 0.376552
     },
     "transactions": {
-      "updateIndex": "0x1a8a0d8cfc39c18402c3624522b13210aa86058e62926ae32beb078f15af01a0",
-      "updateEnergyPrice": "0x7a93c9036c01bdece3b1875c4da1e0ccc34601badbf93efd7cba1b3a0fd4b89f",
-      "updateOraclePriceAndAdjust": "0xd2203c963e9d3cf696455a2a5647be3e65649bba8332c706d9751a8f4a35bbc4"
+      "updateIndex": "0x6e4bae6aee946d06c77e70d48e4a45a597a50c63bd03ef9424146dc80d9303c4",
+      "updateEnergyPrice": "0xe333487d7ef54b948343a9dc36100bc4a882855183dc8c708e7c7773be33a504",
+      "updateOraclePriceAndAdjust": "0xc4c9e03e9f700d9287b696f4ba4b4b8af1707154f3e8df60dc32d8c77558eb33"
     },
     "transaction_urls": {
-      "updateIndex": "https://sepolia.etherscan.io/tx/0x1a8a0d8cfc39c18402c3624522b13210aa86058e62926ae32beb078f15af01a0",
-      "updateEnergyPrice": "https://sepolia.etherscan.io/tx/0x7a93c9036c01bdece3b1875c4da1e0ccc34601badbf93efd7cba1b3a0fd4b89f",
-      "updateOraclePriceAndAdjust": "https://sepolia.etherscan.io/tx/0xd2203c963e9d3cf696455a2a5647be3e65649bba8332c706d9751a8f4a35bbc4"
+      "updateIndex": "https://sepolia.etherscan.io/tx/0x6e4bae6aee946d06c77e70d48e4a45a597a50c63bd03ef9424146dc80d9303c4",
+      "updateEnergyPrice": "https://sepolia.etherscan.io/tx/0xe333487d7ef54b948343a9dc36100bc4a882855183dc8c708e7c7773be33a504",
+      "updateOraclePriceAndAdjust": "https://sepolia.etherscan.io/tx/0xc4c9e03e9f700d9287b696f4ba4b4b8af1707154f3e8df60dc32d8c77558eb33"
     }
   },
   "recent_runs": [
-    {
-      "date": "2026-05-04",
-      "nasa_date": "2026-04-29",
-      "normalised_index": 0.4740809968847352,
-      "option_index": 0.474081,
-      "reserve_ratio_pct": 10.1,
-      "peg_stable": true,
-      "updateIndex_tx": "0x09865f791a8d52d557a7e4dee404e6e628551d56e28b4ea22d117ac4f8a1ec86"
-    },
     {
       "date": "2026-05-05",
       "nasa_date": "2026-04-30",
@@ -173,6 +164,15 @@
       "reserve_ratio_pct": 10.1,
       "peg_stable": true,
       "updateIndex_tx": "0x1a8a0d8cfc39c18402c3624522b13210aa86058e62926ae32beb078f15af01a0"
+    },
+    {
+      "date": "2026-05-18",
+      "nasa_date": "2026-05-13",
+      "normalised_index": 0.37655172413793103,
+      "option_index": 0.376552,
+      "reserve_ratio_pct": 10.1,
+      "peg_stable": true,
+      "updateIndex_tx": "0x6e4bae6aee946d06c77e70d48e4a45a597a50c63bd03ef9424146dc80d9303c4"
     }
   ]
 }
