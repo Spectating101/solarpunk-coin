@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-18T09:56:32.028Z`
+- generated_at: `2026-05-18T10:00:46.303Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -29,7 +29,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-17 (1 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-18 (0 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -56,7 +56,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-17 (1 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-18 (0 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -95,7 +95,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-17 (1 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-18 (0 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`

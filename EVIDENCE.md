@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Evidence Register
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-05-18
 **Purpose:** Flat, clickable receipts for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
 
 This document answers: **"Is there actual evidence, or just descriptions of evidence?"**
@@ -91,7 +91,7 @@ These prove the protocol executes correctly end-to-end, not just compiles.
 
 System that fetches real satellite data and pushes it to the live contracts every day. Not a demo — running continuously on GitHub Actions cron at 01:00 UTC.
 
-**Current summary:** 21 successful runs, latest successful run `2026-05-17`, current success streak 19 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
+**Current summary:** 22 successful runs, latest successful run `2026-05-18`, current success streak 20 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
 
 | Date | NASA date used | GHI (kWh/m²) | Normalised index | On-chain tx |
 |---|---|---|---|---|
@@ -102,6 +102,7 @@ System that fetches real satellite data and pushes it to the live contracts ever
 | 2026-05-14 | 2026-05-09 | 2.0808 | 0.5979 (below avg) | [0x20162f...](https://sepolia.etherscan.io/tx/0x20162f08923cddf07e3455ce3eeecfd69ca4bcd7baeead84e6e2b1e4fe6cf856) |
 | 2026-05-16 | 2026-05-11 | 3.2566 | 0.9358 (near avg) | [0xcb92e9...](https://sepolia.etherscan.io/tx/0xcb92e9b6583c5831b6d5148442d8b821d062475bed74f16ff5daf0bcb6689be8) |
 | 2026-05-17 | 2026-05-12 | 3.9612 | 1.1383 (above avg) | [0x1a8a0d...](https://sepolia.etherscan.io/tx/0x1a8a0d8cfc39c18402c3624522b13210aa86058e62926ae32beb078f15af01a0) |
+| 2026-05-18 | 2026-05-13 | 1.3104 | 0.3766 (below avg) | [0x6e4bae...](https://sepolia.etherscan.io/tx/0x6e4bae6aee946d06c77e70d48e4a45a597a50c63bd03ef9424146dc80d9303c4) |
 
 **Log files:** `state/keeper_logs/YYYY-MM-DD.json` — each entry contains: NASA date, GHI value, monthly mean, normalised index, source hash, 3 on-chain TX hashes, and full protocol state snapshot.
 
