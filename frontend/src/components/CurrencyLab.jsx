@@ -13,6 +13,7 @@ import fieldReceipt from '../../../state/product/field_receipt_loop.json';
 import resourceBenchmark from '../../../state/product/resource_benchmark_lab.json';
 import energyStandard from '../../../state/product/energy_standard_economics.json';
 import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
+import inverterMeterAdapter from '../../../state/product/inverter_meter_adapter_receipt.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
@@ -119,6 +120,13 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatNumber(pilotCsvReceipt.mint_preview.net_spk, 5)} SPK</div>
           <div className="metric-sub">
             {pilotCsvReceipt.attestation_bundle.summary.accepted_records} accepted rows, {formatNumber(pilotCsvReceipt.attestation_bundle.summary.total_surplus_kwh, 1)} kWh surplus
+          </div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Inverter Adapter</div>
+          <div className="metric-value">{formatNumber(inverterMeterAdapter.mint_readiness.accepted_surplus_kwh, 1)} kWh</div>
+          <div className="metric-sub">
+            {inverterMeterAdapter.attestation_bundle.summary.accepted_records} signed interval, {inverterMeterAdapter.source.interval_method.replaceAll('_', ' ')}
           </div>
         </div>
         <div className="metric-card metric-amber">
@@ -327,6 +335,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/PILOT_CSV_RECEIPT.md`} target="_blank" rel="noreferrer">
               Pilot CSV receipt <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/INVERTER_METER_ADAPTER.md`} target="_blank" rel="noreferrer">
+              Inverter adapter <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/RESOURCE_BENCHMARK_LAB.md`} target="_blank" rel="noreferrer">
               Resource benchmark <ExternalLink size={12} />

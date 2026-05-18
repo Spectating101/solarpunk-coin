@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Reviewer Packet
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-05-18
 **Purpose:** one-page orientation for grant reviewers, advisors, and ecosystem partners.
 
 ## One-line summary
@@ -16,6 +16,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | Public proof readback | Read-only Sepolia check of tx success, consumed attestation hash, consumed source hash, and recipient balance | [`docs/product/SPK_PUBLIC_READBACK.md`](../product/SPK_PUBLIC_READBACK.md) |
 | Pilot meter import | Meter onboarding + CSV import path for inverter/meter exports | [`docs/project/METER_CSV_IMPORT.md`](../project/METER_CSV_IMPORT.md) |
 | Pilot CSV receipt | CSV export -> signed readings -> accepted bundle -> source hash -> SPK mint preview | [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) |
+| Inverter/meter adapter | Cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle | [`docs/product/INVERTER_METER_ADAPTER.md`](../product/INVERTER_METER_ADAPTER.md) |
 | Monetary stress harness | Redemption-wave and physical-shortfall scenarios with explicit reserve gaps | [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) |
 | Energy-money simulation | Measured keeper resource signals drive SPK issuance, settlement, redemption, and reserve modeling | [`docs/product/ENERGY_MONEY_SIMULATION.md`](../product/ENERGY_MONEY_SIMULATION.md) |
 | SPK finance dossier | Income statement, balance-sheet liability, break-even fee-base gap, reserve coverage, and closed-pilot finance stack | [`docs/product/SPK_FINANCE_DOSSIER.md`](../product/SPK_FINANCE_DOSSIER.md) |
@@ -35,8 +36,9 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 2. Open [`docs/product/SPK_ATTESTED_MINT_PROOF.md`](../product/SPK_ATTESTED_MINT_PROOF.md) and confirm the meter-to-mint receipt.
 3. Open [`docs/product/SPK_PUBLIC_READBACK.md`](../product/SPK_PUBLIC_READBACK.md) and confirm the Sepolia replay guards are consumed.
 4. Open [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) and confirm the operator-style CSV bridge.
-5. Open [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) and inspect the shortfall/reserve table.
-6. Open [`EVIDENCE.md`](../../EVIDENCE.md) and inspect the daily keeper and Sepolia transaction trail.
+5. Open [`docs/product/INVERTER_METER_ADAPTER.md`](../product/INVERTER_METER_ADAPTER.md) and confirm the direct adapter path.
+6. Open [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) and inspect the shortfall/reserve table.
+7. Open [`EVIDENCE.md`](../../EVIDENCE.md) and inspect the daily keeper and Sepolia transaction trail.
 
 ## What is real today
 
@@ -44,6 +46,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - The latest SPK contract can mint from signed surplus-energy attestations and reject replayed, reused-source, non-oracle, expired, future-window, zero-source, or invalid-window attestations.
 - The sample meter pipeline verifies 2 device signatures, rejects duplicate/low-quality readings, accepts 2,606.7 kWh, and the Sepolia proof mints 130.1697 SPK from 2,606 on-chain kWh.
 - The pilot CSV bridge imports meter/inverter rows into signed raw readings, derives a 1,985.5 kWh accepted-surplus bundle, and previews 99.15075 SPK.
+- The inverter/meter adapter normalizes cumulative counter snapshots into one accepted signed interval with 996.2 kWh accepted surplus and includes a Fronius LAN PowerFlow mode for real inverter testing.
 - The energy-money simulation uses recent real keeper-index days to project 15,216.48 SPK annualized issuance across transparent rooftop/neighborhood/commercial archetypes.
 - The monetary stress harness maps redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 - The SPK finance dossier shows annualized protocol fee revenue, active-supply liability, fee break-even gap, and a closed-pilot finance stack instead of hiding the non-self-funding stage.
@@ -59,7 +62,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - No formal security audit.
 - No production oracle finality.
 - No production-governed attestation-enabled SPK deployment yet; the current fresh Sepolia stack is source-verified but proof-scoped.
-- No certified hardware meter adapter yet.
+- No certified hardware meter adapter yet; the new adapter proves the software bridge, not physical finality.
 - No executed counterparty pilot or solar operator LOI yet.
 - No claim that the current Sepolia parameters are final production parameters.
 

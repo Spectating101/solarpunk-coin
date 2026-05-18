@@ -1,6 +1,6 @@
 # CURRENT STATUS
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-05-18
 This file is the canonical stage snapshot for external reviewers.
 
 ## Status table
@@ -14,6 +14,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Currency-framework contract | `SolarPunkCurrencySystem` implemented locally: SPK invoice settlement, redemption burn into owed-kWh receipt, fulfillment/shortfall/dispute states |
 | Field receipt loop | Local no-external-dependency run: signed meter surplus -> SPK mint -> 75 SPK settled -> 20 SPK redeemed -> 400 kWh delivered |
 | Pilot CSV receipt | Added: sample meter/inverter CSV -> signed readings -> accepted bundle -> deterministic source hash -> 99.15075 SPK mint preview |
+| Inverter/meter adapter | Added: cumulative counter snapshot adapter + Fronius PowerFlow polling mode; sample receipt produces 1 accepted signed interval and 996.2 kWh accepted surplus |
 | Monetary stress harness | Added: redemption-wave and physical-shortfall scenarios with conservation checks, fee buffers, and explicit additional reserve requirements |
 | Energy-money simulation | Added: real keeper-index resource signal -> explicit surplus assumptions -> SPK issuance -> settlement velocity -> redemption/reserve model |
 | SPK finance dossier | Added: annualized income statement, balance-sheet liability view, break-even fee-base gap, reserve coverage, and closed-pilot finance stack |
@@ -23,7 +24,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Theory/comparables anchor | Added: SPK positioned as an energy-denominated settlement and receipt system anchored to RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, FSB stablecoin risk controls |
 | Multi-resource benchmark lab | Added: NASA POWER solar/wind/temperature fetch, standard 10 kWdc PV conversion, $3.15/Wdc install-cost assumption, renewable benchmark matrix, and oil-only energy-unit comparison |
 | Energy-standard economics | Added: gold-standard mapping, issuance equations, kWh/SPK convertibility, capacity scenarios, settlement velocity, fee sensitivity, and finance risk register |
-| Pilot meter adapter | CSV meter/inverter import + meter onboarding scripts now feed the signed-reading verifier |
+| Pilot meter adapter | CSV meter/inverter import, meter onboarding scripts, and inverter/meter adapter now feed the signed-reading verifier |
 | Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 legacy Sepolia contracts verified on Etherscan**; all 3 fresh attested SPK proof contracts also verified |
 | Governance delay | **86,400s (24h) on all 3 core contracts** |
@@ -66,7 +67,7 @@ See [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) for full parameter state 
 
 ## Honest status line
 
-The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, pilot CSV receipt, empirical dossier, resource benchmark lab, energy-standard economics, energy-money simulation, monetary stress harness, historical resource-to-finance backtest, economic launch-readiness gate, and a local SPK currency-framework contract for invoice settlement plus redemption receipts. The launchable surface is the SolarPunk Public Lab: public demo, reproducible proof, Sepolia readback, daily keeper evidence, NASA/PV/wind resource benchmarks, 862-day finance backtest, economic threshold table, energy-standard issuance math, meter CSV onboarding, and reviewer/operator pilot packets. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, legal/commercial scope, named shortfall/reserve policy, and signed economics that clear DSCR/payback thresholds.
+The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, pilot CSV receipt, inverter/meter adapter receipt, empirical dossier, resource benchmark lab, energy-standard economics, energy-money simulation, monetary stress harness, historical resource-to-finance backtest, economic launch-readiness gate, and a local SPK currency-framework contract for invoice settlement plus redemption receipts. The launchable surface is the SolarPunk Public Lab: public demo, reproducible proof, Sepolia readback, daily keeper evidence, NASA/PV/wind resource benchmarks, 862-day finance backtest, economic threshold table, energy-standard issuance math, meter CSV onboarding, inverter adapter sample path, and reviewer/operator pilot packets. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, legal/commercial scope, named shortfall/reserve policy, and signed economics that clear DSCR/payback thresholds.
 
 See [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) for the current public lab model, [`EVIDENCE.md`](./EVIDENCE.md) for clickable receipts of every claim, and [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) for full context.
 
@@ -75,7 +76,7 @@ See [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) for the current
 | Gap | Status |
 |---|---|
 | Production-governed attestation-enabled SPK redeploy | Open — public proof stack exists, but not Safe-admin/production-governed |
-| Real signed meter adapter | Partial — CSV/onboarding bridge exists; hardware-backed meter custody and live API adapter still open |
+| Real signed meter adapter | Partial — CSV/onboarding bridge plus inverter/meter adapter exists; hardware-backed meter custody and a real operator live source are still open |
 | Economic launch terms | Partial — empirical thresholds are quantified; unsupported paid launch remains blocked until tariff/PPA, capex, support capital, or service revenue terms clear the gap |
 | Shortfall/reserve policy | Partial — monetary stress harness quantifies gaps; named reserve capital and legal redemption terms still open |
 | Single EOA admin | **Closed for core contracts — Safe is admin; StabilityPool auxiliary admin remains deployer EOA** |

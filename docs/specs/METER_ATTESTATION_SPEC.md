@@ -13,6 +13,7 @@ The goal is not to prove physical truth on-chain. The goal is to make the off-ch
 2. The meter signs raw readings in `data/attestations/raw_meter_readings.json`.
    - For fixture generation, run `npm run attestations:fixture`.
    - For a pilot-style inverter/meter CSV export, run `npm run attestations:import-csv`; see `docs/project/METER_CSV_IMPORT.md`.
+   - For cumulative inverter/gateway snapshots or Fronius PowerFlow polling, run `npm run meter:inverter-adapter`; see `docs/product/INVERTER_METER_ADAPTER.md`.
 3. `npm run attestations:build` verifies readings and writes `state/attestations/latest_attestation_bundle.json`.
 4. `npm run proof:spk-attested-mint` hashes the accepted bundle, signs an oracle attestation, and calls `mintFromSurplusAttestation`.
 5. `SolarPunkCoin` consumes both the attestation hash and the source hash before minting SPK.
@@ -117,5 +118,6 @@ npm run product:empirics
 
 - The included private keys are deterministic fixture keys only.
 - The sample readings are synthetic pilot fixtures, not hardware-certified readings.
-- A production adapter must replace fixture generation with inverter/meter API ingestion and hardware key custody.
+- The inverter/meter adapter sample proves the normalization path, not hardware finality.
+- A production adapter must replace fixture generation with a real operator inverter/meter source, cumulative counters where possible, hardware or gateway key custody, tamper-evident logs, and a revocation process.
 - The public Sepolia proof stack is source-verified and exercised, but it is proof-scoped rather than production-governed.

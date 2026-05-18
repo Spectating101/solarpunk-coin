@@ -4,6 +4,8 @@ This is the first pilot-facing adapter path for turning a solar inverter or reve
 
 It does not prove physical truth by itself. It proves that a named meter export can be canonicalized, signed by the registered meter key, checked against the registry, and then passed through the same verifier used by the public SPK mint proof.
 
+For a direct inverter/gateway integration path that starts from cumulative counter snapshots or a Fronius LAN inverter API, see `docs/product/INVERTER_METER_ADAPTER.md` and `scripts/inverter_meter_adapter.js`. The CSV path remains useful for operator exports; the inverter adapter is the cleaner path for automated polling.
+
 ## CSV Schema
 
 Required columns:

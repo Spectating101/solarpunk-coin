@@ -1,0 +1,31 @@
+{
+  "schema": "SPK_RAW_METER_READINGS_V1",
+  "generated_at": "2026-05-18T09:53:40.453Z",
+  "batch_id": "inverter_adapter_sample_2026_02_14",
+  "min_quality_threshold": 0.9,
+  "import_adapter": {
+    "schema": "SPK_INVERTER_METER_ADAPTER_V1",
+    "provider": "sample-cumulative",
+    "source_mode": "sample_cumulative_snapshot_pair",
+    "evidence_grade": "adapter_sample_or_review",
+    "unsigned": false,
+    "signer_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258"
+  },
+  "readings": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-14T00:00:00Z",
+      "window_end": "2026-02-14T23:59:59Z",
+      "generation_kwh": 1388.6,
+      "site_load_kwh": 392.4,
+      "export_kwh": 821.2,
+      "curtailed_kwh": 175,
+      "quality_score": 0.97,
+      "source": "solar_gateway_cumulative_v1_interval_v1",
+      "nonce": "TW-TY-0001:inverter:2026-02-14T00:00:00Z:2026-02-14T23:59:59Z",
+      "payload_hash": "0xd4ecbe5d55f7718a4c562569515e51d9c7dc58f2ad3361cc9a845704c7c7d0e4",
+      "signature": "0x4718f29f34b197ea447f2053a99a902ec90b63870ca9ba7413710dc4095bb8c40d72e51add7ed3f1f0cb06912962b2536c68947dc654825e473399ea541c5be91c"
+    }
+  ]
+}

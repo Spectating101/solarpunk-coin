@@ -144,9 +144,27 @@ This is the first practical bridge from a meter/inverter export into the same si
 | CSV-derived accepted records | 2 accepted, 0 rejected | `docs/project/METER_CSV_ATTESTATION_BUNDLE.md` |
 | CSV-derived surplus | 1,985.5 kWh | Same file |
 | Onboarding demo receipt | Generated | `docs/project/METER_ONBOARDING_RECEIPT.md` |
-| Adapter tests | 7 additional Node tests | `test-node/meter_csv_import.test.js`, `test-node/meter_onboarding.test.js` |
+| Adapter tests | 11 additional Node tests | `test-node/meter_csv_import.test.js`, `test-node/meter_onboarding.test.js`, `test-node/inverter_meter_adapter.test.js` |
 
 Scope note: this is not hardware certification. It is the pilot-ingestion bridge needed before connecting a real meter gateway or inverter API.
+
+### 2.6b Direct Inverter/Meter Adapter
+
+This adds the first direct hardware-facing adapter path. It can normalize cumulative counter snapshots from an inverter, gateway, or revenue meter into the same signed-reading schema. It also includes a Fronius PowerFlow mode for LAN inverter polling, anchored to Fronius' official local JSON API and SunSpec's broader DER interoperability standards.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Adapter command | Available | `scripts/inverter_meter_adapter.js` |
+| Cumulative sample snapshots | 2 snapshots | `data/inverter/sample_cumulative_start.json`, `data/inverter/sample_cumulative_end.json` |
+| Fronius PowerFlow sample payloads | 2 payloads | `data/inverter/fronius_powerflow_start.json`, `data/inverter/fronius_powerflow_end.json` |
+| Accepted adapter interval | 1 accepted, 0 rejected | `docs/product/INVERTER_METER_ADAPTER.md` |
+| Accepted adapter surplus | 996.2 kWh | Same file |
+| Private-key boundary | No private key written to repo outputs | `state/product/inverter_meter_adapter_receipt.json` |
+| Tests | 4 Node tests | `test-node/inverter_meter_adapter.test.js` |
+| Fronius API anchor | Local REST API returns inverter/meter JSON | [Fronius Solar API JSON](https://www.fronius.com/en/help-center/solar-energy/products/monitoring-control/solutions/open-interfaces/fronius-solar-api-json-) |
+| SunSpec anchor | Open DER Modbus standard for inverters/meters | [SunSpec specifications](https://sunspec.org/specifications/) |
+
+Scope note: sample mode proves the integration path only. A closed pilot still needs a real operator meter or inverter source, hardware/gateway key custody, tamper-evident logs, and sign-convention validation.
 
 ### 2.7 SPK Currency Framework Contract
 

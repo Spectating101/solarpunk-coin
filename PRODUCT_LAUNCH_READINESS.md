@@ -1,6 +1,6 @@
 # Product Launch Readiness
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-05-18
 
 ## Product thesis
 
@@ -25,6 +25,7 @@ This is the product story that the repo should now support: verified surplus ren
 | Meter ingestion | `scripts/derive_meter_attestations.js` verifies signed raw readings into `state/attestations/` | The data side now has registered meter identities and signature checks |
 | Meter CSV import | `scripts/import_meter_csv.js` canonicalizes and signs inverter/meter CSV exports | First pilot-facing bridge from real meter exports into the attestation pipeline |
 | Pilot CSV receipt | `scripts/pilot_csv_receipt.js` generates raw readings, accepted bundle, source hash, and mint preview | First end-to-end operator-style CSV proof surface |
+| Inverter/meter adapter | `scripts/inverter_meter_adapter.js` normalizes cumulative counter snapshots and Fronius PowerFlow intervals | First direct hardware-facing adapter path; sample mode proves the verifier bridge, real operator mode still needs hardware custody |
 | Monetary stress harness | `scripts/monetary_stress_harness.js` generates redemption-wave and shortfall scenarios | Shows where SPK needs named reserve capital instead of pretending physical shortfalls can be printed away |
 | Energy-money simulation | `scripts/energy_money_simulation.js` uses real keeper-index resource days plus explicit assumptions | Shows SPK as an energy-standard monetary system, not merely a pilot receipt generator |
 | SPK finance dossier | `scripts/spk_finance_dossier.js` turns simulation/stress artifacts into income statement, balance sheet, break-even, and finance-stack views | Makes the finance blockers explicit: current fee policy is not self-funding and stress capital must be named |
@@ -48,6 +49,7 @@ This is the product story that the repo should now support: verified surplus ren
 - The meter bundle pipeline verifies device signatures, rejects duplicate/low-quality readings, and produces deterministic record hashes plus a product-level source hash.
 - The generated product proof demonstrates the full path from sample meter records to a public Sepolia SPK mint, with deterministic local reproduction still available.
 - The pilot CSV receipt demonstrates a realistic operator/export path: `1,985.5` accepted kWh becomes a deterministic source hash and `99.15075 SPK` mint preview without writing private keys to repo outputs.
+- The inverter/meter adapter demonstrates the direct hardware-facing path: cumulative counter snapshots become `1` signed interval, `996.2` accepted surplus kWh, and an accepted attestation bundle. Fronius PowerFlow polling is wired for LAN inverter tests, but sample mode is not real hardware provenance.
 - The monetary stress harness keeps the economics honest by converting redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.
 - The energy-money simulation uses recent real keeper-index days to model SPK issuance, settlement velocity, redemption claims, active supply, and reserve gaps across rooftop, neighborhood, and commercial archetypes.
 - The empirical finance backtest uses 862 observed NASA POWER daily records to estimate annual energy value, DSCR, payback, and monthly revenue-at-risk across 10 kW, 250 kW, and 1 MW archetypes.
@@ -61,7 +63,7 @@ This is the product story that the repo should now support: verified surplus ren
 
 2. **Real meter provenance**
 
-   The current bundle is deterministic and useful for demonstration, but production needs a real adapter:
+   The current bundle and adapter sample are deterministic and useful for demonstration, but production needs a real operator source:
 
    - device identity
    - signed readings
@@ -94,7 +96,7 @@ npm run product:launch-gate
 
 Current gate result: **launch the SolarPunk Public Lab; do not launch paid/mainnet**.
 
-That means the public demo, Sepolia proof, SPK mint dashboard, currency-system lab, pilot CSV receipt, energy-money simulation, empirical finance backtest, economic launch-readiness gate, monetary stress harness, resource benchmark lab, energy-standard economics, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external public lab. A closed pilot is still blocked until there is a governed attested-SPK redeploy, one real meter or inverter adapter, and anchor economics or support terms. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, named reserve/shortfall policy, production deployment, and self-consistent unit economics exist.
+That means the public demo, Sepolia proof, SPK mint dashboard, currency-system lab, pilot CSV receipt, inverter/meter adapter receipt, energy-money simulation, empirical finance backtest, economic launch-readiness gate, monetary stress harness, resource benchmark lab, energy-standard economics, signed-meter fixture, CSV onboarding path, daily keeper evidence, and reproducible docs are launchable as an external public lab. A closed pilot is still blocked until there is a governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics or support terms. A paid/mainnet product is blocked until audit, legal/commercial scope, redemption policy, named reserve/shortfall policy, production deployment, and self-consistent unit economics exist.
 
 See `docs/product/PUBLIC_LAB.md` for the operating model.
 
@@ -105,6 +107,7 @@ See `docs/product/PUBLIC_LAB.md` for the operating model.
 - Run `npm run proof:spk-attested-mint`.
 - Run `npm run product:empirics`.
 - Run `npm run product:pilot-csv`.
+- Run `npm run meter:inverter-adapter -- --use-dev-fixture-key --now=2026-05-16T00:00:00Z`.
 - Run `npm run product:monetary-stress`.
 - Run `npm run product:energy-money-sim`.
 - Run `npm run product:empirical-backtest`.
@@ -125,9 +128,10 @@ Target outcome: anyone can reproduce the core SPK product path and compare it to
 
 Target outcome: public explorer proof under pilot-grade governance that verified surplus kWh can mint SPK.
 
-### Phase 2: Real meter adapter
+### Phase 2: Real meter/inverter adapter
 
-- Replace sample bundle with one real data adapter.
+- Replace sample bundle or sample adapter snapshots with one real operator data source.
+- Prefer cumulative revenue-meter/inverter counters; use Fronius PowerFlow polling only after validating the site sign convention and interval quality.
 - Sign bundle records from a controlled operator key.
 - Commit daily bundle summaries.
 - Add freshness and failure alerts.

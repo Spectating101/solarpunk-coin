@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T05:03:35.395Z",
+  "generated_at": "2026-05-18T09:56:32.028Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 11,
+      "passed_checks": 12,
       "blocking_checks": 0,
       "checks": [
         {
@@ -36,7 +36,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-17 (0 days old).",
+          "message": "Latest keeper run is 2026-05-17 (1 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -52,6 +52,13 @@
           "blocking": true,
           "message": "Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.",
           "evidence": "docs/product/PILOT_CSV_RECEIPT.md"
+        },
+        {
+          "name": "Inverter/meter adapter receipt exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.",
+          "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
           "name": "Monetary stress harness passes",
@@ -94,7 +101,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 12,
+      "passed_checks": 13,
       "blocking_checks": 3,
       "checks": [
         {
@@ -122,7 +129,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-17 (0 days old).",
+          "message": "Latest keeper run is 2026-05-17 (1 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -138,6 +145,13 @@
           "blocking": true,
           "message": "Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.",
           "evidence": "docs/product/PILOT_CSV_RECEIPT.md"
+        },
+        {
+          "name": "Inverter/meter adapter receipt exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.",
+          "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
           "name": "Monetary stress harness passes",
@@ -185,8 +199,8 @@
           "name": "Real meter or inverter adapter",
           "pass": false,
           "blocking": true,
-          "message": "Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.",
-          "evidence": "docs/project/METER_CSV_IMPORT.md"
+          "message": "Current public mint batch batch_2026_02_12_a is fixture/proof data and inverter adapter real_operator_source is false; closed pilot needs one real operator meter or inverter export.",
+          "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
           "name": "Anchor economics or support terms",
@@ -222,7 +236,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 12,
+      "passed_checks": 13,
       "blocking_checks": 8,
       "checks": [
         {
@@ -250,7 +264,7 @@
           "name": "Daily keeper evidence is fresh",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-17 (0 days old).",
+          "message": "Latest keeper run is 2026-05-17 (1 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -266,6 +280,13 @@
           "blocking": true,
           "message": "Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.",
           "evidence": "docs/product/PILOT_CSV_RECEIPT.md"
+        },
+        {
+          "name": "Inverter/meter adapter receipt exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.",
+          "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
           "name": "Monetary stress harness passes",
@@ -313,8 +334,8 @@
           "name": "Real meter or inverter adapter",
           "pass": false,
           "blocking": true,
-          "message": "Current batch batch_2026_02_12_a is fixture/proof data; closed pilot needs one real meter or inverter export.",
-          "evidence": "docs/project/METER_CSV_IMPORT.md"
+          "message": "Current public mint batch batch_2026_02_12_a is fixture/proof data and inverter adapter real_operator_source is false; closed pilot needs one real operator meter or inverter export.",
+          "evidence": "docs/product/INVERTER_METER_ADAPTER.md"
         },
         {
           "name": "Anchor economics or support terms",
@@ -384,7 +405,7 @@
   },
   "next_actions": [
     "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
-    "Next build target: governed attested-SPK redeploy, one real meter or inverter adapter, and anchor economics that clear the launch-readiness thresholds.",
+    "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
     "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
     "Use the monetary stress harness to size any named reserve before promising redemption.",
     "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, economic terms, and shortfall policy are resolved."

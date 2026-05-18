@@ -53,7 +53,7 @@ function summarizeNextActions(modes) {
   if (modes.public_testnet_product.status === "launchable") {
     return [
       "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, and meter CSV onboarding.",
-      "Next build target: governed attested-SPK redeploy, one real meter or inverter adapter, and anchor economics that clear the launch-readiness thresholds.",
+      "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
       "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
       "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, economic terms, and shortfall policy are resolved.",
@@ -74,6 +74,7 @@ function evaluateLaunchGate(options = {}) {
   const keeper = readJson(root, "state/keeper_logs/summary.json", {});
   const deployment = readJson(root, "state/deployments/sepolia_attested_spk_deploy.json", {});
   const pilotCsv = readJson(root, "state/product/pilot_csv_receipt.json", {});
+  const inverterAdapter = readJson(root, "state/product/inverter_meter_adapter_receipt.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
@@ -92,6 +93,8 @@ function evaluateLaunchGate(options = {}) {
   const bestEconomicArchetype = economicLaunch.best_current_archetype || {};
   const auditStatus = audit.external_audit?.status || "UNKNOWN";
   const isFixtureBatch = String(meterToMint.batch_id || "").startsWith("batch_2026_02_12");
+  const inverterAdapterAccepted = Number(inverterAdapter.attestation_bundle?.summary?.accepted_records || 0) > 0;
+  const inverterAdapterRealSource = Boolean(inverterAdapter.hardware_provenance?.real_operator_source);
   const allContractsVerified = Boolean(deployment.source_verification?.contracts_verified)
     || Object.values(deploymentContracts).every((item) => item && item.verified);
 
@@ -131,6 +134,12 @@ function evaluateLaunchGate(options = {}) {
       Boolean(pilotCsv.mint_preview?.can_mint_from_receipt && Number(pilotCsv.attestation_bundle?.summary?.accepted_records || 0) > 0),
       "Pilot CSV receipt produces accepted readings, source hash, and SPK mint preview.",
       "docs/product/PILOT_CSV_RECEIPT.md"
+    ),
+    check(
+      "Inverter/meter adapter receipt exists",
+      Boolean(inverterAdapterAccepted && inverterAdapter.mint_readiness?.can_mint_from_adapter),
+      "Cumulative inverter/meter adapter output feeds the signed-reading verifier and produces an accepted surplus bundle.",
+      "docs/product/INVERTER_METER_ADAPTER.md"
     ),
     check(
       "Monetary stress harness passes",
@@ -186,9 +195,9 @@ function evaluateLaunchGate(options = {}) {
     ),
     check(
       "Real meter or inverter adapter",
-      !isFixtureBatch,
-      `Current batch ${meterToMint.batch_id || "unknown"} is fixture/proof data; closed pilot needs one real meter or inverter export.`,
-      "docs/project/METER_CSV_IMPORT.md"
+      !isFixtureBatch || inverterAdapterRealSource,
+      `Current public mint batch ${meterToMint.batch_id || "unknown"} is fixture/proof data and inverter adapter real_operator_source is ${inverterAdapterRealSource}; closed pilot needs one real operator meter or inverter export.`,
+      "docs/product/INVERTER_METER_ADAPTER.md"
     ),
     check(
       "Anchor economics or support terms",

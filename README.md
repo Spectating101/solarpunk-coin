@@ -21,6 +21,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: public proof, local field receipt, redemption framework, settlement framework |
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
 | [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end field receipt: signed meter surplus -> mint -> settlement -> redemption -> delivery |
+| [`docs/product/INVERTER_METER_ADAPTER.md`](./docs/product/INVERTER_METER_ADAPTER.md) | Inverter/meter adapter receipt: cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle |
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV receipt: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
 | [`docs/product/ENERGY_MONEY_SIMULATION.md`](./docs/product/ENERGY_MONEY_SIMULATION.md) | Energy-standard monetary simulation: measured resource signal -> SPK issuance -> settlement -> redemption risk |
@@ -109,6 +110,10 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Meter onboarding command writes a registry receipt without storing private keys
   - CSV import signs meter/inverter rows and feeds the same verifier as the public SPK proof
   - Sample CSV-derived bundle: `2` accepted, `0` rejected, `1,985.5` kWh surplus
+- **Inverter/meter adapter bridge** — see `docs/product/INVERTER_METER_ADAPTER.md`
+  - Cumulative inverter/meter snapshots normalize into `SPK_RAW_METER_READINGS_V1`
+  - Sample adapter receipt: `1` accepted signed interval, `996.2` kWh accepted surplus
+  - Fronius PowerFlow mode can poll a LAN inverter with `--host`, while production minting should prefer cumulative counters and hardware/gateway key custody
 - **Pilot CSV receipt** — see `docs/product/PILOT_CSV_RECEIPT.md`
   - Sample CSV -> `2` accepted rows -> `1,985.5` kWh surplus -> deterministic source hash
   - Mint preview: `99.15075 SPK` at `$0.05/kWh` after 10 bps mint fee
