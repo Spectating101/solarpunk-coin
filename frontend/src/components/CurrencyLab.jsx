@@ -17,6 +17,7 @@ import inverterMeterAdapter from '../../../state/product/inverter_meter_adapter_
 import hardwareProvenance from '../../../state/product/hardware_provenance_model.json';
 import closedPilotPackage from '../../../state/product/closed_pilot_execution_package.json';
 import publicSolarReplay from '../../../state/product/public_solar_data_replay.json';
+import operatorDataIntake from '../../../state/product/operator_data_intake.json';
 import monetaryStress from '../../../state/product/monetary_stress_harness.json';
 import energyMoneySimulation from '../../../state/product/energy_money_simulation.json';
 import spkFinanceDossier from '../../../state/product/spk_finance_dossier.json';
@@ -139,6 +140,13 @@ export default function CurrencyLab() {
           <div className="metric-value">{formatNumber(publicSolarReplay.mint_preview.net_spk, 5)} SPK</div>
           <div className="metric-sub">
             {publicSolarReplay.replay_summary.accepted_days} historical Ausgrid days, {formatNumber(publicSolarReplay.replay_summary.total_export_surplus_kwh, 2)} kWh export surplus
+          </div>
+        </div>
+        <div className="metric-card metric-amber">
+          <div className="metric-label">Operator Intake</div>
+          <div className="metric-value">{formatNumber(operatorDataIntake.mint_preview.net_spk, 5)} SPK</div>
+          <div className="metric-sub">
+            {operatorDataIntake.validation_summary.accepted_records} accepted rows, {operatorDataIntake.provenance_assessment.level} provenance, {formatNumber(operatorDataIntake.validation_summary.total_eligible_surplus_kwh, 2)} kWh eligible surplus
           </div>
         </div>
         <div className="metric-card metric-amber">
@@ -367,6 +375,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`} target="_blank" rel="noreferrer">
               Public solar replay <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/OPERATOR_DATA_INTAKE.md`} target="_blank" rel="noreferrer">
+              Operator intake <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/HARDWARE_PROVENANCE_MODEL.md`} target="_blank" rel="noreferrer">
               Hardware provenance <ExternalLink size={12} />

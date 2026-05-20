@@ -1,0 +1,31 @@
+{
+  "schema": "SPK_OPERATOR_PROFILE_V1",
+  "operator_name": "SolarPunk sample 10 kW rooftop",
+  "operator_type": "sample_fixture",
+  "real_operator_source": false,
+  "site_id": "sample-rooftop-10kw",
+  "meter_id": "TW-TY-0001",
+  "capacity_kw": 10,
+  "generation_resource": "solar_pv_rooftop",
+  "location_label": "Taiwan sample profile",
+  "timezone": "Asia/Taipei",
+  "data_source": {
+    "kind": "operator_csv",
+    "source_system": "sample inverter export",
+    "archive_policy": "checked into repo for reproducible demo only"
+  },
+  "device": {
+    "model": "Sample inverter/gateway",
+    "serial_or_hash": "sample-only",
+    "commissioning_date": "2026-01-01",
+    "accuracy_basis": "not revenue grade"
+  },
+  "provenance": {
+    "level": "L0",
+    "label": "Sample operator fixture",
+    "external_operator_confirmed": false,
+    "live_api": false,
+    "utility_corroborated": false
+  },
+  "commercial_boundary": "This file is sample data for a public lab demo. It is not a real operator source and cannot support paid SPK issuance."
+}

@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-18T16:12:56.743Z`
+- generated_at: `2026-05-18T18:39:46.612Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,13 +9,13 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 15 | 0 |
-| Closed testnet pilot | `blocked` | 16 | 4 |
-| Paid/mainnet product | `blocked` | 16 | 9 |
+| SolarPunk Public Lab | `launchable` | 16 | 0 |
+| Closed testnet pilot | `blocked` | 17 | 4 |
+| Paid/mainnet product | `blocked` | 17 | 9 |
 
 ## Next Actions
 
-- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.
+- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.
 - Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.
 - Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.
 - Use the monetary stress harness to size any named reserve before promising redemption.
@@ -43,6 +43,8 @@
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
+- PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
+  Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -76,6 +78,8 @@
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
+- PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
+  Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -123,6 +127,8 @@
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
+- PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
+  Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.

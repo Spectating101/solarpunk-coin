@@ -183,7 +183,27 @@ This uses public historical rooftop-solar data to test SPK mint math against rea
 
 Scope note: this is public historical data re-signed by the lab for replay through the existing verifier. It is useful economic/model evidence, not live meter proof.
 
-### 2.6d Hardware Provenance Model
+### 2.6d Operator Data Intake
+
+This turns the real-data ask into a runnable product path: one solar operator CSV/profile becomes validated rows, signed raw readings, accepted/rejected verifier output, eligible surplus, and an SPK cryptocurrency mint preview.
+
+| Claim | Value | Artifact |
+|---|---|---|
+| Intake generator | Available | `scripts/operator_data_intake.js` |
+| Sample operator profile | 10 kW rooftop sample | `data/operator/sample_operator_profile.json` |
+| Sample operator CSV | 7 daily rows | `data/operator/sample_operator_export.csv` |
+| Accepted verifier records | 7 accepted, 0 rejected | `docs/product/OPERATOR_DATA_INTAKE.md` |
+| Eligible surplus | 103.8 kWh | Same file |
+| Mint preview | 5.14485 SPK | `state/product/operator_data_intake.json` |
+| Daily normalized CSV | Generated | `state/product/operator_data_daily.csv` |
+| Operator handoff | Schema and run command | `data/operator/README.md` |
+| Outreach packet | Target list, email, follow-up | `docs/product/DATA_REQUEST_OUTREACH.md` |
+| Commercial packet | Paid research/demo/pilot offer | `docs/product/PILOT_COMMERCIAL_PACKET.md` |
+| Tests | 5 Node tests | `test-node/operator_data_intake.test.js` |
+
+Scope note: checked-in sample data is L0 public-lab evidence only. The value of this path is that a real external CSV can now drop into the same workflow without inventing a new process.
+
+### 2.6e Hardware Provenance Model
 
 This converts the physical hardware gap into an explicit risk model instead of a vague blocker. The model ranks meter/inverter evidence from L0 sample data through L4 utility-corroborated data, then applies risk haircuts and kWh/day caps to the current adapter surplus basis.
 
@@ -201,7 +221,7 @@ This converts the physical hardware gap into an explicit risk model instead of a
 
 Scope note: this model does not certify hardware. It makes the certification gap measurable and gives a concrete upgrade path.
 
-### 2.6e Closed Pilot Execution Package
+### 2.6f Closed Pilot Execution Package
 
 This turns the remaining path from public lab to closed pilot into an operator intake checklist, action queue, command set, acceptance criteria, and owner map.
 

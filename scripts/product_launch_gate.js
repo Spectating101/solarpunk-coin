@@ -52,7 +52,7 @@ function summarizeNextActions(modes) {
   }
   if (modes.public_testnet_product.status === "launchable") {
     return [
-      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.",
+      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.",
       "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
       "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
@@ -78,6 +78,7 @@ function evaluateLaunchGate(options = {}) {
   const hardwareProvenance = readJson(root, "state/product/hardware_provenance_model.json", {});
   const closedPilotPackage = readJson(root, "state/product/closed_pilot_execution_package.json", {});
   const publicSolarReplay = readJson(root, "state/product/public_solar_data_replay.json", {});
+  const operatorDataIntake = readJson(root, "state/product/operator_data_intake.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
@@ -171,6 +172,17 @@ function evaluateLaunchGate(options = {}) {
       ),
       "Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.",
       "docs/product/PUBLIC_SOLAR_DATA_REPLAY.md"
+    ),
+    check(
+      "Generic operator intake exists",
+      Boolean(
+        Number(operatorDataIntake.validation_summary?.accepted_records || 0) > 0 &&
+          Number(operatorDataIntake.validation_summary?.total_eligible_surplus_kwh || 0) > 0 &&
+          (operatorDataIntake.mint_preview?.can_mint_spk_from_bundle ??
+            operatorDataIntake.mint_preview?.can_mint_from_receipt)
+      ),
+      "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
+      "docs/product/OPERATOR_DATA_INTAKE.md"
     ),
     check(
       "Monetary stress harness passes",

@@ -1,6 +1,6 @@
 # Product Launch Readiness
 
-**Last updated:** 2026-05-18
+**Last updated:** 2026-05-19
 
 ## Product thesis
 
@@ -27,6 +27,7 @@ This is the product story that the repo should now support: verified surplus ren
 | Pilot CSV proof | `scripts/pilot_csv_receipt.js` generates raw readings, accepted bundle, source hash, and mint preview | First end-to-end operator-style CSV proof surface |
 | Inverter/meter adapter | `scripts/inverter_meter_adapter.js` normalizes cumulative counter snapshots and Fronius PowerFlow intervals | First direct hardware-facing adapter path; sample mode proves the verifier bridge, real operator mode still needs hardware custody |
 | Public solar data replay | `scripts/public_solar_data_replay.js` normalizes public historical Ausgrid rooftop-solar rows into SPK verifier inputs | Shows SPK mint math against real-world public solar profiles without pretending this is live hardware proof |
+| Operator data intake | `scripts/operator_data_intake.js` normalizes a generic solar operator CSV/profile into SPK verifier inputs | Converts the next external ask into a concrete artifact: CSV in, accepted/rejected rows, eligible surplus, SPK preview, and case-study output |
 | Hardware provenance model | `scripts/hardware_provenance_model.js` generates L0-L4 hardware tiers, risk haircuts, issuance caps, and upgrade evidence | Prevents the hardware gap from being hand-waved; current adapter sample is L0 with 0 kWh real-value cap |
 | Closed pilot execution package | `scripts/closed_pilot_execution_package.js` generates operator intake, execution modes, action queue, and acceptance criteria | Converts remaining pilot obstacles into named inputs, commands, owners, and success definitions |
 | Monetary stress harness | `scripts/monetary_stress_harness.js` generates redemption-wave and shortfall scenarios | Shows where SPK needs named reserve capital instead of pretending physical shortfalls can be printed away |
@@ -54,6 +55,7 @@ This is the product story that the repo should now support: verified surplus ren
 - The pilot CSV proof demonstrates a realistic operator/export path: `1,985.5` accepted kWh becomes a deterministic source hash and `99.15075 SPK` mint preview without writing private keys to repo outputs.
 - The inverter/meter adapter demonstrates the direct hardware-facing path: cumulative counter snapshots become `1` signed interval, `996.2` accepted surplus kWh, and an accepted attestation bundle. Fronius PowerFlow polling is wired for LAN inverter tests, but sample mode is not real hardware provenance.
 - The public solar data replay demonstrates that public historical rooftop-solar profiles can be normalized into the same verifier shape and SPK mint preview while staying clearly outside live-hardware provenance.
+- The operator data intake path demonstrates the exact handoff needed for an external solar owner or lab: current sample accepts `7` daily rows, validates `103.8 kWh` eligible surplus, and previews `5.14485 SPK`.
 - The hardware provenance model makes the physical-data gap explicit: L0 sample data is public-lab only, L2 is the minimum closed-pilot target, L3/L4 are the revenue-grade or utility-corroborated targets for real-value scale.
 - The closed-pilot execution package turns the next lane into an action queue: collect L2 operator source, run the adapter, redeploy governed pilot stack, secure anchor economics, and rerun gates.
 - The monetary stress harness keeps the economics honest by converting redemption waves into owed kWh, delivered kWh, shortfall kWh, fee buffer, and additional reserve requirement.

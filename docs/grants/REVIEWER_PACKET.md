@@ -1,6 +1,6 @@
 # SolarPunk Protocol — Reviewer Packet
 
-**Last updated:** 2026-05-18
+**Last updated:** 2026-05-19
 **Purpose:** one-page orientation for grant reviewers, advisors, and ecosystem partners.
 
 ## One-line summary
@@ -17,6 +17,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | Pilot meter import | Meter onboarding + CSV import path for inverter/meter exports | [`docs/project/METER_CSV_IMPORT.md`](../project/METER_CSV_IMPORT.md) |
 | Pilot CSV proof | CSV export -> signed readings -> accepted bundle -> source hash -> SPK mint preview | [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) |
 | Public solar replay | Public historical rooftop-solar data -> normalized export surplus -> SPK mint preview | [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](../product/PUBLIC_SOLAR_DATA_REPLAY.md) |
+| Operator data intake | Generic solar operator CSV/profile -> validation -> eligible surplus -> SPK cryptocurrency preview | [`docs/product/OPERATOR_DATA_INTAKE.md`](../product/OPERATOR_DATA_INTAKE.md) |
 | Inverter/meter adapter | Cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle | [`docs/product/INVERTER_METER_ADAPTER.md`](../product/INVERTER_METER_ADAPTER.md) |
 | Hardware provenance model | L0-L4 hardware assurance tiers, risk haircuts, kWh caps, and upgrade checklist | [`docs/product/HARDWARE_PROVENANCE_MODEL.md`](../product/HARDWARE_PROVENANCE_MODEL.md) |
 | Closed pilot execution package | Operator intake, commands, action queue, owners, and acceptance criteria for the next pilot lane | [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](../product/CLOSED_PILOT_EXECUTION_PACKAGE.md) |
@@ -40,11 +41,12 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 3. Open [`docs/product/SPK_PUBLIC_READBACK.md`](../product/SPK_PUBLIC_READBACK.md) and confirm the Sepolia replay guards are consumed.
 4. Open [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) and confirm the operator-style CSV bridge.
 5. Open [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](../product/PUBLIC_SOLAR_DATA_REPLAY.md) and confirm the public historical solar replay boundary.
-6. Open [`docs/product/INVERTER_METER_ADAPTER.md`](../product/INVERTER_METER_ADAPTER.md) and confirm the direct adapter path.
-7. Open [`docs/product/HARDWARE_PROVENANCE_MODEL.md`](../product/HARDWARE_PROVENANCE_MODEL.md) and confirm the real hardware boundary.
-8. Open [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](../product/CLOSED_PILOT_EXECUTION_PACKAGE.md) and inspect the operator/action queue.
-9. Open [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) and inspect the shortfall/reserve table.
-10. Open [`EVIDENCE.md`](../../EVIDENCE.md) and inspect the daily keeper and Sepolia transaction trail.
+6. Open [`docs/product/OPERATOR_DATA_INTAKE.md`](../product/OPERATOR_DATA_INTAKE.md) and confirm the generic real-data handoff path.
+7. Open [`docs/product/INVERTER_METER_ADAPTER.md`](../product/INVERTER_METER_ADAPTER.md) and confirm the direct adapter path.
+8. Open [`docs/product/HARDWARE_PROVENANCE_MODEL.md`](../product/HARDWARE_PROVENANCE_MODEL.md) and confirm the real hardware boundary.
+9. Open [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](../product/CLOSED_PILOT_EXECUTION_PACKAGE.md) and inspect the operator/action queue.
+10. Open [`docs/product/MONETARY_STRESS_HARNESS.md`](../product/MONETARY_STRESS_HARNESS.md) and inspect the shortfall/reserve table.
+11. Open [`EVIDENCE.md`](../../EVIDENCE.md) and inspect the daily keeper and Sepolia transaction trail.
 
 ## What is real today
 
@@ -53,6 +55,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - The sample meter pipeline verifies 2 device signatures, rejects duplicate/low-quality readings, accepts 2,606.7 kWh, and the Sepolia proof mints 130.1697 SPK from 2,606 on-chain kWh.
 - The pilot CSV bridge imports meter/inverter rows into signed raw readings, derives a 1,985.5 kWh accepted-surplus bundle, and previews 99.15075 SPK.
 - The public solar replay runs historical Ausgrid rooftop-solar data through normalized export-surplus math and previews SPK without claiming live hardware provenance.
+- The operator data intake path accepts a generic solar CSV/profile and produces a case-study artifact; the current sample validates 7 daily rows, 103.8 kWh eligible surplus, and 5.14485 SPK preview.
 - The inverter/meter adapter normalizes cumulative counter snapshots into one accepted signed interval with 996.2 kWh accepted surplus and includes a Fronius LAN PowerFlow mode for real inverter testing.
 - The hardware provenance model keeps the adapter honest: current sample mode is L0 with 0 kWh real-value cap; closed pilot needs L2 or better real-operator evidence.
 - The closed-pilot execution package maps remaining pilot work into concrete inputs, commands, acceptance criteria, and owners instead of leaving vague blockers.

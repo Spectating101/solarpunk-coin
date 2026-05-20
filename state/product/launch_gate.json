@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18T16:12:56.743Z",
+  "generated_at": "2026-05-18T18:39:46.612Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 15,
+      "passed_checks": 16,
       "blocking_checks": 0,
       "checks": [
         {
@@ -82,6 +82,13 @@
           "evidence": "docs/product/PUBLIC_SOLAR_DATA_REPLAY.md"
         },
         {
+          "name": "Generic operator intake exists",
+          "pass": true,
+          "blocking": true,
+          "message": "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
+          "evidence": "docs/product/OPERATOR_DATA_INTAKE.md"
+        },
+        {
           "name": "Monetary stress harness passes",
           "pass": true,
           "blocking": true,
@@ -122,7 +129,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 16,
+      "passed_checks": 17,
       "blocking_checks": 4,
       "checks": [
         {
@@ -194,6 +201,13 @@
           "blocking": true,
           "message": "Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.",
           "evidence": "docs/product/PUBLIC_SOLAR_DATA_REPLAY.md"
+        },
+        {
+          "name": "Generic operator intake exists",
+          "pass": true,
+          "blocking": true,
+          "message": "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
+          "evidence": "docs/product/OPERATOR_DATA_INTAKE.md"
         },
         {
           "name": "Monetary stress harness passes",
@@ -285,7 +299,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 16,
+      "passed_checks": 17,
       "blocking_checks": 9,
       "checks": [
         {
@@ -357,6 +371,13 @@
           "blocking": true,
           "message": "Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.",
           "evidence": "docs/product/PUBLIC_SOLAR_DATA_REPLAY.md"
+        },
+        {
+          "name": "Generic operator intake exists",
+          "pass": true,
+          "blocking": true,
+          "message": "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
+          "evidence": "docs/product/OPERATOR_DATA_INTAKE.md"
         },
         {
           "name": "Monetary stress harness passes",
@@ -481,7 +502,7 @@
     }
   },
   "next_actions": [
-    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.",
+    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.",
     "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
     "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
     "Use the monetary stress harness to size any named reserve before promising redemption.",

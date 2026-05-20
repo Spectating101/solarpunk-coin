@@ -22,11 +22,15 @@ Use these first when facts conflict elsewhere:
 - `docs/product/PUBLIC_LAB.md` — current public lab operating model
 - `docs/product/PUBLIC_LAB_SOCIAL_KIT.md` — social validation copy and guardrails
 - `docs/product/PRODUCT_LAUNCH_GATE.md` — explicit launch gates and blockers
+- `docs/product/SOLARPUNK_FULL_CONTEXT_FOR_CLAUDE.md` — full Claude handoff: product framing, proof surfaces, launch gates, commands, and next steps
 - `docs/product/CURRENCY_SYSTEM_LAB.md` — compressed four-layer currency-system lab
 - `docs/product/CURRENCY_FRAMEWORK_READINESS.md` — internal SPK currency-framework readiness checks
 - `docs/product/FIELD_RECEIPT_LOOP.md` — local no-external-dependency SPK loop
 - `docs/product/INVERTER_METER_ADAPTER.md` — direct inverter/meter adapter output: cumulative snapshots/Fronius PowerFlow into signed attestations
 - `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` — public historical solar data replay into SPK mint math
+- `docs/product/OPERATOR_DATA_INTAKE.md` — generic operator CSV intake, validation, eligible surplus, and SPK cryptocurrency preview
+- `docs/product/DATA_REQUEST_OUTREACH.md` — target list, email templates, and data-request handoff for real solar datasets
+- `docs/product/PILOT_COMMERCIAL_PACKET.md` — paid research/demo/pilot offer and pricing bands
 - `docs/product/HARDWARE_PROVENANCE_MODEL.md` — hardware assurance tiers, risk haircuts, issuance caps, and upgrade checklist
 - `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md` — closed-pilot operator intake, action queue, commands, owners, and acceptance criteria
 - `docs/product/PILOT_CSV_RECEIPT.md` — pilot CSV proof: signed readings, accepted bundle, source hash, SPK mint preview

@@ -4,7 +4,9 @@
 
 This packet is for one renewable-energy operator, homeowner, researcher, or integrator who can share a meter or inverter export.
 
-The goal is narrow: convert one CSV export into public lab proof that shows accepted readings, rejected readings, surplus kWh, source hash, and SPK mint preview. It is not a paid pilot, token sale, or legal redemption offer.
+The goal is narrow: convert one CSV export into public lab proof that shows accepted readings, rejected readings, surplus kWh, source hash, and SPK mint preview. It is not a token sale or legal redemption offer.
+
+For the generic current intake path, start with [`data/operator/README.md`](../../data/operator/README.md) and [`docs/product/OPERATOR_DATA_INTAKE.md`](./OPERATOR_DATA_INTAKE.md).
 
 ## What To Send
 
@@ -32,6 +34,8 @@ Do not send:
 
 Running the pilot path produces:
 
+- `state/product/operator_data_intake.json` — generic operator case-study report with provenance level and SPK preview.
+- `state/product/operator_data_daily.csv` — normalized daily rows for the dashboard/report.
 - `state/product/pilot_csv_raw_readings.json` — canonical raw readings generated from the CSV.
 - `state/product/pilot_csv_attestation_bundle.json` — accepted/rejected verifier result.
 - `state/product/pilot_csv_receipt.json` — reviewer-facing summary with mint preview.
@@ -43,15 +47,15 @@ The current sample run accepts `2` rows, records `1,985.5 kWh` surplus, floors o
 
 ```bash
 npm run product:pilot-csv
+npm run product:operator-intake
 ```
 
 For a real operator file, use:
 
 ```bash
-METER_PRIVATE_KEY=0x... node scripts/pilot_csv_receipt.js \
-  --csv=data/attestations/operator_export.csv \
-  --meter-id=OPERATOR-METER-001 \
-  --site-id=operator-site-a \
+METER_PRIVATE_KEY=0x... node scripts/operator_data_intake.js \
+  --csv=data/operator/operator_export.csv \
+  --profile=data/operator/operator_profile.json \
   --now=2026-05-17T00:00:00Z
 ```
 

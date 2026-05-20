@@ -26,6 +26,9 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](./docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md) | Closed-pilot execution package: operator intake, action queue, commands, caps, and acceptance criteria |
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV proof: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](./docs/product/PUBLIC_SOLAR_DATA_REPLAY.md) | Public historical solar replay: Ausgrid rooftop data -> normalized surplus -> SPK mint preview |
+| [`docs/product/OPERATOR_DATA_INTAKE.md`](./docs/product/OPERATOR_DATA_INTAKE.md) | Generic operator intake: real solar CSV shape -> validation -> eligible surplus -> SPK cryptocurrency preview |
+| [`docs/product/DATA_REQUEST_OUTREACH.md`](./docs/product/DATA_REQUEST_OUTREACH.md) | Data request target list, email, follow-up, and operator-file handoff |
+| [`docs/product/PILOT_COMMERCIAL_PACKET.md`](./docs/product/PILOT_COMMERCIAL_PACKET.md) | Paid research/demo/pilot offer and pricing bands |
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
 | [`docs/product/ENERGY_MONEY_SIMULATION.md`](./docs/product/ENERGY_MONEY_SIMULATION.md) | Energy-standard monetary simulation: measured resource signal -> SPK issuance -> settlement -> redemption risk |
 | [`docs/product/SPK_FINANCE_DOSSIER.md`](./docs/product/SPK_FINANCE_DOSSIER.md) | Finance dossier: income statement, balance-sheet liability, break-even fee base, reserve coverage, and closed-pilot finance stack |
@@ -121,6 +124,10 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Public historical Ausgrid rooftop-solar data replays through the same verifier shape
   - Current sample: `3` historical days, export surplus normalized into an SPK mint preview
   - Explicit boundary: this proves model behavior on real-world public solar profiles, not live hardware provenance
+- **Operator data intake** — see `docs/product/OPERATOR_DATA_INTAKE.md`
+  - Generic real-operator CSV shape normalizes solar generation/load/export rows into the same SPK verifier path
+  - Current sample: `7` days from a 10 kW rooftop profile, `103.8 kWh` eligible surplus, `5.14485 SPK` mint preview
+  - Explicit boundary: checked-in sample is public-lab evidence only; external paid/closed pilot still needs a named real operator source
 - **Hardware provenance model** — see `docs/product/HARDWARE_PROVENANCE_MODEL.md`
   - Current adapter sample is `L0`: acceptable for public lab, `0` kWh real-value cap
   - Closed pilot requires `L2` or better: named operator, live inverter/gateway counters, signed intervals, and archived raw source files
@@ -194,6 +201,7 @@ npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv
 npm run product:public-solar-replay
+npm run product:operator-intake
 npm run product:monetary-stress
 npm run product:energy-money-sim
 npm run product:empirical-backtest

@@ -11,6 +11,7 @@ SolarPunk is an energy-standard cryptocurrency lab: signed renewable-energy surp
 | Public attested SPK mint exists | `docs/product/SPK_ATTESTED_MINT_PROOF.md` |
 | Sepolia readback confirms consumed hashes | `docs/product/SPK_PUBLIC_READBACK.md` |
 | CSV bridge converts meter export into mint preview | `docs/product/PILOT_CSV_RECEIPT.md` |
+| Generic operator intake converts a solar CSV/profile into a case study | `docs/product/OPERATOR_DATA_INTAKE.md` |
 | Local field loop mints, settles, redeems, and resolves delivery | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Energy-money simulation models the currency system | `docs/product/ENERGY_MONEY_SIMULATION.md` |
 | Monetary stress harness exposes shortfall reserve needs | `docs/product/MONETARY_STRESS_HARNESS.md` |
@@ -22,6 +23,7 @@ SolarPunk is an energy-standard cryptocurrency lab: signed renewable-energy surp
 - Public Sepolia mint tx: `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d`.
 - Public proof mint: `2,606` on-chain kWh -> `130.1697 SPK`.
 - Pilot CSV sample: `1,985.5 kWh` accepted surplus -> `99.15075 SPK` mint preview.
+- Operator intake sample: `7` daily rows, `103.8 kWh` eligible surplus -> `5.14485 SPK` mint preview.
 - Energy-money simulation: `15,216.476344 SPK` annualized issuance projection across transparent rooftop/neighborhood/commercial archetypes.
 - Local SPK loop: `130.1697 SPK` minted, `75 SPK` settled, `20 SPK` redeemed, `400 kWh` delivered.
 - Monetary stress harness: all conservation checks pass; shortfall cases show explicit extra reserve requirements instead of assuming money can be printed through physical delivery gaps.
@@ -38,6 +40,7 @@ SolarPunk is an energy-standard cryptocurrency lab: signed renewable-energy surp
 
 ```bash
 npm run product:pilot-csv
+npm run product:operator-intake
 npm run product:energy-money-sim
 npm run product:monetary-stress
 npm run pilot-stack:test

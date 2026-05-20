@@ -55,6 +55,8 @@
     "product:closed-pilot:test": "node --test test-node/closed_pilot_execution_package.test.js",
     "product:public-solar-replay": "node scripts/public_solar_data_replay.js --generated-at=2026-05-18T00:00:00Z --now=2026-05-18T00:00:00Z",
     "product:public-solar-replay:test": "node --test test-node/public_solar_data_replay.test.js",
+    "product:operator-intake": "node scripts/operator_data_intake.js --use-dev-fixture-key --generated-at=2026-05-19T00:00:00Z --now=2026-05-19T00:00:00Z",
+    "product:operator-intake:test": "node --test test-node/operator_data_intake.test.js",
     "deploy:pilot-stack:hardhat": "hardhat run scripts/deploy_pilot_stack.js",
     "deploy:pilot-stack:sepolia": "hardhat run scripts/deploy_pilot_stack.js --network sepolia",
     "pilot-stack:readback": "hardhat run scripts/read_pilot_stack.js --network ${PILOT_NETWORK:-sepolia}",

@@ -21,6 +21,7 @@ The lab exists to answer one question:
 | Meter CSV import | Pilot-style adapter path | `docs/project/METER_CSV_IMPORT.md` |
 | Pilot CSV proof | CSV export -> accepted bundle -> source hash -> mint preview | `docs/product/PILOT_CSV_RECEIPT.md` |
 | Public solar data replay | Ausgrid historical rooftop-solar data -> normalized export surplus -> SPK mint preview | `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` |
+| Operator data intake | Generic solar CSV/profile -> accepted rows -> eligible surplus -> SPK cryptocurrency preview | `docs/product/OPERATOR_DATA_INTAKE.md` |
 | Product launch gate | Explicit launch status | `docs/product/PRODUCT_LAUNCH_GATE.md` |
 | Currency system lab | Four-layer compressed currency prototype | `docs/product/CURRENCY_SYSTEM_LAB.md` |
 | Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
@@ -42,9 +43,10 @@ The lab exists to answer one question:
 1. Inspect the frontend demo and source-verified Sepolia contracts.
 2. Re-run the local meter-bundle to SPK mint proof.
 3. Import a sample meter/inverter CSV and derive an attestation bundle.
-4. Re-run the pilot CSV proof and monetary stress harness.
-5. Review the daily NASA keeper logs and transaction hashes.
-6. Open a GitHub issue using the public lab pilot template if they have a real meter export, inverter export, research collaboration, or integration question.
+4. Run the generic operator intake sample and inspect the SPK cryptocurrency preview.
+5. Re-run the pilot CSV proof and monetary stress harness.
+6. Review the daily NASA keeper logs and transaction hashes.
+7. Open a GitHub issue using the public lab pilot template if they have a real meter export, inverter export, research collaboration, or integration question.
 
 Direct inquiry link:
 
@@ -88,6 +90,7 @@ npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv
 npm run product:public-solar-replay
+npm run product:operator-intake
 npm run product:monetary-stress
 npm run product:energy-money-sim
 npm run product:empirical-backtest
