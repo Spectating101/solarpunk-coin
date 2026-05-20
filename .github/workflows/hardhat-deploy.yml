@@ -2,12 +2,9 @@ name: hardhat-deploy
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 jobs:
   deploy:
-    if: ${{ secrets.RPC_URL != '' && secrets.PRIVATE_KEY != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,6 +17,14 @@ jobs:
 
       - name: Install
         run: npm install
+
+      - name: Check deployment secrets
+        env:
+          RPC_URL: ${{ secrets.RPC_URL }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          test -n "$RPC_URL" || (echo "Missing RPC_URL secret" && exit 1)
+          test -n "$PRIVATE_KEY" || (echo "Missing PRIVATE_KEY secret" && exit 1)
 
       - name: Deploy to sepolia
         env:
