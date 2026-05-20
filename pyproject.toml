@@ -64,6 +64,7 @@ api = [
     "fastapi>=0.95.0",
     "uvicorn>=0.21.0",
     "pydantic>=1.10.0",
+    "httpx>=0.24.0",
 ]
 dashboard = [
     "streamlit>=1.20.0",
@@ -76,6 +77,7 @@ all = [
     "pytest-cov>=3.0.0",
     "fastapi>=0.95.0",
     "uvicorn>=0.21.0",
+    "httpx>=0.24.0",
     "streamlit>=1.20.0",
     "plotly>=5.13.0",
 ]

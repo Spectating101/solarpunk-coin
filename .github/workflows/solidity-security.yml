@@ -24,6 +24,6 @@ jobs:
       - name: Run Slither
         uses: crytic/slither-action@v0.3.0
         with:
-          target: contracts
-          slither-args: "--filter-paths node_modules"
+          target: "."
+          slither-args: "--filter-paths node_modules --compile-force-framework hardhat"
           fail-on: medium

@@ -29,9 +29,7 @@ Usage
 from __future__ import annotations
 
 import json
-import warnings
 from dataclasses import dataclass
-from typing import Optional
 
 # ── Minimal ABIs (view functions only) ───────────────────────────────────────
 
@@ -60,36 +58,37 @@ _TREASURY_ABI = json.loads("""[
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
-SEPOLIA_RPC      = "https://rpc.sepolia.org"
-SPK_ADDRESS      = "0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F"
-OPTION_ADDRESS   = "0xe40A88398b5f90D038f7A6F1f122112DCD9e4104"
+SEPOLIA_RPC = "https://rpc.sepolia.org"
+SPK_ADDRESS = "0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F"
+OPTION_ADDRESS = "0xe40A88398b5f90D038f7A6F1f122112DCD9e4104"
 TREASURY_ADDRESS = "0x138e793f095a33D2790349eC1066FED3A756dd2c"
 
-_WAD = 10 ** 18
-_USDC_DEC = 10 ** 6
+_WAD = 10**18
+_USDC_DEC = 10**6
 
 
 # ── Data classes ──────────────────────────────────────────────────────────────
+
 
 @dataclass
 class ProtocolState:
     """Snapshot of live SolarPunk on-chain state."""
 
     # SolarPunkCoin
-    total_supply_spk: float          # SPK outstanding
+    total_supply_spk: float  # SPK outstanding
     energy_price_usd_per_kwh: float  # $USD per kWh (from energyPricePerKwh / 1e18)
-    oracle_price_usd: float          # last posted oracle price (/ 1e18)
-    usdc_reserve_usd: float          # USDC held in reserve (/ 1e6)
-    reserve_ratio_pct: float         # reserve ratio in percent (bps / 100)
-    cumulative_kwh: float            # total kWh of surplus verified
+    oracle_price_usd: float  # last posted oracle price (/ 1e18)
+    usdc_reserve_usd: float  # USDC held in reserve (/ 1e6)
+    reserve_ratio_pct: float  # reserve ratio in percent (bps / 100)
+    cumulative_kwh: float  # total kWh of surplus verified
     grid_stressed: bool
     peg_stable: bool
     peg_target_usd: float
     supply_cap_spk: float
-    stability_fee_share_pct: float   # percent routed to stability pool
+    stability_fee_share_pct: float  # percent routed to stability pool
 
     # SolarPunkOption
-    current_index: float             # energy index used for option mark-to-market
+    current_index: float  # energy index used for option mark-to-market
 
     # Source
     rpc_url: str
@@ -113,6 +112,7 @@ class ProtocolState:
 
 
 # ── Client ────────────────────────────────────────────────────────────────────
+
 
 class SolarPunkChainClient:
     """
@@ -148,10 +148,16 @@ class SolarPunkChainClient:
         if not self._w3.is_connected():
             raise ConnectionError(f"Could not connect to RPC: {rpc_url}")
 
-        self._spk      = self._w3.eth.contract(address=Web3.to_checksum_address(spk_address),      abi=_SPK_ABI)
-        self._option   = self._w3.eth.contract(address=Web3.to_checksum_address(option_address),   abi=_OPT_ABI)
-        self._treasury = self._w3.eth.contract(address=Web3.to_checksum_address(treasury_address), abi=_TREASURY_ABI)
-        self._rpc_url  = rpc_url
+        self._spk = self._w3.eth.contract(
+            address=Web3.to_checksum_address(spk_address), abi=_SPK_ABI
+        )
+        self._option = self._w3.eth.contract(
+            address=Web3.to_checksum_address(option_address), abi=_OPT_ABI
+        )
+        self._treasury = self._w3.eth.contract(
+            address=Web3.to_checksum_address(treasury_address), abi=_TREASURY_ABI
+        )
+        self._rpc_url = rpc_url
 
     # ── High-level ────────────────────────────────────────────────────────
 
@@ -161,19 +167,19 @@ class SolarPunkChainClient:
         opt = self._option
 
         return ProtocolState(
-            total_supply_spk          = spk.functions.totalSupply().call()          / _WAD,
-            energy_price_usd_per_kwh  = spk.functions.energyPricePerKwh().call()   / _WAD,
-            oracle_price_usd          = spk.functions.lastOraclePrice().call()      / _WAD,
-            usdc_reserve_usd          = spk.functions.usdcReserve().call()          / _USDC_DEC,
-            reserve_ratio_pct         = spk.functions.getReserveRatio().call()      / 100,
-            cumulative_kwh            = spk.functions.cumulativeSurplusKwh().call(),       # raw kWh integer, not 1e18
-            grid_stressed             = spk.functions.gridStressed().call(),
-            peg_stable                = spk.functions.isPegStable().call(),
-            peg_target_usd            = spk.functions.pegTarget().call()            / _WAD,
-            supply_cap_spk            = spk.functions.supplyCap().call()            / _WAD,
-            stability_fee_share_pct   = spk.functions.stabilityFeeShare().call()   / 100,
-            current_index             = opt.functions.currentIndex().call()         / _WAD,
-            rpc_url                   = self._rpc_url,
+            total_supply_spk=spk.functions.totalSupply().call() / _WAD,
+            energy_price_usd_per_kwh=spk.functions.energyPricePerKwh().call() / _WAD,
+            oracle_price_usd=spk.functions.lastOraclePrice().call() / _WAD,
+            usdc_reserve_usd=spk.functions.usdcReserve().call() / _USDC_DEC,
+            reserve_ratio_pct=spk.functions.getReserveRatio().call() / 100,
+            cumulative_kwh=spk.functions.cumulativeSurplusKwh().call(),  # raw kWh integer, not 1e18
+            grid_stressed=spk.functions.gridStressed().call(),
+            peg_stable=spk.functions.isPegStable().call(),
+            peg_target_usd=spk.functions.pegTarget().call() / _WAD,
+            supply_cap_spk=spk.functions.supplyCap().call() / _WAD,
+            stability_fee_share_pct=spk.functions.stabilityFeeShare().call() / 100,
+            current_index=opt.functions.currentIndex().call() / _WAD,
+            rpc_url=self._rpc_url,
         )
 
     # ── Convenience accessors ─────────────────────────────────────────────
@@ -193,6 +199,7 @@ class SolarPunkChainClient:
     def keeper_bond(self, operator: str) -> float:
         """USDC-equivalent bond held by `operator` in ProtocolTreasury."""
         from web3 import Web3
+
         raw = self._treasury.functions.keeperBonds(Web3.to_checksum_address(operator)).call()
         return raw / _USDC_DEC
 
@@ -205,6 +212,7 @@ class SolarPunkChainClient:
 
 
 # ── CLI convenience ───────────────────────────────────────────────────────────
+
 
 def _cli_main() -> None:
     """Print live protocol state when run as a script."""
