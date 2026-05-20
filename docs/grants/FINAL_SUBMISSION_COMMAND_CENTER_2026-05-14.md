@@ -37,7 +37,7 @@ Use these exact links:
 
 | Proof | Current value | File |
 |---|---:|---|
-| Smart contract tests | 102 passing | `npm test` |
+| Smart contract tests | 103 passing | `npm test` |
 | Attestation tests | 14 passing | `npm run attestations:test` |
 | Frontend tests | 5 passing | `cd frontend && npm test -- --run` |
 | Public SPK mint | 130.1697 SPK from 2,606 kWh on-chain surplus | `docs/product/SPK_ATTESTED_MINT_PROOF.md` |

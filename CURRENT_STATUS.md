@@ -8,7 +8,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Area | Current status |
 |---|---|
 | Stage | Public lab phase — public Sepolia attested mint proof live; production-governed redeploy pending |
-| Smart contracts | **102/102 tests passing** |
+| Smart contracts | **103/103 tests passing** |
 | Primary product | SPK attested surplus minting: meter bundle -> source hash -> oracle signature -> SPK mint |
 | Currency-system lab | Four-layer lab artifact generated: public proof, local SPK settlement loop, redemption framework, settlement framework |
 | Currency-framework contract | `SolarPunkCurrencySystem` implemented locally: SPK invoice settlement, redemption burn into owed-kWh claim, fulfillment/shortfall/dispute states |
@@ -30,6 +30,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Energy-standard economics | Added: gold-standard mapping, issuance equations, kWh/SPK convertibility, capacity scenarios, settlement velocity, fee sensitivity, and finance risk register |
 | Pilot meter adapter | CSV meter/inverter import, meter onboarding scripts, and inverter/meter adapter now feed the signed-reading verifier |
 | Public solar replay | Added: historical Ausgrid rooftop-solar sample -> normalized export surplus -> lab-signed verifier bundle -> 0.8991 SPK mint preview |
+| SPK intelligence layer | Added: advisory off-chain scoring for operator energy claims against NASA/PV benchmark, anomaly labels, and audit-ready explanation; AI advises, contracts decide |
 | Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 legacy Sepolia contracts verified on Etherscan**; all 3 fresh attested SPK proof contracts also verified |
 | Governance delay | **86,400s (24h) on all 3 core contracts** |

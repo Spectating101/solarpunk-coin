@@ -59,7 +59,7 @@ Primary launch-gate artifact:
 
 ## What Is Real Today
 
-- Smart contracts pass `102/102` Hardhat tests.
+- Smart contracts pass `103/103` Hardhat tests.
 - A fresh attestation-enabled SPK proof stack is deployed and source-verified on Sepolia.
 - A public Sepolia transaction proves signed meter-style data can mint SPK.
 - The repo has a local currency-system contract for invoice settlement and owed-kWh claim tracking.
@@ -67,6 +67,7 @@ Primary launch-gate artifact:
 - The daily NASA keeper has been running since 2026-04-20 and logs daily resource/on-chain evidence.
 - Public historical Ausgrid solar data is replayed through the SPK verifier and mint math.
 - A generic operator data intake path now exists for external solar datasets.
+- A v0 SPK intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes; AI advises, contracts decide.
 - Economic simulations, finance dossier, monetary stress harness, resource benchmarks, and launch thresholds exist.
 
 ## What Is Not Real Yet
@@ -472,6 +473,7 @@ Generate current product artifacts:
 npm run product:operator-intake
 npm run product:public-solar-replay
 npm run product:pilot-csv
+npm run product:intelligence
 npm run product:launch-gate
 ```
 
@@ -485,8 +487,9 @@ npm run build
 
 Recent verification from Codex:
 
-- `npm test` -> `102 passing`.
+- `npm test` -> `103 passing`.
 - `npm run product:operator-intake:test` -> `5 passing`.
+- `npm run product:intelligence:test` -> `3 passing`.
 - `npm run product:launch-gate:test` -> `3 passing`.
 - `npm run product:public-solar-replay:test` -> `4 passing`.
 - `npm run product:pilot-csv:test` -> `5 passing`.

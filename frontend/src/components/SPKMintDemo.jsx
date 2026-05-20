@@ -14,6 +14,7 @@ import {
 import SPK_ABI from '../abi/SolarPunkCoin.json';
 import { CONTRACTS, GITHUB_REPO, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL } from '../constants/contracts';
 import productEmpirics from '../../../state/proofs/spk_product_empirics.json';
+import spkIntelligence from '../../../state/product/spk_intelligence_layer.json';
 
 const SAMPLE_PRICE_PER_KWH = 0.05;
 const SAMPLE_MINT_FEE_BPS = 10;
@@ -136,6 +137,7 @@ export default function SPKMintDemo() {
     ['Product empirics', `${GITHUB_REPO}/blob/main/docs/product/SPK_PRODUCT_EMPIRICS.md`],
     ['Attested mint proof', `${GITHUB_REPO}/blob/main/docs/product/SPK_ATTESTED_MINT_PROOF.md`],
     ['Public readback', `${GITHUB_REPO}/blob/main/docs/product/SPK_PUBLIC_READBACK.md`],
+    ['Intelligence layer', `${GITHUB_REPO}/blob/main/docs/product/SPK_INTELLIGENCE_LAYER.md`],
     ['Meter bundle', `${GITHUB_REPO}/blob/main/docs/project/METER_ATTESTATION_BUNDLE.md`],
     ['Public SPK proof', `${SEPOLIA_EXPLORER}/address/${proofContractAddress}`],
     ['Mint transaction', `${SEPOLIA_EXPLORER}/tx/${proof.tx_hash || CONTRACTS.attestedMintTx}`],
@@ -187,6 +189,13 @@ export default function SPKMintDemo() {
           <div className="metric-label">Live Energy Price</div>
           <div className="metric-value">${liveOk ? formatNumber(liveData.energyPricePerKwh, 4) : 'n/a'}</div>
           <div className="metric-sub">current contract parameter</div>
+        </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Advisory Risk</div>
+          <div className="metric-value">{spkIntelligence.summary.overall_risk.replaceAll('_', ' ')}</div>
+          <div className="metric-sub">
+            {spkIntelligence.summary.rows_scored} rows scored; AI advises, contracts decide
+          </div>
         </div>
       </div>
 

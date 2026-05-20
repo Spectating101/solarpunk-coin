@@ -4,7 +4,7 @@ SolarPunk is an **energy-standard cryptocurrency**: a modern gold-standard syste
 
 The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.
 
-**Status (May 2026):** Live Sepolia prototype for the earlier core contracts, public attested SPK mint proof, 102/102 contract tests, daily NASA -> on-chain oracle keeper running since April 20, independent code review complete.
+**Status (May 2026):** Live Sepolia prototype for the earlier core contracts, public attested SPK mint proof, 103/103 contract tests, daily NASA -> on-chain oracle keeper running since April 20, independent code review complete.
 
 **Public demo:** https://spectating101.github.io/solarpunk-coin/
 
@@ -28,6 +28,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV proof: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](./docs/product/PUBLIC_SOLAR_DATA_REPLAY.md) | Public historical solar replay: Ausgrid rooftop data -> normalized surplus -> SPK mint preview |
 | [`docs/product/OPERATOR_DATA_INTAKE.md`](./docs/product/OPERATOR_DATA_INTAKE.md) | Generic operator intake: real solar CSV shape -> validation -> eligible surplus -> SPK cryptocurrency preview |
+| [`docs/product/SPK_INTELLIGENCE_LAYER.md`](./docs/product/SPK_INTELLIGENCE_LAYER.md) | Advisory intelligence layer: operator energy claims -> NASA/PV benchmark -> anomaly score -> audit note |
 | [`docs/product/DATA_REQUEST_OUTREACH.md`](./docs/product/DATA_REQUEST_OUTREACH.md) | Data request target list, email, follow-up, and operator-file handoff |
 | [`docs/product/PILOT_COMMERCIAL_PACKET.md`](./docs/product/PILOT_COMMERCIAL_PACKET.md) | Paid research/demo/pilot offer and pricing bands |
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |
@@ -105,7 +106,7 @@ These public contracts prove the earlier SPK system state and daily keeper path.
 
 ## What is verified and running
 
-- **102/102 smart contract tests** — `npx hardhat test`
+- **103/103 smart contract tests** — `npx hardhat test`
 - **Public attested SPK mint proof** — see `docs/product/SPK_ATTESTED_MINT_PROOF.md`
   - Sample bundle: `4` signed raw readings, `2` accepted, `2` rejected, `2` verified device signatures
   - Accepted surplus: `2606.7` kWh
@@ -185,7 +186,7 @@ These public contracts prove the earlier SPK system state and daily keeper path.
 # Install
 npm install
 
-# Run all tests (102 passing)
+# Run all tests (103 passing)
 npx hardhat test
 
 # Reproduce the SPK product proof

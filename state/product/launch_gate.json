@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-20T12:28:13.349Z",
+  "generated_at": "2026-05-20T19:43:32.644Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 17,
+      "passed_checks": 18,
       "blocking_checks": 0,
       "checks": [
         {
@@ -89,6 +89,13 @@
           "evidence": "docs/product/OPERATOR_DATA_INTAKE.md"
         },
         {
+          "name": "SPK intelligence layer exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.",
+          "evidence": "docs/product/SPK_INTELLIGENCE_LAYER.md"
+        },
+        {
           "name": "Pilot-stack currency drill passes",
           "pass": true,
           "blocking": true,
@@ -136,7 +143,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 18,
+      "passed_checks": 19,
       "blocking_checks": 4,
       "checks": [
         {
@@ -215,6 +222,13 @@
           "blocking": true,
           "message": "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
           "evidence": "docs/product/OPERATOR_DATA_INTAKE.md"
+        },
+        {
+          "name": "SPK intelligence layer exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.",
+          "evidence": "docs/product/SPK_INTELLIGENCE_LAYER.md"
         },
         {
           "name": "Pilot-stack currency drill passes",
@@ -313,7 +327,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 18,
+      "passed_checks": 19,
       "blocking_checks": 9,
       "checks": [
         {
@@ -392,6 +406,13 @@
           "blocking": true,
           "message": "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
           "evidence": "docs/product/OPERATOR_DATA_INTAKE.md"
+        },
+        {
+          "name": "SPK intelligence layer exists",
+          "pass": true,
+          "blocking": true,
+          "message": "Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.",
+          "evidence": "docs/product/SPK_INTELLIGENCE_LAYER.md"
         },
         {
           "name": "Pilot-stack currency drill passes",

@@ -37,7 +37,7 @@ ESP is still worth approaching, but it should not be framed as a generic startup
 
 ## Claims To Lead With
 
-- 102/102 smart contract tests passing.
+- 103/103 smart contract tests passing.
 - Five source-verified legacy Sepolia contracts plus three source-verified attested SPK proof contracts.
 - Public signed-meter -> attested SPK mint proof: 2,606.7 kWh accepted surplus, 130.1697 SPK minted.
 - Read-only Sepolia readback confirms tx success, consumed attestation hash, consumed source hash, recipient balance, and cumulative surplus.

@@ -19,14 +19,16 @@ Use this checklist before submitting ESP, Chainlink BUILD, academic grants, or e
 - Daily experiment status: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - SPK attested mint proof: `docs/product/SPK_ATTESTED_MINT_PROOF.md`
 - Public SPK readback: `docs/product/SPK_PUBLIC_READBACK.md`
+- SPK intelligence layer: `docs/product/SPK_INTELLIGENCE_LAYER.md`
 - Contract addresses: `CONTRACT_ADDRESSES.md`
 - Demo walkthrough script: `docs/grants/DEMO_WALKTHROUGH_SCRIPT.md`
 
 ## Claims allowed
 
-- 102/102 smart contract tests passing.
+- 103/103 smart contract tests passing.
 - Live source-verified Sepolia deployment, including the attested SPK proof stack.
 - Public signed-meter -> attested SPK mint proof and read-only Sepolia readback.
+- Advisory SPK intelligence layer scores operator sample data against NASA/PV benchmarks without controlling minting.
 - Daily NASA POWER -> Sepolia keeper running with committed artifacts.
 - ChainlinkOracleAdapter deployed on Sepolia with AggregatorV3Interface compatibility and manual fallback.
 - Safe admin handoff complete for the three core contracts.

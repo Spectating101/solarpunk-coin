@@ -30,6 +30,7 @@ Do not say:
 - Public lab model: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PUBLIC_LAB.md`
 - Product launch gate: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PRODUCT_LAUNCH_GATE.md`
 - Currency system lab: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/CURRENCY_SYSTEM_LAB.md`
+- SPK intelligence layer: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_INTELLIGENCE_LAYER.md`
 - SPK product proof: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_ATTESTED_MINT_PROOF.md`
 - Public readback: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_PUBLIC_READBACK.md`
 - Pilot inquiry: `https://github.com/Spectating101/solarpunk-coin/issues/new?template=public-lab-pilot.md`
@@ -107,8 +108,9 @@ Current proof surface:
 - read-only on-chain readback checks
 - daily NASA POWER -> Sepolia keeper logs
 - CSV import path for meter/inverter exports
-- 96 Solidity tests
-- 14 meter/attestation tests
+- advisory intelligence layer for energy-claim anomaly scoring
+- 103 Solidity tests
+- 84 Node product/data tests
 
 Hard limits:
 - not mainnet

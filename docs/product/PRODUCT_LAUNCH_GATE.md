@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-20T12:28:13.349Z`
+- generated_at: `2026-05-20T19:43:32.644Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,9 +9,9 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 17 | 0 |
-| Closed testnet pilot | `blocked` | 18 | 4 |
-| Paid/mainnet product | `blocked` | 18 | 9 |
+| SolarPunk Public Lab | `launchable` | 18 | 0 |
+| Closed testnet pilot | `blocked` | 19 | 4 |
+| Paid/mainnet product | `blocked` | 19 | 9 |
 
 ## Next Actions
 
@@ -45,6 +45,8 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
+- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.
+  Evidence: `docs/product/SPK_INTELLIGENCE_LAYER.md`
 - PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
   Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
@@ -82,6 +84,8 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
+- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.
+  Evidence: `docs/product/SPK_INTELLIGENCE_LAYER.md`
 - PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
   Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
@@ -133,6 +137,8 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
+- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.
+  Evidence: `docs/product/SPK_INTELLIGENCE_LAYER.md`
 - PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
   Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.

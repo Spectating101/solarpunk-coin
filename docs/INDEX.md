@@ -13,7 +13,7 @@ Use these first when facts conflict elsewhere:
 ## Timeline and precedence rule
 
 - **Pivot date:** 2026-04-20 (Sepolia live + M3 security hardening + multisig handoff)
-- Prefer docs updated **after** the pivot and aligned with Sepolia/102-test state.
+- Prefer docs updated **after** the pivot and aligned with Sepolia/103-test state.
 - If a file claims Amoy-primary deployment, 46/55/77 test totals, single-EOA admin, or zero governance delay as current state, treat it as historical unless explicitly refreshed.
 
 ## Core repo references
@@ -30,6 +30,7 @@ Use these first when facts conflict elsewhere:
 - `docs/product/INVERTER_METER_ADAPTER.md` — direct inverter/meter adapter output: cumulative snapshots/Fronius PowerFlow into signed attestations
 - `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` — public historical solar data replay into SPK mint math
 - `docs/product/OPERATOR_DATA_INTAKE.md` — generic operator CSV intake, validation, eligible surplus, and SPK cryptocurrency preview
+- `docs/product/SPK_INTELLIGENCE_LAYER.md` — advisory intelligence layer for energy-claim anomaly scoring and audit notes
 - `docs/product/DATA_REQUEST_OUTREACH.md` — target list, email templates, and data-request handoff for real solar datasets
 - `docs/product/PILOT_COMMERCIAL_PACKET.md` — paid research/demo/pilot offer and pricing bands
 - `docs/product/HARDWARE_PROVENANCE_MODEL.md` — hardware assurance tiers, risk haircuts, issuance caps, and upgrade checklist

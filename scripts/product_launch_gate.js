@@ -79,6 +79,7 @@ function evaluateLaunchGate(options = {}) {
   const closedPilotPackage = readJson(root, "state/product/closed_pilot_execution_package.json", {});
   const publicSolarReplay = readJson(root, "state/product/public_solar_data_replay.json", {});
   const operatorDataIntake = readJson(root, "state/product/operator_data_intake.json", {});
+  const spkIntelligence = readJson(root, "state/product/spk_intelligence_layer.json", {});
   const pilotStackDrill = readJson(root, "state/product/pilot_stack_currency_drill.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
@@ -184,6 +185,17 @@ function evaluateLaunchGate(options = {}) {
       ),
       "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
       "docs/product/OPERATOR_DATA_INTAKE.md"
+    ),
+    check(
+      "SPK intelligence layer exists",
+      Boolean(
+        spkIntelligence.advisory_only === true &&
+          spkIntelligence.summary?.rows_scored > 0 &&
+          spkIntelligence.audit_dossier?.contract_action_boundary &&
+          Array.isArray(spkIntelligence.scored_rows)
+      ),
+      "Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.",
+      "docs/product/SPK_INTELLIGENCE_LAYER.md"
     ),
     check(
       "Pilot-stack currency drill passes",
