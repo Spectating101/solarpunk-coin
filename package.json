@@ -33,6 +33,8 @@
     "product:currency-framework:test": "node --test test-node/currency_framework_readiness.test.js",
     "product:field-receipt": "hardhat run scripts/run_currency_field_receipt_loop.js",
     "product:field-receipt:test": "node --test test-node/field_receipt_loop.test.js",
+    "product:pilot-stack-drill": "hardhat run scripts/run_pilot_stack_currency_drill.js",
+    "product:pilot-stack-drill:test": "node --test test-node/pilot_stack_currency_drill.test.js",
     "product:resource-benchmark": "node scripts/resource_benchmark_lab.js",
     "product:resource-benchmark:test": "node --test test-node/resource_benchmark_lab.test.js",
     "product:energy-standard": "node scripts/energy_standard_economics.js",

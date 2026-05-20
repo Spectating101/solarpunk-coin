@@ -1,9 +1,9 @@
 # SolarPunk Currency Framework Readiness
 
-- generated_at: `2026-05-18T16:12:55.682Z`
-- current_internal_stage: `local_spk_loop_ready`
+- generated_at: `2026-05-20T12:28:13.336Z`
+- current_internal_stage: `local_governed_pilot_stack_ready`
 - launch_gate_context: `public_testnet_product`
-- readiness: `8/8` checks
+- readiness: `9/9` checks
 
 ## Thesis
 
@@ -31,6 +31,7 @@ Treat SPK as an energy-denominated cryptocurrency: surplus attestations create s
 | Delivery resolution and dispute state | `implemented` | PASS | `contracts/SolarPunkCurrencySystem.sol` | The framework can track pending, fulfilled, shortfall, and disputed redemption states. |
 | Contract regression tests | `tested` | PASS | `test/SolarPunkCurrencySystem.test.js` | The new currency mechanics are covered by settlement, burn/redemption, replay, slippage, fulfillment, shortfall, dispute, and re-resolution accounting tests. |
 | Local SPK loop | `local_end_to_end_spk_loop` | PASS | `docs/product/FIELD_RECEIPT_LOOP.md` | The repo can run the whole internal currency path with no external dependency: signed meter surplus, SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution. |
+| Governed pilot-stack drill | `local_governed_stack_exercised` | PASS | `docs/product/PILOT_STACK_CURRENCY_DRILL.md` | The latest SPK, treasury, and currency-system contracts can run as one governed-style stack: mint, payment, redemption, and delivery accounting. |
 | Empirical feed continuity | `running_experiment` | PASS | `docs/project/DAILY_EXPERIMENT_STATUS.md` | The daily data loop is long enough to support continuing empirical claims instead of a one-off demo. |
 
 ## Current Quantitative State
@@ -49,12 +50,17 @@ Treat SPK as an energy-denominated cryptocurrency: surplus attestations create s
 | field_receipt_redeemed_spk | `20` |
 | field_receipt_owed_kwh | `400` |
 | field_receipt_delivered_kwh | `400` |
-| daily_keeper_runs | `20` |
+| pilot_stack_minted_spk | `130.1697` |
+| pilot_stack_settlement_volume_spk | `75` |
+| pilot_stack_redeemed_spk | `20` |
+| pilot_stack_owed_kwh | `400` |
+| pilot_stack_delivered_kwh | `400` |
+| daily_keeper_runs | `22` |
 
 ## Next Internal Build Targets
 
 - `Currency stress harness` (next_internal_target): Simulate multi-actor payment velocity, redemption load, reserve ratio, and delivery shortfalls under daily energy-price scenarios.
-- `Deployable currency stack` (next_internal_target): Add a deployment script and public readback for SolarPunkCurrencySystem beside the attestation-enabled SPK proof stack.
+- `Public Sepolia pilot-stack drill` (next_internal_target): Run the same governed SPK mint, payment, redemption, and delivery drill against a public Sepolia pilot stack.
 - `Real meter export loop` (next_internal_target): Replace the fixture meter bundle with a real inverter or utility export while keeping the same local SPK script and accounting checks.
 
 ## Boundary

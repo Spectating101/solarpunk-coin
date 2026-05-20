@@ -79,6 +79,7 @@ function evaluateLaunchGate(options = {}) {
   const closedPilotPackage = readJson(root, "state/product/closed_pilot_execution_package.json", {});
   const publicSolarReplay = readJson(root, "state/product/public_solar_data_replay.json", {});
   const operatorDataIntake = readJson(root, "state/product/operator_data_intake.json", {});
+  const pilotStackDrill = readJson(root, "state/product/pilot_stack_currency_drill.json", {});
   const monetaryStress = readJson(root, "state/product/monetary_stress_harness.json", {});
   const energyMoneySimulation = readJson(root, "state/product/energy_money_simulation.json", {});
   const financeDossier = readJson(root, "state/product/spk_finance_dossier.json", {});
@@ -183,6 +184,18 @@ function evaluateLaunchGate(options = {}) {
       ),
       "A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.",
       "docs/product/OPERATOR_DATA_INTAKE.md"
+    ),
+    check(
+      "Pilot-stack currency drill passes",
+      Boolean(
+        pilotStackDrill.all_checks_passed &&
+          pilotStackDrill.accounting?.conservation_pass &&
+          pilotStackDrill.accounting?.delivery_fulfilled &&
+          Number(pilotStackDrill.accounting?.settlement_volume_spk || 0) > 0 &&
+          Number(pilotStackDrill.accounting?.redeemed_spk || 0) > 0
+      ),
+      "Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.",
+      "docs/product/PILOT_STACK_CURRENCY_DRILL.md"
     ),
     check(
       "Monetary stress harness passes",

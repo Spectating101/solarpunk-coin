@@ -26,6 +26,7 @@ Use these first when facts conflict elsewhere:
 - `docs/product/CURRENCY_SYSTEM_LAB.md` — compressed four-layer currency-system lab
 - `docs/product/CURRENCY_FRAMEWORK_READINESS.md` — internal SPK currency-framework readiness checks
 - `docs/product/FIELD_RECEIPT_LOOP.md` — local no-external-dependency SPK loop
+- `docs/product/PILOT_STACK_CURRENCY_DRILL.md` — governed-style local SPK stack drill: mint, pay, redeem, and resolve delivery
 - `docs/product/INVERTER_METER_ADAPTER.md` — direct inverter/meter adapter output: cumulative snapshots/Fronius PowerFlow into signed attestations
 - `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` — public historical solar data replay into SPK mint math
 - `docs/product/OPERATOR_DATA_INTAKE.md` — generic operator CSV intake, validation, eligible surplus, and SPK cryptocurrency preview

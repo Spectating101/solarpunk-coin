@@ -10,6 +10,7 @@ import {
 import currencyLab from '../../../state/product/currency_system_lab.json';
 import currencyFramework from '../../../state/product/currency_framework_readiness.json';
 import fieldReceipt from '../../../state/product/field_receipt_loop.json';
+import pilotStackDrill from '../../../state/product/pilot_stack_currency_drill.json';
 import resourceBenchmark from '../../../state/product/resource_benchmark_lab.json';
 import energyStandard from '../../../state/product/energy_standard_economics.json';
 import pilotCsvReceipt from '../../../state/product/pilot_csv_receipt.json';
@@ -269,6 +270,13 @@ export default function CurrencyLab() {
             {formatNumber(fieldReceipt.accounting.settlement_volume_spk)} SPK settled, no external dependency
           </div>
         </div>
+        <div className="metric-card metric-good">
+          <div className="metric-label">Pilot Stack Drill</div>
+          <div className="metric-value">{formatNumber(pilotStackDrill.accounting.redeemed_spk)} SPK</div>
+          <div className="metric-sub">
+            minted, paid, redeemed, delivered: {String(pilotStackDrill.all_checks_passed)}
+          </div>
+        </div>
         <div className="metric-card metric-amber">
           <div className="metric-label">Worst Stress Buffer</div>
           <div className="metric-value">{formatUsd(monetaryStress.summary.worst_additional_buffer_required_usd, 0)}</div>
@@ -366,6 +374,9 @@ export default function CurrencyLab() {
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/FIELD_RECEIPT_LOOP.md`} target="_blank" rel="noreferrer">
               Local SPK loop <ExternalLink size={12} />
+            </a>
+            <a href={`${GITHUB_REPO}/blob/main/docs/product/PILOT_STACK_CURRENCY_DRILL.md`} target="_blank" rel="noreferrer">
+              Pilot stack drill <ExternalLink size={12} />
             </a>
             <a href={`${GITHUB_REPO}/blob/main/docs/product/PILOT_CSV_RECEIPT.md`} target="_blank" rel="noreferrer">
               Pilot CSV proof <ExternalLink size={12} />

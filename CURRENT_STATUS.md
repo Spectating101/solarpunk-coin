@@ -13,6 +13,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Currency-system lab | Four-layer lab artifact generated: public proof, local SPK settlement loop, redemption framework, settlement framework |
 | Currency-framework contract | `SolarPunkCurrencySystem` implemented locally: SPK invoice settlement, redemption burn into owed-kWh claim, fulfillment/shortfall/dispute states |
 | Local SPK settlement loop | Local no-external-dependency run: signed meter surplus -> SPK mint -> 75 SPK settled -> 20 SPK redeemed -> 400 kWh delivered |
+| Pilot-stack currency drill | Added: governed-style local stack deploys MockUSDC + ProtocolTreasury + SolarPunkCoin + SolarPunkCurrencySystem, mints 130.1697 SPK, settles 75 SPK, redeems 20 SPK, and resolves 400 kWh delivered |
 | Pilot CSV proof | Added: sample meter/inverter CSV -> signed readings -> accepted bundle -> deterministic source hash -> 99.15075 SPK mint preview |
 | Inverter/meter adapter | Added: cumulative counter snapshot adapter + Fronius PowerFlow polling mode; sample output produces 1 accepted signed interval and 996.2 kWh accepted surplus |
 | Operator data intake | Added: generic operator CSV/profile intake -> validated rows -> eligible surplus -> 5.14485 SPK sample preview and reusable case-study output |

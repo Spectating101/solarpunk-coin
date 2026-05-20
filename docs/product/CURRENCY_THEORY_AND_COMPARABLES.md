@@ -73,7 +73,7 @@ This is compatible with tokenisation literature because the value is not merely 
 4. **Redemption policy.** Define what a holder can redeem, who owes delivery, how shortfall is handled, and what caps apply.
 5. **Stress harness.** Simulate redemption waves, delivery shortfalls, oracle drift, reserve changes, and payment velocity.
 6. **Resource-specific data adapters.** Replace solar/wind resource benchmarks with actual generator exports for at least one renewable source.
-7. **Public deployable currency stack.** Deploy `SolarPunkCurrencySystem` beside the attested SPK proof stack and publish readbacks.
+7. **Public deployable currency stack.** The local governed-style stack drill now passes; next run the same mint, payment, redemption, and delivery drill on Sepolia and publish readbacks.
 8. **Operator governance.** Establish who can resolve deliveries, how disputes escalate, and how malicious/failed operators are penalized.
 
 ## Comparable Positioning

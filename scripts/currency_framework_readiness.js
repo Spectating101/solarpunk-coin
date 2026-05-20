@@ -42,6 +42,7 @@ function evaluateCurrencyFramework(options = {}) {
   const root = options.root || ROOT;
   const currencyLab = readJson(root, "state/product/currency_system_lab.json", {});
   const fieldReceipt = readJson(root, "state/product/field_receipt_loop.json", {});
+  const pilotStackDrill = readJson(root, "state/product/pilot_stack_currency_drill.json", {});
   const launchGate = readJson(root, "state/product/launch_gate.json", {});
   const product = readJson(root, "state/proofs/spk_product_empirics.json", {});
   const testSource = readText(root, "test/SolarPunkCurrencySystem.test.js");
@@ -49,6 +50,7 @@ function evaluateCurrencyFramework(options = {}) {
   const sourceEvidence = currencyLab.source_evidence || {};
   const accounting = currencyLab.ledger?.accounting || {};
   const fieldAccounting = fieldReceipt.accounting || {};
+  const pilotStackAccounting = pilotStackDrill.accounting || {};
 
   const checks = [
     item(
@@ -107,6 +109,17 @@ function evaluateCurrencyFramework(options = {}) {
       "The repo can run the whole internal currency path with no external dependency: signed meter surplus, SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution."
     ),
     item(
+      "Governed pilot-stack drill",
+      pilotStackDrill.execution_scope === "local_governed_pilot_stack_currency_drill" &&
+        pilotStackDrill.all_checks_passed === true &&
+        pilotStackAccounting.conservation_pass === true &&
+        pilotStackAccounting.delivery_fulfilled === true &&
+        Number(pilotStackAccounting.owed_kwh || 0) === Number(pilotStackAccounting.delivered_kwh || 0),
+      "local_governed_stack_exercised",
+      "docs/product/PILOT_STACK_CURRENCY_DRILL.md",
+      "The latest SPK, treasury, and currency-system contracts can run as one governed-style stack: mint, payment, redemption, and delivery accounting."
+    ),
+    item(
       "Empirical feed continuity",
       Number(product.operational_basis?.total_successful_runs || sourceEvidence.daily_keeper_runs || 0) >= 14,
       "running_experiment",
@@ -123,9 +136,9 @@ function evaluateCurrencyFramework(options = {}) {
       description: "Simulate multi-actor payment velocity, redemption load, reserve ratio, and delivery shortfalls under daily energy-price scenarios.",
     },
     {
-      name: "Deployable currency stack",
+      name: "Public Sepolia pilot-stack drill",
       status: "next_internal_target",
-      description: "Add a deployment script and public readback for SolarPunkCurrencySystem beside the attestation-enabled SPK proof stack.",
+      description: "Run the same governed SPK mint, payment, redemption, and delivery drill against a public Sepolia pilot stack.",
     },
     {
       name: "Real meter export loop",
@@ -139,7 +152,7 @@ function evaluateCurrencyFramework(options = {}) {
     title: "SolarPunk Currency Framework Readiness",
     current_internal_stage:
       readiness.passed === readiness.total
-        ? "local_spk_loop_ready"
+        ? "local_governed_pilot_stack_ready"
         : "currency_framework_lab_incomplete",
     launch_gate_context: launchGate.recommended_current_launch || "unknown",
     design_thesis:
@@ -169,6 +182,11 @@ function evaluateCurrencyFramework(options = {}) {
       field_receipt_redeemed_spk: fieldAccounting.redeemed_spk || null,
       field_receipt_owed_kwh: fieldAccounting.owed_kwh || null,
       field_receipt_delivered_kwh: fieldAccounting.delivered_kwh || null,
+      pilot_stack_minted_spk: pilotStackAccounting.minted_to_producer_spk || null,
+      pilot_stack_settlement_volume_spk: pilotStackAccounting.settlement_volume_spk || null,
+      pilot_stack_redeemed_spk: pilotStackAccounting.redeemed_spk || null,
+      pilot_stack_owed_kwh: pilotStackAccounting.owed_kwh || null,
+      pilot_stack_delivered_kwh: pilotStackAccounting.delivered_kwh || null,
       daily_keeper_runs: product.operational_basis?.total_successful_runs || sourceEvidence.daily_keeper_runs || null,
     },
     internal_boundary:

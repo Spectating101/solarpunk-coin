@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-20T10:02:10.620Z`
+- generated_at: `2026-05-20T12:28:13.349Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,9 +9,9 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 16 | 0 |
-| Closed testnet pilot | `blocked` | 17 | 4 |
-| Paid/mainnet product | `blocked` | 17 | 9 |
+| SolarPunk Public Lab | `launchable` | 17 | 0 |
+| Closed testnet pilot | `blocked` | 18 | 4 |
+| Paid/mainnet product | `blocked` | 18 | 9 |
 
 ## Next Actions
 
@@ -45,6 +45,8 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
+- PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
+  Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -80,6 +82,8 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
+- PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
+  Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.
@@ -129,6 +133,8 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
+- PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
+  Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
 - PASS `Monetary stress harness passes`: Redemption-wave and shortfall scenarios preserve accounting conservation and expose reserve gaps.
   Evidence: `docs/product/MONETARY_STRESS_HARNESS.md`
 - PASS `Energy-money simulation exists`: Measured keeper resource signals drive a transparent SPK issuance, settlement, redemption, and reserve simulation.

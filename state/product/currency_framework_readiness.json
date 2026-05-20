@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-18T16:12:55.682Z",
+  "generated_at": "2026-05-20T12:28:13.336Z",
   "title": "SolarPunk Currency Framework Readiness",
-  "current_internal_stage": "local_spk_loop_ready",
+  "current_internal_stage": "local_governed_pilot_stack_ready",
   "launch_gate_context": "public_testnet_product",
   "design_thesis": "Treat SPK as an energy-denominated cryptocurrency: surplus attestations create supply, invoice settlement creates circulation, redemption burns supply into owed-kWh claims, and delivery resolution measures whether the system clears real obligations.",
   "mechanism_path": [
@@ -15,8 +15,8 @@
     "empirical_readiness_update"
   ],
   "readiness": {
-    "passed": 8,
-    "total": 8,
+    "passed": 9,
+    "total": 9,
     "ratio": 1
   },
   "checks": [
@@ -70,6 +70,13 @@
       "interpretation": "The repo can run the whole internal currency path with no external dependency: signed meter surplus, SPK mint, invoice settlement, redemption burn, owed-kWh claim, and delivery resolution."
     },
     {
+      "name": "Governed pilot-stack drill",
+      "pass": true,
+      "status": "local_governed_stack_exercised",
+      "evidence": "docs/product/PILOT_STACK_CURRENCY_DRILL.md",
+      "interpretation": "The latest SPK, treasury, and currency-system contracts can run as one governed-style stack: mint, payment, redemption, and delivery accounting."
+    },
+    {
       "name": "Empirical feed continuity",
       "pass": true,
       "status": "running_experiment",
@@ -90,7 +97,12 @@
     "field_receipt_redeemed_spk": 20,
     "field_receipt_owed_kwh": 400,
     "field_receipt_delivered_kwh": 400,
-    "daily_keeper_runs": 20
+    "pilot_stack_minted_spk": 130.1697,
+    "pilot_stack_settlement_volume_spk": 75,
+    "pilot_stack_redeemed_spk": 20,
+    "pilot_stack_owed_kwh": 400,
+    "pilot_stack_delivered_kwh": 400,
+    "daily_keeper_runs": 22
   },
   "internal_boundary": "This is an internal engineering-readiness artifact. It measures whether the currency mechanism is coherent, testable, and empirically instrumented; it does not assert legal, audit, market, or mainnet readiness.",
   "next_build_targets": [
@@ -100,9 +112,9 @@
       "description": "Simulate multi-actor payment velocity, redemption load, reserve ratio, and delivery shortfalls under daily energy-price scenarios."
     },
     {
-      "name": "Deployable currency stack",
+      "name": "Public Sepolia pilot-stack drill",
       "status": "next_internal_target",
-      "description": "Add a deployment script and public readback for SolarPunkCurrencySystem beside the attestation-enabled SPK proof stack."
+      "description": "Run the same governed SPK mint, payment, redemption, and delivery drill against a public Sepolia pilot stack."
     },
     {
       "name": "Real meter export loop",

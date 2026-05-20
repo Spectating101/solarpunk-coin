@@ -26,6 +26,7 @@ The lab exists to answer one question:
 | Currency system lab | Four-layer compressed currency prototype | `docs/product/CURRENCY_SYSTEM_LAB.md` |
 | Currency framework readiness | Internal settlement/redemption framework checks | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 | Local SPK loop | Local mint -> settlement -> redemption -> delivery accounting | `docs/product/FIELD_RECEIPT_LOOP.md` |
+| Pilot-stack currency drill | Governed-style local stack -> SPK mint -> payment -> redemption -> delivery accounting | `docs/product/PILOT_STACK_CURRENCY_DRILL.md` |
 | Monetary stress harness | Redemption-wave, shortfall, and reserve-gap table | `docs/product/MONETARY_STRESS_HARNESS.md` |
 | Energy-money simulation | Measured resource signal -> SPK issuance -> settlement -> redemption-risk model | `docs/product/ENERGY_MONEY_SIMULATION.md` |
 | SPK finance dossier | Income statement, balance-sheet liability, fee break-even gap, reserve coverage, and pilot finance stack | `docs/product/SPK_FINANCE_DOSSIER.md` |
@@ -86,6 +87,7 @@ npm run product:launch-gate
 npm run product:currency-lab
 npm run product:currency-framework
 npm run product:field-receipt
+npm run product:pilot-stack-drill
 npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv

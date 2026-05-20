@@ -21,6 +21,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CURRENCY_SYSTEM_LAB.md`](./docs/product/CURRENCY_SYSTEM_LAB.md) | Four-layer currency-system lab: public proof, local SPK loop, redemption framework, settlement framework |
 | [`docs/product/CURRENCY_FRAMEWORK_READINESS.md`](./docs/product/CURRENCY_FRAMEWORK_READINESS.md) | Internal currency-framework readiness: issuance, settlement, redemption, delivery resolution |
 | [`docs/product/FIELD_RECEIPT_LOOP.md`](./docs/product/FIELD_RECEIPT_LOOP.md) | Local end-to-end SPK loop: signed meter surplus -> mint -> settlement -> redemption -> delivery |
+| [`docs/product/PILOT_STACK_CURRENCY_DRILL.md`](./docs/product/PILOT_STACK_CURRENCY_DRILL.md) | Governed-style SPK stack drill: deploy coin + treasury + currency system, mint, pay, redeem, and resolve delivery |
 | [`docs/product/INVERTER_METER_ADAPTER.md`](./docs/product/INVERTER_METER_ADAPTER.md) | Inverter/meter adapter output: cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle |
 | [`docs/product/HARDWARE_PROVENANCE_MODEL.md`](./docs/product/HARDWARE_PROVENANCE_MODEL.md) | Hardware assurance tiers: evidence score, risk haircut, issuance cap, and upgrade checklist for real meter/inverter data |
 | [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](./docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md) | Closed-pilot execution package: operator intake, action queue, commands, caps, and acceptance criteria |

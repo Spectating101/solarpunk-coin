@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-05-20T12:28:05.497Z",
+  "title": "SolarPunk Pilot Stack Currency Drill",
+  "execution_scope": "local_governed_pilot_stack_currency_drill",
+  "network": "hardhat",
+  "chain_id": 1337,
+  "dependencies": {
+    "external_network_required": false,
+    "external_api_required": false,
+    "grant_or_external_approval_required": false,
+    "real_counterparty_required": false,
+    "input_source": "repo_fixture_signed_meter_bundle"
+  },
+  "contracts": {
+    "MockUSDC": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "ProtocolTreasury": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "SolarPunkCoin": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    "SolarPunkCurrencySystem": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+  },
+  "actors": {
+    "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "minter": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "oracle": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "governance_admin": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+    "producer": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+    "service_provider": "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+    "energy_buyer": "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+  },
+  "source": {
+    "bundle_path": "state/attestations/latest_attestation_bundle.json",
+    "source_schema": "SPK_RAW_METER_READINGS_V1",
+    "batch_id": "batch_2026_02_12_a",
+    "accepted_records": 2,
+    "rejected_records": 2,
+    "verified_signatures": 2,
+    "source_hash": "0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8",
+    "attestation_hash": "0x214e3d253fdba0a1af326953669c3a84c4af54948a387ce19d83f3b791feee94",
+    "source_payload": {
+      "schema": "SPK_METER_SURPLUS_SOURCE_V1",
+      "batch_id": "batch_2026_02_12_a",
+      "min_quality_threshold": 0.9,
+      "accepted_record_hashes": [
+        "4584ac821c931b4af028aecd3cf79e7bae33df0562a5cb62a07475b80a7f9397",
+        "5b91153b2b827dbf11a26c41c8b8b0cc293af49535054990516ddcbbafb31a21"
+      ],
+      "rejected_record_count": 2,
+      "total_surplus_kwh": 2606.7
+    }
+  },
+  "governance_checks": {
+    "spk_owner_is_governance_admin": true,
+    "spk_default_admin_is_governance_admin": true,
+    "spk_deployer_default_admin_revoked": true,
+    "spk_minter_role_separated": true,
+    "spk_oracle_role_separated": true,
+    "treasury_default_admin_is_governance_admin": true,
+    "treasury_deployer_default_admin_revoked": true,
+    "currency_default_admin_is_governance_admin": true,
+    "currency_operator_is_governance_admin": true
+  },
+  "flow": [
+    {
+      "name": "attested_surplus_mint",
+      "result": "130.1697 SPK minted to producer from 2606 kWh"
+    },
+    {
+      "name": "service_invoice_payment",
+      "result": "25 SPK paid to a service provider through SolarPunkCurrencySystem"
+    },
+    {
+      "name": "energy_credit_payment",
+      "result": "50 SPK paid to an energy buyer through SolarPunkCurrencySystem"
+    },
+    {
+      "name": "redemption_claim",
+      "result": "20 SPK burned into 400 owed kWh"
+    },
+    {
+      "name": "delivery_resolution",
+      "result": "400 kWh delivered with 0 kWh shortfall"
+    }
+  ],
+  "accounting": {
+    "accepted_surplus_kwh": 2606.7,
+    "onchain_surplus_kwh": 2606,
+    "minted_to_producer_spk": 130.1697,
+    "settlement_volume_spk": 75,
+    "redeemed_spk": 20,
+    "active_circulating_spk": 110.1697,
+    "protocol_fee_inventory_spk": 0.1503,
+    "owed_kwh": 400,
+    "delivered_kwh": 400,
+    "shortfall_kwh": 0,
+    "energy_price_usd_per_kwh": 0.05,
+    "total_supply_after_spk": 110.32,
+    "currency_next_payment_id": 3,
+    "currency_next_redemption_id": 2,
+    "conservation_pass": true,
+    "delivery_fulfilled": true
+  },
+  "all_checks_passed": true,
+  "boundaries": [
+    "This is a local pilot-stack drill, not a public network deployment.",
+    "It proves the latest contracts work together as a cryptocurrency system: mint, payment, redemption, and delivery accounting.",
+    "It does not prove real hardware provenance, legal redemption enforceability, customer demand, external audit, or mainnet readiness.",
+    "The next public step is to run this drill against a governed Sepolia stack and then replace fixture meter evidence with a real operator export."
+  ]
+}
