@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
 interface IProtocolTreasuryBondView {
@@ -350,7 +351,7 @@ contract SolarPunkCoin is
         uint256 baseSPK = surplusKwh * energyPricePerKwh;
 
         // Apply minting fee (seigniorage)
-        uint256 fee = (baseSPK * mintingFee) / 10000;
+        uint256 fee = Math.mulDiv(baseSPK, mintingFee, 10_000);
         uint256 amountToMint = baseSPK - fee;
 
         // Check supply cap
@@ -367,7 +368,7 @@ contract SolarPunkCoin is
         // Split fee: stabilityFeeShare goes to stability pool (enables PI burn path),
         // remainder goes to treasury
         if (fee > 0) {
-            uint256 stabilityAmount = (fee * stabilityFeeShare) / 10000;
+            uint256 stabilityAmount = Math.mulDiv(fee, stabilityFeeShare, 10_000);
             uint256 treasuryAmount = fee - stabilityAmount;
             if (stabilityAmount > 0) {
                 _mint(stabilityPool, stabilityAmount);

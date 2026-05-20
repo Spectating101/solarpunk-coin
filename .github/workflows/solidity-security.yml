@@ -25,5 +25,5 @@ jobs:
         uses: crytic/slither-action@v0.3.0
         with:
           target: "."
-          slither-args: "--filter-paths node_modules --compile-force-framework hardhat"
+          slither-args: "--filter-paths node_modules --compile-force-framework hardhat --exclude-low --exclude-informational --exclude-optimization"
           fail-on: medium

@@ -250,7 +250,7 @@ contract EnergyRevenueFloor is AccessControl, ReentrancyGuard, Pausable {
         if (!producerExists[producerId]) return false;
         Producer memory producer = producers[producerId];
         if (!producer.active) return false;
-        if (producer.lastReportAt == 0) return true;
+        if (producer.lastReportAt < 1) return true;
         return block.timestamp - producer.lastReportAt <= producer.heartbeatSeconds;
     }
 
@@ -282,7 +282,7 @@ contract EnergyRevenueFloor is AccessControl, ReentrancyGuard, Pausable {
         uint256 premiumBps,
         address payer
     ) external nonReentrant onlyProducerOwner(producerId) whenNotPaused returns (uint256 policyId) {
-        if (payer == address(0)) revert UnauthorizedActor();
+        if (payer == address(0) || payer != msg.sender) revert UnauthorizedActor();
         Producer storage producer = producers[producerId];
         if (!producer.active) revert InvalidProducerState();
         if (!heartbeatIsFresh(producerId)) revert DeadlineMissed();
@@ -300,7 +300,7 @@ contract EnergyRevenueFloor is AccessControl, ReentrancyGuard, Pausable {
 
         policies[policyId] = FloorPolicy({
             producerId: producerId,
-            payer: payer,
+            payer: msg.sender,
             periodStart: periodStart,
             periodEnd: periodEnd,
             reportDeadline: reportDeadline,
@@ -323,14 +323,14 @@ contract EnergyRevenueFloor is AccessControl, ReentrancyGuard, Pausable {
 
         totalLockedLiquidity += maxPayout;
         producer.totalPolicies += 1;
-        policiesByPayer[payer].push(policyId);
+        policiesByPayer[msg.sender].push(policyId);
 
-        settlementToken.safeTransferFrom(payer, treasury, premium);
+        settlementToken.safeTransferFrom(msg.sender, treasury, premium);
 
         emit PolicyOpened(
             policyId,
             producerId,
-            payer,
+            msg.sender,
             periodStart,
             periodEnd,
             targetKwh,

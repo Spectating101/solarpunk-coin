@@ -18,7 +18,7 @@ interface AggregatorV3Interface {
 }
 
 interface ISolarPunkCoin {
-    function updateOraclePriceAndAdjust(uint256 newPrice) external returns (bool);
+    function updateOraclePriceAndAdjust(uint256 newPrice) external;
     function updateEnergyPrice(uint256 newPrice) external;
 }
 
@@ -232,8 +232,17 @@ contract ChainlinkOracleAdapter is Ownable {
         view
         returns (uint256 price18, uint256 updatedAt)
     {
-        (, int256 answer, , uint256 _updatedAt, ) = feed.latestRoundData();
+        (
+            uint80 roundId,
+            int256 answer,
+            uint256 startedAt,
+            uint256 _updatedAt,
+            uint80 answeredInRound
+        ) = feed.latestRoundData();
+        require(roundId > 0, "invalid feed round");
+        require(answeredInRound >= roundId, "stale answered round");
         require(answer > 0, "negative or zero price from feed");
+        require(_updatedAt >= startedAt && _updatedAt > 0, "invalid feed timestamp");
 
         uint8 feedDecimals = feed.decimals();
         // Normalise: multiply by 10^(18 - feedDecimals) or divide by 10^(feedDecimals - 18)

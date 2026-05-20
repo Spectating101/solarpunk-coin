@@ -44,6 +44,7 @@ describe("EnergyRevenueFloor", function () {
     await floor.grantRole(auditorRole, auditor.address);
 
     await usdc.mint(owner.address, 500_000n * ONE_USDC);
+    await usdc.mint(producer.address, 500_000n * ONE_USDC);
     await usdc.mint(payer.address, 500_000n * ONE_USDC);
     await usdc.mint(liquidityProvider.address, 500_000n * ONE_USDC);
 
@@ -82,7 +83,7 @@ describe("EnergyRevenueFloor", function () {
       premiumBps
     );
 
-    await usdc.connect(payer).approve(floor.target, premium);
+    await usdc.connect(producer).approve(floor.target, premium);
 
     const policyId = await floor.connect(producer).openFloorPolicy.staticCall(
       producerId,
@@ -91,7 +92,7 @@ describe("EnergyRevenueFloor", function () {
       targetKwh,
       floorPricePerKwh,
       premiumBps,
-      payer.address
+      producer.address
     );
 
     await floor.connect(producer).openFloorPolicy(
@@ -101,7 +102,7 @@ describe("EnergyRevenueFloor", function () {
       targetKwh,
       floorPricePerKwh,
       premiumBps,
-      payer.address
+      producer.address
     );
 
     return {
@@ -129,7 +130,7 @@ describe("EnergyRevenueFloor", function () {
   });
 
   it("opens a policy when liquidity and premium approvals are sufficient", async function () {
-    const payerBalanceBefore = await usdc.balanceOf(payer.address);
+    const producerBalanceBefore = await usdc.balanceOf(producer.address);
     const treasuryBalanceBefore = await usdc.balanceOf(owner.address);
     const { maxPayout, premium } = await openFloorPolicy();
 
@@ -140,15 +141,15 @@ describe("EnergyRevenueFloor", function () {
     expect(policy.premiumPaid).to.equal(premium);
     expect(await floor.totalLockedLiquidity()).to.equal(maxPayout);
 
-    const payerBalanceAfter = await usdc.balanceOf(payer.address);
+    const producerBalanceAfter = await usdc.balanceOf(producer.address);
     const treasuryBalanceAfter = await usdc.balanceOf(owner.address);
-    expect(payerBalanceBefore - payerBalanceAfter).to.equal(premium);
+    expect(producerBalanceBefore - producerBalanceAfter).to.equal(premium);
     expect(treasuryBalanceAfter - treasuryBalanceBefore).to.equal(premium);
   });
 
   it("finalizes settlement after manual report and releases locked liquidity", async function () {
     const { targetKwh, floorPricePerKwh, maxPayout, periodEnd } = await openFloorPolicy();
-    const payerBalanceBefore = await usdc.balanceOf(payer.address);
+    const producerBalanceBefore = await usdc.balanceOf(producer.address);
 
     const policy = await floor.policies(1n);
     const measuredAt = Number(policy.periodStart) + 60;
@@ -169,22 +170,22 @@ describe("EnergyRevenueFloor", function () {
     await ethers.provider.send("evm_increaseTime", [Number(disputeWindow) + 1]);
     await ethers.provider.send("evm_mine");
 
-    await floor.connect(payer).finalizePolicy(1n);
+    await floor.connect(producer).finalizePolicy(1n);
 
     const settled = await floor.policies(1n);
     expect(settled.state).to.equal(POLICY_STATE.Settled);
     expect(settled.payout).to.equal(payout);
     expect(await floor.totalLockedLiquidity()).to.equal(0n);
 
-    const payerBalanceAfter = await usdc.balanceOf(payer.address);
-    expect(payerBalanceAfter).to.equal(payerBalanceBefore + payout);
+    const producerBalanceAfter = await usdc.balanceOf(producer.address);
+    expect(producerBalanceAfter).to.equal(producerBalanceBefore + payout);
     expect(settled.settledAt).to.be.greaterThan(periodEnd);
   });
 
   it("supports cancel then release liquidity", async function () {
     const { policyId, maxPayout } = await openFloorPolicy();
 
-    await floor.connect(payer).cancelPolicy(policyId);
+    await floor.connect(producer).cancelPolicy(policyId);
     const after = await floor.policies(policyId);
     expect(after.state).to.equal(POLICY_STATE.Cancelled);
     expect(after.lockedLiquidity).to.equal(0n);
@@ -206,7 +207,7 @@ describe("EnergyRevenueFloor", function () {
     }
 
     await floor.connect(reporter).submitManualProductionReport(1n, 700n, measuredAt, ethers.ZeroHash);
-    await floor.connect(payer).requestDispute(1n, "source hash mismatch");
+    await floor.connect(producer).requestDispute(1n, "source hash mismatch");
 
     const disputed = await floor.policies(1n);
     expect(disputed.state).to.equal(POLICY_STATE.Disputed);
@@ -233,11 +234,29 @@ describe("EnergyRevenueFloor", function () {
     expect(await floor.totalLockedLiquidity()).to.equal(0n);
   });
 
-  it("only allows policy buyers to cancel while producer owners can create and report", async function () {
+  it("only allows policy buyers to cancel or dispute", async function () {
     const { policyId } = await openFloorPolicy();
 
     await expect(floor.connect(owner).cancelPolicy(policyId)).to.be.revertedWithCustomError(floor, "UnauthorizedActor");
-    await expect(floor.connect(producer).requestDispute(policyId, "unauthorized")).to.be.revertedWithCustomError(floor, "UnauthorizedActor");
+    await expect(floor.connect(payer).requestDispute(policyId, "unauthorized")).to.be.revertedWithCustomError(floor, "UnauthorizedActor");
+  });
+
+  it("rejects delegated premium payment without explicit authorization", async function () {
+    const { periodStart, periodEnd } = await nextPolicyWindow();
+    const [, premium] = await floor.connect(producer).estimatePolicy(1000n, 1200000n, 120n);
+    await usdc.connect(payer).approve(floor.target, premium);
+
+    await expect(
+      floor.connect(producer).openFloorPolicy(
+        producerId,
+        periodStart,
+        periodEnd,
+        1000n,
+        1200000n,
+        120n,
+        payer.address
+      )
+    ).to.be.revertedWithCustomError(floor, "UnauthorizedActor");
   });
 
   it("requires sufficient free liquidity for opening a new floor policy", async function () {
@@ -252,7 +271,7 @@ describe("EnergyRevenueFloor", function () {
       await floor.connect(liquidityProvider).withdrawLiquidity(withdrawAmount, owner.address);
     }
 
-    await usdc.connect(payer).approve(floor.target, maxPayout);
+    await usdc.connect(producer).approve(floor.target, maxPayout);
     const { periodStart, periodEnd } = await nextPolicyWindow();
     await expect(
       floor.connect(producer).openFloorPolicy(
@@ -262,7 +281,7 @@ describe("EnergyRevenueFloor", function () {
         targetKwh,
         floorPricePerKwh,
         premiumBps,
-        payer.address
+        producer.address
       )
     ).to.be.revertedWithCustomError(floor, "NotEnoughLiquidity");
   });
@@ -278,7 +297,7 @@ describe("EnergyRevenueFloor", function () {
         1000n,
         1000000n,
         100n,
-        payer.address
+        producer.address
       )
     ).to.be.reverted;
   });
