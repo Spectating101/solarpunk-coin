@@ -17,6 +17,7 @@ import { CONTRACTS, GITHUB_REPO, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL } from '../co
 import productEmpirics from '../../../state/proofs/spk_product_empirics.json';
 import spkIntelligence from '../../../state/product/spk_intelligence_layer.json';
 import nrelMapScenarios from '../../../state/product/nrel_solar_map_scenarios.json';
+import SitePilotSimulator from './SitePilotSimulator';
 
 const SAMPLE_PRICE_PER_KWH = 0.05;
 const SAMPLE_MINT_FEE_BPS = 10;
@@ -177,6 +178,8 @@ export default function SPKMintDemo() {
           </div>
         </div>
       </div>
+
+      <SitePilotSimulator />
 
       <div className="metric-grid">
         <div className="metric-card metric-amber">

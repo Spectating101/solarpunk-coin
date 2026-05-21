@@ -601,6 +601,252 @@ p {
   letter-spacing: 0;
 }
 
+.site-simulator {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(52, 211, 153, 0.2);
+  background:
+    radial-gradient(circle at 9% 12%, rgba(52, 211, 153, 0.1), transparent 20rem),
+    linear-gradient(135deg, rgba(13, 23, 16, 0.96), rgba(7, 13, 8, 0.88));
+}
+
+.site-simulator::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: -80px;
+  width: 280px;
+  height: 280px;
+  border: 1px solid rgba(217, 119, 6, 0.16);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.site-simulator-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.25fr);
+  gap: 16px;
+}
+
+.site-controls,
+.site-output {
+  display: grid;
+  gap: 12px;
+}
+
+.site-selector {
+  display: grid;
+  gap: 8px;
+}
+
+.site-selector span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.site-selector select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: rgba(7, 13, 8, 0.68);
+  color: var(--text);
+  padding: 11px 12px;
+  font: inherit;
+}
+
+.site-baseline-card,
+.site-kpi,
+.pilot-readiness-grid > div,
+.readiness-stack div,
+.intake-stack code {
+  border: 1px solid rgba(27, 52, 34, 0.82);
+  border-radius: 7px;
+  background: rgba(7, 13, 8, 0.28);
+}
+
+.site-baseline-card {
+  padding: 13px;
+}
+
+.site-baseline-card strong {
+  display: block;
+  color: var(--text);
+}
+
+.site-baseline-card span {
+  display: block;
+  margin-top: 5px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.site-baseline-card p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.site-control-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.site-control {
+  display: grid;
+  gap: 7px;
+  border: 1px solid rgba(27, 52, 34, 0.82);
+  border-radius: 7px;
+  background: rgba(7, 13, 8, 0.24);
+  padding: 11px;
+}
+
+.site-control span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.site-control strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.site-control b {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.site-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--green);
+}
+
+.site-control em {
+  color: var(--dim);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.meter-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-radius: 7px;
+  background: rgba(217, 119, 6, 0.08);
+  color: var(--amber);
+  padding: 11px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.meter-toggle.active {
+  border-color: rgba(52, 211, 153, 0.34);
+  background: rgba(52, 211, 153, 0.09);
+  color: var(--green);
+}
+
+.site-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.site-kpi {
+  padding: 13px;
+}
+
+.site-kpi span {
+  display: block;
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.site-kpi strong {
+  display: block;
+  margin-top: 7px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 20px;
+}
+
+.site-kpi.metric-good strong {
+  color: var(--green);
+}
+
+.site-kpi.metric-amber strong,
+.site-kpi.metric-warn strong {
+  color: var(--amber);
+}
+
+.site-kpi p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.pilot-readiness-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+  gap: 12px;
+}
+
+.pilot-readiness-grid > div {
+  padding: 13px;
+}
+
+.readiness-stack,
+.intake-stack {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.readiness-stack div {
+  padding: 10px;
+}
+
+.readiness-stack strong {
+  display: block;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.readiness-stack .pass strong {
+  color: var(--green);
+}
+
+.readiness-stack span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.intake-stack code {
+  padding: 9px 10px;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
 .panel {
   padding: 18px;
 }
@@ -1405,6 +1651,8 @@ p {
   .currency-layer-grid,
   .proof-main-grid.bottom,
   .solar-map-layout,
+  .site-simulator-grid,
+  .pilot-readiness-grid,
   .tab-grid,
   .workbench-grid {
     grid-template-columns: 1fr;
@@ -1416,6 +1664,7 @@ p {
 
   .conversion-flow,
   .solar-site-strip,
+  .site-kpi-grid,
   .workbench-kpi-grid,
   .risk-ledger {
     grid-template-columns: 1fr;
