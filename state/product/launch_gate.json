@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-21T16:06:40.136Z",
+  "generated_at": "2026-05-21T16:40:15.111Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -8,7 +8,7 @@
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
       "status": "launchable",
-      "passed_checks": 19,
+      "passed_checks": 20,
       "blocking_checks": 0,
       "checks": [
         {
@@ -89,6 +89,13 @@
           "evidence": "docs/product/NREL_SOLAR_TRAINING_LAB.md"
         },
         {
+          "name": "NREL solar map scenarios exist",
+          "pass": true,
+          "blocking": true,
+          "message": "NREL/PVWatts compact map scenarios provide frontend-ready modeled solar points without storing hourly or daily traces.",
+          "evidence": "docs/product/NREL_SOLAR_MAP_SCENARIOS.md"
+        },
+        {
           "name": "Generic operator intake exists",
           "pass": true,
           "blocking": true,
@@ -150,7 +157,7 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 20,
+      "passed_checks": 21,
       "blocking_checks": 4,
       "checks": [
         {
@@ -229,6 +236,13 @@
           "blocking": true,
           "message": "NREL/PVWatts baseline creates public modeled daily rows for SPK forecasting, anomaly scoring, and future model training without storing the API key.",
           "evidence": "docs/product/NREL_SOLAR_TRAINING_LAB.md"
+        },
+        {
+          "name": "NREL solar map scenarios exist",
+          "pass": true,
+          "blocking": true,
+          "message": "NREL/PVWatts compact map scenarios provide frontend-ready modeled solar points without storing hourly or daily traces.",
+          "evidence": "docs/product/NREL_SOLAR_MAP_SCENARIOS.md"
         },
         {
           "name": "Generic operator intake exists",
@@ -341,7 +355,7 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 20,
+      "passed_checks": 21,
       "blocking_checks": 9,
       "checks": [
         {
@@ -420,6 +434,13 @@
           "blocking": true,
           "message": "NREL/PVWatts baseline creates public modeled daily rows for SPK forecasting, anomaly scoring, and future model training without storing the API key.",
           "evidence": "docs/product/NREL_SOLAR_TRAINING_LAB.md"
+        },
+        {
+          "name": "NREL solar map scenarios exist",
+          "pass": true,
+          "blocking": true,
+          "message": "NREL/PVWatts compact map scenarios provide frontend-ready modeled solar points without storing hourly or daily traces.",
+          "evidence": "docs/product/NREL_SOLAR_MAP_SCENARIOS.md"
         },
         {
           "name": "Generic operator intake exists",
@@ -565,7 +586,7 @@
     }
   },
   "next_actions": [
-    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training baseline, hardware provenance model, and closed-pilot execution package.",
+    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training/map baselines, hardware provenance model, and closed-pilot execution package.",
     "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
     "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
     "Use the monetary stress harness to size any named reserve before promising redemption.",

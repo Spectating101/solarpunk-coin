@@ -54,6 +54,106 @@ const DEFAULT_CONFIG = {
   ],
 };
 
+const DEFAULT_MAP_CONFIG = {
+  ...DEFAULT_CONFIG,
+  map: {
+    annual_energy_value_usd_per_kwh: 0.05,
+  },
+  sites: [
+    ...DEFAULT_CONFIG.sites,
+    {
+      id: "los_angeles_10kw",
+      label: "Los Angeles 10 kW rooftop",
+      region: "US West Coast",
+      latitude: 34.0522,
+      longitude: -118.2437,
+      system_capacity_kw: 10,
+      dataset: "nsrdb",
+      market_note: "Large distributed-solar market with strong visual demo relevance.",
+    },
+    {
+      id: "new_york_10kw",
+      label: "New York 10 kW rooftop",
+      region: "US Northeast",
+      latitude: 40.7128,
+      longitude: -74.0060,
+      system_capacity_kw: 10,
+      dataset: "nsrdb",
+      market_note: "Lower-resource dense-load benchmark for urban adoption cases.",
+    },
+    {
+      id: "berlin_10kw",
+      label: "Berlin 10 kW rooftop",
+      region: "Europe",
+      latitude: 52.52,
+      longitude: 13.405,
+      system_capacity_kw: 10,
+      dataset: "intl",
+      market_note: "European energy-transition benchmark with weaker solar resource but strong policy relevance.",
+    },
+    {
+      id: "singapore_10kw",
+      label: "Singapore 10 kW rooftop",
+      region: "Southeast Asia",
+      latitude: 1.3521,
+      longitude: 103.8198,
+      system_capacity_kw: 10,
+      dataset: "intl",
+      market_note: "Equatorial dense-city benchmark where roof area and load profile matter.",
+    },
+    {
+      id: "tokyo_10kw",
+      label: "Tokyo 10 kW rooftop",
+      region: "East Asia",
+      latitude: 35.6762,
+      longitude: 139.6503,
+      system_capacity_kw: 10,
+      dataset: "intl",
+      market_note: "Large high-load city benchmark near the current Asia reference geography.",
+    },
+    {
+      id: "sydney_10kw",
+      label: "Sydney 10 kW rooftop",
+      region: "Australia",
+      latitude: -33.8688,
+      longitude: 151.2093,
+      system_capacity_kw: 10,
+      dataset: "intl",
+      market_note: "Residential rooftop-solar market benchmark for public-data and pilot comparisons.",
+    },
+    {
+      id: "nairobi_10kw",
+      label: "Nairobi 10 kW rooftop",
+      region: "East Africa",
+      latitude: -1.2921,
+      longitude: 36.8219,
+      system_capacity_kw: 10,
+      dataset: "intl",
+      market_note: "High-growth distributed-energy benchmark with strong resource quality.",
+    },
+    {
+      id: "dubai_10kw",
+      label: "Dubai 10 kW rooftop",
+      region: "Middle East",
+      latitude: 25.2048,
+      longitude: 55.2708,
+      system_capacity_kw: 10,
+      dataset: "intl",
+      market_note: "High-solar stress benchmark for upper-bound SPK map scenarios.",
+    },
+    {
+      id: "sao_paulo_10kw",
+      label: "Sao Paulo 10 kW rooftop",
+      region: "South America",
+      latitude: -23.5558,
+      longitude: -46.6396,
+      system_capacity_kw: 10,
+      dataset: "intl",
+      market_note: "Large-market Southern Hemisphere benchmark with moderate solar output.",
+    },
+  ],
+};
+
 function readJson(relativePath, fallback = null) {
   const filePath = path.join(ROOT, relativePath);
   if (!fs.existsSync(filePath)) return fallback;
@@ -210,6 +310,21 @@ function monthlyRowsFromDaily(dailyRows) {
   }));
 }
 
+function productionTier(annualAcKwh) {
+  const value = Number(annualAcKwh);
+  if (value >= 16_000) return "high_solar";
+  if (value >= 13_000) return "strong_solar";
+  if (value >= 11_000) return "moderate_solar";
+  return "lower_solar";
+}
+
+function mapPosition(latitude, longitude) {
+  return {
+    x_pct: fixed(((Number(longitude) + 180) / 360) * 100, 3),
+    y_pct: fixed(((90 - Number(latitude)) / 180) * 100, 3),
+  };
+}
+
 function summarizeSite(site, payload, dailyRows) {
   const outputs = payload.outputs || {};
   const annualAc = Number(outputs.ac_annual || sum(dailyRows.map((row) => row.modeled_ac_kwh)));
@@ -329,6 +444,96 @@ function buildReport({ config = DEFAULT_CONFIG, responses, now = new Date(), ope
   return report;
 }
 
+function buildMapScenarioReport({ config = DEFAULT_MAP_CONFIG, responses, now = new Date() }) {
+  const mapPoints = [];
+
+  for (const site of config.sites) {
+    const payload = responses[site.id];
+    if (!payload) throw new Error(`Missing PVWatts response for map site ${site.id}`);
+    const dailyRows = dailyRowsFromPvWatts(site, payload, config.spk);
+    const summary = summarizeSite(site, payload, dailyRows);
+    const bestMonth = summary.monthly.reduce((best, row) => (
+      Number(row.modeled_ac_kwh) > Number(best.modeled_ac_kwh) ? row : best
+    ), summary.monthly[0]);
+    const worstMonth = summary.monthly.reduce((worst, row) => (
+      Number(row.modeled_ac_kwh) < Number(worst.modeled_ac_kwh) ? row : worst
+    ), summary.monthly[0]);
+    const annualAc = Number(summary.annual_ac_kwh);
+    const tier = productionTier(annualAc);
+    const position = mapPosition(site.latitude, site.longitude);
+
+    mapPoints.push({
+      id: site.id,
+      label: site.label,
+      region: site.region || "reference",
+      latitude: site.latitude,
+      longitude: site.longitude,
+      system_capacity_kw: site.system_capacity_kw,
+      dataset: site.dataset || "nsrdb",
+      annual_ac_kwh: summary.annual_ac_kwh,
+      average_daily_ac_kwh: fixed(annualAc / 365, 4),
+      annual_capacity_factor_pct: summary.annual_capacity_factor_pct,
+      modeled_spk_ceiling_if_all_exported: fixed(annualAc * config.spk.net_spk_per_kwh_after_mint_fee, 6),
+      modeled_energy_value_usd_at_5c: fixed(annualAc * config.map.annual_energy_value_usd_per_kwh, 2),
+      best_month: {
+        label: bestMonth.label,
+        modeled_ac_kwh: bestMonth.modeled_ac_kwh,
+      },
+      worst_month: {
+        label: worstMonth.label,
+        modeled_ac_kwh: worstMonth.modeled_ac_kwh,
+      },
+      weather_data_source: summary.station_info.weather_data_source,
+      solar_resource_file: summary.station_info.solar_resource_file,
+      production_tier: tier,
+      map_position: position,
+      market_note: site.market_note,
+    });
+  }
+
+  const annualOutputs = mapPoints.map((point) => Number(point.annual_ac_kwh));
+  const sorted = [...mapPoints].sort((a, b) => Number(b.annual_ac_kwh) - Number(a.annual_ac_kwh));
+  return {
+    generated_at: now.toISOString(),
+    title: "NREL Solar Map Scenarios",
+    purpose: "Compact map-ready PVWatts scenarios for the frontend: one modeled 10 kW rooftop point per geography, without storing full hourly or daily traces.",
+    source: {
+      provider: "NREL/NLR PVWatts V8",
+      endpoint: PVWATTS_ENDPOINT,
+      api_key_written_to_artifact: false,
+      model_basis: "PVWatts V8 hourly AC output summarized into compact site-level map points.",
+    },
+    assumptions: {
+      system_capacity_kw: 10,
+      module_type: config.pvwatts.module_type,
+      losses_pct: config.pvwatts.losses,
+      array_type: config.pvwatts.array_type,
+      tilt_degrees: config.pvwatts.tilt,
+      azimuth_degrees: config.pvwatts.azimuth,
+      dc_ac_ratio: config.pvwatts.dc_ac_ratio,
+      inverter_efficiency_pct: config.pvwatts.inv_eff,
+      net_spk_per_kwh_after_mint_fee: config.spk.net_spk_per_kwh_after_mint_fee,
+      energy_value_usd_per_kwh: config.map.annual_energy_value_usd_per_kwh,
+    },
+    summary: {
+      map_points: mapPoints.length,
+      annual_ac_kwh_min: fixed(Math.min(...annualOutputs), 4),
+      annual_ac_kwh_max: fixed(Math.max(...annualOutputs), 4),
+      annual_ac_kwh_average: fixed(average(annualOutputs), 4),
+      strongest_site: sorted[0]?.id || null,
+      weakest_site: sorted[sorted.length - 1]?.id || null,
+      frontend_stage: "map_simulation_ready",
+    },
+    map_points: mapPoints,
+    hard_boundaries: [
+      "Map points are modeled 10 kW rooftop scenarios, not real customer sites.",
+      "Modeled SPK ceiling assumes all generated kWh is export-eligible; real SPK requires signed surplus meter data.",
+      "This compact artifact is intended for frontend simulation and reviewer explanation, not mint authorization.",
+      "The NREL API key is supplied only at runtime and is not written into repo artifacts.",
+    ],
+  };
+}
+
 function toMarkdown(report) {
   const lines = [];
   lines.push("# NREL Solar Training Lab");
@@ -387,16 +592,69 @@ function toMarkdown(report) {
   return lines.join("\n");
 }
 
+function mapScenariosToMarkdown(report) {
+  const lines = [];
+  lines.push("# NREL Solar Map Scenarios");
+  lines.push("");
+  lines.push(report.purpose);
+  lines.push("");
+  lines.push("## Result");
+  lines.push("");
+  lines.push(`- generated_at: \`${report.generated_at}\``);
+  lines.push(`- frontend_stage: \`${report.summary.frontend_stage}\``);
+  lines.push(`- map_points: \`${report.summary.map_points}\``);
+  lines.push(`- annual AC range: \`${report.summary.annual_ac_kwh_min}-${report.summary.annual_ac_kwh_max} kWh\``);
+  lines.push(`- strongest_site: \`${report.summary.strongest_site}\``);
+  lines.push(`- weakest_site: \`${report.summary.weakest_site}\``);
+  lines.push(`- api_key_written_to_artifact: \`${report.source.api_key_written_to_artifact}\``);
+  lines.push("");
+  lines.push("## Map Points");
+  lines.push("");
+  lines.push("| Site | Region | Annual AC kWh | SPK ceiling | Value at $0.05/kWh | Tier | Weather source |");
+  lines.push("|---|---|---:|---:|---:|---|---|");
+  for (const point of report.map_points) {
+    lines.push(`| ${point.label} | ${point.region} | ${point.annual_ac_kwh} | ${point.modeled_spk_ceiling_if_all_exported} | $${point.modeled_energy_value_usd_at_5c} | \`${point.production_tier}\` | ${point.weather_data_source} |`);
+  }
+  lines.push("");
+  lines.push("## Boundaries");
+  lines.push("");
+  for (const boundary of report.hard_boundaries) {
+    lines.push(`- ${boundary}`);
+  }
+  lines.push("");
+  return lines.join("\n");
+}
+
+async function fetchResponsesForSites(sites, config, apiKey) {
+  const responses = {};
+  for (const site of sites) {
+    responses[site.id] = await fetchPvWattsSite(site, config, apiKey);
+  }
+  return responses;
+}
+
 async function main() {
   const apiKey = process.env.NREL_API_KEY;
   if (!apiKey) {
-    throw new Error("Missing NREL_API_KEY. Run as: NREL_API_KEY=... npm run product:nrel-training");
+    throw new Error("Missing NREL_API_KEY. Run as: NREL_API_KEY=... npm run product:nrel-training or npm run product:nrel-map");
   }
 
-  const responses = {};
-  for (const site of DEFAULT_CONFIG.sites) {
-    responses[site.id] = await fetchPvWattsSite(site, DEFAULT_CONFIG, apiKey);
+  if (process.argv.includes("--map-pack")) {
+    const responses = await fetchResponsesForSites(DEFAULT_MAP_CONFIG.sites, DEFAULT_MAP_CONFIG, apiKey);
+    const report = buildMapScenarioReport({ config: DEFAULT_MAP_CONFIG, responses });
+    const jsonPath = path.join(ROOT, "state", "product", "nrel_solar_map_scenarios.json");
+    const mdPath = path.join(ROOT, "docs", "product", "NREL_SOLAR_MAP_SCENARIOS.md");
+    writeJson(jsonPath, report);
+    writeText(mdPath, mapScenariosToMarkdown(report));
+    console.log(`nrel_map_stage=${report.summary.frontend_stage}`);
+    console.log(`map_points=${report.summary.map_points}`);
+    console.log(`annual_ac_range=${report.summary.annual_ac_kwh_min}-${report.summary.annual_ac_kwh_max}`);
+    console.log(`wrote: ${jsonPath}`);
+    console.log(`wrote: ${mdPath}`);
+    return;
   }
+
+  const responses = await fetchResponsesForSites(DEFAULT_CONFIG.sites, DEFAULT_CONFIG, apiKey);
 
   const operatorData = readJson("state/product/operator_data_intake.json", null);
   const report = buildReport({ config: DEFAULT_CONFIG, responses, operatorData });
@@ -421,8 +679,12 @@ if (require.main === module) {
 
 module.exports = {
   DEFAULT_CONFIG,
+  DEFAULT_MAP_CONFIG,
+  buildMapScenarioReport,
   buildReport,
   dailyRowsFromPvWatts,
+  mapPosition,
+  productionTier,
   monthDayFromHour,
   operatorCrosscheck,
   summarizeSite,

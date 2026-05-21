@@ -9,12 +9,14 @@ import {
   Gauge,
   KeyRound,
   Leaf,
+  MapPinned,
   ShieldCheck,
 } from 'lucide-react';
 import SPK_ABI from '../abi/SolarPunkCoin.json';
 import { CONTRACTS, GITHUB_REPO, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL } from '../constants/contracts';
 import productEmpirics from '../../../state/proofs/spk_product_empirics.json';
 import spkIntelligence from '../../../state/product/spk_intelligence_layer.json';
+import nrelMapScenarios from '../../../state/product/nrel_solar_map_scenarios.json';
 
 const SAMPLE_PRICE_PER_KWH = 0.05;
 const SAMPLE_MINT_FEE_BPS = 10;
@@ -132,6 +134,9 @@ export default function SPKMintDemo() {
   const forecastBase = spkIntelligence.forecast.scenarios.find((scenario) => scenario.label === 'base');
   const forecastLow = spkIntelligence.forecast.scenarios.find((scenario) => scenario.label === 'low');
   const forecastHigh = spkIntelligence.forecast.scenarios.find((scenario) => scenario.label === 'high');
+  const mapPoints = nrelMapScenarios.map_points || [];
+  const strongestMapPoint = mapPoints.find((point) => point.id === nrelMapScenarios.summary.strongest_site) || mapPoints[0];
+  const weakestMapPoint = mapPoints.find((point) => point.id === nrelMapScenarios.summary.weakest_site) || mapPoints[mapPoints.length - 1];
   const liveOk = live.status === 'ok';
   const liveData = live.data;
   const oracleStale = liveOk && liveData.oracleAgeSeconds >= liveData.oracleStalenessThreshold;
@@ -206,6 +211,70 @@ export default function SPKMintDemo() {
           <div className="metric-value">{formatNumber(forecastBase?.net_spk_preview, 4)} SPK</div>
           <div className="metric-sub">
             {formatNumber(forecastLow?.net_spk_preview, 2)}-{formatNumber(forecastHigh?.net_spk_preview, 2)} SPK public-lab band
+          </div>
+        </div>
+      </div>
+
+      <div className="panel solar-map-panel">
+        <div className="panel-heading compact">
+          <div>
+            <div className="panel-kicker"><MapPinned size={14} /> Solar Map Simulation</div>
+            <h2>Where a 10 kW rooftop produces the most SPK potential</h2>
+          </div>
+          <div className="map-summary-pill">
+            {nrelMapScenarios.summary.map_points} NREL/PVWatts points
+          </div>
+        </div>
+        <div className="solar-map-layout">
+          <div className="solar-map" aria-label="NREL/PVWatts solar map scenarios">
+            <div className="solar-map-equator" />
+            {mapPoints.map((point) => (
+              <div
+                key={point.id}
+                className={`solar-map-point ${point.production_tier}`}
+                style={{
+                  left: `${point.map_position.x_pct}%`,
+                  top: `${point.map_position.y_pct}%`,
+                }}
+                title={`${point.label}: ${formatNumber(point.annual_ac_kwh, 0)} kWh/year`}
+              >
+                <span />
+              </div>
+            ))}
+          </div>
+          <div className="solar-map-copy">
+            <div className="map-result-grid">
+              <div>
+                <span>Strongest modeled site</span>
+                <strong>{strongestMapPoint?.label}</strong>
+                <em>{formatNumber(strongestMapPoint?.annual_ac_kwh, 0)} kWh/year</em>
+              </div>
+              <div>
+                <span>Weakest modeled site</span>
+                <strong>{weakestMapPoint?.label}</strong>
+                <em>{formatNumber(weakestMapPoint?.annual_ac_kwh, 0)} kWh/year</em>
+              </div>
+              <div>
+                <span>Average output</span>
+                <strong>{formatNumber(nrelMapScenarios.summary.annual_ac_kwh_average, 0)} kWh/year</strong>
+                <em>10 kW rooftop basis</em>
+              </div>
+            </div>
+            <div className="solar-site-strip">
+              {mapPoints
+                .slice()
+                .sort((a, b) => Number(b.annual_ac_kwh) - Number(a.annual_ac_kwh))
+                .slice(0, 5)
+                .map((point) => (
+                  <div key={point.id}>
+                    <strong>{point.label.replace(' 10 kW rooftop', '')}</strong>
+                    <span>{formatNumber(point.modeled_spk_ceiling_if_all_exported, 1)} SPK ceiling</span>
+                  </div>
+                ))}
+            </div>
+            <div className="scope-note">
+              This is a map simulation only: PVWatts estimates gross solar output. Real SPK still needs verified surplus from signed meter or inverter data.
+            </div>
           </div>
         </div>
       </div>

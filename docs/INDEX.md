@@ -39,6 +39,7 @@ Use these first when facts conflict elsewhere:
 - `docs/product/MONETARY_STRESS_HARNESS.md` — redemption-wave and shortfall stress harness for the SPK currency model
 - `docs/product/ENERGY_MONEY_SIMULATION.md` — measured-resource energy-standard monetary simulation
 - `docs/product/NREL_SOLAR_TRAINING_LAB.md` — NREL/PVWatts solar baseline for SPK forecasting, anomaly scoring, and future model training
+- `docs/product/NREL_SOLAR_MAP_SCENARIOS.md` — compact NREL/PVWatts map points for frontend solar-potential simulation
 - `docs/product/PILOT_OPERATOR_PACKET.md` — operator-facing CSV/export handoff
 - `docs/product/PILOT_REVIEWER_PACKET.md` — reviewer-facing pilot proof checklist
 - `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` — theory anchors and comparable energy/token systems

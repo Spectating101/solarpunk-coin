@@ -28,6 +28,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV proof: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](./docs/product/PUBLIC_SOLAR_DATA_REPLAY.md) | Public historical solar replay: Ausgrid rooftop data -> normalized surplus -> SPK mint preview |
 | [`docs/product/NREL_SOLAR_TRAINING_LAB.md`](./docs/product/NREL_SOLAR_TRAINING_LAB.md) | NREL/PVWatts solar baseline: 1,095 daily model rows across Taoyuan, Austin, and Phoenix for forecasting and anomaly scoring |
+| [`docs/product/NREL_SOLAR_MAP_SCENARIOS.md`](./docs/product/NREL_SOLAR_MAP_SCENARIOS.md) | NREL/PVWatts map scenarios: 12 compact 10 kW rooftop points for frontend solar-potential simulation |
 | [`docs/product/OPERATOR_DATA_INTAKE.md`](./docs/product/OPERATOR_DATA_INTAKE.md) | Generic operator intake: real solar CSV shape -> validation -> eligible surplus -> SPK cryptocurrency preview |
 | [`docs/product/SPK_INTELLIGENCE_LAYER.md`](./docs/product/SPK_INTELLIGENCE_LAYER.md) | Advisory intelligence layer: energy claims -> provenance -> forecast -> finance readiness -> bad-claim checks -> audit note |
 | [`docs/product/DATA_REQUEST_OUTREACH.md`](./docs/product/DATA_REQUEST_OUTREACH.md) | Data request target list, email, follow-up, and operator-file handoff |
@@ -131,6 +132,10 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - NREL/PVWatts V8 produces `1,095` daily modeled rows across Taoyuan, Austin, and Phoenix 10 kW rooftop baselines
   - Taoyuan modeled annual AC output: `11,743.0994 kWh`; Austin: `14,761.5443 kWh`; Phoenix: `17,551.196 kWh`
   - Explicit boundary: this improves SPK forecasting, anomaly thresholds, and AI training, but it is modeled resource data, not signed meter proof
+- **NREL solar map scenarios** — see `docs/product/NREL_SOLAR_MAP_SCENARIOS.md`
+  - Compact frontend map pack: `12` modeled 10 kW rooftop points across the US, Asia, Europe, Australia, Africa, Middle East, and South America
+  - Modeled annual AC range: `8,677.8852-17,615.3739 kWh`; strongest site is Dubai, weakest site is Berlin under the current PVWatts assumptions
+  - Explicit boundary: map scenarios are visual/analytical estimates only; real SPK minting still requires signed surplus meter data
 - **Operator data intake** — see `docs/product/OPERATOR_DATA_INTAKE.md`
   - Generic real-operator CSV shape normalizes solar generation/load/export rows into the same SPK verifier path
   - Current sample: `7` days from a 10 kW rooftop profile, `103.8 kWh` eligible surplus, `5.14485 SPK` mint preview

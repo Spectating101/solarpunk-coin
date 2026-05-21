@@ -33,7 +33,7 @@ const tabs = [
 ];
 
 function App() {
-  const TEST_COUNT = 102;
+  const TEST_COUNT = 103;
 
   const [activeTab, setActiveTab] = useState('currency');
   const [account, setAccount] = useState(null);

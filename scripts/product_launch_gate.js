@@ -52,7 +52,7 @@ function summarizeNextActions(modes) {
   }
   if (modes.public_testnet_product.status === "launchable") {
     return [
-      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training baseline, hardware provenance model, and closed-pilot execution package.",
+      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training/map baselines, hardware provenance model, and closed-pilot execution package.",
       "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
       "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
@@ -79,6 +79,7 @@ function evaluateLaunchGate(options = {}) {
   const closedPilotPackage = readJson(root, "state/product/closed_pilot_execution_package.json", {});
   const publicSolarReplay = readJson(root, "state/product/public_solar_data_replay.json", {});
   const nrelTraining = readJson(root, "state/product/nrel_solar_training_lab.json", {});
+  const nrelMapScenarios = readJson(root, "state/product/nrel_solar_map_scenarios.json", {});
   const operatorDataIntake = readJson(root, "state/product/operator_data_intake.json", {});
   const spkIntelligence = readJson(root, "state/product/spk_intelligence_layer.json", {});
   const pilotStackDrill = readJson(root, "state/product/pilot_stack_currency_drill.json", {});
@@ -186,6 +187,17 @@ function evaluateLaunchGate(options = {}) {
       ),
       "NREL/PVWatts baseline creates public modeled daily rows for SPK forecasting, anomaly scoring, and future model training without storing the API key.",
       "docs/product/NREL_SOLAR_TRAINING_LAB.md"
+    ),
+    check(
+      "NREL solar map scenarios exist",
+      Boolean(
+        nrelMapScenarios.source?.api_key_written_to_artifact === false &&
+          nrelMapScenarios.summary?.frontend_stage === "map_simulation_ready" &&
+          Number(nrelMapScenarios.summary?.map_points || 0) >= 12 &&
+          Array.isArray(nrelMapScenarios.map_points)
+      ),
+      "NREL/PVWatts compact map scenarios provide frontend-ready modeled solar points without storing hourly or daily traces.",
+      "docs/product/NREL_SOLAR_MAP_SCENARIOS.md"
     ),
     check(
       "Generic operator intake exists",

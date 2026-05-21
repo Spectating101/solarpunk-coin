@@ -61,6 +61,7 @@
     "product:operator-intake:test": "node --test test-node/operator_data_intake.test.js",
     "product:nrel-training": "node scripts/nrel_solar_training_lab.js",
     "product:nrel-training:test": "node --test test-node/nrel_solar_training_lab.test.js",
+    "product:nrel-map": "node scripts/nrel_solar_training_lab.js --map-pack",
     "product:intelligence": "node scripts/spk_intelligence_layer.js",
     "product:intelligence:test": "node --test test-node/spk_intelligence_layer.test.js",
     "deploy:pilot-stack:hardhat": "hardhat run scripts/deploy_pilot_stack.js",

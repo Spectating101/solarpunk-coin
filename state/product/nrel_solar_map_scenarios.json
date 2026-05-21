@@ -1,0 +1,400 @@
+{
+  "generated_at": "2026-05-21T16:36:49.923Z",
+  "title": "NREL Solar Map Scenarios",
+  "purpose": "Compact map-ready PVWatts scenarios for the frontend: one modeled 10 kW rooftop point per geography, without storing full hourly or daily traces.",
+  "source": {
+    "provider": "NREL/NLR PVWatts V8",
+    "endpoint": "https://developer.nlr.gov/api/pvwatts/v8.json",
+    "api_key_written_to_artifact": false,
+    "model_basis": "PVWatts V8 hourly AC output summarized into compact site-level map points."
+  },
+  "assumptions": {
+    "system_capacity_kw": 10,
+    "module_type": 0,
+    "losses_pct": 14,
+    "array_type": 1,
+    "tilt_degrees": 20,
+    "azimuth_degrees": 180,
+    "dc_ac_ratio": 1.2,
+    "inverter_efficiency_pct": 96,
+    "net_spk_per_kwh_after_mint_fee": 0.04995,
+    "energy_value_usd_per_kwh": 0.05
+  },
+  "summary": {
+    "map_points": 12,
+    "annual_ac_kwh_min": 8677.8852,
+    "annual_ac_kwh_max": 17615.3739,
+    "annual_ac_kwh_average": 13175.8152,
+    "strongest_site": "dubai_10kw",
+    "weakest_site": "berlin_10kw",
+    "frontend_stage": "map_simulation_ready"
+  },
+  "map_points": [
+    {
+      "id": "taoyuan_10kw",
+      "label": "Taoyuan 10 kW rooftop",
+      "region": "reference",
+      "latitude": 24.99,
+      "longitude": 121.3,
+      "system_capacity_kw": 10,
+      "dataset": "nsrdb",
+      "annual_ac_kwh": 11743.0994,
+      "average_daily_ac_kwh": 32.1729,
+      "annual_capacity_factor_pct": 13.4054,
+      "modeled_spk_ceiling_if_all_exported": 586.567815,
+      "modeled_energy_value_usd_at_5c": 587.15,
+      "best_month": {
+        "label": "Jul",
+        "modeled_ac_kwh": 1319.7496
+      },
+      "worst_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 431.1516
+      },
+      "weather_data_source": "NSRDB PSM V3 Himawari tmy-2020 3.2.0",
+      "solar_resource_file": "1251279.csv",
+      "production_tier": "moderate_solar",
+      "map_position": {
+        "x_pct": 83.694,
+        "y_pct": 36.117
+      },
+      "market_note": "SolarPunk reference location; NSRDB/Himawari modeled baseline."
+    },
+    {
+      "id": "austin_10kw",
+      "label": "Austin 10 kW rooftop",
+      "region": "reference",
+      "latitude": 30.2672,
+      "longitude": -97.7431,
+      "system_capacity_kw": 10,
+      "dataset": "nsrdb",
+      "annual_ac_kwh": 14761.5443,
+      "average_daily_ac_kwh": 40.4426,
+      "annual_capacity_factor_pct": 16.8511,
+      "modeled_spk_ceiling_if_all_exported": 737.339138,
+      "modeled_energy_value_usd_at_5c": 738.08,
+      "best_month": {
+        "label": "Aug",
+        "modeled_ac_kwh": 1517.7832
+      },
+      "worst_month": {
+        "label": "Feb",
+        "modeled_ac_kwh": 920.9452
+      },
+      "weather_data_source": "NSRDB PSM V3 GOES tmy-2020 3.2.0",
+      "solar_resource_file": "677718.csv",
+      "production_tier": "strong_solar",
+      "map_position": {
+        "x_pct": 22.849,
+        "y_pct": 33.185
+      },
+      "market_note": "Pecan Street-adjacent climate anchor for later residential-data comparison."
+    },
+    {
+      "id": "phoenix_10kw",
+      "label": "Phoenix 10 kW rooftop",
+      "region": "reference",
+      "latitude": 33.4484,
+      "longitude": -112.074,
+      "system_capacity_kw": 10,
+      "dataset": "nsrdb",
+      "annual_ac_kwh": 17551.196,
+      "average_daily_ac_kwh": 48.0855,
+      "annual_capacity_factor_pct": 20.0356,
+      "modeled_spk_ceiling_if_all_exported": 876.68224,
+      "modeled_energy_value_usd_at_5c": 877.56,
+      "best_month": {
+        "label": "May",
+        "modeled_ac_kwh": 1797.4435
+      },
+      "worst_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 1165.7209
+      },
+      "weather_data_source": "NSRDB PSM V3 GOES tmy-2020 3.2.0",
+      "solar_resource_file": "78206.csv",
+      "production_tier": "high_solar",
+      "map_position": {
+        "x_pct": 18.868,
+        "y_pct": 31.418
+      },
+      "market_note": "High-solar Southwest US stress/upper-resource benchmark."
+    },
+    {
+      "id": "los_angeles_10kw",
+      "label": "Los Angeles 10 kW rooftop",
+      "region": "US West Coast",
+      "latitude": 34.0522,
+      "longitude": -118.2437,
+      "system_capacity_kw": 10,
+      "dataset": "nsrdb",
+      "annual_ac_kwh": 16771.081,
+      "average_daily_ac_kwh": 45.9482,
+      "annual_capacity_factor_pct": 19.1451,
+      "modeled_spk_ceiling_if_all_exported": 837.715496,
+      "modeled_energy_value_usd_at_5c": 838.55,
+      "best_month": {
+        "label": "Aug",
+        "modeled_ac_kwh": 1732.3944
+      },
+      "worst_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 1001.7616
+      },
+      "weather_data_source": "NSRDB PSM V3 GOES tmy-2020 3.2.0",
+      "solar_resource_file": "83556.csv",
+      "production_tier": "high_solar",
+      "map_position": {
+        "x_pct": 17.155,
+        "y_pct": 31.082
+      },
+      "market_note": "Large distributed-solar market with strong visual demo relevance."
+    },
+    {
+      "id": "new_york_10kw",
+      "label": "New York 10 kW rooftop",
+      "region": "US Northeast",
+      "latitude": 40.7128,
+      "longitude": -74.006,
+      "system_capacity_kw": 10,
+      "dataset": "nsrdb",
+      "annual_ac_kwh": 12913.5277,
+      "average_daily_ac_kwh": 35.3795,
+      "annual_capacity_factor_pct": 14.7415,
+      "modeled_spk_ceiling_if_all_exported": 645.030709,
+      "modeled_energy_value_usd_at_5c": 645.68,
+      "best_month": {
+        "label": "Jul",
+        "modeled_ac_kwh": 1413.4961
+      },
+      "worst_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 634.6307
+      },
+      "weather_data_source": "NSRDB PSM V3 GOES tmy-2020 3.2.0",
+      "solar_resource_file": "1244690.csv",
+      "production_tier": "moderate_solar",
+      "map_position": {
+        "x_pct": 29.443,
+        "y_pct": 27.382
+      },
+      "market_note": "Lower-resource dense-load benchmark for urban adoption cases."
+    },
+    {
+      "id": "berlin_10kw",
+      "label": "Berlin 10 kW rooftop",
+      "region": "Europe",
+      "latitude": 52.52,
+      "longitude": 13.405,
+      "system_capacity_kw": 10,
+      "dataset": "intl",
+      "annual_ac_kwh": 8677.8852,
+      "average_daily_ac_kwh": 23.775,
+      "annual_capacity_factor_pct": 9.9063,
+      "modeled_spk_ceiling_if_all_exported": 433.460366,
+      "modeled_energy_value_usd_at_5c": 433.89,
+      "best_month": {
+        "label": "Jul",
+        "modeled_ac_kwh": 1276.9263
+      },
+      "worst_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 125.433
+      },
+      "weather_data_source": "PVWatts International",
+      "solar_resource_file": "103840.tm3",
+      "production_tier": "lower_solar",
+      "map_position": {
+        "x_pct": 53.724,
+        "y_pct": 20.822
+      },
+      "market_note": "European energy-transition benchmark with weaker solar resource but strong policy relevance."
+    },
+    {
+      "id": "singapore_10kw",
+      "label": "Singapore 10 kW rooftop",
+      "region": "Southeast Asia",
+      "latitude": 1.3521,
+      "longitude": 103.8198,
+      "system_capacity_kw": 10,
+      "dataset": "intl",
+      "annual_ac_kwh": 11915.886,
+      "average_daily_ac_kwh": 32.6463,
+      "annual_capacity_factor_pct": 13.6026,
+      "modeled_spk_ceiling_if_all_exported": 595.198506,
+      "modeled_energy_value_usd_at_5c": 595.79,
+      "best_month": {
+        "label": "Jan",
+        "modeled_ac_kwh": 1115.7009
+      },
+      "worst_month": {
+        "label": "Jun",
+        "modeled_ac_kwh": 862.2952
+      },
+      "weather_data_source": "PVWatts International",
+      "solar_resource_file": "486980-EPW-IWEC.epw",
+      "production_tier": "moderate_solar",
+      "map_position": {
+        "x_pct": 78.839,
+        "y_pct": 49.249
+      },
+      "market_note": "Equatorial dense-city benchmark where roof area and load profile matter."
+    },
+    {
+      "id": "tokyo_10kw",
+      "label": "Tokyo 10 kW rooftop",
+      "region": "East Asia",
+      "latitude": 35.6762,
+      "longitude": 139.6503,
+      "system_capacity_kw": 10,
+      "dataset": "intl",
+      "annual_ac_kwh": 11373.3953,
+      "average_daily_ac_kwh": 31.16,
+      "annual_capacity_factor_pct": 12.9833,
+      "modeled_spk_ceiling_if_all_exported": 568.101095,
+      "modeled_energy_value_usd_at_5c": 568.67,
+      "best_month": {
+        "label": "Apr",
+        "modeled_ac_kwh": 1150.7667
+      },
+      "worst_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 741.8846
+      },
+      "weather_data_source": "PVWatts International",
+      "solar_resource_file": "477150-EPW-IWEC.epw",
+      "production_tier": "moderate_solar",
+      "map_position": {
+        "x_pct": 88.792,
+        "y_pct": 30.18
+      },
+      "market_note": "Large high-load city benchmark near the current Asia reference geography."
+    },
+    {
+      "id": "sydney_10kw",
+      "label": "Sydney 10 kW rooftop",
+      "region": "Australia",
+      "latitude": -33.8688,
+      "longitude": 151.2093,
+      "system_capacity_kw": 10,
+      "dataset": "intl",
+      "annual_ac_kwh": 10284.7291,
+      "average_daily_ac_kwh": 28.1773,
+      "annual_capacity_factor_pct": 11.7406,
+      "modeled_spk_ceiling_if_all_exported": 513.722219,
+      "modeled_energy_value_usd_at_5c": 514.24,
+      "best_month": {
+        "label": "Jan",
+        "modeled_ac_kwh": 1458.1704
+      },
+      "worst_month": {
+        "label": "Jun",
+        "modeled_ac_kwh": 267.1252
+      },
+      "weather_data_source": "PVWatts International",
+      "solar_resource_file": "947670.tm3",
+      "production_tier": "lower_solar",
+      "map_position": {
+        "x_pct": 92.003,
+        "y_pct": 68.816
+      },
+      "market_note": "Residential rooftop-solar market benchmark for public-data and pilot comparisons."
+    },
+    {
+      "id": "nairobi_10kw",
+      "label": "Nairobi 10 kW rooftop",
+      "region": "East Africa",
+      "latitude": -1.2921,
+      "longitude": 36.8219,
+      "system_capacity_kw": 10,
+      "dataset": "intl",
+      "annual_ac_kwh": 13662.0073,
+      "average_daily_ac_kwh": 37.4302,
+      "annual_capacity_factor_pct": 15.5959,
+      "modeled_spk_ceiling_if_all_exported": 682.417265,
+      "modeled_energy_value_usd_at_5c": 683.1,
+      "best_month": {
+        "label": "Jan",
+        "modeled_ac_kwh": 1542.9855
+      },
+      "worst_month": {
+        "label": "Jun",
+        "modeled_ac_kwh": 794.6931
+      },
+      "weather_data_source": "PVWatts International",
+      "solar_resource_file": "637420.tm3",
+      "production_tier": "strong_solar",
+      "map_position": {
+        "x_pct": 60.228,
+        "y_pct": 50.718
+      },
+      "market_note": "High-growth distributed-energy benchmark with strong resource quality."
+    },
+    {
+      "id": "dubai_10kw",
+      "label": "Dubai 10 kW rooftop",
+      "region": "Middle East",
+      "latitude": 25.2048,
+      "longitude": 55.2708,
+      "system_capacity_kw": 10,
+      "dataset": "intl",
+      "annual_ac_kwh": 17615.3739,
+      "average_daily_ac_kwh": 48.2613,
+      "annual_capacity_factor_pct": 20.1089,
+      "modeled_spk_ceiling_if_all_exported": 879.887926,
+      "modeled_energy_value_usd_at_5c": 880.77,
+      "best_month": {
+        "label": "May",
+        "modeled_ac_kwh": 1660.6848
+      },
+      "worst_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 1247.049
+      },
+      "weather_data_source": "PVWatts International",
+      "solar_resource_file": "412170.tm3",
+      "production_tier": "high_solar",
+      "map_position": {
+        "x_pct": 65.353,
+        "y_pct": 35.997
+      },
+      "market_note": "High-solar stress benchmark for upper-bound SPK map scenarios."
+    },
+    {
+      "id": "sao_paulo_10kw",
+      "label": "Sao Paulo 10 kW rooftop",
+      "region": "South America",
+      "latitude": -23.5558,
+      "longitude": -46.6396,
+      "system_capacity_kw": 10,
+      "dataset": "intl",
+      "annual_ac_kwh": 10840.0572,
+      "average_daily_ac_kwh": 29.6988,
+      "annual_capacity_factor_pct": 12.3745,
+      "modeled_spk_ceiling_if_all_exported": 541.460857,
+      "modeled_energy_value_usd_at_5c": 542,
+      "best_month": {
+        "label": "Dec",
+        "modeled_ac_kwh": 1350.6776
+      },
+      "worst_month": {
+        "label": "Jun",
+        "modeled_ac_kwh": 446.0157
+      },
+      "weather_data_source": "PVWatts International",
+      "solar_resource_file": "837800.tm3",
+      "production_tier": "lower_solar",
+      "map_position": {
+        "x_pct": 37.045,
+        "y_pct": 63.087
+      },
+      "market_note": "Large-market Southern Hemisphere benchmark with moderate solar output."
+    }
+  ],
+  "hard_boundaries": [
+    "Map points are modeled 10 kW rooftop scenarios, not real customer sites.",
+    "Modeled SPK ceiling assumes all generated kWh is export-eligible; real SPK requires signed surplus meter data.",
+    "This compact artifact is intended for frontend simulation and reviewer explanation, not mint authorization.",
+    "The NREL API key is supplied only at runtime and is not written into repo artifacts."
+  ]
+}

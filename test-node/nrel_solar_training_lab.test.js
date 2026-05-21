@@ -5,10 +5,14 @@ const test = require("node:test");
 
 const {
   DEFAULT_CONFIG,
+  DEFAULT_MAP_CONFIG,
+  buildMapScenarioReport,
   buildReport,
   dailyRowsFromPvWatts,
+  mapPosition,
   monthDayFromHour,
   operatorCrosscheck,
+  productionTier,
   summarizeSite,
 } = require("../scripts/nrel_solar_training_lab");
 
@@ -98,6 +102,35 @@ test("report builds a sanitized three-site training dataset without credential m
   assert.doesNotMatch(serialized, /NREL_API_KEY=/);
 });
 
+test("map scenario report produces compact frontend points without daily-row bloat", () => {
+  const config = {
+    ...DEFAULT_MAP_CONFIG,
+    sites: DEFAULT_MAP_CONFIG.sites.slice(0, 4),
+  };
+  const responses = Object.fromEntries(
+    config.sites.map((site, index) => [site.id, fakePvWattsPayload({
+      acWatts: 700 + (index * 200),
+      annualAc: ((700 + (index * 200)) * 8760) / 1000,
+    })])
+  );
+  const report = buildMapScenarioReport({
+    config,
+    responses,
+    now: new Date("2026-05-22T00:00:00Z"),
+  });
+  const serialized = JSON.stringify(report);
+
+  assert.equal(report.generated_at, "2026-05-22T00:00:00.000Z");
+  assert.equal(report.summary.frontend_stage, "map_simulation_ready");
+  assert.equal(report.summary.map_points, 4);
+  assert.equal(report.map_points[0].map_position.x_pct, mapPosition(24.99, 121.30).x_pct);
+  assert.equal(productionTier(17_000), "high_solar");
+  assert.equal(productionTier(9_000), "lower_solar");
+  assert.equal(report.source.api_key_written_to_artifact, false);
+  assert.equal(report.training_rows, undefined);
+  assert.doesNotMatch(serialized, /api_key=/i);
+});
+
 test("operator crosscheck compares sample rows against Taoyuan baseline by month/day", () => {
   const taoyuanRows = dailyRowsFromPvWatts(DEFAULT_CONFIG.sites[0], fakePvWattsPayload(), DEFAULT_CONFIG.spk);
   const allRows = [
@@ -130,4 +163,18 @@ test("generated NREL artifact is present after live training command", () => {
   if (process.env.NREL_API_KEY) {
     assert.doesNotMatch(serialized, new RegExp(process.env.NREL_API_KEY.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
+});
+
+test("generated NREL map artifact is compact and frontend-ready", () => {
+  const report = readJson("state/product/nrel_solar_map_scenarios.json");
+  const serialized = JSON.stringify(report);
+
+  assert.equal(report.title, "NREL Solar Map Scenarios");
+  assert.equal(report.summary.frontend_stage, "map_simulation_ready");
+  assert.equal(report.summary.map_points, 12);
+  assert.equal(report.source.api_key_written_to_artifact, false);
+  assert.ok(report.map_points.every((point) => Number.isFinite(point.map_position.x_pct)));
+  assert.ok(report.map_points.every((point) => Number.isFinite(point.modeled_spk_ceiling_if_all_exported)));
+  assert.equal(report.training_rows, undefined);
+  assert.doesNotMatch(serialized, /api_key=/i);
 });
