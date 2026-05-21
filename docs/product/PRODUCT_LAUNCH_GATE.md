@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-20T19:43:32.644Z`
+- generated_at: `2026-05-21T15:37:25.886Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -29,7 +29,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-20 (0 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-20 (1 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -45,7 +45,7 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
-- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.
+- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores energy claims, provenance, forecast, finance readiness, and adversarial checks without controlling minting.
   Evidence: `docs/product/SPK_INTELLIGENCE_LAYER.md`
 - PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
   Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
@@ -68,7 +68,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-20 (0 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-20 (1 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -84,7 +84,7 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
-- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.
+- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores energy claims, provenance, forecast, finance readiness, and adversarial checks without controlling minting.
   Evidence: `docs/product/SPK_INTELLIGENCE_LAYER.md`
 - PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
   Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`
@@ -121,7 +121,7 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-20 (0 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-20 (1 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
 - PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
   Evidence: `frontend/src`
@@ -137,7 +137,7 @@
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
-- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.
+- PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores energy claims, provenance, forecast, finance readiness, and adversarial checks without controlling minting.
   Evidence: `docs/product/SPK_INTELLIGENCE_LAYER.md`
 - PASS `Pilot-stack currency drill passes`: Governed-style local SPK stack executes mint, payment, redemption, and delivery accounting as one cryptocurrency system.
   Evidence: `docs/product/PILOT_STACK_CURRENCY_DRILL.md`

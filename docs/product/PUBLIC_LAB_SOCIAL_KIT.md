@@ -108,9 +108,9 @@ Current proof surface:
 - read-only on-chain readback checks
 - daily NASA POWER -> Sepolia keeper logs
 - CSV import path for meter/inverter exports
-- advisory intelligence layer for energy-claim anomaly scoring
+- advisory intelligence layer for claim-risk, provenance, forecast, finance, and bad-claim checks
 - 103 Solidity tests
-- 84 Node product/data tests
+- 85 Node product/data tests
 
 Hard limits:
 - not mainnet

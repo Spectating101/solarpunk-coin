@@ -6,6 +6,7 @@ const test = require("node:test");
 const {
   buildIntelligenceLayer,
   riskLabel,
+  riskStatus,
   scoreReading,
 } = require("../scripts/spk_intelligence_layer");
 
@@ -24,6 +25,8 @@ test("SPK intelligence layer scores operator data without becoming mint authorit
   assert.equal(report.summary.provenance_level, "L0");
   assert.equal(report.summary.real_value_mint_allowed, false);
   assert.match(report.audit_dossier.contract_action_boundary, /contracts? decide/i);
+  assert.equal(report.risk_profile.summary.readiness, "public_lab_only");
+  assert.equal(report.adversarial_checks.all_caught, true);
 });
 
 test("SPK intelligence layer flags physically impossible claims", () => {
@@ -50,10 +53,24 @@ test("SPK intelligence layer can be regenerated from current product artifacts",
   const report = buildIntelligenceLayer({ now: new Date("2026-05-21T00:00:00Z") });
 
   assert.equal(report.generated_at, "2026-05-21T00:00:00.000Z");
-  assert.equal(report.model.type, "capacity_scaled_nasa_pvwatts_baseline");
+  assert.equal(report.model.type, "capacity_scaled_nasa_pvwatts_risk_stack");
   assert.equal(report.scored_rows.length, 7);
+  assert.equal(report.forecast.horizon_days, 7);
+  assert.equal(report.finance_readiness.closed_pilot_economic_status, "requires_anchor_tariff_ppa_capex_reduction_or_support_capital");
   assert.equal(riskLabel(0.1), "normal");
   assert.equal(riskLabel(0.3), "review");
   assert.equal(riskLabel(0.8), "suspicious");
+  assert.equal(riskStatus(0.8), "blocked");
 });
 
+test("SPK intelligence layer splits risk stack into distinct targets", () => {
+  const report = readJson("state/product/spk_intelligence_layer.json");
+  const categories = Object.fromEntries(report.risk_profile.categories.map((item) => [item.id, item]));
+
+  assert.equal(categories.physical_plausibility.status, "normal");
+  assert.equal(categories.data_quality.status, "normal");
+  assert.equal(categories.hardware_provenance.status, "blocked");
+  assert.equal(categories.economic_viability.status, "suspicious");
+  assert.equal(categories.redemption_shortfall.status, "review");
+  assert.equal(categories.pilot_readiness.status, "blocked");
+});

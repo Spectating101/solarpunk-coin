@@ -128,6 +128,10 @@ export default function SPKMintDemo() {
   const sampleSurplus = Number(proof.total_surplus_kwh || 0);
   const sampleOnchainKwh = Math.floor(sampleSurplus);
   const sampleMinted = Number(proof.minted_spk || 0);
+  const riskCategories = Object.fromEntries(spkIntelligence.risk_profile.categories.map((item) => [item.id, item]));
+  const forecastBase = spkIntelligence.forecast.scenarios.find((scenario) => scenario.label === 'base');
+  const forecastLow = spkIntelligence.forecast.scenarios.find((scenario) => scenario.label === 'low');
+  const forecastHigh = spkIntelligence.forecast.scenarios.find((scenario) => scenario.label === 'high');
   const liveOk = live.status === 'ok';
   const liveData = live.data;
   const oracleStale = liveOk && liveData.oracleAgeSeconds >= liveData.oracleStalenessThreshold;
@@ -192,9 +196,16 @@ export default function SPKMintDemo() {
         </div>
         <div className="metric-card metric-good">
           <div className="metric-label">Advisory Risk</div>
-          <div className="metric-value">{spkIntelligence.summary.overall_risk.replaceAll('_', ' ')}</div>
+          <div className="metric-value">{spkIntelligence.risk_profile.summary.readiness.replaceAll('_', ' ')}</div>
           <div className="metric-sub">
-            {spkIntelligence.summary.rows_scored} rows scored; AI advises, contracts decide
+            {spkIntelligence.summary.rows_scored} rows scored; {spkIntelligence.adversarial_checks.passed}/{spkIntelligence.adversarial_checks.total} bad claims caught
+          </div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-label">7d SPK Forecast</div>
+          <div className="metric-value">{formatNumber(forecastBase?.net_spk_preview, 4)} SPK</div>
+          <div className="metric-sub">
+            {formatNumber(forecastLow?.net_spk_preview, 2)}-{formatNumber(forecastHigh?.net_spk_preview, 2)} SPK public-lab band
           </div>
         </div>
       </div>
@@ -235,6 +246,50 @@ export default function SPKMintDemo() {
           <div className="scope-note">
             This public Sepolia proof stack includes `mintFromSurplusAttestation` and has consumed the
             sample source hash. It is proof-scoped, not the final Safe-admin or audited production deployment.
+          </div>
+        </div>
+      </div>
+
+      <div className="proof-main-grid">
+        <div className="panel">
+          <div className="panel-heading compact">
+            <div>
+              <div className="panel-kicker"><ShieldCheck size={14} /> Intelligence Layer</div>
+              <h2>Risk stack, not mint authority</h2>
+            </div>
+          </div>
+          <div className="state-list">
+            <div><span>Physical plausibility</span><strong>{riskCategories.physical_plausibility?.status}</strong></div>
+            <div><span>Data quality</span><strong>{riskCategories.data_quality?.status}</strong></div>
+            <div><span>Hardware provenance</span><strong>{riskCategories.hardware_provenance?.status}</strong></div>
+            <div><span>Economic viability</span><strong>{riskCategories.economic_viability?.status}</strong></div>
+            <div><span>Shortfall reserve</span><strong>{riskCategories.redemption_shortfall?.status}</strong></div>
+            <div><span>Pilot readiness</span><strong>{riskCategories.pilot_readiness?.status}</strong></div>
+          </div>
+          <div className="scope-note">
+            This layer catches fake or weak claims and writes audit notes. It cannot mint SPK; signed attestations,
+            oracle roles, replay protection, and contract rules still decide.
+          </div>
+        </div>
+
+        <div className="panel">
+          <div className="panel-heading compact">
+            <div>
+              <div className="panel-kicker"><Gauge size={14} /> Forecast + Finance</div>
+              <h2>What the intelligence layer adds</h2>
+            </div>
+          </div>
+          <div className="state-list">
+            <div><span>Forecast method</span><strong>{spkIntelligence.forecast.confidence.replaceAll('_', ' ')}</strong></div>
+            <div><span>Base 7d surplus</span><strong>{formatNumber(forecastBase?.eligible_surplus_kwh, 1)} kWh</strong></div>
+            <div><span>Base 7d SPK</span><strong>{formatNumber(forecastBase?.net_spk_preview, 4)} SPK</strong></div>
+            <div><span>Bad-claim checks</span><strong>{spkIntelligence.adversarial_checks.passed}/{spkIntelligence.adversarial_checks.total}</strong></div>
+            <div><span>Support gap</span><strong>${formatNumber(spkIntelligence.finance_readiness.minimum_annual_support_required_usd, 0)}/yr</strong></div>
+            <div><span>Finance stage</span><strong>{spkIntelligence.finance_readiness.stage.replaceAll('_', ' ')}</strong></div>
+          </div>
+          <div className="scope-note">
+            Current sample is still L0 public-lab data. The stronger AI layer improves judgment and explanation,
+            but it does not remove the need for real operator hardware evidence.
           </div>
         </div>
       </div>

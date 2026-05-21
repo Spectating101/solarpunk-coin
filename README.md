@@ -28,7 +28,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV proof: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](./docs/product/PUBLIC_SOLAR_DATA_REPLAY.md) | Public historical solar replay: Ausgrid rooftop data -> normalized surplus -> SPK mint preview |
 | [`docs/product/OPERATOR_DATA_INTAKE.md`](./docs/product/OPERATOR_DATA_INTAKE.md) | Generic operator intake: real solar CSV shape -> validation -> eligible surplus -> SPK cryptocurrency preview |
-| [`docs/product/SPK_INTELLIGENCE_LAYER.md`](./docs/product/SPK_INTELLIGENCE_LAYER.md) | Advisory intelligence layer: operator energy claims -> NASA/PV benchmark -> anomaly score -> audit note |
+| [`docs/product/SPK_INTELLIGENCE_LAYER.md`](./docs/product/SPK_INTELLIGENCE_LAYER.md) | Advisory intelligence layer: energy claims -> provenance -> forecast -> finance readiness -> bad-claim checks -> audit note |
 | [`docs/product/DATA_REQUEST_OUTREACH.md`](./docs/product/DATA_REQUEST_OUTREACH.md) | Data request target list, email, follow-up, and operator-file handoff |
 | [`docs/product/PILOT_COMMERCIAL_PACKET.md`](./docs/product/PILOT_COMMERCIAL_PACKET.md) | Paid research/demo/pilot offer and pricing bands |
 | [`docs/product/MONETARY_STRESS_HARNESS.md`](./docs/product/MONETARY_STRESS_HARNESS.md) | Redemption/shortfall stress table for the SPK currency model |

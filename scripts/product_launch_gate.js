@@ -194,7 +194,7 @@ function evaluateLaunchGate(options = {}) {
           spkIntelligence.audit_dossier?.contract_action_boundary &&
           Array.isArray(spkIntelligence.scored_rows)
       ),
-      "Off-chain intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes without controlling minting.",
+      "Off-chain intelligence layer scores energy claims, provenance, forecast, finance readiness, and adversarial checks without controlling minting.",
       "docs/product/SPK_INTELLIGENCE_LAYER.md"
     ),
     check(

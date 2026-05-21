@@ -67,7 +67,7 @@ Primary launch-gate artifact:
 - The daily NASA keeper has been running since 2026-04-20 and logs daily resource/on-chain evidence.
 - Public historical Ausgrid solar data is replayed through the SPK verifier and mint math.
 - A generic operator data intake path now exists for external solar datasets.
-- A v0 SPK intelligence layer scores operator energy claims against NASA/PV benchmarks and generates advisory audit notes; AI advises, contracts decide.
+- A v1 SPK intelligence layer scores operator energy claims, hardware provenance, forecast range, finance readiness, and adversarial bad-claim checks; AI advises, contracts decide.
 - Economic simulations, finance dossier, monetary stress harness, resource benchmarks, and launch thresholds exist.
 
 ## What Is Not Real Yet
@@ -489,7 +489,7 @@ Recent verification from Codex:
 
 - `npm test` -> `103 passing`.
 - `npm run product:operator-intake:test` -> `5 passing`.
-- `npm run product:intelligence:test` -> `3 passing`.
+- `npm run product:intelligence:test` -> `4 passing`.
 - `npm run product:launch-gate:test` -> `3 passing`.
 - `npm run product:public-solar-replay:test` -> `4 passing`.
 - `npm run product:pilot-csv:test` -> `5 passing`.

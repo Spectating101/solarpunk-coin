@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-05-20T19:43:32.628Z",
-  "title": "SolarPunk Intelligence Layer v0",
-  "framing": "Off-chain AI/statistical intelligence for renewable-energy mint claims. AI advises; contracts decide.",
-  "implementation_stage": "deterministic_statistical_mvp_no_llm_required",
+  "generated_at": "2026-05-21T15:37:25.870Z",
+  "title": "SolarPunk Intelligence Layer v1",
+  "framing": "Off-chain AI/statistical intelligence for renewable-energy mint claims, pilot risk, and finance readiness. AI advises; contracts decide.",
+  "implementation_stage": "deterministic_risk_stack_v1_no_llm_required",
   "advisory_only": true,
   "contract_authority": [
     "registered signatures",
@@ -15,11 +15,15 @@
   "data_sources": {
     "operator_intake": "state/product/operator_data_intake.json",
     "resource_benchmark": "state/product/resource_benchmark_lab.json",
+    "hardware_provenance": "state/product/hardware_provenance_model.json",
+    "economic_launch_readiness": "state/product/economic_launch_readiness.json",
+    "finance_dossier": "state/product/spk_finance_dossier.json",
+    "monetary_stress_harness": "state/product/monetary_stress_harness.json",
     "nasa_parameter": "NASA POWER ALLSKY_SFC_SW_DWN",
     "benchmark_model": "daily_ac_kwh = NASA_GHI_kWh_m2_day * system_kWdc * (1 - PVWatts_loss_pct)"
   },
   "model": {
-    "type": "capacity_scaled_nasa_pvwatts_baseline",
+    "type": "capacity_scaled_nasa_pvwatts_risk_stack",
     "expected_low_multiplier": 0.65,
     "expected_high_multiplier": 1.55,
     "max_capacity_factor": 0.9,
@@ -28,7 +32,7 @@
       "review",
       "suspicious"
     ],
-    "future_upgrade": "Optional LLM can summarize this deterministic report, but should not approve minting."
+    "future_upgrade": "Optional LLM can summarize this deterministic report, but should not approve minting or launch readiness."
   },
   "summary": {
     "operator_name": "SolarPunk sample 10 kW rooftop",
@@ -55,6 +59,155 @@
     "provenance_level": "L0",
     "real_value_mint_allowed": false,
     "review_note": "Energy values are statistically plausible for a public-lab sample, but L0 provenance means the data cannot support real-value SPK issuance."
+  },
+  "risk_profile": {
+    "version": "risk_stack_v1",
+    "summary": {
+      "categories": 6,
+      "normal": 2,
+      "review_or_worse": 4,
+      "strongest_signal": "physical_plausibility",
+      "weakest_signal": "hardware_provenance",
+      "readiness": "public_lab_only"
+    },
+    "categories": [
+      {
+        "id": "physical_plausibility",
+        "label": "Physical plausibility",
+        "score": 0,
+        "status": "normal",
+        "evidence": "7 rows scored; 0 rows flagged",
+        "interpretation": "Current readings sit inside the NASA/PV benchmark band."
+      },
+      {
+        "id": "data_quality",
+        "label": "Data quality/signatures",
+        "score": 0.0536,
+        "status": "normal",
+        "evidence": "7/7 signatures verified; average quality 0.9757",
+        "interpretation": "Checks whether accepted rows are signed and meet quality thresholds."
+      },
+      {
+        "id": "hardware_provenance",
+        "label": "Hardware/data provenance",
+        "score": 0.95,
+        "status": "blocked",
+        "evidence": "L0",
+        "interpretation": "Adapter sample or fixture; Software normalization, signing, replay protection, and verifier compatibility."
+      },
+      {
+        "id": "economic_viability",
+        "label": "Economic viability",
+        "score": 0.6863,
+        "status": "suspicious",
+        "evidence": "best current p50 DSCR 0.3764x",
+        "interpretation": "The empirical economics are now measurable and externally inspectable, but current assumptions do not justify an unsupported paid launch."
+      },
+      {
+        "id": "redemption_shortfall",
+        "label": "Redemption/shortfall reserve",
+        "score": 0.3941,
+        "status": "review",
+        "evidence": "$3940.99 worst additional buffer required",
+        "interpretation": "Stress scenarios need a named reserve before real-value redemption can be promised."
+      },
+      {
+        "id": "pilot_readiness",
+        "label": "Overall pilot readiness",
+        "score": 0.9,
+        "status": "blocked",
+        "evidence": "real_value_mint_allowed=false; provenance=L0",
+        "interpretation": "Current sample remains public-lab only; closed pilot needs real operator hardware evidence and economics."
+      }
+    ]
+  },
+  "forecast": {
+    "horizon_days": 7,
+    "method": "capacity_scaled_nasa_pvwatts_with_observed_surplus_ratio",
+    "observed_surplus_ratio": 0.44039,
+    "confidence": "wide_public_lab_band",
+    "scenarios": [
+      {
+        "label": "low",
+        "generation_kwh": 125.1327,
+        "eligible_surplus_kwh": 55.1072,
+        "net_spk_preview": 2.752607
+      },
+      {
+        "label": "base",
+        "generation_kwh": 192.5119,
+        "eligible_surplus_kwh": 84.7804,
+        "net_spk_preview": 4.23478
+      },
+      {
+        "label": "high",
+        "generation_kwh": 298.3934,
+        "eligible_surplus_kwh": 131.4096,
+        "net_spk_preview": 6.563909
+      }
+    ],
+    "limitation": "Forecast uses current sample surplus ratio and resource baseline; it is not a production forecast until real site telemetry exists."
+  },
+  "finance_readiness": {
+    "stage": "finance_model_ready_but_capital_and_revenue_blocked",
+    "finance_checks_passed": 3,
+    "finance_checks_total": 5,
+    "closed_pilot_economic_status": "requires_anchor_tariff_ppa_capex_reduction_or_support_capital",
+    "paid_mainnet_economic_status": "blocked_by_unit_economics_and_protocol_revenue",
+    "minimum_annual_support_required_usd": 2875.48,
+    "minimum_capital_support_required_usd": 23046.29,
+    "opex_coverage_ratio": 0.000185,
+    "worst_additional_buffer_required_usd": 3940.99,
+    "interpretation": "Finance intelligence is advisory: it sizes support, revenue, and reserve gaps; it does not authorize paid launch."
+  },
+  "adversarial_checks": {
+    "checks": [
+      {
+        "id": "impossible_generation",
+        "expected_flag": "physical_or_energy_balance_violation",
+        "caught": true,
+        "risk_label": "suspicious",
+        "anomaly_score": 1,
+        "flags": [
+          "physical_or_energy_balance_violation",
+          "above_expected_solar_range"
+        ]
+      },
+      {
+        "id": "export_exceeds_generation",
+        "expected_flag": "physical_or_energy_balance_violation",
+        "caught": true,
+        "risk_label": "suspicious",
+        "anomaly_score": 1,
+        "flags": [
+          "physical_or_energy_balance_violation",
+          "very_high_export_ratio"
+        ]
+      },
+      {
+        "id": "surplus_overclaim",
+        "expected_flag": "physical_or_energy_balance_violation",
+        "caught": true,
+        "risk_label": "suspicious",
+        "anomaly_score": 1,
+        "flags": [
+          "physical_or_energy_balance_violation"
+        ]
+      },
+      {
+        "id": "low_quality_claim",
+        "expected_flag": "low_quality_score",
+        "caught": true,
+        "risk_label": "review",
+        "anomaly_score": 0.3,
+        "flags": [
+          "low_quality_score"
+        ]
+      }
+    ],
+    "passed": 4,
+    "total": 4,
+    "all_caught": true
   },
   "scored_rows": [
     {
@@ -197,7 +350,8 @@
       "signed reading bundle",
       "NASA POWER solar benchmark",
       "SPK mint preview",
-      "hardware provenance label"
+      "hardware provenance label",
+      "finance readiness and monetary stress artifacts"
     ]
   },
   "boundaries": [

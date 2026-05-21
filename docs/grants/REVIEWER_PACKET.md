@@ -26,7 +26,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | SPK finance dossier | Income statement, balance-sheet liability, break-even fee-base gap, reserve coverage, and closed-pilot finance stack | [`docs/product/SPK_FINANCE_DOSSIER.md`](../product/SPK_FINANCE_DOSSIER.md) |
 | Empirical finance backtest | 862-day NASA POWER historical resource-to-finance backtest for DSCR, payback, and reserve-at-risk | [`docs/product/EMPIRICAL_FINANCE_BACKTEST.md`](../product/EMPIRICAL_FINANCE_BACKTEST.md) |
 | Economic launch readiness | Empirical launch thresholds: required realized $/kWh, max capex, support gaps, sensitivity paths, and paid-launch blocker | [`docs/product/ECONOMIC_LAUNCH_READINESS.md`](../product/ECONOMIC_LAUNCH_READINESS.md) |
-| SPK intelligence layer | Advisory scoring of operator energy claims against NASA/PV benchmarks, with audit notes and explicit non-authority boundary | [`docs/product/SPK_INTELLIGENCE_LAYER.md`](../product/SPK_INTELLIGENCE_LAYER.md) |
+| SPK intelligence layer | Advisory risk stack for energy claims, provenance, forecast, finance readiness, adversarial checks, and explicit non-authority boundary | [`docs/product/SPK_INTELLIGENCE_LAYER.md`](../product/SPK_INTELLIGENCE_LAYER.md) |
 | Governed pilot-stack scaffold | Deploy/readback scripts for SPK + treasury + currency system pilot stack | [`docs/project/PILOT_STACK_DEPLOYMENT.md`](../project/PILOT_STACK_DEPLOYMENT.md) |
 | Product empirics | Single-product empirical dossier tying thesis evidence to SPK | [`docs/product/SPK_PRODUCT_EMPIRICS.md`](../product/SPK_PRODUCT_EMPIRICS.md) |
 | Tests | 103/103 Hardhat tests passing | `npx hardhat test` |
@@ -58,7 +58,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - The pilot CSV bridge imports meter/inverter rows into signed raw readings, derives a 1,985.5 kWh accepted-surplus bundle, and previews 99.15075 SPK.
 - The public solar replay runs historical Ausgrid rooftop-solar data through normalized export-surplus math and previews SPK without claiming live hardware provenance.
 - The operator data intake path accepts a generic solar CSV/profile and produces a case-study artifact; the current sample validates 7 daily rows, 103.8 kWh eligible surplus, and 5.14485 SPK preview.
-- The SPK intelligence layer scores those 7 operator rows against NASA/PV benchmark expectations, currently labels the public-lab sample as normal but L0, and keeps real-value minting blocked.
+- The SPK intelligence layer scores those 7 operator rows against NASA/PV benchmark expectations, separates physical/data/provenance/economic/shortfall risk, catches 4/4 adversarial bad-claim fixtures, and keeps real-value minting blocked.
 - The inverter/meter adapter normalizes cumulative counter snapshots into one accepted signed interval with 996.2 kWh accepted surplus and includes a Fronius LAN PowerFlow mode for real inverter testing.
 - The hardware provenance model keeps the adapter honest: current sample mode is L0 with 0 kWh real-value cap; closed pilot needs L2 or better real-operator evidence.
 - The closed-pilot execution package maps remaining pilot work into concrete inputs, commands, acceptance criteria, and owners instead of leaving vague blockers.

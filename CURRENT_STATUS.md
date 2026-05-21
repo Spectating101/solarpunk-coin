@@ -30,7 +30,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Energy-standard economics | Added: gold-standard mapping, issuance equations, kWh/SPK convertibility, capacity scenarios, settlement velocity, fee sensitivity, and finance risk register |
 | Pilot meter adapter | CSV meter/inverter import, meter onboarding scripts, and inverter/meter adapter now feed the signed-reading verifier |
 | Public solar replay | Added: historical Ausgrid rooftop-solar sample -> normalized export surplus -> lab-signed verifier bundle -> 0.8991 SPK mint preview |
-| SPK intelligence layer | Added: advisory off-chain scoring for operator energy claims against NASA/PV benchmark, anomaly labels, and audit-ready explanation; AI advises, contracts decide |
+| SPK intelligence layer | Added: v1 advisory risk stack for operator energy claims, hardware provenance, forecast range, finance readiness, adversarial checks, and audit explanation; AI advises, contracts decide |
 | Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 legacy Sepolia contracts verified on Etherscan**; all 3 fresh attested SPK proof contracts also verified |
 | Governance delay | **86,400s (24h) on all 3 core contracts** |
