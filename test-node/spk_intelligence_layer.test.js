@@ -4,6 +4,7 @@ const path = require("node:path");
 const test = require("node:test");
 
 const {
+  buildNrelTrainingBaseline,
   buildIntelligenceLayer,
   riskLabel,
   riskStatus,
@@ -27,6 +28,9 @@ test("SPK intelligence layer scores operator data without becoming mint authorit
   assert.match(report.audit_dossier.contract_action_boundary, /contracts? decide/i);
   assert.equal(report.risk_profile.summary.readiness, "public_lab_only");
   assert.equal(report.adversarial_checks.all_caught, true);
+  assert.equal(report.summary.nrel_training.available, true);
+  assert.equal(report.summary.nrel_training.total_training_rows, 1095);
+  assert.ok(report.scored_rows.every((row) => row.baseline_source === "nrel_pvwatts_month_day"));
 });
 
 test("SPK intelligence layer flags physically impossible claims", () => {
@@ -54,6 +58,7 @@ test("SPK intelligence layer can be regenerated from current product artifacts",
 
   assert.equal(report.generated_at, "2026-05-21T00:00:00.000Z");
   assert.equal(report.model.type, "capacity_scaled_nasa_pvwatts_risk_stack");
+  assert.match(report.model.training_baseline, /NREL\/PVWatts/);
   assert.equal(report.scored_rows.length, 7);
   assert.equal(report.forecast.horizon_days, 7);
   assert.equal(report.finance_readiness.closed_pilot_economic_status, "requires_anchor_tariff_ppa_capex_reduction_or_support_capital");
@@ -61,6 +66,17 @@ test("SPK intelligence layer can be regenerated from current product artifacts",
   assert.equal(riskLabel(0.3), "review");
   assert.equal(riskLabel(0.8), "suspicious");
   assert.equal(riskStatus(0.8), "blocked");
+});
+
+test("SPK intelligence layer summarizes NREL/PVWatts baseline for model training", () => {
+  const baseline = buildNrelTrainingBaseline(readJson("state/product/nrel_solar_training_lab.json"));
+
+  assert.equal(baseline.available, true);
+  assert.equal(baseline.site_id, "taoyuan_10kw");
+  assert.equal(baseline.rows, 365);
+  assert.equal(baseline.total_training_rows, 1095);
+  assert.ok(baseline.average_daily_ac_kwh > 30);
+  assert.ok(baseline.by_month_day["05-01"].modeled_ac_kwh > 0);
 });
 
 test("SPK intelligence layer splits risk stack into distinct targets", () => {

@@ -18,6 +18,7 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 | Pilot CSV proof | CSV export -> signed readings -> accepted bundle -> source hash -> SPK mint preview | [`docs/product/PILOT_CSV_RECEIPT.md`](../product/PILOT_CSV_RECEIPT.md) |
 | Public solar replay | Public historical rooftop-solar data -> normalized export surplus -> SPK mint preview | [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](../product/PUBLIC_SOLAR_DATA_REPLAY.md) |
 | Operator data intake | Generic solar operator CSV/profile -> validation -> eligible surplus -> SPK cryptocurrency preview | [`docs/product/OPERATOR_DATA_INTAKE.md`](../product/OPERATOR_DATA_INTAKE.md) |
+| NREL solar training lab | NREL/PVWatts V8 baseline -> 1,095 daily modeled rows for SPK forecasting and anomaly scoring | [`docs/product/NREL_SOLAR_TRAINING_LAB.md`](../product/NREL_SOLAR_TRAINING_LAB.md) |
 | Inverter/meter adapter | Cumulative counter snapshots or Fronius PowerFlow -> signed readings -> accepted surplus bundle | [`docs/product/INVERTER_METER_ADAPTER.md`](../product/INVERTER_METER_ADAPTER.md) |
 | Hardware provenance model | L0-L4 hardware assurance tiers, risk haircuts, kWh caps, and upgrade checklist | [`docs/product/HARDWARE_PROVENANCE_MODEL.md`](../product/HARDWARE_PROVENANCE_MODEL.md) |
 | Closed pilot execution package | Operator intake, commands, action queue, owners, and acceptance criteria for the next pilot lane | [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](../product/CLOSED_PILOT_EXECUTION_PACKAGE.md) |
@@ -58,7 +59,8 @@ SolarPunk is an open-source Ethereum prototype for energy-minted money: accepted
 - The pilot CSV bridge imports meter/inverter rows into signed raw readings, derives a 1,985.5 kWh accepted-surplus bundle, and previews 99.15075 SPK.
 - The public solar replay runs historical Ausgrid rooftop-solar data through normalized export-surplus math and previews SPK without claiming live hardware provenance.
 - The operator data intake path accepts a generic solar CSV/profile and produces a case-study artifact; the current sample validates 7 daily rows, 103.8 kWh eligible surplus, and 5.14485 SPK preview.
-- The SPK intelligence layer scores those 7 operator rows against NASA/PV benchmark expectations, separates physical/data/provenance/economic/shortfall risk, catches 4/4 adversarial bad-claim fixtures, and keeps real-value minting blocked.
+- The NREL solar training lab pulls PVWatts V8 public-model output and produces 1,095 daily rows across Taoyuan, Austin, and Phoenix, giving the AI/statistical layer a concrete baseline before private operator data exists.
+- The SPK intelligence layer scores those 7 operator rows against date-matched NREL/PVWatts expectations, separates physical/data/provenance/economic/shortfall risk, catches 4/4 adversarial bad-claim fixtures, and keeps real-value minting blocked.
 - The inverter/meter adapter normalizes cumulative counter snapshots into one accepted signed interval with 996.2 kWh accepted surplus and includes a Fronius LAN PowerFlow mode for real inverter testing.
 - The hardware provenance model keeps the adapter honest: current sample mode is L0 with 0 kWh real-value cap; closed pilot needs L2 or better real-operator evidence.
 - The closed-pilot execution package maps remaining pilot work into concrete inputs, commands, acceptance criteria, and owners instead of leaving vague blockers.

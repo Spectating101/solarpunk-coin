@@ -21,6 +21,7 @@ The lab exists to answer one question:
 | Meter CSV import | Pilot-style adapter path | `docs/project/METER_CSV_IMPORT.md` |
 | Pilot CSV proof | CSV export -> accepted bundle -> source hash -> mint preview | `docs/product/PILOT_CSV_RECEIPT.md` |
 | Public solar data replay | Ausgrid historical rooftop-solar data -> normalized export surplus -> SPK mint preview | `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md` |
+| NREL solar training lab | NREL/PVWatts baseline -> 1,095 daily modeled rows -> forecast/anomaly-scoring input | `docs/product/NREL_SOLAR_TRAINING_LAB.md` |
 | Operator data intake | Generic solar CSV/profile -> accepted rows -> eligible surplus -> SPK cryptocurrency preview | `docs/product/OPERATOR_DATA_INTAKE.md` |
 | SPK intelligence layer | Operator energy claims -> NASA/PV benchmark -> risk stack -> forecast -> finance/adversarial checks -> audit note | `docs/product/SPK_INTELLIGENCE_LAYER.md` |
 | Product launch gate | Explicit launch status | `docs/product/PRODUCT_LAUNCH_GATE.md` |
@@ -93,6 +94,7 @@ npm run product:resource-benchmark
 npm run product:energy-standard
 npm run product:pilot-csv
 npm run product:public-solar-replay
+npm run product:nrel-training
 npm run product:operator-intake
 npm run product:intelligence
 npm run product:monetary-stress

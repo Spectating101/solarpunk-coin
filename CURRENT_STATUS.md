@@ -1,6 +1,6 @@
 # CURRENT STATUS
 
-**Last updated:** 2026-05-19
+**Last updated:** 2026-05-21
 This file is the canonical stage snapshot for external reviewers.
 
 ## Status table
@@ -30,6 +30,7 @@ This file is the canonical stage snapshot for external reviewers.
 | Energy-standard economics | Added: gold-standard mapping, issuance equations, kWh/SPK convertibility, capacity scenarios, settlement velocity, fee sensitivity, and finance risk register |
 | Pilot meter adapter | CSV meter/inverter import, meter onboarding scripts, and inverter/meter adapter now feed the signed-reading verifier |
 | Public solar replay | Added: historical Ausgrid rooftop-solar sample -> normalized export surplus -> lab-signed verifier bundle -> 0.8991 SPK mint preview |
+| NREL solar training lab | Added: live NREL/PVWatts V8 pull -> 1,095 daily modeled rows across Taoyuan/Austin/Phoenix for SPK forecasting, anomaly scoring, and future AI/model training |
 | SPK intelligence layer | Added: v1 advisory risk stack for operator energy claims, hardware provenance, forecast range, finance readiness, adversarial checks, and audit explanation; AI advises, contracts decide |
 | Independent code review | **Codex review (April 2026) — 5 findings identified and fixed; regression tests added** |
 | Source verification | **All 5 legacy Sepolia contracts verified on Etherscan**; all 3 fresh attested SPK proof contracts also verified |
@@ -73,7 +74,7 @@ See [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) for full parameter state 
 
 ## Honest status line
 
-The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, pilot CSV proof, operator data intake, inverter/meter adapter output, public historical solar replay, hardware provenance model, closed-pilot execution package, empirical dossier, resource benchmark lab, energy-standard economics, energy-money simulation, monetary stress harness, historical resource-to-finance backtest, economic launch-readiness gate, and a local SPK currency-framework contract for invoice settlement plus owed-kWh claim tracking. The launchable surface is the SolarPunk Public Lab: public demo, reproducible proof, Sepolia readback, daily keeper evidence, NASA/PV/wind resource benchmarks, Ausgrid rooftop-solar replay, generic operator CSV case-study path, 862-day finance backtest, economic threshold table, energy-standard issuance math, meter CSV onboarding, inverter adapter sample path, hardware assurance tiers, closed-pilot action queue, and reviewer/operator/commercial pilot packets. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, legal/commercial scope, named shortfall/reserve policy, and signed economics that clear DSCR/payback thresholds.
+The repo now has a coherent SPK product path: signed raw meter readings, deterministic accepted bundle, oracle-signed surplus attestation, replay-protected minting, public Sepolia mint proof, pilot CSV proof, operator data intake, inverter/meter adapter output, public historical solar replay, NREL/PVWatts model baselines, hardware provenance model, closed-pilot execution package, empirical dossier, resource benchmark lab, energy-standard economics, energy-money simulation, monetary stress harness, historical resource-to-finance backtest, economic launch-readiness gate, and a local SPK currency-framework contract for invoice settlement plus owed-kWh claim tracking. The launchable surface is the SolarPunk Public Lab: public demo, reproducible proof, Sepolia readback, daily keeper evidence, NASA/PV/wind resource benchmarks, NREL/PVWatts 1,095-row solar training baseline, Ausgrid rooftop-solar replay, generic operator CSV case-study path, 862-day finance backtest, economic threshold table, energy-standard issuance math, meter CSV onboarding, inverter adapter sample path, hardware assurance tiers, closed-pilot action queue, and reviewer/operator/commercial pilot packets. The older Safe-admin Sepolia deployment still proves the earlier core system and daily NASA keeper; the fresh proof stack proves the attested SPK mint path but is not production-governed. Remaining gates before real launch are real meter provenance, audited production governance, governed source verification, legal/commercial scope, named shortfall/reserve policy, and signed economics that clear DSCR/payback thresholds.
 
 See [`docs/product/PUBLIC_LAB.md`](./docs/product/PUBLIC_LAB.md) for the current public lab model, [`EVIDENCE.md`](./EVIDENCE.md) for clickable proof links, and [`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) for full context.
 

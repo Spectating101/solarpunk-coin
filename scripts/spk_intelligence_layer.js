@@ -55,6 +55,11 @@ function rowDate(row) {
   return String(row.window_start || "").slice(0, 10) || "unknown";
 }
 
+function rowMonthDay(row) {
+  const date = rowDate(row);
+  return date.length >= 10 ? date.slice(5, 10) : null;
+}
+
 function expectedDailyKwh(resourceBenchmark, capacityKw) {
   const solar = resourceBenchmark.solar || {};
   const standardKw = Number(solar.standard_system?.system_kw_dc || 10);
@@ -65,12 +70,41 @@ function expectedDailyKwh(resourceBenchmark, capacityKw) {
   return baseline * (capacityKw / standardKw);
 }
 
+function buildNrelTrainingBaseline(nrelTrainingLab, siteId = "taoyuan_10kw") {
+  if (!nrelTrainingLab?.training_rows?.length) {
+    return {
+      available: false,
+      reason: "state/product/nrel_solar_training_lab.json is not available yet",
+    };
+  }
+
+  const rows = nrelTrainingLab.training_rows.filter((row) => row.site_id === siteId);
+  const site = nrelTrainingLab.sites?.find((item) => item.id === siteId) || null;
+  const byMonthDay = Object.fromEntries(rows.map((row) => [row.month_day, row]));
+  return {
+    available: rows.length > 0,
+    source_artifact: "state/product/nrel_solar_training_lab.json",
+    training_stage: nrelTrainingLab.summary?.training_stage || "unknown",
+    site_id: siteId,
+    site_label: site?.label || siteId,
+    rows: rows.length,
+    total_training_rows: nrelTrainingLab.summary?.training_rows || null,
+    annual_ac_kwh: site?.annual_ac_kwh || null,
+    average_daily_ac_kwh: site?.annual_ac_kwh ? fixed(Number(site.annual_ac_kwh) / 365, 4) : null,
+    weather_data_source: site?.station_info?.weather_data_source || "unknown",
+    operator_crosscheck: nrelTrainingLab.operator_crosscheck || null,
+    by_month_day: byMonthDay,
+  };
+}
+
 function scoreReading(row, context) {
   const generation = Number(row.generation_kwh || 0);
   const exportKwh = Number(row.export_kwh || 0);
   const eligibleSurplus = Number(row.eligible_surplus_kwh || 0);
   const quality = Number(row.quality_score ?? 1);
-  const expected = context.expected_daily_kwh;
+  const monthDay = rowMonthDay(row);
+  const nrelRow = context.nrel_training_baseline?.by_month_day?.[monthDay] || null;
+  const expected = Number(nrelRow?.modeled_ac_kwh || context.expected_daily_kwh);
   const expectedLow = expected * context.expected_low_multiplier;
   const expectedHigh = expected * context.expected_high_multiplier;
   const physicalDailyMax = context.capacity_kw * 24 * context.max_capacity_factor;
@@ -106,6 +140,7 @@ function scoreReading(row, context) {
     date: rowDate(row),
     meter_id: row.meter_id,
     site_id: row.site_id,
+    baseline_source: nrelRow ? "nrel_pvwatts_month_day" : "nasa_capacity_scaled_daily",
     reported_generation_kwh: fixed(generation, 4),
     reported_export_kwh: fixed(exportKwh, 4),
     eligible_surplus_kwh: fixed(eligibleSurplus, 4),
@@ -149,6 +184,7 @@ function buildAuditDossier(report) {
       "operator CSV/profile intake",
       "signed reading bundle",
       "NASA POWER solar benchmark",
+      "NREL/PVWatts daily training baseline",
       "SPK mint preview",
       "hardware provenance label",
       "finance readiness and monetary stress artifacts",
@@ -245,8 +281,10 @@ function buildRiskProfile({
       score: fixed(maxAnomalyScore, 4),
       status: riskStatus(maxAnomalyScore),
       evidence: `${scoredRows.length} rows scored; ${scoredRows.filter((row) => row.risk_label !== "normal").length} rows flagged`,
-      interpretation: maxAnomalyScore > 0
+      interpretation: maxAnomalyScore >= 0.25
         ? "At least one reading is outside normal physical/resource expectations."
+        : maxAnomalyScore > 0
+          ? "Some rows deviate from the modeled baseline but stay below review thresholds."
         : "Current readings sit inside the NASA/PV benchmark band.",
     },
     {
@@ -403,15 +441,18 @@ function buildFinanceReadiness(economicLaunch, financeDossier, monetaryStress) {
 function buildIntelligenceLayer(options = {}) {
   const operatorData = options.operatorData || readJson("state/product/operator_data_intake.json");
   const resourceBenchmark = options.resourceBenchmark || readJson("state/product/resource_benchmark_lab.json");
+  const nrelTrainingLab = options.nrelTrainingLab || readJson("state/product/nrel_solar_training_lab.json", {});
   const hardwareProvenance = options.hardwareProvenance || readJson("state/product/hardware_provenance_model.json", {});
   const economicLaunch = options.economicLaunch || readJson("state/product/economic_launch_readiness.json", {});
   const financeDossier = options.financeDossier || readJson("state/product/spk_finance_dossier.json", {});
   const monetaryStress = options.monetaryStress || readJson("state/product/monetary_stress_harness.json", {});
   const capacityKw = Number(operatorData.input?.capacity_kw || operatorData.operator_profile?.capacity_kw || 0);
   const expected = expectedDailyKwh(resourceBenchmark, capacityKw);
+  const nrelTrainingBaseline = buildNrelTrainingBaseline(nrelTrainingLab, options.nrelSiteId || "taoyuan_10kw");
   const context = {
     capacity_kw: capacityKw,
     expected_daily_kwh: expected,
+    nrel_training_baseline: nrelTrainingBaseline.available ? nrelTrainingBaseline : null,
     expected_low_multiplier: Number(options.expectedLowMultiplier || 0.65),
     expected_high_multiplier: Number(options.expectedHighMultiplier || 1.55),
     max_capacity_factor: Number(options.maxCapacityFactor || 0.9),
@@ -459,6 +500,18 @@ function buildIntelligenceLayer(options = {}) {
     provenance_level: provenance.level || "unknown",
     real_value_mint_allowed: Boolean(operatorData.launch_controls?.current_sample_allowed_real_value_kwh > 0),
     review_note: reviewNote,
+    nrel_training: {
+      available: nrelTrainingBaseline.available,
+      training_stage: nrelTrainingBaseline.training_stage || "missing",
+      source_artifact: nrelTrainingBaseline.source_artifact || null,
+      reference_site: nrelTrainingBaseline.site_label || null,
+      reference_site_annual_ac_kwh: fixed(nrelTrainingBaseline.annual_ac_kwh, 4),
+      reference_site_average_daily_ac_kwh: nrelTrainingBaseline.average_daily_ac_kwh || null,
+      reference_weather_source: nrelTrainingBaseline.weather_data_source || null,
+      reference_site_rows: nrelTrainingBaseline.rows || 0,
+      total_training_rows: nrelTrainingBaseline.total_training_rows || 0,
+      operator_crosscheck_average_absolute_deviation_pct: fixed(nrelTrainingBaseline.operator_crosscheck?.average_absolute_deviation_pct, 4),
+    },
   };
 
   const forecast = buildForecast(operatorData, context, financeDossier);
@@ -490,6 +543,7 @@ function buildIntelligenceLayer(options = {}) {
     data_sources: {
       operator_intake: "state/product/operator_data_intake.json",
       resource_benchmark: "state/product/resource_benchmark_lab.json",
+      nrel_training_lab: "state/product/nrel_solar_training_lab.json",
       hardware_provenance: "state/product/hardware_provenance_model.json",
       economic_launch_readiness: "state/product/economic_launch_readiness.json",
       finance_dossier: "state/product/spk_finance_dossier.json",
@@ -504,6 +558,9 @@ function buildIntelligenceLayer(options = {}) {
       max_capacity_factor: context.max_capacity_factor,
       risk_labels: ["normal", "review", "suspicious"],
       future_upgrade: "Optional LLM can summarize this deterministic report, but should not approve minting or launch readiness.",
+      training_baseline: nrelTrainingBaseline.available
+        ? "NREL/PVWatts date-matched daily rows improve scoring and future forecasting; they remain modeled data, not meter truth."
+        : "NREL/PVWatts baseline missing; scoring falls back to NASA capacity-scaled daily estimate.",
     },
     summary,
     risk_profile: riskProfile,
@@ -539,7 +596,19 @@ function toMarkdown(report) {
   lines.push(`- rows_scored: \`${report.summary.rows_scored}\``);
   lines.push(`- max_anomaly_score: \`${report.summary.max_anomaly_score}\``);
   lines.push(`- provenance_level: \`${report.summary.provenance_level}\``);
+  lines.push(`- nrel_training_rows: \`${report.summary.nrel_training.total_training_rows}\``);
   lines.push(`- adversarial_checks: \`${report.adversarial_checks.passed}/${report.adversarial_checks.total}\``);
+  lines.push("");
+  lines.push("## NREL Training Baseline");
+  lines.push("");
+  lines.push(`- available: \`${report.summary.nrel_training.available}\``);
+  lines.push(`- training_stage: \`${report.summary.nrel_training.training_stage}\``);
+  lines.push(`- reference_site: ${report.summary.nrel_training.reference_site}`);
+  lines.push(`- reference_site_annual_ac_kwh: \`${report.summary.nrel_training.reference_site_annual_ac_kwh}\``);
+  lines.push(`- reference_weather_source: ${report.summary.nrel_training.reference_weather_source}`);
+  lines.push(`- operator_crosscheck_average_absolute_deviation_pct: \`${report.summary.nrel_training.operator_crosscheck_average_absolute_deviation_pct}%\``);
+  lines.push("");
+  lines.push("This improves forecasting and anomaly scoring, but it is modeled public-resource data, not real meter proof.");
   lines.push("");
   lines.push("## Audit Dossier");
   lines.push("");
@@ -637,6 +706,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  buildNrelTrainingBaseline,
   buildIntelligenceLayer,
   expectedDailyKwh,
   riskLabel,

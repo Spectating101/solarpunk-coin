@@ -59,6 +59,8 @@
     "product:public-solar-replay:test": "node --test test-node/public_solar_data_replay.test.js",
     "product:operator-intake": "node scripts/operator_data_intake.js --use-dev-fixture-key --generated-at=2026-05-19T00:00:00Z --now=2026-05-19T00:00:00Z",
     "product:operator-intake:test": "node --test test-node/operator_data_intake.test.js",
+    "product:nrel-training": "node scripts/nrel_solar_training_lab.js",
+    "product:nrel-training:test": "node --test test-node/nrel_solar_training_lab.test.js",
     "product:intelligence": "node scripts/spk_intelligence_layer.js",
     "product:intelligence:test": "node --test test-node/spk_intelligence_layer.test.js",
     "deploy:pilot-stack:hardhat": "hardhat run scripts/deploy_pilot_stack.js",

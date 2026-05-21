@@ -38,6 +38,7 @@ Use these first when facts conflict elsewhere:
 - `docs/product/PILOT_CSV_RECEIPT.md` — pilot CSV proof: signed readings, accepted bundle, source hash, SPK mint preview
 - `docs/product/MONETARY_STRESS_HARNESS.md` — redemption-wave and shortfall stress harness for the SPK currency model
 - `docs/product/ENERGY_MONEY_SIMULATION.md` — measured-resource energy-standard monetary simulation
+- `docs/product/NREL_SOLAR_TRAINING_LAB.md` — NREL/PVWatts solar baseline for SPK forecasting, anomaly scoring, and future model training
 - `docs/product/PILOT_OPERATOR_PACKET.md` — operator-facing CSV/export handoff
 - `docs/product/PILOT_REVIEWER_PACKET.md` — reviewer-facing pilot proof checklist
 - `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` — theory anchors and comparable energy/token systems

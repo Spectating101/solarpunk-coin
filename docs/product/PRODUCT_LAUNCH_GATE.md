@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-05-21T15:39:38.012Z`
+- generated_at: `2026-05-21T16:06:40.136Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -9,13 +9,13 @@
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `launchable` | 18 | 0 |
-| Closed testnet pilot | `blocked` | 19 | 4 |
-| Paid/mainnet product | `blocked` | 19 | 9 |
+| SolarPunk Public Lab | `launchable` | 19 | 0 |
+| Closed testnet pilot | `blocked` | 20 | 4 |
+| Paid/mainnet product | `blocked` | 20 | 9 |
 
 ## Next Actions
 
-- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.
+- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training baseline, hardware provenance model, and closed-pilot execution package.
 - Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.
 - Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.
 - Use the monetary stress harness to size any named reserve before promising redemption.
@@ -43,6 +43,8 @@
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
+- PASS `NREL solar training baseline exists`: NREL/PVWatts baseline creates public modeled daily rows for SPK forecasting, anomaly scoring, and future model training without storing the API key.
+  Evidence: `docs/product/NREL_SOLAR_TRAINING_LAB.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
 - PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores energy claims, provenance, forecast, finance readiness, and adversarial checks without controlling minting.
@@ -82,6 +84,8 @@
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
+- PASS `NREL solar training baseline exists`: NREL/PVWatts baseline creates public modeled daily rows for SPK forecasting, anomaly scoring, and future model training without storing the API key.
+  Evidence: `docs/product/NREL_SOLAR_TRAINING_LAB.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
 - PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores energy claims, provenance, forecast, finance readiness, and adversarial checks without controlling minting.
@@ -135,6 +139,8 @@
   Evidence: `docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`
 - PASS `Public solar data replay exists`: Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.
   Evidence: `docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`
+- PASS `NREL solar training baseline exists`: NREL/PVWatts baseline creates public modeled daily rows for SPK forecasting, anomaly scoring, and future model training without storing the API key.
+  Evidence: `docs/product/NREL_SOLAR_TRAINING_LAB.md`
 - PASS `Generic operator intake exists`: A reusable operator CSV intake path validates solar exports, computes eligible surplus, and generates an SPK mint preview/case study.
   Evidence: `docs/product/OPERATOR_DATA_INTAKE.md`
 - PASS `SPK intelligence layer exists`: Off-chain intelligence layer scores energy claims, provenance, forecast, finance readiness, and adversarial checks without controlling minting.

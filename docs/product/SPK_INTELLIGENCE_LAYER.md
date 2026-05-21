@@ -4,21 +4,33 @@ Off-chain AI/statistical intelligence for renewable-energy mint claims, pilot ri
 
 ## Current Result
 
-- generated_at: `2026-05-21T15:37:25.870Z`
+- generated_at: `2026-05-21T16:05:30.139Z`
 - implementation_stage: `deterministic_risk_stack_v1_no_llm_required`
 - advisory_only: `true`
 - overall_risk: `normal_public_lab_fixture`
 - risk_stack_readiness: `public_lab_only`
 - rows_scored: `7`
-- max_anomaly_score: `0`
+- max_anomaly_score: `0.1176`
 - provenance_level: `L0`
+- nrel_training_rows: `1095`
 - adversarial_checks: `4/4`
+
+## NREL Training Baseline
+
+- available: `true`
+- training_stage: `public_model_baseline_ready`
+- reference_site: Taoyuan 10 kW rooftop
+- reference_site_annual_ac_kwh: `11743.0994`
+- reference_weather_source: NSRDB PSM V3 Himawari tmy-2020 3.2.0
+- operator_crosscheck_average_absolute_deviation_pct: `32.8559%`
+
+This improves forecasting and anomaly scoring, but it is modeled public-resource data, not real meter proof.
 
 ## Audit Dossier
 
 - operator_submitted: 235.7 kWh generation, 103.8 kWh eligible surplus
 - expected_range: 17.8761-42.6276 kWh/day
-- deviation: 22.434% average daily deviation from NASA/PV benchmark
+- deviation: 3.3805% average daily deviation from NASA/PV benchmark
 - risk: `normal_public_lab_fixture`
 - review_note: Energy values are statistically plausible for a public-lab sample, but L0 provenance means the data cannot support real-value SPK issuance.
 - contract_boundary: AI advises; contracts decide. SPK minting still depends on signed attestations, replay protection, oracle roles, source-hash uniqueness, reserve checks, and contract rules.
@@ -27,7 +39,7 @@ Off-chain AI/statistical intelligence for renewable-energy mint claims, pilot ri
 
 | Risk type | Score | Status | Evidence | Interpretation |
 |---|---:|---|---|---|
-| Physical plausibility | 0 | `normal` | 7 rows scored; 0 rows flagged | Current readings sit inside the NASA/PV benchmark band. |
+| Physical plausibility | 0.1176 | `normal` | 7 rows scored; 0 rows flagged | Some rows deviate from the modeled baseline but stay below review thresholds. |
 | Data quality/signatures | 0.0536 | `normal` | 7/7 signatures verified; average quality 0.9757 | Checks whether accepted rows are signed and meet quality thresholds. |
 | Hardware/data provenance | 0.95 | `blocked` | L0 | Adapter sample or fixture; Software normalization, signing, replay protection, and verifier compatibility. |
 | Economic viability | 0.6863 | `suspicious` | best current p50 DSCR 0.3764x | The empirical economics are now measurable and externally inspectable, but current assumptions do not justify an unsupported paid launch. |
@@ -65,21 +77,21 @@ Finance intelligence is advisory: it sizes support, revenue, and reserve gaps; i
 | Scenario | Caught | Risk | Score | Flags |
 |---|---|---|---:|---|
 | impossible_generation | `true` | `suspicious` | 1 | physical_or_energy_balance_violation, above_expected_solar_range |
-| export_exceeds_generation | `true` | `suspicious` | 1 | physical_or_energy_balance_violation, very_high_export_ratio |
-| surplus_overclaim | `true` | `suspicious` | 1 | physical_or_energy_balance_violation |
-| low_quality_claim | `true` | `review` | 0.3 | low_quality_score |
+| export_exceeds_generation | `true` | `suspicious` | 1 | physical_or_energy_balance_violation, below_expected_solar_range, very_high_export_ratio |
+| surplus_overclaim | `true` | `suspicious` | 1 | physical_or_energy_balance_violation, below_expected_solar_range |
+| low_quality_claim | `true` | `review` | 0.3719 | below_expected_solar_range, low_quality_score |
 
 ## Scored Rows
 
 | Date | Generation kWh | Expected kWh | Range kWh | Deviation | Score | Risk | Flags |
 |---|---:|---:|---:|---:|---:|---|---|
-| 2026-05-01 | 31.2 | 27.5017 | 17.8761-42.6276 | 13.4475% | 0 | `normal` | within_expected_range |
-| 2026-05-02 | 28.6 | 27.5017 | 17.8761-42.6276 | 3.9936% | 0 | `normal` | within_expected_range |
-| 2026-05-03 | 34.9 | 27.5017 | 17.8761-42.6276 | 26.9012% | 0 | `normal` | within_expected_range |
-| 2026-05-04 | 41.3 | 27.5017 | 17.8761-42.6276 | 50.1725% | 0 | `normal` | within_expected_range |
-| 2026-05-05 | 22.4 | 27.5017 | 17.8761-42.6276 | -18.5505% | 0 | `normal` | within_expected_range |
-| 2026-05-06 | 37.8 | 27.5017 | 17.8761-42.6276 | 37.446% | 0 | `normal` | within_expected_range |
-| 2026-05-07 | 39.5 | 27.5017 | 17.8761-42.6276 | 43.6275% | 0 | `normal` | within_expected_range |
+| 2026-05-01 | 31.2 | 47.8112 | 31.0773-74.1074 | -34.7433% | 0 | `normal` | within_expected_range |
+| 2026-05-02 | 28.6 | 20.5992 | 13.3895-31.9288 | 38.8403% | 0 | `normal` | within_expected_range |
+| 2026-05-03 | 34.9 | 36.4735 | 23.7078-56.5339 | -4.3141% | 0 | `normal` | within_expected_range |
+| 2026-05-04 | 41.3 | 36.2815 | 23.583-56.2363 | 13.8321% | 0 | `normal` | within_expected_range |
+| 2026-05-05 | 22.4 | 39.3264 | 25.5622-60.9559 | -43.0408% | 0.0773 | `normal` | below_expected_solar_range |
+| 2026-05-06 | 37.8 | 21.7048 | 14.1081-33.6424 | 74.155% | 0.1176 | `normal` | above_expected_solar_range |
+| 2026-05-07 | 39.5 | 50.0414 | 32.5269-77.5642 | -21.0654% | 0 | `normal` | within_expected_range |
 
 ## AI Boundary
 

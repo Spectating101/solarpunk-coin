@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-21T15:37:25.870Z",
+  "generated_at": "2026-05-21T16:05:30.139Z",
   "title": "SolarPunk Intelligence Layer v1",
   "framing": "Off-chain AI/statistical intelligence for renewable-energy mint claims, pilot risk, and finance readiness. AI advises; contracts decide.",
   "implementation_stage": "deterministic_risk_stack_v1_no_llm_required",
@@ -15,6 +15,7 @@
   "data_sources": {
     "operator_intake": "state/product/operator_data_intake.json",
     "resource_benchmark": "state/product/resource_benchmark_lab.json",
+    "nrel_training_lab": "state/product/nrel_solar_training_lab.json",
     "hardware_provenance": "state/product/hardware_provenance_model.json",
     "economic_launch_readiness": "state/product/economic_launch_readiness.json",
     "finance_dossier": "state/product/spk_finance_dossier.json",
@@ -32,7 +33,8 @@
       "review",
       "suspicious"
     ],
-    "future_upgrade": "Optional LLM can summarize this deterministic report, but should not approve minting or launch readiness."
+    "future_upgrade": "Optional LLM can summarize this deterministic report, but should not approve minting or launch readiness.",
+    "training_baseline": "NREL/PVWatts date-matched daily rows improve scoring and future forecasting; they remain modeled data, not meter truth."
   },
   "summary": {
     "operator_name": "SolarPunk sample 10 kW rooftop",
@@ -46,10 +48,10 @@
     "total_reported_generation_kwh": 235.7,
     "total_eligible_surplus_kwh": 103.8,
     "average_reported_generation_kwh": 33.6714,
-    "average_deviation_pct": 22.434,
-    "average_absolute_deviation_pct": 27.7341,
-    "max_anomaly_score": 0,
-    "highest_risk_day": "2026-05-01",
+    "average_deviation_pct": 3.3805,
+    "average_absolute_deviation_pct": 32.8559,
+    "max_anomaly_score": 0.1176,
+    "highest_risk_day": "2026-05-06",
     "risk_counts": {
       "normal": 7,
       "review": 0,
@@ -58,7 +60,19 @@
     "overall_risk": "normal_public_lab_fixture",
     "provenance_level": "L0",
     "real_value_mint_allowed": false,
-    "review_note": "Energy values are statistically plausible for a public-lab sample, but L0 provenance means the data cannot support real-value SPK issuance."
+    "review_note": "Energy values are statistically plausible for a public-lab sample, but L0 provenance means the data cannot support real-value SPK issuance.",
+    "nrel_training": {
+      "available": true,
+      "training_stage": "public_model_baseline_ready",
+      "source_artifact": "state/product/nrel_solar_training_lab.json",
+      "reference_site": "Taoyuan 10 kW rooftop",
+      "reference_site_annual_ac_kwh": 11743.0994,
+      "reference_site_average_daily_ac_kwh": 32.1729,
+      "reference_weather_source": "NSRDB PSM V3 Himawari tmy-2020 3.2.0",
+      "reference_site_rows": 365,
+      "total_training_rows": 1095,
+      "operator_crosscheck_average_absolute_deviation_pct": 32.8559
+    }
   },
   "risk_profile": {
     "version": "risk_stack_v1",
@@ -66,7 +80,7 @@
       "categories": 6,
       "normal": 2,
       "review_or_worse": 4,
-      "strongest_signal": "physical_plausibility",
+      "strongest_signal": "data_quality",
       "weakest_signal": "hardware_provenance",
       "readiness": "public_lab_only"
     },
@@ -74,10 +88,10 @@
       {
         "id": "physical_plausibility",
         "label": "Physical plausibility",
-        "score": 0,
+        "score": 0.1176,
         "status": "normal",
         "evidence": "7 rows scored; 0 rows flagged",
-        "interpretation": "Current readings sit inside the NASA/PV benchmark band."
+        "interpretation": "Some rows deviate from the modeled baseline but stay below review thresholds."
       },
       {
         "id": "data_quality",
@@ -181,6 +195,7 @@
         "anomaly_score": 1,
         "flags": [
           "physical_or_energy_balance_violation",
+          "below_expected_solar_range",
           "very_high_export_ratio"
         ]
       },
@@ -191,7 +206,8 @@
         "risk_label": "suspicious",
         "anomaly_score": 1,
         "flags": [
-          "physical_or_energy_balance_violation"
+          "physical_or_energy_balance_violation",
+          "below_expected_solar_range"
         ]
       },
       {
@@ -199,8 +215,9 @@
         "expected_flag": "low_quality_score",
         "caught": true,
         "risk_label": "review",
-        "anomaly_score": 0.3,
+        "anomaly_score": 0.3719,
         "flags": [
+          "below_expected_solar_range",
           "low_quality_score"
         ]
       }
@@ -214,13 +231,14 @@
       "date": "2026-05-01",
       "meter_id": "TW-TY-0001",
       "site_id": "sample-rooftop-10kw",
+      "baseline_source": "nrel_pvwatts_month_day",
       "reported_generation_kwh": 31.2,
       "reported_export_kwh": 12.8,
       "eligible_surplus_kwh": 12.8,
-      "expected_generation_kwh": 27.5017,
-      "expected_low_kwh": 17.8761,
-      "expected_high_kwh": 42.6276,
-      "deviation_pct": 13.4475,
+      "expected_generation_kwh": 47.8112,
+      "expected_low_kwh": 31.0773,
+      "expected_high_kwh": 74.1074,
+      "deviation_pct": -34.7433,
       "quality_score": 0.98,
       "anomaly_score": 0,
       "risk_label": "normal",
@@ -232,13 +250,14 @@
       "date": "2026-05-02",
       "meter_id": "TW-TY-0001",
       "site_id": "sample-rooftop-10kw",
+      "baseline_source": "nrel_pvwatts_month_day",
       "reported_generation_kwh": 28.6,
       "reported_export_kwh": 8.4,
       "eligible_surplus_kwh": 8.4,
-      "expected_generation_kwh": 27.5017,
-      "expected_low_kwh": 17.8761,
-      "expected_high_kwh": 42.6276,
-      "deviation_pct": 3.9936,
+      "expected_generation_kwh": 20.5992,
+      "expected_low_kwh": 13.3895,
+      "expected_high_kwh": 31.9288,
+      "deviation_pct": 38.8403,
       "quality_score": 0.97,
       "anomaly_score": 0,
       "risk_label": "normal",
@@ -250,13 +269,14 @@
       "date": "2026-05-03",
       "meter_id": "TW-TY-0001",
       "site_id": "sample-rooftop-10kw",
+      "baseline_source": "nrel_pvwatts_month_day",
       "reported_generation_kwh": 34.9,
       "reported_export_kwh": 18.8,
       "eligible_surplus_kwh": 18.8,
-      "expected_generation_kwh": 27.5017,
-      "expected_low_kwh": 17.8761,
-      "expected_high_kwh": 42.6276,
-      "deviation_pct": 26.9012,
+      "expected_generation_kwh": 36.4735,
+      "expected_low_kwh": 23.7078,
+      "expected_high_kwh": 56.5339,
+      "deviation_pct": -4.3141,
       "quality_score": 0.98,
       "anomaly_score": 0,
       "risk_label": "normal",
@@ -268,13 +288,14 @@
       "date": "2026-05-04",
       "meter_id": "TW-TY-0001",
       "site_id": "sample-rooftop-10kw",
+      "baseline_source": "nrel_pvwatts_month_day",
       "reported_generation_kwh": 41.3,
       "reported_export_kwh": 21.6,
       "eligible_surplus_kwh": 21.6,
-      "expected_generation_kwh": 27.5017,
-      "expected_low_kwh": 17.8761,
-      "expected_high_kwh": 42.6276,
-      "deviation_pct": 50.1725,
+      "expected_generation_kwh": 36.2815,
+      "expected_low_kwh": 23.583,
+      "expected_high_kwh": 56.2363,
+      "deviation_pct": 13.8321,
       "quality_score": 0.99,
       "anomaly_score": 0,
       "risk_label": "normal",
@@ -286,49 +307,52 @@
       "date": "2026-05-05",
       "meter_id": "TW-TY-0001",
       "site_id": "sample-rooftop-10kw",
+      "baseline_source": "nrel_pvwatts_month_day",
       "reported_generation_kwh": 22.4,
       "reported_export_kwh": 1.4,
       "eligible_surplus_kwh": 1.4,
-      "expected_generation_kwh": 27.5017,
-      "expected_low_kwh": 17.8761,
-      "expected_high_kwh": 42.6276,
-      "deviation_pct": -18.5505,
+      "expected_generation_kwh": 39.3264,
+      "expected_low_kwh": 25.5622,
+      "expected_high_kwh": 60.9559,
+      "deviation_pct": -43.0408,
       "quality_score": 0.95,
-      "anomaly_score": 0,
+      "anomaly_score": 0.0773,
       "risk_label": "normal",
       "flags": [
-        "within_expected_range"
+        "below_expected_solar_range"
       ]
     },
     {
       "date": "2026-05-06",
       "meter_id": "TW-TY-0001",
       "site_id": "sample-rooftop-10kw",
+      "baseline_source": "nrel_pvwatts_month_day",
       "reported_generation_kwh": 37.8,
       "reported_export_kwh": 18.9,
       "eligible_surplus_kwh": 18.9,
-      "expected_generation_kwh": 27.5017,
-      "expected_low_kwh": 17.8761,
-      "expected_high_kwh": 42.6276,
-      "deviation_pct": 37.446,
+      "expected_generation_kwh": 21.7048,
+      "expected_low_kwh": 14.1081,
+      "expected_high_kwh": 33.6424,
+      "deviation_pct": 74.155,
       "quality_score": 0.98,
-      "anomaly_score": 0,
+      "anomaly_score": 0.1176,
       "risk_label": "normal",
       "flags": [
-        "within_expected_range"
+        "above_expected_solar_range"
       ]
     },
     {
       "date": "2026-05-07",
       "meter_id": "TW-TY-0001",
       "site_id": "sample-rooftop-10kw",
+      "baseline_source": "nrel_pvwatts_month_day",
       "reported_generation_kwh": 39.5,
       "reported_export_kwh": 21.9,
       "eligible_surplus_kwh": 21.9,
-      "expected_generation_kwh": 27.5017,
-      "expected_low_kwh": 17.8761,
-      "expected_high_kwh": 42.6276,
-      "deviation_pct": 43.6275,
+      "expected_generation_kwh": 50.0414,
+      "expected_low_kwh": 32.5269,
+      "expected_high_kwh": 77.5642,
+      "deviation_pct": -21.0654,
       "quality_score": 0.98,
       "anomaly_score": 0,
       "risk_label": "normal",
@@ -341,7 +365,7 @@
     "title": "SPK Intelligence Audit Dossier",
     "operator_submitted": "235.7 kWh generation, 103.8 kWh eligible surplus",
     "expected_range": "17.8761-42.6276 kWh/day",
-    "deviation": "22.434% average daily deviation from NASA/PV benchmark",
+    "deviation": "3.3805% average daily deviation from NASA/PV benchmark",
     "risk": "normal_public_lab_fixture",
     "contract_action_boundary": "AI advises; contracts decide. SPK minting still depends on signed attestations, replay protection, oracle roles, source-hash uniqueness, reserve checks, and contract rules.",
     "review_note": "Energy values are statistically plausible for a public-lab sample, but L0 provenance means the data cannot support real-value SPK issuance.",
@@ -349,6 +373,7 @@
       "operator CSV/profile intake",
       "signed reading bundle",
       "NASA POWER solar benchmark",
+      "NREL/PVWatts daily training baseline",
       "SPK mint preview",
       "hardware provenance label",
       "finance readiness and monetary stress artifacts"

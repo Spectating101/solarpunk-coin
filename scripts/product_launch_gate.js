@@ -52,7 +52,7 @@ function summarizeNextActions(modes) {
   }
   if (modes.public_testnet_product.status === "launchable") {
     return [
-      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, hardware provenance model, and closed-pilot execution package.",
+      "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training baseline, hardware provenance model, and closed-pilot execution package.",
       "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
       "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
       "Use the monetary stress harness to size any named reserve before promising redemption.",
@@ -78,6 +78,7 @@ function evaluateLaunchGate(options = {}) {
   const hardwareProvenance = readJson(root, "state/product/hardware_provenance_model.json", {});
   const closedPilotPackage = readJson(root, "state/product/closed_pilot_execution_package.json", {});
   const publicSolarReplay = readJson(root, "state/product/public_solar_data_replay.json", {});
+  const nrelTraining = readJson(root, "state/product/nrel_solar_training_lab.json", {});
   const operatorDataIntake = readJson(root, "state/product/operator_data_intake.json", {});
   const spkIntelligence = readJson(root, "state/product/spk_intelligence_layer.json", {});
   const pilotStackDrill = readJson(root, "state/product/pilot_stack_currency_drill.json", {});
@@ -174,6 +175,17 @@ function evaluateLaunchGate(options = {}) {
       ),
       "Public historical rooftop-solar data is replayed through the SPK verifier and mint math without claiming live hardware provenance.",
       "docs/product/PUBLIC_SOLAR_DATA_REPLAY.md"
+    ),
+    check(
+      "NREL solar training baseline exists",
+      Boolean(
+        nrelTraining.source?.api_key_written_to_artifact === false &&
+          nrelTraining.summary?.training_stage === "public_model_baseline_ready" &&
+          Number(nrelTraining.summary?.sites || 0) >= 3 &&
+          Number(nrelTraining.summary?.training_rows || 0) >= 1095
+      ),
+      "NREL/PVWatts baseline creates public modeled daily rows for SPK forecasting, anomaly scoring, and future model training without storing the API key.",
+      "docs/product/NREL_SOLAR_TRAINING_LAB.md"
     ),
     check(
       "Generic operator intake exists",

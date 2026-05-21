@@ -27,6 +27,7 @@ The primary product is SolarPunkCoin (SPK): accepted surplus renewable-energy kW
 | [`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`](./docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md) | Closed-pilot execution package: operator intake, action queue, commands, caps, and acceptance criteria |
 | [`docs/product/PILOT_CSV_RECEIPT.md`](./docs/product/PILOT_CSV_RECEIPT.md) | Pilot CSV proof: meter/inverter export -> signed readings -> source hash -> SPK mint preview |
 | [`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`](./docs/product/PUBLIC_SOLAR_DATA_REPLAY.md) | Public historical solar replay: Ausgrid rooftop data -> normalized surplus -> SPK mint preview |
+| [`docs/product/NREL_SOLAR_TRAINING_LAB.md`](./docs/product/NREL_SOLAR_TRAINING_LAB.md) | NREL/PVWatts solar baseline: 1,095 daily model rows across Taoyuan, Austin, and Phoenix for forecasting and anomaly scoring |
 | [`docs/product/OPERATOR_DATA_INTAKE.md`](./docs/product/OPERATOR_DATA_INTAKE.md) | Generic operator intake: real solar CSV shape -> validation -> eligible surplus -> SPK cryptocurrency preview |
 | [`docs/product/SPK_INTELLIGENCE_LAYER.md`](./docs/product/SPK_INTELLIGENCE_LAYER.md) | Advisory intelligence layer: energy claims -> provenance -> forecast -> finance readiness -> bad-claim checks -> audit note |
 | [`docs/product/DATA_REQUEST_OUTREACH.md`](./docs/product/DATA_REQUEST_OUTREACH.md) | Data request target list, email, follow-up, and operator-file handoff |
@@ -126,6 +127,10 @@ These public contracts prove the earlier SPK system state and daily keeper path.
   - Public historical Ausgrid rooftop-solar data replays through the same verifier shape
   - Current sample: `3` historical days, export surplus normalized into an SPK mint preview
   - Explicit boundary: this proves model behavior on real-world public solar profiles, not live hardware provenance
+- **NREL solar training lab** — see `docs/product/NREL_SOLAR_TRAINING_LAB.md`
+  - NREL/PVWatts V8 produces `1,095` daily modeled rows across Taoyuan, Austin, and Phoenix 10 kW rooftop baselines
+  - Taoyuan modeled annual AC output: `11,743.0994 kWh`; Austin: `14,761.5443 kWh`; Phoenix: `17,551.196 kWh`
+  - Explicit boundary: this improves SPK forecasting, anomaly thresholds, and AI training, but it is modeled resource data, not signed meter proof
 - **Operator data intake** — see `docs/product/OPERATOR_DATA_INTAKE.md`
   - Generic real-operator CSV shape normalizes solar generation/load/export rows into the same SPK verifier path
   - Current sample: `7` days from a 10 kW rooftop profile, `103.8 kWh` eligible surplus, `5.14485 SPK` mint preview
