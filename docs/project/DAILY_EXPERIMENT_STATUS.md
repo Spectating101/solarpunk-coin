@@ -2,12 +2,12 @@
 
 Continuous Sepolia proof surface for the NASA POWER -> SolarPunk oracle experiment.
 
-- generated_at: `2026-05-25T05:13:49.224251+00:00`
+- generated_at: `2026-05-26T04:55:48.953220+00:00`
 - network: `sepolia`
-- total_successful_runs: `29`
+- total_successful_runs: `30`
 - first_successful_run: `2026-04-20`
-- last_successful_run: `2026-05-25`
-- current_success_streak_days: `27`
+- last_successful_run: `2026-05-26`
+- current_success_streak_days: `28`
 - max_missing_gap_days: `7`
 
 ## What this proves
@@ -18,29 +18,28 @@ Continuous Sepolia proof surface for the NASA POWER -> SolarPunk oracle experime
 
 ## Latest run
 
-- date: `2026-05-25`
-- NASA observation date: `2026-05-17`
+- date: `2026-05-26`
+- NASA observation date: `2026-05-21`
 - location: `Taoyuan, Taiwan`
-- normalised index: `1.4343`
-- on-chain option index: `1.4343`
+- normalised index: `0.9453`
+- on-chain option index: `0.9453`
 - reserve ratio: `10.1%`
 - peg stable: `True`
 - cumulative surplus kWh: `30000`
-- updateIndex tx: https://sepolia.etherscan.io/tx/0x8e6ce0f8d167a503759e9f0aac31b54559155b17bd874f1888c981a4dad642fe
-- updateEnergyPrice tx: https://sepolia.etherscan.io/tx/0xa966a837823d0d19c1242cf903ef7006897626ff3ad9810cbc1bcb5b6cb56bb1
-- updateOraclePriceAndAdjust tx: https://sepolia.etherscan.io/tx/0xe3ca51afed039e01e3f0245726a772b87887ba88671677998c509302298bf303
+- updateIndex tx: https://sepolia.etherscan.io/tx/0xa6ae4e6b28f34fbedad3072aad36d30d10b299835042eb92798cfb6b2dc691b5
+- updateEnergyPrice tx: https://sepolia.etherscan.io/tx/0x1fe1b596b078e7e2ae4e564e61d1bae8652e076611a8a89fc7dae84b1ad83ea3
+- updateOraclePriceAndAdjust tx: https://sepolia.etherscan.io/tx/0xefd2e7264b752100dbc36a605c2dbf7348c180ce6bf85483b69912ea351368a6
 
 ## Aggregate summary
 
 - peg stable rate: `100.0%`
-- normalised index min/max/avg: `0.2393` / `1.7159` / `0.9825`
+- normalised index min/max/avg: `0.2393` / `1.7159` / `0.9812`
 - reserve ratio min/max/avg: `10.1%` / `10.1%` / `10.1%`
 
 ## Recent runs
 
 | Date | NASA Date | Normalised Index | Option Index | Reserve Ratio | Peg Stable | updateIndex tx |
 |---|---|---:|---:|---:|---|---|
-| 2026-05-12 | 2026-05-07 | 1.5926 | 1.5926 | 10.1% | True | [0x80f65219...](https://sepolia.etherscan.io/tx/0x80f65219a50abdf98e1111354c2c7e6001623162edc26b9d9b39d7800bb80190) |
 | 2026-05-13 | 2026-05-08 | 0.9067 | 0.9067 | 10.1% | True | [0xf65ef5ea...](https://sepolia.etherscan.io/tx/0xf65ef5eab1261e568715260dc112e96eaed3907f4b058af93e7c1c0b29e8c7e7) |
 | 2026-05-14 | 2026-05-09 | 0.5979 | 0.5979 | 10.1% | True | [0x20162f08...](https://sepolia.etherscan.io/tx/0x20162f08923cddf07e3455ce3eeecfd69ca4bcd7baeead84e6e2b1e4fe6cf856) |
 | 2026-05-15 | 2026-05-10 | 0.6519 | 0.6519 | 10.1% | True | [0x8b39e789...](https://sepolia.etherscan.io/tx/0x8b39e789e5d3444e48ebcd24008cdd31cc4453c482bc66e155503a4df309083b) |
@@ -54,6 +53,7 @@ Continuous Sepolia proof surface for the NASA POWER -> SolarPunk oracle experime
 | 2026-05-23 | 2026-05-17 | 1.4343 | 1.4343 | 10.1% | True | [0xec61f85c...](https://sepolia.etherscan.io/tx/0xec61f85c32fa6789be8529891e4c7bc79d8e7df089217bfbd102a300a72e4c04) |
 | 2026-05-24 | 2026-05-17 | 1.4343 | 1.4343 | 10.1% | True | [0x924a013e...](https://sepolia.etherscan.io/tx/0x924a013e914ca6b376c47e9fb3f5e0c4ca4fb5f05af1272d83020dd03cd23b5e) |
 | 2026-05-25 | 2026-05-17 | 1.4343 | 1.4343 | 10.1% | True | [0x8e6ce0f8...](https://sepolia.etherscan.io/tx/0x8e6ce0f8d167a503759e9f0aac31b54559155b17bd874f1888c981a4dad642fe) |
+| 2026-05-26 | 2026-05-21 | 0.9453 | 0.9453 | 10.1% | True | [0xa6ae4e6b...](https://sepolia.etherscan.io/tx/0xa6ae4e6b28f34fbedad3072aad36d30d10b299835042eb92798cfb6b2dc691b5) |
 
 ## Scope note
 
