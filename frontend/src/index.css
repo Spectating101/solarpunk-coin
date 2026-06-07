@@ -1716,3 +1716,299 @@ p {
     min-height: auto;
   }
 }
+
+/* —— SPK v1 minimal demo (GitHub Pages) —— */
+.app-minimal {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+}
+
+.app-minimal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-minimal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ghost-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.ghost-link:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.wallet-button.compact {
+  padding: 9px 12px;
+  font-size: 13px;
+}
+
+.spk-demo {
+  display: grid;
+  gap: 20px;
+}
+
+.spk-demo-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.spk-demo-hero h1 {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 400;
+}
+
+.spk-demo-lead {
+  margin-top: 12px;
+  max-width: 640px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.spk-demo-error {
+  padding: 24px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.spk-stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.spk-stat {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(13, 23, 16, 0.86);
+}
+
+.spk-stat span {
+  display: block;
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spk-stat strong {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--green);
+}
+
+.spk-stat.highlight {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(52, 211, 153, 0.06);
+}
+
+.spk-status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(13, 23, 16, 0.7);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.spk-status-meta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.spk-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dim);
+}
+
+.spk-live-dot.live {
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.15);
+}
+
+.spk-network-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  border-radius: 8px;
+  background: rgba(217, 119, 6, 0.1);
+  color: var(--amber);
+  font-size: 14px;
+}
+
+.ghost-link.compact {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.spk-loading {
+  padding: 24px 0;
+}
+
+.spk-pay-hint {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.spk-pay-card,
+.spk-ledger-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(13, 23, 16, 0.86);
+}
+
+.spk-pay-card h2,
+.spk-ledger-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.spk-pay-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.spk-pay-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.spk-pay-form input,
+.spk-pay-form select {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.spk-pay-ok {
+  margin-top: 12px;
+  color: var(--green);
+  font-size: 14px;
+}
+
+.spk-pay-error {
+  margin-top: 12px;
+  color: var(--red);
+  font-size: 14px;
+}
+
+.spk-pay-ok a,
+.spk-pay-error a {
+  margin-left: 8px;
+  color: inherit;
+}
+
+.spk-table-wrap {
+  overflow-x: auto;
+}
+
+.spk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.spk-table th,
+.spk-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.spk-table th {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spk-table a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.spk-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.spk-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.spk-footer a:hover {
+  color: var(--green);
+}
+
+@media (max-width: 640px) {
+  .spk-pay-form {
+    grid-template-columns: 1fr;
+  }
+
+  .app-minimal-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

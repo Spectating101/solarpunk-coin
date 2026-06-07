@@ -1,262 +1,280 @@
-import React, { useEffect, useState } from 'react';
-import { Activity, Coins, ExternalLink, Network, Rocket, Users, Zap } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ethers } from 'ethers';
+import { ArrowUpRight, RefreshCw, Send, Wallet } from 'lucide-react';
+import SPK_ABI from '../abi/SolarPunkCoin.json';
+import CURRENCY_ABI from '../abi/SolarPunkCurrencySystem.json';
 import { SEPOLIA_EXPLORER } from '../constants/contracts';
-import SpkV1WalletPay from './SpkV1WalletPay';
+import { buildPayees } from '../lib/payees';
+import { loadSpkV1Runtime } from '../lib/runtime';
+import { ensureSepolia } from '../lib/wallet';
 import useSpkV1Live from '../hooks/useSpkV1Live';
 
-function explorerLink(base, kind, value) {
-  if (!base || !value) return null;
-  return `${base}/${kind}/${value}`;
+function txUrl(explorer, hash) {
+  return `${explorer}/tx/${hash}`;
 }
 
-function formatPercent(value) {
-  if (!Number.isFinite(Number(value))) return 'n/a';
-  return `${Number(value).toFixed(2)}%`;
+function addrUrl(explorer, address) {
+  return `${explorer}/address/${address}`;
 }
 
-export default function SpkV1Console({ provider, signer, account }) {
+function formatSyncedAt(iso) {
+  if (!iso) return null;
+  try {
+    return new Date(iso).toLocaleString();
+  } catch {
+    return iso;
+  }
+}
+
+export default function SpkV1Console({ provider, signer, account, onConnect, connecting }) {
   const [runtime, setRuntime] = useState(null);
   const [error, setError] = useState(null);
-  const live = useSpkV1Live(runtime);
+  const [amount, setAmount] = useState('5');
+  const [payeeId, setPayeeId] = useState('merchant');
+  const [payStatus, setPayStatus] = useState({ state: 'idle', message: '' });
+  const live = useSpkV1Live(runtime, account);
 
-  const loadRuntime = () => fetch('/spk_v1.json')
-      .then((response) => {
-        if (!response.ok) throw new Error('SPK v1 runtime not deployed yet');
-        return response.json();
-      })
-      .then(setRuntime)
-      .catch((err) => setError(err.message));
+  const payees = useMemo(() => buildPayees(runtime), [runtime]);
+
+  const reload = useCallback(() => {
+    setError(null);
+    return loadSpkV1Runtime().then(setRuntime).catch((err) => setError(err.message));
+  }, []);
 
   useEffect(() => {
-    loadRuntime();
-    const id = window.setInterval(loadRuntime, 60_000);
+    reload();
+    const id = window.setInterval(reload, 120_000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [reload]);
+
+  useEffect(() => {
+    if (payees.length && !payees.find((p) => p.id === payeeId)) {
+      setPayeeId(payees[0].id);
+    }
+  }, [payees, payeeId]);
+
+  const liveData = live.status === 'ok' ? live.data : null;
+  const explorer = runtime?.explorer_base || SEPOLIA_EXPLORER;
+  const spkAddress = runtime?.contracts?.solar_punk_coin;
+  const currencyAddress = runtime?.contracts?.currency_system;
+  const payee = payees.find((p) => p.id === payeeId) || payees[0];
+
+  const supply = liveData?.totalSupply ?? runtime?.on_chain?.total_supply_spk;
+  const paymentCount = liveData?.metrics?.networkPaymentCount ?? runtime?.genesis?.metrics?.network_payment_count;
+  const settled = liveData?.metrics?.totalSettled ?? runtime?.genesis?.metrics?.total_settled_spk;
+  const circulation = liveData?.metrics?.circulationShare ?? runtime?.genesis?.metrics?.circulation_share_percent;
+  const surplusKwh = liveData?.cumulativeSurplusKwh ?? runtime?.on_chain?.cumulative_surplus_kwh;
+  const balance = liveData?.walletBalance;
+  const ledger = runtime?.chain_index?.payment_ledger || [];
+  const syncedAt = runtime?.synced_at || runtime?.updated_at;
+
+  const parsedAmount = Number(amount);
+  const canPay = account && signer && parsedAmount > 0 && (balance == null || parsedAmount <= balance);
+
+  const pay = async () => {
+    if (!signer || !spkAddress || !currencyAddress || !payee) return;
+    if (!parsedAmount || parsedAmount <= 0) {
+      setPayStatus({ state: 'error', message: 'Enter a positive SPK amount.' });
+      return;
+    }
+    if (balance != null && parsedAmount > balance) {
+      setPayStatus({ state: 'error', message: `Insufficient balance (${balance.toFixed(2)} SPK).` });
+      return;
+    }
+
+    setPayStatus({ state: 'pending', message: 'Confirm in wallet…' });
+    try {
+      await ensureSepolia(provider);
+      const spk = new ethers.Contract(spkAddress, SPK_ABI, signer);
+      const currency = new ethers.Contract(currencyAddress, CURRENCY_ABI, signer);
+      const wei = ethers.parseEther(String(parsedAmount));
+      const invoiceHash = ethers.id(`spk-v1:ui:${Date.now()}:${payee.id}`);
+      await (await spk.approve(currencyAddress, wei)).wait();
+      const tx = await currency.settleNetworkPayment(payee.address, wei, invoiceHash, ethers.id(payee.role));
+      const receipt = await tx.wait();
+      setPayStatus({ state: 'ok', message: `Sent ${amount} SPK to ${payee.label}.`, txHash: receipt.hash });
+      reload();
+    } catch (err) {
+      setPayStatus({ state: 'error', message: err.shortMessage || err.message });
+    }
+  };
 
   if (error) {
     return (
-      <section className="launch-shell">
-        <div className="proof-hero launch-hero">
-          <div>
-            <div className="eyebrow"><Rocket size={14} /> SPK v1 Network Money</div>
-            <h1>Deploy SPK v1 to load the live runtime.</h1>
-            <p>Run <code>npm run spk:v1:launch</code> locally or deploy to Sepolia, then refresh.</p>
-            <p className="muted">{error}</p>
-          </div>
+      <section className="spk-demo">
+        <div className="spk-demo-error">
+          <h1>Could not load SPK v1 data</h1>
+          <p>{error}</p>
+          <button type="button" className="wallet-button" onClick={reload}>Retry</button>
         </div>
       </section>
     );
   }
 
   if (!runtime) {
-    return <section className="launch-shell"><p>Loading SPK v1 runtime…</p></section>;
+    return (
+      <section className="spk-demo">
+        <p className="muted spk-loading">Loading SPK v1 runtime…</p>
+      </section>
+    );
   }
 
-  const explorer = runtime.explorer_base || SEPOLIA_EXPLORER;
-  const policy = runtime.monetary_policy || {};
-  const genesis = runtime.genesis;
-  const liveData = live.status === 'ok' ? live.data : null;
-  const onChain = liveData ? {
-    total_supply_spk: liveData.totalSupply,
-    deployer_spk_balance: liveData.deployerBalance,
-    cumulative_surplus_kwh: liveData.cumulativeSurplusKwh,
-    kwh_per_spk: liveData.kwhPerSpk,
-    peg_enabled: liveData.pegEnabled,
-  } : (runtime.on_chain || {});
-  const metrics = liveData?.metrics ? {
-    total_settled_spk: liveData.metrics.totalSettled,
-    total_redeemed_spk: liveData.metrics.totalRedeemed,
-    circulation_share_percent: liveData.metrics.circulationShare,
-    redemption_share_percent: liveData.metrics.redemptionShare,
-    network_payment_count: liveData.metrics.networkPaymentCount,
-  } : genesis?.metrics;
-  const operations = runtime.operations || [];
-  const lastCycle = operations[operations.length - 1];
-  const counterpartyBalances = liveData?.counterpartyBalances || runtime.counterparty_balances_spk || {};
-  const counterparties = runtime.counterparties || {};
-  const paymentLedger = runtime.chain_index?.payment_ledger || [];
-  const settledByKind = runtime.chain_index?.settled_by_kind_spk || {};
-
   return (
-    <section className="launch-shell">
-      <div className="proof-hero launch-hero">
+    <section className="spk-demo">
+      <div className="spk-status-bar">
+        <span className={`spk-live-dot ${live.status === 'ok' ? 'live' : ''}`} />
+        <span>
+          {live.status === 'ok' ? 'Live on Sepolia' : live.status === 'error' ? 'Cached data (RPC unavailable)' : 'Reading chain…'}
+        </span>
+        {syncedAt ? <span className="spk-status-meta">Indexed {formatSyncedAt(syncedAt)}</span> : null}
+      </div>
+
+      <header className="spk-demo-hero">
         <div>
-          <div className="eyebrow"><Rocket size={14} /> SPK v1 — Network Money</div>
-          <h1>Energy-attested issuance. Circulation-first settlement.</h1>
-          <p>
-            This is the primary product runtime: one stack, one config, energy-native minting,
-            network payments as the main path, optional energy exit as secondary.
+          <p className="eyebrow">Sepolia testnet · energy-native money</p>
+          <h1>SPK v1 demo</h1>
+          <p className="spk-demo-lead">
+            Minted from verified surplus kWh. Spent via on-chain network payments.
+            Connect wallet on Sepolia to send a real test payment.
           </p>
         </div>
-        <div className="system-tile good">
-          <div className="system-title"><Coins size={18} /> Runtime</div>
-          <div className="system-grid">
-            <span>Network</span><strong>{runtime.network}</strong>
-            <span>Status</span><strong>{runtime.status || 'deployed'}</strong>
-            <span>Launched</span><strong>{runtime.launched_at?.slice(0, 10) || 'n/a'}</strong>
-          </div>
-        </div>
-      </div>
+        <button type="button" className="icon-button" onClick={reload} title="Refresh">
+          <RefreshCw size={16} />
+        </button>
+      </header>
 
-      <div className="launch-mode-grid">
-        <div className="launch-mode-card launchable">
-          <div className="launch-mode-head">
-            <Zap size={18} />
-            <div>
-              <h3>Monetary Policy</h3>
-              <span>v1 constitution</span>
-            </div>
+      <div className="spk-stat-row">
+        <div className="spk-stat">
+          <span>Total supply</span>
+          <strong>{supply != null ? `${Number(supply).toLocaleString()} SPK` : '…'}</strong>
+        </div>
+        <div className="spk-stat">
+          <span>Surplus minted</span>
+          <strong>{surplusKwh != null ? `${Number(surplusKwh).toLocaleString()} kWh` : '…'}</strong>
+        </div>
+        <div className="spk-stat">
+          <span>Network payments</span>
+          <strong>{paymentCount ?? '…'}</strong>
+        </div>
+        <div className="spk-stat">
+          <span>SPK settled</span>
+          <strong>{settled != null ? `${Number(settled).toLocaleString()} SPK` : '…'}</strong>
+        </div>
+        <div className="spk-stat">
+          <span>In circulation</span>
+          <strong>{circulation != null ? `${Number(circulation).toFixed(1)}%` : '…'}</strong>
+        </div>
+        {account ? (
+          <div className="spk-stat highlight">
+            <span>Your balance</span>
+            <strong>{balance != null ? `${Number(balance).toFixed(2)} SPK` : '…'}</strong>
           </div>
-          <ul className="launch-checklist">
-            <li>Issuance: {policy.issuance_mode}</li>
-            <li>Primary use: {policy.primary_use}</li>
-            <li>Peg: {policy.peg_enabled ? 'on' : 'off'}</li>
-            <li>Reference USD/kWh: {policy.reference_usd_per_kwh}</li>
-          </ul>
-        </div>
-
-        <div className="launch-mode-card launchable">
-          <div className="launch-mode-head">
-            <Network size={18} />
-            <div>
-              <h3>Contracts</h3>
-              <span>{runtime.network}</span>
-            </div>
-          </div>
-          <ul className="launch-checklist">
-            {Object.entries(runtime.contracts || {}).map(([name, address]) => (
-              <li key={name}>
-                {name}:{' '}
-                <a href={explorerLink(explorer, 'address', address)} target="_blank" rel="noreferrer">
-                  {address.slice(0, 10)}… <ExternalLink size={12} />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="proof-panel">
-        <h2><Activity size={16} /> On-chain state {liveData ? '(live RPC)' : '(cached)'}</h2>
-        <div className="system-grid">
-          <span>Total supply</span><strong>{onChain.total_supply_spk ?? 'n/a'} SPK</strong>
-          <span>Deployer balance</span><strong>{onChain.deployer_spk_balance ?? 'n/a'} SPK</strong>
-          <span>Cumulative surplus</span><strong>{onChain.cumulative_surplus_kwh ?? 'n/a'} kWh</strong>
-          <span>Circulation share</span><strong>{formatPercent(metrics?.circulation_share_percent)}</strong>
-          <span>Redemption share</span><strong>{formatPercent(metrics?.redemption_share_percent)}</strong>
-          <span>Network payments</span><strong>{metrics?.network_payment_count ?? 'n/a'}</strong>
-          <span>Settled SPK</span><strong>{metrics?.total_settled_spk ?? 'n/a'}</strong>
-        </div>
-        {Object.keys(settledByKind).length > 0 ? (
-          <p className="muted">
-            By kind: {Object.entries(settledByKind).map(([k, v]) => `${k} ${v}`).join(' · ')}
-          </p>
         ) : null}
-        <p className="muted">
-          {liveData
-            ? `Live ${liveData.fetchedAt.slice(0, 19).replace('T', ' ')} UTC`
-            : runtime.synced_at
-              ? `Cached sync ${runtime.synced_at.slice(0, 19).replace('T', ' ')} UTC`
-              : null}
-        </p>
       </div>
 
-      {paymentLedger.length > 0 ? (
-        <div className="proof-panel">
-          <h2>Payment ledger</h2>
-          <p>{paymentLedger.length} on-chain network payments indexed from CurrencySystem events.</p>
-          <ul className="launch-checklist">
-            {paymentLedger.slice(-12).reverse().map((row) => (
-              <li key={`${row.payment_id}-${row.tx_hash}`}>
-                #{row.payment_id} {row.payment_kind} — {row.spk} SPK → {row.payee.slice(0, 10)}…{' '}
-                <a href={explorerLink(explorer, 'tx', row.tx_hash)} target="_blank" rel="noreferrer">
-                  tx
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {Object.keys(counterparties).length > 0 ? (
-        <div className="proof-panel">
-          <h2><Users size={16} /> Network counterparties</h2>
-          <p>Simulated multi-party circulation — preset Sepolia addresses receive SPK from operator cycles.</p>
-          <ul className="launch-checklist">
-            {Object.entries(counterparties).map(([name, info]) => (
-              <li key={name}>
-                {name} ({info.role}):{' '}
-                <a href={explorerLink(explorer, 'address', info.address)} target="_blank" rel="noreferrer">
-                  {info.address.slice(0, 10)}…
-                </a>
-                {' — '}
-                <strong>{counterpartyBalances[name] ?? 0} SPK</strong>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      <SpkV1WalletPay provider={provider} signer={signer} account={account} runtime={runtime} />
-
-      {lastCycle ? (
-        <div className="proof-panel">
-          <h2>Latest operator cycle</h2>
-          <p>{lastCycle.cycle_id} — {lastCycle.completed_at?.slice(0, 19).replace('T', ' ')} UTC</p>
-          <ul className="launch-checklist">
-            {(lastCycle.steps || []).map((step, index) => (
-              <li key={`${step.action}-${step.tx_hash || step.label || index}`}>
-                {step.action}
-                {step.spk ? ` — ${step.spk} SPK` : ''}
-                {step.surplus_kwh ? ` — ${step.surplus_kwh} kWh` : ''}
-                {step.tx_hash ? (
-                  <>
-                    {' '}
-                    <a href={explorerLink(explorer, 'tx', step.tx_hash)} target="_blank" rel="noreferrer">
-                      tx
-                    </a>
-                  </>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {genesis?.mint_tx_hash || genesis?.steps?.length ? (
-        <div className="proof-panel">
-          <h2>Genesis</h2>
-          {genesis.minted_spk ? (
-            <p>Minted {genesis.minted_spk} SPK from {genesis.surplus_kwh} kWh surplus.</p>
-          ) : (
-            <p>{genesis.note || 'Genesis metrics recorded from chain.'}</p>
-          )}
-          <ul className="launch-checklist">
-            {genesis.mint_tx_hash ? (
-              <li>
-                mint:{' '}
-                <a href={explorerLink(explorer, 'tx', genesis.mint_tx_hash)} target="_blank" rel="noreferrer">
-                  {genesis.mint_tx_hash.slice(0, 14)}…
-                </a>
-              </li>
+      <div className="spk-pay-card">
+        <h2><Send size={18} /> Send SPK</h2>
+        {!account ? (
+          <>
+            <p>MetaMask on <strong>Sepolia</strong>. You need SPK in your wallet — the operator/deployer wallet has test SPK for demos.</p>
+            <button type="button" className="wallet-button" onClick={onConnect} disabled={connecting || !provider}>
+              <Wallet size={17} />
+              {connecting ? 'Connecting…' : provider ? 'Connect wallet' : 'Install MetaMask'}
+            </button>
+          </>
+        ) : (
+          <>
+            <p className="muted">Wallet {account.slice(0, 6)}…{account.slice(-4)}</p>
+            <div className="spk-pay-form">
+              <label>
+                Amount (SPK)
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </label>
+              <label>
+                Pay
+                <select value={payeeId} onChange={(e) => setPayeeId(e.target.value)}>
+                  {payees.map((p) => (
+                    <option key={p.id} value={p.id}>{p.label} ({p.role})</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <button
+              type="button"
+              className="wallet-button"
+              onClick={pay}
+              disabled={payStatus.state === 'pending' || !canPay}
+            >
+              {payStatus.state === 'pending' ? 'Waiting for wallet…' : 'Send payment'}
+            </button>
+            {balance != null && balance === 0 ? (
+              <p className="spk-pay-hint">This wallet has 0 SPK. Import the deployer key or receive SPK from the operator.</p>
             ) : null}
-            {(genesis.steps || []).map((step) => (
-              <li key={`${step.action}-${step.label}-${step.tx_hash}`}>
-                {step.action} ({step.label}) {step.spk} SPK —{' '}
-                <a href={explorerLink(explorer, 'tx', step.tx_hash)} target="_blank" rel="noreferrer">
-                  tx
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      <div className="proof-panel">
-        <h2>Operator loop</h2>
-        <p>Compound circulation on testnet: <code>npm run spk:v1:cycle:sepolia</code></p>
-        <p className="muted">See docs/product/SPK_V1_OPERATOR.md</p>
+            {payStatus.message ? (
+              <p className={payStatus.state === 'error' ? 'spk-pay-error' : 'spk-pay-ok'}>
+                {payStatus.message}
+                {payStatus.txHash ? (
+                  <a href={txUrl(explorer, payStatus.txHash)} target="_blank" rel="noreferrer">
+                    View tx <ArrowUpRight size={14} />
+                  </a>
+                ) : null}
+              </p>
+            ) : null}
+          </>
+        )}
       </div>
+
+      <div className="spk-ledger-card">
+        <h2>Payment history</h2>
+        {ledger.length === 0 ? (
+          <p className="muted">No indexed payments yet. Run <code>npm run spk:v1:sync</code> after operator cycles.</p>
+        ) : (
+          <div className="spk-table-wrap">
+            <table className="spk-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Kind</th>
+                  <th>SPK</th>
+                  <th>Payee</th>
+                  <th>Tx</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...ledger].reverse().map((row) => (
+                  <tr key={`${row.payment_id}-${row.tx_hash}`}>
+                    <td>{row.payment_id}</td>
+                    <td>{row.payment_kind}</td>
+                    <td>{row.spk}</td>
+                    <td>
+                      <a href={addrUrl(explorer, row.payee)} target="_blank" rel="noreferrer">
+                        {row.payee.slice(0, 8)}…
+                      </a>
+                    </td>
+                    <td>
+                      <a href={txUrl(explorer, row.tx_hash)} target="_blank" rel="noreferrer">
+                        {row.tx_hash.slice(0, 10)}…
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <footer className="spk-footer">
+        <a href={addrUrl(explorer, spkAddress)} target="_blank" rel="noreferrer">SPK contract</a>
+        <a href={addrUrl(explorer, currencyAddress)} target="_blank" rel="noreferrer">Payment contract</a>
+        <a href="https://github.com/Spectating101/solarpunk-coin" target="_blank" rel="noreferrer">GitHub</a>
+      </footer>
     </section>
   );
 }

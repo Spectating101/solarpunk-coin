@@ -6,7 +6,7 @@ import { SEPOLIA_RPC_URL } from '../constants/contracts';
 
 const POLL_MS = 25_000;
 
-export default function useSpkV1Live(runtime) {
+export default function useSpkV1Live(runtime, account = null) {
   const [live, setLive] = useState({ status: 'idle', data: null, error: null });
 
   useEffect(() => {
@@ -22,21 +22,16 @@ export default function useSpkV1Live(runtime) {
       try {
         const spk = new ethers.Contract(spkAddress, SPK_ABI, provider);
         const currency = new ethers.Contract(currencyAddress, CURRENCY_ABI, provider);
+        const walletAddress = account || deployer;
         const [
           totalSupply,
-          deployerBalance,
+          walletBalance,
           cumulativeSurplus,
-          issuanceMode,
-          pegEnabled,
-          kwhPerSpk,
           metrics,
         ] = await Promise.all([
           spk.totalSupply(),
-          spk.balanceOf(deployer),
+          spk.balanceOf(walletAddress),
           spk.cumulativeSurplusKwh(),
-          spk.issuanceMode(),
-          spk.pegEnabled(),
-          spk.kwhPerSpkWad(),
           currency.networkMetrics(),
         ]);
 
@@ -54,11 +49,8 @@ export default function useSpkV1Live(runtime) {
             error: null,
             data: {
               totalSupply: Number(ethers.formatEther(totalSupply)),
-              deployerBalance: Number(ethers.formatEther(deployerBalance)),
+              walletBalance: Number(ethers.formatEther(walletBalance)),
               cumulativeSurplusKwh: Number(cumulativeSurplus),
-              issuanceMode: Number(issuanceMode),
-              pegEnabled,
-              kwhPerSpk: ethers.formatEther(kwhPerSpk),
               metrics: {
                 totalSettled: Number(ethers.formatEther(metrics.settledSpk)),
                 totalRedeemed: Number(ethers.formatEther(metrics.redeemedSpk)),
@@ -82,7 +74,7 @@ export default function useSpkV1Live(runtime) {
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [runtime]);
+  }, [runtime, account]);
 
   return live;
 }
