@@ -1,8 +1,10 @@
 # SolarPunk Public Lab
 
+> **ARCHIVED (2026-06-07):** Launch-outreach phase ended. Current product: **SPK v1** — see [`../../DOCS.md`](../../DOCS.md). Do not use this doc for current state.
+
 ## Meaning
 
-The public lab is the launchable form of SolarPunk before paid production.
+The public lab was an open testnet surface for inspecting and reproducing the SPK attestation path — not a token sale or mainnet product.
 
 It is not a token sale, not a mainnet product, and not a promise of yield. It is an open testnet environment where reviewers, researchers, builders, and potential pilot partners can inspect the SPK product path and reproduce the evidence.
 

@@ -1,5 +1,7 @@
 # ENERGY AS MONEY: A Constraints-Based Blueprint for a Sound Energy-Backed Currency
 
+> **Draft status (2026-06-07):** Older integrated draft. Some implementation numbers are stale (e.g. 79 tests — now **103**). Prefer [`thesis_package/THESIS_SOURCE_OF_TRUTH.md`](./thesis_package/THESIS_SOURCE_OF_TRUTH.md) and grounded chapter drafts (`thesis_package/CHAPTER_*_GROUNDED_DRAFT.md`) for the manuscript under submission. Repo snapshot: [`CURRENT_STATUS.md`](./CURRENT_STATUS.md).
+
 **Christopher Ongko**
 **Student ID: 1133958**
 

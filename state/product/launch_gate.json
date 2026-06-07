@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-05-21T16:40:15.111Z",
-  "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
-  "recommended_current_launch": "public_testnet_product",
+  "generated_at": "2026-06-06T18:17:35.082Z",
+  "decision": "Do not launch yet; public testnet proof surface is blocked.",
+  "recommended_current_launch": "none",
   "next_build_target": "closed_testnet_pilot",
   "modes": {
     "public_testnet_product": {
       "name": "public_testnet_product",
       "label": "SolarPunk Public Lab",
-      "status": "launchable",
-      "passed_checks": 20,
-      "blocking_checks": 0,
+      "status": "blocked",
+      "passed_checks": 19,
+      "blocking_checks": 1,
       "checks": [
         {
           "name": "SPK product proof exists",
@@ -34,9 +34,9 @@
         },
         {
           "name": "Daily keeper evidence is fresh",
-          "pass": true,
+          "pass": false,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-21 (0 days old).",
+          "message": "Latest keeper run is 2026-05-21 (16 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -157,8 +157,8 @@
       "name": "closed_testnet_pilot",
       "label": "Closed testnet pilot",
       "status": "blocked",
-      "passed_checks": 21,
-      "blocking_checks": 4,
+      "passed_checks": 20,
+      "blocking_checks": 5,
       "checks": [
         {
           "name": "SPK product proof exists",
@@ -183,9 +183,9 @@
         },
         {
           "name": "Daily keeper evidence is fresh",
-          "pass": true,
+          "pass": false,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-21 (0 days old).",
+          "message": "Latest keeper run is 2026-05-21 (16 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -355,8 +355,8 @@
       "name": "paid_mainnet_product",
       "label": "Paid/mainnet product",
       "status": "blocked",
-      "passed_checks": 21,
-      "blocking_checks": 9,
+      "passed_checks": 20,
+      "blocking_checks": 10,
       "checks": [
         {
           "name": "SPK product proof exists",
@@ -381,9 +381,9 @@
         },
         {
           "name": "Daily keeper evidence is fresh",
-          "pass": true,
+          "pass": false,
           "blocking": true,
-          "message": "Latest keeper run is 2026-05-21 (0 days old).",
+          "message": "Latest keeper run is 2026-05-21 (16 days old).",
           "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
         },
         {
@@ -586,10 +586,7 @@
     }
   },
   "next_actions": [
-    "Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training/map baselines, hardware provenance model, and closed-pilot execution package.",
-    "Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.",
-    "Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.",
-    "Use the monetary stress harness to size any named reserve before promising redemption.",
-    "Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, economic terms, and shortfall policy are resolved."
+    "Do not launch externally yet.",
+    "Repair the public testnet proof path first: SPK mint proof, public readback, daily keeper evidence, and frontend build."
   ]
 }

@@ -1,0 +1,31 @@
+{
+  "schema": "SPK_ENERGY_NATIVE_DEMO_V1",
+  "generated_at": "2026-06-07T08:26:38.895Z",
+  "issuance_mode": 1,
+  "peg_enabled": true,
+  "kwh_per_spk": 1,
+  "reference_usd_per_kwh": 0.05,
+  "implied_usd_per_spk": 0.05,
+  "surplus_kwh": 2606,
+  "minted_spk_estimate": 2603.394,
+  "producer_balance_spk": 2528.394,
+  "buyer_balance_spk": 55,
+  "invoice_settled_spk": 25,
+  "redeemed_spk": 20,
+  "redeemed_kwh": 20,
+  "total_redeemed_spk": 20,
+  "total_delivered_kwh": 20,
+  "supply_before_peg": 2586.02,
+  "supply_after_peg": 2589.1232,
+  "peg_minted_spk": 3.1032,
+  "contracts": {
+    "spk": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "currency_system": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+  },
+  "narrative": [
+    "Energy-native issuance: verified surplus kWh maps 1:1 to SPK (minus mint fee).",
+    "Optional referenceUsdPerKwh is reporting-only; it does not change mint math.",
+    "Redemption burns SPK and records owed kWh for off-chain utility delivery.",
+    "pegEnabled overlays PI supply control when a USD peg is desired."
+  ]
+}

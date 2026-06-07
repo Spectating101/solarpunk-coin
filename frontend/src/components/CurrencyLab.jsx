@@ -74,9 +74,14 @@ export default function CurrencyLab() {
 
   return (
     <section className="currency-shell">
+      <div className="proof-panel" style={{ marginBottom: '1rem' }}>
+        <strong>Local lab artifacts</strong> below are reproducible JSON outputs from Hardhat scripts.
+        Live testnet money: open the <strong>SPK v1</strong> tab — Sepolia{' '}
+        <code>{'0x8e189002'.slice(0, 10)}…</code> / <code>{'0x52016225'.slice(0, 10)}…</code>.
+      </div>
       <div className="proof-hero currency-hero">
         <div>
-          <div className="eyebrow"><Coins size={14} /> Currency System Lab</div>
+          <div className="eyebrow"><Coins size={14} /> Currency System Lab (local)</div>
           <h1>Energy-standard cryptocurrency, compressed into one lab run.</h1>
           <p>
             SolarPunk rebuilds the gold-standard idea around verified renewable-energy surplus.

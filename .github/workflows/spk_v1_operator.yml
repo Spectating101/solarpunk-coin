@@ -1,0 +1,32 @@
+name: SPK v1 Operator Cycle
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * 1'
+
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run compile
+      - name: Run Sepolia operator cycle
+        env:
+          PRIVATE_KEY: ${{ secrets.SPK_V1_OPERATOR_PRIVATE_KEY }}
+          SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
+          CYCLE_MINT_KWH: '50'
+          CYCLE_REDEEM_SPK: '5'
+        run: npm run spk:v1:cycle:sepolia
+        continue-on-error: true
+      - name: Sync runtime from chain
+        env:
+          PRIVATE_KEY: ${{ secrets.SPK_V1_OPERATOR_PRIVATE_KEY }}
+          SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
+        run: npm run spk:v1:sync
+        continue-on-error: true

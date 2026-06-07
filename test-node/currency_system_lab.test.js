@@ -3,13 +3,15 @@ const test = require("node:test");
 
 const { buildCurrencyLab, buildLedger } = require("../scripts/currency_system_lab");
 
-test("ledger conserves minted SPK across active balances and redemption", () => {
-  const ledger = buildLedger(130.1697, 0.05);
+test("ledger conserves minted SPK across active balances and optional redemption", () => {
+  const mintedSpk = 2603.394;
+  const ledger = buildLedger(mintedSpk, { kwhPerSpk: 1, redeemedSpk: 15 });
   assert.equal(ledger.accounting.conservation_pass, true);
-  assert.equal(ledger.accounting.minted_spk, 130.1697);
-  assert.equal(ledger.accounting.redeemed_spk, 20);
-  assert.equal(ledger.accounting.active_supply_spk, 110.1697);
-  assert.equal(ledger.accounting.redeemed_energy_kwh_equivalent, 400);
+  assert.equal(ledger.accounting.minted_spk, mintedSpk);
+  assert.equal(ledger.accounting.redeemed_spk, 15);
+  assert.equal(ledger.accounting.active_supply_spk, 2588.394);
+  assert.equal(ledger.accounting.redeemed_energy_kwh_equivalent, 15);
+  assert.ok(ledger.accounting.circulation_share > 0.9);
 });
 
 test("currency lab keeps real proof separate from simulated layers", () => {

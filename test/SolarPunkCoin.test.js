@@ -694,6 +694,7 @@ describe("SolarPunkCoin", function () {
     });
 
     it("Should scale mint amounts by energyPricePerKwh", async function () {
+      await spk.connect(owner).setIssuanceMode(0);
       // Set price to $0.05/kWh
       const energyPrice = ethers.parseEther("0.05");
       await spk.connect(oracle).updateEnergyPrice(energyPrice);
@@ -886,6 +887,45 @@ describe("SolarPunkCoin", function () {
       // This should succeed (well under cap)
       const tx = await spk.connect(minter).mintFromSurplus(1000, user.address);
       expect(tx).to.not.be.reverted;
+    });
+  });
+
+  describe("Energy-native issuance", function () {
+    it("Should mint one SPK per one kWh by default", async function () {
+      expect(await spk.issuanceMode()).to.equal(1);
+      expect(await spk.kwhPerSpkWad()).to.equal(ethers.parseEther("1"));
+
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      const surplusKwh = 2606;
+      const expected = await spk.estimateMintAmount(surplusKwh);
+
+      await spk.connect(minter).mintFromSurplus(surplusKwh, user.address);
+      expect(await spk.balanceOf(user.address)).to.equal(expected);
+      expect(expected).to.equal(ethers.parseEther("2603.394")); // 2606 SPK minus 10 bps fee
+    });
+
+    it("Should quote redemption kWh directly from SPK in energy-native mode", async function () {
+      const spkAmount = ethers.parseEther("20");
+      expect(await spk.quoteRedemptionKwh(spkAmount)).to.equal(ethers.parseEther("20"));
+    });
+
+    it("Should expose implied USD/SPK only when a reference tariff is set", async function () {
+      expect(await spk.impliedUsdPerSpk()).to.equal(0);
+      await spk.connect(oracle).setReferenceUsdPerKwh(ethers.parseEther("0.05"));
+      expect(await spk.impliedUsdPerSpk()).to.equal(ethers.parseEther("0.05"));
+    });
+
+    it("Should skip PI control until peg is explicitly enabled", async function () {
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1"));
+      await spk.connect(minter).mintFromSurplus(10000, user.address);
+      const supplyBefore = await spk.totalSupply();
+
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1.08"));
+      expect(await spk.totalSupply()).to.equal(supplyBefore);
+
+      await spk.connect(owner).setPegEnabled(true);
+      await spk.connect(oracle).updateOraclePriceAndAdjust(ethers.parseEther("1.08"));
+      expect(await spk.totalSupply()).to.be.gte(supplyBefore);
     });
   });
 });

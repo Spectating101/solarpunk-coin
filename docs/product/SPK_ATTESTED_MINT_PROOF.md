@@ -4,12 +4,12 @@ This proof shows the product-critical path: signed raw meter readings -> verifie
 
 ## Run
 
-- generated_at: `2026-05-14T10:48:52.962Z`
-- network: `sepolia`
-- chain_id: `11155111`
-- execution_scope: `attached-network`
-- tx_hash: `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d`
-- gas_used: `239354`
+- generated_at: `2026-06-06T18:17:30.330Z`
+- network: `hardhat`
+- chain_id: `1337`
+- execution_scope: `local-reproducible`
+- tx_hash: `0xf8b7481908da07318bf9dae4b86bd87b7366261cf99841818c393ac727a7f07f`
+- gas_used: `239462`
 
 ## Meter Bundle
 
@@ -27,14 +27,14 @@ This proof shows the product-critical path: signed raw meter readings -> verifie
 
 ## Attestation
 
-- attestor: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
-- minter: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
-- recipient: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
+- attestor: `0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC`
+- minter: `0x70997970C51812dc3A010C7d01b50e0d17dc79C8`
+- recipient: `0x90F79bf6EB2c4f870365E785982E1f101E93b906`
 - window_start: `1770768000`
 - window_end: `1770854399`
-- valid_after: `1778755644`
-- valid_before: `1778842104`
-- attestation_hash: `0xd3c77958aa6f53cd1a5a8ed52c8898cf1376b8a5751e1598add5ab0c5cea558d`
+- valid_after: `1780769800`
+- valid_before: `1780856260`
+- attestation_hash: `0x9591b32b3e7fd166adf133923f0b2151128eabf57d2f040eb98d9f4295288940`
 - attestation_hash_consumed: `true`
 - source_hash_consumed: `true`
 
@@ -48,6 +48,6 @@ This proof shows the product-critical path: signed raw meter readings -> verifie
 
 ## Scope Note
 
-- This is a public Sepolia proof artifact against the attached SolarPunkCoin deployment.
-- This proof deployment is not the production/governance deployment and does not replace the older Safe-admin testnet stack.
+- This is a reproducible local proof artifact. Hardhat transaction hashes are local-only.
+- A public proof requires attaching this script to an attestation-enabled SolarPunkCoin on a public testnet.
 - The current proof does not certify physical hardware finality; it proves the protocol path once a meter bundle is accepted.

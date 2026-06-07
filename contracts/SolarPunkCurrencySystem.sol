@@ -11,22 +11,28 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 
 interface ISolarPunkEnergyToken is IERC20Metadata {
     function energyPricePerKwh() external view returns (uint256);
+    function redemptionBasisWad() external view returns (uint256);
+    function quoteRedemptionKwh(uint256 spkAmount) external view returns (uint256);
     function redeemForEnergy(uint256 amount) external returns (bool);
 }
 
 /**
  * @title SolarPunkCurrencySystem
- * @notice Currency-framework layer for SPK invoice settlement and energy-credit redemption.
+ * @notice Network-money layer for SPK: circulation-first settlement with optional energy exit.
  * @dev This contract deliberately does not mint SPK. It consumes the existing SPK token:
- *      1. invoice settlement transfers SPK between real parties and records a replay-safe invoice hash;
- *      2. redemption transfers SPK into this contract, burns it through SPK.redeemForEnergy(),
- *         and records the owed kWh plus later delivery resolution.
+ *      1. network payments (primary path) transfer SPK between participants and record replay-safe invoice hashes;
+ *      2. optional redemption (secondary sink) burns SPK through SPK.redeemForEnergy() and records owed kWh.
+ *      Issuance remains energy-backed on SPK; this contract models SPK as a circulating settlement unit.
  */
 contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+    bytes32 public constant PAYMENT_KIND_GOODS = keccak256("GOODS");
+    bytes32 public constant PAYMENT_KIND_SERVICE = keccak256("SERVICE");
+    bytes32 public constant PAYMENT_KIND_LABOR = keccak256("LABOR");
+    bytes32 public constant PAYMENT_KIND_NETWORK = keccak256("NETWORK");
 
     enum RedemptionState {
         Pending,
@@ -41,7 +47,17 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
         address payee;
         uint256 spkAmount;
         bytes32 invoiceHash;
+        bytes32 paymentKind;
         uint64 settledAt;
+    }
+
+    struct NetworkMetrics {
+        uint256 settledSpk;
+        uint256 redeemedSpk;
+        uint256 circulationShareBps;
+        uint256 redemptionShareBps;
+        uint256 networkPaymentCount;
+        uint256 redemptionCount;
     }
 
     struct Redemption {
@@ -70,8 +86,11 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
     uint256 public totalOwedKwhWad;
     uint256 public totalDeliveredKwhWad;
     uint256 public totalShortfallKwhWad;
+    uint256 public networkPaymentCount;
+    bool public redemptionEnabled = true;
 
     mapping(uint256 => Payment) public payments;
+    mapping(bytes32 => uint256) public settledSpkByPaymentKind;
     mapping(uint256 => Redemption) public redemptions;
     mapping(bytes32 => bool) public usedInvoiceHashes;
     mapping(bytes32 => bool) public usedRedemptionSourceHashes;
@@ -83,6 +102,15 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
         uint256 spkAmount,
         bytes32 invoiceHash
     );
+    event NetworkPaymentSettled(
+        uint256 indexed paymentId,
+        address indexed payer,
+        address indexed payee,
+        uint256 spkAmount,
+        bytes32 invoiceHash,
+        bytes32 paymentKind
+    );
+    event RedemptionPolicyUpdated(bool enabled);
     event RedemptionOpened(
         uint256 indexed redemptionId,
         address indexed redeemer,
@@ -108,6 +136,7 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
     error SlippageExceeded();
     error RedemptionMissing();
     error RedemptionStateInvalid();
+    error RedemptionDisabled();
     error UnauthorizedActor();
 
     constructor(address spkAddress, address admin) {
@@ -128,6 +157,47 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
         whenNotPaused
         returns (uint256 paymentId)
     {
+        return _settleNetworkPayment(payee, spkAmount, invoiceHash, bytes32(0), false);
+    }
+
+    function settleNetworkPayment(
+        address payee,
+        uint256 spkAmount,
+        bytes32 invoiceHash,
+        bytes32 paymentKind
+    ) external nonReentrant whenNotPaused returns (uint256 paymentId) {
+        return _settleNetworkPayment(payee, spkAmount, invoiceHash, paymentKind, true);
+    }
+
+    function setRedemptionEnabled(bool enabled) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        redemptionEnabled = enabled;
+        emit RedemptionPolicyUpdated(enabled);
+    }
+
+    function networkMetrics() external view returns (NetworkMetrics memory metrics) {
+        metrics.settledSpk = totalSettledSpk;
+        metrics.redeemedSpk = totalRedeemedSpk;
+        metrics.networkPaymentCount = networkPaymentCount;
+        metrics.redemptionCount = nextRedemptionId > 1 ? nextRedemptionId - 1 : 0;
+
+        uint256 activity = totalSettledSpk + totalRedeemedSpk;
+        if (activity == 0) {
+            metrics.circulationShareBps = 0;
+            metrics.redemptionShareBps = 0;
+            return metrics;
+        }
+
+        metrics.circulationShareBps = Math.mulDiv(totalSettledSpk, 10_000, activity);
+        metrics.redemptionShareBps = 10_000 - metrics.circulationShareBps;
+    }
+
+    function _settleNetworkPayment(
+        address payee,
+        uint256 spkAmount,
+        bytes32 invoiceHash,
+        bytes32 paymentKind,
+        bool emitNetworkEvent
+    ) internal returns (uint256 paymentId) {
         if (payee == address(0)) revert InvalidAddress();
         if (spkAmount == 0) revert InvalidAmount();
         if (invoiceHash == bytes32(0)) revert HashRequired();
@@ -137,6 +207,7 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
         nextPaymentId += 1;
         usedInvoiceHashes[invoiceHash] = true;
         totalSettledSpk += spkAmount;
+        networkPaymentCount += 1;
 
         payments[paymentId] = Payment({
             id: paymentId,
@@ -144,12 +215,27 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
             payee: payee,
             spkAmount: spkAmount,
             invoiceHash: invoiceHash,
+            paymentKind: paymentKind,
             settledAt: uint64(block.timestamp)
         });
+
+        if (paymentKind != bytes32(0)) {
+            settledSpkByPaymentKind[paymentKind] += spkAmount;
+        }
 
         spkToken.safeTransferFrom(msg.sender, payee, spkAmount);
 
         emit InvoiceSettled(paymentId, msg.sender, payee, spkAmount, invoiceHash);
+        if (emitNetworkEvent) {
+            emit NetworkPaymentSettled(
+                paymentId,
+                msg.sender,
+                payee,
+                spkAmount,
+                invoiceHash,
+                paymentKind
+            );
+        }
     }
 
     function quoteRedemption(uint256 spkAmount)
@@ -158,9 +244,9 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
         returns (uint256 energyPricePerKwh, uint256 owedKwhWad)
     {
         if (spkAmount == 0) revert InvalidAmount();
-        energyPricePerKwh = spk.energyPricePerKwh();
+        energyPricePerKwh = spk.redemptionBasisWad();
         if (energyPricePerKwh == 0) revert InvalidAmount();
-        owedKwhWad = Math.mulDiv(spkAmount, 1e18, energyPricePerKwh);
+        owedKwhWad = spk.quoteRedemptionKwh(spkAmount);
     }
 
     function openRedemption(
@@ -169,6 +255,7 @@ contract SolarPunkCurrencySystem is AccessControl, Pausable, ReentrancyGuard {
         uint256 minKwhWad,
         bytes32 sourceHash
     ) external nonReentrant whenNotPaused returns (uint256 redemptionId) {
+        if (!redemptionEnabled) revert RedemptionDisabled();
         if (beneficiary == address(0)) revert InvalidAddress();
         if (sourceHash == bytes32(0)) revert HashRequired();
         if (usedRedemptionSourceHashes[sourceHash]) revert HashAlreadyUsed();

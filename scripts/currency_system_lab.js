@@ -50,29 +50,40 @@ function tx(kind, from, to, amountSpk, note) {
   };
 }
 
-function buildLedger(mintedSpk, energyPriceUsdPerKwh) {
+function buildLedger(mintedSpk, options = {}) {
+  const kwhPerSpk = Number(options.kwhPerSpk || 1);
+  const redeemedSpk = Number(options.redeemedSpk || 15);
   const producer = "taoyuan_rooftop_producer";
   const gateway = "meter_gateway_operator";
   const maintenance = "maintenance_provider";
   const buyer = "community_energy_buyer";
   const merchant = "local_service_merchant";
-  const burn = "redeemed_energy_credit";
+  const burn = "optional_energy_exit";
 
   const transactions = [
-    tx("mint", null, producer, mintedSpk, "SPK minted from accepted surplus-energy attestation."),
-    tx("transfer", producer, gateway, 3, "Producer pays the meter gateway for data service."),
-    tx("transfer", producer, maintenance, 10, "Producer pays maintenance provider in SPK."),
-    tx("transfer", producer, buyer, 50, "Producer distributes SPK to a local buyer as an energy-credit settlement unit."),
-    tx("transfer", buyer, merchant, 15, "Buyer spends SPK with a local merchant."),
-    tx("transfer", merchant, producer, 5, "Merchant settles an energy-credit invoice back to producer."),
-    tx("redeem", buyer, burn, 20, "Buyer burns SPK against a lab-model energy-credit redemption."),
+    tx("mint", null, producer, mintedSpk, "SPK minted from verified surplus energy (issuance anchor)."),
+    tx("network_payment", producer, gateway, 12, "Producer pays gateway for attestation service (SERVICE)."),
+    tx("network_payment", producer, maintenance, 40, "Producer pays maintenance in SPK (LABOR)."),
+    tx("network_payment", producer, buyer, 180, "Producer seeds local network circulation (NETWORK)."),
+    tx("network_payment", buyer, merchant, 55, "Buyer spends SPK on local goods (GOODS)."),
+    tx("network_payment", merchant, producer, 20, "Merchant settles supply invoice back to producer (GOODS)."),
+    tx(
+      "optional_redemption",
+      buyer,
+      burn,
+      redeemedSpk,
+      "Optional energy exit — secondary sink, not the primary money identity."
+    ),
   ];
 
   const balances = {};
   for (const item of transactions) {
     applyTransfer(balances, item);
-    if (item.kind === "redeem") {
-      item.energy_kwh_equivalent = fixed(item.amount_spk / energyPriceUsdPerKwh, 4);
+    if (item.kind === "optional_redemption") {
+      item.energy_kwh_equivalent = fixed(item.amount_spk * kwhPerSpk, 4);
+    }
+    if (item.kind === "network_payment") {
+      item.payment_kind = item.note.match(/\(([^)]+)\)/)?.[1] || "NETWORK";
     }
   }
 
@@ -80,10 +91,10 @@ function buildLedger(mintedSpk, energyPriceUsdPerKwh) {
     .filter((item) => item.kind === "mint")
     .reduce((sum, item) => sum + item.amount_units, 0);
   const redeemedUnits = transactions
-    .filter((item) => item.kind === "redeem")
+    .filter((item) => item.kind === "optional_redemption")
     .reduce((sum, item) => sum + item.amount_units, 0);
   const settlementVolumeUnits = transactions
-    .filter((item) => item.kind === "transfer")
+    .filter((item) => item.kind === "network_payment")
     .reduce((sum, item) => sum + item.amount_units, 0);
   const activeSupplyUnits = Object.entries(balances)
     .filter(([name]) => name !== burn)
@@ -103,8 +114,10 @@ function buildLedger(mintedSpk, energyPriceUsdPerKwh) {
       active_supply_spk: fromUnits(activeSupplyUnits),
       settlement_volume_spk: fromUnits(settlementVolumeUnits),
       velocity_ratio: fixed(settlementVolumeUnits / mintedUnits, 4),
-      redeemed_energy_kwh_equivalent: fixed(fromUnits(redeemedUnits) / energyPriceUsdPerKwh, 4),
-      remaining_energy_kwh_equivalent: fixed(fromUnits(activeSupplyUnits) / energyPriceUsdPerKwh, 4),
+      circulation_share: fixed(settlementVolumeUnits / (settlementVolumeUnits + redeemedUnits), 4),
+      redemption_share: fixed(redeemedUnits / (settlementVolumeUnits + redeemedUnits), 4),
+      redeemed_energy_kwh_equivalent: fixed(fromUnits(redeemedUnits) * kwhPerSpk, 4),
+      remaining_energy_kwh_equivalent: fixed(fromUnits(activeSupplyUnits) * kwhPerSpk, 4),
       conservation_pass: mintedUnits === activeSupplyUnits + redeemedUnits,
     },
   };
@@ -118,13 +131,23 @@ function buildCurrencyLab(options = {}) {
   const meter = product.meter_to_mint || {};
   const operational = product.operational_basis || {};
   const energyPrice = Number(readback.onchain?.energy_price_usd_per_kwh || 0.05);
-  const mintedSpk = Number(meter.minted_spk || 0);
-  const ledger = buildLedger(mintedSpk, energyPrice);
+  const surplusKwh = Number(meter.total_surplus_kwh || 2606);
+  const mintedSpkEnergyNative = Number((surplusKwh * 0.999).toFixed(4));
+  const mintedSpkSepoliaProof = Number(meter.minted_spk || 0);
+  const ledger = buildLedger(mintedSpkEnergyNative, { kwhPerSpk: 1, redeemedSpk: 15 });
 
   return {
     generated_at: (options.now || new Date()).toISOString(),
     title: "SolarPunk Currency System Lab",
-    thesis: "Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.",
+    thesis:
+      "SPK is network money issued against verified energy surplus: circulation-first settlement with optional energy exit, not a dollar clone or utility coupon.",
+    monetary_model: {
+      issuance_anchor: "verified_surplus_kwh",
+      primary_use: "network_settlement",
+      secondary_sink: "optional_energy_redemption",
+      peg_policy: "off_by_default",
+      unit_mode: "energy_native",
+    },
     source_evidence: {
       spk_contract: meter.contract_address,
       currency_framework_contract: "contracts/SolarPunkCurrencySystem.sol",
@@ -133,8 +156,10 @@ function buildCurrencyLab(options = {}) {
       source_hash: meter.source_hash,
       attestation_hash: meter.attestation_hash,
       accepted_surplus_kwh: meter.total_surplus_kwh,
-      minted_spk: meter.minted_spk,
+      minted_spk_sepolia_dollar_translated: mintedSpkSepoliaProof,
+      minted_spk_energy_native_model: mintedSpkEnergyNative,
       energy_price_usd_per_kwh: energyPrice,
+      reference_quote_only: true,
       daily_keeper_runs: operational.total_successful_runs,
       latest_keeper_run: operational.last_successful_run,
       launch_gate: launchGate.recommended_current_launch || "unknown",
@@ -168,8 +193,12 @@ function buildCurrencyLab(options = {}) {
         id: 4,
         name: "Networked settlement framework",
         status: "local_contract_tested",
-        claim: "SPK invoice settlement is implemented as a replay-protected payment router while the lab ledger models multi-party circulation and conservation.",
-        evidence: ["contracts/SolarPunkCurrencySystem.sol", "state/product/currency_system_lab.json"],
+        claim: "SPK network payments are the primary money path; typed invoice settlement tracks GOODS/SERVICE/LABOR circulation with optional redemption as a secondary sink.",
+        evidence: [
+          "contracts/SolarPunkCurrencySystem.sol",
+          "state/product/currency_system_lab.json",
+          "docs/product/NETWORK_MONEY.md",
+        ],
         blocker_to_upgrade: "Deploy and run one real invoice/counterparty settlement.",
       },
     ],
@@ -200,7 +229,8 @@ function writeMarkdown(filePath, report) {
   lines.push(`| Local SPK loop | \`${report.source_evidence.local_spk_loop}\` |`);
   lines.push(`| Mint tx | \`${report.source_evidence.mint_tx}\` |`);
   lines.push(`| Accepted surplus | \`${report.source_evidence.accepted_surplus_kwh}\` kWh |`);
-  lines.push(`| Minted SPK | \`${report.source_evidence.minted_spk}\` |`);
+  lines.push(`| Minted SPK (Sepolia dollar-translated proof) | \`${report.source_evidence.minted_spk_sepolia_dollar_translated}\` |`);
+  lines.push(`| Minted SPK (energy-native model) | \`${report.source_evidence.minted_spk_energy_native_model}\` |`);
   lines.push(`| Energy price | \`$${report.source_evidence.energy_price_usd_per_kwh}/kWh\` |`);
   lines.push(`| Daily keeper runs | \`${report.source_evidence.daily_keeper_runs}\` |`);
   lines.push(`| Latest keeper run | \`${report.source_evidence.latest_keeper_run}\` |`);
@@ -230,6 +260,8 @@ function writeMarkdown(filePath, report) {
   lines.push(`| Redeemed SPK | \`${report.ledger.accounting.redeemed_spk}\` |`);
   lines.push(`| Settlement volume | \`${report.ledger.accounting.settlement_volume_spk}\` |`);
   lines.push(`| Velocity ratio | \`${report.ledger.accounting.velocity_ratio}\` |`);
+  lines.push(`| Circulation share | \`${report.ledger.accounting.circulation_share}\` |`);
+  lines.push(`| Redemption share | \`${report.ledger.accounting.redemption_share}\` |`);
   lines.push(`| Redeemed energy equivalent | \`${report.ledger.accounting.redeemed_energy_kwh_equivalent}\` kWh |`);
   lines.push(`| Remaining energy equivalent | \`${report.ledger.accounting.remaining_energy_kwh_equivalent}\` kWh |`);
   lines.push(`| Conservation check | \`${report.ledger.accounting.conservation_pass}\` |`);

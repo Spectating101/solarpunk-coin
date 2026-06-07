@@ -1,3 +1,13 @@
+/** Canonical SPK v1 network money stack (see frontend/public/spk_v1.json). */
+export const SPK_V1 = {
+  solarPunkCoin: "0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128",
+  currencySystem: "0x520162252F9B94824417678525FFd69145014970",
+  mockUsdc: "0xaD2A7169CfFBA9Bef8C45515fc85178DbBfEc2C9",
+  deployer: "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  launchMode: "unified_sepolia_lean",
+};
+
+/** Legacy options / treasury demo stack — not canonical for network money. */
 export const CONTRACTS = {
   protocolTreasury: "0x138e793f095a33D2790349eC1066FED3A756dd2c",
   solarPunkCoin: "0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F",

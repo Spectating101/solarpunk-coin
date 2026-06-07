@@ -9,6 +9,7 @@ import {
   RadioTower,
   Leaf,
   FlaskConical,
+  Rocket,
   ShieldCheck,
   Wallet,
 } from 'lucide-react';
@@ -19,23 +20,25 @@ import SystemIntegrity from './components/SystemIntegrity';
 import MarketStats from './components/MarketStats';
 import SPKMintDemo from './components/SPKMintDemo';
 import LaunchConsole from './components/LaunchConsole';
+import SpkV1Console from './components/SpkV1Console';
 import CurrencyLab from './components/CurrencyLab';
 import { GITHUB_REPO, KEEPER_WORKFLOW } from './constants/contracts';
 
 const tabs = [
-  { id: 'currency', label: 'Currency', icon: Coins },
-  { id: 'mint', label: 'SPK Mint', icon: Leaf },
-  { id: 'proof', label: 'Proof', icon: RadioTower },
-  { id: 'launch', label: 'Lab', icon: FlaskConical },
-  { id: 'market', label: 'Market', icon: BarChart3 },
-  { id: 'hedge', label: 'Hedge', icon: Wallet },
+  { id: 'spk-v1', label: 'SPK v1', icon: Rocket },
+  { id: 'currency', label: 'Currency Lab', icon: Coins },
+  { id: 'mint', label: 'Mint (archive)', icon: Leaf },
+  { id: 'proof', label: 'Proof (archive)', icon: RadioTower },
+  { id: 'launch', label: 'Lab (archive)', icon: FlaskConical },
+  { id: 'market', label: 'Options (archive)', icon: BarChart3 },
+  { id: 'hedge', label: 'Hedge (archive)', icon: Wallet },
   { id: 'status', label: 'Status', icon: ShieldCheck },
 ];
 
 function App() {
-  const TEST_COUNT = 103;
+  const TEST_COUNT = 109;
 
-  const [activeTab, setActiveTab] = useState('currency');
+  const [activeTab, setActiveTab] = useState('spk-v1');
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
@@ -71,7 +74,7 @@ function App() {
           <div className="brand-mark">SP</div>
           <div>
             <div className="brand-name">SolarPunk</div>
-            <div className="brand-sub">Protocol · Sepolia</div>
+            <div className="brand-sub">SPK v1 · Sepolia</div>
           </div>
         </div>
 
@@ -89,9 +92,9 @@ function App() {
         </nav>
 
         <div className="sidebar-card">
-          <div className="sidebar-card-title"><Gauge size={14} /> Live Experiment</div>
+          <div className="sidebar-card-title"><Gauge size={14} /> SPK v1 Runtime</div>
           <div className="sidebar-row"><span>Network</span><strong>Sepolia</strong></div>
-          <div className="sidebar-row"><span>Keeper</span><strong>Daily</strong></div>
+          <div className="sidebar-row"><span>Policy</span><strong>Energy-native</strong></div>
           <div className="sidebar-row"><span>Tests</span><strong>{TEST_COUNT} passing</strong></div>
         </div>
 
@@ -126,6 +129,8 @@ function App() {
 
         {activeTab === 'launch' && <LaunchConsole />}
 
+        {activeTab === 'spk-v1' && <SpkV1Console provider={provider} signer={signer} account={account} />}
+
         {activeTab === 'currency' && <CurrencyLab />}
 
         {activeTab === 'market' && (
@@ -153,22 +158,9 @@ function App() {
                 </div>
               </div>
               <div className="scope-list">
-                <div><strong>Shows:</strong> live Sepolia reads, keeper artifacts, NASA-derived index history, SPK mint proof path, explorer links.</div>
-                <div><strong>Does not claim:</strong> mainnet readiness, formal audit completion, or production oracle finality.</div>
-                <div><strong>Next real upgrade:</strong> move the attestation-enabled SPK stack from proof-scoped deployment to governed pilot deployment and hardware-backed meter adapters.</div>
-              </div>
-            </div>
-            <div className="panel">
-              <div className="panel-heading compact">
-                <div>
-                  <div className="panel-kicker">Grant packet</div>
-                  <h2>What funding unlocks next</h2>
-                </div>
-              </div>
-              <div className="grant-grid">
-                <div><strong>Security</strong><span>External audit scope, invariant review, and hardened deployment runbooks.</span></div>
-                <div><strong>Oracle</strong><span>Production data adapter design, fallback feeds, and documented freshness guarantees.</span></div>
-                <div><strong>Meter Proof</strong><span>Partner-facing adapter, signed meter bundles, and continuous real-data experiment expansion.</span></div>
+                <div><strong>Canonical:</strong> SPK v1 energy-native stack on Sepolia — runtime in <code>/spk_v1.json</code>, operator cycles, network payments.</div>
+                <div><strong>Archive tabs:</strong> May 2026 attested mint proof, April 2026 options/treasury demo, local lab JSON artifacts.</div>
+                <div><strong>Does not claim:</strong> mainnet readiness, audit completion, or revenue-grade meter finality.</div>
               </div>
             </div>
           </div>

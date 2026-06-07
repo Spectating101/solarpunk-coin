@@ -1,8 +1,11 @@
 # DEPLOYMENT GUIDE
 
-## Current deployment
+> **Canonical deploy:** SPK v1 lean stack — `npm run spk:v1:launch:sepolia:lean` (one-time). Weekly ops: `npm run spk:v1:cycle:sepolia`. See [`DOCS.md`](./DOCS.md).  
+> **Below:** April 2026 legacy Safe/options stack (archive).
 
-Full stack is live on **Ethereum Sepolia testnet** (deployed 2026-04-20).
+## Legacy deployment (archive — 2026-04-20)
+
+Full legacy stack on **Ethereum Sepolia testnet**:
 
 | Contract | Address |
 |---|---|

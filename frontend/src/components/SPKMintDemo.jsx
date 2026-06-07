@@ -13,7 +13,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import SPK_ABI from '../abi/SolarPunkCoin.json';
-import { CONTRACTS, GITHUB_REPO, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL } from '../constants/contracts';
+import { CONTRACTS, GITHUB_REPO, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL, SPK_V1 } from '../constants/contracts';
 import productEmpirics from '../../../state/proofs/spk_product_empirics.json';
 import spkIntelligence from '../../../state/product/spk_intelligence_layer.json';
 import nrelMapScenarios from '../../../state/product/nrel_solar_map_scenarios.json';
@@ -128,6 +128,7 @@ const productSteps = [
 
 export default function SPKMintDemo() {
   const live = useSolarPunkCoinState(proofContractAddress);
+  const v1Live = useSolarPunkCoinState(SPK_V1.solarPunkCoin);
   const sampleSurplus = Number(proof.total_surplus_kwh || 0);
   const sampleOnchainKwh = Math.floor(sampleSurplus);
   const sampleMinted = Number(proof.minted_spk || 0);
@@ -154,11 +155,18 @@ export default function SPKMintDemo() {
     ['Legacy SPK stack', `${SEPOLIA_EXPLORER}/address/${CONTRACTS.solarPunkCoin}`],
   ];
 
+  const v1Ok = v1Live.status === 'ok';
+
   return (
     <section className="mint-shell">
+      <div className="proof-panel" style={{ marginBottom: '1rem' }}>
+        <strong>Archive tab.</strong> This view documents the May 2026 attested mint proof on <code>{CONTRACTS.attestedSolarPunkCoin.slice(0, 10)}…</code>.
+        {' '}Canonical product: <strong>SPK v1</strong> tab — <code>{SPK_V1.solarPunkCoin.slice(0, 10)}…</code>
+        {v1Ok ? ` (${formatNumber(v1Live.data.totalSupply, 2)} SPK live supply)` : ''}.
+      </div>
       <div className="proof-hero mint-hero">
         <div>
-          <div className="eyebrow"><Leaf size={14} /> Primary Product</div>
+          <div className="eyebrow"><Leaf size={14} /> Attested Mint Proof (Archive)</div>
           <h1>Verified surplus kWh becomes SPK.</h1>
           <p>
             The product is not free token printing. The protocol mints only after an accepted

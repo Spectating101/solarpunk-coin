@@ -15,7 +15,7 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'rec
 import SPK_ABI from '../abi/SolarPunkCoin.json';
 import OPTION_ABI from '../abi/SolarPunkOption.json';
 import keeperSummary from '../../../state/keeper_logs/summary.json';
-import { CONTRACTS, GITHUB_REPO, KEEPER_WORKFLOW, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL } from '../constants/contracts';
+import { CONTRACTS, GITHUB_REPO, KEEPER_WORKFLOW, SEPOLIA_EXPLORER, SEPOLIA_RPC_URL, SPK_V1 } from '../constants/contracts';
 
 const POLL_INTERVAL = 30_000;
 
@@ -181,6 +181,10 @@ export default function ProofDashboard() {
 
   return (
     <section className="proof-shell">
+      <div className="proof-panel" style={{ marginBottom: '1rem' }}>
+        <strong>Archive tab.</strong> Keeper + legacy Safe-admin stack ({CONTRACTS.solarPunkCoin.slice(0, 10)}…).
+        Canonical network money: <strong>SPK v1</strong> — SPK {SPK_V1.solarPunkCoin.slice(0, 10)}… on Sepolia.
+      </div>
       <div className="proof-hero">
         <div>
           <div className="eyebrow"><RadioTower size={14} /> Live Sepolia Prototype</div>

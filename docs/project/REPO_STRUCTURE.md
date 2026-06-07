@@ -6,10 +6,12 @@ For the folder-by-folder cleanup judgment, see `docs/project/FOLDER_CLEANUP_ASSE
 
 ## Active Reviewer Surface
 
-- `README.md` - public landing page for GitHub reviewers.
-- `EVIDENCE.md` - primary proof index for grant reviewers.
-- `MASTER_HANDOFF.md` - full project context and operational handoff.
-- `CURRENT_STATUS.md` - short status snapshot.
+- `CURRENT_STATUS.md` - **canonical live snapshot** (tests, deployments, gaps).
+- `thesis_package/THESIS_SOURCE_OF_TRUTH.md` - thesis framing and numbers.
+- `docs/project/DOC_MAINTENANCE.md` - how to verify and update docs.
+- `README.md` - public landing page (should match CURRENT_STATUS).
+- `EVIDENCE.md` - proof index with clickable artifacts.
+- `MASTER_HANDOFF.md` - long-form context (verify numbers against CURRENT_STATUS).
 - `docs/grants/` - current reviewer packet, grant plan, copy-paste answers, outreach templates, and submission brief.
 - `GRANT_SUBMISSIONS/` - only the current submission-ready drafts.
 

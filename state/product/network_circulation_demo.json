@@ -1,0 +1,79 @@
+{
+  "schema": "SPK_NETWORK_CIRCULATION_DEMO_V1",
+  "generated_at": "2026-06-07T09:14:30.763Z",
+  "thesis": "SPK is network settlement money issued against verified energy surplus. Circulation is primary; energy redemption is an optional exit.",
+  "identity": "Issuance anchor = surplus kWh. Public face = replay-protected network payments between participants. Not a dollar peg. Not an electricity-company coupon.",
+  "issuance": {
+    "mode": "energy_native",
+    "surplus_kwh": 2606,
+    "minted_to_producer_spk": 2603.394,
+    "kwh_per_spk": 1,
+    "peg_enabled": false,
+    "reference_usd_per_kwh": 0.05,
+    "implied_usd_per_spk": 0.05
+  },
+  "steps": [
+    {
+      "index": 1,
+      "action": "network_payment",
+      "spk": 12,
+      "note": "Producer pays meter gateway for attestation service."
+    },
+    {
+      "index": 2,
+      "action": "network_payment",
+      "spk": 40,
+      "note": "Producer pays maintenance crew in SPK — not a utility bill."
+    },
+    {
+      "index": 3,
+      "action": "network_payment",
+      "spk": 180,
+      "note": "Producer allocates SPK into the local network economy."
+    },
+    {
+      "index": 4,
+      "action": "network_payment",
+      "spk": 55,
+      "note": "Buyer spends SPK on local goods — primary money use."
+    },
+    {
+      "index": 5,
+      "action": "network_payment",
+      "spk": 20,
+      "note": "Merchant settles supply invoice back to producer."
+    },
+    {
+      "index": 6,
+      "action": "optional_redemption",
+      "spk": 15,
+      "note": "Small optional energy exit — secondary sink, not the product identity."
+    }
+  ],
+  "balances": {
+    "producer_spk": 2391.394,
+    "gateway_spk": 12,
+    "maintenance_spk": 40,
+    "buyer_spk": 110,
+    "merchant_spk": 35
+  },
+  "settlement_by_kind": {
+    "SERVICE": 12,
+    "LABOR": 40,
+    "GOODS": 75,
+    "NETWORK": 180
+  },
+  "metrics": {
+    "total_settled_spk": 307,
+    "total_redeemed_spk": 15,
+    "circulation_share_percent": 95.34,
+    "redemption_share_percent": 4.66,
+    "circulation_share_before_optional_exit_percent": 100,
+    "network_payment_count": 5,
+    "redemption_count": 1
+  },
+  "contracts": {
+    "spk": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "currency_system": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+  }
+}

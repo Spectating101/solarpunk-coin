@@ -1,70 +1,59 @@
-# CONTRACT ADDRESSES
+# Contract addresses (Sepolia)
 
-## Public testnet addresses
+Network: Ethereum Sepolia · chain `11155111`  
+Deployer: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
 
-Status: **Live on Sepolia (Ethereum testnet)**
+**Canonical state:** `state/runtime/spk_v1.json`
 
-Initial deployment: 2026-04-20  
-M3 security setup: 2026-04-20  
-Deployer: `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`  
-Network: Ethereum Sepolia (chain 11155111)
+---
 
-## Core protocol (verified)
+## SPK v1 — canonical product (Jun 2026)
 
-| Contract | Address | Etherscan |
-|---|---|---|
-| ProtocolTreasury | `0x138e793f095a33D2790349eC1066FED3A756dd2c` | [Verified ✓](https://sepolia.etherscan.io/address/0x138e793f095a33D2790349eC1066FED3A756dd2c#code) |
-| SolarPunkCoin | `0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F` | [Verified ✓](https://sepolia.etherscan.io/address/0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F#code) |
-| SolarPunkOption | `0xe40A88398b5f90D038f7A6F1f122112DCD9e4104` | [Verified ✓](https://sepolia.etherscan.io/address/0xe40A88398b5f90D038f7A6F1f122112DCD9e4104#code) |
-
-## Infrastructure (verified)
+Energy-native token + network payment contract. Source verified on Etherscan.
 
 | Contract | Address | Etherscan |
-|---|---|---|
-| StabilityPool | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` | [Verified ✓](https://sepolia.etherscan.io/address/0xb9c2Ac8166edFc899b591bc51746d75bFCEca086#code) |
-| ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` | [Verified ✓](https://sepolia.etherscan.io/address/0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9#code) |
-| EnergyRevenueFloor (pilot module) | `0x0000000000000000000000000000000000000000` (not deployed) | — |
-| Safe multisig (1/1) | `0xB95586775C73feB0154828c77832E106425C818A` | [Etherscan](https://sepolia.etherscan.io/address/0xB95586775C73feB0154828c77832E106425C818A) · [Safe app](https://app.safe.global/sep:0xB95586775C73feB0154828c77832E106425C818A) |
+|----------|---------|-----------|
+| SolarPunkCoin | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` | [code](https://sepolia.etherscan.io/address/0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128#code) |
+| SolarPunkCurrencySystem | `0x520162252F9B94824417678525FFd69145014970` | [code](https://sepolia.etherscan.io/address/0x520162252F9B94824417678525FFd69145014970#code) |
+| MockUSDC (reserve lab) | `0xaD2A7169CfFBA9Bef8C45515fc85178DbBfEc2C9` | [code](https://sepolia.etherscan.io/address/0xaD2A7169CfFBA9Bef8C45515fc85178DbBfEc2C9#code) |
 
-## Attested SPK proof stack (verified)
+---
 
-| Contract / proof | Address / tx | Etherscan |
-|---|---|---|
-| Attestation-enabled SolarPunkCoin | `0x8ceDa149EDE44078bf151b3334513916a84df820` | [Verified ✓](https://sepolia.etherscan.io/address/0x8ceDa149EDE44078bf151b3334513916a84df820#code) |
-| Proof MockUSDC | `0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268` | [Verified ✓](https://sepolia.etherscan.io/address/0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268#code) |
-| Proof ProtocolTreasury | `0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F` | [Verified ✓](https://sepolia.etherscan.io/address/0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F#code) |
-| Signed-meter SPK mint | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` | [Tx](https://sepolia.etherscan.io/tx/0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d) |
+## Archive — May 2026 attested proof
 
-## Test collateral
+Dollar-basis mint demo. Thesis historical evidence; not the current product stack.
+
+| Item | Address / tx |
+|------|----------------|
+| Attestation-enabled SPK | `0x8ceDa149EDE44078bf151b3334513916a84df820` |
+| Signed-meter mint tx | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` |
+| Proof MockUSDC | `0xB9e769e347Fa1e5e9f4088FA1c5bc63A23De5268` |
+| Proof Treasury | `0xeF105f48ef7d54dc1E6400E4a2D3f330Fb1d875F` |
+
+---
+
+## Archive — April 2026 legacy stack (options / keeper demo)
+
+Safe multisig on core contracts. Frontend archive tabs still read these.
 
 | Contract | Address |
-|---|---|
+|----------|---------|
+| SolarPunkCoin | `0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F` |
+| SolarPunkOption | `0xe40A88398b5f90D038f7A6F1f122112DCD9e4104` |
+| ProtocolTreasury | `0x138e793f095a33D2790349eC1066FED3A756dd2c` |
+| StabilityPool | `0xb9c2Ac8166edFc899b591bc51746d75bFCEca086` |
+| ChainlinkOracleAdapter | `0x87B64cd4cE7C95a3A2465aE1e4E71582A64820C9` |
+| Safe (1/1 admin) | `0xB95586775C73feB0154828c77832E106425C818A` |
 | MockUSDC | `0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2` |
 
-## Current parameter state (post M3 setup)
+Legacy parameters: 24h governance delay, 100 USDC bonds, $0.05/kWh manual oracle.
 
-| Parameter | Value |
-|---|---|
-| Admin authority | **Safe multisig** `0xB95586775C73feB0154828c77832E106425C818A` controls the 3 core contracts; `StabilityPool` admin remains deployer EOA |
-| Governance delay | 86400s (24h) on all 3 core contracts |
-| Min minter bond | 100 USDC |
-| Min oracle bond | 100 USDC (SolarPunkCoin + SolarPunkOption) |
-| Min liquidator bond | 100 USDC |
-| Deployer keeper bond | 100 USDC deposited |
-| Stability pool | External StabilityPool contract |
-| StabilityPool disburser | SolarPunkCoin has `DISBURSER_ROLE`; deployer EOA does not |
-| Oracle adapter | ChainlinkOracleAdapter holds ORACLE_ROLE on both contracts |
-| Energy price (adapter) | $0.05/kWh (manual — no Chainlink energy feed on Sepolia) |
+---
 
-## Deployment receipts
+## Not deployed
 
-- `state/deployments/sepolia_full_deploy.json` — initial deployment
-- `state/deployments/sepolia_m3_setup.json` — M3 security setup (governance delay, bonds, adapters)
-- `state/deployments/sepolia_attested_spk_deploy.json` — verified attested SPK public proof stack
+| Contract | Status |
+|----------|--------|
+| EnergyRevenueFloor | Tested locally only (`0x000…`) |
 
-## Notes
-
-- MockUSDC is a test token with no real value
-- Chainlink adapter runs in manual energy price mode — no live energy price feed exists on Sepolia; will connect to a real feed for mainnet
-- Mainnet deployment gated on: security audit + multisig admin transfer + pilot counterparty
-- EnergyRevenueFloor is implemented and test-covered in-repo, but currently pending Sepolia deployment (`0x000...0000` placeholder)
+Deployment receipts: `state/deployments/`

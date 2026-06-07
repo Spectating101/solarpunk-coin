@@ -1,7 +1,14 @@
 {
-  "generated_at": "2026-05-18T16:12:55.547Z",
+  "generated_at": "2026-06-07T09:14:30.951Z",
   "title": "SolarPunk Currency System Lab",
-  "thesis": "Compress the currency-system path into one reproducible public-lab artifact without claiming mainnet adoption.",
+  "thesis": "SPK is network money issued against verified energy surplus: circulation-first settlement with optional energy exit, not a dollar clone or utility coupon.",
+  "monetary_model": {
+    "issuance_anchor": "verified_surplus_kwh",
+    "primary_use": "network_settlement",
+    "secondary_sink": "optional_energy_redemption",
+    "peg_policy": "off_by_default",
+    "unit_mode": "energy_native"
+  },
   "source_evidence": {
     "spk_contract": "0x8ceDa149EDE44078bf151b3334513916a84df820",
     "currency_framework_contract": "contracts/SolarPunkCurrencySystem.sol",
@@ -10,11 +17,13 @@
     "source_hash": "0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8",
     "attestation_hash": "0xd3c77958aa6f53cd1a5a8ed52c8898cf1376b8a5751e1598add5ab0c5cea558d",
     "accepted_surplus_kwh": 2606.7,
-    "minted_spk": "130.1697",
+    "minted_spk_sepolia_dollar_translated": 130.1697,
+    "minted_spk_energy_native_model": 2604.0933,
     "energy_price_usd_per_kwh": 0.05,
-    "daily_keeper_runs": 20,
-    "latest_keeper_run": "2026-05-16",
-    "launch_gate": "public_testnet_product"
+    "reference_quote_only": true,
+    "daily_keeper_runs": 22,
+    "latest_keeper_run": "2026-05-18",
+    "launch_gate": "none"
   },
   "layers": [
     {
@@ -54,10 +63,11 @@
       "id": 4,
       "name": "Networked settlement framework",
       "status": "local_contract_tested",
-      "claim": "SPK invoice settlement is implemented as a replay-protected payment router while the lab ledger models multi-party circulation and conservation.",
+      "claim": "SPK network payments are the primary money path; typed invoice settlement tracks GOODS/SERVICE/LABOR circulation with optional redemption as a secondary sink.",
       "evidence": [
         "contracts/SolarPunkCurrencySystem.sol",
-        "state/product/currency_system_lab.json"
+        "state/product/currency_system_lab.json",
+        "docs/product/NETWORK_MONEY.md"
       ],
       "blocker_to_upgrade": "Deploy and run one real invoice/counterparty settlement."
     }
@@ -75,75 +85,82 @@
         "kind": "mint",
         "from": null,
         "to": "taoyuan_rooftop_producer",
-        "amount_units": 130169700,
-        "amount_spk": 130.1697,
-        "note": "SPK minted from accepted surplus-energy attestation."
+        "amount_units": 2604093300,
+        "amount_spk": 2604.0933,
+        "note": "SPK minted from verified surplus energy (issuance anchor)."
       },
       {
-        "kind": "transfer",
+        "kind": "network_payment",
         "from": "taoyuan_rooftop_producer",
         "to": "meter_gateway_operator",
-        "amount_units": 3000000,
-        "amount_spk": 3,
-        "note": "Producer pays the meter gateway for data service."
+        "amount_units": 12000000,
+        "amount_spk": 12,
+        "note": "Producer pays gateway for attestation service (SERVICE).",
+        "payment_kind": "SERVICE"
       },
       {
-        "kind": "transfer",
+        "kind": "network_payment",
         "from": "taoyuan_rooftop_producer",
         "to": "maintenance_provider",
-        "amount_units": 10000000,
-        "amount_spk": 10,
-        "note": "Producer pays maintenance provider in SPK."
+        "amount_units": 40000000,
+        "amount_spk": 40,
+        "note": "Producer pays maintenance in SPK (LABOR).",
+        "payment_kind": "LABOR"
       },
       {
-        "kind": "transfer",
+        "kind": "network_payment",
         "from": "taoyuan_rooftop_producer",
         "to": "community_energy_buyer",
-        "amount_units": 50000000,
-        "amount_spk": 50,
-        "note": "Producer distributes SPK to a local buyer as an energy-credit settlement unit."
+        "amount_units": 180000000,
+        "amount_spk": 180,
+        "note": "Producer seeds local network circulation (NETWORK).",
+        "payment_kind": "NETWORK"
       },
       {
-        "kind": "transfer",
+        "kind": "network_payment",
         "from": "community_energy_buyer",
         "to": "local_service_merchant",
-        "amount_units": 15000000,
-        "amount_spk": 15,
-        "note": "Buyer spends SPK with a local merchant."
+        "amount_units": 55000000,
+        "amount_spk": 55,
+        "note": "Buyer spends SPK on local goods (GOODS).",
+        "payment_kind": "GOODS"
       },
       {
-        "kind": "transfer",
+        "kind": "network_payment",
         "from": "local_service_merchant",
         "to": "taoyuan_rooftop_producer",
-        "amount_units": 5000000,
-        "amount_spk": 5,
-        "note": "Merchant settles an energy-credit invoice back to producer."
-      },
-      {
-        "kind": "redeem",
-        "from": "community_energy_buyer",
-        "to": "redeemed_energy_credit",
         "amount_units": 20000000,
         "amount_spk": 20,
-        "note": "Buyer burns SPK against a lab-model energy-credit redemption.",
-        "energy_kwh_equivalent": 400
+        "note": "Merchant settles supply invoice back to producer (GOODS).",
+        "payment_kind": "GOODS"
+      },
+      {
+        "kind": "optional_redemption",
+        "from": "community_energy_buyer",
+        "to": "optional_energy_exit",
+        "amount_units": 15000000,
+        "amount_spk": 15,
+        "note": "Optional energy exit — secondary sink, not the primary money identity.",
+        "energy_kwh_equivalent": 15
       }
     ],
     "balances": {
-      "taoyuan_rooftop_producer": 72.1697,
-      "meter_gateway_operator": 3,
-      "maintenance_provider": 10,
-      "community_energy_buyer": 15,
-      "local_service_merchant": 10
+      "taoyuan_rooftop_producer": 2392.0933,
+      "meter_gateway_operator": 12,
+      "maintenance_provider": 40,
+      "community_energy_buyer": 110,
+      "local_service_merchant": 35
     },
     "accounting": {
-      "minted_spk": 130.1697,
-      "redeemed_spk": 20,
-      "active_supply_spk": 110.1697,
-      "settlement_volume_spk": 83,
-      "velocity_ratio": 0.6376,
-      "redeemed_energy_kwh_equivalent": 400,
-      "remaining_energy_kwh_equivalent": 2203.394,
+      "minted_spk": 2604.0933,
+      "redeemed_spk": 15,
+      "active_supply_spk": 2589.0933,
+      "settlement_volume_spk": 307,
+      "velocity_ratio": 0.1179,
+      "circulation_share": 0.9534,
+      "redemption_share": 0.0466,
+      "redeemed_energy_kwh_equivalent": 15,
+      "remaining_energy_kwh_equivalent": 2589.0933,
       "conservation_pass": true
     }
   },

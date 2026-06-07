@@ -1,9 +1,24 @@
 # SolarPunk Protocol — Evidence Register
 
-**Last updated:** 2026-05-18
-**Purpose:** Flat, clickable proof links for every empirical, operational, and external claim made about this project. Structured so a skeptical reviewer can verify any claim in under 60 seconds without reading the full handoff.
+**Last updated:** 2026-06-07
+**Purpose:** Flat, clickable proof links for every empirical, operational, and external claim made about this project.
+
+**Doc map:** [`DOCS.md`](./DOCS.md) · **Live testnet:** §0 below · **Thesis empirics:** §1+
 
 This document answers: **"Is there actual evidence, or just descriptions of evidence?"**
+
+---
+
+## 0. SPK v1 live testnet (primary implementation evidence)
+
+| Claim | Evidence |
+|---|---|
+| Energy-native SPK on Sepolia | Contract `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
+| Network-money settlement | Contract `0x520162252F9B94824417678525FFd69145014970` |
+| 14+ typed network payments | Indexed ledger in `state/runtime/spk_v1.json` |
+| Meter-linked attested mint on v1 | Tx `0x3527585fd110ae3e135e76b870232d1b30411d76953c15c94a237743a0d1754d` |
+
+Full tx tables: [`thesis_package/SPK_V1_EVIDENCE.md`](./thesis_package/SPK_V1_EVIDENCE.md) · UI: https://spectating101.github.io/solarpunk-coin/
 
 ---
 
@@ -87,11 +102,11 @@ These prove the protocol executes correctly end-to-end, not just compiles.
 | Mark position to $1.05 | [0x17b3524c...](https://sepolia.etherscan.io/tx/0x17b3524c2d14c23df77c19dd6de91c84a3d901cdd0672d33efc2940d94cff961) |
 | updateOraclePriceAndAdjust | [0x4bce17ac...](https://sepolia.etherscan.io/tx/0x4bce17ac407229402943fc6e6a9e70bda12dd0cc2820d0c4a7e20402a8bcb3a2) |
 
-### 2.4 Daily NASA → Sepolia Oracle Keeper (Automated)
+### 2.4 Daily NASA → Sepolia Oracle Keeper
 
-System that fetches real satellite data and pushes it to the live contracts every day. Not a demo — running continuously on GitHub Actions cron at 01:00 UTC.
+Fetches NASA POWER irradiance for Taoyuan and pushes index updates to the **legacy** Sepolia stack. GitHub Actions workflow: `.github/workflows/nasa_keeper.yml` (01:00 UTC cron).
 
-**Current summary:** 22 successful runs, latest successful run `2026-05-18`, current success streak 20 days. See `docs/project/DAILY_EXPERIMENT_STATUS.md` and `state/keeper_logs/summary.json` for the complete rolling table.
+**Current summary (2026-06-07):** **25** successful runs recorded; **last run `2026-05-21`**. Automation is **stale** — no new logs committed since then. Historical on-chain TXs remain valid evidence. Authoritative rolling state: `state/keeper_logs/summary.json`.
 
 | Date | NASA date used | GHI (kWh/m²) | Normalised index | On-chain tx |
 |---|---|---|---|---|

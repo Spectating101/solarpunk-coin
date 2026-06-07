@@ -1,6 +1,8 @@
 # Grant Submissions
 
-Active, submission-ready files:
+> **ARCHIVED:** Grant phase ended. Product focus is SPK v1 testnet. See [`../DOCS.md`](../DOCS.md).
+
+Historical submission files:
 
 - `CHAINLINK/BUILD_APPLICATION.md` - primary application for Chainlink BUILD.
 - `ETHEREUM_ESP_APPLICATION.txt` - Ethereum ESP Project Feedback / Office Hours draft, with funding text if invited into the financial-support path.

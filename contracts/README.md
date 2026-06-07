@@ -1,6 +1,8 @@
-# SolarPunkCoin Smart Contract
+# SolarPunk Contracts
 
-Energy-backed stablecoin on Polygon. Mints SPK based on verified renewable energy surplus, stabilizes peg via PI control, redeemable for electricity.
+Energy-linked token and clearinghouse contracts for the SolarPunk thesis prototype. **Network: Ethereum Sepolia** (testnet). Mints SPK from verified surplus; PI peg control; options clearinghouse.
+
+**Docs:** [`../DOCS.md`](../DOCS.md) · **SPK v1 Sepolia:** `0x8e189…` / `0x52016…` · **109** tests — `npx hardhat test`
 
 ## 🚀 Quick Start
 
@@ -172,21 +174,19 @@ npx hardhat test
 
 ### Test Coverage
 
-```
-✓ Deployment (3 tests)
-✓ Minting: Rule A (5 tests)
-✓ Peg Stabilization: Rule D (5 tests)
-✓ Redemption: Rule B (4 tests)
-✓ Grid Safety: Rule E (3 tests)
-✓ Reserve Management (4 tests)
-✓ Parameter Management (4 tests)
-✓ View Functions (3 tests)
-✓ Emergency Functions (3 tests)
-✓ Integration: Full Flow (2 tests)
-✓ Treasury & Bonds (4 tests)
+Run the full suite:
 
-Total: 40 tests (all passing)
+```bash
+npx hardhat test   # 103 tests across 5 files (2026-06-07)
 ```
+
+| File | Tests |
+|---|---|
+| `test/SolarPunkCoin.test.js` | 58 |
+| `test/SolarPunkOption.test.js` | 20 |
+| `test/ProtocolTreasury.test.js` | 8 |
+| `test/SolarPunkCurrencySystem.test.js` | 6 |
+| `test/EnergyRevenueFloor.test.js` | 11 |
 
 ### Gas Benchmarks
 
@@ -197,42 +197,29 @@ Total: 40 tests (all passing)
 | `redeemForEnergy()` | 45,000 | 65,000 | ~$0.15 |
 | `transfer()` | 22,000 | 35,000 | ~$0.07 |
 
-*(Estimates at Polygon Mumbai gas price ~20 gwei)*
+*(Gas varies by network — Sepolia for current deployments)*
 
 ## 🚢 Deployment
 
-### Local Testing
+See [`../DEPLOYMENT_GUIDE.md`](../DEPLOYMENT_GUIDE.md) and [`../CONTRACT_ADDRESSES.md`](../CONTRACT_ADDRESSES.md).
+
+### Local / Hardhat
 
 ```bash
-# Terminal 1: Start local node
-npx hardhat node
-
-# Terminal 2: Deploy to local node
+npx hardhat node   # terminal 1
 npx hardhat run scripts/deploy.js --network localhost
+npm run deploy:pilot-stack:hardhat   # SPK + treasury + currency system
 ```
 
-Local deployments auto-deploy a MockUSDC reserve token and wire it into SolarPunkCoin.
-
-### Polygon Mumbai (Testnet)
+### Ethereum Sepolia (testnet)
 
 ```bash
-# Set private key in .env
-export PRIVATE_KEY="0x..."
-export RESERVE_TOKEN_ADDRESS="0x..." # USDC on Mumbai
-
-# Deploy
-npx hardhat run scripts/deploy.js --network mumbai
+# .env: PRIVATE_KEY, SEPOLIA_RPC
+npx hardhat run scripts/deploy_testnet_full.js --network sepolia
+npx hardhat run scripts/deploy_attested_spk_public_proof.js --network sepolia
 ```
 
-### Polygon Mainnet (Production)
-
-```bash
-# Set POLYGON_MAINNET_RPC in .env
-export RESERVE_TOKEN_ADDRESS="0x..." # USDC on Polygon
-npx hardhat run scripts/deploy.js --network mainnet
-```
-
-**Output:** Contract address for Etherscan verification
+**Not deployed for production.** No mainnet deployment in this repo.
 
 ## 📊 Simulation
 
@@ -424,7 +411,6 @@ MIT License - See LICENSE file
 
 ---
 
-**Status:** MVP Phase (Testnet Ready)  
-**Network:** Polygon Mumbai (Testnet) → Polygon Mainnet (Production)  
-**Deployment Date:** December 2025  
-**Version:** 1.0.0 (beta)
+**Status:** Thesis research prototype (Sepolia testnet + local Hardhat)  
+**Network:** Ethereum Sepolia  
+**Version:** See `package.json` and `CURRENT_STATUS.md`

@@ -30,6 +30,7 @@ jobs:
 
       - name: Install and Build
         run: |
+          test -f frontend/public/spk_v1.json || cp state/runtime/spk_v1.json frontend/public/spk_v1.json
           cd frontend
           npm install
           npm run build

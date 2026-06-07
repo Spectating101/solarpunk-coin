@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T10:33:52.448Z",
+  "generated_at": "2026-06-06T18:17:30.330Z",
   "network": "hardhat",
   "chain_id": 1337,
   "execution_scope": "local-reproducible",
@@ -40,12 +40,12 @@
     "recipient": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
     "window_start": 1770768000,
     "window_end": 1770854399,
-    "valid_after": 1778754782,
-    "valid_before": 1778841242,
-    "attestation_hash": "0xde934a1674df129d53bcb60d5a4e5018695538ccece9f77297b8ca9f72e6426b",
+    "valid_after": 1780769800,
+    "valid_before": 1780856260,
+    "attestation_hash": "0x9591b32b3e7fd166adf133923f0b2151128eabf57d2f040eb98d9f4295288940",
     "attestation_hash_consumed": true,
     "source_hash_consumed": true,
-    "signature": "0x91312450448a62457f2d97d5a7914495e89e1640caceb36d8a92debb7fd846aa2256e506e79f7e64e1c226cacd1b40645f5775b547005418f175d2edadd108d21c"
+    "signature": "0x32f0340a51eb455f9be7b24a67a4e021995a2c5764b228803928c9ff42ead5eb3e81c69221838aa917a5efeffbbb72c40c700d416182c199c2f67e9d92a894e61b"
   },
   "mint": {
     "expected_minted_wei": "130169700000000000000",
@@ -58,9 +58,9 @@
     "cumulative_surplus_kwh_after": "2606"
   },
   "transaction": {
-    "hash": "0xe855c487da56e819229558bc19ae4bf7ea959d73a6d7ad5e211c0cb01722dbd4",
+    "hash": "0xf8b7481908da07318bf9dae4b86bd87b7366261cf99841818c393ac727a7f07f",
     "block_number": 12,
-    "gas_used": "239354",
+    "gas_used": "239462",
     "status": 1
   }
 }

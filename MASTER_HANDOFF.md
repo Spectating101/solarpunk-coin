@@ -1,14 +1,16 @@
 # SolarPunk Protocol — Master Handoff Document
 
-**Date:** 2026-05-05
+**Date:** 2026-06-07 (numbers refreshed; narrative sections may lag)
 **Author:** Christopher Ongko (s1133958@mail.yzu.edu.tw)
 **Repo:** Solarpunk-bitcoin
 **GitHub:** https://github.com/Spectating101/solarpunk-coin
-**Supersedes:** `HANDOFF.md` (2026-04-20)
+**Supersedes:** `HANDOFF.md` (now a redirect)
 
-This document is the canonical, comprehensive handoff for the SolarPunk Protocol. It describes the project's purpose, current state, architecture, operations, design decisions and their rationale, outstanding items, and the strategic outlook (both grant prospects and career/value prospects). Anyone reading this without prior context should be able to fully orient themselves.
+Long-form context for architecture, design decisions, and history.
 
-**2026-05-19 delta:** For the freshest reviewer-facing status, read `CURRENT_STATUS.md` and `EVIDENCE.md` first. Since this handoff was written, the repo added the attestation-enabled SPK proof stack, `SolarPunkCurrencySystem`, the local SPK loop, the currency framework readiness reports, the multi-resource benchmark lab (`docs/product/RESOURCE_BENCHMARK_LAB.md`), the energy-standard economics spine (`docs/product/ENERGY_STANDARD_ECONOMICS.md`), the pilot CSV proof (`docs/product/PILOT_CSV_RECEIPT.md`), the inverter/meter adapter output (`docs/product/INVERTER_METER_ADAPTER.md`), the public solar replay (`docs/product/PUBLIC_SOLAR_DATA_REPLAY.md`), the generic operator data intake path (`docs/product/OPERATOR_DATA_INTAKE.md`), the data-request outreach packet (`docs/product/DATA_REQUEST_OUTREACH.md`), the commercial pilot packet (`docs/product/PILOT_COMMERCIAL_PACKET.md`), the hardware provenance model (`docs/product/HARDWARE_PROVENANCE_MODEL.md`), the closed-pilot execution package (`docs/product/CLOSED_PILOT_EXECUTION_PACKAGE.md`), the energy-money simulation (`docs/product/ENERGY_MONEY_SIMULATION.md`), the monetary stress harness (`docs/product/MONETARY_STRESS_HARNESS.md`), and the governed pilot-stack deploy/readback scaffold (`scripts/deploy_pilot_stack.js`, `scripts/read_pilot_stack.js`).
+> **Do not start here.** Read [`DOCS.md`](./DOCS.md) then [`CURRENT_STATUS.md`](./CURRENT_STATUS.md). This file is narrative history; numbers go stale.
+
+> **Canonical product:** SPK v1 on Sepolia (`0x8e189…` / `0x52016…`). Launch-grant-public-lab phase ended.
 
 ---
 
@@ -16,24 +18,20 @@ This document is the canonical, comprehensive handoff for the SolarPunk Protocol
 
 SolarPunk is a renewable-energy-backed decentralized derivatives protocol. It exists as **both** a Master's thesis at Yuan Ze University (Finance) **and** a working prototype on Ethereum Sepolia. The two purposes co-evolve — academic justification informs the design; the working implementation backs the academic claims.
 
-**As of 2026-05-05:**
-- 5 Solidity contracts deployed and source-verified on Sepolia
-- 79/79 tests passing (50 SolarPunkCoin + 21 SolarPunkOption + 8 ProtocolTreasury)
-- Safe multisig holds admin authority on the three core contracts; StabilityPool admin remains the deployer EOA
-- 24-hour governance timelock active on every parameter change
-- 100 USDC bond escrow in force for minter / oracle / liquidator roles
-- Daily NASA POWER → Sepolia oracle keeper running on GitHub Actions cron, with 9 successful keeper artifacts through 2026-05-05
-- Independent code review (Codex, April 2026) — 5 findings identified and fixed; regression tests added
-- Python pricing library `spk-derivatives` v0.5.0 published on PyPI
-- Frontend (Vite/React) reading live Sepolia state with 30-second polling
-- Maturity report (90-day jump-diffusion stress test, 80.24% unassisted survival rate at recommended 250% IM)
-- 7 grant drafts prepared, 3 refreshed against current state (Ethereum ESP, Chainlink BUILD, EF Academic)
+**As of 2026-06-07 (verify via `CURRENT_STATUS.md`):**
+- **109** Hardhat tests
+- **SPK v1 canonical:** energy-native SPK + CurrencySystem on Sepolia, verified on Etherscan, operator cycles running
+- **Archive stacks:** legacy Safe/options (`0x1D55…`), May 2026 attested proof (`0x8ceDa…`)
+- NASA keeper: stale since 2026-05-21
+- Independent code review (Codex, April 2026) — 5 findings fixed
+- Python SDK in `energy_derivatives/` — 10 pytest tests
+- Frontend — 9 Vitest tests; reads legacy Sepolia contracts
+- Maturity memo: 90-day stress test; 250% IM recommendation
 
-**What this is not yet:**
-- Not formally audited
-- Not on mainnet
-- 1-of-1 Safe (signer threshold to be expanded post-grant)
-- No counterparty pilots executed yet
+**What this is not:**
+- Not a product launch or mainnet deployment
+- Not formally audited for production
+- Not backed by live utility-grade meter provenance (fixtures/samples only)
 
 ---
 
@@ -49,13 +47,15 @@ The thesis investigates renewable-energy-backed monetary instruments and on-chai
 
 ### 1.2 Protocol layer (this repo)
 
-A three-contract core plus supporting infrastructure:
+Core plus supporting infrastructure:
 
-- **`SolarPunkCoin`** — energy-backed stablecoin with PI peg controller, oracle-gated minting, and mint/burn supply mechanics.
-- **`SolarPunkOption`** — European cash-settled options clearinghouse with margin, auto-liquidation, and series-based settlement. Live Sepolia config is currently 150% IM / 75% MM; the stress-tested next pilot target is 250% IM / 125% MM.
-- **`ProtocolTreasury`** — fee vault with 4-bucket budget split (operations / R&D / insurance / community) and keeper bond escrow with slashing.
-- **`StabilityPool`** — dedicated peg-stability vault with `DISBURSER_ROLE`-gated withdrawals (separated from the main coin contract for blast-radius isolation).
-- **`ChainlinkOracleAdapter`** — bridges `AggregatorV3Interface` feeds to internal contract surfaces; normalizes any decimal count to 1e18; manual fallback for energy price.
+- **`SolarPunkCoin`** — energy-linked token; PI peg; `mintFromSurplus` and `mintFromSurplusAttestation`; redemption burn.
+- **`SolarPunkOption`** — European cash-settled options; 150% IM / 75% MM on Sepolia (250% / 125% recommended in stress memo).
+- **`ProtocolTreasury`** — fee vault; 4-bucket budget split; keeper bond escrow.
+- **`StabilityPool`** — peg-stability inventory isolated from the coin contract.
+- **`ChainlinkOracleAdapter`** — external feed bridge to internal oracle surfaces.
+- **`SolarPunkCurrencySystem`** — invoice settlement and owed-kWh redemption registry (local tests / pilot stack).
+- **`EnergyRevenueFloor`** — revenue-floor pilot module; tested, not deployed on Sepolia.
 
 ### 1.3 Why this combination
 
@@ -81,14 +81,19 @@ The thesis explains *why* energy-backed derivatives matter (renewables face reve
 
 ### 2.2 Test posture
 
-| Suite | Tests passing | File |
+| Suite | Tests | File |
 |---|---|---|
-| `SolarPunkCoin` | 50 / 50 | `test/SolarPunkCoin.test.js` |
-| `SolarPunkOption` | 21 / 21 | `test/SolarPunkOption.test.js` |
-| `ProtocolTreasury` | 8 / 8 | `test/ProtocolTreasury.test.js` |
-| **Total** | **79 / 79** | |
+| `SolarPunkCoin` | 58 | `test/SolarPunkCoin.test.js` |
+| `SolarPunkOption` | 20 | `test/SolarPunkOption.test.js` |
+| `ProtocolTreasury` | 8 | `test/ProtocolTreasury.test.js` |
+| `SolarPunkCurrencySystem` | 6 | `test/SolarPunkCurrencySystem.test.js` |
+| `EnergyRevenueFloor` | 11 | `test/EnergyRevenueFloor.test.js` |
+| **Hardhat total** | **103** | |
+| Node product scripts | 92/93 | `test-node/*.test.js` |
+| Frontend | 9 | `frontend/src/**/*.test.jsx` |
+| Python SDK | 10 | `energy_derivatives/tests/` |
 
-Run with `npx hardhat test` (no compile flag needed; full suite ~4 seconds).
+Run with `npx hardhat test` (~5 seconds on a typical machine).
 
 ### 2.3 Operational state on-chain
 

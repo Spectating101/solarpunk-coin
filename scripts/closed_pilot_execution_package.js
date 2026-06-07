@@ -140,11 +140,12 @@ function buildActionQueue(launchGate, hardware, economic) {
   const lowest = economic.lowest_absolute_support_archetype || {};
   const actions = [
     {
-      id: "publish_public_lab",
+      id: "maintain_research_demo",
       owner: "SolarPunk",
-      status: launchGate.modes?.public_testnet_product?.status === "launchable" ? "ready_now" : "needs_repair",
-      command_or_artifact: "docs/product/PRODUCT_LAUNCH_GATE.md",
-      acceptance_criteria: "Public Lab gate remains launchable with 0 blocking checks.",
+      status: "ready_now",
+      command_or_artifact: "npx hardhat test && npm run proof:spk-attested-mint",
+      acceptance_criteria:
+        "Contract tests pass and the local attestation mint reproduces without Sepolia. Historical Sepolia proof JSON remains in state/proofs/.",
     },
     {
       id: "collect_l2_operator_source",
@@ -175,11 +176,11 @@ function buildActionQueue(launchGate, hardware, economic) {
       acceptance_criteria: `At minimum, the 10 kW path needs about ${money(lowest.required_realized_value_usd_per_kwh, 4)}/kWh realized value or ${money(lowest.annual_support_required_usd, 2)}/year support equivalent under current assumptions.`,
     },
     {
-      id: "rerun_gate",
+      id: "refresh_research_artifacts",
       owner: "SolarPunk",
-      status: "ready_after_inputs",
-      command_or_artifact: "npm run product:hardware-provenance && npm run product:economic-launch && npm run product:launch-gate",
-      acceptance_criteria: "Closed pilot gate moves from blocked to launchable, while paid/mainnet remains separately gated.",
+      status: "ready_on_demand",
+      command_or_artifact: "npm run product:hardware-provenance && npm run product:economic-launch && npm run product:empirics",
+      acceptance_criteria: "state/product/*.json reports regenerate from current inputs without manual edits.",
     },
   ];
   return actions;

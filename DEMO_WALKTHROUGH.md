@@ -1,5 +1,7 @@
 # DEMO WALKTHROUGH
 
+> **Partially stale:** Describes April 2026 legacy stack. For current product demo use `npm run spk:v1:launch` and the SPK v1 UI tab. See [`DOCS.md`](./DOCS.md).
+
 ## Purpose
 
 Show reviewers that the protocol mechanism works end-to-end — both locally and on a public testnet.
@@ -25,7 +27,7 @@ Deployed contracts: see [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md)
 ## Local quick run
 
 ```bash
-npx hardhat test                # 102/102 contract tests
+npx hardhat test                # 103/103 contract tests
 npm run product:field-receipt   # local mint -> settlement -> redemption -> delivery receipt
 npm run product:pilot-csv       # CSV export -> signed readings -> source hash -> SPK mint preview
 npm run product:monetary-stress # redemption-wave and shortfall reserve table

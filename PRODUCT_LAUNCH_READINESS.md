@@ -1,10 +1,12 @@
 # Product Launch Readiness
 
+> **Archival (2026-06-07):** Written for a product-launch phase that is no longer active. The repo is a **thesis research artifact**. See [`CURRENT_STATUS.md`](./CURRENT_STATUS.md).
+
 **Last updated:** 2026-05-21
 
 ## Product thesis
 
-The launchable product is SolarPunkCoin (SPK), not the broader research stack.
+SolarPunkCoin (SPK) was the narrow mechanism story for verified surplus minting — now documented as proof-of-concept in the thesis.
 
 The narrow claim is:
 

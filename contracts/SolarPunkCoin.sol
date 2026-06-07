@@ -23,7 +23,7 @@ interface IStabilityPool {
 
 /**
  * @title SolarPunkCoin (SPK)
- * @notice Energy-backed stablecoin pegged to renewable energy prices
+ * @notice Energy-issued network settlement token with optional peg overlay
  * @dev Implements Rules A-J from SolarPunkCoin design:
  *      A: Surplus-only issuance via oracle
  *      B: Intrinsic redemption guarantee for electricity
@@ -106,11 +106,25 @@ contract SolarPunkCoin is
     uint256 public minOracleBond = 0;
     uint256 public governanceDelay = 0;
 
-    /// @notice Energy price per kWh in USD (1e18 = $1.00). Set by oracle.
-    ///         Determines how many SPK are minted per kWh of surplus.
-    ///         Default 1e18 ($1.00/kWh) for backward compatibility.
+    /// @notice Issuance mode: 0 = dollar-translated (legacy), 1 = energy-native.
+    uint8 public constant ISSUANCE_DOLLAR_TRANSLATED = 0;
+    uint8 public constant ISSUANCE_ENERGY_NATIVE = 1;
+
+    /// @notice Default energy-native: SPK supply tracks verified surplus kWh directly.
+    uint8 public issuanceMode = ISSUANCE_ENERGY_NATIVE;
+
+    /// @notice kWh (1e18-scaled) represented by 1 whole SPK in energy-native mode.
+    uint256 public kwhPerSpkWad = 1e18;
+
+    /// @notice Energy price per kWh in USD (1e18 = $1.00). Used only in dollar-translated mode.
     uint256 public energyPricePerKwh = 1e18;
     uint256 public lastEnergyPriceUpdate = 0;
+
+    /// @notice Optional market reference USD/kWh for implied-value views. Does not change energy-native minting.
+    uint256 public referenceUsdPerKwh = 0;
+
+    /// @notice When false, oracle price updates are recorded but PI peg control is skipped.
+    bool public pegEnabled = false;
 
     /// @notice Fraction of mint fee routed to stability pool (basis points).
     ///         Remainder goes to treasury. Stability pool needs a token balance
@@ -159,6 +173,10 @@ contract SolarPunkCoin is
     event GovernanceActionCancelled(bytes32 indexed actionId);
     event GovernanceActionConsumed(bytes32 indexed actionId);
     event EnergyPriceUpdated(uint256 price, uint256 timestamp);
+    event IssuanceModeUpdated(uint8 newMode);
+    event KwhPerSpkUpdated(uint256 newKwhPerSpkWad);
+    event PegEnabledUpdated(bool enabled);
+    event ReferenceUsdPerKwhUpdated(uint256 price, uint256 timestamp);
     event StabilityFeeShareUpdated(uint256 newShare);
     event SurplusAttestationMinted(
         bytes32 indexed attestationHash,
@@ -346,9 +364,7 @@ contract SolarPunkCoin is
         require(surplusKwh > 0, "Surplus must be > 0");
         require(recipient != address(0), "Invalid recipient");
 
-        // SPK amount = surplusKwh × energyPricePerKwh (set by energy price oracle)
-        // e.g., 100 kWh × $0.05/kWh = $5 = 5 SPK (peg $1.00)
-        uint256 baseSPK = surplusKwh * energyPricePerKwh;
+        uint256 baseSPK = _baseSpkForSurplus(surplusKwh);
 
         // Apply minting fee (seigniorage)
         uint256 fee = Math.mulDiv(baseSPK, mintingFee, 10_000);
@@ -413,12 +429,23 @@ contract SolarPunkCoin is
         return adjusted;
     }
 
+    function _baseSpkForSurplus(uint256 surplusKwh) internal view returns (uint256) {
+        if (issuanceMode == ISSUANCE_ENERGY_NATIVE) {
+            require(kwhPerSpkWad > 0, "kwhPerSpk required");
+            return Math.mulDiv(surplusKwh * 1e18, 1e18, kwhPerSpkWad);
+        }
+        return surplusKwh * energyPricePerKwh;
+    }
+
     /**
      * @notice PI (Proportional-Integral) control loop
      * @dev When price deviates from peg, mint or burn to bring it back
      * @param currentPrice Current market price
      */
     function _applyPIControl(uint256 currentPrice) internal returns (bool) {
+        if (!pegEnabled) {
+            return false;
+        }
         int256 priceDelta = int256(currentPrice) - int256(pegTarget);
         bool adjusted = false;
         uint256 supply = totalSupply();
@@ -704,9 +731,8 @@ contract SolarPunkCoin is
 
     /**
      * @notice Update the energy price oracle (USD per kWh, 1e18 = $1.00)
-     * @dev Sets how many SPK are minted per kWh of verified surplus.
-     *      At $0.05/kWh: 100 kWh → 5 SPK. Requires ORACLE_ROLE.
-     * @param newPrice New energy price in USD (1e18 precision)
+     * @dev Dollar-translated mode only: sets how many SPK are minted per kWh.
+     *      Energy-native mode ignores this for issuance; use setReferenceUsdPerKwh for optional USD views.
      */
     function updateEnergyPrice(uint256 newPrice) external onlyOracle {
         _requireBond(msg.sender, minOracleBond, "oracle bond too low");
@@ -714,6 +740,50 @@ contract SolarPunkCoin is
         energyPricePerKwh = newPrice;
         lastEnergyPriceUpdate = block.timestamp;
         emit EnergyPriceUpdated(newPrice, block.timestamp);
+    }
+
+    /**
+     * @notice Optional USD/kWh reference for implied-value reporting in energy-native mode.
+     * @dev Does not change energy-native mint amounts.
+     */
+    function setReferenceUsdPerKwh(uint256 newPrice) external onlyOracle {
+        _requireBond(msg.sender, minOracleBond, "oracle bond too low");
+        require(newPrice > 0, "Price must be positive");
+        referenceUsdPerKwh = newPrice;
+        lastEnergyPriceUpdate = block.timestamp;
+        emit ReferenceUsdPerKwhUpdated(newPrice, block.timestamp);
+    }
+
+    function setIssuanceMode(uint8 newMode)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetIssuanceMode(newMode))
+    {
+        require(
+            newMode == ISSUANCE_DOLLAR_TRANSLATED || newMode == ISSUANCE_ENERGY_NATIVE,
+            "Invalid issuance mode"
+        );
+        issuanceMode = newMode;
+        emit IssuanceModeUpdated(newMode);
+    }
+
+    function setKwhPerSpk(uint256 newKwhPerSpkWad)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetKwhPerSpk(newKwhPerSpkWad))
+    {
+        require(newKwhPerSpkWad > 0, "kwhPerSpk required");
+        kwhPerSpkWad = newKwhPerSpkWad;
+        emit KwhPerSpkUpdated(newKwhPerSpkWad);
+    }
+
+    function setPegEnabled(bool enabled)
+        external
+        onlyOwner
+        onlyGovernanceApproved(actionIdSetPegEnabled(enabled))
+    {
+        pegEnabled = enabled;
+        emit PegEnabledUpdated(enabled);
     }
 
     /**
@@ -779,9 +849,39 @@ contract SolarPunkCoin is
         view
         returns (uint256)
     {
-        uint256 baseSPK = surplusKwh * energyPricePerKwh;
+        uint256 baseSPK = _baseSpkForSurplus(surplusKwh);
         uint256 fee = (baseSPK * mintingFee) / 10000;
         return baseSPK - fee;
+    }
+
+    /**
+     * @notice Convert an SPK balance into owed kWh under the active issuance mode.
+     */
+    function quoteRedemptionKwh(uint256 spkAmount) external view returns (uint256 owedKwhWad) {
+        require(spkAmount > 0, "Amount must be > 0");
+        if (issuanceMode == ISSUANCE_ENERGY_NATIVE) {
+            return Math.mulDiv(spkAmount, kwhPerSpkWad, 1e18);
+        }
+        require(energyPricePerKwh > 0, "energy price required");
+        return Math.mulDiv(spkAmount, 1e18, energyPricePerKwh);
+    }
+
+    /**
+     * @notice Implied USD/SPK from optional reference tariff (energy-native) or issuance price (dollar mode).
+     */
+    function impliedUsdPerSpk() external view returns (uint256) {
+        if (issuanceMode == ISSUANCE_ENERGY_NATIVE) {
+            if (referenceUsdPerKwh == 0) return 0;
+            return Math.mulDiv(kwhPerSpkWad, referenceUsdPerKwh, 1e18);
+        }
+        return energyPricePerKwh;
+    }
+
+    function redemptionBasisWad() external view returns (uint256) {
+        if (issuanceMode == ISSUANCE_ENERGY_NATIVE) {
+            return kwhPerSpkWad;
+        }
+        return energyPricePerKwh;
     }
 
     /**
@@ -873,6 +973,18 @@ contract SolarPunkCoin is
         returns (bytes32)
     {
         return keccak256(abi.encode("UPDATE_RESERVE_PARAMETERS", newMinReserveMarginPercent));
+    }
+
+    function actionIdSetIssuanceMode(uint8 newMode) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_ISSUANCE_MODE", newMode));
+    }
+
+    function actionIdSetKwhPerSpk(uint256 newKwhPerSpkWad) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_KWH_PER_SPK", newKwhPerSpkWad));
+    }
+
+    function actionIdSetPegEnabled(bool enabled) public pure returns (bytes32) {
+        return keccak256(abi.encode("SET_PEG_ENABLED", enabled));
     }
 
     function actionIdSetStabilityFeeShare(uint256 newShare) public pure returns (bytes32) {
