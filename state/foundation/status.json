@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-08T15:58:21.332120+00:00",
+  "generated_at": "2026-06-08T17:00:00.418596+00:00",
   "horizon": "structural",
   "network": "sepolia",
   "chain_id": 11155111,
   "status": "operating",
-  "synced_at": "2026-06-08T15:58:21.329204Z",
+  "synced_at": "2026-06-08T16:59:59.637011Z",
   "anchor": {
     "kwh_per_spk": 1.0,
-    "cumulative_surplus_kwh": 5464.0
+    "cumulative_surplus_kwh": 5514.0
   },
   "usd_translation": {
     "reference_usd_per_kwh": 0.05,
-    "implied_supply_usd": 272.70050000000003,
-    "implied_settled_usd": 20.200000000000003,
+    "implied_supply_usd": 274.95075,
+    "implied_settled_usd": 22.1,
     "note": "Reference valuation layer \u2014 not a live market peg."
   },
   "peg": {
@@ -21,25 +21,25 @@
     "secondary_sink": "optional_energy_redemption"
   },
   "circulation": {
-    "total_supply_spk": 5454.01,
-    "total_settled_spk": 404.0,
-    "total_redeemed_spk": 10.0,
-    "circulation_share_percent": 97.58,
-    "network_payment_count": 17
+    "total_supply_spk": 5499.015,
+    "total_settled_spk": 442.0,
+    "total_redeemed_spk": 15.0,
+    "circulation_share_percent": 96.71,
+    "network_payment_count": 21
   },
   "constraints": {
     "data": {
-      "cumulative_surplus_kwh": 5464.0
+      "cumulative_surplus_kwh": 5514.0
     },
     "issuance": {
-      "total_supply_spk": 5454.01
+      "total_supply_spk": 5499.015
     },
     "pricing": {
       "reference_usd_per_kwh": 0.05
     },
     "settlement": {
-      "network_payment_count": 17,
-      "total_settled_spk": 404.0
+      "network_payment_count": 21,
+      "total_settled_spk": 442.0
     },
     "governance": {
       "peg_enabled": false
@@ -52,13 +52,13 @@
   },
   "latest_payment": {
     "type": "network_payment",
-    "payment_id": 17,
+    "payment_id": 21,
     "payer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
-    "payee": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
-    "spk": 10.0,
-    "payment_kind": "LABOR",
-    "invoice_hash": "0x3805b147480430fe8e232aa47cbb7b9e63ebabcd4df3bdf92d5744fcb9035e79",
-    "block_number": 11015815,
-    "tx_hash": "0x2fd62cdcf93fb38b7bb6d827ca141ad3ba1559611844b38a2ad63ec42dc59ba8"
+    "payee": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+    "spk": 8.0,
+    "payment_kind": "NETWORK",
+    "invoice_hash": "0x13695c268ff16726f34b6a04a60c0d9de53c45a9be8b581b4d82e61ec1a2ed91",
+    "block_number": 11016677,
+    "tx_hash": "0x5a72cc73cbc658afaa9739783e665281eb2e41d0448335bbba9c2d0797a75746"
   }
 }
