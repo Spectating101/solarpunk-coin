@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ethers } from 'ethers';
 import { ArrowUpRight, RefreshCw, Send, Wallet } from 'lucide-react';
 import SPK_ABI from '../abi/SolarPunkCoin.json';
 import CURRENCY_ABI from '../abi/SolarPunkCurrencySystem.json';
 import { SEPOLIA_EXPLORER } from '../constants/contracts';
 import { buildPayees } from '../lib/payees';
+import { sendNetworkPayment } from '../lib/pay';
 import { loadSpkV1Runtime } from '../lib/runtime';
 import { ensureSepolia } from '../lib/wallet';
 import useSpkV1Live from '../hooks/useSpkV1Live';
@@ -26,13 +26,14 @@ function formatSyncedAt(iso) {
   }
 }
 
-export default function SpkV1Console({ provider, signer, account, onConnect, connecting }) {
+export default function SpkV1Console({ provider, signer, account, onConnect, connecting, wrongNetwork = false }) {
   const [runtime, setRuntime] = useState(null);
   const [error, setError] = useState(null);
   const [amount, setAmount] = useState('5');
   const [payeeId, setPayeeId] = useState('merchant');
   const [payStatus, setPayStatus] = useState({ state: 'idle', message: '' });
-  const live = useSpkV1Live(runtime, account);
+  const [liveRefreshKey, setLiveRefreshKey] = useState(0);
+  const live = useSpkV1Live(runtime, account, liveRefreshKey);
 
   const payees = useMemo(() => buildPayees(runtime), [runtime]);
 
@@ -69,10 +70,20 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
   const syncedAt = runtime?.synced_at || runtime?.updated_at;
 
   const parsedAmount = Number(amount);
-  const canPay = account && signer && parsedAmount > 0 && (balance == null || parsedAmount <= balance);
+  const canPay = (
+    account
+    && signer
+    && !wrongNetwork
+    && parsedAmount > 0
+    && (balance == null || parsedAmount <= balance)
+  );
 
   const pay = async () => {
     if (!signer || !spkAddress || !currencyAddress || !payee) return;
+    if (wrongNetwork) {
+      setPayStatus({ state: 'error', message: 'Switch MetaMask to Sepolia first.' });
+      return;
+    }
     if (!parsedAmount || parsedAmount <= 0) {
       setPayStatus({ state: 'error', message: 'Enter a positive SPK amount.' });
       return;
@@ -82,17 +93,31 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
       return;
     }
 
-    setPayStatus({ state: 'pending', message: 'Confirm in wallet…' });
+    setPayStatus({ state: 'pending', message: 'Step 1/2: approve SPK in wallet…' });
     try {
       await ensureSepolia(provider);
-      const spk = new ethers.Contract(spkAddress, SPK_ABI, signer);
-      const currency = new ethers.Contract(currencyAddress, CURRENCY_ABI, signer);
-      const wei = ethers.parseEther(String(parsedAmount));
-      const invoiceHash = ethers.id(`spk-v1:ui:${Date.now()}:${payee.id}`);
-      await (await spk.approve(currencyAddress, wei)).wait();
-      const tx = await currency.settleNetworkPayment(payee.address, wei, invoiceHash, ethers.id(payee.role));
-      const receipt = await tx.wait();
-      setPayStatus({ state: 'ok', message: `Sent ${amount} SPK to ${payee.label}.`, txHash: receipt.hash });
+      const { receipt } = await sendNetworkPayment({
+        signer,
+        spkAddress,
+        currencyAddress,
+        spkAbi: SPK_ABI,
+        currencyAbi: CURRENCY_ABI,
+        payeeAddress: payee.address,
+        amountSpk: parsedAmount,
+        payeeRole: payee.role,
+        payeeId: payee.id,
+        onStep: (step) => {
+          if (step === 'settle') {
+            setPayStatus({ state: 'pending', message: 'Step 2/2: confirm network payment…' });
+          }
+        },
+      });
+      setPayStatus({
+        state: 'ok',
+        message: `Sent ${amount} SPK to ${payee.label}. Balance updates live; payment table refreshes after sync.`,
+        txHash: receipt.hash,
+      });
+      setLiveRefreshKey((k) => k + 1);
       reload();
     } catch (err) {
       setPayStatus({ state: 'error', message: err.shortMessage || err.message });

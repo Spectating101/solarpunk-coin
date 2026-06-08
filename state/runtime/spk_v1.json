@@ -39,11 +39,11 @@
   "deploy_gas_spent_eth": 0.010914547113359475,
   "genesis": {
     "metrics": {
-      "total_settled_spk": 383.0,
+      "total_settled_spk": 388.0,
       "total_redeemed_spk": 10.0,
-      "circulation_share_percent": 97.45,
-      "redemption_share_percent": 2.55,
-      "network_payment_count": 14
+      "circulation_share_percent": 97.48,
+      "redemption_share_percent": 2.52,
+      "network_payment_count": 15
     },
     "note": "Synced from on-chain state."
   },
@@ -54,16 +54,16 @@
     "attached_currency_system": "0x3Fa51B6631282e7a9f4CBFB7D764748831D9Ca47",
     "note": "Previous attach stack kept for history; v1 lean stack is canonical after this deploy."
   },
-  "synced_at": "2026-06-07T18:42:07.791728Z",
+  "synced_at": "2026-06-08T09:45:56.348799Z",
   "on_chain": {
-    "deployer_spk_balance": 5198.303000000001,
+    "deployer_spk_balance": 5148.303,
     "total_supply_spk": 5404.01,
     "cumulative_surplus_kwh": 5414,
     "issuance_mode": 1,
     "peg_enabled": false,
     "kwh_per_spk": "1.0"
   },
-  "updated_at": "2026-06-07T18:42:07.792049Z",
+  "updated_at": "2026-06-08T09:45:56.349050Z",
   "operations": [
     {
       "cycle_id": "2026-06-07T15-36-04-187Z",
@@ -315,7 +315,7 @@
   "counterparty_balances_spk": {
     "gateway": 32.0,
     "maintenance": 60.0,
-    "merchant": 95.0,
+    "merchant": 100.0,
     "network_peer": 16.0
   },
   "deploy_block": 11009402,
@@ -477,6 +477,17 @@
         "invoice_hash": "0x09dfc2f2ddd19a4fb5ca41847088acb3512927d3c3dbf0fbe00124864dece961",
         "block_number": 11009730,
         "tx_hash": "0x2b8e8efb9ff2e8191ac751ba86c79e2ff2b78a84568dbdc531a2d23fe3c8d99c"
+      },
+      {
+        "type": "network_payment",
+        "payment_id": 15,
+        "payer": "0xaC39F4a71A69fF24a6aeEA12A24C45396027Aec0",
+        "payee": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+        "spk": 5.0,
+        "payment_kind": "GOODS",
+        "invoice_hash": "0xf64f45cad48263a6f73eeff79f4e6a07c2fadf11d79ba5581090ea3ceae10767",
+        "block_number": 11014542,
+        "tx_hash": "0xbd7bb0e540dda4adb00d4e029ce6ff34ecab8d3c0ab3c96719281d645857d57f"
       }
     ],
     "redemption_ledger": [
@@ -507,9 +518,9 @@
       "SERVICE": 32.0,
       "LABOR": 60.0,
       "NETWORK": 196.0,
-      "GOODS": 95.0
+      "GOODS": 100.0
     },
-    "payment_count": 14,
+    "payment_count": 15,
     "redemption_count": 2
   }
 }

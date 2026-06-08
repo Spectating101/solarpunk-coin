@@ -11,6 +11,7 @@ function App() {
   const [signer, setSigner] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [chainId, setChainId] = useState(null);
+  const [connectError, setConnectError] = useState(null);
 
   const refreshChain = useCallback(async (p) => {
     if (!p) return;
@@ -55,8 +56,12 @@ function App() {
   }, [refreshChain]);
 
   const connectWallet = async () => {
-    if (!provider) return;
+    if (!provider) {
+      setConnectError('MetaMask not detected. Install the extension and reload this page.');
+      return;
+    }
     setIsConnecting(true);
+    setConnectError(null);
     try {
       await ensureSepolia(provider);
       const accounts = await provider.send('eth_requestAccounts', []);
@@ -64,6 +69,8 @@ function App() {
       setSigner(await provider.getSigner());
       await refreshChain(provider);
     } catch (error) {
+      const message = error?.shortMessage || error?.message || 'Wallet connection failed';
+      setConnectError(message);
       console.error('Connection failed', error);
     } finally {
       setIsConnecting(false);
@@ -100,6 +107,13 @@ function App() {
         </div>
       </header>
 
+      {connectError ? (
+        <div className="spk-network-banner spk-error-banner" role="alert">
+          <AlertTriangle size={16} />
+          {connectError}
+        </div>
+      ) : null}
+
       {wrongNetwork ? (
         <div className="spk-network-banner" role="status">
           <AlertTriangle size={16} />
@@ -114,6 +128,7 @@ function App() {
         account={account}
         onConnect={connectWallet}
         connecting={isConnecting}
+        wrongNetwork={wrongNetwork}
       />
     </div>
   );

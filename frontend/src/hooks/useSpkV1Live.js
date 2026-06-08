@@ -6,7 +6,7 @@ import { SEPOLIA_RPC_URL } from '../constants/contracts';
 
 const POLL_MS = 25_000;
 
-export default function useSpkV1Live(runtime, account = null) {
+export default function useSpkV1Live(runtime, account = null, refreshKey = 0) {
   const [live, setLive] = useState({ status: 'idle', data: null, error: null });
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function useSpkV1Live(runtime, account = null) {
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [runtime, account]);
+  }, [runtime, account, refreshKey]);
 
   return live;
 }

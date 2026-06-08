@@ -1879,6 +1879,12 @@ p {
   font-size: 14px;
 }
 
+.spk-error-banner {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+}
+
 .ghost-link.compact {
   padding: 6px 10px;
   font-size: 12px;
