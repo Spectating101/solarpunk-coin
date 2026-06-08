@@ -34,8 +34,9 @@ jobs:
           cd frontend
           npm install
           npm run build
-          # Fix for Vite base path on custom domains/subpaths
-          # (Optional: Only if you see asset loading errors)
+
+      - name: Mirror demo to docs/demo (branch Pages)
+        run: bash scripts/publish_demo_to_docs.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

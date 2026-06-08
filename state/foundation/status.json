@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-08T15:20:06.211752+00:00",
+  "generated_at": "2026-06-08T15:58:21.332120+00:00",
   "horizon": "structural",
   "network": "sepolia",
   "chain_id": 11155111,
   "status": "operating",
-  "synced_at": "2026-06-08T15:20:06.210776Z",
+  "synced_at": "2026-06-08T15:58:21.329204Z",
   "anchor": {
     "kwh_per_spk": 1.0,
     "cumulative_surplus_kwh": 5464.0

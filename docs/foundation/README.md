@@ -11,6 +11,7 @@ Product canon for the energy-anchored monetary stack.
 | [GOVERNANCE.md](./GOVERNANCE.md) | Multisig handoff |
 | [OPERATOR.md](./OPERATOR.md) | Weekly ops + gas |
 | [PILOT_PLAYBOOK.md](./PILOT_PLAYBOOK.md) | Minimal closed-loop demo |
+| [WHEN_YOU_RETURN.md](./WHEN_YOU_RETURN.md) | Gas + thesis deferred checklist |
 
 ## Commands
 
@@ -19,6 +20,7 @@ npm run foundation:health        # gas + sync — run first
 npm run foundation:sync          # Sepolia sync + foundation export
 npm run foundation:cycle         # operator cycle (needs gas)
 npm run foundation:refresh       # sync + publish live demo
+npm run foundation:daily         # sync + health + peg + publish (no cycle)
 npm run foundation:publish-docs
 npm run spk:v1:api               # GET /v1/foundation when API is up
 npm run foundation:peg-check

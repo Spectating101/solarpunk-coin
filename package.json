@@ -62,6 +62,7 @@
     "foundation:health": "node scripts/foundation_health.js",
     "foundation:cycle:meter": "bash scripts/foundation_cycle_meter.sh",
     "foundation:refresh": "npm run foundation:sync && npm run foundation:publish-docs",
+    "foundation:daily": "bash scripts/foundation_daily.sh",
     "spk:v1:verify:sepolia": "hardhat run scripts/verify_spk_v1_sepolia.js --network sepolia",
     "spk:v1:test": "node --test test-node/spk_v1_launch.test.js",
     "product:currency-lab": "node scripts/currency_system_lab.js",
