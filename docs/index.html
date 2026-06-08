@@ -2,97 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=./demo/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SolarPunk Protocol</title>
-    <style>
-      :root {
-        color-scheme: dark;
-        --bg: #070d08;
-        --surface: #0d1710;
-        --border: #1b3422;
-        --green: #34d399;
-        --amber: #d97706;
-        --text: #e4efe5;
-        --muted: #719277;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        background:
-          radial-gradient(circle at 20% 10%, rgba(52, 211, 153, 0.12), transparent 28rem),
-          linear-gradient(145deg, #070d08, #0a120c 52%, #080b07);
-        color: var(--text);
-        font-family: ui-sans-serif, system-ui, sans-serif;
-      }
-
-      main {
-        width: min(780px, calc(100% - 32px));
-        padding: 34px;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        background: rgba(13, 23, 16, 0.86);
-      }
-
-      h1 {
-        margin: 0;
-        font-size: clamp(38px, 8vw, 76px);
-        line-height: 0.95;
-        font-family: Georgia, serif;
-        font-weight: 400;
-      }
-
-      p {
-        max-width: 640px;
-        color: var(--muted);
-        line-height: 1.7;
-      }
-
-      nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 24px;
-      }
-
-      a {
-        padding: 11px 14px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        color: var(--text);
-        text-decoration: none;
-      }
-
-      a.primary {
-        border-color: rgba(52, 211, 153, 0.35);
-        background: rgba(52, 211, 153, 0.12);
-        color: var(--green);
-      }
-
-      .note {
-        margin-top: 22px;
-        color: var(--amber);
-        font-size: 13px;
-      }
-    </style>
+    <title>SolarPunk SPK v1</title>
+    <script>location.replace('./demo/');</script>
   </head>
   <body>
-    <main>
-      <h1>SolarPunk Protocol</h1>
-      <p>
-        Open-source Ethereum testnet prototype for renewable-energy hedging:
-        NASA POWER data, source-verified Sepolia contracts, daily keeper proofs,
-        and a live proof dashboard.
-      </p>
-      <nav>
-        <a class="primary" href="https://spectating101.github.io/solarpunk-coin/">Open Live Demo</a>
-        <a href="https://github.com/Spectating101/solarpunk-coin">GitHub</a>
-        <a href="./grants/REVIEWER_PACKET.md">Reviewer Packet</a>
-        <a href="./project/DAILY_EXPERIMENT_STATUS.md">Daily Experiment</a>
-      </nav>
-      <div class="note">Prototype-stage Sepolia deployment. Not audited. Not mainnet.</div>
-    </main>
+    <p><a href="./demo/">Open SPK v1 demo</a></p>
   </body>
 </html>
