@@ -9,12 +9,15 @@ from pydantic import BaseModel, Field
 from spk_v1 import __version__
 from spk_v1.service import (
     default_repo_root,
+    get_foundation_snapshot,
     get_metrics_summary,
     get_runtime,
     list_payments,
     run_export_evidence,
     run_export_lake,
+    run_foundation_export,
     run_sync,
+    run_sync_and_foundation,
 )
 
 app = FastAPI(
@@ -78,6 +81,34 @@ def payments_endpoint(
 def sync_endpoint(rpc_url: str | None = Query(None)) -> dict[str, Any]:
     try:
         return run_sync(rpc_url=rpc_url)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ConnectionError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@app.get("/v1/foundation")
+def foundation_endpoint() -> dict[str, Any]:
+    try:
+        return get_foundation_snapshot()
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/v1/foundation/export")
+def foundation_export_endpoint() -> dict[str, Any]:
+    try:
+        return run_foundation_export()
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/v1/foundation/sync")
+def foundation_sync_endpoint(rpc_url: str | None = Query(None)) -> dict[str, Any]:
+    try:
+        return run_sync_and_foundation(rpc_url=rpc_url)
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ConnectionError as exc:

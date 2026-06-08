@@ -70,9 +70,19 @@ Not claimed: mainnet readiness, legal tender, revenue-grade meter finality, prod
 
 ---
 
-## Thesis
+## Monetary foundation
 
-Finance Master's thesis (Yuan Ze University) runs **alongside** the build. Chapter 5 uses SPK v1 Sepolia evidence as implementation proof for the five-constraint framework. Canonical framing: [`thesis_package/THESIS_SOURCE_OF_TRUTH.md`](./thesis_package/THESIS_SOURCE_OF_TRUTH.md).
+Energy-anchored network money with **USD translation** — monetary-design space, not L1 chain competition.
+
+- [`docs/foundation/MONETARY_FOUNDATION.md`](./docs/foundation/MONETARY_FOUNDATION.md) — north star
+- [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) — live metrics (generated)
+
+```bash
+npm run foundation:build   # export foundation status from runtime
+npm run foundation:sync    # Sepolia sync + foundation export
+npm run foundation:cycle   # operator cycle + sync + foundation
+npm run spk:v1:api         # GET /v1/foundation
+```
 
 ---
 

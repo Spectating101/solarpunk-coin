@@ -54,7 +54,7 @@
     "attached_currency_system": "0x3Fa51B6631282e7a9f4CBFB7D764748831D9Ca47",
     "note": "Previous attach stack kept for history; v1 lean stack is canonical after this deploy."
   },
-  "synced_at": "2026-06-08T09:45:56.348799Z",
+  "synced_at": "2026-06-08T13:40:06.118962Z",
   "on_chain": {
     "deployer_spk_balance": 5148.303,
     "total_supply_spk": 5404.01,
@@ -63,7 +63,7 @@
     "peg_enabled": false,
     "kwh_per_spk": "1.0"
   },
-  "updated_at": "2026-06-08T09:45:56.349050Z",
+  "updated_at": "2026-06-08T13:40:06.119215Z",
   "operations": [
     {
       "cycle_id": "2026-06-07T15-36-04-187Z",

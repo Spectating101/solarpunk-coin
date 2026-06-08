@@ -1,6 +1,6 @@
 # SPK v1 — Network Money (Testnet Launch)
 
-SPK v1 is the **primary product**: energy-attested network money on Ethereum testnet. Not a thesis appendix. Not a lab layer.
+SPK v1 is the **primary product**: energy-attested network money on Ethereum testnet. Foundation docs: [`../foundation/README.md`](../foundation/README.md).
 
 ## Monetary constitution
 

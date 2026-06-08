@@ -26,8 +26,8 @@ if [[ "${SPK_V1_SKIP_LIVE:-0}" != "1" ]]; then
   "$VENV/bin/spk-v1" sync --repo-root "$ROOT"
 fi
 
-echo "==> CLI export-evidence"
-"$VENV/bin/spk-v1" export-evidence --repo-root "$ROOT"
+echo "==> CLI foundation export"
+"$VENV/bin/spk-v1" foundation --repo-root "$ROOT"
 
 echo "==> API smoke (uvicorn background)"
 "$VENV/bin/spk-v1-api" &
@@ -37,6 +37,8 @@ sleep 2
 curl -fsS "http://127.0.0.1:${SPK_V1_API_PORT:-8787}/health" | head -c 200
 echo
 curl -fsS "http://127.0.0.1:${SPK_V1_API_PORT:-8787}/v1/metrics" | head -c 300
+echo
+curl -fsS "http://127.0.0.1:${SPK_V1_API_PORT:-8787}/v1/foundation" | head -c 300
 echo
 
 echo "backend_check_ok"

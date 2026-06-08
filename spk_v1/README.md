@@ -49,7 +49,9 @@ No PyPI publish required — editable local install is the packaging boundary.
 | Command | Purpose |
 |---------|---------|
 | `spk-v1 sync` | Pull live Sepolia state into `state/runtime/spk_v1.json` + `frontend/public/spk_v1.json` |
-| `spk-v1 export-evidence` | Write `thesis_package/SPK_V1_EVIDENCE.md` |
+| `spk-v1 foundation` | Export `docs/foundation/FOUNDATION_STATUS.md` + `state/foundation/status.json` |
+| `spk-v1 foundation-sync` | Sync Sepolia + export foundation status |
+| `spk-v1 export-evidence` | Write `thesis_package/SPK_V1_EVIDENCE.md` (optional) |
 | `spk-v1 export-lake` | Export runtime + payment ledger JSONL for research lakes (Sharpe, etc.) |
 | `spk-v1 show-metrics` | Print current metrics from runtime file |
 
@@ -60,6 +62,8 @@ No PyPI publish required — editable local install is the packaging boundary.
 | GET | `/health` | Service + repo root probe |
 | GET | `/v1/runtime` | Full runtime JSON |
 | GET | `/v1/metrics` | Summary metrics |
+| GET | `/v1/foundation` | Monetary foundation snapshot |
+| POST | `/v1/foundation/sync` | Sync chain + export foundation status |
 | GET | `/v1/payments` | Payment ledger (`limit`, `payment_kind`) |
 | POST | `/v1/sync` | On-chain sync (slow; uses Sepolia RPC) |
 | POST | `/v1/export/evidence` | Thesis evidence markdown |

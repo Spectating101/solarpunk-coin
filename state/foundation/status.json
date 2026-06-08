@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-06-08T13:40:06.119890+00:00",
+  "horizon": "structural",
+  "network": "sepolia",
+  "chain_id": 11155111,
+  "status": "operating",
+  "synced_at": "2026-06-08T13:40:06.118962Z",
+  "anchor": {
+    "kwh_per_spk": 1.0,
+    "cumulative_surplus_kwh": 5414.0
+  },
+  "usd_translation": {
+    "reference_usd_per_kwh": 0.05,
+    "implied_supply_usd": 270.20050000000003,
+    "implied_settled_usd": 19.400000000000002,
+    "note": "Reference valuation layer \u2014 not a live market peg."
+  },
+  "peg": {
+    "enabled": false,
+    "primary_use": "network_circulation",
+    "secondary_sink": "optional_energy_redemption"
+  },
+  "circulation": {
+    "total_supply_spk": 5404.01,
+    "total_settled_spk": 388.0,
+    "total_redeemed_spk": 10.0,
+    "circulation_share_percent": 97.48,
+    "network_payment_count": 15
+  },
+  "constraints": {
+    "data": {
+      "cumulative_surplus_kwh": 5414.0
+    },
+    "issuance": {
+      "total_supply_spk": 5404.01
+    },
+    "pricing": {
+      "reference_usd_per_kwh": 0.05
+    },
+    "settlement": {
+      "network_payment_count": 15,
+      "total_settled_spk": 388.0
+    },
+    "governance": {
+      "peg_enabled": false
+    }
+  },
+  "contracts": {
+    "mock_usdc": "0xaD2A7169CfFBA9Bef8C45515fc85178DbBfEc2C9",
+    "solar_punk_coin": "0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128",
+    "currency_system": "0x520162252F9B94824417678525FFd69145014970"
+  },
+  "latest_payment": {
+    "type": "network_payment",
+    "payment_id": 1,
+    "payer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+    "payee": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "spk": 12.0,
+    "payment_kind": "SERVICE",
+    "invoice_hash": "0xc35c53c47cf65139ce697c5c756aa50caa78fadb0b2bde9f7bdad41ba65837b9",
+    "block_number": 11009412,
+    "tx_hash": "0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b"
+  }
+}

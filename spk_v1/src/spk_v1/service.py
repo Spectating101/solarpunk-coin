@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from spk_v1.evidence import export_evidence_markdown
+from spk_v1.foundation import build_foundation_snapshot, export_foundation_status
 from spk_v1.lake import export_data_lake
 from spk_v1.runtime import read_runtime, runtime_paths, sync_runtime
 
@@ -65,6 +66,32 @@ def run_sync(repo_root: str | Path | None = None, *, rpc_url: str | None = None)
         "synced_at": runtime.get("synced_at"),
         "total_supply_spk": (runtime.get("on_chain") or {}).get("total_supply_spk"),
     }
+
+
+def get_foundation_snapshot(repo_root: str | Path | None = None) -> dict[str, Any]:
+    runtime = get_runtime(repo_root)
+    return build_foundation_snapshot(runtime)
+
+
+def run_foundation_export(repo_root: str | Path | None = None) -> dict[str, Any]:
+    root = Path(repo_root or default_repo_root())
+    runtime = get_runtime(root)
+    result = export_foundation_status(runtime, root)
+    return {
+        "ok": True,
+        "status_md": result["status_md"],
+        "status_json": result["status_json"],
+        "snapshot": result["snapshot"],
+    }
+
+
+def run_sync_and_foundation(
+    repo_root: str | Path | None = None, *, rpc_url: str | None = None
+) -> dict[str, Any]:
+    root = Path(repo_root or default_repo_root())
+    sync_result = run_sync(root, rpc_url=rpc_url)
+    foundation_result = run_foundation_export(root)
+    return {**sync_result, **foundation_result}
 
 
 def run_export_evidence(repo_root: str | Path | None = None) -> dict[str, Any]:

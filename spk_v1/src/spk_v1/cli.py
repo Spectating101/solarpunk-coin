@@ -10,7 +10,9 @@ from spk_v1.service import (
     get_metrics_summary,
     run_export_evidence,
     run_export_lake,
+    run_foundation_export,
     run_sync,
+    run_sync_and_foundation,
 )
 
 
@@ -32,6 +34,16 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("export-evidence", parents=[common], help="Write thesis_package/SPK_V1_EVIDENCE.md").set_defaults(
         func="export-evidence"
     )
+
+    sub.add_parser("foundation", parents=[common], help="Export docs/foundation/FOUNDATION_STATUS.md").set_defaults(
+        func="foundation"
+    )
+
+    foundation_sync = sub.add_parser(
+        "foundation-sync", parents=[common], help="Sync Sepolia runtime and export foundation status"
+    )
+    foundation_sync.add_argument("--rpc-url", default=None)
+    foundation_sync.set_defaults(func="foundation-sync")
 
     lake = sub.add_parser("export-lake", parents=[common], help="Export data_lake/spk_v1 bundle for research repos")
     lake.add_argument("--out-root", type=Path, required=True)
@@ -57,6 +69,14 @@ def main(argv: list[str] | None = None) -> int:
         elif args.func == "export-evidence":
             result = run_export_evidence(root)
             print(f"wrote {result['path']}")
+        elif args.func == "foundation":
+            result = run_foundation_export(root)
+            print(f"wrote {result['status_md']}")
+        elif args.func == "foundation-sync":
+            result = run_sync_and_foundation(root, rpc_url=args.rpc_url)
+            print("spk_v1_foundation_synced")
+            print(f"payments_indexed={result.get('payments_indexed')}")
+            print(f"wrote {result.get('status_md')}")
         elif args.func == "export-lake":
             print(json.dumps(run_export_lake(root, out_root=args.out_root), indent=2))
         elif args.func == "show-metrics":

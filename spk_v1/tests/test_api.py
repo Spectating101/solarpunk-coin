@@ -55,6 +55,17 @@ def test_metrics_and_payments(client: TestClient):
     assert body["rows"][0]["payment_kind"] == "SERVICE"
 
 
+def test_foundation_endpoints(client: TestClient):
+    snap = client.get("/v1/foundation")
+    assert snap.status_code == 200
+    body = snap.json()
+    assert body["circulation"]["total_supply_spk"] == 100.0
+
+    exported = client.post("/v1/foundation/export")
+    assert exported.status_code == 200
+    assert Path(exported.json()["status_md"]).exists()
+
+
 def test_export_evidence(client: TestClient):
     res = client.post("/v1/export/evidence")
     assert res.status_code == 200

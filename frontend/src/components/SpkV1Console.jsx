@@ -4,6 +4,7 @@ import SPK_ABI from '../abi/SolarPunkCoin.json';
 import CURRENCY_ABI from '../abi/SolarPunkCurrencySystem.json';
 import { SEPOLIA_EXPLORER } from '../constants/contracts';
 import { buildPayees } from '../lib/payees';
+import { requestFoundationSync } from '../lib/foundationSync';
 import { sendNetworkPayment } from '../lib/pay';
 import { loadSpkV1Runtime } from '../lib/runtime';
 import { ensureSepolia } from '../lib/wallet';
@@ -112,9 +113,12 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
           }
         },
       });
+      const sync = await requestFoundationSync();
       setPayStatus({
         state: 'ok',
-        message: `Sent ${amount} SPK to ${payee.label}. Balance updates live; payment table refreshes after sync.`,
+        message: sync.ok
+          ? `Sent ${amount} SPK to ${payee.label}. Ledger synced.`
+          : `Sent ${amount} SPK to ${payee.label}. Balance updates live; run npm run foundation:sync for ledger.`,
         txHash: receipt.hash,
       });
       setLiveRefreshKey((k) => k + 1);
