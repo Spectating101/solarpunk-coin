@@ -54,20 +54,27 @@ No PyPI publish required — editable local install is the packaging boundary.
 | `spk-v1 export-evidence` | Write `thesis_package/SPK_V1_EVIDENCE.md` (optional) |
 | `spk-v1 export-lake` | Export runtime + payment ledger JSONL for research lakes (Sharpe, etc.) |
 | `spk-v1 show-metrics` | Print current metrics from runtime file |
+| `spk-v1 health` | Operator gas + sync freshness → `state/foundation/health.json` |
+| `spk-v1 validate` | Runtime / foundation artifact consistency check |
 
 ## API (local)
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| GET | `/health` | Service + repo root probe |
+| GET | `/health` | Service probe; `?live=1` includes operator gas |
 | GET | `/v1/runtime` | Full runtime JSON |
 | GET | `/v1/metrics` | Summary metrics |
+| GET | `/v1/counterparties` | Labeled addresses + balances |
+| GET | `/v1/operator/health` | Operator readiness |
+| GET | `/v1/validate` | Consistency check (422 if issues) |
 | GET | `/v1/foundation` | Monetary foundation snapshot |
 | POST | `/v1/foundation/sync` | Sync chain + export foundation status |
 | GET | `/v1/payments` | Payment ledger (`limit`, `payment_kind`) |
 | POST | `/v1/sync` | On-chain sync (slow; uses Sepolia RPC) |
 | POST | `/v1/export/evidence` | Thesis evidence markdown |
 | POST | `/v1/export/lake` | Body: `{"out_root": "..."}` |
+
+Full operator doc: `docs/foundation/BACKEND.md`.
 
 ## Library API
 

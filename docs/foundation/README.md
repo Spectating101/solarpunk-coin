@@ -11,6 +11,7 @@ Product canon for the energy-anchored monetary stack.
 | [GOVERNANCE.md](./GOVERNANCE.md) | Multisig handoff |
 | [OPERATOR.md](./OPERATOR.md) | Weekly ops + gas |
 | [PILOT_PLAYBOOK.md](./PILOT_PLAYBOOK.md) | Minimal closed-loop demo |
+| [BACKEND.md](./BACKEND.md) | Python API, CLI, validate, CI |
 | [AUTONOMOUS_OPS.md](./AUTONOMOUS_OPS.md) | What runs without you (CI + rhythm) |
 | [WHEN_YOU_RETURN.md](./WHEN_YOU_RETURN.md) | Pilot + governance + thesis deferred |
 
@@ -18,6 +19,7 @@ Product canon for the energy-anchored monetary stack.
 
 ```bash
 npm run foundation:health        # gas + sync — run first
+npm run foundation:validate      # runtime + artifact consistency
 npm run foundation:sync          # Sepolia sync + foundation export
 npm run foundation:weekly        # health → cycle or daily → publish
 npm run foundation:cycle         # operator cycle (needs gas)

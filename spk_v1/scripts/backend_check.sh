@@ -29,16 +29,23 @@ fi
 echo "==> CLI foundation export"
 "$VENV/bin/spk-v1" foundation --repo-root "$ROOT"
 
+echo "==> CLI validate"
+"$VENV/bin/spk-v1" validate --repo-root "$ROOT"
+
 echo "==> API smoke (uvicorn background)"
+API_PORT="${SPK_V1_API_PORT:-$(( 8800 + RANDOM % 200 ))}"
+export SPK_V1_API_PORT="$API_PORT"
 "$VENV/bin/spk-v1-api" &
 API_PID=$!
 trap 'kill "$API_PID" 2>/dev/null || true' EXIT
 sleep 2
-curl -fsS "http://127.0.0.1:${SPK_V1_API_PORT:-8787}/health" | head -c 200
+curl -fsS "http://127.0.0.1:${API_PORT}/health" | head -c 240
 echo
-curl -fsS "http://127.0.0.1:${SPK_V1_API_PORT:-8787}/v1/metrics" | head -c 300
+curl -fsS "http://127.0.0.1:${API_PORT}/v1/metrics" | head -c 300
 echo
-curl -fsS "http://127.0.0.1:${SPK_V1_API_PORT:-8787}/v1/foundation" | head -c 300
+curl -fsS "http://127.0.0.1:${API_PORT}/v1/foundation" | head -c 300
+echo
+curl -fsS "http://127.0.0.1:${API_PORT}/v1/counterparties" | head -c 200
 echo
 
 echo "backend_check_ok"

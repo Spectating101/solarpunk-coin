@@ -64,6 +64,7 @@
     "foundation:refresh": "npm run foundation:sync && npm run foundation:publish-docs",
     "foundation:daily": "bash scripts/foundation_daily.sh",
     "foundation:weekly": "bash scripts/foundation_weekly.sh",
+    "foundation:validate": "SPK_V1_REPO_ROOT=. spk_v1/.venv/bin/spk-v1 validate --repo-root .",
     "spk:v1:verify:sepolia": "hardhat run scripts/verify_spk_v1_sepolia.js --network sepolia",
     "spk:v1:test": "node --test test-node/spk_v1_launch.test.js",
     "product:currency-lab": "node scripts/currency_system_lab.js",

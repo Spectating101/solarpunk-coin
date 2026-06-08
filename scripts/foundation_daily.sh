@@ -6,6 +6,7 @@ cd "$ROOT"
 
 npm run foundation:sync || true
 npm run foundation:health || true
+npm run foundation:validate || true
 npm run foundation:peg-check || true
 npm run foundation:publish-docs
 echo "foundation_daily_ok"

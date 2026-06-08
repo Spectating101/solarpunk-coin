@@ -29,6 +29,8 @@ def build_foundation_snapshot(runtime: dict[str, Any]) -> dict[str, Any]:
 
     ledger = (runtime.get("chain_index") or {}).get("payment_ledger") or []
     latest = max(ledger, key=lambda row: int(row.get("payment_id") or 0), default=None)
+    counterparties = runtime.get("counterparties") or {}
+    counterparty_balances = runtime.get("counterparty_balances_spk") or {}
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -70,6 +72,12 @@ def build_foundation_snapshot(runtime: dict[str, Any]) -> dict[str, Any]:
             "governance": {"peg_enabled": bool(policy.get("peg_enabled"))},
         },
         "contracts": contracts,
+        "counterparties": counterparties,
+        "counterparty_balances_spk": counterparty_balances,
+        "operator": {
+            "deployer": runtime.get("deployer"),
+            "governance_admin": runtime.get("governance_admin"),
+        },
         "latest_payment": latest,
     }
 

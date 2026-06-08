@@ -4,10 +4,13 @@ import os
 from pathlib import Path
 from typing import Any
 
+from spk_v1.counterparties import merge_counterparties
 from spk_v1.evidence import export_evidence_markdown
 from spk_v1.foundation import build_foundation_snapshot, export_foundation_status
+from spk_v1.health import run_operator_health
 from spk_v1.lake import export_data_lake
 from spk_v1.runtime import read_runtime, runtime_paths, sync_runtime
+from spk_v1.validate import run_validate
 
 
 def default_repo_root() -> Path:
@@ -107,3 +110,50 @@ def run_export_lake(repo_root: str | Path | None = None, *, out_root: str | Path
     runtime = get_runtime(root)
     summary = export_data_lake(runtime, out_root, source_repo=root)
     return {"ok": True, **summary}
+
+
+def get_counterparties(repo_root: str | Path | None = None) -> dict[str, Any]:
+    runtime = get_runtime(repo_root)
+    counterparties = merge_counterparties(runtime.get("counterparties"))
+    balances = runtime.get("counterparty_balances_spk") or {}
+    rows = []
+    for cid, info in counterparties.items():
+        rows.append({
+            "id": cid,
+            "label": info.get("label") or cid.replace("_", " ").title(),
+            "role": info.get("role"),
+            "address": info.get("address"),
+            "balance_spk": balances.get(cid),
+        })
+    return {"counterparties": rows, "balances_spk": balances}
+
+
+def get_operator_health(
+    repo_root: str | Path | None = None,
+    *,
+    rpc_url: str | None = None,
+    live: bool = True,
+) -> dict[str, Any]:
+    root = Path(repo_root or default_repo_root())
+    if live:
+        return run_operator_health(root, rpc_url=rpc_url)
+    health_path = root / "state" / "foundation" / "health.json"
+    if health_path.exists():
+        import json
+
+        return json.loads(health_path.read_text(encoding="utf-8"))
+    runtime = get_runtime(root)
+    from spk_v1.health import build_operator_health
+
+    return build_operator_health(
+        runtime,
+        foundation_status_exists=(root / "state" / "foundation" / "status.json").exists(),
+    )
+
+
+def run_validate_runtime(
+    repo_root: str | Path | None = None,
+    *,
+    check_foundation: bool = True,
+) -> dict[str, Any]:
+    return run_validate(Path(repo_root or default_repo_root()), check_foundation=check_foundation)

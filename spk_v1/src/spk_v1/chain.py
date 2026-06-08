@@ -14,6 +14,16 @@ def make_web3(rpc_url: str) -> Web3:
     return Web3(Web3.HTTPProvider(rpc_url, request_kwargs={"timeout": 60}))
 
 
+def connect_web3(rpc_url: str, *, attempts: int = 3) -> Web3:
+    last_error: Exception | None = None
+    for _ in range(max(1, attempts)):
+        w3 = make_web3(rpc_url)
+        if w3.is_connected():
+            return w3
+        last_error = ConnectionError(f"Could not connect to RPC: {rpc_url}")
+    raise last_error or ConnectionError(f"Could not connect to RPC: {rpc_url}")
+
+
 def resolve_deploy_block(runtime: dict[str, Any], rpc_url: str) -> int:
     if runtime.get("deploy_block"):
         return int(runtime["deploy_block"])
@@ -148,9 +158,7 @@ def read_counterparty_balances(spk, counterparties: dict[str, Any]) -> dict[str,
 
 
 def read_live_snapshot(runtime: dict[str, Any], rpc_url: str) -> dict[str, Any]:
-    w3 = make_web3(rpc_url)
-    if not w3.is_connected():
-        raise ConnectionError(f"Could not connect to RPC: {rpc_url}")
+    w3 = connect_web3(rpc_url)
 
     spk = w3.eth.contract(
         address=Web3.to_checksum_address(runtime["contracts"]["solar_punk_coin"]),

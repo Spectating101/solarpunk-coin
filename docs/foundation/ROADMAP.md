@@ -11,6 +11,8 @@ Product-only. Thesis untouched.
 - [x] Live demo on GitHub Pages
 - [x] Operator gas restored; weekly cycle + 21 payments indexed
 - [x] Autosync CI + autonomous ops doc
+- [x] Backend validate + health CLI/API + labeled payment ledger
+- [x] Pilot payer in counterparty registry (payment #15)
 
 ## Next (in order)
 

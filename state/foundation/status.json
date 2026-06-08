@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-08T17:28:28.951056+00:00",
+  "generated_at": "2026-06-08T17:43:23.428211+00:00",
   "horizon": "structural",
   "network": "sepolia",
   "chain_id": 11155111,
   "status": "operating",
-  "synced_at": "2026-06-08T17:28:28.949921Z",
+  "synced_at": "2026-06-08T17:43:22.905580Z",
   "anchor": {
     "kwh_per_spk": 1.0,
     "cumulative_surplus_kwh": 5514.0
@@ -50,6 +50,50 @@
     "solar_punk_coin": "0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128",
     "currency_system": "0x520162252F9B94824417678525FFd69145014970"
   },
+  "counterparties": {
+    "gateway": {
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "role": "SERVICE",
+      "label": "Gateway"
+    },
+    "maintenance": {
+      "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+      "role": "LABOR",
+      "label": "Maintenance"
+    },
+    "merchant": {
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "role": "GOODS",
+      "label": "Merchant"
+    },
+    "network_peer": {
+      "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
+      "role": "NETWORK",
+      "label": "Network peer"
+    },
+    "pilot_payer": {
+      "address": "0xaC39F4a71A69fF24a6aeEA12A24C45396027Aec0",
+      "role": "PAYER",
+      "label": "Pilot payer"
+    },
+    "operator": {
+      "address": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+      "role": "OPERATOR",
+      "label": "Operator"
+    }
+  },
+  "counterparty_balances_spk": {
+    "gateway": 44.0,
+    "maintenance": 80.0,
+    "merchant": 114.0,
+    "network_peer": 24.0,
+    "pilot_payer": 45.0,
+    "operator": 5189.258
+  },
+  "operator": {
+    "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+    "governance_admin": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54"
+  },
   "latest_payment": {
     "type": "network_payment",
     "payment_id": 21,
@@ -59,6 +103,10 @@
     "payment_kind": "NETWORK",
     "invoice_hash": "0x13695c268ff16726f34b6a04a60c0d9de53c45a9be8b581b4d82e61ec1a2ed91",
     "block_number": 11016677,
-    "tx_hash": "0x5a72cc73cbc658afaa9739783e665281eb2e41d0448335bbba9c2d0797a75746"
+    "tx_hash": "0x5a72cc73cbc658afaa9739783e665281eb2e41d0448335bbba9c2d0797a75746",
+    "payer_id": "operator",
+    "payer_label": "Operator",
+    "payee_id": "network_peer",
+    "payee_label": "Network peer"
   }
 }

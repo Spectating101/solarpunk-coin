@@ -302,9 +302,12 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
                     <td>{row.payment_kind}</td>
                     <td>{row.spk}</td>
                     <td>
-                      <a href={addrUrl(explorer, row.payee)} target="_blank" rel="noreferrer">
-                        {row.payee.slice(0, 8)}…
+                      <a href={addrUrl(explorer, row.payee)} target="_blank" rel="noreferrer" title={row.payee}>
+                        {row.payee_label || `${row.payee.slice(0, 8)}…`}
                       </a>
+                      {row.payer_label ? (
+                        <span className="muted"> · from {row.payer_label}</span>
+                      ) : null}
                     </td>
                     <td>
                       <a href={txUrl(explorer, row.tx_hash)} target="_blank" rel="noreferrer">

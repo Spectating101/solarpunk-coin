@@ -5,14 +5,17 @@ import json
 import sys
 from pathlib import Path
 
+from spk_v1.health import health_exit_code
 from spk_v1.service import (
     default_repo_root,
     get_metrics_summary,
+    get_operator_health,
     run_export_evidence,
     run_export_lake,
     run_foundation_export,
     run_sync,
     run_sync_and_foundation,
+    run_validate_runtime,
 )
 
 
@@ -50,6 +53,15 @@ def build_parser() -> argparse.ArgumentParser:
     lake.set_defaults(func="export-lake")
 
     sub.add_parser("show-metrics", parents=[common], help="Print runtime metrics JSON").set_defaults(func="show-metrics")
+
+    health = sub.add_parser("health", parents=[common], help="Operator gas + sync health (writes health.json)")
+    health.add_argument("--rpc-url", default=None)
+    health.add_argument("--cached", action="store_true", help="Read health.json only (no RPC)")
+    health.set_defaults(func="health")
+
+    validate = sub.add_parser("validate", parents=[common], help="Validate runtime + foundation artifacts")
+    validate.add_argument("--skip-foundation", action="store_true")
+    validate.set_defaults(func="validate")
     return parser
 
 
@@ -81,6 +93,14 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(run_export_lake(root, out_root=args.out_root), indent=2))
         elif args.func == "show-metrics":
             print(json.dumps(get_metrics_summary(root), indent=2))
+        elif args.func == "health":
+            report = get_operator_health(root, rpc_url=args.rpc_url, live=not args.cached)
+            print(json.dumps(report, indent=2))
+            return health_exit_code(report)
+        elif args.func == "validate":
+            result = run_validate_runtime(root, check_foundation=not args.skip_foundation)
+            print(json.dumps(result, indent=2))
+            return 0 if result.get("ok") else 1
         else:
             raise RuntimeError(f"unknown command: {args.func}")
         return 0

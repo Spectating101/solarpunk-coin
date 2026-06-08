@@ -54,7 +54,7 @@
     "attached_currency_system": "0x3Fa51B6631282e7a9f4CBFB7D764748831D9Ca47",
     "note": "Previous attach stack kept for history; v1 lean stack is canonical after this deploy."
   },
-  "synced_at": "2026-06-08T17:28:28.949921Z",
+  "synced_at": "2026-06-08T17:43:22.905580Z",
   "on_chain": {
     "deployer_spk_balance": 5189.258,
     "total_supply_spk": 5499.015,
@@ -63,7 +63,7 @@
     "peg_enabled": false,
     "kwh_per_spk": "1.0"
   },
-  "updated_at": "2026-06-08T17:28:28.950217Z",
+  "updated_at": "2026-06-08T17:43:22.905902Z",
   "operations": [
     {
       "cycle_id": "2026-06-07T15-36-04-187Z",
@@ -390,26 +390,42 @@
   "counterparties": {
     "gateway": {
       "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-      "role": "SERVICE"
+      "role": "SERVICE",
+      "label": "Gateway"
     },
     "maintenance": {
       "address": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
-      "role": "LABOR"
+      "role": "LABOR",
+      "label": "Maintenance"
     },
     "merchant": {
       "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-      "role": "GOODS"
+      "role": "GOODS",
+      "label": "Merchant"
     },
     "network_peer": {
       "address": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
-      "role": "NETWORK"
+      "role": "NETWORK",
+      "label": "Network peer"
+    },
+    "pilot_payer": {
+      "address": "0xaC39F4a71A69fF24a6aeEA12A24C45396027Aec0",
+      "role": "PAYER",
+      "label": "Pilot payer"
+    },
+    "operator": {
+      "address": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+      "role": "OPERATOR",
+      "label": "Operator"
     }
   },
   "counterparty_balances_spk": {
     "gateway": 44.0,
     "maintenance": 80.0,
     "merchant": 114.0,
-    "network_peer": 24.0
+    "network_peer": 24.0,
+    "pilot_payer": 45.0,
+    "operator": 5189.258
   },
   "deploy_block": 11009402,
   "chain_index": {
@@ -426,7 +442,11 @@
         "payment_kind": "SERVICE",
         "invoice_hash": "0xc35c53c47cf65139ce697c5c756aa50caa78fadb0b2bde9f7bdad41ba65837b9",
         "block_number": 11009412,
-        "tx_hash": "0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b"
+        "tx_hash": "0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "gateway",
+        "payee_label": "Gateway"
       },
       {
         "type": "network_payment",
@@ -437,7 +457,11 @@
         "payment_kind": "LABOR",
         "invoice_hash": "0xb6dab985baf50801d382ab1866ba9f254b47d0fd137be61bdbc8f206a97579ec",
         "block_number": 11009414,
-        "tx_hash": "0x8ad9f3ce544ced77767d88a57c329ef599674377daf100ddd11fd274c7bbe31a"
+        "tx_hash": "0x8ad9f3ce544ced77767d88a57c329ef599674377daf100ddd11fd274c7bbe31a",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "maintenance",
+        "payee_label": "Maintenance"
       },
       {
         "type": "network_payment",
@@ -448,7 +472,11 @@
         "payment_kind": "NETWORK",
         "invoice_hash": "0x755f39ebf81573c95513f5f0965f751677fe9b4586e40c350729dcb513f332ca",
         "block_number": 11009416,
-        "tx_hash": "0x6dbbf6393df70f859f44be3d168367729f88c60685f494bc91b3f9cd02d2067e"
+        "tx_hash": "0x6dbbf6393df70f859f44be3d168367729f88c60685f494bc91b3f9cd02d2067e",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "operator",
+        "payee_label": "Operator"
       },
       {
         "type": "network_payment",
@@ -459,7 +487,11 @@
         "payment_kind": "GOODS",
         "invoice_hash": "0x23190a767240ea87cdda907996cb4b698bb352299559af106c68f974b34a991e",
         "block_number": 11009418,
-        "tx_hash": "0x0d7e506b1503c3ffd86e30f6e4022ab6e9a208974ab12330cf30c0dadc0f3e86"
+        "tx_hash": "0x0d7e506b1503c3ffd86e30f6e4022ab6e9a208974ab12330cf30c0dadc0f3e86",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "merchant",
+        "payee_label": "Merchant"
       },
       {
         "type": "network_payment",
@@ -470,7 +502,11 @@
         "payment_kind": "SERVICE",
         "invoice_hash": "0x0c7f9fa86611d7882db26fbb16bbc9176245dad7a253f52cf16b947fa182fb2a",
         "block_number": 11009496,
-        "tx_hash": "0xeacc17a44e8e99d01ab66638f729842e460e27a3e1ca3b29776ee44af03f6794"
+        "tx_hash": "0xeacc17a44e8e99d01ab66638f729842e460e27a3e1ca3b29776ee44af03f6794",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "gateway",
+        "payee_label": "Gateway"
       },
       {
         "type": "network_payment",
@@ -481,7 +517,11 @@
         "payment_kind": "GOODS",
         "invoice_hash": "0xbb3b0f8ec111e6794ce02ef51c82081f88ae6b31482a32114ac4df36ebb8f75e",
         "block_number": 11009498,
-        "tx_hash": "0xb497285681741bb1b5c2592c06b0b8f28f63f9363aaf256692e1682f1f6aa82c"
+        "tx_hash": "0xb497285681741bb1b5c2592c06b0b8f28f63f9363aaf256692e1682f1f6aa82c",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "merchant",
+        "payee_label": "Merchant"
       },
       {
         "type": "network_payment",
@@ -492,7 +532,11 @@
         "payment_kind": "SERVICE",
         "invoice_hash": "0x9a3522f0a16c0f037fa0343b49e0862f01d4e1e3ac6648efbbe00a43900c6eb9",
         "block_number": 11009620,
-        "tx_hash": "0x7bf526551f5aecf2c8ba4a50f0fd64735a53f3b07eed00f6a159354b00ae5517"
+        "tx_hash": "0x7bf526551f5aecf2c8ba4a50f0fd64735a53f3b07eed00f6a159354b00ae5517",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "gateway",
+        "payee_label": "Gateway"
       },
       {
         "type": "network_payment",
@@ -503,7 +547,11 @@
         "payment_kind": "LABOR",
         "invoice_hash": "0x66d3bbe146989b4d54b3343f210c315b3917615bdc13f0e4266e3a8e94072387",
         "block_number": 11009622,
-        "tx_hash": "0x1f7cd59612cf81dd4a43f1cb1b4e5d6e03f4be570e4ad4fc2c21e28ee72d09be"
+        "tx_hash": "0x1f7cd59612cf81dd4a43f1cb1b4e5d6e03f4be570e4ad4fc2c21e28ee72d09be",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "maintenance",
+        "payee_label": "Maintenance"
       },
       {
         "type": "network_payment",
@@ -514,7 +562,11 @@
         "payment_kind": "GOODS",
         "invoice_hash": "0x2d8bff3316c0eadd7a2cc727c9d01259e45210f15b6a29ca452707d2d0ec6728",
         "block_number": 11009624,
-        "tx_hash": "0x3b912b39ed2446d38874bb45984eccbaee1fb6d8cb05f3141632d7bff03fde51"
+        "tx_hash": "0x3b912b39ed2446d38874bb45984eccbaee1fb6d8cb05f3141632d7bff03fde51",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "merchant",
+        "payee_label": "Merchant"
       },
       {
         "type": "network_payment",
@@ -525,7 +577,11 @@
         "payment_kind": "NETWORK",
         "invoice_hash": "0xeca0db217c54ce03f7f7a0c19602ca1175a66fdb8b4c19f42f3a3a97912f4c58",
         "block_number": 11009626,
-        "tx_hash": "0x100b4decd5e1831aded05df5a0cf700a29da225fe8895cdb29fa1359fc35bee2"
+        "tx_hash": "0x100b4decd5e1831aded05df5a0cf700a29da225fe8895cdb29fa1359fc35bee2",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "network_peer",
+        "payee_label": "Network peer"
       },
       {
         "type": "network_payment",
@@ -536,7 +592,11 @@
         "payment_kind": "SERVICE",
         "invoice_hash": "0xf81e03d15a8ee36b0967eb0fea21349c14fe308854f05a03c64a29b0a85d04e3",
         "block_number": 11009724,
-        "tx_hash": "0x7d68647acac4c0f1dd153c9bad49b5d2b688ca3f79ebcd24069b098fcaa6df60"
+        "tx_hash": "0x7d68647acac4c0f1dd153c9bad49b5d2b688ca3f79ebcd24069b098fcaa6df60",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "gateway",
+        "payee_label": "Gateway"
       },
       {
         "type": "network_payment",
@@ -547,7 +607,11 @@
         "payment_kind": "LABOR",
         "invoice_hash": "0xdfee2bfd800587d6083294b7624b6c9de71e5942414b9373b0005af5a203989f",
         "block_number": 11009726,
-        "tx_hash": "0xc1eb24c0dc7e1fdd61a8fb36e73805d5eec19013bb2e4cadb2b19405df9b72f3"
+        "tx_hash": "0xc1eb24c0dc7e1fdd61a8fb36e73805d5eec19013bb2e4cadb2b19405df9b72f3",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "maintenance",
+        "payee_label": "Maintenance"
       },
       {
         "type": "network_payment",
@@ -558,7 +622,11 @@
         "payment_kind": "GOODS",
         "invoice_hash": "0x44254b332917764a63e2664421bec6c1e07753ef7c38c117ee83f370c09ec08f",
         "block_number": 11009728,
-        "tx_hash": "0xd01d4ab8839620cc1140421c82c3c0e0e8ce5abaa610ac36be5c6719ddf38633"
+        "tx_hash": "0xd01d4ab8839620cc1140421c82c3c0e0e8ce5abaa610ac36be5c6719ddf38633",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "merchant",
+        "payee_label": "Merchant"
       },
       {
         "type": "network_payment",
@@ -569,7 +637,11 @@
         "payment_kind": "NETWORK",
         "invoice_hash": "0x09dfc2f2ddd19a4fb5ca41847088acb3512927d3c3dbf0fbe00124864dece961",
         "block_number": 11009730,
-        "tx_hash": "0x2b8e8efb9ff2e8191ac751ba86c79e2ff2b78a84568dbdc531a2d23fe3c8d99c"
+        "tx_hash": "0x2b8e8efb9ff2e8191ac751ba86c79e2ff2b78a84568dbdc531a2d23fe3c8d99c",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "network_peer",
+        "payee_label": "Network peer"
       },
       {
         "type": "network_payment",
@@ -580,7 +652,11 @@
         "payment_kind": "GOODS",
         "invoice_hash": "0xf64f45cad48263a6f73eeff79f4e6a07c2fadf11d79ba5581090ea3ceae10767",
         "block_number": 11014542,
-        "tx_hash": "0xbd7bb0e540dda4adb00d4e029ce6ff34ecab8d3c0ab3c96719281d645857d57f"
+        "tx_hash": "0xbd7bb0e540dda4adb00d4e029ce6ff34ecab8d3c0ab3c96719281d645857d57f",
+        "payer_id": "pilot_payer",
+        "payer_label": "Pilot payer",
+        "payee_id": "merchant",
+        "payee_label": "Merchant"
       },
       {
         "type": "network_payment",
@@ -591,7 +667,11 @@
         "payment_kind": "SERVICE",
         "invoice_hash": "0xd609e2b3a3a32a4e7c8eea3b70083264667b51e2d455af290443ec7a3246a8a8",
         "block_number": 11015813,
-        "tx_hash": "0x7bd6389e32d1a57011b01c321d85770620a2fe77f8f3979344690f76fb27ee34"
+        "tx_hash": "0x7bd6389e32d1a57011b01c321d85770620a2fe77f8f3979344690f76fb27ee34",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "gateway",
+        "payee_label": "Gateway"
       },
       {
         "type": "network_payment",
@@ -602,7 +682,11 @@
         "payment_kind": "LABOR",
         "invoice_hash": "0x3805b147480430fe8e232aa47cbb7b9e63ebabcd4df3bdf92d5744fcb9035e79",
         "block_number": 11015815,
-        "tx_hash": "0x2fd62cdcf93fb38b7bb6d827ca141ad3ba1559611844b38a2ad63ec42dc59ba8"
+        "tx_hash": "0x2fd62cdcf93fb38b7bb6d827ca141ad3ba1559611844b38a2ad63ec42dc59ba8",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "maintenance",
+        "payee_label": "Maintenance"
       },
       {
         "type": "network_payment",
@@ -613,7 +697,11 @@
         "payment_kind": "SERVICE",
         "invoice_hash": "0xc7b627b6a6ac643d9da22f5f4911b06777c6baefd9bfea6341d1426ac831a91b",
         "block_number": 11016671,
-        "tx_hash": "0xfc63cd227940728f83f9c1b6738a8f19fc7fdb65936e189f7b1d9cd6da4a6f05"
+        "tx_hash": "0xfc63cd227940728f83f9c1b6738a8f19fc7fdb65936e189f7b1d9cd6da4a6f05",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "gateway",
+        "payee_label": "Gateway"
       },
       {
         "type": "network_payment",
@@ -624,7 +712,11 @@
         "payment_kind": "LABOR",
         "invoice_hash": "0xe8bca46eae615d8ab4411efcbf982bb41d58b4d2c49c6fa3a5a569633097c8f4",
         "block_number": 11016673,
-        "tx_hash": "0xb620ea8cdcf7b4b12fe59209999d0706e11d261d38e3b0f159ec01fe4fe1c5ef"
+        "tx_hash": "0xb620ea8cdcf7b4b12fe59209999d0706e11d261d38e3b0f159ec01fe4fe1c5ef",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "maintenance",
+        "payee_label": "Maintenance"
       },
       {
         "type": "network_payment",
@@ -635,7 +727,11 @@
         "payment_kind": "GOODS",
         "invoice_hash": "0xd1c550b021fc889ba78ebe6c0c8c3c6df649caf049733064fd071519190630b0",
         "block_number": 11016675,
-        "tx_hash": "0x6b1f3801f468e927bf53df48b203588fc6b67ff8672e7e58e8de4a4e0352e1f8"
+        "tx_hash": "0x6b1f3801f468e927bf53df48b203588fc6b67ff8672e7e58e8de4a4e0352e1f8",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "merchant",
+        "payee_label": "Merchant"
       },
       {
         "type": "network_payment",
@@ -646,7 +742,11 @@
         "payment_kind": "NETWORK",
         "invoice_hash": "0x13695c268ff16726f34b6a04a60c0d9de53c45a9be8b581b4d82e61ec1a2ed91",
         "block_number": 11016677,
-        "tx_hash": "0x5a72cc73cbc658afaa9739783e665281eb2e41d0448335bbba9c2d0797a75746"
+        "tx_hash": "0x5a72cc73cbc658afaa9739783e665281eb2e41d0448335bbba9c2d0797a75746",
+        "payer_id": "operator",
+        "payer_label": "Operator",
+        "payee_id": "network_peer",
+        "payee_label": "Network peer"
       }
     ],
     "redemption_ledger": [

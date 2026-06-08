@@ -6,13 +6,7 @@ const { ethers } = hre;
 const { ROOT, readRuntime, mergeRuntime, getSignerFor } = require("./lib/spk_v1_runtime");
 const { buildCycleBundle, mintAttestedOnSpk } = require("./lib/spk_v1_attested_mint");
 const { loadMeterBundleForCycle } = require("./lib/spk_v1_meter_bundle");
-
-const COUNTERPARTIES = {
-  gateway: { address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC", role: "SERVICE" },
-  maintenance: { address: "0x90F79bf6EB2c4f870365E785982E1f101E93b906", role: "LABOR" },
-  merchant: { address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8", role: "GOODS" },
-  network_peer: { address: "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65", role: "NETWORK" },
-};
+const { CYCLE_PAYEES, mergeCounterparties } = require("./lib/spk_v1_counterparties");
 
 function cycleId() {
   return new Date().toISOString().replace(/[:.]/g, "-");
@@ -111,10 +105,11 @@ async function main() {
     });
   };
 
-  await pay(6, COUNTERPARTIES.gateway.address, "gateway-service", "SERVICE");
-  await pay(10, COUNTERPARTIES.maintenance.address, "maintenance-labor", "LABOR");
-  await pay(14, COUNTERPARTIES.merchant.address, "merchant-goods", "GOODS");
-  await pay(8, COUNTERPARTIES.network_peer.address, "network-seed", "NETWORK");
+  const cyclePayees = CYCLE_PAYEES;
+  await pay(6, cyclePayees.gateway.address, "gateway-service", "SERVICE");
+  await pay(10, cyclePayees.maintenance.address, "maintenance-labor", "LABOR");
+  await pay(14, cyclePayees.merchant.address, "merchant-goods", "GOODS");
+  await pay(8, cyclePayees.network_peer.address, "network-seed", "NETWORK");
 
   let redemptionStep = { action: "optional_redemption", skipped: true };
   if (process.env.CYCLE_REDEEM_SPK !== "0") {
@@ -150,7 +145,8 @@ async function main() {
   steps.push(redemptionStep);
 
   const metrics = await currency.networkMetrics();
-  const counterpartyBalances = await readCounterpartyBalances(spk, COUNTERPARTIES);
+  const counterparties = mergeCounterparties(runtime.counterparties);
+  const counterpartyBalances = await readCounterpartyBalances(spk, counterparties);
 
   const operation = {
     cycle_id: id,
@@ -158,7 +154,7 @@ async function main() {
     network: runtime.network,
     mint_mode: mintMode,
     steps,
-    counterparties: COUNTERPARTIES,
+    counterparties,
     counterparty_balances_spk: counterpartyBalances,
     metrics: {
       total_settled_spk: Number(ethers.formatEther(metrics.settledSpk)),
@@ -174,7 +170,7 @@ async function main() {
     {
       status: "operating",
       operations,
-      counterparties: COUNTERPARTIES,
+      counterparties,
       counterparty_balances_spk: counterpartyBalances,
       on_chain: {
         deployer_spk_balance: Number(ethers.formatEther(await spk.balanceOf(deployer.address))),
@@ -203,4 +199,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { main, COUNTERPARTIES };
+module.exports = { main, CYCLE_PAYEES };

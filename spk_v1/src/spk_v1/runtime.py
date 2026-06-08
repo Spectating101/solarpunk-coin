@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from spk_v1.chain import read_live_snapshot, resolve_deploy_block
+from spk_v1.counterparties import enrich_payment_ledger, merge_counterparties
 
 DEFAULT_RPC = "https://ethereum-sepolia-rpc.publicnode.com"
 
@@ -56,14 +57,22 @@ def sync_runtime(
     runtime_with_block = {**runtime, "deploy_block": deploy_block}
     snapshot = read_live_snapshot(runtime_with_block, rpc)
 
+    counterparties = merge_counterparties(runtime.get("counterparties"))
+    chain_index = dict(snapshot["chain_index"])
+    chain_index["payment_ledger"] = enrich_payment_ledger(
+        chain_index.get("payment_ledger") or [],
+        counterparties,
+    )
+
     status = runtime.get("status") if runtime.get("status") == "operating" else runtime.get("status") or "genesis_complete"
     patch = {
         "status": status,
         "deploy_block": deploy_block,
         "synced_at": _utc_now(),
+        "counterparties": counterparties,
         "on_chain": snapshot["on_chain"],
         "counterparty_balances_spk": snapshot["counterparty_balances_spk"],
-        "chain_index": snapshot["chain_index"],
+        "chain_index": chain_index,
         "genesis": {
             **(runtime.get("genesis") or {}),
             "metrics": snapshot["metrics"],

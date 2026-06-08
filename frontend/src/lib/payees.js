@@ -3,6 +3,8 @@ const LABELS = {
   gateway: 'Gateway',
   maintenance: 'Maintenance',
   network_peer: 'Network peer',
+  pilot_payer: 'Pilot payer',
+  operator: 'Operator',
 };
 
 /** Build payee list from synced runtime (falls back to demo Hardhat accounts). */
