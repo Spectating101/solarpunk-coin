@@ -1,0 +1,213 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "paymentId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "payer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "payee",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "spkAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "invoiceHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "InvoiceSettled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "paymentId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "payer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "payee",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "spkAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "invoiceHash",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "paymentKind",
+        "type": "bytes32"
+      }
+    ],
+    "name": "NetworkPaymentSettled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "redemptionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "redeemer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "spkAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "owedKwhWad",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "energyPricePerKwh",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "sourceHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RedemptionOpened",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "redemptionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum SolarPunkCurrencySystem.RedemptionState",
+        "name": "state",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "deliveredKwhWad",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "shortfallKwhWad",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "resolutionHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RedemptionResolved",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "networkMetrics",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "settledSpk",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "redeemedSpk",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "circulationShareBps",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "redemptionShareBps",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "networkPaymentCount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "redemptionCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct SolarPunkCurrencySystem.NetworkMetrics",
+        "name": "metrics",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

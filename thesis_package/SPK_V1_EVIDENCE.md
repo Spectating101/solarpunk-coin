@@ -1,6 +1,6 @@
 # SPK v1 — Thesis Evidence Pack (Chapter 5)
 
-**Generated:** 2026-06-07T16:27:40.906Z
+**Generated:** 2026-06-07T18:42:08.411656+00:00
 **Status:** operating
 **Runtime:** `state/runtime/spk_v1.json`
 
@@ -15,7 +15,7 @@
 ## Live metrics
 
 - Total supply: **5404.01 SPK**
-- Settled: **383 SPK**
+- Settled: **383.0 SPK**
 - Network payments: **14**
 - Circulation share: **97.45%**
 
@@ -23,20 +23,20 @@
 
 | # | Kind | SPK | Payee | Tx |
 |---|------|-----|-------|-----|
-| 1 | SERVICE | 12 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b) |
-| 2 | LABOR | 40 | `0x90F79bf6…` | [link](https://sepolia.etherscan.io/tx/0x8ad9f3ce544ced77767d88a57c329ef599674377daf100ddd11fd274c7bbe31a) |
-| 3 | NETWORK | 180 | `0x0b90e3a0…` | [link](https://sepolia.etherscan.io/tx/0x6dbbf6393df70f859f44be3d168367729f88c60685f494bc91b3f9cd02d2067e) |
-| 4 | GOODS | 55 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0x0d7e506b1503c3ffd86e30f6e4022ab6e9a208974ab12330cf30c0dadc0f3e86) |
-| 5 | SERVICE | 8 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0xeacc17a44e8e99d01ab66638f729842e460e27a3e1ca3b29776ee44af03f6794) |
-| 6 | GOODS | 12 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0xb497285681741bb1b5c2592c06b0b8f28f63f9363aaf256692e1682f1f6aa82c) |
-| 7 | SERVICE | 6 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0x7bf526551f5aecf2c8ba4a50f0fd64735a53f3b07eed00f6a159354b00ae5517) |
-| 8 | LABOR | 10 | `0x90F79bf6…` | [link](https://sepolia.etherscan.io/tx/0x1f7cd59612cf81dd4a43f1cb1b4e5d6e03f4be570e4ad4fc2c21e28ee72d09be) |
-| 9 | GOODS | 14 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0x3b912b39ed2446d38874bb45984eccbaee1fb6d8cb05f3141632d7bff03fde51) |
-| 10 | NETWORK | 8 | `0x15d34AAf…` | [link](https://sepolia.etherscan.io/tx/0x100b4decd5e1831aded05df5a0cf700a29da225fe8895cdb29fa1359fc35bee2) |
-| 11 | SERVICE | 6 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0x7d68647acac4c0f1dd153c9bad49b5d2b688ca3f79ebcd24069b098fcaa6df60) |
-| 12 | LABOR | 10 | `0x90F79bf6…` | [link](https://sepolia.etherscan.io/tx/0xc1eb24c0dc7e1fdd61a8fb36e73805d5eec19013bb2e4cadb2b19405df9b72f3) |
-| 13 | GOODS | 14 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0xd01d4ab8839620cc1140421c82c3c0e0e8ce5abaa610ac36be5c6719ddf38633) |
-| 14 | NETWORK | 8 | `0x15d34AAf…` | [link](https://sepolia.etherscan.io/tx/0x2b8e8efb9ff2e8191ac751ba86c79e2ff2b78a84568dbdc531a2d23fe3c8d99c) |
+| 1 | SERVICE | 12.0 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b) |
+| 2 | LABOR | 40.0 | `0x90F79bf6…` | [link](https://sepolia.etherscan.io/tx/0x8ad9f3ce544ced77767d88a57c329ef599674377daf100ddd11fd274c7bbe31a) |
+| 3 | NETWORK | 180.0 | `0x0b90e3a0…` | [link](https://sepolia.etherscan.io/tx/0x6dbbf6393df70f859f44be3d168367729f88c60685f494bc91b3f9cd02d2067e) |
+| 4 | GOODS | 55.0 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0x0d7e506b1503c3ffd86e30f6e4022ab6e9a208974ab12330cf30c0dadc0f3e86) |
+| 5 | SERVICE | 8.0 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0xeacc17a44e8e99d01ab66638f729842e460e27a3e1ca3b29776ee44af03f6794) |
+| 6 | GOODS | 12.0 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0xb497285681741bb1b5c2592c06b0b8f28f63f9363aaf256692e1682f1f6aa82c) |
+| 7 | SERVICE | 6.0 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0x7bf526551f5aecf2c8ba4a50f0fd64735a53f3b07eed00f6a159354b00ae5517) |
+| 8 | LABOR | 10.0 | `0x90F79bf6…` | [link](https://sepolia.etherscan.io/tx/0x1f7cd59612cf81dd4a43f1cb1b4e5d6e03f4be570e4ad4fc2c21e28ee72d09be) |
+| 9 | GOODS | 14.0 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0x3b912b39ed2446d38874bb45984eccbaee1fb6d8cb05f3141632d7bff03fde51) |
+| 10 | NETWORK | 8.0 | `0x15d34AAf…` | [link](https://sepolia.etherscan.io/tx/0x100b4decd5e1831aded05df5a0cf700a29da225fe8895cdb29fa1359fc35bee2) |
+| 11 | SERVICE | 6.0 | `0x3C44CdDd…` | [link](https://sepolia.etherscan.io/tx/0x7d68647acac4c0f1dd153c9bad49b5d2b688ca3f79ebcd24069b098fcaa6df60) |
+| 12 | LABOR | 10.0 | `0x90F79bf6…` | [link](https://sepolia.etherscan.io/tx/0xc1eb24c0dc7e1fdd61a8fb36e73805d5eec19013bb2e4cadb2b19405df9b72f3) |
+| 13 | GOODS | 14.0 | `0x70997970…` | [link](https://sepolia.etherscan.io/tx/0xd01d4ab8839620cc1140421c82c3c0e0e8ce5abaa610ac36be5c6719ddf38633) |
+| 14 | NETWORK | 8.0 | `0x15d34AAf…` | [link](https://sepolia.etherscan.io/tx/0x2b8e8efb9ff2e8191ac751ba86c79e2ff2b78a84568dbdc531a2d23fe3c8d99c) |
 
 ## Operator cycles
 
@@ -68,6 +68,6 @@
 
 ```bash
 npm run spk:v1:cycle:sepolia
-npm run spk:v1:sync
-npm run spk:v1:evidence:export
+spk-v1 sync --repo-root .
+spk-v1 export-evidence --repo-root .
 ```
