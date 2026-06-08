@@ -1,11 +1,11 @@
 {
   "ok": true,
-  "at": "2026-06-08T17:00:16.236Z",
+  "at": "2026-06-08T17:28:30.088Z",
   "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
   "operator_eth": 0.5304020988204315,
   "operator_eth_min": 0.01,
   "operator_spk": 5189.258,
-  "synced_at": "2026-06-08T16:59:59.637011Z",
+  "synced_at": "2026-06-08T17:28:28.949921Z",
   "sync_age_hours": 0,
   "network_payment_count": 21,
   "total_supply_spk": 5499.015,

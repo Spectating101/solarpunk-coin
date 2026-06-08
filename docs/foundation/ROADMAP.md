@@ -9,6 +9,8 @@ Product-only. Thesis untouched.
 - [x] `foundation:sync` / `foundation:build` pipeline
 - [x] `GET /v1/foundation` API
 - [x] Live demo on GitHub Pages
+- [x] Operator gas restored; weekly cycle + 21 payments indexed
+- [x] Autosync CI + autonomous ops doc
 
 ## Next (in order)
 
@@ -49,5 +51,5 @@ Run `spk-v1-api` behind demo host or cron `foundation:sync` every N minutes.
 | When | Command |
 |------|---------|
 | After chain activity | `npm run foundation:sync` |
-| Weekly operator | `npm run foundation:cycle` |
+| Weekly operator | `npm run foundation:weekly` (CI Mondays) |
 | Local wallet demo | `npm run spk:v1:api` + `cd frontend && npm run dev` |

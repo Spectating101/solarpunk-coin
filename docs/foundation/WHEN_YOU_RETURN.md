@@ -1,35 +1,38 @@
-# When you return (gas + thesis later)
+# When you return
 
-Product foundation keeps running via autosync. Two items need **you** when ready.
+Foundation runs on autosync + weekly operator CI. You only need to touch it for **pilots**, **governance**, or **thesis** (later).
 
-## 1. Sepolia gas (unblocks the economy)
-
-**Wallet:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54`
+## Quick status
 
 ```bash
-npm run foundation:health   # must show operator_eth ≥ 0.01
-npm run foundation:cycle    # mint + pay + sync
+npm run foundation:health && head -30 docs/foundation/FOUNDATION_STATUS.md
 ```
 
-Until then: sync, demo, and ledger **read** from chain still work; **new** operator payments do not.
+**Last known good (2026-06-08):** health **ok** · ~0.53 Sepolia ETH · **21** payments · peg **off**.
 
-## 2. Thesis (paused)
+## Optional: run a pilot payment
 
-No thesis files are required for foundation ops. When you pick it up:
+1. Open https://spectating101.github.io/solarpunk-coin/demo/
+2. Connect Sepolia on wallet `0xaC39…` (or fund another: `RECIPIENT=0x… AMOUNT=50 npm run spk:v1:fund`)
+3. Send SPK to Merchant
+4. `npm run foundation:sync` — or wait for daily autosync
 
-- Ch 5 can cite `FOUNDATION_STATUS.md` + Etherscan txs
-- Do **not** claim peg victory or stablecoin war
+See `PILOT_PLAYBOOK.md`.
 
-## What runs without you
+## When you need to decide
 
-| Item | How |
-|------|-----|
-| Daily chain → JSON sync | GitHub Action `Foundation autosync` |
-| Public demo data | `docs/demo/spk_v1.json` |
-| Health snapshot | `state/foundation/health.json` |
+| Item | Command / doc |
+|------|----------------|
+| Multisig handoff | `npm run foundation:multisig:dry-run` then `GOVERNANCE.md` |
+| Meter-attested mint | `npm run foundation:cycle:meter` |
+| Peg experiment | `foundation:peg-check` first; branch before `peg_enabled` |
+| Thesis | **Paused** — cite `FOUNDATION_STATUS.md` when you resume Ch 5 |
 
-## One-liner status
+## What already runs without you
 
-```bash
-npm run foundation:health && head -25 docs/foundation/FOUNDATION_STATUS.md
-```
+See `AUTONOMOUS_OPS.md` — daily autosync, Monday operator cycle, public demo at `/demo/`.
+
+## Do not claim (yet)
+
+- Stablecoin parity with USDC/DAI at scale
+- Peg credibility (horizon C — internal simulation only)

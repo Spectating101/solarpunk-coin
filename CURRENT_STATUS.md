@@ -23,21 +23,22 @@
 | Foundation status | [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) |
 | Runtime | `state/runtime/spk_v1.json` |
 
-**On-chain (last sync):** ~5,454 SPK supply · 404 SPK settled · **17** network payments · ~97.6% circulation · peg off · $0.05/kWh reference.
+**On-chain (last sync):** ~5,499 SPK supply · 442 SPK settled · **21** network payments · ~96.7% circulation · peg off · $0.05/kWh reference.
 
 ---
 
-## Operator (you)
+## Operator
 
 | Check | Command |
 |-------|---------|
 | Gas + sync health | `npm run foundation:health` |
 | Sync ledger | `npm run foundation:sync` |
-| Full cycle | `npm run foundation:cycle` *(needs ≥0.01 Sepolia ETH on deployer)* |
+| Weekly rhythm | `npm run foundation:weekly` |
+| Full cycle | `npm run foundation:cycle` |
 | Refresh public demo | `npm run foundation:refresh` |
 | Fund demo wallet | `RECIPIENT=0x… AMOUNT=50 npm run spk:v1:fund` |
 
-**Deployer:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54` — **low ETH blocks cycles** until faucet top-up.
+**Deployer:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54` — **~0.53 Sepolia ETH** (cycles OK). Autosync + Monday CI handle routine ops — see [`docs/foundation/AUTONOMOUS_OPS.md`](./docs/foundation/AUTONOMOUS_OPS.md).
 
 ---
 
@@ -53,9 +54,9 @@
 
 ## Next foundation builds
 
-1. Top up operator Sepolia ETH → resume weekly `foundation:cycle`  
-2. Multisig handoff when ops are boring (`docs/foundation/GOVERNANCE.md`)  
-3. Meter mint cycle (`npm run foundation:cycle:meter`)  
-4. Peg-on experiment (after simulation discipline)
+1. Multisig handoff when ops are boring (`docs/foundation/GOVERNANCE.md`) — **your approval**  
+2. Meter mint cycle (`npm run foundation:cycle:meter`)  
+3. Labeled pilot payee in runtime  
+4. Peg-on experiment (after `foundation:peg-check` discipline)
 
 Thesis track: **paused** — product foundation only.
