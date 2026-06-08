@@ -24,9 +24,15 @@ jobs:
           CYCLE_REDEEM_SPK: '5'
         run: npm run spk:v1:cycle:sepolia
         continue-on-error: true
-      - name: Sync runtime from chain
+      - name: Sync runtime + foundation status
         env:
           PRIVATE_KEY: ${{ secrets.SPK_V1_OPERATOR_PRIVATE_KEY }}
           SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
-        run: npm run spk:v1:sync
+          SPK_V1_REPO_ROOT: ${{ github.workspace }}
+        run: |
+          npm run spk:v1:py:install
+          npm run foundation:sync
+        continue-on-error: true
+      - name: Peg simulation summary
+        run: npm run foundation:peg-check
         continue-on-error: true

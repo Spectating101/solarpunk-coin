@@ -1,16 +1,16 @@
 # Foundation Status
 
-**Generated:** 2026-06-08T13:45:56.520578+00:00
-**Synced:** 2026-06-08T13:45:52.582038Z
+**Generated:** 2026-06-08T14:08:03.217811+00:00
+**Synced:** 2026-06-08T14:08:03.191535Z
 
 ## Monetary stack
 
 | Layer | Value |
 |-------|-------|
 | Energy anchor | 1.0 kWh / SPK |
-| Surplus minted | 5,414 kWh |
+| Surplus minted | 5,464 kWh |
 | USD reference | $0.0500 / kWh |
-| Implied supply (ref) | ~$270.20 |
+| Implied supply (ref) | ~$272.70 |
 | Peg enabled | **False** |
 | Primary use | network_circulation |
 
@@ -18,10 +18,10 @@
 
 | Metric | Value |
 |--------|-------|
-| Supply | 5,404.01 SPK |
-| Settled | 388.00 SPK (~$19.40 ref) |
-| Payments | 15 |
-| Circulation share | 97.48% |
+| Supply | 5,454.01 SPK |
+| Settled | 404.00 SPK (~$20.20 ref) |
+| Payments | 17 |
+| Circulation share | 97.58% |
 | Redeemed | 10.00 SPK |
 
 ## Contracts
@@ -31,9 +31,9 @@
 
 ## Latest payment
 
-- Kind: **GOODS**
-- SPK: **5.0**
-- Tx: `0xbd7bb0e540dda4adb00d4e029ce6ff34ecab8d3c0ab3c96719281d645857d57f`
+- Kind: **SERVICE**
+- SPK: **12.0**
+- Tx: `0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b`
 
 > USD figures use `reference_usd_per_kwh` only. See `docs/foundation/MONETARY_FOUNDATION.md`.
 

@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-08T13:40:06.119890+00:00",
+  "generated_at": "2026-06-08T14:08:03.217811+00:00",
   "horizon": "structural",
   "network": "sepolia",
   "chain_id": 11155111,
   "status": "operating",
-  "synced_at": "2026-06-08T13:40:06.118962Z",
+  "synced_at": "2026-06-08T14:08:03.191535Z",
   "anchor": {
     "kwh_per_spk": 1.0,
-    "cumulative_surplus_kwh": 5414.0
+    "cumulative_surplus_kwh": 5464.0
   },
   "usd_translation": {
     "reference_usd_per_kwh": 0.05,
-    "implied_supply_usd": 270.20050000000003,
-    "implied_settled_usd": 19.400000000000002,
+    "implied_supply_usd": 272.70050000000003,
+    "implied_settled_usd": 20.200000000000003,
     "note": "Reference valuation layer \u2014 not a live market peg."
   },
   "peg": {
@@ -21,25 +21,25 @@
     "secondary_sink": "optional_energy_redemption"
   },
   "circulation": {
-    "total_supply_spk": 5404.01,
-    "total_settled_spk": 388.0,
+    "total_supply_spk": 5454.01,
+    "total_settled_spk": 404.0,
     "total_redeemed_spk": 10.0,
-    "circulation_share_percent": 97.48,
-    "network_payment_count": 15
+    "circulation_share_percent": 97.58,
+    "network_payment_count": 17
   },
   "constraints": {
     "data": {
-      "cumulative_surplus_kwh": 5414.0
+      "cumulative_surplus_kwh": 5464.0
     },
     "issuance": {
-      "total_supply_spk": 5404.01
+      "total_supply_spk": 5454.01
     },
     "pricing": {
       "reference_usd_per_kwh": 0.05
     },
     "settlement": {
-      "network_payment_count": 15,
-      "total_settled_spk": 388.0
+      "network_payment_count": 17,
+      "total_settled_spk": 404.0
     },
     "governance": {
       "peg_enabled": false

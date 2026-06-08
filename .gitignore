@@ -186,6 +186,7 @@ energy_derivatives/data/*.json
 # Temporary files
 *.tmp
 *.bak
+spk_simulation_results.csv
 
 # Gemini CLI Brainstorming
 .superpowers/

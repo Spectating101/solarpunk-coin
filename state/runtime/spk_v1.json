@@ -39,11 +39,11 @@
   "deploy_gas_spent_eth": 0.010914547113359475,
   "genesis": {
     "metrics": {
-      "total_settled_spk": 388.0,
+      "total_settled_spk": 404.0,
       "total_redeemed_spk": 10.0,
-      "circulation_share_percent": 97.48,
-      "redemption_share_percent": 2.52,
-      "network_payment_count": 15
+      "circulation_share_percent": 97.58,
+      "redemption_share_percent": 2.42,
+      "network_payment_count": 17
     },
     "note": "Synced from on-chain state."
   },
@@ -54,16 +54,16 @@
     "attached_currency_system": "0x3Fa51B6631282e7a9f4CBFB7D764748831D9Ca47",
     "note": "Previous attach stack kept for history; v1 lean stack is canonical after this deploy."
   },
-  "synced_at": "2026-06-08T13:40:06.118962Z",
+  "synced_at": "2026-06-08T14:08:03.191535Z",
   "on_chain": {
-    "deployer_spk_balance": 5148.303,
-    "total_supply_spk": 5404.01,
-    "cumulative_surplus_kwh": 5414,
+    "deployer_spk_balance": 5182.277999999999,
+    "total_supply_spk": 5454.01,
+    "cumulative_surplus_kwh": 5464,
     "issuance_mode": 1,
     "peg_enabled": false,
     "kwh_per_spk": "1.0"
   },
-  "updated_at": "2026-06-08T13:40:06.119215Z",
+  "updated_at": "2026-06-08T14:08:03.191816Z",
   "operations": [
     {
       "cycle_id": "2026-06-07T15-36-04-187Z",
@@ -313,8 +313,8 @@
     }
   },
   "counterparty_balances_spk": {
-    "gateway": 32.0,
-    "maintenance": 60.0,
+    "gateway": 38.0,
+    "maintenance": 70.0,
     "merchant": 100.0,
     "network_peer": 16.0
   },
@@ -488,6 +488,28 @@
         "invoice_hash": "0xf64f45cad48263a6f73eeff79f4e6a07c2fadf11d79ba5581090ea3ceae10767",
         "block_number": 11014542,
         "tx_hash": "0xbd7bb0e540dda4adb00d4e029ce6ff34ecab8d3c0ab3c96719281d645857d57f"
+      },
+      {
+        "type": "network_payment",
+        "payment_id": 16,
+        "payer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+        "payee": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+        "spk": 6.0,
+        "payment_kind": "SERVICE",
+        "invoice_hash": "0xd609e2b3a3a32a4e7c8eea3b70083264667b51e2d455af290443ec7a3246a8a8",
+        "block_number": 11015813,
+        "tx_hash": "0x7bd6389e32d1a57011b01c321d85770620a2fe77f8f3979344690f76fb27ee34"
+      },
+      {
+        "type": "network_payment",
+        "payment_id": 17,
+        "payer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+        "payee": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        "spk": 10.0,
+        "payment_kind": "LABOR",
+        "invoice_hash": "0x3805b147480430fe8e232aa47cbb7b9e63ebabcd4df3bdf92d5744fcb9035e79",
+        "block_number": 11015815,
+        "tx_hash": "0x2fd62cdcf93fb38b7bb6d827ca141ad3ba1559611844b38a2ad63ec42dc59ba8"
       }
     ],
     "redemption_ledger": [
@@ -515,12 +537,12 @@
       }
     ],
     "settled_by_kind_spk": {
-      "SERVICE": 32.0,
-      "LABOR": 60.0,
+      "SERVICE": 38.0,
+      "LABOR": 70.0,
       "NETWORK": 196.0,
       "GOODS": 100.0
     },
-    "payment_count": 15,
+    "payment_count": 17,
     "redemption_count": 2
   }
 }

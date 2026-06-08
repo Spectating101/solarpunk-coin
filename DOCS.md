@@ -13,9 +13,9 @@ SolarPunk **SPK v1** is testnet money on Ethereum Sepolia:
 2. SPK pays for services, labor, goods (on-chain)  
 3. Burning SPK for energy credit is optional, not the main path  
 
-A Finance Master's thesis documents the research. The **product** is the live testnet loop.
+The **product** is an energy-anchored monetary foundation on testnet (circulation-first, USD translation, peg off until tested).
 
-**Not claimed:** mainnet, real dollars, production audit, legal tender.
+**Not claimed:** mainnet, live dollar peg, production audit, legal tender.
 
 ---
 
@@ -23,15 +23,15 @@ A Finance Master's thesis documents the research. The **product** is the live te
 
 | File | Use |
 |------|-----|
+| [`docs/foundation/MONETARY_FOUNDATION.md`](./docs/foundation/MONETARY_FOUNDATION.md) | Blueprint / north star |
+| [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) | Generated live foundation metrics |
+| [`docs/foundation/ROADMAP.md`](./docs/foundation/ROADMAP.md) | What to build next |
 | [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | Live snapshot: addresses, metrics, gaps |
 | [`state/runtime/spk_v1.json`](./state/runtime/spk_v1.json) | Machine-readable testnet state |
+| [`state/foundation/status.json`](./state/foundation/status.json) | Foundation snapshot (JSON) |
 | [`README.md`](./README.md) | Quick start commands |
-| [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md) | All Sepolia addresses |
 | [`docs/product/SPK_V1.md`](./docs/product/SPK_V1.md) | Product constitution |
 | [`docs/product/SPK_V1_OPERATOR.md`](./docs/product/SPK_V1_OPERATOR.md) | How to run weekly cycles |
-| [`thesis_package/THESIS_SOURCE_OF_TRUTH.md`](./thesis_package/THESIS_SOURCE_OF_TRUTH.md) | Thesis numbers and framing |
-| [`thesis_package/SPK_V1_EVIDENCE.md`](./thesis_package/SPK_V1_EVIDENCE.md) | Etherscan tx tables for Ch 5 |
-| [`EVIDENCE.md`](./EVIDENCE.md) | Full proof register (empirics + testnet) |
 
 **When docs disagree:** `CURRENT_STATUS.md` + `spk_v1.json` win.
 

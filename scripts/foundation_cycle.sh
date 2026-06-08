@@ -13,7 +13,9 @@ fi
 export SPK_V1_REPO_ROOT="$ROOT"
 
 echo "== operator cycle (Sepolia) =="
-npm run spk:v1:cycle:sepolia
+if ! npm run spk:v1:cycle:sepolia; then
+  echo "operator cycle failed (often low Sepolia ETH) — continuing sync + foundation export" >&2
+fi
 
 echo "== sync + foundation =="
 "${VENV_BIN}/spk-v1" sync --repo-root "$ROOT"
