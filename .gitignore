@@ -168,6 +168,8 @@ energy_derivatives/data/*.json
 *.png
 *.pdf
 *.html
+!docs/index.html
+!docs/demo/index.html
 
 # Large binary files
 *.zip
