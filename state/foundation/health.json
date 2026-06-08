@@ -1,0 +1,17 @@
+{
+  "ok": false,
+  "at": "2026-06-08T15:19:49.748Z",
+  "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
+  "operator_eth": 0.000242589736294095,
+  "operator_eth_min": 0.01,
+  "operator_spk": 5182.278,
+  "synced_at": "2026-06-08T15:19:48.726725Z",
+  "sync_age_hours": 0,
+  "network_payment_count": 17,
+  "total_supply_spk": 5454.01,
+  "peg_enabled": false,
+  "foundation_status_json": true,
+  "actions": [
+    "Top up Sepolia ETH on deployer (need ≥0.01, have 0.000243)"
+  ]
+}

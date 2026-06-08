@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-08T14:08:03.217811+00:00",
+  "generated_at": "2026-06-08T15:20:06.211752+00:00",
   "horizon": "structural",
   "network": "sepolia",
   "chain_id": 11155111,
   "status": "operating",
-  "synced_at": "2026-06-08T14:08:03.191535Z",
+  "synced_at": "2026-06-08T15:20:06.210776Z",
   "anchor": {
     "kwh_per_spk": 1.0,
     "cumulative_surplus_kwh": 5464.0
@@ -52,13 +52,13 @@
   },
   "latest_payment": {
     "type": "network_payment",
-    "payment_id": 1,
+    "payment_id": 17,
     "payer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
-    "payee": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-    "spk": 12.0,
-    "payment_kind": "SERVICE",
-    "invoice_hash": "0xc35c53c47cf65139ce697c5c756aa50caa78fadb0b2bde9f7bdad41ba65837b9",
-    "block_number": 11009412,
-    "tx_hash": "0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b"
+    "payee": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+    "spk": 10.0,
+    "payment_kind": "LABOR",
+    "invoice_hash": "0x3805b147480430fe8e232aa47cbb7b9e63ebabcd4df3bdf92d5744fcb9035e79",
+    "block_number": 11015815,
+    "tx_hash": "0x2fd62cdcf93fb38b7bb6d827ca141ad3ba1559611844b38a2ad63ec42dc59ba8"
   }
 }

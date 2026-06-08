@@ -1,35 +1,43 @@
 # Current status
 
-**Updated:** 2026-06-07  
-**Doc entry point:** [`DOCS.md`](./DOCS.md) — read that first if you're catching up.
+**Updated:** 2026-06-08  
+**Entry point:** [`docs/foundation/README.md`](./docs/foundation/README.md) · [`DOCS.md`](./DOCS.md)
 
 ---
 
 ## What this is
 
-**Product:** SPK v1 testnet money on Sepolia — mint from energy surplus, pay people on-chain, optional burn-for-energy-credit.
+**Product:** Energy-anchored testnet money on Sepolia — mint from surplus kWh, circulate via on-chain payments, USD reference for expression (peg **off**).
 
-**Also:** Finance Master's thesis (Yuan Ze) — Bitcoin energy-cost empirics, options pricing, five-constraint framework.
-
-Not mainnet. Not audited for production. Deployer key runs testnet demos.
+**Horizon:** Operating laboratory (structure), not stablecoin war (scale).
 
 ---
 
-## SPK v1 on Sepolia (canonical)
+## Live now
 
 | | |
 |---|---|
-| SPK token | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` [verified](https://sepolia.etherscan.io/address/0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128#code) |
-| Payment contract | `0x520162252F9B94824417678525FFd69145014970` [verified](https://sepolia.etherscan.io/address/0x520162252F9B94824417678525FFd69145014970#code) |
-| Runtime JSON | `state/runtime/spk_v1.json` |
-| Demo UI | https://spectating101.github.io/solarpunk-coin/ (SPK v1 tab) |
+| Demo | https://spectating101.github.io/solarpunk-coin/demo/ |
+| SPK | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
+| Payments contract | `0x520162252F9B94824417678525FFd69145014970` |
+| Foundation status | [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) |
+| Runtime | `state/runtime/spk_v1.json` |
 
-**On-chain (last sync):** ~5,400+ SPK supply · 383 SPK settled · 14 network payments · 97.5% circulation share · 4 counterparties holding SPK.
+**On-chain (last sync):** ~5,454 SPK supply · 404 SPK settled · **17** network payments · ~97.6% circulation · peg off · $0.05/kWh reference.
 
-```bash
-npm run spk:v1:cycle:sepolia   # weekly: mint + pay + log
-npm run spk:v1:sync            # pull chain state into JSON
-```
+---
+
+## Operator (you)
+
+| Check | Command |
+|-------|---------|
+| Gas + sync health | `npm run foundation:health` |
+| Sync ledger | `npm run foundation:sync` |
+| Full cycle | `npm run foundation:cycle` *(needs ≥0.01 Sepolia ETH on deployer)* |
+| Refresh public demo | `npm run foundation:refresh` |
+| Fund demo wallet | `RECIPIENT=0x… AMOUNT=50 npm run spk:v1:fund` |
+
+**Deployer:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54` — **low ETH blocks cycles** until faucet top-up.
 
 ---
 
@@ -37,50 +45,17 @@ npm run spk:v1:sync            # pull chain state into JSON
 
 | Command | What |
 |---------|------|
-| `npx hardhat test` | **109** contract tests |
-| `npm run spk:v1:test` | Runtime smoke |
-| `npm run attestations:test` | Meter signature pipeline |
-| `pytest energy_derivatives/tests/` | Options pricing math |
-
-Pass counts are not product readiness. See [`docs/project/TEST_ANALYSIS.md`](./docs/project/TEST_ANALYSIS.md).
+| `npx hardhat test` | 109 contract tests |
+| `npm run spk:v1:backend:check` | Python sync + API |
+| `npm run foundation:health` | Operator readiness |
 
 ---
 
-## Archive deployments (do not confuse with SPK v1)
+## Next foundation builds
 
-| Stack | When | Purpose now |
-|-------|------|-------------|
-| `0x1D55…` + Safe + options | Apr 2026 | UI archive / keeper demo |
-| `0x8ceDa…` attested mint | May 2026 | Thesis historical proof |
+1. Top up operator Sepolia ETH → resume weekly `foundation:cycle`  
+2. Multisig handoff when ops are boring (`docs/foundation/GOVERNANCE.md`)  
+3. Meter mint cycle (`npm run foundation:cycle:meter`)  
+4. Peg-on experiment (after simulation discipline)
 
-Full list: [`CONTRACT_ADDRESSES.md`](./CONTRACT_ADDRESSES.md)
-
----
-
-## What works locally (no Sepolia needed)
-
-```bash
-npx hardhat test
-npm run spk:v1:launch              # full local loop
-npm run proof:spk-attested-mint    # meter → mint proof
-```
-
----
-
-## Honest gaps
-
-| Gap | Detail |
-|-----|--------|
-| Real hardware | Mint proofs use fixtures / sample CSV, not live site meters |
-| Governance | SPK v1 uses deployer EOA, not Safe multisig |
-| Keeper | NASA→Sepolia automation stale since May 2026 |
-| Doc drift | Old files may cite wrong test counts — trust `DOCS.md` + this file |
-| Production | No audit, no mainnet, no legal classification |
-
----
-
-## One line
-
-Live testnet cryptocurrency prototype with thesis documentation — compound circulation on SPK v1, don't redeploy unless bytecode changes.
-
-**Read next:** [`DOCS.md`](./DOCS.md) · [`README.md`](./README.md) · [`thesis_package/SPK_V1_EVIDENCE.md`](./thesis_package/SPK_V1_EVIDENCE.md)
+Thesis track: **paused** — product foundation only.

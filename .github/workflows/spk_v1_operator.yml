@@ -16,6 +16,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run compile
+      - name: Foundation health (gas + sync)
+        env:
+          SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
+        run: npm run foundation:health || true
       - name: Run Sepolia operator cycle
         env:
           PRIVATE_KEY: ${{ secrets.SPK_V1_OPERATOR_PRIVATE_KEY }}

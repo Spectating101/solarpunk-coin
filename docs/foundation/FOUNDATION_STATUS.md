@@ -1,7 +1,7 @@
 # Foundation Status
 
-**Generated:** 2026-06-08T14:08:03.217811+00:00
-**Synced:** 2026-06-08T14:08:03.191535Z
+**Generated:** 2026-06-08T15:20:06.211752+00:00
+**Synced:** 2026-06-08T15:20:06.210776Z
 
 ## Monetary stack
 
@@ -31,9 +31,9 @@
 
 ## Latest payment
 
-- Kind: **SERVICE**
-- SPK: **12.0**
-- Tx: `0x6c65e0ae7cd1d124fcd1d0dce4fc833b429e9d95a30ccd0f853ad9dc04c4c37b`
+- Kind: **LABOR**
+- SPK: **10.0**
+- Tx: `0x2fd62cdcf93fb38b7bb6d827ca141ad3ba1559611844b38a2ad63ec42dc59ba8`
 
 > USD figures use `reference_usd_per_kwh` only. See `docs/foundation/MONETARY_FOUNDATION.md`.
 
