@@ -34,7 +34,8 @@ def _sample_runtime() -> dict:
         },
         "chain_index": {
             "payment_ledger": [
-                {"payment_kind": "GOODS", "spk": 5, "tx_hash": "0xabc"},
+                {"payment_id": 1, "payment_kind": "SERVICE", "spk": 12, "tx_hash": "0xold"},
+                {"payment_id": 3, "payment_kind": "GOODS", "spk": 5, "tx_hash": "0xabc"},
             ]
         },
     }
@@ -46,6 +47,7 @@ def test_build_foundation_snapshot():
     assert snap["usd_translation"]["implied_supply_usd"] == 5.0
     assert snap["circulation"]["network_payment_count"] == 3
     assert snap["constraints"]["settlement"]["total_settled_spk"] == 40.0
+    assert snap["latest_payment"]["payment_id"] == 3
 
 
 def test_export_foundation_status(tmp_path: Path):

@@ -28,7 +28,7 @@ def build_foundation_snapshot(runtime: dict[str, Any]) -> dict[str, Any]:
     settled = float(metrics.get("total_settled_spk") or 0)
 
     ledger = (runtime.get("chain_index") or {}).get("payment_ledger") or []
-    latest = ledger[0] if ledger else None
+    latest = max(ledger, key=lambda row: int(row.get("payment_id") or 0), default=None)
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),

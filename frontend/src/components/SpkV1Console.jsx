@@ -38,8 +38,9 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
 
   const payees = useMemo(() => buildPayees(runtime), [runtime]);
 
-  const reload = useCallback(() => {
+  const reload = useCallback(async () => {
     setError(null);
+    await requestFoundationSync();
     return loadSpkV1Runtime().then(setRuntime).catch((err) => setError(err.message));
   }, []);
 
@@ -69,6 +70,14 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
   const balance = liveData?.walletBalance;
   const ledger = runtime?.chain_index?.payment_ledger || [];
   const syncedAt = runtime?.synced_at || runtime?.updated_at;
+  const monetaryPolicy = runtime?.monetary_policy;
+  const refUsdPerKwh = monetaryPolicy?.reference_usd_per_kwh != null
+    ? Number(monetaryPolicy.reference_usd_per_kwh)
+    : null;
+  const pegEnabled = Boolean(monetaryPolicy?.peg_enabled);
+  const impliedSupplyUsd = supply != null && refUsdPerKwh != null
+    ? Number(supply) * refUsdPerKwh
+    : null;
 
   const parsedAmount = Number(amount);
   const canPay = (
@@ -200,6 +209,17 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
           </div>
         ) : null}
       </div>
+
+      {refUsdPerKwh != null ? (
+        <div className="spk-foundation-strip" role="status">
+          <span>USD ref <strong>${refUsdPerKwh.toFixed(4)}/kWh</strong></span>
+          <span>Peg <strong>{pegEnabled ? 'on' : 'off'}</strong></span>
+          {impliedSupplyUsd != null ? (
+            <span>Implied supply <strong>~${impliedSupplyUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })}</strong></span>
+          ) : null}
+          <span className="muted">Energy anchor · dollar translation</span>
+        </div>
+      ) : null}
 
       <div className="spk-pay-card">
         <h2><Send size={18} /> Send SPK</h2>

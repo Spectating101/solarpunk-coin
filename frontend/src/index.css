@@ -1885,6 +1885,24 @@ p {
   color: #fca5a5;
 }
 
+.spk-foundation-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--border, #1b3422);
+  border-radius: 8px;
+  background: rgba(52, 211, 153, 0.06);
+  font-size: 13px;
+}
+
+.spk-foundation-strip .muted {
+  margin-left: auto;
+  font-size: 12px;
+}
+
 .ghost-link.compact {
   padding: 6px 10px;
   font-size: 12px;
