@@ -20,6 +20,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PKG = Path(__file__).resolve().parent
 sys.path.insert(0, str(PKG))
+
+from embed_evidence import inject_chapter5_evidence
 OUTPUT_MD = PKG / "THESIS_GROUNDED_MANUSCRIPT.md"
 OUTPUT_DOCX = PKG / "output" / "THESIS_GROUNDED.docx"
 CHAPTER_OUTPUT_DIR = PKG / "output" / "chapters"
@@ -194,6 +196,8 @@ def assemble_manuscript() -> str:
         if not chapter_path.exists():
             raise FileNotFoundError(f"Missing chapter draft: {chapter_path}")
         body, refs = load_chapter(chapter_path)
+        if chapter_path.name == "CHAPTER_5_GROUNDED_DRAFT.md":
+            body = inject_chapter5_evidence(body, PKG / "SPK_V1_EVIDENCE.md")
         parts.append(body)
         parts.append("\n")
         if refs:

@@ -307,7 +307,17 @@ def add_markdown_table(doc: Document, token: dict) -> None:
             cell = table.rows[row_idx].cells[col_idx]
             cell.text = ""
             paragraph = cell.paragraphs[0]
+            if cols >= 5:
+                paragraph.paragraph_format.first_line_indent = Inches(0)
             render_inline(paragraph, cell_token.get("children", []))
+
+    if cols >= 5:
+        for row in table.rows:
+            for cell in row.cells:
+                for paragraph in cell.paragraphs:
+                    paragraph.paragraph_format.first_line_indent = Inches(0)
+                    for run in paragraph.runs:
+                        run.font.size = Pt(9)
 
     doc.add_paragraph("")
 

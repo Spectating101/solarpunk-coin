@@ -213,7 +213,7 @@ This iteration is **product-oriented evidence**, not a new theoretical claim. It
 4. **Settlement** — typed network payments (SERVICE, LABOR, GOODS, NETWORK) with invoice-hash replay protection; redemption gated and secondary.
 5. **Governance** — role separation on contracts; testnet operator key for demo only.
 
-Table 5.3 summarises the main public SPK v1 evidence (full ledger: `thesis_package/SPK_V1_EVIDENCE.md`).
+Table 5.3 summarises the main public SPK v1 evidence (Table 5.4 and §5.10.1–5.10.3 below; regenerated on each thesis build).
 
 | Evidence item | Sepolia transaction / contract |
 |---|---|

@@ -887,7 +887,7 @@ This iteration is **product-oriented evidence**, not a new theoretical claim. It
 4. **Settlement** — typed network payments (SERVICE, LABOR, GOODS, NETWORK) with invoice-hash replay protection; redemption gated and secondary.
 5. **Governance** — role separation on contracts; testnet operator key for demo only.
 
-Table 5.3 summarises the main public SPK v1 evidence (full ledger: `thesis_package/SPK_V1_EVIDENCE.md`).
+Table 5.3 summarises the main public SPK v1 evidence (Table 5.4 and §5.10.1–5.10.3 below; regenerated on each thesis build).
 
 | Evidence item | Sepolia transaction / contract |
 |---|---|
@@ -900,6 +900,90 @@ Table 5.3 summarises the main public SPK v1 evidence (full ledger: `thesis_packa
 Synced metrics (Jun 2026): ~5,499 SPK supply, 442 SPK settled, **21** network payments, 96.7% circulation share. Payment **#15** is a wallet-initiated pilot transfer (Pilot payer → Merchant, 5 SPK). Reproduce: `npm run foundation:sync` or `spk-v1 sync --repo-root .`.
 
 **Thesis interpretation:** SPK v1 demonstrates that the constraints framework can support an energy-native, circulation-first instrument—not only a dollar-pegged lab token. It does **not** demonstrate mainnet readiness, legal money status, or real-site meter finality. Those boundaries from §5.9 still apply. Launch-gate staging (§5.7) remains useful for separating research demos from production, but the **primary implementation evidence** for this chapter is now the SPK v1 runtime and its on-chain payment history.
+
+*The following blocks are exported from `state/runtime/spk_v1.json` after Sepolia sync (Generated:** 2026-06-09T09:53:51.664666+00:00).*
+
+
+### 5.10.1 Canonical contracts and live metrics
+
+
+| Contract | Address |
+|----------|---------|
+| mock_usdc | `0xaD2A7169CfFBA9Bef8C45515fc85178DbBfEc2C9` |
+| solar_punk_coin | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
+| currency_system | `0x520162252F9B94824417678525FFd69145014970` |
+
+
+- Total supply: **5499.015 SPK**
+- Settled: **442.0 SPK**
+- Network payments: **21**
+- Circulation share: **96.71%**
+
+### 5.10.2 Indexed payment ledger (Table 5.4)
+
+Table 5.4 lists all indexed `settleNetworkPayment` events. Payment **#15** is the wallet-initiated pilot transfer (Pilot payer → Merchant).
+
+
+| # | Kind | SPK | Payee | Payer | Tx |
+|---|------|-----|-------|-------|-----|
+| 1 | SERVICE | 12.0 | Gateway | Operator | 0x6c65e0ae… |
+| 2 | LABOR | 40.0 | Maintenance | Operator | 0x8ad9f3ce… |
+| 3 | NETWORK | 180.0 | Operator | Operator | 0x6dbbf639… |
+| 4 | GOODS | 55.0 | Merchant | Operator | 0x0d7e506b… |
+| 5 | SERVICE | 8.0 | Gateway | Operator | 0xeacc17a4… |
+| 6 | GOODS | 12.0 | Merchant | Operator | 0xb4972856… |
+| 7 | SERVICE | 6.0 | Gateway | Operator | 0x7bf52655… |
+| 8 | LABOR | 10.0 | Maintenance | Operator | 0x1f7cd596… |
+| 9 | GOODS | 14.0 | Merchant | Operator | 0x3b912b39… |
+| 10 | NETWORK | 8.0 | Network peer | Operator | 0x100b4dec… |
+| 11 | SERVICE | 6.0 | Gateway | Operator | 0x7d68647a… |
+| 12 | LABOR | 10.0 | Maintenance | Operator | 0xc1eb24c0… |
+| 13 | GOODS | 14.0 | Merchant | Operator | 0xd01d4ab8… |
+| 14 | NETWORK | 8.0 | Network peer | Operator | 0x2b8e8efb… |
+| 15 | GOODS | 5.0 | Merchant | Pilot payer | 0xbd7bb0e5… |
+| 16 | SERVICE | 6.0 | Gateway | Operator | 0x7bd6389e… |
+| 17 | LABOR | 10.0 | Maintenance | Operator | 0x2fd62cdc… |
+| 18 | SERVICE | 6.0 | Gateway | Operator | 0xfc63cd22… |
+| 19 | LABOR | 10.0 | Maintenance | Operator | 0xb620ea8c… |
+| 20 | GOODS | 14.0 | Merchant | Operator | 0x6b1f3801… |
+| 21 | NETWORK | 8.0 | Network peer | Operator | 0x5a72cc73… |
+
+### 5.10.3 Operator cycle log
+
+
+#### 2026-06-07T15-36-04-187Z
+
+- **mint_from_surplus** (100 kWh): 0xcf922f3883f5…
+- **network_payment** (8 SPK): 0xeacc17a44e8e…
+- **network_payment** (12 SPK): 0xb49728568174…
+- **optional_redemption** (5 SPK): 0xabfc4d3462ac…
+
+#### 2026-06-07T16-02-48-981Z
+
+- **mint_from_attestation** (50 kWh): 0x9fcf885ff5df…
+- **network_payment** (6 SPK): 0x7bf526551f5a…
+- **network_payment** (10 SPK): 0x1f7cd59612cf…
+- **network_payment** (14 SPK): 0x3b912b39ed24…
+- **network_payment** (8 SPK): 0x100b4decd5e1…
+- **optional_redemption** (5 SPK): 0xd14b9c118ce7…
+
+#### 2026-06-07T16-25-38-349Z
+
+- **mint_from_attestation** (52 kWh): 0x3527585fd110…
+- **network_payment** (6 SPK): 0x7d68647acac4…
+- **network_payment** (10 SPK): 0xc1eb24c0dc7e…
+- **network_payment** (14 SPK): 0xd01d4ab88396…
+- **network_payment** (8 SPK): 0x2b8e8efb9ff2…
+
+#### 2026-06-08T16-57-04-958Z
+
+- **oracle_refresh**: 0x2b2fff3df582…
+- **mint_from_attestation** (50 kWh): 0x3dd63c06a294…
+- **network_payment** (6 SPK): 0xfc63cd227940…
+- **network_payment** (10 SPK): 0xb620ea8cdcf7…
+- **network_payment** (14 SPK): 0x6b1f3801f468…
+- **network_payment** (8 SPK): 0x5a72cc73cbc6…
+- **optional_redemption** (5 SPK): 0xf3111ce6742e…
 
 ### 5.11 Chapter Conclusion
 

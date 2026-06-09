@@ -39,11 +39,15 @@ npm run thesis:evidence
 4. Add page numbers (Insert → Page Number) if required by department.
 5. Run spell-check; verify Ch 3–4 numbers against `THESIS_SOURCE_OF_TRUTH.md`.
 
+## Chapter 5 evidence (automatic)
+
+The full Sepolia payment ledger (21 rows), contracts table, live metrics, and operator-cycle log are **embedded automatically** into Chapter 5 before §5.11 when you run `npm run thesis:docx`. No manual copy-paste from `SPK_V1_EVIDENCE.md`.
+
 ## Edit workflow
 
 1. Edit the relevant `CHAPTER_N_GROUNDED_DRAFT.md`.
 2. If Ch 5 numbers change on-chain: `npm run foundation:sync` then `npm run thesis:docx`.
-3. Send advisor a single chapter: `output/chapters/CHAPTER_3.docx`.
+3. Send advisor a single chapter: `output/chapters/CHAPTER_5.docx` includes the ledger tables.
 
 ## Dependencies
 

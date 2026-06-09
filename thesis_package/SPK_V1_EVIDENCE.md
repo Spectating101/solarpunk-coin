@@ -1,6 +1,6 @@
 # SPK v1 — Thesis Evidence Pack (Chapter 5)
 
-**Generated:** 2026-06-09T09:39:58.481175+00:00
+**Generated:** 2026-06-09T09:53:51.664666+00:00
 **Status:** operating
 **Runtime:** `state/runtime/spk_v1.json`
 
