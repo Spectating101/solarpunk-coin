@@ -45,11 +45,12 @@ def format_evidence_block(raw: str) -> str:
         if in_reproduce:
             continue
 
-        if line.startswith("**Generated:"):
-            meta = line.strip("*").strip()
+        if "Generated:" in line and line.strip().startswith("**"):
+            meta = re.sub(r"\*+", "", line).strip()
+            ts = meta.split("Generated:", 1)[-1].strip()
             lines_out.append(
                 f"*The following blocks are exported from `state/runtime/spk_v1.json` "
-                f"after Sepolia sync ({meta}).*"
+                f"after Sepolia sync (generated {ts}).*"
             )
             lines_out.append("")
             continue
@@ -62,7 +63,7 @@ def format_evidence_block(raw: str) -> str:
             if mapped is None:
                 continue
             section_title = mapped
-            lines_out.append(f"### {mapped}")
+            lines_out.append(f"#### {mapped}")
             lines_out.append("")
             if heading == "Payment ledger (indexed from chain)":
                 lines_out.append(
@@ -73,7 +74,7 @@ def format_evidence_block(raw: str) -> str:
             continue
 
         if line.startswith("### ") and section_title == "5.10.3 Operator cycle log":
-            lines_out.append(f"#### {line[4:].strip()}")
+            lines_out.append(f"##### {line[4:].strip()}")
             continue
 
         lines_out.append(wordify_markdown_links(line))
@@ -99,6 +100,14 @@ def inject_chapter5_evidence(chapter_body: str, evidence_path: Path | None = Non
     chapter_body = chapter_body.replace(
         "(full ledger: `thesis_package/SPK_V1_EVIDENCE.md`).",
         "(Table 5.4 and §5.10.1–5.10.3 below; regenerated on each thesis build).",
+    )
+
+    # Drop one-line metrics summary; the embedded block repeats with tables.
+    chapter_body = re.sub(
+        r"Synced metrics \(Jun 2026\):[^\n]+\n\n",
+        "",
+        chapter_body,
+        count=1,
     )
 
     marker = "### 5.11 Chapter Conclusion"

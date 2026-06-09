@@ -897,14 +897,12 @@ Table 5.3 summarises the main public SPK v1 evidence (Table 5.4 and §5.10.1–5
 | Attested mint (Taoyuan meter fixture, scaled) | `0x3527585fd110ae3e135e76b870232d1b30411d76953c15c94a237743a0d1754d` |
 | Network payment (LABOR) | `0x1f7cd59612cf81dd4a43f1cb1b4e5d6e03f4be570e4ad4fc2c21e28ee72d09be` |
 
-Synced metrics (Jun 2026): ~5,499 SPK supply, 442 SPK settled, **21** network payments, 96.7% circulation share. Payment **#15** is a wallet-initiated pilot transfer (Pilot payer → Merchant, 5 SPK). Reproduce: `npm run foundation:sync` or `spk-v1 sync --repo-root .`.
-
 **Thesis interpretation:** SPK v1 demonstrates that the constraints framework can support an energy-native, circulation-first instrument—not only a dollar-pegged lab token. It does **not** demonstrate mainnet readiness, legal money status, or real-site meter finality. Those boundaries from §5.9 still apply. Launch-gate staging (§5.7) remains useful for separating research demos from production, but the **primary implementation evidence** for this chapter is now the SPK v1 runtime and its on-chain payment history.
 
-*The following blocks are exported from `state/runtime/spk_v1.json` after Sepolia sync (Generated:** 2026-06-09T09:53:51.664666+00:00).*
+*The following blocks are exported from `state/runtime/spk_v1.json` after Sepolia sync (generated 2026-06-09T10:03:54.491830+00:00).*
 
 
-### 5.10.1 Canonical contracts and live metrics
+#### 5.10.1 Canonical contracts and live metrics
 
 
 | Contract | Address |
@@ -919,7 +917,7 @@ Synced metrics (Jun 2026): ~5,499 SPK supply, 442 SPK settled, **21** network pa
 - Network payments: **21**
 - Circulation share: **96.71%**
 
-### 5.10.2 Indexed payment ledger (Table 5.4)
+#### 5.10.2 Indexed payment ledger (Table 5.4)
 
 Table 5.4 lists all indexed `settleNetworkPayment` events. Payment **#15** is the wallet-initiated pilot transfer (Pilot payer → Merchant).
 
@@ -948,17 +946,17 @@ Table 5.4 lists all indexed `settleNetworkPayment` events. Payment **#15** is th
 | 20 | GOODS | 14.0 | Merchant | Operator | 0x6b1f3801… |
 | 21 | NETWORK | 8.0 | Network peer | Operator | 0x5a72cc73… |
 
-### 5.10.3 Operator cycle log
+#### 5.10.3 Operator cycle log
 
 
-#### 2026-06-07T15-36-04-187Z
+##### 2026-06-07T15-36-04-187Z
 
 - **mint_from_surplus** (100 kWh): 0xcf922f3883f5…
 - **network_payment** (8 SPK): 0xeacc17a44e8e…
 - **network_payment** (12 SPK): 0xb49728568174…
 - **optional_redemption** (5 SPK): 0xabfc4d3462ac…
 
-#### 2026-06-07T16-02-48-981Z
+##### 2026-06-07T16-02-48-981Z
 
 - **mint_from_attestation** (50 kWh): 0x9fcf885ff5df…
 - **network_payment** (6 SPK): 0x7bf526551f5a…
@@ -967,7 +965,7 @@ Table 5.4 lists all indexed `settleNetworkPayment` events. Payment **#15** is th
 - **network_payment** (8 SPK): 0x100b4decd5e1…
 - **optional_redemption** (5 SPK): 0xd14b9c118ce7…
 
-#### 2026-06-07T16-25-38-349Z
+##### 2026-06-07T16-25-38-349Z
 
 - **mint_from_attestation** (52 kWh): 0x3527585fd110…
 - **network_payment** (6 SPK): 0x7d68647acac4…
@@ -975,7 +973,7 @@ Table 5.4 lists all indexed `settleNetworkPayment` events. Payment **#15** is th
 - **network_payment** (14 SPK): 0xd01d4ab88396…
 - **network_payment** (8 SPK): 0x2b8e8efb9ff2…
 
-#### 2026-06-08T16-57-04-958Z
+##### 2026-06-08T16-57-04-958Z
 
 - **oracle_refresh**: 0x2b2fff3df582…
 - **mint_from_attestation** (50 kWh): 0x3dd63c06a294…
@@ -1156,8 +1154,6 @@ OECD. (2024). *Bridging the Clean Energy Investment Gap: Cost of Capital in the 
 U.S. Department of State, Office of the Historian. (n.d.). *Nixon and the End of the Bretton Woods System, 1971-1973*. https://history.state.gov/milestones/1969-1976/nixon-shock
 
 Cambridge Centre for Alternative Finance. (n.d.). *Cambridge Bitcoin Electricity Consumption Index*. Cambridge Judge Business School. https://ccaf.io/cbnsi/cbeci
-
-Cambridge Centre for Alternative Finance. (n.d.-a). *Cambridge Bitcoin Electricity Consumption Index*. Cambridge Judge Business School. https://ccaf.io/cbnsi/cbeci
 
 Black, F., & Scholes, M. (1973). The pricing of options and corporate liabilities. *Journal of Political Economy, 81*(3), 637-654.
 

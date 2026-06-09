@@ -95,6 +95,18 @@ def _normalize_ref(entry: str) -> str:
     return re.sub(r"\s+", " ", entry.strip().lower())
 
 
+def _ref_dedupe_key(entry: str) -> str:
+    norm = _normalize_ref(entry)
+    if "cambridge centre for alternative finance" in norm:
+        if "mining map" in norm:
+            return "cambridge:mining-map"
+        if "methodology" in norm:
+            return "cambridge:methodology"
+        if "cbeci" in norm and "index" in norm:
+            return "cambridge:cbeci-index"
+    return norm[:100]
+
+
 def extract_references(text: str) -> tuple[str, list[str]]:
     marker = "\n## References\n"
     if marker not in text:
@@ -147,7 +159,7 @@ def merge_references(all_refs: list[list[str]]) -> list[str]:
     merged: list[str] = []
     for chapter_refs in all_refs:
         for entry in chapter_refs:
-            key = _normalize_ref(entry)
+            key = _ref_dedupe_key(entry)
             if key in seen:
                 continue
             seen.add(key)
@@ -218,11 +230,24 @@ def write_markdown(path: Path, content: str) -> None:
     print(f"wrote {path.relative_to(ROOT)}")
 
 
-def build_docx(input_md: Path, output_docx: Path, date_text: str) -> None:
-    from create_thesis_word import build_docx
+def build_docx(
+    input_md: Path,
+    output_docx: Path,
+    date_text: str,
+    *,
+    include_cover: bool = True,
+    chapter_only: bool = False,
+) -> None:
+    from create_thesis_word import build_docx as render_docx
 
     output_docx.parent.mkdir(parents=True, exist_ok=True)
-    build_docx(input_md, output_docx, date_text)
+    render_docx(
+        input_md,
+        output_docx,
+        date_text,
+        include_cover=include_cover,
+        chapter_only=chapter_only,
+    )
     print(f"wrote {output_docx.relative_to(ROOT)}")
 
 
@@ -242,13 +267,13 @@ def build_chapter_docx(manuscript: str, date_text: str) -> None:
         if not m:
             continue
         num = m.group(1)
-        mini = front + "\n\n" + chunk
+        mini = chunk
         if refs_block and "## References" not in mini:
             mini += "\n\n" + refs_block
         tmp = PKG / "output" / f"_chapter_{num}.md"
         tmp.write_text(mini, encoding="utf-8")
         out = CHAPTER_OUTPUT_DIR / f"CHAPTER_{num}.docx"
-        build_docx(tmp, out, date_text)
+        build_docx(tmp, out, date_text, include_cover=False, chapter_only=True)
         print(f"wrote {out.relative_to(ROOT)}")
 
 

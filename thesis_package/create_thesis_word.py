@@ -351,14 +351,22 @@ def markdown_heading_level(md_level: int) -> int:
     return max(1, min(4, md_level - 1))
 
 
-def build_docx(input_path: Path, output_path: Path, date_text: str) -> None:
+def build_docx(
+    input_path: Path,
+    output_path: Path,
+    date_text: str,
+    *,
+    include_cover: bool = True,
+    chapter_only: bool = False,
+) -> None:
     markdown = input_path.read_text(encoding="utf-8")
     parser = mistune.create_markdown(renderer="ast", plugins=["table"])
     tokens = parser(markdown)
 
     doc = Document()
     setup_document_styles(doc)
-    add_cover_page(doc, date_text)
+    if include_cover:
+        add_cover_page(doc, date_text)
 
     started = False
     skip_toc = False
@@ -370,7 +378,10 @@ def build_docx(input_path: Path, output_path: Path, date_text: str) -> None:
         if not started:
             if token_type == "heading":
                 heading_text = inline_text(token.get("children", [])).strip()
-                if token.get("attrs", {}).get("level") == 2 and heading_text == "Abstract":
+                level = token.get("attrs", {}).get("level", 2)
+                if chapter_only and level == 2 and heading_text.startswith("Chapter "):
+                    started = True
+                elif level == 2 and heading_text == "Abstract":
                     started = True
                 else:
                     continue
@@ -386,7 +397,7 @@ def build_docx(input_path: Path, output_path: Path, date_text: str) -> None:
             if skip_toc and level == 2 and heading_text != "Table of Contents":
                 skip_toc = False
 
-            if level == 2 and heading_text == "Table of Contents":
+            if not chapter_only and level == 2 and heading_text == "Table of Contents":
                 add_toc_section(doc)
                 skip_toc = True
                 continue
