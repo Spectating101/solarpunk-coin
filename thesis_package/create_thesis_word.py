@@ -10,12 +10,14 @@ does not leak raw fences, horizontal rules, or pipe tables.
 from __future__ import annotations
 
 import argparse
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable
 
 import mistune
 from docx import Document
+from docx.enum.section import WD_ORIENT
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
 from docx.oxml import OxmlElement
@@ -64,7 +66,26 @@ def setup_document_styles(doc: Document) -> None:
     heading3 = doc.styles["Heading 3"]
     heading3.paragraph_format.space_before = Pt(12)
     heading3.paragraph_format.space_after = Pt(6)
-    heading3.font.italic = True
+    heading3.font.italic = False
+
+    heading4 = doc.styles["Heading 4"]
+    heading4.font.name = "Times New Roman"
+    heading4.font.size = Pt(12)
+    heading4.font.bold = True
+    heading4.font.italic = False
+    heading4.paragraph_format.line_spacing_rule = WD_LINE_SPACING.DOUBLE
+    heading4.paragraph_format.first_line_indent = Inches(0)
+    heading4.paragraph_format.space_before = Pt(6)
+    heading4.paragraph_format.space_after = Pt(3)
+
+    for list_style in ("List Bullet", "List Number"):
+        lst = doc.styles[list_style]
+        lst.font.name = "Times New Roman"
+        lst.font.size = Pt(12)
+        lst.paragraph_format.left_indent = Inches(0.5)
+        lst.paragraph_format.first_line_indent = Inches(0)
+        lst.paragraph_format.line_spacing_rule = WD_LINE_SPACING.DOUBLE
+        lst.paragraph_format.space_after = Pt(0)
 
     styles = doc.styles
     if "Code Block" not in styles:
@@ -86,6 +107,39 @@ def setup_document_styles(doc: Document) -> None:
         quote_style.paragraph_format.first_line_indent = Inches(0)
         quote_style.paragraph_format.left_indent = Inches(0.5)
         quote_style.paragraph_format.right_indent = Inches(0.25)
+
+    if "Caption" not in styles:
+        cap = styles.add_style("Caption", WD_STYLE_TYPE.PARAGRAPH)
+        cap.base_style = styles["Normal"]
+        cap.font.name = "Times New Roman"
+        cap.font.size = Pt(11)
+        cap.font.italic = True
+        cap.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        cap.paragraph_format.first_line_indent = Inches(0)
+        cap.paragraph_format.space_before = Pt(6)
+        cap.paragraph_format.space_after = Pt(12)
+        cap.paragraph_format.line_spacing_rule = WD_LINE_SPACING.SINGLE
+
+    if "Bibliography" not in styles:
+        bib = styles.add_style("Bibliography", WD_STYLE_TYPE.PARAGRAPH)
+        bib.base_style = styles["Normal"]
+        bib.font.name = "Times New Roman"
+        bib.font.size = Pt(12)
+        bib.paragraph_format.left_indent = Inches(0.5)
+        bib.paragraph_format.first_line_indent = Inches(-0.5)
+        bib.paragraph_format.line_spacing_rule = WD_LINE_SPACING.DOUBLE
+        bib.paragraph_format.space_after = Pt(0)
+
+    if "Table Note" not in styles:
+        note = styles.add_style("Table Note", WD_STYLE_TYPE.PARAGRAPH)
+        note.base_style = styles["Normal"]
+        note.font.name = "Times New Roman"
+        note.font.size = Pt(10)
+        note.font.italic = True
+        note.paragraph_format.first_line_indent = Inches(0)
+        note.paragraph_format.space_before = Pt(3)
+        note.paragraph_format.space_after = Pt(9)
+        note.paragraph_format.line_spacing_rule = WD_LINE_SPACING.SINGLE
 
 
 def add_cover_page(doc: Document, date_text: str) -> None:
@@ -242,18 +296,60 @@ def render_inline(paragraph, tokens: Iterable[dict], *, bold: bool = False,
             )
 
 
-def add_body_paragraph(doc: Document, token: dict) -> None:
+def _paragraph_style_hint(text: str) -> str:
+    if text.startswith(("Keywords:", "JEL Codes:")):
+        return "meta"
+    if re.match(r"^Table \d+(\.\d+)?(\.|:)", text) or text.startswith("Figure "):
+        return "caption"
+    if text.startswith("The following blocks are exported") or text.startswith(
+        "Table 5.4 lists all indexed"
+    ):
+        return "table_note"
+    return "body"
+
+
+def add_body_paragraph(doc: Document, token: dict, *, bibliography: bool = False) -> None:
     text = inline_text(token.get("children", [])).strip()
     if not text:
         return
 
-    paragraph = doc.add_paragraph()
-    if text.startswith("Table ") or text.startswith("Figure "):
+    hint = _paragraph_style_hint(text)
+    if bibliography:
+        paragraph = doc.add_paragraph(style="Bibliography")
+        paragraph.paragraph_format.left_indent = Inches(0.5)
+        paragraph.paragraph_format.first_line_indent = Inches(-0.5)
+    elif hint == "caption":
+        paragraph = doc.add_paragraph(style="Caption")
         paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
         paragraph.paragraph_format.first_line_indent = Inches(0)
-    elif text.startswith("Note:") or text.startswith("Keywords:") or text.startswith("JEL Codes:"):
+    elif hint == "table_note":
+        paragraph = doc.add_paragraph(style="Table Note")
         paragraph.paragraph_format.first_line_indent = Inches(0)
+    else:
+        paragraph = doc.add_paragraph()
+        if hint == "meta":
+            paragraph.paragraph_format.first_line_indent = Inches(0)
     render_inline(paragraph, token.get("children", []))
+
+
+def _set_landscape(section) -> None:
+    section.orientation = WD_ORIENT.LANDSCAPE
+    section.page_width, section.page_height = section.page_height, section.page_width
+
+
+def _set_portrait(section) -> None:
+    section.orientation = WD_ORIENT.PORTRAIT
+    section.page_width, section.page_height = section.page_height, section.page_width
+
+
+def _style_table_cell(paragraph, *, compact: bool) -> None:
+    paragraph.paragraph_format.first_line_indent = Inches(0)
+    paragraph.paragraph_format.line_spacing_rule = WD_LINE_SPACING.SINGLE
+    paragraph.paragraph_format.space_before = Pt(0)
+    paragraph.paragraph_format.space_after = Pt(0)
+    size = Pt(8) if compact else Pt(10)
+    for run in paragraph.runs:
+        run.font.size = size
 
 
 def add_code_block(doc: Document, token: dict) -> None:
@@ -292,8 +388,21 @@ def add_markdown_table(doc: Document, token: dict) -> None:
     header_cells = head.get("children", [])
     rows = 1 + len(body_rows)
     cols = len(header_cells)
+    compact = cols >= 5
+
+    restore_section = None
+    if compact:
+        restore_section = doc.sections[-1]
+        landscape = doc.add_section()
+        landscape.top_margin = Inches(0.75)
+        landscape.bottom_margin = Inches(0.75)
+        landscape.left_margin = Inches(0.75)
+        landscape.right_margin = Inches(0.75)
+        _set_landscape(landscape)
+
     table = doc.add_table(rows=rows, cols=cols)
     table.style = "Table Grid"
+    table.autofit = True
 
     for col_idx, cell_token in enumerate(header_cells):
         cell = table.rows[0].cells[col_idx]
@@ -301,25 +410,25 @@ def add_markdown_table(doc: Document, token: dict) -> None:
         paragraph = cell.paragraphs[0]
         paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
         render_inline(paragraph, cell_token.get("children", []), bold=True)
+        _style_table_cell(paragraph, compact=compact)
 
     for row_idx, row_token in enumerate(body_rows, start=1):
         for col_idx, cell_token in enumerate(row_token.get("children", [])):
             cell = table.rows[row_idx].cells[col_idx]
             cell.text = ""
             paragraph = cell.paragraphs[0]
-            if cols >= 5:
-                paragraph.paragraph_format.first_line_indent = Inches(0)
+            if col_idx == 0:
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
             render_inline(paragraph, cell_token.get("children", []))
+            _style_table_cell(paragraph, compact=compact)
 
-    if cols >= 5:
-        for row in table.rows:
-            for cell in row.cells:
-                for paragraph in cell.paragraphs:
-                    paragraph.paragraph_format.first_line_indent = Inches(0)
-                    for run in paragraph.runs:
-                        run.font.size = Pt(9)
-
-    doc.add_paragraph("")
+    if compact and restore_section is not None:
+        portrait = doc.add_section()
+        portrait.top_margin = restore_section.top_margin
+        portrait.bottom_margin = restore_section.bottom_margin
+        portrait.left_margin = restore_section.left_margin
+        portrait.right_margin = restore_section.right_margin
+        _set_portrait(portrait)
 
 
 def add_list(doc: Document, token: dict) -> None:
@@ -370,6 +479,7 @@ def build_docx(
 
     started = False
     skip_toc = False
+    in_references = False
     chapter_count = 0
 
     for token in tokens:
@@ -408,6 +518,9 @@ def build_docx(
                     doc.add_page_break()
             elif level == 2 and heading_text == "References":
                 doc.add_page_break()
+                in_references = True
+            elif in_references and level == 2:
+                in_references = False
 
             doc.add_heading(heading_text, level=markdown_heading_level(level))
             continue
@@ -416,7 +529,7 @@ def build_docx(
             continue
 
         if token_type == "paragraph":
-            add_body_paragraph(doc, token)
+            add_body_paragraph(doc, token, bibliography=in_references)
         elif token_type == "block_code":
             add_code_block(doc, token)
         elif token_type == "block_quote":

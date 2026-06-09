@@ -65,12 +65,6 @@ def format_evidence_block(raw: str) -> str:
             section_title = mapped
             lines_out.append(f"#### {mapped}")
             lines_out.append("")
-            if heading == "Payment ledger (indexed from chain)":
-                lines_out.append(
-                    "Table 5.4 lists all indexed `settleNetworkPayment` events. "
-                    "Payment **#15** is the wallet-initiated pilot transfer (Pilot payer → Merchant)."
-                )
-                lines_out.append("")
             continue
 
         if line.startswith("### ") and section_title == "5.10.3 Operator cycle log":
@@ -78,6 +72,12 @@ def format_evidence_block(raw: str) -> str:
             continue
 
         lines_out.append(wordify_markdown_links(line))
+        if section_title == "5.10.2 Indexed payment ledger (Table 5.4)" and line.startswith("| 21 |"):
+            lines_out.append("")
+            lines_out.append(
+                "*Table 5.4. Indexed network payments on Sepolia (SPK v1). "
+                "Payment #15 is the wallet-initiated pilot transfer (Pilot payer → Merchant).*"
+            )
 
     body = "\n".join(lines_out).strip()
     if not body:

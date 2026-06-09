@@ -899,7 +899,7 @@ Table 5.3 summarises the main public SPK v1 evidence (Table 5.4 and §5.10.1–5
 
 **Thesis interpretation:** SPK v1 demonstrates that the constraints framework can support an energy-native, circulation-first instrument—not only a dollar-pegged lab token. It does **not** demonstrate mainnet readiness, legal money status, or real-site meter finality. Those boundaries from §5.9 still apply. Launch-gate staging (§5.7) remains useful for separating research demos from production, but the **primary implementation evidence** for this chapter is now the SPK v1 runtime and its on-chain payment history.
 
-*The following blocks are exported from `state/runtime/spk_v1.json` after Sepolia sync (generated 2026-06-09T10:03:54.491830+00:00).*
+*The following blocks are exported from `state/runtime/spk_v1.json` after Sepolia sync (generated 2026-06-09T10:16:17.836331+00:00).*
 
 
 #### 5.10.1 Canonical contracts and live metrics
@@ -918,8 +918,6 @@ Table 5.3 summarises the main public SPK v1 evidence (Table 5.4 and §5.10.1–5
 - Circulation share: **96.71%**
 
 #### 5.10.2 Indexed payment ledger (Table 5.4)
-
-Table 5.4 lists all indexed `settleNetworkPayment` events. Payment **#15** is the wallet-initiated pilot transfer (Pilot payer → Merchant).
 
 
 | # | Kind | SPK | Payee | Payer | Tx |
@@ -945,6 +943,8 @@ Table 5.4 lists all indexed `settleNetworkPayment` events. Payment **#15** is th
 | 19 | LABOR | 10.0 | Maintenance | Operator | 0xb620ea8c… |
 | 20 | GOODS | 14.0 | Merchant | Operator | 0x6b1f3801… |
 | 21 | NETWORK | 8.0 | Network peer | Operator | 0x5a72cc73… |
+
+*Table 5.4. Indexed network payments on Sepolia (SPK v1). Payment #15 is the wallet-initiated pilot transfer (Pilot payer → Merchant).*
 
 #### 5.10.3 Operator cycle log
 
