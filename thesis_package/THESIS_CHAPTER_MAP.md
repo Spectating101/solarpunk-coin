@@ -18,6 +18,8 @@ Main output: the reader understands that energy-linked financial contracts are t
 
 Current file: `thesis_package/CHAPTER_1_GROUNDED_DRAFT.md`
 
+Build: `npm run thesis:docx` → `thesis_package/output/THESIS_GROUNDED.docx`
+
 ### Chapter 2 - Monetary Background and the Case for Energy
 
 Purpose: explain why commodity constraints mattered historically, why gold failed as a scalable monetary constraint, why fiat and cryptocurrency leave a gap between technical scarcity and economic credibility, and why energy is a defensible candidate to test.

@@ -223,7 +223,7 @@ Table 5.3 summarises the main public SPK v1 evidence (full ledger: `thesis_packa
 | Attested mint (Taoyuan meter fixture, scaled) | `0x3527585fd110ae3e135e76b870232d1b30411d76953c15c94a237743a0d1754d` |
 | Network payment (LABOR) | `0x1f7cd59612cf81dd4a43f1cb1b4e5d6e03f4be570e4ad4fc2c21e28ee72d09be` |
 
-Synced metrics (Jun 2026): ~5,400 SPK supply, 383 SPK settled, 14 network payments, 97.5% circulation share. Reproduce: `npm run spk:v1:sync`.
+Synced metrics (Jun 2026): ~5,499 SPK supply, 442 SPK settled, **21** network payments, 96.7% circulation share. Payment **#15** is a wallet-initiated pilot transfer (Pilot payer → Merchant, 5 SPK). Reproduce: `npm run foundation:sync` or `spk-v1 sync --repo-root .`.
 
 **Thesis interpretation:** SPK v1 demonstrates that the constraints framework can support an energy-native, circulation-first instrument—not only a dollar-pegged lab token. It does **not** demonstrate mainnet readiness, legal money status, or real-site meter finality. Those boundaries from §5.9 still apply. Launch-gate staging (§5.7) remains useful for separating research demos from production, but the **primary implementation evidence** for this chapter is now the SPK v1 runtime and its on-chain payment history.
 

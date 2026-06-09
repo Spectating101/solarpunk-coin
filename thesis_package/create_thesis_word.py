@@ -23,9 +23,10 @@ from docx.oxml.ns import qn
 from docx.shared import Inches, Pt
 
 
-ROOT = Path(__file__).resolve().parent
-DEFAULT_INPUT = ROOT / "thesis-draft.md"
-DEFAULT_OUTPUT = ROOT / "thesis_package" / "THESIS_COMPLETE_FINAL.docx"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PKG = Path(__file__).resolve().parent
+DEFAULT_INPUT = PKG / "THESIS_GROUNDED_MANUSCRIPT.md"
+DEFAULT_OUTPUT = PKG / "output" / "THESIS_GROUNDED.docx"
 
 
 def setup_document_styles(doc: Document) -> None:
@@ -99,9 +100,9 @@ def add_cover_page(doc: Document, date_text: str) -> None:
         ("Department of Finance", 14, False),
         ("", 12, False),
         ("", 12, False),
-        ("ENERGY-BACKED DERIVATIVES:", 18, True),
-        ("From Empirical Validation to a Credible", 18, True),
-        ("Pricing-and-Contract Framework", 18, True),
+        ("ENERGY AS A CONSTRAINT:", 18, True),
+        ("Credibility, Pricing, and Settlement", 18, True),
+        ("in Energy-Linked Digital Finance", 18, True),
         ("", 12, False),
         ("", 12, False),
         ("Christopher Ongko", 14, True),

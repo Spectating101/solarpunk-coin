@@ -38,14 +38,15 @@ def export_evidence_markdown(runtime: dict[str, Any], out_path: str | Path) -> P
     if not ledger:
         lines.append("_Run `spk-v1 sync` to index on-chain events._")
     else:
-        lines.append("| # | Kind | SPK | Payee | Tx |")
-        lines.append("|---|------|-----|-------|-----|")
+        lines.append("| # | Kind | SPK | Payee | Payer | Tx |")
+        lines.append("|---|------|-----|-------|-------|-----|")
         for row in ledger:
-            payee = row["payee"]
+            payee = row.get("payee_label") or f"`{row['payee'][:10]}…`"
+            payer = row.get("payer_label") or "—"
             tx = row["tx_hash"]
             lines.append(
                 f"| {row['payment_id']} | {row['payment_kind']} | {row['spk']} | "
-                f"`{payee[:10]}…` | [link]({base}/tx/{tx}) |"
+                f"{payee} | {payer} | [link]({base}/tx/{tx}) |"
             )
     lines.append("")
     lines.append("## Operator cycles")
