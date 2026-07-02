@@ -105,6 +105,8 @@ Legacy Sepolia stacks (`0x1D55…`, `0x8ceDa…` May 2026 proof) are **archive**
 
 Optional sequel after v1.0 freeze: [`docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md`](./docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md) — 14-day validation → 90-day pilot if external hook appears.
 
+Visual polish (ChatGPT): [`docs/project/VISUAL_REVIEW_WORKFLOW.md`](./docs/project/VISUAL_REVIEW_WORKFLOW.md) — `npm run demo:screenshots` → upload `screenshots/public-lab-screenshots.zip`.
+
 ---
 
 ## Maintenance
