@@ -12,6 +12,7 @@
   --red: #ef4444;
   --text: #e4efe5;
   --muted: #719277;
+  --muted-readable: #9eb5a3;
   --dim: #426249;
   --font-sans: "DM Sans", "Aptos", sans-serif;
   --font-display: "Instrument Serif", Georgia, serif;
@@ -2075,10 +2076,14 @@ p {
 
 .public-lab-section-lead {
   font-size: 14px;
-  color: var(--muted);
+  color: var(--muted-readable);
   line-height: 1.55;
   margin-bottom: 16px;
   max-width: 46rem;
+}
+
+.public-lab-hook-accent {
+  color: var(--amber);
 }
 
 .public-lab-hook h1 {
@@ -2093,7 +2098,7 @@ p {
 .public-lab-subhead {
   margin-top: 16px;
   font-size: 15px;
-  color: var(--text);
+  color: var(--muted-readable);
   line-height: 1.6;
   max-width: 46rem;
 }
@@ -2105,13 +2110,30 @@ p {
   border: 1px solid var(--border);
   background: rgba(52, 211, 153, 0.06);
   font-size: 14px;
-  color: var(--muted);
+  color: var(--muted-readable);
   line-height: 1.5;
   max-width: 46rem;
 }
 
 .public-lab-cta-hero {
   margin-top: 22px;
+}
+
+.public-lab-console-link {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted-readable);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.public-lab-console-link:hover {
+  color: var(--green);
 }
 
 /* Proof pipeline */
@@ -2173,11 +2195,37 @@ p {
 }
 
 .proof-strip-table th {
-  color: var(--muted);
+  color: var(--muted-readable);
   font-weight: 500;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.proof-strip-status {
+  font-size: 15px;
+}
+
+.public-lab-sync-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 12px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  color: var(--muted-readable);
+}
+
+.public-lab-sync-primary {
+  font-weight: 500;
+}
+
+.public-lab-sync-footnote {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
 }
 
 /* Comparison */
@@ -2343,11 +2391,6 @@ p {
   margin-bottom: 12px;
 }
 
-.public-lab-sync-note {
-  font-size: 13px;
-  margin-bottom: 14px;
-}
-
 .public-lab-addresses {
   display: flex;
   flex-wrap: wrap;
@@ -2462,6 +2505,40 @@ p {
     transform: rotate(90deg);
     align-self: center;
     margin: 2px 0;
+  }
+
+  .comparison-table thead {
+    display: none;
+  }
+
+  .comparison-table tr {
+    display: block;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(13, 23, 16, 0.7);
+  }
+
+  .comparison-table td {
+    display: block;
+    border-bottom: none;
+    padding: 6px 0;
+  }
+
+  .comparison-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .comparison-highlight td:first-child::before {
+    color: var(--green);
   }
 
   .app-tab-nav {

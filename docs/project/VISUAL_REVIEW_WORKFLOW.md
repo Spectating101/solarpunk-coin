@@ -25,18 +25,31 @@ DEMO_URL=http://localhost:4173/ npm run demo:screenshots
 
 | Path | Purpose |
 |------|---------|
-| `screenshots/public-lab/YYYY-MM-DD/` | PNG set + manifest |
-| `screenshots/public-lab-screenshots.zip` | Upload this to ChatGPT |
+| `screenshots/public-lab/YYYY-MM-DD-local/` or `...-live/` | PNG set + manifest + `CHATGPT_PROMPT.txt` |
+| `screenshots/chatgpt-visual-audit-live.zip` | **Upload for deployed site audit** |
+| `screenshots/chatgpt-visual-audit-local.zip` | **Upload for latest local build** |
+| `screenshots/chatgpt-visual-audit.zip` | Copy of whichever run finished last |
 
-Each run captures **desktop / tablet / mobile** — viewport + full-page PNGs.
+Each run captures **desktop / tablet / mobile** (viewport + full page) plus **8 desktop section shots** (hero, pipeline, proof, why, audience, gates, external ask, entry points).
+
+Output is tagged **`local`** or **`live`** so runs do not overwrite each other:
+
+| Zip | When |
+|-----|------|
+| `screenshots/chatgpt-visual-audit-local.zip` | `DEMO_URL=http://127.0.0.1:4173/` |
+| `screenshots/chatgpt-visual-audit-live.zip` | default (GitHub Pages) |
+| `screenshots/chatgpt-visual-audit.zip` | copy of the last run |
+
+**Live URL:** https://spectating101.github.io/solarpunk-coin/ (not `/demo/` — that path 404s).
 
 ---
 
 ## What to upload to ChatGPT
 
-1. `screenshots/public-lab-screenshots.zip`
-2. Optional: link https://spectating101.github.io/solarpunk-coin/demo/
-3. Paste the prompt below
+1. **`screenshots/chatgpt-visual-audit.zip`** (preferred — flat PNGs + `CHATGPT_PROMPT.txt`)
+2. Or all PNGs from `screenshots/public-lab/YYYY-MM-DD/`
+3. Optional live link: https://spectating101.github.io/solarpunk-coin/
+4. Paste **`CHATGPT_PROMPT.txt`** from the zip (or below)
 
 ---
 

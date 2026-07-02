@@ -171,7 +171,11 @@ export default function PublicLabLanding({ onOpenConsole }) {
       {/* §1 Hero */}
       <header className="public-lab-hero public-lab-hook">
         <p className="eyebrow">SolarPunk Public Lab v1.0 · Sepolia testnet</p>
-        <h1>A fourth foundation for digital money: verified renewable surplus.</h1>
+        <h1>
+          <span className="public-lab-hook-accent">A fourth foundation</span>
+          {' '}
+          for digital money: verified renewable surplus.
+        </h1>
         <p className="public-lab-subhead">
           Fiat issues by authority. Gold rests on inert scarcity. Bitcoin proves scarcity through energy burn.
           SolarPunk tests whether digital settlement units can instead be issued from{' '}
@@ -188,12 +192,12 @@ export default function PublicLabLanding({ onOpenConsole }) {
           <a className="ghost-button" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
             <ExternalLink size={17} /> Contribute meter data
           </a>
-          {onOpenConsole ? (
-            <button type="button" className="ghost-button" onClick={onOpenConsole}>
-              Open technical console
-            </button>
-          ) : null}
         </div>
+        {onOpenConsole ? (
+          <button type="button" className="public-lab-console-link" onClick={onOpenConsole}>
+            Open technical console →
+          </button>
+        ) : null}
       </header>
 
       {/* §2 Proof pipeline */}
@@ -217,11 +221,17 @@ export default function PublicLabLanding({ onOpenConsole }) {
       {/* §3 What is real today */}
       <section className="public-lab-section public-lab-proof-strip" aria-labelledby="proof-heading">
         <h2 id="proof-heading">What is real today</h2>
-        <p className="muted public-lab-sync-note">
-          {dataSource}
-          {syncedAt ? ` · last indexed ${formatSyncedAt(syncedAt)}` : null}
-          {' · '}
-          Refresh locally with <code>npm run foundation:sync</code> before citing live chain state.
+        <p className="public-lab-sync-note">
+          <span className="public-lab-sync-primary">
+            {dataSource}
+            {syncedAt ? ` · ${formatSyncedAt(syncedAt)}` : null}
+          </span>
+          <span
+            className="public-lab-sync-footnote"
+            title="Run npm run foundation:sync locally before citing live Sepolia state."
+          >
+            How to refresh
+          </span>
         </p>
         <table className="proof-strip-table">
           <thead>
@@ -235,7 +245,9 @@ export default function PublicLabLanding({ onOpenConsole }) {
               <tr key={row.proof}>
                 <td>{row.proof}</td>
                 <td>
-                  <span className={row.ready ? 'gate-ready' : 'gate-blocked'}>{row.status}</span>
+                  <span className={row.ready ? 'gate-ready proof-strip-status' : 'gate-blocked proof-strip-status'}>
+                    {row.status}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -270,9 +282,9 @@ export default function PublicLabLanding({ onOpenConsole }) {
             <tbody>
               {COMPARISON_ROWS.map((row) => (
                 <tr key={row.foundation} className={row.highlight ? 'comparison-highlight' : undefined}>
-                  <td>{row.foundation}</td>
-                  <td>{row.mechanism}</td>
-                  <td>{row.problem}</td>
+                  <td data-label="Foundation">{row.foundation}</td>
+                  <td data-label="Mechanism">{row.mechanism}</td>
+                  <td data-label="Limit">{row.problem}</td>
                 </tr>
               ))}
             </tbody>
