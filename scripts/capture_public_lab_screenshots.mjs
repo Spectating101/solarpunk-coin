@@ -17,7 +17,7 @@ import { chromium } from 'playwright';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
 
-const DEFAULT_URL = 'https://spectating101.github.io/solarpunk-coin/';
+const DEFAULT_URL = 'https://spectating101.github.io/solarpunk-coin/demo/';
 
 const VIEWPORTS = [
   { id: 'desktop', width: 1440, height: 1200, label: 'Desktop 1440×1200' },

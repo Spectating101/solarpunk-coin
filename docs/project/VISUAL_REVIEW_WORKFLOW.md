@@ -40,7 +40,7 @@ Output is tagged **`local`** or **`live`** so runs do not overwrite each other:
 | `screenshots/chatgpt-visual-audit-live.zip` | default (GitHub Pages) |
 | `screenshots/chatgpt-visual-audit.zip` | copy of the last run |
 
-**Live URL:** https://spectating101.github.io/solarpunk-coin/ (not `/demo/` — that path 404s).
+**Live URL:** https://spectating101.github.io/solarpunk-coin/demo/ (served from `docs/demo/` on Pages).
 
 ---
 
@@ -48,7 +48,7 @@ Output is tagged **`local`** or **`live`** so runs do not overwrite each other:
 
 1. **`screenshots/chatgpt-visual-audit.zip`** (preferred — flat PNGs + `CHATGPT_PROMPT.txt`)
 2. Or all PNGs from `screenshots/public-lab/YYYY-MM-DD/`
-3. Optional live link: https://spectating101.github.io/solarpunk-coin/
+3. Optional live link: https://spectating101.github.io/solarpunk-coin/demo/
 4. Paste **`CHATGPT_PROMPT.txt`** from the zip (or below)
 
 ---
