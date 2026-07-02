@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Activity,
+  ArrowRight,
+  BookOpen,
+  Cpu,
+  Database,
   ExternalLink,
   FileText,
-  Layers,
+  FlaskConical,
+  Leaf,
   ShieldAlert,
-  Zap,
+  Users,
 } from 'lucide-react';
 import {
   GITHUB_REPO,
@@ -19,6 +23,42 @@ import useSpkV1Live from '../hooks/useSpkV1Live';
 const EVIDENCE_URL = `${GITHUB_REPO}/blob/main/thesis_package/SPK_V1_EVIDENCE.md`;
 const PUBLIC_LAB_DOC = `${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB_V1.md`;
 const PILOT_ASK_DOC = `${GITHUB_REPO}/blob/main/docs/product/PILOT_DATA_ASK.md`;
+const THESIS_READING_URL = `${GITHUB_REPO}/blob/main/thesis_package/output/reading/full/THESIS_GROUNDED.md`;
+
+const COMPARISON_ROWS = [
+  { foundation: 'Fiat', mechanism: 'Authority', problem: 'Discretionary expansion' },
+  { foundation: 'Gold', mechanism: 'Inert scarcity', problem: 'Scarce but unproductive' },
+  { foundation: 'Bitcoin', mechanism: 'Proof-of-work burn', problem: 'Scarcity through energy cost' },
+  {
+    foundation: 'SolarPunk lab',
+    mechanism: 'Verified renewable surplus',
+    problem: 'Productive issuance — still externally unproven',
+    highlight: true,
+  },
+];
+
+const AUDIENCE_CARDS = [
+  {
+    icon: FlaskConical,
+    title: 'Researchers',
+    body: 'A reproducible lab for energy-constrained digital finance — thesis evidence, CEIR empirics, and testnet settlement.',
+  },
+  {
+    icon: Database,
+    title: 'Energy operators',
+    body: 'Test how meter or inverter export data becomes auditable settlement evidence without a token sale.',
+  },
+  {
+    icon: Cpu,
+    title: 'Ethereum / public goods',
+    body: 'Open-source infrastructure for real-world attested issuance experiments on Sepolia.',
+  },
+  {
+    icon: Leaf,
+    title: 'Green finance / policy',
+    body: 'A concrete prototype linking renewable production evidence to settlement accounting and launch gates.',
+  },
+];
 
 function formatSyncedAt(iso) {
   if (!iso) return '—';
@@ -31,6 +71,18 @@ function formatSyncedAt(iso) {
 
 function addrUrl(address) {
   return `${SEPOLIA_EXPLORER}/address/${address}`;
+}
+
+function PipelineStep({ label, status, isLast }) {
+  return (
+    <>
+      <div className="pipeline-step">
+        <span className="pipeline-step-label">{label}</span>
+        <span className="pipeline-step-status">{status}</span>
+      </div>
+      {!isLast ? <ArrowRight size={18} className="pipeline-arrow" aria-hidden /> : null}
+    </>
+  );
 }
 
 export default function PublicLabLanding({ onOpenConsole }) {
@@ -58,6 +110,41 @@ export default function PublicLabLanding({ onOpenConsole }) {
   const syncedAt = runtime?.synced_at || runtime?.updated_at;
   const spkAddress = runtime?.contracts?.solar_punk_coin || SPK_V1.solarPunkCoin;
   const currencyAddress = runtime?.contracts?.currency_system || SPK_V1.currencySystem;
+  const dataSource = live.status === 'ok' ? 'Live Sepolia reads' : 'Cached runtime JSON';
+
+  const pipelineSteps = [
+    { label: 'Meter / inverter data', status: 'L0 fixture/sample today' },
+    { label: 'Attestation', status: 'Signed + replay-safe' },
+    { label: 'SPK mint', status: 'Bounded issuance' },
+    {
+      label: 'Network payment',
+      status: paymentCount != null ? `${paymentCount} indexed payments` : 'Indexed payments',
+    },
+    { label: 'Launch gate', status: 'Public Lab shipped · pilot blocked' },
+  ];
+
+  const proofRows = [
+    { proof: 'Sepolia contracts', status: 'Live', ready: true },
+    {
+      proof: 'SPK supply',
+      status: supply != null ? `~${Number(supply).toLocaleString()} SPK` : '…',
+      ready: true,
+    },
+    {
+      proof: 'Settled',
+      status: settled != null ? `${Number(settled).toLocaleString()} SPK` : '…',
+      ready: true,
+    },
+    { proof: 'Payments', status: paymentCount != null ? String(paymentCount) : '…', ready: true },
+    {
+      proof: 'Circulation',
+      status: circulation != null ? `~${Number(circulation).toFixed(1)}%` : '…',
+      ready: true,
+    },
+    { proof: 'Contract tests', status: '109 passing', ready: true },
+    { proof: 'Peg', status: pegEnabled ? 'On' : 'Off', ready: !pegEnabled },
+    { proof: 'Current endpoint', status: 'Public Lab shipped', ready: true },
+  ];
 
   if (error) {
     return (
@@ -81,69 +168,138 @@ export default function PublicLabLanding({ onOpenConsole }) {
 
   return (
     <section className="public-lab">
-      <header className="public-lab-hero">
-        <p className="eyebrow">Sepolia testnet · energy-standard settlement</p>
-        <h1>SolarPunk Public Lab v1.0</h1>
-        <p className="public-lab-lead">
-          Verified renewable surplus → bounded testnet issuance → network settlement.
-          SPK is the <strong>lab unit</strong> inside this architecture, not a monetary product claim.
+      {/* §1 Hero */}
+      <header className="public-lab-hero public-lab-hook">
+        <p className="eyebrow">SolarPunk Public Lab v1.0 · Sepolia testnet</p>
+        <h1>A fourth foundation for digital money: verified renewable surplus.</h1>
+        <p className="public-lab-subhead">
+          Fiat issues by authority. Gold rests on inert scarcity. Bitcoin proves scarcity through energy burn.
+          SolarPunk tests whether digital settlement units can instead be issued from{' '}
+          <strong>productive renewable surplus</strong>.
         </p>
+        <p className="public-lab-proofline">
+          Public Lab v1.0 runs this architecture on Sepolia: energy evidence → bounded SPK issuance →
+          network settlement → launch gates.
+        </p>
+        <div className="public-lab-cta public-lab-cta-hero">
+          <a className="wallet-button" href={EVIDENCE_URL} target="_blank" rel="noreferrer">
+            <FileText size={17} /> Review the evidence
+          </a>
+          <a className="ghost-button" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
+            <ExternalLink size={17} /> Contribute meter data
+          </a>
+          {onOpenConsole ? (
+            <button type="button" className="ghost-button" onClick={onOpenConsole}>
+              Open technical console
+            </button>
+          ) : null}
+        </div>
       </header>
 
-      <div className="public-lab-cards">
-        <article className="public-lab-card">
-          <Zap size={22} className="text-primary" />
-          <h2>Energy evidence</h2>
-          <p>Signed meter/inverter readings → attestation bundles → provenance tiers (L0–L4 in docs).</p>
-        </article>
-        <article className="public-lab-card">
-          <Layers size={22} className="text-primary" />
-          <h2>Issuance discipline</h2>
-          <p>Mint only from accepted surplus; replay-safe hashes; supply caps; peg <strong>off</strong>.</p>
-        </article>
-        <article className="public-lab-card">
-          <Activity size={22} className="text-primary" />
-          <h2>Settlement loop</h2>
-          <p>Network payments on-chain; circulation vs redemption metrics; explicit launch gates.</p>
-        </article>
-      </div>
-
-      <div className="public-lab-evidence">
-        <h2><FileText size={18} /> Live evidence</h2>
-        <p className="muted public-lab-sync-note">
-          {live.status === 'ok' ? 'Live Sepolia reads' : 'Cached runtime JSON'}
-          {syncedAt ? ` · indexed ${formatSyncedAt(syncedAt)}` : null}
+      {/* §2 Proof pipeline */}
+      <section className="public-lab-section" aria-labelledby="pipeline-heading">
+        <h2 id="pipeline-heading">The proof pipeline</h2>
+        <p className="public-lab-section-lead">
+          One screen: how renewable evidence becomes a bounded settlement object on testnet.
         </p>
-        <div className="spk-stat-row">
-          <div className="spk-stat">
-            <span>Supply</span>
-            <strong>{supply != null ? `${Number(supply).toLocaleString()} SPK` : '…'}</strong>
-          </div>
-          <div className="spk-stat">
-            <span>Settled</span>
-            <strong>{settled != null ? `${Number(settled).toLocaleString()} SPK` : '…'}</strong>
-          </div>
-          <div className="spk-stat">
-            <span>Payments</span>
-            <strong>{paymentCount ?? '…'}</strong>
-          </div>
-          <div className="spk-stat">
-            <span>Circulation</span>
-            <strong>{circulation != null ? `${Number(circulation).toFixed(1)}%` : '…'}</strong>
-          </div>
-          <div className="spk-stat">
-            <span>Peg</span>
-            <strong>{pegEnabled ? 'on' : 'off'}</strong>
-          </div>
+        <div className="public-lab-pipeline">
+          {pipelineSteps.map((step, i) => (
+            <PipelineStep
+              key={step.label}
+              label={step.label}
+              status={step.status}
+              isLast={i === pipelineSteps.length - 1}
+            />
+          ))}
         </div>
-        <div className="public-lab-addresses font-mono">
-          <a href={addrUrl(spkAddress)} target="_blank" rel="noreferrer">SPK {spkAddress.slice(0, 10)}…</a>
-          <a href={addrUrl(currencyAddress)} target="_blank" rel="noreferrer">Payments {currencyAddress.slice(0, 10)}…</a>
-        </div>
-      </div>
+      </section>
 
-      <div className="public-lab-gates">
-        <h2>Launch gates</h2>
+      {/* §3 What is real today */}
+      <section className="public-lab-section public-lab-proof-strip" aria-labelledby="proof-heading">
+        <h2 id="proof-heading">What is real today</h2>
+        <p className="muted public-lab-sync-note">
+          {dataSource}
+          {syncedAt ? ` · last indexed ${formatSyncedAt(syncedAt)}` : null}
+          {' · '}
+          Refresh locally with <code>npm run foundation:sync</code> before citing live chain state.
+        </p>
+        <table className="proof-strip-table">
+          <thead>
+            <tr>
+              <th>Proof</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {proofRows.map((row) => (
+              <tr key={row.proof}>
+                <td>{row.proof}</td>
+                <td>
+                  <span className={row.ready ? 'gate-ready' : 'gate-blocked'}>{row.status}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="public-lab-addresses font-mono">
+          <a href={addrUrl(spkAddress)} target="_blank" rel="noreferrer">
+            SPK {spkAddress.slice(0, 10)}…
+          </a>
+          <a href={addrUrl(currencyAddress)} target="_blank" rel="noreferrer">
+            Payments {currencyAddress.slice(0, 10)}…
+          </a>
+        </div>
+      </section>
+
+      {/* §4 Why this matters */}
+      <section className="public-lab-section" aria-labelledby="why-heading">
+        <h2 id="why-heading">Why this matters</h2>
+        <p className="public-lab-section-lead">
+          SolarPunk is useful because it turns renewable-energy evidence into a testable settlement object —
+          not because it claims to be legal money today.
+        </p>
+        <div className="comparison-table-wrap">
+          <table className="comparison-table">
+            <thead>
+              <tr>
+                <th>Foundation</th>
+                <th>Mechanism</th>
+                <th>Limit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARISON_ROWS.map((row) => (
+                <tr key={row.foundation} className={row.highlight ? 'comparison-highlight' : undefined}>
+                  <td>{row.foundation}</td>
+                  <td>{row.mechanism}</td>
+                  <td>{row.problem}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* §5 Who should care */}
+      <section className="public-lab-section" aria-labelledby="audience-heading">
+        <h2 id="audience-heading"><Users size={18} /> Who should care</h2>
+        <div className="audience-grid">
+          {AUDIENCE_CARDS.map(({ icon: Icon, title, body }) => (
+            <article key={title} className="public-lab-card audience-card">
+              <Icon size={22} className="text-primary" />
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* §6 Launch gates */}
+      <section className="public-lab-section public-lab-gates" aria-labelledby="gates-heading">
+        <h2 id="gates-heading">Launch gates</h2>
+        <p className="public-lab-section-lead">
+          Blocked paths are intentional — they are why the lab is credible.
+        </p>
         <table className="public-lab-gate-table">
           <thead>
             <tr>
@@ -158,16 +314,63 @@ export default function PublicLabLanding({ onOpenConsole }) {
             </tr>
             <tr>
               <td>Closed pilot</td>
-              <td><span className="gate-blocked">Blocked</span> — real operator data</td>
+              <td><span className="gate-blocked">Blocked</span> — real operator meter/inverter data</td>
             </tr>
             <tr>
               <td>Paid / mainnet</td>
-              <td><span className="gate-blocked">Blocked</span> — audit, legal, reserves</td>
+              <td><span className="gate-blocked">Blocked</span> — audit, legal, reserves, governance</td>
             </tr>
           </tbody>
         </table>
-      </div>
+      </section>
 
+      {/* §7 External ask */}
+      <section className="public-lab-section public-lab-external-ask" aria-labelledby="external-heading">
+        <h2 id="external-heading">What would make this external?</h2>
+        <p className="public-lab-external-lead">
+          <strong>Next external gate: one real meter or inverter export.</strong>
+        </p>
+        <p className="public-lab-section-lead">
+          Public Lab v1.0 is complete. The next validation step is not mainnet. It is one real or
+          semi-real renewable-energy dataset passed through the same attestation and testnet settlement pipeline.
+        </p>
+        <div className="public-lab-cta">
+          <a className="wallet-button" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
+            <Database size={17} /> Contribute one meter export
+          </a>
+          <a className="ghost-button" href={PILOT_ASK_DOC} target="_blank" rel="noreferrer">
+            <BookOpen size={17} /> Read the data ask
+          </a>
+          <a className="ghost-button" href={GITHUB_REPO} target="_blank" rel="noreferrer">
+            <ExternalLink size={17} /> GitHub
+          </a>
+        </div>
+      </section>
+
+      {/* Audience-specific entry points */}
+      <section className="public-lab-section" aria-labelledby="entry-heading">
+        <h2 id="entry-heading">Find your entry point</h2>
+        <div className="audience-cta-grid">
+          <a className="audience-cta-card" href={THESIS_READING_URL} target="_blank" rel="noreferrer">
+            <span className="audience-cta-role">I&apos;m a researcher</span>
+            <span className="audience-cta-action">Thesis &amp; evidence pack →</span>
+          </a>
+          <a className="audience-cta-card" href={PILOT_ASK_DOC} target="_blank" rel="noreferrer">
+            <span className="audience-cta-role">I have energy data</span>
+            <span className="audience-cta-action">Pilot data ask →</span>
+          </a>
+          <button type="button" className="audience-cta-card audience-cta-button" onClick={onOpenConsole}>
+            <span className="audience-cta-role">I&apos;m technical</span>
+            <span className="audience-cta-action">SPK console &amp; contracts →</span>
+          </button>
+          <a className="audience-cta-card" href={PUBLIC_LAB_DOC} target="_blank" rel="noreferrer">
+            <span className="audience-cta-role">I&apos;m an advisor / reviewer</span>
+            <span className="audience-cta-action">Public Lab v1 doc →</span>
+          </a>
+        </div>
+      </section>
+
+      {/* Non-claims */}
       <div className="public-lab-disclaimer">
         <h2><ShieldAlert size={18} /> What this is not</h2>
         <ul>
@@ -178,22 +381,9 @@ export default function PublicLabLanding({ onOpenConsole }) {
         </ul>
       </div>
 
-      <div className="public-lab-cta">
-        <a className="wallet-button" href={EVIDENCE_URL} target="_blank" rel="noreferrer">
-          <FileText size={17} /> Review evidence pack
-        </a>
-        <a className="ghost-button" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
-          <ExternalLink size={17} /> Closed pilot data ask
-        </a>
-        {onOpenConsole ? (
-          <button type="button" className="ghost-button" onClick={onOpenConsole}>
-            Open SPK console
-          </button>
-        ) : null}
-      </div>
-
       <footer className="public-lab-footer">
         <a href={PUBLIC_LAB_DOC} target="_blank" rel="noreferrer">PUBLIC_LAB_V1.md</a>
+        <a href={EVIDENCE_URL} target="_blank" rel="noreferrer">Evidence pack</a>
         <a href={PILOT_ASK_DOC} target="_blank" rel="noreferrer">Pilot data ask</a>
         <a href={GITHUB_REPO} target="_blank" rel="noreferrer">GitHub</a>
       </footer>
