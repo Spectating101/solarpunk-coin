@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  ArrowRight,
   BookOpen,
   Cpu,
   Database,
@@ -73,15 +72,12 @@ function addrUrl(address) {
   return `${SEPOLIA_EXPLORER}/address/${address}`;
 }
 
-function PipelineStep({ label, status, isLast }) {
+function PipelineStep({ label, status }) {
   return (
-    <>
-      <div className="pipeline-step">
-        <span className="pipeline-step-label">{label}</span>
-        <span className="pipeline-step-status">{status}</span>
-      </div>
-      {!isLast ? <ArrowRight size={18} className="pipeline-arrow" aria-hidden /> : null}
-    </>
+    <div className="pipeline-step">
+      <span className="pipeline-step-label">{label}</span>
+      <span className="pipeline-step-status">{status}</span>
+    </div>
   );
 }
 
@@ -170,34 +166,58 @@ export default function PublicLabLanding({ onOpenConsole }) {
     <section className="public-lab">
       {/* §1 Hero */}
       <header className="public-lab-hero public-lab-hook">
-        <p className="eyebrow">SolarPunk Public Lab v1.0 · Sepolia testnet</p>
-        <h1>
-          <span className="public-lab-hook-accent">A fourth foundation</span>
-          {' '}
-          for digital money: verified renewable surplus.
-        </h1>
-        <p className="public-lab-subhead">
-          Fiat issues by authority. Gold rests on inert scarcity. Bitcoin proves scarcity through energy burn.
-          SolarPunk tests whether digital settlement units can instead be issued from{' '}
-          <strong>productive renewable surplus</strong>.
-        </p>
-        <p className="public-lab-proofline">
-          Public Lab v1.0 runs this architecture on Sepolia: energy evidence → bounded SPK issuance →
-          network settlement → launch gates.
-        </p>
-        <div className="public-lab-cta public-lab-cta-hero">
-          <a className="wallet-button" href={EVIDENCE_URL} target="_blank" rel="noreferrer">
-            <FileText size={17} /> Review the evidence
-          </a>
-          <a className="ghost-button" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
-            <ExternalLink size={17} /> Contribute meter data
-          </a>
+        <div className="public-lab-hero-main">
+          <p className="eyebrow">SolarPunk Public Lab v1.0 · Sepolia testnet</p>
+          <h1>
+            <span className="public-lab-hook-accent">A fourth foundation</span>
+            {' '}
+            for digital money:{' '}
+            <span className="public-lab-hook-surplus">verified renewable surplus</span>.
+          </h1>
+          <p className="public-lab-subhead">
+            Fiat issues by authority. Gold rests on inert scarcity. Bitcoin proves scarcity through energy burn.
+            SolarPunk tests whether digital settlement units can instead be issued from{' '}
+            <strong>productive renewable surplus</strong>.
+          </p>
+          <p className="public-lab-proofline">
+            Public Lab v1.0 runs this architecture on Sepolia: energy evidence → bounded SPK issuance →
+            network settlement → launch gates.
+          </p>
+          <div className="public-lab-cta public-lab-cta-hero">
+            <a className="wallet-button" href={EVIDENCE_URL} target="_blank" rel="noreferrer">
+              <FileText size={17} /> Review the evidence
+            </a>
+            <a className="ghost-button ghost-button-green" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
+              <ExternalLink size={17} /> Contribute meter data
+            </a>
+          </div>
+          {onOpenConsole ? (
+            <button type="button" className="public-lab-console-link" onClick={onOpenConsole}>
+              Open technical console →
+            </button>
+          ) : null}
         </div>
-        {onOpenConsole ? (
-          <button type="button" className="public-lab-console-link" onClick={onOpenConsole}>
-            Open technical console →
-          </button>
-        ) : null}
+        <aside className="public-lab-hero-proof-card" aria-label="Live lab snapshot">
+          <p className="public-lab-hero-proof-eyebrow">Live on Sepolia</p>
+          <ul className="public-lab-hero-proof-list">
+            <li>
+              <span>SPK supply</span>
+              <strong>{supply != null ? `~${Number(supply).toLocaleString()}` : '…'}</strong>
+            </li>
+            <li>
+              <span>Payments</span>
+              <strong>{paymentCount != null ? paymentCount : '…'}</strong>
+            </li>
+            <li>
+              <span>Contract tests</span>
+              <strong>109 passing</strong>
+            </li>
+            <li>
+              <span>Peg</span>
+              <strong>{pegEnabled ? 'On' : 'Off'}</strong>
+            </li>
+          </ul>
+        </aside>
       </header>
 
       {/* §2 Proof pipeline */}
@@ -207,12 +227,11 @@ export default function PublicLabLanding({ onOpenConsole }) {
           One screen: how renewable evidence becomes a bounded settlement object on testnet.
         </p>
         <div className="public-lab-pipeline">
-          {pipelineSteps.map((step, i) => (
+          {pipelineSteps.map((step) => (
             <PipelineStep
               key={step.label}
               label={step.label}
               status={step.status}
-              isLast={i === pipelineSteps.length - 1}
             />
           ))}
         </div>
@@ -220,6 +239,7 @@ export default function PublicLabLanding({ onOpenConsole }) {
 
       {/* §3 What is real today */}
       <section className="public-lab-section public-lab-proof-strip" aria-labelledby="proof-heading">
+        <p className="public-lab-proof-eyebrow">Proof at a glance</p>
         <h2 id="proof-heading">What is real today</h2>
         <p className="public-lab-sync-note">
           <span className="public-lab-sync-primary">
