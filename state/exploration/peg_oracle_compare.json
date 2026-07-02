@@ -1,0 +1,54 @@
+{
+  "peg_simulation": {
+    "max_peg_deviation_bps": 1228.3131790485113,
+    "max_peg_deviation_pct": 12.28,
+    "pct_in_5pct_band": 81.4,
+    "avg_peg_deviation_bps": -14.8
+  },
+  "spk_v1_posture": "peg_off_by_default",
+  "comparison_rows": [
+    {
+      "location": "Taiwan",
+      "sigma": "189%",
+      "max_err_vr95_pct": 21.7,
+      "peg_sim_max_dev_pct": 12.28,
+      "within_oracle_band": true,
+      "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+    },
+    {
+      "location": "Saudi Arabia",
+      "sigma": "172%",
+      "max_err_vr95_pct": 19.7,
+      "peg_sim_max_dev_pct": 12.28,
+      "within_oracle_band": true,
+      "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+    },
+    {
+      "location": "Arizona, USA",
+      "sigma": "165%",
+      "max_err_vr95_pct": 18.9,
+      "peg_sim_max_dev_pct": 12.28,
+      "within_oracle_band": true,
+      "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+    },
+    {
+      "location": "Brazil",
+      "sigma": "198%",
+      "max_err_vr95_pct": 22.7,
+      "peg_sim_max_dev_pct": 12.28,
+      "within_oracle_band": true,
+      "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+    },
+    {
+      "location": "Germany",
+      "sigma": "45%",
+      "max_err_vr95_pct": 5.2,
+      "peg_sim_max_dev_pct": 12.28,
+      "within_oracle_band": false,
+      "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+    }
+  ],
+  "taiwan_within_band": true,
+  "locations_within_band": 4,
+  "interpretation": "If peg-on max deviation exceeds oracle tolerance, peg machinery needs tighter control or higher reserves before stablecoin claims \u2014 independent of CEIR."
+}

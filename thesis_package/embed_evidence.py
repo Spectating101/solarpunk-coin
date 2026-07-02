@@ -9,10 +9,10 @@ PKG = Path(__file__).resolve().parent
 EVIDENCE_PATH = PKG / "SPK_V1_EVIDENCE.md"
 
 SECTION_MAP = {
-    "Canonical contracts": "5.10.1 Canonical contracts and live metrics",
-    "Live metrics": None,  # merged into 5.10.1
-    "Payment ledger (indexed from chain)": "5.10.2 Indexed payment ledger (Table 5.4)",
-    "Operator cycles": "5.10.3 Operator cycle log",
+    "Canonical contracts": "5.9.1 Canonical contracts and live metrics",
+    "Live metrics": None,  # merged into 5.9.1
+    "Payment ledger (indexed from chain)": "5.9.2 Indexed payment ledger (Table 5.4)",
+    "Operator cycles": None,  # omit verbose cycle log from thesis body
 }
 
 
@@ -35,6 +35,7 @@ def format_evidence_block(raw: str) -> str:
     lines_out: list[str] = []
     section_title: str | None = None
     in_reproduce = False
+    skip_section = False
 
     for line in raw.splitlines():
         if line.startswith("# SPK v1"):
@@ -48,17 +49,25 @@ def format_evidence_block(raw: str) -> str:
         if "Generated:" in line and line.strip().startswith("**"):
             meta = re.sub(r"\*+", "", line).strip()
             ts = meta.split("Generated:", 1)[-1].strip()
+            lines_out.append("")
             lines_out.append(
-                f"*The following blocks are exported from `state/runtime/spk_v1.json` "
-                f"after Sepolia sync (generated {ts}).*"
+                f"_Metrics and ledger entries below are synced from public Sepolia "
+                f"testnet state (generated {ts})._"
             )
             lines_out.append("")
+            continue
+        if skip_section:
             continue
         if line.startswith("**Status:") or line.startswith("**Runtime:"):
             continue
 
         if line.startswith("## "):
             heading = line[3:].strip()
+            if heading == "Operator cycles":
+                skip_section = True
+                section_title = None
+                continue
+            skip_section = False
             mapped = SECTION_MAP.get(heading)
             if mapped is None:
                 continue
@@ -67,12 +76,15 @@ def format_evidence_block(raw: str) -> str:
             lines_out.append("")
             continue
 
-        if line.startswith("### ") and section_title == "5.10.3 Operator cycle log":
+        if skip_section:
+            continue
+
+        if line.startswith("### ") and section_title == "5.9.3 Operator cycle log":
             lines_out.append(f"##### {line[4:].strip()}")
             continue
 
         lines_out.append(wordify_markdown_links(line))
-        if section_title == "5.10.2 Indexed payment ledger (Table 5.4)" and line.startswith("| 21 |"):
+        if section_title == "5.9.2 Indexed payment ledger (Table 5.4)" and line.startswith("| 21 |"):
             lines_out.append("")
             lines_out.append(
                 "*Table 5.4. Indexed network payments on Sepolia (SPK v1). "
@@ -99,7 +111,7 @@ def inject_chapter5_evidence(chapter_body: str, evidence_path: Path | None = Non
 
     chapter_body = chapter_body.replace(
         "(full ledger: `thesis_package/SPK_V1_EVIDENCE.md`).",
-        "(Table 5.4 and §5.10.1–5.10.3 below; regenerated on each thesis build).",
+        "(Table 5.4 and §5.9.1–5.9.2 below; regenerated on each thesis build).",
     )
 
     # Drop one-line metrics summary; the embedded block repeats with tables.
@@ -110,7 +122,7 @@ def inject_chapter5_evidence(chapter_body: str, evidence_path: Path | None = Non
         count=1,
     )
 
-    marker = "### 5.11 Chapter Conclusion"
+    marker = "## 5.10 Chapter Conclusion"
     if marker in chapter_body:
         return chapter_body.replace(marker, appendix + "\n" + marker, 1)
     return chapter_body.rstrip() + "\n\n" + appendix + "\n"

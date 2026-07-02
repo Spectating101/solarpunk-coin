@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-06-28T17:44:41.182Z",
+  "bundle_schema": "SPK_ATTESTATION_BUNDLE_V2",
+  "source_schema": "SPK_RAW_METER_READINGS_V1",
+  "registry_schema": "SPK_METER_REGISTRY_V2",
+  "batch_id": "sample-cumulative_1782668681175",
+  "min_quality_threshold": 0.9,
+  "summary": {
+    "input_records": 1,
+    "accepted_records": 1,
+    "rejected_records": 0,
+    "verified_signatures": 1,
+    "registered_meters": 2,
+    "total_surplus_kwh": 996.2
+  },
+  "accepted_attestations": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-14T00:00:00+00:00",
+      "window_end": "2026-02-14T23:59:59+00:00",
+      "surplus_kwh": 996.2,
+      "quality_score": 0.97,
+      "source": "solar_gateway_cumulative_v1_interval_v1",
+      "attestor": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
+      "payload_hash": "0xd4ecbe5d55f7718a4c562569515e51d9c7dc58f2ad3361cc9a845704c7c7d0e4",
+      "signature": "0x4718f29f34b197ea447f2053a99a902ec90b63870ca9ba7413710dc4095bb8c40d72e51add7ed3f1f0cb06912962b2536c68947dc654825e473399ea541c5be91c",
+      "location_country": "TW",
+      "grid_zone": "TW-TPC-NORTH",
+      "energy_vintage": "2026-02",
+      "record_hash": "e6b6e7407d3c7a7d612fbea7d71f9aed2fb19e623ac1c5b3dc2bb5edf80a856f"
+    }
+  ],
+  "rejected_attestations": []
+}

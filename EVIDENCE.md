@@ -28,15 +28,16 @@ Full tx tables: [`thesis_package/SPK_V1_EVIDENCE.md`](./thesis_package/SPK_V1_EV
 
 | Claim | Value | Artifact |
 |---|---|---|
-| Pre-ban CEIR coefficient | β = −0.257 | `thesis_package/empirical_results/ceir_analysis_summary.csv` |
-| Post-ban CEIR coefficient | β = −0.634 | Same file |
-| Structural break (Chow test) | p = 1.11e-16 | Same file |
-| Block bootstrap pre-ban 95% CI | [−0.371, −0.002], 97.4% draws β < 0 | `thesis-draft.md` §2.7 |
-| Pre-ban sample size | N = 898 weeks | `thesis_package/empirical_results/ceir_analysis_summary.csv` |
-| Post-ban sample size | N = 1,044 weeks | Same file |
-| Mechanism test: 2.8× stronger in fearful markets | β_fearful = −0.500 | `thesis-draft.md` §2.7 |
+| Pre-ban CEIR coefficient | β = −0.262 (HAC p ≈ 0.0005) | `thesis_package/empirical_results/ceir_analysis_summary.csv` |
+| Post-ban CEIR coefficient | β = −0.071 (HAC p ≈ 0.13, not significant) | Same file |
+| Structural break (Chow test) | p = 1.11×10⁻¹⁶ | Same file |
+| Pre-ban sample size | N = 872 days | Same file |
+| Post-ban sample size | N = 1,408 days | Same file |
+| Trading rule vs buy-and-hold | +176% vs +2771%; Sharpe 0.72 vs 1.13 | `ceir_trading_rule_summary.json` |
 
-**Raw dataset:** `thesis_package/empirical_results/bitcoin_ceir_analysis_ready.csv` (~400k rows, 2019–present)
+**Reproduce:** `python thesis_package/ceir_regression.py --refresh-panel`
+
+**Raw dataset:** `thesis_package/empirical_results/bitcoin_ceir_analysis_ready.csv` (daily, 2019–2025; `Returns_forward` = true 30-day forward return after rebuild)
 
 ### 1.2 Physics-Based Volatility Calibration (Pillar 2)
 
@@ -266,6 +267,7 @@ This is the first internal currency-framework layer around SPK. It does not mint
 | Local SPK settlement loop | 130.1697 SPK minted, 75 SPK settled, 20 SPK redeemed, 400 kWh delivered | `docs/product/FIELD_RECEIPT_LOOP.md` |
 | Internal readiness report | 8/8 checks pass | `docs/product/CURRENCY_FRAMEWORK_READINESS.md` |
 | Theory/comparables anchor | Positions SPK against RECs, granular certificates, Green Button/ESPI, Energy Web, SolarCoin, Powerledger, BIS tokenisation, and FSB stablecoin controls | `docs/product/CURRENCY_THEORY_AND_COMPARABLES.md` |
+| CEIR → SPK literature bridge | How corrected CEIR motivates energy-standard issuance (not peg proof) | `docs/product/CEIR_TO_SPK_LITERATURE_BRIDGE.md` |
 
 Scope note: this is a local contract/test/readiness layer, not a deployed Sepolia/mainnet currency stack yet.
 

@@ -1,5 +1,6 @@
 {
-  "generated_at": "2026-05-18T18:39:33.675Z",
+  "generated_at": "2026-06-28T17:44:40.926Z",
+  "bundle_schema": "SPK_ATTESTATION_BUNDLE_V2",
   "source_schema": "SPK_RAW_METER_READINGS_V1",
   "registry_schema": "SPK_OPERATOR_INTAKE_REGISTRY_V1",
   "batch_id": "sample_operator_export",
@@ -25,7 +26,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x1e8a1fd5c5bfa12f42c585830cc5d4c37a050f6be51a8dd1b94bb04c570b34b0",
       "signature": "0x226d41ffeaab2a05d53d829175f6f375ed316b46ea767e152965f88664fd68336e351ac72363d05efa554fb60380db737e206ea8eeb5d4e3540259dabcdfc0941c",
-      "record_hash": "3e98c1e999ad5c77d1af98829b8fd93e2c5d774b1dcc43e37f6000b49fbfae7c"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-05",
+      "record_hash": "0897ae9c4eae94c39f43d1b2a9ba91025aa00933ac2ba3135b7fe6ffccdb730b"
     },
     {
       "meter_id": "TW-TY-0001",
@@ -39,7 +43,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x7a7efa43a088b9d7d19cd314b1afb9b22681fa7dddc73dfe26e63c5bfe3d2486",
       "signature": "0x037f78260efbe6fdde4357c257012d38f96136455afac3722cd801ef61d66e666d1eb5591ff61e76b8d730807eeb882bb3e393a935014a1beebec709514950501b",
-      "record_hash": "5a4aa08d780313945f96608f97882dc9a6a89920a7565367c8faef786dabce4e"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-05",
+      "record_hash": "125aebc0b2526e189b5a694d07bc3fea8cdb688364496295d61992e604ce4e5e"
     },
     {
       "meter_id": "TW-TY-0001",
@@ -53,7 +60,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x7147b2c33b0518a5ca483424d7d53a8cccc43add43fb1a3ec314c8dc5f0be18b",
       "signature": "0x3f08e0b2dba6041bcb29fe365aa912c04bb732fa6b71cbe89415edcda285430e0308d51b65fe896d0d54316d4ad30eb57f7cf37fddfa9904f1780accf668dcc41c",
-      "record_hash": "39fd90154e4c218d37a8b8c9077c7b9e95b37fcc4cf8d0fcdc09e2dd8339ea9b"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-05",
+      "record_hash": "1b1f583aac96dbb6c1f6717cbf922240d62dfaedbb68a37f8c67357832912e0b"
     },
     {
       "meter_id": "TW-TY-0001",
@@ -67,7 +77,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x61b80e764a1b5865e0b7aabebc30fefa58ea65a8fc33fe6bb811d8e5fd543d82",
       "signature": "0x480b0b16dcb4af1bc9a61bcb17a00894ac99f29cc6502b8158128d2ad6187a8652064fed424994d00ab442168c14e4ed41f57aa3be6af660c8d86e29efdba3811b",
-      "record_hash": "137fd642e2f00a6c8add23bbfe4c03d918b7609e6598d0c9adf5c590b8a1b7b1"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-05",
+      "record_hash": "1e9d7e7901e5c04ca8564ec6bebdd541800e71ebe8692f388dcf55820d36c1b4"
     },
     {
       "meter_id": "TW-TY-0001",
@@ -81,7 +94,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x1b0d5aafd2f8a99f0d9aa13a940f7730abb9edc0b0e74c272a145a9cf2449207",
       "signature": "0xc4bf66abba88417c096edf8abc0776f8aa9e3f21ed4181bdbe897381ffebaa96227dba98c0299b9731cc1d0a398fc04ded8f81a1efb59bb7948fd7bde75a824b1b",
-      "record_hash": "e186fa1a4132179a47e9c42e97b6edb14bc606252bdd7192d7d0d31c60f21c8f"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-05",
+      "record_hash": "d6dda9bc44a3ea7dce948cb88577e8b4e9ade8adafad96eed79e91bc3ac7ffbf"
     },
     {
       "meter_id": "TW-TY-0001",
@@ -95,7 +111,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x37421bcfb5c31e39ee67857eade03d8aa720fc3cb47a09ec7144502aca34c69a",
       "signature": "0x4544eb84cd63aec7b6ff16377d9505b21b5bddfd48f4c66a23f3bc656594fb9870c706a8e68f8cadc6a32ec0b89d5343857f6576b80cd4be4633bb3740e6cf111b",
-      "record_hash": "9a2f5c515eeb3b8c77969af10aa149276a42ad2bd25271e8cddc3ca495fbe497"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-05",
+      "record_hash": "e8d93a0978dae794ac16e760b92314c3f41e54bb23b8ed28e15bdc9bcd61c0b3"
     },
     {
       "meter_id": "TW-TY-0001",
@@ -109,7 +128,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x9c26f96814629eb673ecb66a09609e399430f9156ae20386431547e62cf90aa8",
       "signature": "0xb9703ac3975c5054a4bc91c40e77cc384b58df0bd38498b6c1c1d1652f7151c8638552dce4469886bc03a867d5e9cf48298f16e06f753656c759830a815894081c",
-      "record_hash": "08266e6c6e495b22edbf623ffda5a35fc3e0ee52f4db585864b19e9618f81530"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-05",
+      "record_hash": "97cc6ce0bb36ea2e5df7c3817843bd91a481ad5afaf77faab275a291f82ea62b"
     }
   ],
   "rejected_attestations": []

@@ -15,6 +15,8 @@ function registry() {
         site_id: "taoyuan-rooftop-a",
         device_address: new ethers.Wallet(DEVICE_KEYS["TW-TY-0001"]).address,
         capacity_kw: 120,
+        location_country: "TW",
+        grid_zone: "TW-TPC-NORTH",
         active_after: "2026-01-01T00:00:00Z",
         active_until: "2027-01-01T00:00:00Z",
       },
@@ -23,6 +25,8 @@ function registry() {
         site_id: "taoyuan-rooftop-b",
         device_address: new ethers.Wallet(DEVICE_KEYS["TW-TY-0002"]).address,
         capacity_kw: 110,
+        location_country: "TW",
+        grid_zone: "TW-TPC-NORTH",
         active_after: "2026-01-01T00:00:00Z",
         active_until: "2027-01-01T00:00:00Z",
       },
@@ -86,6 +90,15 @@ test("derives accepted surplus from valid signed meter readings", async () => {
   assert.equal(bundle.summary.rejected_records, 0);
   assert.equal(bundle.summary.verified_signatures, 2);
   assert.equal(bundle.summary.total_surplus_kwh, 2606.7);
+});
+
+test("v2 bundle carries regime metadata on accepted attestations", async () => {
+  const bundle = deriveBundle(payload([await signed()]), registry(), { now: NOW });
+  assert.equal(bundle.bundle_schema, "SPK_ATTESTATION_BUNDLE_V2");
+  const row = bundle.accepted_attestations[0];
+  assert.equal(row.location_country, "TW");
+  assert.equal(row.grid_zone, "TW-TPC-NORTH");
+  assert.equal(row.energy_vintage, "2026-02");
 });
 
 test("rejects duplicate meter nonces", async () => {

@@ -22,6 +22,7 @@ PKG = Path(__file__).resolve().parent
 sys.path.insert(0, str(PKG))
 
 from embed_evidence import inject_chapter5_evidence
+from embed_tables import inject_empirical_tables
 OUTPUT_MD = PKG / "THESIS_GROUNDED_MANUSCRIPT.md"
 OUTPUT_DOCX = PKG / "output" / "THESIS_GROUNDED.docx"
 CHAPTER_OUTPUT_DIR = PKG / "output" / "chapters"
@@ -69,6 +70,35 @@ KEYWORDS = (
 JEL = "E42, G13, Q42, Q47"
 
 
+def refresh_empirical_artifacts() -> None:
+    """Regenerate pricing CSVs, CEIR appendix, and thesis figures."""
+    subprocess.run(
+        [sys.executable, str(PKG / "options_pricing.py")],
+        check=False,
+        cwd=PKG,
+    )
+    subprocess.run(
+        [sys.executable, str(PKG / "ceir_regression.py")],
+        check=False,
+        cwd=ROOT,
+    )
+    subprocess.run(
+        [sys.executable, str(PKG / "generate_thesis_figures.py")],
+        check=False,
+        cwd=ROOT,
+    )
+    subprocess.run(
+        [sys.executable, str(PKG / "generate_thesis_tables.py")],
+        check=False,
+        cwd=ROOT,
+    )
+    subprocess.run(
+        [sys.executable, str(PKG / "verify_thesis_numbers.py")],
+        check=False,
+        cwd=ROOT,
+    )
+
+
 def refresh_evidence() -> None:
     """Sync runtime metrics into thesis evidence pack."""
     venv_spk = ROOT / "spk_v1" / ".venv" / "bin" / "spk-v1"
@@ -95,16 +125,39 @@ def _normalize_ref(entry: str) -> str:
     return re.sub(r"\s+", " ", entry.strip().lower())
 
 
+REFERENCES_MD = PKG / "THESIS_REFERENCES.md"
+
+
+def load_canonical_references() -> list[str]:
+    if not REFERENCES_MD.exists():
+        return []
+    entries: list[str] = []
+    for line in REFERENCES_MD.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        entries.append(line)
+    return entries
+
+
 def _ref_dedupe_key(entry: str) -> str:
     norm = _normalize_ref(entry)
+    if "bis.org/publ/arpdf/ar2023e3" in norm:
+        return "bis:2023-blueprint"
     if "cambridge centre for alternative finance" in norm:
         if "mining map" in norm:
             return "cambridge:mining-map"
-        if "methodology" in norm:
-            return "cambridge:methodology"
-        if "cbeci" in norm and "index" in norm:
+        if "cbeci/methodology" in norm or (
+            "methodology" in norm and "mining map" not in norm
+        ):
+            return "cambridge:cbeci-methodology"
+        if "cbeci" in norm:
             return "cambridge:cbeci-index"
-    return norm[:100]
+    if "chain.link/education-hub/oracle-problem" in norm:
+        return "chainlink:oracle-problem"
+    if "chain.link/proof-of-reserve" in norm:
+        return "chainlink:proof-of-reserve"
+    return norm[:120]
 
 
 def extract_references(text: str) -> tuple[str, list[str]]:
@@ -146,12 +199,28 @@ def bump_headings(lines: list[str]) -> list[str]:
     return out
 
 
-def load_chapter(path: Path) -> tuple[str, list[str]]:
+def load_chapter(path: Path, *, apply_heading_bump: bool = True) -> tuple[str, list[str]]:
     raw = path.read_text(encoding="utf-8")
     body, refs = extract_references(raw)
     lines = strip_proposed_title_block(body.splitlines())
-    transformed = "\n".join(bump_headings(lines)).strip() + "\n"
+    if apply_heading_bump:
+        lines = bump_headings(lines)
+    transformed = "\n".join(lines).strip() + "\n"
     return transformed, refs
+
+
+def _ref_sort_key(entry: str) -> str:
+    text = re.sub(r"\*+", "", entry.strip())
+    if not text:
+        return ""
+    if "," in text.split(".", 1)[0]:
+        surname = text.split(",", 1)[0].strip().lower()
+    else:
+        surname = text.split()[0].strip().lower()
+    for prefix in ("the ", "a ", "an "):
+        if surname.startswith(prefix):
+            surname = surname[len(prefix) :]
+    return surname
 
 
 def merge_references(all_refs: list[list[str]]) -> list[str]:
@@ -164,6 +233,7 @@ def merge_references(all_refs: list[list[str]]) -> list[str]:
                 continue
             seen.add(key)
             merged.append(entry)
+    merged.sort(key=_ref_sort_key)
     return merged
 
 
@@ -190,7 +260,7 @@ Master's Thesis — {now}
 ## Table of Contents
 
 1. Chapter 1 — Introduction  
-2. Chapter 2 — Monetary Background and the Case for Energy  
+2. Chapter 2 — Literature Review and Theoretical Background  
 3. Chapter 3 — Empirical Evidence from Bitcoin Energy Costs  
 4. Chapter 4 — Pricing Renewable-Energy Risk  
 5. Chapter 5 — Constraints Framework and Proof-of-Concept Implementation  
@@ -200,6 +270,28 @@ Master's Thesis — {now}
 """
 
 
+def inject_ceir_appendix(chapter_body: str) -> str:
+    appendix_path = PKG / "CEIR_REGRESSION_APPENDIX.md"
+    if not appendix_path.exists():
+        return chapter_body
+    raw = appendix_path.read_text(encoding="utf-8")
+    # Table A.1 duplicates Table 3.7 — keep only supplementary boundary checks.
+    raw = re.sub(r"## Table A\.1.*?## Table A\.2", "## Table A.2", raw, flags=re.DOTALL)
+    raw = re.sub(r"\n## Reproduce\n.*", "", raw, flags=re.DOTALL)
+    raw = raw.replace("# CEIR Regression Appendix", "## 3.9 Supplementary CEIR Checks")
+    raw = raw.replace("(auto-generated)", "").replace("CEIR Regression Appendix (auto-generated)", "Supplementary CEIR checks")
+    raw = raw.replace("## Table", "### Table")
+    intro = (
+        "The preferred level specification appears in Table 3.7. "
+        "Section 3.9 records supplementary boundary checks only.\n\n"
+    )
+    marker = "## References"
+    if marker in chapter_body:
+        head, tail = chapter_body.split(marker, 1)
+        return head.rstrip() + "\n\n" + intro + raw.strip() + "\n\n" + marker + tail
+    return chapter_body.rstrip() + "\n\n" + intro + raw.strip() + "\n"
+
+
 def assemble_manuscript() -> str:
     parts = [build_front_matter()]
     all_refs: list[list[str]] = []
@@ -207,15 +299,23 @@ def assemble_manuscript() -> str:
     for chapter_path in CHAPTER_FILES:
         if not chapter_path.exists():
             raise FileNotFoundError(f"Missing chapter draft: {chapter_path}")
-        body, refs = load_chapter(chapter_path)
+        body, refs = load_chapter(chapter_path, apply_heading_bump=False)
+        if chapter_path.name == "CHAPTER_3_GROUNDED_DRAFT.md":
+            body = inject_empirical_tables(body)
+            body = inject_ceir_appendix(body)
+        if chapter_path.name == "CHAPTER_4_GROUNDED_DRAFT.md":
+            body = inject_empirical_tables(body)
         if chapter_path.name == "CHAPTER_5_GROUNDED_DRAFT.md":
             body = inject_chapter5_evidence(body, PKG / "SPK_V1_EVIDENCE.md")
+        body = "\n".join(bump_headings(body.splitlines())).strip() + "\n"
         parts.append(body)
         parts.append("\n")
         if refs:
             all_refs.append(refs)
 
-    merged = merge_references(all_refs)
+    merged = load_canonical_references()
+    if not merged:
+        merged = merge_references(all_refs)
     if merged:
         parts.append("## References\n\n")
         parts.append("\n\n".join(merged))
@@ -238,10 +338,10 @@ def build_docx(
     include_cover: bool = True,
     chapter_only: bool = False,
 ) -> None:
-    from create_thesis_word import build_docx as render_docx
+    from create_thesis_word import build_docx_polished
 
     output_docx.parent.mkdir(parents=True, exist_ok=True)
-    render_docx(
+    build_docx_polished(
         input_md,
         output_docx,
         date_text,
@@ -281,12 +381,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build grounded thesis markdown and DOCX.")
     parser.add_argument("--docx", action="store_true", help="Also build Word document(s).")
     parser.add_argument("--chapters", action="store_true", help="Build per-chapter DOCX files.")
+    parser.add_argument("--pdf", action="store_true", help="Also export PDF reading pack.")
     parser.add_argument("--skip-evidence", action="store_true", help="Skip evidence refresh.")
     parser.add_argument("--output-md", default=str(OUTPUT_MD))
     parser.add_argument("--output-docx", default=str(OUTPUT_DOCX))
     args = parser.parse_args()
 
     if not args.skip_evidence:
+        print("==> refresh pricing + thesis figures")
+        refresh_empirical_artifacts()
         print("==> refresh thesis evidence from runtime")
         refresh_evidence()
 
@@ -303,6 +406,15 @@ def main() -> int:
         if args.chapters:
             print("==> build chapter DOCX files")
             build_chapter_docx(manuscript, date_text)
+
+    if args.pdf:
+        print("==> export reading pack (PDF)")
+        rc = subprocess.run(
+            [sys.executable, str(PKG / "export_reading_pack.py")],
+            cwd=ROOT,
+        ).returncode
+        if rc != 0:
+            return rc
 
     print("thesis_build_ok")
     return 0

@@ -169,11 +169,11 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
 
       <header className="spk-demo-hero">
         <div>
-          <p className="eyebrow">Sepolia testnet · energy-native money</p>
-          <h1>SPK v1 demo</h1>
+          <p className="eyebrow">Sepolia testnet · lab unit console</p>
+          <h1>SPK console</h1>
           <p className="spk-demo-lead">
-            Minted from verified surplus kWh. Spent via on-chain network payments.
-            Connect wallet on Sepolia to send a real test payment.
+            Technical view: bounded SPK mint from verified surplus kWh, network payments on-chain.
+            Connect wallet on Sepolia to send a testnet settlement payment.
           </p>
         </div>
         <button type="button" className="icon-button" onClick={reload} title="Refresh">

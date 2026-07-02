@@ -16,7 +16,25 @@ def foundation_paths(repo_root: Path) -> dict[str, Path]:
     }
 
 
-def build_foundation_snapshot(runtime: dict[str, Any]) -> dict[str, Any]:
+def _load_peg_simulation(repo_root: Path) -> dict[str, Any] | None:
+    path = Path(repo_root) / "state" / "foundation" / "peg_simulation_summary.json"
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    return {
+        "ok": bool(data.get("ok")),
+        "pct_in_band": data.get("pct_in_band"),
+        "max_deviation_bps": data.get("max_deviation_bps"),
+        "note": "Off-chain PI simulation only — peg disabled on Sepolia.",
+    }
+
+
+def build_foundation_snapshot(runtime: dict[str, Any], *, repo_root: Path | None = None) -> dict[str, Any]:
     policy = runtime.get("monetary_policy") or {}
     on_chain = runtime.get("on_chain") or {}
     metrics = (runtime.get("genesis") or {}).get("metrics") or {}
@@ -31,8 +49,9 @@ def build_foundation_snapshot(runtime: dict[str, Any]) -> dict[str, Any]:
     latest = max(ledger, key=lambda row: int(row.get("payment_id") or 0), default=None)
     counterparties = runtime.get("counterparties") or {}
     counterparty_balances = runtime.get("counterparty_balances_spk") or {}
+    peg_sim = _load_peg_simulation(repo_root) if repo_root else None
 
-    return {
+    snapshot = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "horizon": "structural",
         "network": runtime.get("network"),
@@ -80,6 +99,9 @@ def build_foundation_snapshot(runtime: dict[str, Any]) -> dict[str, Any]:
         },
         "latest_payment": latest,
     }
+    if peg_sim:
+        snapshot["peg_simulation"] = peg_sim
+    return snapshot
 
 
 def render_foundation_markdown(snapshot: dict[str, Any]) -> str:
@@ -134,6 +156,21 @@ def render_foundation_markdown(snapshot: dict[str, Any]) -> str:
             "",
         ])
 
+    peg_sim = snapshot.get("peg_simulation")
+    if peg_sim:
+        lines.extend([
+            "## Peg simulation (off-chain)",
+            "",
+            f"| Signal | Value |",
+            f"|--------|-------|",
+            f"| Simulation OK | **{peg_sim.get('ok')}** |",
+            f"| Days in ±5% band | {peg_sim.get('pct_in_band') or '—'} |",
+            f"| Max deviation | {peg_sim.get('max_deviation_bps') or '—'} |",
+            "",
+            f"> {peg_sim.get('note', '')}",
+            "",
+        ])
+
     lines.extend([
         "> USD figures use `reference_usd_per_kwh` only. See `docs/foundation/MONETARY_FOUNDATION.md`.",
         "",
@@ -146,7 +183,7 @@ def render_foundation_markdown(snapshot: dict[str, Any]) -> str:
 def export_foundation_status(runtime: dict[str, Any], repo_root: Path) -> dict[str, Any]:
     root = Path(repo_root)
     paths = foundation_paths(root)
-    snapshot = build_foundation_snapshot(runtime)
+    snapshot = build_foundation_snapshot(runtime, repo_root=root)
     paths["status_json"].parent.mkdir(parents=True, exist_ok=True)
     paths["status_md"].parent.mkdir(parents=True, exist_ok=True)
     paths["status_json"].write_text(json.dumps(snapshot, indent=2) + "\n", encoding="utf-8")

@@ -8,5 +8,7 @@ npm run foundation:sync || true
 npm run foundation:health || true
 npm run foundation:validate || true
 npm run foundation:peg-check || true
+npm run exploration:procure-data || true
+npm run exploration:tier-c || true
 npm run foundation:publish-docs
 echo "foundation_daily_ok"

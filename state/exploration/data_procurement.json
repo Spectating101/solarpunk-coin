@@ -1,0 +1,183 @@
+{
+  "schema": "TIER_C_DATA_PROCUREMENT",
+  "version": "1.0.0",
+  "generated_at": "2026-06-28T17:44:41.196972+00:00",
+  "procurement": {
+    "ceir": {
+      "step": "ceir_regression",
+      "regression_run": {
+        "command": "/usr/bin/python3 /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/thesis_package/ceir_regression.py --refresh-panel",
+        "ok": true,
+        "stdout_tail": "wrote thesis_package/empirical_results/ceir_analysis_summary.csv\nwrote thesis_package/empirical_results/ceir_analysis_summary_diff.csv\nwrote thesis_package/empirical_results/ceir_trading_rule_summary.json\nwrote thesis_package/CEIR_REGRESSION_APPENDIX.md\npre beta=-0.2623 post beta=-0.0708 chow_p=1.11e-16\nceir_regression_ok\n",
+        "stderr_tail": "",
+        "exit_code": 0
+      },
+      "panel_stats": {
+        "panel_path": "thesis_package/empirical_results/bitcoin_ceir_analysis_ready.csv",
+        "date_min": "2019-01-01",
+        "date_max": "2025-05-28",
+        "n_observations": 2340,
+        "n_pre_ban": 901,
+        "n_post_ban": 1439,
+        "ceir_mean_pre": 30.035,
+        "ceir_mean_post": 29.383,
+        "cumulative_cost_usd_latest": 53387588912.0,
+        "data_lineage": "Historical panel: Bitcoin price + Cambridge-style cumulative energy cost (electricity_price \u00d7 daily TWh path). Modelled consumption side \u2014 not site meters."
+      },
+      "coefficients": {
+        "Pre_ban_N": 872.0,
+        "Post_ban_N": 1408.0,
+        "Pre_ban_CEIR_coef": -0.262347427051995,
+        "Post_ban_CEIR_coef": -0.0708107094846445,
+        "Chow_pvalue": 1.1102230246251563e-16,
+        "Pre_ban_p_hac": 0.0005156475703374,
+        "Post_ban_p_hac": 0.1331254555952099,
+        "Pre_ban_p_cluster": 0.0007345332732709,
+        "Post_ban_p_cluster": 0.1258205726684107,
+        "Econ_impact_1sd_30d_pct": -12.620199236189451
+      },
+      "sources": [
+        "thesis_package/empirical_results/bitcoin_ceir_analysis_ready.csv",
+        "Cambridge CBECI methodology (modelled mining electricity)"
+      ]
+    },
+    "nasa_power": {
+      "ok": true,
+      "location": "Taoyuan, Taiwan",
+      "lat": 24.99,
+      "lon": 121.3,
+      "api": "NASA POWER daily ALLSKY_SFC_SW_DWN",
+      "window": {
+        "start": "20260524",
+        "end": "20260628"
+      },
+      "latest_valid_date": "20260623",
+      "ghi_kwh_m2_day": 6.7735,
+      "n_valid_days": 31,
+      "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=121.3&latitude=24.99&start=20260524&end=20260628&format=JSON",
+      "use": "Production-side resource benchmark (irradiance), contrasts with CBECI consumption estimates"
+    },
+    "operator_intake": {
+      "run": {
+        "command": "npm run product:operator-intake",
+        "ok": true,
+        "stdout_tail": "\n> solarpunkcoin-contracts@1.0.0 product:operator-intake\n> node scripts/operator_data_intake.js --use-dev-fixture-key --generated-at=2026-05-19T00:00:00Z --now=2026-05-19T00:00:00Z\n\naccepted_records=7\neligible_surplus_kwh=103.8\nnet_spk_preview=5.14485\nprovenance_level=L0\nwrote: /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/state/product/operator_data_intake.json\n",
+        "stderr_tail": "",
+        "exit_code": 0
+      },
+      "summary": null,
+      "operator_profile": null,
+      "accepted_kwh": 103.8,
+      "artifacts": [
+        "state/product/operator_data_intake.json",
+        "state/product/operator_data_attestation_bundle.json"
+      ]
+    },
+    "meter_csv": {
+      "run": {
+        "command": "import_meter_csv (signed with dev fixture key TW-TY-0001)",
+        "ok": false,
+        "stdout_tail": "",
+        "stderr_tail": "_csv.js:131:23)\n    at importCsvRows (/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/scripts/import_meter_csv.js:196:21)\n    at main (/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/scripts/import_meter_csv.js:225:25)\n    at Object.<anonymous> (/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/scripts/import_meter_csv.js:243:3)\n    at Module._compile (node:internal/modules/cjs/loader:1706:14)\n    at Object..js (node:internal/modules/cjs/loader:1839:10)\n    at Module.load (node:internal/modules/cjs/loader:1441:32)\n    at Function._load (node:internal/modules/cjs/loader:1263:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\n",
+        "exit_code": 1
+      },
+      "source_csv": "data/attestations/sample_meter_export.csv",
+      "n_csv_rows": 2,
+      "csv_surplus_kwh_total": 1985.5,
+      "output_raw": null
+    },
+    "inverter_adapter": {
+      "run": {
+        "command": "node scripts/inverter_meter_adapter.js --provider=sample-cumulative --start=data/inverter/sample_cumulative_start.json --end=data/inverter/sample_cumulative_end.json --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --use-dev-fixture-key --out-json=state/exploration/inverter_adapter_receipt.json --out-raw=state/exploration/inverter_raw_readings.json --out-bundle=state/exploration/inverter_attestation_bundle.json",
+        "ok": true,
+        "stdout_tail": "provider=sample-cumulative\nsource_mode=sample_cumulative_snapshot_pair\naccepted_records=1\naccepted_surplus_kwh=996.2\ncan_mint_from_adapter=true\nwrote: /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/state/exploration/inverter_adapter_receipt.json\nwrote: /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/docs/product/INVERTER_METER_ADAPTER.md\n",
+        "stderr_tail": "",
+        "exit_code": 0
+      },
+      "receipt": "state/exploration/inverter_adapter_receipt.json",
+      "surplus_kwh": 821.2,
+      "generation_kwh": 1388.6,
+      "accepted_surplus_kwh": 996.2,
+      "can_mint_from_adapter": true,
+      "evidence_grade": "adapter_sample_or_review",
+      "references": []
+    },
+    "ausgrid": {
+      "ok": true,
+      "source": "Ausgrid Solar Home Electricity Data (public sample row)",
+      "source_file": "data/public/ausgrid_sample.csv",
+      "license_note": "Public research dataset; not SPK operator data",
+      "sample_date": "1/07/2012",
+      "n_gg_days_in_sample": 3,
+      "daily_generation_kwh_proxy": 8.726,
+      "peak_30min_kwh": 1.156,
+      "use": "External validation that real utility-export formats exist; P4 geography AU not TW"
+    }
+  },
+  "contrast": {
+    "title": "Consumption-side (CEIR) vs production-side (SPK) data contrast",
+    "rows": [
+      {
+        "dimension": "Object",
+        "ceir_bitcoin": "Bitcoin market cap vs cumulative mining electricity cost",
+        "spk_production": "Verified rooftop/export surplus kWh"
+      },
+      {
+        "dimension": "Side",
+        "ceir_bitcoin": "Consumption (PoW burn)",
+        "spk_production": "Production (export/curtailment)"
+      },
+      {
+        "dimension": "Primary source",
+        "ceir_bitcoin": "Cambridge CBECI-style model in panel",
+        "spk_production": "Signed meter / inverter / operator CSV"
+      },
+      {
+        "dimension": "Sample period",
+        "ceir_bitcoin": "2019-01-01 \u2192 2025-05-28 (n=2340)",
+        "spk_production": "Taoyuan fixtures + operator intake 2026-05"
+      },
+      {
+        "dimension": "Latest CEIR / resource",
+        "ceir_bitcoin": "mean CEIR post-ban \u2248 29.383",
+        "spk_production": "NASA GHI 6.7735 kWh/m\u00b2/day (20260623)"
+      },
+      {
+        "dimension": "Empirical finding",
+        "ceir_bitcoin": "pre-ban \u03b2 \u2248 -0.262347427051995",
+        "spk_production": "CSV import surplus 1985.5 kWh (2 days)"
+      }
+    ]
+  },
+  "research": {
+    "comparables": [
+      {
+        "name": "SolarCoin / kSLR",
+        "claim": "1 kSLR per verified kWh solar production; 30k+ installations",
+        "contrast_to_spk": "Reward token on Base/EW Chain \u2014 production-linked issuance like SPK anchor, but no circulation-first network-money or redemption state machine in our sense.",
+        "sources": [
+          "https://solarcoin.org/how-it-works/",
+          "https://solarcoin.org/frequently-asked-questions/"
+        ]
+      },
+      {
+        "name": "EnergyTag Granular Certificates (GC)",
+        "claim": "Hourly-or-less energy attributes; temporal + geographic matching; anti-double-count",
+        "contrast_to_spk": "SPK v2 attestation fields (country, grid_zone, energy_vintage) align with GC matching features \u2014 SPK adds monetary circulation + optional redeem.",
+        "sources": [
+          "https://energytag.org/wp-content/uploads/2024/12/EnergyTag_Granular-Certificate-Scheme-Standard-V2.pdf",
+          "https://energytag.org/wp-content/uploads/2024/03/Granular-Certificate-Matching-Standard_V1.pdf"
+        ]
+      },
+      {
+        "name": "FSB global stablecoin recommendations",
+        "claim": "Redemption, governance, stress planning for stable-value systems",
+        "contrast_to_spk": "Horizon C bar; SPK v1 peg-off deliberately below this bar",
+        "sources": [
+          "https://www.fsb.org/2023/07/high-level-recommendations-for-the-regulation-supervision-and-oversight-of-global-stablecoin-arrangements-final-report/"
+        ]
+      }
+    ],
+    "stitch_implication": "CEIR procurement validates passive consumption-side signal; SPK procurement validates production-side attestation path. Comparable literature shows production tokens exist (SolarCoin) and regime metadata standards exist (EnergyTag) \u2014 SPK combines mint + settlement + optional redeem in one testnet stack."
+  }
+}

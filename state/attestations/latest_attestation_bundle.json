@@ -1,7 +1,8 @@
 {
-  "generated_at": "2026-05-14T10:43:06.622Z",
+  "generated_at": "2026-06-28T17:36:13.890Z",
+  "bundle_schema": "SPK_ATTESTATION_BUNDLE_V2",
   "source_schema": "SPK_RAW_METER_READINGS_V1",
-  "registry_schema": "SPK_METER_REGISTRY_V1",
+  "registry_schema": "SPK_METER_REGISTRY_V2",
   "batch_id": "batch_2026_02_12_a",
   "min_quality_threshold": 0.9,
   "summary": {
@@ -25,7 +26,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0x7c04fd8ee0fd101afc3ab9fe16b4b7cd63db80d6ad91c45e86aca8df0f8cd34f",
       "signature": "0x004a3cefa52199ab32f9952968af1e6a4ca44fd6f867e0923a94ee0fa67b1ef33ca0f1ef72db9b922332d1934365a2b09730cc99ca4109ef38147271019a87711b",
-      "record_hash": "4584ac821c931b4af028aecd3cf79e7bae33df0562a5cb62a07475b80a7f9397"
+      "location_country": "TW",
+      "grid_zone": "TW-TPC-NORTH",
+      "energy_vintage": "2026-02",
+      "record_hash": "267138999bc5b3118e584507a6c9d64965d0d3787e659baf64a758276f97b720"
     },
     {
       "meter_id": "TW-TY-0002",
@@ -39,7 +43,10 @@
       "device_address": "0x8b6541d3F26cc3bA1D5A4E6210501da458C03F19",
       "payload_hash": "0xfb81b3b66b26a522cb1dbe9a10a69125cfdb814d0f864e3dbeddc9f7a5d66fca",
       "signature": "0x8a8e328579be7562b73dd33a19dada08045ffadc2c5261fa6301e19c1bf8ff0c24f5a7b9b0dc7b55c4b879b44d37ed9069688a538d84b41e02d69fe8e20bddc81c",
-      "record_hash": "5b91153b2b827dbf11a26c41c8b8b0cc293af49535054990516ddcbbafb31a21"
+      "location_country": "TW",
+      "grid_zone": "TW-TPC-NORTH",
+      "energy_vintage": "2026-02",
+      "record_hash": "70787add83de9f866e5de3a98dc6fcbd9d670ed7329cd0b2587f50215e236145"
     }
   ],
   "rejected_attestations": [

@@ -20,12 +20,20 @@ This folder is the full working directory for the CEIR analysis (data, scripts, 
 - Removed redundant copies of `proj_1133958_text*.pdf` (kept the two unique hashes).
 - Restored `bitcoin_analysis_cleaned.csv` from backup (`AW_bitcoin_analysis_cleaned.csv`) to enable DiD/backtest; price-corrected and concentration variants remain in `empirical-backup/empirical backup/`.
 
-## Latest robustness notes (Dec 21, 2025)
-- Regression (price-corrected BA dataset, winsor 1%, trend, HAC(30), month clustering; level CEIR): pre-ban β≈-0.26 (p≈0.005; cluster p≈0.008); post-ban β≈-0.63 (p<0.001); Chow p≈0. Interaction CEIR×Google base term robust (cluster p≈0.002); CEIR×EPU interaction significant (cluster p≈0.007).
-- Regression differenced CEIR (see `ceir_analysis_summary_diff.csv`): pre/post CEIR effects lose significance; break remains. Use to show trend-robust boundary.
-- DiD: OLS shows both post_ban and china_high significant on volatility; HAC/cluster widen SEs (post_ban stays significant ~p=0.003/0.012; china_high not). CEIR DiD terms remain highly significant across OLS/HAC/cluster.
-- Trading rule remains economically weak (strategy -1.4% vs buy&hold +1770%; Sharpe 0.145 vs 0.844).
-- Sensitivity: price-corrected datasets make post-ban CEIR effect significant and larger in magnitude; raw data (bitcoin_ceir_final) yields non-significant post-ban in level spec. Consider CEIR differencing toggle (`USE_DIFF_CEIR`) for further trend robustness if needed.
+## Latest robustness notes (rebuilt Jun 2026)
+
+Reproduce from the thesis package (not missing `Regression.py`):
+
+```bash
+python thesis_package/ceir_regression.py --refresh-panel
+```
+
+- **Level spec** (1% winsor `log(CEIR)`, trend, fear/greed, 30d vol; HAC(30); month clustering): pre-ban β ≈ **−0.26** (p ≈ 0.0005); post-ban β ≈ **−0.07** (p ≈ 0.13, not significant); Chow p ≈ **1.1×10⁻¹⁶**.
+- **Differenced CEIR:** insignificant pre and post — boundary condition.
+- **Trading rule:** ≈ +176% vs buy-and-hold ≈ +2771%; Sharpe 0.72 vs 1.13 — underperforms; not viable.
+- **Data fix:** `Returns_forward` in older exports was 1-day; rebuild uses true 30-day forward returns from price.
+
+Older notes citing post-ban β ≈ −0.63 or strategy −1.4% are superseded.
 
 ## Open follow-ups
 - Re-run `Regression.py`/`fix_did.py` after any data changes; logs currently show NaN overflow issues in older runs (`Regression.txt`) and cleaned runs in `Raw_ceir_result.txt`.

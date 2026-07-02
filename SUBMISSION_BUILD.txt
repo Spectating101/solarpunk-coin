@@ -1,0 +1,3 @@
+built_at=2026-07-01T15:37:53.023452+00:00
+docx=energy_constraint_thesis_final_submission_v3.docx
+source=thesis_package/output/THESIS_GROUNDED.docx

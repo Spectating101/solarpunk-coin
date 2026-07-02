@@ -1,49 +1,46 @@
 # Documentation map
 
 **If you're human or an AI catching up: read this file first.**  
-Then `CURRENT_STATUS.md`, then everything else.
+Then [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md), then `CURRENT_STATUS.md`.
 
 ---
 
 ## What this project is (plain)
 
-SolarPunk **SPK v1** is testnet money on Ethereum Sepolia:
+**SolarPunk Public Lab v1.0** — a public Sepolia testnet laboratory for an **energy-standard settlement architecture**:
 
-1. Extra electricity (kWh) → mint SPK  
-2. SPK pays for services, labor, goods (on-chain)  
-3. Burning SPK for energy credit is optional, not the main path  
+1. Verified renewable surplus (kWh) → bounded SPK issuance  
+2. SPK circulates as settlement credit via on-chain network payments  
+3. Redemption / shortfall accounting is explicit; peg is **off**; USD/kWh is reference only  
 
-The **product** is an energy-anchored monetary foundation on testnet (circulation-first, USD translation, peg off until tested).
-
-**Not claimed:** mainnet, live dollar peg, production audit, legal tender.
+**Not claimed:** mainnet, token sale, stablecoin, legal tender, delivered-energy rights, production audit.
 
 ---
 
 ## Canonical files (trust these)
 
-| File | Use |
-|------|-----|
-| [`docs/foundation/MONETARY_FOUNDATION.md`](./docs/foundation/MONETARY_FOUNDATION.md) | Blueprint / north star |
-| [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) | Generated live foundation metrics |
-| [`docs/foundation/ROADMAP.md`](./docs/foundation/ROADMAP.md) | What to build next |
-| [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | Live snapshot: addresses, metrics, gaps |
-| [`state/runtime/spk_v1.json`](./state/runtime/spk_v1.json) | Machine-readable testnet state |
-| [`state/foundation/status.json`](./state/foundation/status.json) | Foundation snapshot (JSON) |
-| [`README.md`](./README.md) | Quick start commands |
-| [`docs/product/SPK_V1.md`](./docs/product/SPK_V1.md) | Product constitution |
-| [`docs/product/SPK_V1_OPERATOR.md`](./docs/product/SPK_V1_OPERATOR.md) | How to run weekly cycles |
+| Priority | File | Use |
+|----------|------|-----|
+| 1 | [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md) | **Public Lab v1.0** — what it is / is not / evidence |
+| 2 | [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) | Live snapshot, launch gates, ops |
+| 3 | [`state/runtime/spk_v1.json`](./state/runtime/spk_v1.json) | Machine-readable testnet state |
+| 4 | [`thesis_package/SPK_V1_EVIDENCE.md`](./thesis_package/SPK_V1_EVIDENCE.md) | Evidence pack + tx tables |
+| 5 | [`docs/product/SPK_V1.md`](./docs/product/SPK_V1.md) | SPK technical constitution |
+| 6 | [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) | Generated foundation metrics |
+| 7 | [`docs/product/PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md) | Closed pilot data request |
+| 8 | [`docs/product/SPK_V1_OPERATOR.md`](./docs/product/SPK_V1_OPERATOR.md) | Operator cycles |
 
-**When docs disagree:** `CURRENT_STATUS.md` + `spk_v1.json` win.
+**When documents disagree:** **Public Lab v1 framing** + `CURRENT_STATUS.md` + `spk_v1.json` win.
 
 ---
 
 ## Commands that matter
 
 ```bash
-npm run spk:v1:cycle:sepolia    # mint + pay + log (weekly)
-npm run spk:v1:sync             # refresh state from chain
-npm run spk:v1:evidence:export  # regenerate thesis tx tables
 npx hardhat test                # 109 contract tests
+npm run spk:v1:sync             # refresh state from chain (.env RPC)
+npm run spk:v1:evidence:export  # regenerate evidence pack
+npm run foundation:health       # sync age + operator gas
 ```
 
 Credentials: `.env` with `PRIVATE_KEY` and `SEPOLIA_RPC`.
@@ -54,10 +51,10 @@ Credentials: `.env` with `PRIVATE_KEY` and `SEPOLIA_RPC`.
 
 | | Address |
 |---|---------|
-| SPK token | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
+| SPK token (lab unit) | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
 | Payment contract | `0x520162252F9B94824417678525FFd69145014970` |
 
-Both verified on Etherscan. Demo UI: https://spectating101.github.io/solarpunk-coin/
+Demo: https://spectating101.github.io/solarpunk-coin/demo/
 
 ---
 
@@ -65,45 +62,48 @@ Both verified on Etherscan. Demo UI: https://spectating101.github.io/solarpunk-c
 
 | Path | What |
 |------|------|
+| `docs/product/PUBLIC_LAB_V1.md` | **Start here** for public framing |
 | `contracts/` | Solidity source |
-| `scripts/` | Deploy, mint, operator cycle |
-| `frontend/` | Web UI (SPK v1 tab is primary) |
+| `frontend/` | Public Lab landing + SPK console |
 | `thesis_package/` | Thesis chapters and empirics |
-| `energy_derivatives/` | Options pricing Python SDK |
 | `state/runtime/` | Live testnet JSON |
-| `state/product/` | Local lab script outputs (not live chain) |
-| `docs/product/` | Product docs; **see archive list below** |
-| `docs/grants/` | **Archived** — grant phase ended |
+| `docs/project/` | Institutional path, assessments |
+| `docs/grants/` | **Historical** — grant phase; refresh numbers before use |
 | `docs/archive/` | Old snapshots |
 
 ---
 
 ## Stale — do not use as current truth
 
-These exist for history. They will mislead LLMs:
+These exist for history. They will mislead LLMs if read before Public Lab v1 docs:
 
 | File / area | Why stale |
 |-------------|-----------|
-| `docs/product/SOLARPUNK_FULL_CONTEXT_FOR_CLAUDE.md` | Replaced by this file |
-| `docs/product/PUBLIC_LAB.md`, `PRODUCT_LAUNCH_GATE.md` | Launch-outreach phase |
-| `docs/grants/*` | Grant submission phase |
-| `PRODUCT_LAUNCH_READINESS.md` | Launch readiness theater |
-| `MASTER_HANDOFF.md` | Long narrative; verify numbers via CURRENT_STATUS |
-| `docs/product/CURRENCY_FRAMEWORK_READINESS.md` | Local lab scores, not product status |
-| `docs/product/ECONOMIC_LAUNCH_READINESS.md` | Same |
-| Any doc citing **79/102 tests**, **Polygon Amoy**, or **"launchable now"** | Out of date |
+| README/network-money-only snapshots before v1.0 freeze | Superseded by `PUBLIC_LAB_V1.md` |
+| `docs/product/PUBLIC_LAB.md` (old) | Pre-v1.0 launch phase |
+| `docs/product/PRODUCT_LAUNCH_GATE.md` | Launch-outreach phase |
+| `docs/grants/*` | Grant submission phase — verify 109 tests, SPK v1 addresses |
+| `PRODUCT_LAUNCH_READINESS.md` | Pre-freeze launch theater |
+| `MASTER_HANDOFF.md` | Long narrative; verify via CURRENT_STATUS |
+| Any doc citing **"network money launch"**, **Polygon Amoy**, or **103 tests only** | Out of date |
 
-Legacy Sepolia stacks (`0x1D55…` options demo, `0x8ceDa…` May 2026 proof) are **archive**, not the product.
+Legacy Sepolia stacks (`0x1D55…`, `0x8ceDa…` May 2026 proof) are **archive**, not Public Lab v1.
 
 ---
 
-## Thesis vs product
+## Thesis vs Public Lab
 
-| | Product | Thesis |
-|---|---------|--------|
-| Goal | Working testnet money loop | Bounded academic claims |
+| | Public Lab v1.0 | Thesis |
+|---|-----------------|--------|
+| Goal | Inspectable testnet settlement lab | Bounded academic claims |
 | Evidence | Sepolia txs, `spk_v1.json` | Ch 3–5 + `SPK_V1_EVIDENCE.md` |
-| Tone | Ship and compound | "Proof of concept, not production" |
+| Tone | Shipped laboratory | Proof of concept, not production currency |
+
+---
+
+## Post-thesis institutional path
+
+Optional sequel after v1.0 freeze: [`docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md`](./docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md) — 14-day validation → 90-day pilot if external hook appears.
 
 ---
 

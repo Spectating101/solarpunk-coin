@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
+import PublicLabLanding from './components/PublicLabLanding';
 import SpkV1Console from './components/SpkV1Console';
 import { GITHUB_REPO } from './constants/contracts';
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
 
 function App() {
+  const [tab, setTab] = useState('lab');
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
@@ -86,23 +88,41 @@ function App() {
           <div className="brand-mark">SP</div>
           <div>
             <div className="brand-name">SolarPunk</div>
-            <div className="brand-sub">SPK v1 · Sepolia demo</div>
+            <div className="brand-sub">Public Lab v1.0 · Sepolia</div>
           </div>
         </div>
         <div className="app-minimal-actions">
+          <nav className="app-tab-nav" aria-label="Demo sections">
+            <button
+              type="button"
+              className={tab === 'lab' ? 'app-tab active' : 'app-tab'}
+              onClick={() => setTab('lab')}
+            >
+              Public Lab
+            </button>
+            <button
+              type="button"
+              className={tab === 'console' ? 'app-tab active' : 'app-tab'}
+              onClick={() => setTab('console')}
+            >
+              SPK console
+            </button>
+          </nav>
           <a href={GITHUB_REPO} target="_blank" rel="noreferrer" className="ghost-link">
             <Github size={16} /> GitHub
           </a>
-          {account ? (
-            <div className="wallet-pill">
-              <span />
-              {account.slice(0, 6)}…{account.slice(-4)}
-            </div>
-          ) : (
-            <button className="wallet-button compact" onClick={connectWallet} disabled={isConnecting || !provider}>
-              <Wallet size={16} />
-              {isConnecting ? '…' : 'Connect'}
-            </button>
+          {tab === 'console' && (
+            account ? (
+              <div className="wallet-pill">
+                <span />
+                {account.slice(0, 6)}…{account.slice(-4)}
+              </div>
+            ) : (
+              <button className="wallet-button compact" onClick={connectWallet} disabled={isConnecting || !provider}>
+                <Wallet size={16} />
+                {isConnecting ? '…' : 'Connect'}
+              </button>
+            )
           )}
         </div>
       </header>
@@ -114,7 +134,7 @@ function App() {
         </div>
       ) : null}
 
-      {wrongNetwork ? (
+      {tab === 'console' && wrongNetwork ? (
         <div className="spk-network-banner" role="status">
           <AlertTriangle size={16} />
           Switch MetaMask to <strong>Sepolia</strong> to send payments.
@@ -122,14 +142,18 @@ function App() {
         </div>
       ) : null}
 
-      <SpkV1Console
-        provider={provider}
-        signer={signer}
-        account={account}
-        onConnect={connectWallet}
-        connecting={isConnecting}
-        wrongNetwork={wrongNetwork}
-      />
+      {tab === 'lab' ? (
+        <PublicLabLanding onOpenConsole={() => setTab('console')} />
+      ) : (
+        <SpkV1Console
+          provider={provider}
+          signer={signer}
+          account={account}
+          onConnect={connectWallet}
+          connecting={isConnecting}
+          wrongNetwork={wrongNetwork}
+        />
+      )}
     </div>
   );
 }

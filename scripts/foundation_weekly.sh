@@ -15,4 +15,6 @@ else
 fi
 
 npm run foundation:publish-docs
+npm run exploration:procure-data || true
+npm run exploration:tier-c || true
 echo "foundation_weekly_ok"

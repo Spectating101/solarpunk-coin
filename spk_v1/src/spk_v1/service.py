@@ -72,8 +72,9 @@ def run_sync(repo_root: str | Path | None = None, *, rpc_url: str | None = None)
 
 
 def get_foundation_snapshot(repo_root: str | Path | None = None) -> dict[str, Any]:
-    runtime = get_runtime(repo_root)
-    return build_foundation_snapshot(runtime)
+    root = Path(repo_root or default_repo_root())
+    runtime = get_runtime(root)
+    return build_foundation_snapshot(runtime, repo_root=root)
 
 
 def run_foundation_export(repo_root: str | Path | None = None) -> dict[str, Any]:

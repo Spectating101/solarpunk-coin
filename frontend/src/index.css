@@ -2026,6 +2026,188 @@ p {
   color: var(--green);
 }
 
+/* Public Lab v1.0 landing */
+.app-tab-nav {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.app-tab {
+  padding: 6px 12px;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.app-tab.active {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.public-lab {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+}
+
+.public-lab-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 400;
+  margin-top: 8px;
+}
+
+.public-lab-lead {
+  margin-top: 14px;
+  color: var(--muted);
+  line-height: 1.55;
+  max-width: 52rem;
+}
+
+.public-lab-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 28px 0;
+}
+
+.public-lab-card {
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(13, 23, 16, 0.7);
+}
+
+.public-lab-card h2 {
+  font-size: 15px;
+  margin: 12px 0 8px;
+}
+
+.public-lab-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.public-lab-evidence,
+.public-lab-gates,
+.public-lab-disclaimer {
+  margin: 28px 0;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(10, 19, 11, 0.65);
+}
+
+.public-lab-evidence h2,
+.public-lab-gates h2,
+.public-lab-disclaimer h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.public-lab-sync-note {
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.public-lab-addresses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 12px;
+}
+
+.public-lab-addresses a {
+  color: var(--muted);
+}
+
+.public-lab-gate-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.public-lab-gate-table th,
+.public-lab-gate-table td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.gate-ready {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.gate-blocked {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+.public-lab-disclaimer ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.public-lab-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.ghost-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.ghost-button:hover {
+  border-color: var(--border-strong);
+  color: var(--green);
+}
+
+.public-lab-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.public-lab-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.public-lab-footer a:hover {
+  color: var(--green);
+}
+
 @media (max-width: 640px) {
   .spk-pay-form {
     grid-template-columns: 1fr;
@@ -2034,5 +2216,19 @@ p {
   .app-minimal-top {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .public-lab-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .app-tab-nav {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .app-tab {
+    flex: 1;
+    text-align: center;
   }
 }

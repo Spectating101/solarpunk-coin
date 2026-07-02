@@ -1,8 +1,12 @@
 # Thesis ↔ Product Alignment (SPK v1)
 
-**Updated:** 2026-06-07
+**Updated:** 2026-06-08
 
-The repo now treats **SPK v1 network money** as the primary build. The thesis remains valuable but its **role and Chapter 5 framing need a targeted update**, not a full rewrite.
+**Monetary foundation (canonical):** `thesis_package/MONETARY_FOUNDATION.md`  
+**Instrument comparison:** `thesis_package/INSTRUMENT_COMPARISON.md`  
+**Live constraint map:** `thesis_package/FOUNDATION_EVIDENCE.md` (`npm run thesis:foundation`)
+
+The repo treats **SPK v1** as the structural artifact for an **energy-anchored monetary unit with USD translation** — argued in the **stablecoin / monetary-design** space, not as an Ethereum or XRP L1 competitor. The thesis remains valuable; Chapter 5 framing gets targeted updates, not a full rewrite.
 
 ## What stays the same (thesis core)
 
@@ -86,8 +90,18 @@ The **product** can be bolder in README and `docs/product/SPK_V1.md`; the **thes
 
 | Audience | Lead with |
 |----------|-----------|
-| Product / crypto launch | `docs/product/SPK_V1.md`, `state/runtime/spk_v1.json` |
+| Foundation / strategy | `MONETARY_FOUNDATION.md`, `INSTRUMENT_COMPARISON.md` |
+| Product / testnet ops | `docs/product/SPK_V1.md`, `state/runtime/spk_v1.json` |
 | Thesis examiner | `THESIS_SOURCE_OF_TRUTH.md`, grounded chapters, bounded claims |
+| Live metrics for Ch 5 | `FOUNDATION_EVIDENCE.md`, `SPK_V1_EVIDENCE.md` |
 | Both | `THESIS_PRODUCT_ALIGNMENT.md` (this file) |
 
 The thesis is the **argument**. SPK v1 is the **artifact that makes the argument credible.**
+
+## Three horizons (do not mix in one paragraph)
+
+| Horizon | Doc tone | Example claim |
+|---------|----------|---------------|
+| A — Foundational | Thesis | Energy-anchored unit with explicit USD valuation; five constraints |
+| B — Structural | Thesis + ops | Sepolia circulation, indexed ledger, reference USD/kWh |
+| C — Aspirational | Internal only | Peg credibility could subsume settlement rails over decades |

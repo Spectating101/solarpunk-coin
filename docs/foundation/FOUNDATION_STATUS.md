@@ -1,7 +1,7 @@
 # Foundation Status
 
-**Generated:** 2026-06-08T17:43:23.428211+00:00
-**Synced:** 2026-06-08T17:43:22.905580Z
+**Generated:** 2026-07-02T12:51:46.507631+00:00
+**Synced:** 2026-06-10T16:45:22.112606Z
 
 ## Monetary stack
 
@@ -34,6 +34,16 @@
 - Kind: **NETWORK**
 - SPK: **8.0**
 - Tx: `0x5a72cc73cbc658afaa9739783e665281eb2e41d0448335bbba9c2d0797a75746`
+
+## Peg simulation (off-chain)
+
+| Signal | Value |
+|--------|-------|
+| Simulation OK | **True** |
+| Days in ±5% band | 78.6% of days |
+| Max deviation | 1318 bps |
+
+> Off-chain PI simulation only — peg disabled on Sepolia.
 
 > USD figures use `reference_usd_per_kwh` only. See `docs/foundation/MONETARY_FOUNDATION.md`.
 

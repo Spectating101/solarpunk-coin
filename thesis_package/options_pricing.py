@@ -400,5 +400,54 @@ if __name__ == "__main__":
     # ── Save ──────────────────────────────────────────────────────
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     xl.to_csv(RESULTS_DIR / "cross_location_pricing.csv", index=False)
+
+    steps = [50, 100, 200, 400, 800, 1200]
+    conv_numeric = pd.DataFrame(
+        {
+            "steps": steps,
+            "binomial_price": [
+                binomial_call(S0, K, r, sigma, T, N=n) for n in steps
+            ],
+        }
+    )
+    conv_numeric.to_csv(RESULTS_DIR / "binomial_convergence.csv", index=False)
+    conv.to_csv(RESULTS_DIR / "binomial_convergence_table.csv", index=False)
+
+    summary_rows = []
+    for loc, params in LOCATIONS.items():
+        S, sigma, r = params["S0"], params["sigma"], params["r"]
+        K = S
+        b = binomial_call(S, K, r, sigma, T)
+        mc_p, _, _, _ = monte_carlo_call(S, K, r, sigma, T)
+        summary_rows.append(
+            {
+                "Location": loc,
+                "S0": S,
+                "sigma": sigma,
+                "Binomial": b,
+                "MonteCarlo": mc_p,
+                "%Diff": (mc_p - b) / b * 100 if b else 0.0,
+            }
+        )
+    pd.DataFrame(summary_rows).to_csv(
+        RESULTS_DIR / "pricing_convergence_summary.csv", index=False
+    )
+
+    stress_rows = []
+    for s0 in (0.042, 0.0525, 0.063):
+        for sigma in (1.42, 1.89, 2.36):
+            var99 = s0 * (np.exp(Z_99 * sigma * np.sqrt(T)) - 1)
+            stress_rows.append(
+                {
+                    "S0": s0,
+                    "sigma": sigma,
+                    "VaR99_spot": var99,
+                    "Initial_margin_1.5x": initial_margin(s0, sigma, T),
+                }
+            )
+    pd.DataFrame(stress_rows).to_csv(
+        RESULTS_DIR / "margin_stress_table.csv", index=False
+    )
+
     print(f"\nResults saved to {RESULTS_DIR}")
     print("=" * 65)

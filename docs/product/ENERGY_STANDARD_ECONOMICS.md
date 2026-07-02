@@ -1,6 +1,6 @@
 # SolarPunk Energy Standard Economics
 
-- generated_at: `2026-05-18T16:12:55.990Z`
+- generated_at: `2026-06-28T07:38:27.893Z`
 - one_line: SolarPunk is an energy-standard cryptocurrency: a modern gold-standard system where verified renewable-energy surplus replaces gold as the backing base.
 
 ## Core Thesis
@@ -31,12 +31,12 @@ This is the economic/finance spine of the project. The technical system exists t
 | public_or_local_minted_spk | `130.1697` |
 | issuance_formula_net_spk | `130.1697` |
 | issuance_formula_delta_spk | `0` |
-| active_supply_spk_lab | `110.1697` |
-| active_supply_energy_equivalent_kwh_lab | `2203.394` |
-| redeemed_spk_lab | `20` |
-| redeemed_energy_equivalent_kwh_lab | `400` |
-| settlement_volume_spk_lab | `83` |
-| settlement_velocity_ratio_lab | `0.6376` |
+| active_supply_spk_lab | `2589.0933` |
+| active_supply_energy_equivalent_kwh_lab | `51781.866` |
+| redeemed_spk_lab | `15` |
+| redeemed_energy_equivalent_kwh_lab | `300` |
+| settlement_volume_spk_lab | `307` |
+| settlement_velocity_ratio_lab | `0.1179` |
 
 ## Proof Issuance Math
 

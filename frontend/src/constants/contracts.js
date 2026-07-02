@@ -1,4 +1,4 @@
-/** Canonical SPK v1 network money stack (see frontend/public/spk_v1.json). */
+/** Canonical SPK v1 Public Lab stack (see frontend/public/spk_v1.json). */
 export const SPK_V1 = {
   solarPunkCoin: "0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128",
   currencySystem: "0x520162252F9B94824417678525FFd69145014970",

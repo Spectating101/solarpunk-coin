@@ -1,5 +1,5 @@
 {
-  "schema": "SPK_METER_REGISTRY_V1",
+  "schema": "SPK_METER_REGISTRY_V2",
   "generated_at": "2026-05-14T10:43:06.171Z",
   "meters": [
     {
@@ -7,6 +7,8 @@
       "site_id": "taoyuan-rooftop-a",
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "capacity_kw": 120,
+      "location_country": "TW",
+      "grid_zone": "TW-TPC-NORTH",
       "active_after": "2026-01-01T00:00:00Z",
       "active_until": "2027-01-01T00:00:00Z"
     },
@@ -15,6 +17,8 @@
       "site_id": "taoyuan-rooftop-b",
       "device_address": "0x8b6541d3F26cc3bA1D5A4E6210501da458C03F19",
       "capacity_kw": 110,
+      "location_country": "TW",
+      "grid_zone": "TW-TPC-NORTH",
       "active_after": "2026-01-01T00:00:00Z",
       "active_until": "2027-01-01T00:00:00Z"
     }

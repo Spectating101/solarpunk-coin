@@ -1,31 +1,33 @@
 # Chapter 4 - Pricing Renewable-Energy Risk
 
+## At a glance
+
+| | |
+|---|---|
+| **Question** | How do you price an energy-linked claim when there is no liquid options market? |
+| **Method** | Option-style model on $/kWh; binomial tree + Monte Carlo cross-check |
+| **Base case** | Taiwan: S₀ = $0.0525/kWh, σ ≈ 189%, call ≈ $0.0192/kWh (binomial) |
+| **Also covers** | Cross-location comparison, oracle tolerance, collars, margin |
+| **Takeaway** | Risk must be **inspectable** before settlement rules can be credible |
+| **Next chapter** | Ch 5 — five constraints + Sepolia implementation |
+
 ## 4.1 Purpose of the Chapter
 
-Chapter 3 showed that energy cost can matter in a digital market, but that the relationship is conditional and regime-dependent. This chapter moves from empirical motivation to financial design.
+Chapter 2 argued that renewable-energy-linked claims require explicit pricing before issuance can be credible. Chapter 3 showed that energy cost can matter in a digital market, but that the relationship is conditional and regime-dependent. This chapter implements the pricing layer.
 
 If energy is going to constrain digital money or energy-linked contracts, the system must be able to price energy risk. Energy production is not constant. Solar and wind output vary by location, season, weather, and grid conditions. A financial claim linked to energy cannot be credible if it ignores that variability.
 
-This chapter therefore asks:
+This chapter therefore asks how an energy-linked financial contract can be priced when the underlying source is variable, local, and not supported by a liquid options market.
 
-How can an energy-linked financial contract be priced when the underlying energy source is variable, local, and not supported by a liquid options market?
+The answer developed here is a practical **cold-start** pricing framework. It does not claim to be the final model for all electricity markets. It provides a reproducible starting point when implied volatility and liquid derivatives are unavailable: use public energy data to estimate volatility, define a simple payoff, price the payoff with standard numerical methods, and test whether the result is stable enough to inform collateral and settlement rules.
 
-The answer developed here is a practical pricing framework. It does not claim to be the final model for all electricity markets. It provides a reproducible starting point: use public energy data to estimate volatility, define a simple payoff, price the payoff with standard numerical methods, and test whether the result is stable enough to inform collateral and settlement rules.
-
-This matters for the thesis because pricing is one of the conditions that turns "energy-backed" from a label into a credible financial constraint. If risk is not priced, then token creation or settlement promises can become under-collateralised claims.
+This matters for the thesis because pricing is one of the conditions that turns "energy-linked" from a label into a credible financial constraint. If risk is not priced, token creation or settlement promises can become under-collateralised claims.
 
 ## 4.2 Why Pricing Comes Before Settlement
 
 An energy-linked contract cannot be credible only because it references energy. It must also define the value and risk of that reference.
 
-For example, suppose a contract promises protection against low renewable-energy output or creates a token based on verified renewable generation. Several questions immediately appear:
-
-- How much is the energy worth?
-- How variable is the output?
-- What happens if generation is lower than expected?
-- How much collateral or reserve should be posted?
-- How much oracle or measurement error can the system tolerate?
-- Which locations are suitable for this design, and which are not?
+For example, suppose a contract promises protection against low renewable-energy output or creates a token based on verified renewable generation. Several questions immediately appear: how much the energy is worth; how variable output is; what collateral or reserve should be posted; how much oracle or measurement error the system can tolerate; and which locations are suitable for the design.
 
 These are pricing questions before they are implementation questions. A smart contract can enforce a rule, but it cannot make a bad rule economically sound. If the pricing model underestimates volatility or shortfall risk, the contract can still execute correctly while producing a fragile financial instrument.
 
@@ -33,31 +35,19 @@ For this reason, this chapter treats pricing as part of credibility. A system th
 
 ## 4.3 The Underlying Risk
 
-The central risk in this chapter is renewable-energy variability.
+Renewable output varies with irradiance, weather, season, equipment, and grid conditions. A kilowatt-hour is not a uniform financial object; its value depends on where and when it is produced and how the market prices it.
 
-Solar output changes with irradiance, cloud cover, season, system size, panel efficiency, and site conditions. Wind output changes with wind speed and turbine characteristics. Grid value changes with demand, congestion, tariff rules, and curtailment. A kilowatt-hour is therefore not just a physical unit. Its financial value depends on where and when it is produced and how the market treats it.
+The chapter focuses on solar-linked examples because public resource data are widely available (NASA POWER; NREL PVWatts). Those datasets support modelling and benchmarking. They do not substitute for meter or inverter evidence at settlement—a distinction developed further in Chapter 5.
 
-This thesis focuses mainly on solar-linked examples because solar resource data is widely available through public datasets. NASA POWER provides satellite-derived solar and meteorological data, while NREL PVWatts estimates photovoltaic production from location and system assumptions (NASA POWER, n.d.; NREL, n.d.).
-
-These public datasets are not a substitute for meter data. They estimate resource conditions and potential output. They are useful for modelling and benchmarking, not final settlement at a specific physical site. Actual settlement would require stronger evidence, such as meter, inverter, grid, or audited operator data. This distinction is important because the pricing layer estimates risk, while the settlement layer must verify actual claims.
+<!-- INJECT_CH4_EMPIRICAL_TABLES -->
 
 ## 4.4 Model Setup
 
-The pricing framework uses a short-horizon option-style model.
+The pricing framework treats energy value as the underlying for a short-horizon option-style claim, expressed in dollars per kilowatt-hour ($/kWh). The main inputs are the spot proxy `S₀`, strike `K`, volatility σ, risk-free rate `r`, and horizon `T`.
 
-The basic object is a financial claim linked to the value of energy, measured in dollars per kilowatt-hour. The model uses:
+The chapter uses a Taiwan base case at `T = 0.25` years as the preferred numerical anchor (Table 4.1). Location-level values for `S₀`, `r`, and cold-start σ appear in Table 4.4 (§4.3.1). Volatility is estimated from NASA POWER irradiance variability because traded option implied volatility is not available for these sites. Geometric Brownian motion is used as a transparent short-horizon benchmark. It is not a claim that electricity prices follow GBM everywhere; jumps, seasonality, negative prices, and mean reversion remain extensions for future work.
 
-- `S0`: current energy value or spot proxy in dollars per kWh;
-- `K`: strike or reference cost floor;
-- `sigma`: volatility estimate;
-- `r`: risk-free rate;
-- `T`: contract horizon.
-
-The preferred pricing specification uses a quarterly horizon, `T = 0.25`, and a representative Taiwan base case with `S0 = $0.0525/kWh`, `sigma = 189%`, and `r = 2.5%`. The volatility is derived from solar-resource variability rather than from a liquid traded options market. This is a cold-start method: when market-implied volatility is unavailable, public physical data provides an initial risk estimate.
-
-The model uses geometric Brownian motion as a tractable first approximation. This is not a claim that electricity prices perfectly follow GBM. Electricity markets can show jumps, seasonality, mean reversion, negative prices, and local market constraints. The GBM assumption is used because it is transparent, reproducible, and appropriate as a short-horizon benchmark. The thesis treats it as a starting model, not a universal law of energy prices.
-
-Table 4.1 records the preferred Taiwan base case used as the chapter's main numerical anchor.
+**Table 4.1. Taiwan base case (numerical anchor)**
 
 | Parameter | Value |
 |---|---:|
@@ -67,75 +57,60 @@ Table 4.1 records the preferred Taiwan base case used as the chapter's main nume
 | Risk-free rate `r` | `2.5%` |
 | Volatility `sigma` | `189%` |
 | Binomial call value | `$0.01917/kWh` |
-| Monte Carlo call value | `$0.02025/kWh` |
-| Method gap | About `+5.6%` Monte Carlo vs binomial |
+| Monte Carlo call value | `$0.01957/kWh` |
+| Method gap | About `+2.1%` Monte Carlo vs binomial |
 
 ## 4.5 Numerical Pricing Methods
 
-The chapter validates pricing with two independent numerical methods.
+The chapter prices the payoff with two standard numerical methods: a binomial tree (Cox, Ross, and Rubinstein, 1979) and Monte Carlo simulation. Agreement between the two methods under identical assumptions supports reproducibility.
 
-The first method is a binomial tree. A binomial tree divides the horizon into steps and recursively values the payoff backward from maturity. It is transparent and useful for checking convergence as the number of steps increases (Cox, Ross, and Rubinstein, 1979).
+Table 4.2 and Figure 4.2 report cross-location at-the-money values, with `K = S₀` at each site. For high-volatility locations, binomial and Monte Carlo values differ by about 2%. Germany's option value is small because both `S₀` and σ are low; Brazil's is large because both are high. Older runs that fixed `K = $0.0525` across all sites are retained only as non-canonical robustness artifacts (`PRICING_ROBUSTNESS_NOTES.md`).
 
-The second method is Monte Carlo simulation. Monte Carlo simulation generates many possible future paths and estimates the expected discounted payoff from those paths. It is useful because it can be extended later to richer processes, stress scenarios, and non-standard payoff structures.
+Table 4.5 and Figure 4.3 show that Taiwan binomial prices stabilise by about `N = 400` steps, which is the engine default.
 
-Using both methods reduces dependence on a single implementation. If binomial and Monte Carlo values are close under the same assumptions, the pricing engine is more credible as a reproducible research tool.
+| Location | S0 ($/kWh) | Sigma | Binomial Call | Monte Carlo Call | % Diff (B vs MC) |
+|---|---:|---:|---:|---:|---:|
+| Germany | 0.0250 | 45% | 0.00234 | 0.00236 | 0.9% |
+| Taiwan | 0.0525 | 189% | 0.01917 | 0.01957 | 2.1% |
+| Saudi Arabia | 0.0550 | 172% | 0.01841 | 0.01876 | 1.9% |
+| Arizona, USA | 0.0580 | 165% | 0.01877 | 0.01911 | 1.8% |
+| Brazil | 0.0950 | 198% | 0.03702 | 0.03781 | 2.1% |
 
-The preferred specification shows reasonable convergence for the main high-volatility locations. In the cross-location summary:
+*Strike: `K = S₀` per location. Source: `cross_location_pricing.csv`.*
 
-- Taiwan: binomial price about `$0.01917/kWh`, Monte Carlo about `$0.02025/kWh`.
-- Saudi Arabia: binomial about `$0.01929/kWh`, Monte Carlo about `$0.01945/kWh`.
-- Arizona: binomial about `$0.02068/kWh`, Monte Carlo about `$0.02100/kWh`.
-- Brazil: binomial about `$0.05373/kWh`, Monte Carlo about `$0.05449/kWh`.
+![Cross-location binomial vs Monte Carlo ATM call values.](empirical_results/figures/cross_location_pricing.png)
 
-Germany has a very small option value in this convergence run, so the relative percentage difference is inflated by the tiny denominator. This should be interpreted carefully. The more important result is that the main target cases converge to economically similar values under independent methods.
+*Figure 4.2. Cross-location ATM comparison.*
 
-Table 4.2 gives the preferred cross-location pricing specification used in this chapter. Earlier prototype runs used slightly different parameter sets; those are treated as robustness artifacts rather than the main result.
+![Binomial tree convergence for Taiwan parameters.](empirical_results/figures/binomial_convergence.png)
 
-| Location | S0 ($/kWh) | Sigma | Binomial Call | Monte Carlo Call | Interpretation |
-|---|---:|---:|---:|---:|---|
-| Germany | 0.0250 | 45% | 0.000001 | 0.0000009 | Near-zero option value in this convergence run; relative difference inflated by tiny base. |
-| Taiwan | 0.0525 | 189% | 0.01917 | 0.02025 | Main base case; convergence within about 5.6%. |
-| Saudi Arabia | 0.0550 | 172% | 0.01929 | 0.01945 | Strong convergence. |
-| Arizona | 0.0580 | 165% | 0.02068 | 0.02100 | Strong convergence. |
-| Brazil | 0.0950 | 198% | 0.05373 | 0.05449 | Strong convergence. |
+*Figure 4.3. Binomial convergence (Taiwan).*
 
 ## 4.6 Cross-Location Results
 
-The pricing framework is tested across multiple locations because renewable-energy risk is local.
+Renewable risk is local. Inputs in Table 4.4 produce the option values in Table 4.2 and the collateral implications in Table 4.6. High-volatility sites such as Brazil and Taiwan require larger option values and margins than Germany.
 
-The cross-location results show that option values and risk profiles vary meaningfully by region. Brazil, Taiwan, Saudi Arabia, Arizona, and Germany do not have the same spot values, volatility estimates, or margin requirements. This is expected. Energy-linked finance should not assume a single global parameter set.
-
-The preferred cross-location pricing table reports the following approximate values:
-
-- Taiwan: `S0 = $0.0525/kWh`, `sigma = 189%`, call price around `$0.019/kWh`.
-- Saudi Arabia: `S0 = $0.055/kWh`, `sigma = 172%`, call price around `$0.018-$0.019/kWh`.
-- Arizona: `S0 = $0.058/kWh`, `sigma = 165%`, call price around `$0.019-$0.021/kWh`.
-- Brazil: `S0 = $0.095/kWh`, `sigma = 198%`, call price around `$0.054/kWh` in the preferred convergence table.
-- Germany: lower volatility and lower spot assumptions lead to a much smaller risk value in some specifications.
-
-The point is not that one table gives a final market price. The point is that the framework can produce location-specific pricing under explicit assumptions. Those assumptions can be inspected, challenged, and rerun.
-
-This is important for credibility. An energy-linked contract should not hide its risk model. It should state its inputs and show how the price or collateral changes when those inputs change.
+The contribution is therefore not a single universal energy price. It is a location-specific, inspectable risk toolkit whose assumptions can be challenged and rerun. A credible energy-linked contract should state its inputs openly rather than hide them behind a generic label.
 
 ## 4.7 Collars, Oracle Tolerance, and Margin
 
-The pricing layer also supports risk-control design.
+Beyond the base call valuation, the chapter tests three design-relevant extensions.
 
-One instrument considered in the pricing layer is a collar structure. A collar combines options to limit downside and upside exposure. Earlier drafts overstated this result as a volatility-threshold discovery. The corrected result is more precise: under the chosen symmetric percentage strikes in a lognormal model, the collar can produce a net credit structurally because the out-of-the-money call is closer in log space than the out-of-the-money put. The credit grows with volatility, but it should not be presented as a newly discovered threshold.
+First, collars limit upside and downside with paired options. Under symmetric percentage strikes in a lognormal model, a net credit can arise structurally because the out-of-the-money call sits closer in log space than the out-of-the-money put. Credit magnitude grows with σ; it is not presented here as a discovered volatility threshold.
 
-That correction matters. The thesis is stronger when it states the actual mechanism rather than overclaiming the result.
+Second, oracle tolerance asks how much measurement error a hedge can tolerate before effectiveness falls below a target (Table 4.3, Figure 4.5). High-volatility sites accept more error than Germany for the same variance-reduction goal. That result is directly relevant to whether meter-grade data, inverter logs, or satellite proxies are adequate for a given claim.
 
-The pricing layer also studies oracle tolerance. Oracle tolerance asks how much measurement or oracle error the hedge can absorb before its effectiveness falls below a chosen threshold. The current source-of-truth table reports maximum oracle-error thresholds for variance-reduction targets. For example:
+![Oracle tolerance by location (variance reduction ≥ 95%).](empirical_results/figures/oracle_tolerance_bars.png)
 
-- Taiwan tolerates about `21.7%` oracle error for variance reduction above `95%`.
-- Saudi Arabia tolerates about `19.7%`.
-- Arizona tolerates about `18.9%`.
-- Brazil tolerates about `22.7%`.
-- Germany tolerates only about `5.2%`.
+*Figure 4.5. Oracle tolerance by location.*
 
-This result is important because it shows that location matters. High-volatility solar markets can tolerate more oracle error before the hedge breaks down. Lower-volatility markets such as Germany require much more accurate data for the same hedge-effectiveness threshold.
+Third, margin and collateral requirements rise with `S₀` and σ (Table 4.6, Figure 4.4). At Taiwan's spot proxy with σ = 189%, initial margin is about `$0.63/kWh` under a 1.5× VaR₉₉ rule. Issuance without stress-aware collateral rules would therefore be irresponsible even if the contract executes correctly on-chain.
 
-Table 4.3 summarises the current oracle-tolerance source-of-truth values.
+![Initial margin vs volatility at Taiwan spot proxy.](empirical_results/figures/margin_stress_taiwan.png)
+
+*Figure 4.4. Margin stress (Taiwan S₀).*
+
+**Table 4.3. Maximum oracle error for variance reduction ≥ 95%**
 
 | Location | Maximum Oracle Error for Variance Reduction >= 95% |
 |---|---:|
@@ -145,35 +120,23 @@ Table 4.3 summarises the current oracle-tolerance source-of-truth values.
 | Brazil | 22.7% |
 | Germany | 5.2% |
 
-The pricing layer also informs collateral and margin. A financial claim that pays under adverse energy outcomes must be backed by enough collateral or reserve capital to survive stress. The current margin stress table shows that required margin rises with both spot value and volatility. This is expected, but important: energy-linked contracts cannot be responsibly issued without stress-aware collateral rules.
-
 ## 4.8 What the Pricing Layer Proves and Does Not Prove
 
-The pricing layer proves four things.
+The pricing layer supports four bounded claims. First, energy-linked payoffs can be valued under explicit assumptions. Second, public data can supply cold-start volatility when implied volatility is absent. Third, independent numerical methods can cross-check stability. Fourth, the resulting outputs can inform margin and oracle-tolerance design.
 
-First, energy-linked payoffs can be priced under explicit assumptions.
+The pricing layer does not show that GBM is universally correct, that it replaces market-implied volatility where markets exist, or that it resolves liquidity, legal enforceability, basis risk, or physical settlement. This cold-start layer supports modelling and stress-testing under transparent assumptions; meter verification and contract law remain separate problems, developed further in Chapter 5.
 
-Second, public energy data can be used to estimate a cold-start volatility input when liquid derivatives markets are unavailable.
-
-Third, independent numerical methods can be used to check whether the pricing results are stable.
-
-Fourth, pricing outputs can inform collateral, margin, and oracle-tolerance rules.
-
-But the pricing layer does not prove that the model is final.
-
-It does not prove that GBM is the correct process for all energy markets. It does not replace market-implied volatility if such a market exists. It does not solve liquidity, legal enforceability, basis risk, or physical settlement. It does not prove that a site actually produced energy. Those are separate problems handled by data verification and contract design.
-
-The chapter's contribution is therefore methodological: it shows how to move from public energy data to a transparent pricing and risk framework. It does not claim to complete the entire market design.
+The contribution is therefore methodological: a path from public energy data to transparent risk metrics, not a completed market design.
 
 ## 4.9 Chapter Conclusion
 
-Chapter 3 showed that energy cost can matter in digital markets, but only conditionally. This chapter showed how energy-linked risk can be priced in a controlled way.
+Chapter 3 showed conditional evidence that energy cost can matter in digital markets. This chapter showed how renewable-energy-linked risk can be priced and stress-tested under explicit, location-specific assumptions.
 
-The key conclusion is that pricing is not optional. If energy is used as a financial constraint, the system must account for volatility, location, oracle error, and stress exposure. A rule-bound contract without a credible pricing layer may still be fragile.
+Pricing is not optional for credible energy-linked finance. A rule-bound contract without a pricing and collateral layer can still be economically fragile even when it executes faithfully in software.
 
-The pricing results support the thesis in a bounded way. They show that public energy data, numerical pricing, cross-location validation, oracle-tolerance checks, and margin stress analysis can form a practical risk framework. They also show that some locations and assumptions are more suitable than others.
+Chapter 5 turns to the rules—data, issuance, settlement, and governance—that must wrap any such pricing in enforceable implementation.
 
-This leads directly to Chapter 5. Once energy can be measured and its risk can be priced, the next question is what rules are required to make an energy-linked digital instrument credible in implementation.
+> **Key takeaway:** Public data and transparent numerics can support collateral and oracle design—they do not replace meter verification or legal settlement.
 
 ## References
 

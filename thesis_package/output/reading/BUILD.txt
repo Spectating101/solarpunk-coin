@@ -1,0 +1,3 @@
+built_at=2026-07-01 15:37 UTC
+full_pdf=True
+chapters=6/6 pdf

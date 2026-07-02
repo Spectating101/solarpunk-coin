@@ -1,6 +1,6 @@
 # SPK Product Empirics
 
-- generated_at: `2026-05-18T16:15:36.562125+00:00`
+- generated_at: `2026-06-28T07:38:06.750622+00:00`
 - product: `SolarPunkCoin (SPK)`
 - primary_contract: `contracts/SolarPunkCoin.sol`
 - primary_function: `mintFromSurplusAttestation`
@@ -22,7 +22,7 @@ The narrow product path is:
 |---|---:|
 | Bundle available | `True` |
 | Mint proof available | `True` |
-| SolarPunkCoin contract | `0x8ceDa149EDE44078bf151b3334513916a84df820` |
+| SolarPunkCoin contract | `0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0` |
 | Source schema | `SPK_RAW_METER_READINGS_V1` |
 | Batch ID | `batch_2026_02_12_a` |
 | Input records | `4` |
@@ -33,22 +33,22 @@ The narrow product path is:
 | Total surplus kWh | `2606.7` |
 | Minted SPK | `130.1697` |
 | Source hash | `0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8` |
-| Attestation hash | `0xd3c77958aa6f53cd1a5a8ed52c8898cf1376b8a5751e1598add5ab0c5cea558d` |
+| Attestation hash | `0x9591b32b3e7fd166adf133923f0b2151128eabf57d2f040eb98d9f4295288940` |
 | Attestation hash consumed | `True` |
 | Source hash consumed | `True` |
-| Execution scope | `attached-network` |
-| Transaction hash | `0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d` |
+| Execution scope | `local-reproducible` |
+| Transaction hash | `0xf8b7481908da07318bf9dae4b86bd87b7366261cf99841818c393ac727a7f07f` |
 
 ## Empirical Basis
 
 | Evidence pillar | Current result | Why it matters for SPK |
 |---|---|---|
-| CEIR energy anchor | `pre=-0.257131`, `post=-0.634255`, `Chow p=1.110e-16` | Supports the thesis that energy cost carries measurable information in proof-of-work monetary systems. |
+| CEIR energy anchor | `pre=-0.262347`, `post=-0.0708107`, `Chow p=1.110e-16` | Supports the thesis that energy cost carries measurable information in proof-of-work monetary systems. |
 | Physical calibration | `sigma=189.5%`, `JB p=0.348939`, `returns=2166` | Shows the energy-data process can be parameterized from real irradiance observations rather than pure assumptions. |
 | Oracle tolerance | `Taiwan VR>=95% max error=21.7%` | Defines how much source-data error the economics can tolerate before risk controls fail. |
 | Pricing validation | `5 markets`, `Taiwan binomial/MC diff=2.07912%`, `hedge eff=0.995985` | Shows the pricing layer is not a one-location toy and converges across methods. |
 | Monetary scorecard | `Energy=7`, `Gold=2`, `Fiat=1` | Explains why the product is energy-minted money, not just another collateral wrapper. |
-| Daily live-data keeper | `runs=22`, `latest=2026-05-18` | Demonstrates recurring real-data ingestion and public transaction artifacts on Sepolia. |
+| Daily live-data keeper | `runs=44`, `latest=2026-06-09` | Demonstrates recurring real-data ingestion and public transaction artifacts on Sepolia. |
 
 ## Product Interpretation
 

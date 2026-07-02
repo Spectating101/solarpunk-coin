@@ -27,7 +27,7 @@ Retire the older four-constraint wording except when describing prior drafts or 
 | Chapter | Role | Core Claim |
 |---|---|---|
 | Chapter 1 | Introduction | Energy can be tested as a verifiable constraint for digital finance through energy-linked contracts. |
-| Chapter 2 | Monetary background | Energy is worth studying because it combines cost, usefulness, measurability, and digital enforceability, but it is not money by itself. |
+| Chapter 2 | Literature review | Energy is worth studying because it combines cost, usefulness, measurability, and digital enforceability, but it is not money by itself. |
 | Chapter 3 | Bitcoin empirics | Energy cost can matter in digital markets, but the evidence is conditional and specification-sensitive. |
 | Chapter 4 | Pricing | Renewable-energy-linked claims require explicit pricing, oracle tolerance, and margin analysis. |
 | Chapter 5 | Constraints and implementation | Credibility requires reliable data, rule-bound issuance, pricing, settlement protection, and governance limits. |
@@ -45,11 +45,12 @@ Use Chapter 3 wording carefully. The thesis should not pretend all older specifi
 | Preferred regression form | `R_{t,t+30} = alpha + beta * log(CEIR_t) + gamma' * Controls_t + epsilon_t`. |
 | Expected sign | Negative: if Bitcoin is expensive relative to cumulative energy cost, later returns should be weaker. |
 | Preferred empirical posture | The preferred level specification supports a relationship between Bitcoin valuation and cumulative energy cost. |
-| Preferred level coefficient | Use approximate wording: `around -0.26` for the corrected level specification from robustness notes. |
+| Preferred level coefficient | Pre-ban `≈ −0.26` (significant); post-ban `≈ −0.07` (not significant at 5%). |
+| Sample sizes | Pre-ban N `≈ 872`; post-ban N `≈ 1,408` (daily observations, full-control spec). |
 | Standard-error posture | Treat overlapping forward returns as a risk; cite HAC(30), clustering, and differenced specifications as robustness/discipline checks. |
 | Structural break | The China mining-ban period shows a sharp structural break in the level specification. |
 | Differenced specification | Weaker; CEIR effects lose significance and should be reported as a boundary condition. |
-| Trading rule | Negative result; CEIR is not presented as a useful trading strategy. |
+| Trading rule | Negative result; CEIR rule `≈ +176%` total return vs buy-and-hold `≈ +2771%`; Sharpe `0.72` vs `1.13`. Reproduced by `ceir_regression.py` → `ceir_trading_rule_summary.json`. |
 | Scope | Bitcoin-focused, not a universal proof-of-work asset panel. |
 
 ## Canonical Pricing Results
@@ -66,16 +67,18 @@ Use one preferred table in Chapter 4 and treat older parameter runs as robustnes
 | Risk-free rate `r` | `2.5%` |
 | Volatility `sigma` | `189%` |
 | Binomial call value | `$0.01917/kWh` |
-| Monte Carlo call value | `$0.02025/kWh` |
-| Method gap | About `+5.6%` Monte Carlo vs binomial |
+| Monte Carlo call value | `$0.01957/kWh` |
+| Method gap | About `+2.1%` Monte Carlo vs binomial |
 
 | Location | S0 ($/kWh) | Sigma | Binomial Call | Monte Carlo Call | Interpretation |
 |---|---:|---:|---:|---:|---|
-| Germany | 0.0250 | 45% | 0.000001 | 0.0000009 | Near-zero option value in this convergence run; relative difference inflated by tiny base. |
-| Taiwan | 0.0525 | 189% | 0.01917 | 0.02025 | Main base case; convergence within about 5.6%. |
-| Saudi Arabia | 0.0550 | 172% | 0.01929 | 0.01945 | Strong convergence. |
-| Arizona | 0.0580 | 165% | 0.02068 | 0.02100 | Strong convergence. |
-| Brazil | 0.0950 | 198% | 0.05373 | 0.05449 | Strong convergence. |
+| Germany | 0.0250 | 45% | 0.00234 | 0.00236 | ATM (K = S₀); low but non-zero. |
+| Taiwan | 0.0525 | 189% | 0.01917 | 0.01957 | Main base case; ~2.1% method gap. |
+| Saudi Arabia | 0.0550 | 172% | 0.01841 | 0.01876 | ATM; ~1.9% method gap. |
+| Arizona, USA | 0.0580 | 165% | 0.01877 | 0.01911 | ATM; ~1.8% method gap. |
+| Brazil | 0.0950 | 198% | 0.03702 | 0.03781 | ATM; ~2.1% method gap. |
+
+**Strike convention:** `K = S₀` per location (ATM). Do not cite older fixed-`K` prototype tables for cross-location comparison.
 
 ## Canonical Oracle-Tolerance Results
 
@@ -99,7 +102,9 @@ Use one preferred table in Chapter 4 and treat older parameter runs as robustnes
 | Production / mainnet | **Out of scope** — not audited |
 | Real operator hardware | **Not available** — fixtures and sample CSVs only |
 
-Product/thesis alignment: `thesis_package/THESIS_PRODUCT_ALIGNMENT.md`
+Product/thesis alignment: `thesis_package/THESIS_PRODUCT_ALIGNMENT.md`  
+Monetary foundation: `thesis_package/MONETARY_FOUNDATION.md`  
+Instrument comparison: `thesis_package/INSTRUMENT_COMPARISON.md`
 
 ## Canonical Public Proof
 

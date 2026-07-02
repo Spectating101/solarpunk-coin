@@ -6,7 +6,11 @@ Energy as a Constraint: Credibility, Pricing, and Settlement in Energy-Linked Di
 
 ## Core Thesis
 
-Energy can provide a credible constraint for digital money only when it is embedded in a rule-based financial architecture: reliable energy data, rule-bound issuance, explicit risk pricing, and collateral or reserve-backed settlement.
+Energy can provide a credible constraint for digital money only when it is embedded in a rule-based financial architecture with **five integrated constraints**: reliable energy data, rule-bound issuance, explicit pricing and risk controls, protected settlement and redemption accounting, and limited governance.
+
+**Reader's guide:** `thesis_package/THESIS_READERS_GUIDE.md` — chapter digests, canonical numbers, oral-defense cheat sheet.
+
+Each chapter draft opens with an **At a glance** table and ends with a **Key takeaway** blockquote (where applicable).
 
 ## Chapter Structure
 
@@ -20,9 +24,9 @@ Current file: `thesis_package/CHAPTER_1_GROUNDED_DRAFT.md`
 
 Build: `npm run thesis:docx` → `thesis_package/output/THESIS_GROUNDED.docx`
 
-### Chapter 2 - Monetary Background and the Case for Energy
+### Chapter 2 - Literature Review and Theoretical Background
 
-Purpose: explain why commodity constraints mattered historically, why gold failed as a scalable monetary constraint, why fiat and cryptocurrency leave a gap between technical scarcity and economic credibility, and why energy is a defensible candidate to test.
+Purpose: review monetary credibility, gold and Bretton Woods, fiat money, Bitcoin proof-of-work, Bitcoin energy-cost valuation, renewable-energy finance, pricing theory, and programmable settlement; identify the integrated research gap.
 
 Main output: a grounded framework for evaluating energy as a constraint without claiming energy automatically becomes money.
 

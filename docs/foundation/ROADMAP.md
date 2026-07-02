@@ -2,19 +2,18 @@
 
 Product-only. Thesis untouched.
 
-## Now (operating)
+## Now (operating — engine v1 complete for horizon A–B)
 
 - [x] Energy anchor + circulation on Sepolia
 - [x] Wallet payments (MetaMask)
-- [x] `foundation:sync` / `foundation:build` pipeline
-- [x] `GET /v1/foundation` API
-- [x] Live demo on GitHub Pages
-- [x] Operator gas restored; weekly cycle + 21 payments indexed
-- [x] Autosync CI + autonomous ops doc
-- [x] Backend validate + health CLI/API + labeled payment ledger
-- [x] Pilot payer in counterparty registry (payment #15)
+- [x] Sync / validate / health / API pipeline
+- [x] `GET /v1/foundation` + labeled payment ledger
+- [x] Live demo on GitHub Pages + autosync CI
+- [x] Peg simulation export in foundation status (peg **off** on chain)
+- [x] `npm run engine:status` one-screen operator view
+- [x] Thesis evidence hook (`npm run thesis:docx`)
 
-## Next (in order)
+## Next (human decisions only)
 
 ### 1. Governance handoff
 Move SPK v1 admin to Safe multisig when ready.

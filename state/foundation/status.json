@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-08T17:43:23.428211+00:00",
+  "generated_at": "2026-07-02T12:51:46.507631+00:00",
   "horizon": "structural",
   "network": "sepolia",
   "chain_id": 11155111,
   "status": "operating",
-  "synced_at": "2026-06-08T17:43:22.905580Z",
+  "synced_at": "2026-06-10T16:45:22.112606Z",
   "anchor": {
     "kwh_per_spk": 1.0,
     "cumulative_surplus_kwh": 5514.0
@@ -108,5 +108,11 @@
     "payer_label": "Operator",
     "payee_id": "network_peer",
     "payee_label": "Network peer"
+  },
+  "peg_simulation": {
+    "ok": true,
+    "pct_in_band": "78.6% of days",
+    "max_deviation_bps": "1318 bps",
+    "note": "Off-chain PI simulation only \u2014 peg disabled on Sepolia."
   }
 }

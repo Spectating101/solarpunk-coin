@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18T16:15:36.562125+00:00",
+  "generated_at": "2026-06-28T07:38:06.750622+00:00",
   "product": {
     "name": "SolarPunkCoin (SPK)",
     "claim": "Accepted surplus renewable-energy kWh can mint SPK only through a replay-protected oracle attestation.",
@@ -10,8 +10,8 @@
     "bundle_available": true,
     "proof_available": true,
     "bundle_path": "state/attestations/latest_attestation_bundle.json",
-    "proof_path": "state/proofs/sepolia_spk_attested_mint_proof.json",
-    "contract_address": "0x8ceDa149EDE44078bf151b3334513916a84df820",
+    "proof_path": "state/proofs/hardhat_spk_attested_mint_proof.json",
+    "contract_address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
     "source_schema": "SPK_RAW_METER_READINGS_V1",
     "batch_id": "batch_2026_02_12_a",
     "input_records": 4,
@@ -21,19 +21,19 @@
     "registered_meters": 2,
     "total_surplus_kwh": 2606.7,
     "source_hash": "0xe3f1d7e10fbe38a0951943415121a25ca8b9e031634422576bb29ef9a576a5c8",
-    "attestation_hash": "0xd3c77958aa6f53cd1a5a8ed52c8898cf1376b8a5751e1598add5ab0c5cea558d",
+    "attestation_hash": "0x9591b32b3e7fd166adf133923f0b2151128eabf57d2f040eb98d9f4295288940",
     "attestation_hash_consumed": true,
     "source_hash_consumed": true,
     "minted_spk": "130.1697",
-    "execution_scope": "attached-network",
-    "tx_hash": "0x56fc987417f0d73e27cf29c81ad206bd2658c917eb7e5e67aececc54a732c75d"
+    "execution_scope": "local-reproducible",
+    "tx_hash": "0xf8b7481908da07318bf9dae4b86bd87b7366261cf99841818c393ac727a7f07f"
   },
   "empirical_basis": {
     "ceir": {
-      "pre_ban_n": 898,
-      "post_ban_n": 1044,
-      "pre_ban_coef": -0.2571314296894859,
-      "post_ban_coef": -0.634254529970368,
+      "pre_ban_n": 872,
+      "post_ban_n": 1408,
+      "pre_ban_coef": -0.262347427051995,
+      "post_ban_coef": -0.07081070948464456,
       "chow_pvalue": 1.1102230246251565e-16,
       "source": "thesis_package/empirical_results/ceir_analysis_summary.csv"
     },
@@ -75,11 +75,11 @@
   },
   "operational_basis": {
     "daily_keeper_available": true,
-    "total_successful_runs": 22,
+    "total_successful_runs": 44,
     "first_successful_run": "2026-04-20",
-    "last_successful_run": "2026-05-18",
-    "current_success_streak_days": 20,
-    "latest_update_index_tx": "0x6e4bae6aee946d06c77e70d48e4a45a597a50c63bd03ef9424146dc80d9303c4",
+    "last_successful_run": "2026-06-09",
+    "current_success_streak_days": 42,
+    "latest_update_index_tx": "0xaf87224d93111904863bc0290469c47b5d40c3071c4111bc7b311c6185a5ca81",
     "source": "state/keeper_logs/summary.json"
   },
   "scope_limits": [

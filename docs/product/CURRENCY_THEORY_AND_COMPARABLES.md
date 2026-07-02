@@ -24,6 +24,8 @@ The project becomes more novel where those categories overlap: **meter evidence 
 
 ## External Anchors
 
+**CEIR → SPK bridge (supplementary):** See [`CEIR_TO_SPK_LITERATURE_BRIDGE.md`](./CEIR_TO_SPK_LITERATURE_BRIDGE.md) for how corrected Bitcoin CEIR evidence motivates the energy-standard design without proving stablecoin peg.
+
 | Anchor | What It Proves Exists | What SolarPunk Borrows | What SolarPunk Must Not Pretend |
 |---|---|---|---|
 | BIS unified ledger / tokenisation | Tokenised money and tokenised claims can be composed on programmable ledgers. | SPK combines evidence, settlement rules, and claim state in one programmable path. | BIS framing does not validate permissionless retail currency launch. |

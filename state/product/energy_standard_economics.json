@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-18T16:12:55.990Z",
+  "generated_at": "2026-06-28T07:38:27.893Z",
   "title": "SolarPunk Energy Standard Economics",
   "one_line": "SolarPunk is an energy-standard cryptocurrency: a modern gold-standard system where verified renewable-energy surplus replaces gold as the backing base.",
   "thesis": "SPK supply should expand only when productive energy surplus is measured, admitted, signed, and converted through a transparent issuance rule.",
@@ -17,12 +17,12 @@
     "public_or_local_minted_spk": 130.1697,
     "issuance_formula_net_spk": 130.1697,
     "issuance_formula_delta_spk": 0,
-    "active_supply_spk_lab": 110.1697,
-    "active_supply_energy_equivalent_kwh_lab": 2203.394,
-    "redeemed_spk_lab": 20,
-    "redeemed_energy_equivalent_kwh_lab": 400,
-    "settlement_volume_spk_lab": 83,
-    "settlement_velocity_ratio_lab": 0.6376
+    "active_supply_spk_lab": 2589.0933,
+    "active_supply_energy_equivalent_kwh_lab": 51781.866,
+    "redeemed_spk_lab": 15,
+    "redeemed_energy_equivalent_kwh_lab": 300,
+    "settlement_volume_spk_lab": 307,
+    "settlement_velocity_ratio_lab": 0.1179
   },
   "proof_issuance_math": {
     "source": "state/product/field_receipt_loop.json + state/product/currency_system_lab.json",
@@ -37,8 +37,8 @@
     "observed_matches_formula": true
   },
   "empirical_foundation": {
-    "ceir_pre_ban_coefficient": -0.257131,
-    "ceir_post_ban_coefficient": -0.634255,
+    "ceir_pre_ban_coefficient": -0.262347,
+    "ceir_post_ban_coefficient": -0.070811,
     "chow_pvalue": 1.1102230246251565e-16,
     "interpretation": "The thesis evidence motivates energy as an economically meaningful crypto variable; it does not by itself prove SPK demand or legal currency status."
   },

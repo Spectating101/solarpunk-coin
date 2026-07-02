@@ -11,13 +11,16 @@ Product canon for the energy-anchored monetary stack.
 | [GOVERNANCE.md](./GOVERNANCE.md) | Multisig handoff |
 | [OPERATOR.md](./OPERATOR.md) | Weekly ops + gas |
 | [PILOT_PLAYBOOK.md](./PILOT_PLAYBOOK.md) | Minimal closed-loop demo |
+| [ENGINE_OVERVIEW.md](./ENGINE_OVERVIEW.md) | **What the engine does** (sync → validate → export) |
+| [OSS_LANDSCAPE.md](./OSS_LANDSCAPE.md) | **OSS / GitHub research catalog** (maps, attestation, REC, stablecoin refs) |
 | [BACKEND.md](./BACKEND.md) | Python API, CLI, validate, CI |
 | [AUTONOMOUS_OPS.md](./AUTONOMOUS_OPS.md) | What runs without you (CI + rhythm) |
-| [WHEN_YOU_RETURN.md](./WHEN_YOU_RETURN.md) | Pilot + governance + thesis deferred |
+| [WHEN_YOU_RETURN.md](./WHEN_YOU_RETURN.md) | Pilot + governance when you come back |
 
 ## Commands
 
 ```bash
+npm run engine:status           # one-screen health + validate + snapshot
 npm run foundation:health        # gas + sync — run first
 npm run foundation:validate      # runtime + artifact consistency
 npm run foundation:sync          # Sepolia sync + foundation export

@@ -180,6 +180,9 @@ function validateReading(reading, index, meter, ctx) {
     device_address: String(meter.device_address),
     payload_hash: expectedHash,
     signature: String(reading.signature),
+    location_country: String(meter.location_country || "TW"),
+    grid_zone: String(meter.grid_zone || "unknown"),
+    energy_vintage: String(meter.energy_vintage || toUtcIso(reading.window_end).slice(0, 7)),
   };
   normalized.record_hash = recordHash(normalized);
   return normalized;
@@ -254,6 +257,7 @@ function deriveBundle(payload, registry, options = {}) {
   const totalSurplus = accepted.reduce((sum, row) => sum + Number(row.surplus_kwh), 0);
   return {
     generated_at: new Date().toISOString(),
+    bundle_schema: "SPK_ATTESTATION_BUNDLE_V2",
     source_schema: payload.schema || "unknown",
     registry_schema: registry.schema || "unknown",
     batch_id: String(payload.batch_id || "unknown_batch"),

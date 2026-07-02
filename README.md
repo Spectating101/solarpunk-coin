@@ -1,14 +1,17 @@
-# SolarPunk — SPK v1 Network Money
+# SolarPunk Public Lab v1.0
 
-**Energy-attested issuance. Circulation-first settlement. Optional energy exit.**
+**A renewable-energy issuance standard for programmable settlement.**
 
-SPK v1 is a live testnet cryptocurrency system on Ethereum Sepolia: verified surplus kWh mints SPK, participants settle network payments on-chain, redemption is secondary.
+SolarPunk Public Lab is a public Sepolia testnet laboratory for an energy-standard settlement architecture: verified renewable-surplus evidence can produce bounded SPK issuance, circulate through network payments, and remain constrained by explicit settlement and governance gates.
 
-> **Documentation:** [`DOCS.md`](./DOCS.md) is the map — especially for AI assistants catching up.  
-> **Live snapshot:** [`CURRENT_STATUS.md`](./CURRENT_STATUS.md)
+It is **not** a monetary product, token sale, stablecoin, legal tender, mainnet launch, or legal claim on delivered energy.
 
-**Demo UI:** https://spectating101.github.io/solarpunk-coin/ (SPK v1 tab)  
-**Operator guide:** [`docs/product/SPK_V1_OPERATOR.md`](./docs/product/SPK_V1_OPERATOR.md)
+> **Start here:** [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md)  
+> **Current state:** [`CURRENT_STATUS.md`](./CURRENT_STATUS.md)  
+> **Documentation map:** [`DOCS.md`](./DOCS.md)
+
+**Demo:** https://spectating101.github.io/solarpunk-coin/demo/  
+**Closed pilot data ask:** [`docs/product/PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md)
 
 ---
 
@@ -20,7 +23,7 @@ npm install && npx hardhat compile
 # Local full loop
 npm run spk:v1:launch
 
-# Sepolia — compound circulation (requires .env PRIVATE_KEY + SEPOLIA_RPC)
+# Sepolia — operator cycle (requires .env PRIVATE_KEY + SEPOLIA_RPC)
 npm run spk:v1:cycle:sepolia
 npm run spk:v1:sync
 npm run spk:v1:evidence:export
@@ -30,19 +33,21 @@ npm run spk:v1:evidence:export
 
 | Contract | Sepolia address |
 |----------|-----------------|
-| SolarPunkCoin | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
+| SolarPunkCoin (lab unit SPK) | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
 | SolarPunkCurrencySystem | `0x520162252F9B94824417678525FFd69145014970` |
 
 ---
 
-## What SPK v1 proves
+## What Public Lab v1.0 proves
 
-1. **Issuance** — oracle-signed attestation or surplus mint → energy-native SPK (peg off)
+1. **Energy evidence → issuance** — signed surplus attestation or meter bundle → bounded SPK mint (peg off)
 2. **Circulation** — typed network payments (SERVICE, LABOR, GOODS, NETWORK) with invoice replay protection
-3. **Metrics** — `networkMetrics()` circulation vs redemption share on-chain
-4. **Operation** — repeatable operator cycles + indexed payment ledger
+3. **Settlement metrics** — on-chain circulation vs redemption share
+4. **Reproducibility** — operator cycles, sync, evidence export, 109 contract tests
 
-Not claimed: mainnet readiness, legal tender, revenue-grade meter finality, production governance.
+**SPK** is the **lab unit** inside this architecture (~1 kWh surplus per SPK on testnet), not a claim of legal money.
+
+Not claimed: mainnet, token sale, legal tender, revenue-grade meter finality, production governance, live dollar peg.
 
 ---
 
@@ -50,10 +55,11 @@ Not claimed: mainnet readiness, legal tender, revenue-grade meter finality, prod
 
 | Command | Purpose |
 |---------|---------|
-| `npm run spk:v1:cycle:sepolia` | Attested mint + 4-party payments + optional redeem |
-| `CYCLE_MINT_MODE=meter npm run spk:v1:cycle:sepolia` | Mint from real meter bundle (scaled, replay-safe) |
+| `npm run spk:v1:cycle:sepolia` | Attested mint + network payments + optional redeem |
+| `CYCLE_MINT_MODE=meter npm run spk:v1:cycle:sepolia` | Mint from meter bundle (scaled, replay-safe) |
 | `npm run spk:v1:sync` | Index chain events → runtime JSON |
-| `npm run spk:v1:evidence:export` | Regenerate thesis evidence pack |
+| `npm run spk:v1:evidence:export` | Regenerate evidence pack |
+| `npm run foundation:health` | Operator + sync readiness |
 | `npx hardhat test` | 109 on-chain rule tests |
 
 ---
@@ -62,26 +68,27 @@ Not claimed: mainnet readiness, legal tender, revenue-grade meter finality, prod
 
 | Track | Location |
 |-------|----------|
-| Product / testnet | `docs/product/SPK_V1.md`, `state/runtime/` |
+| **Public Lab v1.0** | `docs/product/PUBLIC_LAB_V1.md` |
+| SPK v1 technical spec | `docs/product/SPK_V1.md`, `state/runtime/` |
 | Thesis (bounded) | `thesis_package/`, `thesis_package/SPK_V1_EVIDENCE.md` |
-| Archive demos | Legacy Safe stack, May 2026 attested proof — see `CONTRACT_ADDRESSES.md` |
+| Institutional path (post-thesis) | `docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md` |
 | Bitcoin CEIR empirics | `thesis_package/empirical_results/` |
+| CEIR → SPK exploration (off-thesis) | `docs/exploration/`, `npm run exploration:tier-c` |
 | Options pricing | `energy_derivatives/spk_derivatives/` |
 
 ---
 
-## Monetary foundation
+## Foundation layer
 
-Energy-anchored network money with **USD translation** — monetary-design space, not L1 chain competition.
+Energy-standard settlement with **USD reference for expression** (peg **off** on chain) — research laboratory, not L1 competition.
 
-- [`docs/foundation/MONETARY_FOUNDATION.md`](./docs/foundation/MONETARY_FOUNDATION.md) — north star
-- [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) — live metrics (generated)
+- [`docs/foundation/MONETARY_FOUNDATION.md`](./docs/foundation/MONETARY_FOUNDATION.md) — architecture north star
+- [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) — generated metrics
 
 ```bash
 npm run foundation:build   # export foundation status from runtime
 npm run foundation:sync    # Sepolia sync + foundation export
 npm run foundation:cycle   # operator cycle + sync + foundation
-npm run spk:v1:api         # GET /v1/foundation
 ```
 
 ---
@@ -89,9 +96,11 @@ npm run spk:v1:api         # GET /v1/foundation
 ## Development
 
 ```bash
-cd frontend && npm install && npm run dev   # local UI
+cd frontend && npm install && npm run dev   # Public Lab landing + SPK console
 npx hardhat test                            # contracts
 npm run spk:v1:test                         # runtime smoke
 ```
 
 Push to `main` deploys the frontend to GitHub Pages via `.github/workflows/deploy.yml`.
+
+**Release:** tag `public-lab-v1.0` — see [`docs/product/PUBLIC_LAB_V1_RELEASE_NOTE.md`](./docs/product/PUBLIC_LAB_V1_RELEASE_NOTE.md).

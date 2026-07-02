@@ -1,17 +1,17 @@
 {
-  "ok": true,
-  "at": "2026-06-08T17:28:30.088Z",
+  "ok": false,
+  "at": "2026-07-02T10:12:19.843Z",
   "deployer": "0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54",
-  "operator_eth": 0.5304020988204315,
+  "operator_eth": 0.49232013132779007,
   "operator_eth_min": 0.01,
   "operator_spk": 5189.258,
-  "synced_at": "2026-06-08T17:28:28.949921Z",
-  "sync_age_hours": 0,
+  "synced_at": "2026-06-10T16:45:22.112606Z",
+  "sync_age_hours": 521.45,
   "network_payment_count": 21,
   "total_supply_spk": 5499.015,
   "peg_enabled": false,
   "foundation_status_json": true,
   "actions": [
-    "Ready for npm run foundation:cycle"
+    "Run npm run foundation:sync (stale 521h)"
   ]
 }

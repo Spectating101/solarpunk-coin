@@ -1,0 +1,427 @@
+{
+  "schema": "TIER_C_EXPLORATION_REPORT",
+  "version": "1.0.0",
+  "generated_at": "2026-06-28T17:44:51.578081+00:00",
+  "purpose": "CEIR-to-SPK stitch evidence (exploration, not thesis manuscript)",
+  "data_procurement": {
+    "schema": "TIER_C_DATA_PROCUREMENT",
+    "version": "1.0.0",
+    "generated_at": "2026-06-28T17:44:41.196972+00:00",
+    "procurement": {
+      "ceir": {
+        "step": "ceir_regression",
+        "regression_run": {
+          "command": "/usr/bin/python3 /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/thesis_package/ceir_regression.py --refresh-panel",
+          "ok": true,
+          "stdout_tail": "wrote thesis_package/empirical_results/ceir_analysis_summary.csv\nwrote thesis_package/empirical_results/ceir_analysis_summary_diff.csv\nwrote thesis_package/empirical_results/ceir_trading_rule_summary.json\nwrote thesis_package/CEIR_REGRESSION_APPENDIX.md\npre beta=-0.2623 post beta=-0.0708 chow_p=1.11e-16\nceir_regression_ok\n",
+          "stderr_tail": "",
+          "exit_code": 0
+        },
+        "panel_stats": {
+          "panel_path": "thesis_package/empirical_results/bitcoin_ceir_analysis_ready.csv",
+          "date_min": "2019-01-01",
+          "date_max": "2025-05-28",
+          "n_observations": 2340,
+          "n_pre_ban": 901,
+          "n_post_ban": 1439,
+          "ceir_mean_pre": 30.035,
+          "ceir_mean_post": 29.383,
+          "cumulative_cost_usd_latest": 53387588912.0,
+          "data_lineage": "Historical panel: Bitcoin price + Cambridge-style cumulative energy cost (electricity_price \u00d7 daily TWh path). Modelled consumption side \u2014 not site meters."
+        },
+        "coefficients": {
+          "Pre_ban_N": 872.0,
+          "Post_ban_N": 1408.0,
+          "Pre_ban_CEIR_coef": -0.262347427051995,
+          "Post_ban_CEIR_coef": -0.0708107094846445,
+          "Chow_pvalue": 1.1102230246251563e-16,
+          "Pre_ban_p_hac": 0.0005156475703374,
+          "Post_ban_p_hac": 0.1331254555952099,
+          "Pre_ban_p_cluster": 0.0007345332732709,
+          "Post_ban_p_cluster": 0.1258205726684107,
+          "Econ_impact_1sd_30d_pct": -12.620199236189451
+        },
+        "sources": [
+          "thesis_package/empirical_results/bitcoin_ceir_analysis_ready.csv",
+          "Cambridge CBECI methodology (modelled mining electricity)"
+        ]
+      },
+      "nasa_power": {
+        "ok": true,
+        "location": "Taoyuan, Taiwan",
+        "lat": 24.99,
+        "lon": 121.3,
+        "api": "NASA POWER daily ALLSKY_SFC_SW_DWN",
+        "window": {
+          "start": "20260524",
+          "end": "20260628"
+        },
+        "latest_valid_date": "20260623",
+        "ghi_kwh_m2_day": 6.7735,
+        "n_valid_days": 31,
+        "url": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=ALLSKY_SFC_SW_DWN&community=RE&longitude=121.3&latitude=24.99&start=20260524&end=20260628&format=JSON",
+        "use": "Production-side resource benchmark (irradiance), contrasts with CBECI consumption estimates"
+      },
+      "operator_intake": {
+        "run": {
+          "command": "npm run product:operator-intake",
+          "ok": true,
+          "stdout_tail": "\n> solarpunkcoin-contracts@1.0.0 product:operator-intake\n> node scripts/operator_data_intake.js --use-dev-fixture-key --generated-at=2026-05-19T00:00:00Z --now=2026-05-19T00:00:00Z\n\naccepted_records=7\neligible_surplus_kwh=103.8\nnet_spk_preview=5.14485\nprovenance_level=L0\nwrote: /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/state/product/operator_data_intake.json\n",
+          "stderr_tail": "",
+          "exit_code": 0
+        },
+        "summary": null,
+        "operator_profile": null,
+        "accepted_kwh": 103.8,
+        "artifacts": [
+          "state/product/operator_data_intake.json",
+          "state/product/operator_data_attestation_bundle.json"
+        ]
+      },
+      "meter_csv": {
+        "run": {
+          "command": "import_meter_csv (signed with dev fixture key TW-TY-0001)",
+          "ok": false,
+          "stdout_tail": "",
+          "stderr_tail": "_csv.js:131:23)\n    at importCsvRows (/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/scripts/import_meter_csv.js:196:21)\n    at main (/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/scripts/import_meter_csv.js:225:25)\n    at Object.<anonymous> (/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/scripts/import_meter_csv.js:243:3)\n    at Module._compile (node:internal/modules/cjs/loader:1706:14)\n    at Object..js (node:internal/modules/cjs/loader:1839:10)\n    at Module.load (node:internal/modules/cjs/loader:1441:32)\n    at Function._load (node:internal/modules/cjs/loader:1263:12)\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\n",
+          "exit_code": 1
+        },
+        "source_csv": "data/attestations/sample_meter_export.csv",
+        "n_csv_rows": 2,
+        "csv_surplus_kwh_total": 1985.5,
+        "output_raw": null
+      },
+      "inverter_adapter": {
+        "run": {
+          "command": "node scripts/inverter_meter_adapter.js --provider=sample-cumulative --start=data/inverter/sample_cumulative_start.json --end=data/inverter/sample_cumulative_end.json --meter-id=TW-TY-0001 --site-id=taoyuan-rooftop-a --use-dev-fixture-key --out-json=state/exploration/inverter_adapter_receipt.json --out-raw=state/exploration/inverter_raw_readings.json --out-bundle=state/exploration/inverter_attestation_bundle.json",
+          "ok": true,
+          "stdout_tail": "provider=sample-cumulative\nsource_mode=sample_cumulative_snapshot_pair\naccepted_records=1\naccepted_surplus_kwh=996.2\ncan_mint_from_adapter=true\nwrote: /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/state/exploration/inverter_adapter_receipt.json\nwrote: /home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/docs/product/INVERTER_METER_ADAPTER.md\n",
+          "stderr_tail": "",
+          "exit_code": 0
+        },
+        "receipt": "state/exploration/inverter_adapter_receipt.json",
+        "surplus_kwh": 821.2,
+        "generation_kwh": 1388.6,
+        "accepted_surplus_kwh": 996.2,
+        "can_mint_from_adapter": true,
+        "evidence_grade": "adapter_sample_or_review",
+        "references": []
+      },
+      "ausgrid": {
+        "ok": true,
+        "source": "Ausgrid Solar Home Electricity Data (public sample row)",
+        "source_file": "data/public/ausgrid_sample.csv",
+        "license_note": "Public research dataset; not SPK operator data",
+        "sample_date": "1/07/2012",
+        "n_gg_days_in_sample": 3,
+        "daily_generation_kwh_proxy": 8.726,
+        "peak_30min_kwh": 1.156,
+        "use": "External validation that real utility-export formats exist; P4 geography AU not TW"
+      }
+    },
+    "contrast": {
+      "title": "Consumption-side (CEIR) vs production-side (SPK) data contrast",
+      "rows": [
+        {
+          "dimension": "Object",
+          "ceir_bitcoin": "Bitcoin market cap vs cumulative mining electricity cost",
+          "spk_production": "Verified rooftop/export surplus kWh"
+        },
+        {
+          "dimension": "Side",
+          "ceir_bitcoin": "Consumption (PoW burn)",
+          "spk_production": "Production (export/curtailment)"
+        },
+        {
+          "dimension": "Primary source",
+          "ceir_bitcoin": "Cambridge CBECI-style model in panel",
+          "spk_production": "Signed meter / inverter / operator CSV"
+        },
+        {
+          "dimension": "Sample period",
+          "ceir_bitcoin": "2019-01-01 \u2192 2025-05-28 (n=2340)",
+          "spk_production": "Taoyuan fixtures + operator intake 2026-05"
+        },
+        {
+          "dimension": "Latest CEIR / resource",
+          "ceir_bitcoin": "mean CEIR post-ban \u2248 29.383",
+          "spk_production": "NASA GHI 6.7735 kWh/m\u00b2/day (20260623)"
+        },
+        {
+          "dimension": "Empirical finding",
+          "ceir_bitcoin": "pre-ban \u03b2 \u2248 -0.262347427051995",
+          "spk_production": "CSV import surplus 1985.5 kWh (2 days)"
+        }
+      ]
+    },
+    "research": {
+      "comparables": [
+        {
+          "name": "SolarCoin / kSLR",
+          "claim": "1 kSLR per verified kWh solar production; 30k+ installations",
+          "contrast_to_spk": "Reward token on Base/EW Chain \u2014 production-linked issuance like SPK anchor, but no circulation-first network-money or redemption state machine in our sense.",
+          "sources": [
+            "https://solarcoin.org/how-it-works/",
+            "https://solarcoin.org/frequently-asked-questions/"
+          ]
+        },
+        {
+          "name": "EnergyTag Granular Certificates (GC)",
+          "claim": "Hourly-or-less energy attributes; temporal + geographic matching; anti-double-count",
+          "contrast_to_spk": "SPK v2 attestation fields (country, grid_zone, energy_vintage) align with GC matching features \u2014 SPK adds monetary circulation + optional redeem.",
+          "sources": [
+            "https://energytag.org/wp-content/uploads/2024/12/EnergyTag_Granular-Certificate-Scheme-Standard-V2.pdf",
+            "https://energytag.org/wp-content/uploads/2024/03/Granular-Certificate-Matching-Standard_V1.pdf"
+          ]
+        },
+        {
+          "name": "FSB global stablecoin recommendations",
+          "claim": "Redemption, governance, stress planning for stable-value systems",
+          "contrast_to_spk": "Horizon C bar; SPK v1 peg-off deliberately below this bar",
+          "sources": [
+            "https://www.fsb.org/2023/07/high-level-recommendations-for-the-regulation-supervision-and-oversight-of-global-stablecoin-arrangements-final-report/"
+          ]
+        }
+      ],
+      "stitch_implication": "CEIR procurement validates passive consumption-side signal; SPK procurement validates production-side attestation path. Comparable literature shows production tokens exist (SolarCoin) and regime metadata standards exist (EnergyTag) \u2014 SPK combines mint + settlement + optional redeem in one testnet stack."
+    }
+  },
+  "phases": {
+    "p0_ceir": {
+      "phase": "P0_ceir_motivation",
+      "source": "thesis_package/empirical_results/ceir_analysis_summary.csv",
+      "pre_ban_beta": -0.262347427051995,
+      "post_ban_beta": -0.07081070948464456,
+      "pre_ban_significant_5pct": true,
+      "post_ban_significant_5pct": false,
+      "stitch_reading": "Energy-cost information appears pre-ban; weakens post-ban \u2014 motivates designed surplus issuance, not passive PoW inference.",
+      "reproduce": "python thesis_package/ceir_regression.py --refresh-panel",
+      "phase_pass": true
+    },
+    "p1_meter": {
+      "phase": "P1_meter_data_stitch",
+      "bundle_path": "state/attestations/latest_attestation_bundle.json",
+      "bundle_present": true,
+      "accepted_records": 2,
+      "rejected_records": 2,
+      "total_surplus_kwh": 2606.7,
+      "sites": [
+        "taoyuan-rooftop-a",
+        "taoyuan-rooftop-b"
+      ],
+      "meter_on_chain_cycles": 1,
+      "meter_mint_txs": [
+        {
+          "cycle_id": "2026-06-07T16-25-38-349Z",
+          "tx_hash": "0x3527585fd110ae3e135e76b870232d1b30411d76953c15c94a237743a0d1754d",
+          "surplus_kwh": 52,
+          "meter_source": "state/attestations/latest_attestation_bundle.json",
+          "meter_scale": 0.02
+        }
+      ],
+      "commands": {
+        "local_meter_cycle": "CYCLE_MINT_MODE=meter npm run spk:v1:cycle",
+        "sepolia_meter_cycle": "CYCLE_MINT_MODE=meter npm run spk:v1:cycle:sepolia",
+        "foundation_meter": "npm run foundation:cycle:meter",
+        "meter_onboard": "npm run meter:onboard",
+        "inverter_adapter": "npm run meter:inverter-adapter"
+      },
+      "gates": {
+        "bundle_with_accepted_attestations": true,
+        "quality_filter_rejects_some_rows": true,
+        "sepolia_meter_mint_recorded": true
+      },
+      "phase_pass": true,
+      "next": "Re-run sepolia meter cycle after new inverter export; document tx in METER_EVIDENCE.md"
+    },
+    "p2_contrast": {
+      "phase": "P2_production_vs_consumption",
+      "doc": "docs/exploration/PRODUCTION_VS_CONSUMPTION.md",
+      "ceir_side": "consumption (PoW mining burn, Cambridge estimates)",
+      "spk_side": "production (meter-attested surplus export)",
+      "phase_pass": true,
+      "note": "Narrative stitch \u2014 see PRODUCTION_VS_CONSUMPTION.md"
+    },
+    "p3_redemption": {
+      "phase": "P3_redemption_stress",
+      "scenarios": {
+        "pilot_current": {
+          "scenario": "pilot_current",
+          "label": "Pilot ops \u2014 tight capacity, shock-prone (expected fail)",
+          "params": {
+            "num_paths": 5000,
+            "horizon_days": 90,
+            "mean_daily_redemptions": 8.0,
+            "mean_kwh_per_redemption": 25.0,
+            "delivery_capacity_kwh_per_day": 200.0,
+            "reserve_kwh_buffer": 0.0,
+            "capacity_shock_prob": 0.05,
+            "capacity_shock_factor": 0.4,
+            "dispute_prob_on_shortfall": 0.35,
+            "seed": 42
+          },
+          "paths_with_shortfall": 5000,
+          "paths_with_dispute": 5000,
+          "shortfall_rate": 1.0,
+          "dispute_rate": 1.0,
+          "mean_unfilled_kwh_per_path": 842.2,
+          "p95_unfilled_kwh": 1845.0,
+          "pass_shortfall_under_15pct": false,
+          "pass_dispute_under_10pct": false,
+          "overall_pass": false,
+          "note": "Gates: <15% paths with backlog shortfall, <10% with dispute. Pilot fail is informative; operator_target / stablecoin_gate show what policy must achieve."
+        },
+        "operator_target": {
+          "scenario": "operator_target",
+          "label": "Target operator \u2014 higher daily delivery + modest reserve buffer",
+          "params": {
+            "num_paths": 5000,
+            "horizon_days": 90,
+            "mean_daily_redemptions": 6.0,
+            "mean_kwh_per_redemption": 25.0,
+            "delivery_capacity_kwh_per_day": 320.0,
+            "reserve_kwh_buffer": 500.0,
+            "capacity_shock_prob": 0.03,
+            "capacity_shock_factor": 0.55,
+            "dispute_prob_on_shortfall": 0.35,
+            "seed": 42
+          },
+          "paths_with_shortfall": 0,
+          "paths_with_dispute": 0,
+          "shortfall_rate": 0.0,
+          "dispute_rate": 0.0,
+          "mean_unfilled_kwh_per_path": 0.0,
+          "p95_unfilled_kwh": 0.0,
+          "pass_shortfall_under_15pct": true,
+          "pass_dispute_under_10pct": true,
+          "overall_pass": true,
+          "note": "Gates: <15% paths with backlog shortfall, <10% with dispute. Pilot fail is informative; operator_target / stablecoin_gate show what policy must achieve."
+        },
+        "stablecoin_gate": {
+          "scenario": "stablecoin_gate",
+          "label": "Horizon C gate \u2014 high capacity, low shocks, reserve headroom",
+          "params": {
+            "num_paths": 5000,
+            "horizon_days": 90,
+            "mean_daily_redemptions": 5.0,
+            "mean_kwh_per_redemption": 25.0,
+            "delivery_capacity_kwh_per_day": 450.0,
+            "reserve_kwh_buffer": 2000.0,
+            "capacity_shock_prob": 0.01,
+            "capacity_shock_factor": 0.7,
+            "dispute_prob_on_shortfall": 0.15,
+            "seed": 42
+          },
+          "paths_with_shortfall": 0,
+          "paths_with_dispute": 0,
+          "shortfall_rate": 0.0,
+          "dispute_rate": 0.0,
+          "mean_unfilled_kwh_per_path": 0.0,
+          "p95_unfilled_kwh": 0.0,
+          "pass_shortfall_under_15pct": true,
+          "pass_dispute_under_10pct": true,
+          "overall_pass": true,
+          "note": "Gates: <15% paths with backlog shortfall, <10% with dispute. Pilot fail is informative; operator_target / stablecoin_gate show what policy must achieve."
+        }
+      },
+      "pilot_current_pass": false,
+      "stablecoin_gate_pass": true,
+      "phase_pass": true,
+      "probe_note": "pilot_current expected to fail; stablecoin_gate shows reserve/capacity target before Horizon C claims.",
+      "doc": "docs/exploration/REDEMPTION_STRESS.md"
+    },
+    "p4_metadata": {
+      "phase": "P4_regime_metadata",
+      "bundle_schema": "SPK_ATTESTATION_BUNDLE_V2",
+      "gates": {
+        "site_id_on_attestations": true,
+        "time_window_on_attestations": true,
+        "location_country": true,
+        "grid_zone": true,
+        "energy_vintage": true,
+        "schema_v2": true,
+        "spec_documented": true
+      },
+      "phase_pass": true,
+      "next": "Bind grid_zone + vintage into on-chain attestation metadata hash (roadmap)"
+    },
+    "p5_peg": {
+      "phase": "P5_peg_vs_oracle",
+      "spk_v1_peg_enabled_on_chain": false,
+      "peg_simulation": {
+        "max_peg_deviation_bps": 1228.3131790485113,
+        "max_peg_deviation_pct": 12.28,
+        "pct_in_5pct_band": 81.4,
+        "avg_peg_deviation_bps": -14.8
+      },
+      "oracle_comparison": [
+        {
+          "location": "Taiwan",
+          "sigma": "189%",
+          "max_err_vr95_pct": 21.7,
+          "peg_sim_max_dev_pct": 12.28,
+          "within_oracle_band": true,
+          "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+        },
+        {
+          "location": "Saudi Arabia",
+          "sigma": "172%",
+          "max_err_vr95_pct": 19.7,
+          "peg_sim_max_dev_pct": 12.28,
+          "within_oracle_band": true,
+          "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+        },
+        {
+          "location": "Arizona, USA",
+          "sigma": "165%",
+          "max_err_vr95_pct": 18.9,
+          "peg_sim_max_dev_pct": 12.28,
+          "within_oracle_band": true,
+          "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+        },
+        {
+          "location": "Brazil",
+          "sigma": "198%",
+          "max_err_vr95_pct": 22.7,
+          "peg_sim_max_dev_pct": 12.28,
+          "within_oracle_band": true,
+          "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+        },
+        {
+          "location": "Germany",
+          "sigma": "45%",
+          "max_err_vr95_pct": 5.2,
+          "peg_sim_max_dev_pct": 12.28,
+          "within_oracle_band": false,
+          "note": "Sim PI peg vs thesis oracle tolerance (exploration only)"
+        }
+      ],
+      "taiwan_within_band": true,
+      "locations_within_band": 4,
+      "gates": {
+        "peg_off_in_production_ops": true,
+        "peg_sim_ran": true
+      },
+      "phase_pass": true,
+      "note": "If peg-on max deviation exceeds oracle tolerance, peg machinery needs tighter control or higher reserves before stablecoin claims \u2014 independent of CEIR.",
+      "artifact": "state/exploration/peg_oracle_compare.json"
+    }
+  },
+  "overall": {
+    "phases_pass": 6,
+    "phases_total": 6,
+    "core_phases_pass": true,
+    "pass": true,
+    "summary": "Core stitch (CEIR + meter + production contrast + metadata) must pass. P3 redemption stress and P5 peg-vs-oracle are stress probes \u2014 failing them is expected at pilot scale until capacity, reserves, and peg-on tuning."
+  },
+  "related_docs": [
+    "docs/exploration/DATA_PROCUREMENT_AND_RESEARCH.md",
+    "docs/exploration/TIER_C_PROGRAM.md",
+    "docs/exploration/PRODUCTION_VS_CONSUMPTION.md",
+    "docs/exploration/METER_EVIDENCE.md",
+    "docs/exploration/REDEMPTION_STRESS.md",
+    "docs/exploration/ATTESTATION_SCHEMA_V2.md",
+    "thesis_package/CEIR_SPK_STITCH_PLAN.md",
+    "docs/product/CEIR_TO_SPK_LITERATURE_BRIDGE.md"
+  ]
+}

@@ -1,14 +1,14 @@
 # When you return
 
-Foundation runs on autosync + weekly operator CI. You only need to touch it for **pilots**, **governance**, or **thesis** (later).
+Foundation engine runs on autosync + weekly operator CI. Thesis DOCX is in `thesis_package/output/` — copy to Google Docs when ready.
 
 ## Quick status
 
 ```bash
-npm run foundation:health && head -30 docs/foundation/FOUNDATION_STATUS.md
+npm run engine:status
 ```
 
-**Last known good (2026-06-08):** health **ok** · ~0.53 Sepolia ETH · **21** payments · peg **off**.
+**Last known good:** health **ok** · ~0.53 Sepolia ETH · **21** payments · peg **off**.
 
 ## Optional: run a pilot payment
 
@@ -24,9 +24,9 @@ See `PILOT_PLAYBOOK.md`.
 | Item | Command / doc |
 |------|----------------|
 | Multisig handoff | `npm run foundation:multisig:dry-run` then `GOVERNANCE.md` |
-| Meter-attested mint | `npm run foundation:cycle:meter` |
-| Peg experiment | `foundation:peg-check` first; branch before `peg_enabled` |
-| Thesis | **Paused** — cite `FOUNDATION_STATUS.md` when you resume Ch 5 |
+| Meter-attested mint in cycle | `npm run foundation:cycle:meter` |
+| Peg experiment on testnet | `foundation:peg-check` first; branch before `peg_enabled` |
+| Thesis for professor | `thesis_package/output/THESIS_GROUNDED.docx` + `SUBMIT_TO_ADVISOR.md` |
 
 ## What already runs without you
 
@@ -35,4 +35,5 @@ See `AUTONOMOUS_OPS.md` — daily autosync, Monday operator cycle, public demo a
 ## Do not claim (yet)
 
 - Stablecoin parity with USDC/DAI at scale
-- Peg credibility (horizon C — internal simulation only)
+- Peg credibility on live testnet (horizon C — simulation only until enabled)
+- Production-ready / legal money

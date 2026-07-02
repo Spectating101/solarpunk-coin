@@ -30,7 +30,7 @@ This is the bridge for a real solar owner, lab, or university: send a CSV export
 
 | Metric | Value |
 |---|---:|
-| Source hash | `0x847abeb357a756c2c5d9c6b6671ba29bcc7f804e8c3ebd92576dd81dc795bdee` |
+| Source hash | `0xca0ac0052f6f7a01ba6151f2883db55c2f227c65c90a2b7f44ee6fcb1dba4b19` |
 | On-chain surplus | `103 kWh` |
 | Energy price basis | `$0.05/kWh` |
 | Mint fee | `10 bps` |

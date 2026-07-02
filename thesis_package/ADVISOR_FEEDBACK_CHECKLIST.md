@@ -1,31 +1,45 @@
 # Advisor Feedback Checklist
 
-This file tracks manuscript-level cleanup items before sending the thesis for advisor review. It is not a rewrite plan; it is a discipline checklist to prevent older drafts and unsupported claims from leaking into the final version.
+Manuscript-level cleanup before advisor review. Prevents older drafts and unsupported claims from leaking into the final version.
 
-| Item | Current Status | Action |
+**Status:** Ready for advisor read (Jun 2026 grounded build). Re-run `npm run thesis:docx` after any chapter edit.
+
+| Item | Status | Notes |
 |---|---|---|
-| Explain proof-of-work from scratch | Mostly addressed in Chapters 2 and 3 | Verify that a non-crypto reader can understand why Bitcoin mining uses electricity before CEIR is introduced. |
-| Cite Chapter 1 claims | Partially addressed | Add or verify citations for gold, fiat credibility, Bitcoin mining, renewable-energy data, and energy-finance claims. |
-| Define CEIR explicitly | Addressed in Chapter 3 draft after consolidation | Keep `CEIR_t = MarketCap_t / CumulativeEnergyCost_t` and do not use the inverse formula. |
-| Explain CEIR sign logic | Addressed in Chapter 3 draft after consolidation | Keep the interpretation: higher CEIR means more expensive relative to cumulative energy cost, so the expected coefficient on later returns is negative. |
-| Explain return horizon | Addressed in Chapter 3 draft after consolidation | Use forward 30-day Bitcoin return and mention overlapping-return risk. |
-| Number equations | Partially addressed | Preserve Equation 3.1 and Equation 3.2 in Chapter 3; add final numbering during DOCX formatting if needed. |
-| Explain Bitcoin-only focus | Mostly addressed | Keep the single-asset limitation in Chapter 3 and Chapter 6. |
-| Remove or avoid RDD framing | Addressed in grounded chapters | Do not reintroduce regression-discontinuity language unless the method is actually used. |
-| Separate methodology and results | Mostly addressed | Chapter 3 now separates measurement/design/results/robustness; keep that structure. |
-| Make tables self-explanatory | Partially addressed | Add captions and notes during final formatting. |
-| Pricing source of truth | Addressed in Chapter 4 draft after consolidation | Use the Taiwan base-case table and cross-location table as canonical. |
-| Framework consistency | Addressed | Use the five-constraint framework everywhere: data, issuance, pricing, settlement, governance. |
-| Implementation boundaries | Addressed | Use proof-of-concept/testnet/feasibility language; avoid production-ready claims. |
-| Correlation matrix | Optional / advisor-dependent | Add only if requested or if Chapter 3 needs a compact controls/diagnostics table. |
-| Formatting | Not done | Final DOCX should follow department rules, likely Times New Roman 12, proper references, figure numbering, and table captions. |
+| Explain proof-of-work from scratch | **Done** | Ch 2 §§2.5–2.6; minimal reminder in Ch 3 §3.2 |
+| Cite Chapter 1 claims | **Done** | Gold, fiat, Bitcoin, renewable data, IEA/OECD in Ch 1 refs |
+| Define CEIR explicitly | **Done** | `CEIR_t = MarketCap_t / CumulativeEnergyCost_t`; Equation 3.1 |
+| Explain CEIR sign logic | **Done** | Higher CEIR → weaker later returns → negative β |
+| Explain return horizon | **Done** | Forward 30-day return; overlapping-window caveat + HAC(30) |
+| Number equations | **Done** | Equations 3.1–3.2 in text; final numbering in Word if dept requires |
+| Explain Bitcoin-only focus | **Done** | Ch 3 Table 3.1 + Ch 6 limitations |
+| Remove RDD framing | **Done** | Structural break / Chow only; no regression-discontinuity language |
+| Separate methodology and results | **Done** | Ch 3: design (§3.4) → results (§3.5) → robustness (§3.6) |
+| Make tables self-explanatory | **Mostly done** | At-a-glance tables per chapter; update TOC/captions in Word |
+| Pricing source of truth | **Done** | Taiwan + ATM cross-location in Ch 4; `cross_location_pricing.csv`; verify via `npm run thesis:verify` |
+| Five-constraint framework | **Done** | Ch 2 §2.7, Ch 5 §5.2, abstract, Ch 6 |
+| Implementation boundaries | **Done** | Proof-of-concept / testnet / feasibility throughout Ch 5–6 |
+| Stablecoin framing | **Done** | Ch 2 §2.9 comparator only; not thesis identity |
+| Chapter digestibility | **Done** | At-a-glance openers + key takeaways; `THESIS_READERS_GUIDE.md` |
+| Correlation matrix | **Done** | Table 3.6 (auto-generated) |
+| Descriptive statistics | **Done** | Tables 3.2–3.6 via `generate_thesis_tables.py` |
+| Department formatting | **Done** | Times New Roman 12pt, double-spaced, justified body, APA-style references (hanging indent, alphabetical), 1.25″ left margin |
 
-## Final Pre-Send Rule
+## Final pre-send rule
 
-Before sending the thesis, check that the main text never claims:
+The main text must **not** claim:
 
 - energy automatically becomes money;
-- SolarPunk is production-ready;
+- SolarPunk / SPK v1 is production-ready;
 - CEIR is a trading strategy;
-- satellite data proves site-level energy production;
-- the five-constraint framework proves market adoption.
+- satellite data proves site-level production;
+- the five-constraint framework proves market adoption;
+- this thesis is an energy stablecoin or dollar-peg product.
+
+## Send package
+
+| File | Purpose |
+|---|---|
+| `output/THESIS_GROUNDED.docx` | **Main attachment** |
+| `SUBMIT_TO_ADVISOR.md` | Handoff instructions + sample email |
+| `THESIS_READERS_GUIDE.md` | Optional digest for advisor |

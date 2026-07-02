@@ -1,26 +1,34 @@
-# Chapter 2 - Monetary Background and the Case for Energy
+# Chapter 2 - Literature Review and Theoretical Background
+
+## At a glance
+
+| | |
+|---|---|
+| **Question** | What literatures define “credible constraint,” and where does energy-linked digital finance enter? |
+| **Takeaway** | Credibility needs verifiable limits; energy is a serious candidate only with data, pricing, settlement, and governance rules. |
+| **Key idea** | Technical scarcity (code, fixed supply) ≠ economic credibility (real cost, enforceable rules). |
+| **Not claimed** | Energy stablecoin, USDC replacement, or “energy backs money” by slogan |
+| **Next chapter** | Ch 3 — does energy cost show up in Bitcoin’s market data? |
 
 ## 2.1 Purpose of the Chapter
 
-Chapter 1 introduced the main question of this thesis: whether energy can act as a credible constraint for digital money through energy-linked financial contracts. This chapter explains why that question is worth asking.
+Chapter 1 introduced the central research problem: digital systems can create technical scarcity, but scarcity alone does not guarantee economic credibility. This chapter reviews the literatures needed to evaluate whether energy can act as a credible constraint for digital financial claims.
 
-The chapter does not claim that energy is automatically money. It also does not claim that energy is a complete substitute for gold, fiat money, or Bitcoin. The purpose is more limited: to explain what a monetary constraint is supposed to do, why previous constraints have failed or weakened, and why energy is a serious candidate for further study.
+The review is organised around one guiding question: **what makes a financial claim credibly constrained?** Monetary economics explains why commitment and limits on discretion matter (Kydland and Prescott, 1977; Barro and Gordon, 1983). Gold and Bretton Woods show how physical convertibility can discipline claims, but also how that discipline can fail when settlement and institutional support weaken (Bordo, 1993; Eichengreen, 1992; Federal Reserve History, 2013). Bitcoin introduces protocol-based scarcity and proof-of-work expenditure (Nakamoto, 2008), while renewable-energy finance shows that real energy production has value but also uncertainty (International Energy Agency, 2023; Lazard, 2025). Pricing and smart-contract literature then help explain how uncertainty and rules might be represented in digital financial systems (Black and Scholes, 1973; Cox, Ross, and Rubinstein, 1979; Cong and He, 2019).
 
-The main argument is that monetary credibility depends on limits that users can understand and verify. Gold once provided such a limit because it was costly to mine and difficult to create. Fiat money replaced gold with institutional management and flexibility. Bitcoin replaced institutional discretion with code and mining cost. Energy-linked digital finance tries to combine a real production constraint with digital enforcement, but it can only work if the energy data, pricing, settlement, and governance rules are credible.
+The purpose is not to treat these literatures as separate background topics. It is to show how they jointly define the gap this thesis addresses. Existing research explains important parts of the problem, but not a complete architecture for using verified energy production as a digital financial constraint.
 
-This chapter therefore builds the background for the rest of the thesis. Chapter 3 asks whether energy cost has mattered empirically in Bitcoin. Chapter 4 asks how renewable-energy risk can be priced. Chapter 5 asks what rule-based architecture is needed for implementation.
+## 2.2 Monetary Credibility, Rules, and Discretion
 
-## 2.2 What a Monetary Constraint Does
+A central theme in monetary economics is that credibility depends on commitment. Kydland and Prescott (1977) argue that discretionary policymaking can become time-inconsistent: a policy that appears optimal before expectations are formed may no longer be optimal after private agents adjust. Users of money and financial claims therefore care not only about present rules, but also about whether those rules can be changed opportunistically later. For this thesis, the lesson is that a credible financial constraint must limit future discretion, not merely declare an intention to be constrained.
 
-A monetary constraint is a limit on how easily new money or financial claims can be created.
+Barro and Gordon (1983) extend this credibility problem by showing how reputation and expectations shape inflation outcomes under discretion. When authorities have incentives to create surprise inflation, rational agents anticipate that possibility, weakening credibility in advance. The broader implication is that credibility depends on whether promises are enforceable, reputation-sensitive, or institutionally difficult to break. In digital finance, a token may claim limited supply, reserve backing, or energy linkage, but those claims remain weak if administrators can freely mint, alter rules, replace data sources, or avoid redemption.
 
-The reason this matters is simple. If money can be created without limit, users must trust the issuer not to over-create it. That trust may be justified in a strong institutional setting, but it is still trust. A monetary constraint reduces the role of discretion by making money creation depend on some rule, cost, or external condition.
+The rules-versus-discretion literature therefore supports a central design implication: credibility depends on mechanisms that constrain discretionary action. In this thesis, reliable data, rule-bound issuance, explicit pricing, protected settlement, and limited governance are treated as ways to reduce discretion and make the constraint observable.
 
-Different monetary systems use different constraints.
+This literature explains why constraints matter, but not which real-world constraint should discipline a digital financial claim. That opening motivates the historical and digital cases reviewed in the sections that follow.
 
-Under a commodity standard, the constraint is the cost and availability of the commodity. Gold-backed money depends on the supply of gold and the ability to redeem claims into gold. Under fiat money, the constraint is institutional: central bank credibility, legal structure, policy discipline, and public confidence. Under Bitcoin, the constraint is code and proof-of-work mining. New coins are created according to a fixed schedule, while mining requires hardware and electricity.
-
-Table 2.1 summarises the comparison.
+Table 2.1 summarises how different monetary systems have approached constraint.
 
 | System | Main Constraint | Main Strength | Main Failure Mode |
 |---|---|---|---|
@@ -29,135 +37,181 @@ Table 2.1 summarises the comparison.
 | Bitcoin | Code-based supply rule and proof-of-work mining | Transparent technical scarcity and real mining cost | Indirect energy link; value still depends on market demand and coordination |
 | Energy-linked digital finance | Reliable data plus rule-bound issuance, pricing, settlement, and governance limits | Potential link between digital claims and real production | Must verify data, price risk, protect settlement, and limit governance discretion |
 
-These constraints are not equally strong in all conditions. A rule can be clear but economically empty. A commodity can be scarce but hard to verify. A central bank can be credible in normal times but pressured in crises. A blockchain can have fixed supply but still depend on market belief for value.
+For this thesis, the important distinction within Table 2.1 is between **technical scarcity** and **economic credibility**. Technical scarcity means a system has a rule limiting creation. Economic credibility means users believe that the rule is meaningful, enforceable, and connected to real value. The question is whether energy can help close this gap when measurement, pricing, settlement, and governance are designed explicitly.
 
-For this thesis, the important distinction is between **technical scarcity** and **economic credibility**.
+## 2.3 Gold, Bretton Woods, and Physical Monetary Constraint
 
-Technical scarcity means a system has a rule limiting creation. Economic credibility means users believe that the rule is meaningful, enforceable, and connected to real value. A token can be technically scarce if only one million units exist. But if those units have no connection to use, cost, settlement, or demand, scarcity alone may not create credibility.
+Gold-backed monetary systems provide the standard historical example of discipline through physical convertibility. Under gold-linked arrangements, monetary claims were credible partly because they could, in principle, be redeemed for a scarce physical asset. Bordo (1993) frames the classical gold standard as a monetary rule that worked partly because it operated as a commitment mechanism. Convertibility created discipline because excessive issuance could create redemption pressure and weaken confidence in the issuer’s ability to maintain the promise.
 
-The question is whether energy can help close this gap. Because energy has real production cost and direct economic usefulness, it may provide more than a purely technical limit. But that possibility has to be tested, not assumed.
+Gold-backed money also had operational weaknesses. Most users did not personally inspect gold reserves. They trusted banks, governments, vaults, auditors, and international settlement arrangements. Gold was expensive and slow to move. Supply was geographically and politically concentrated. Convertibility created pressure during stress, when holders had incentives to demand gold early. These problems became visible in the breakdown of Bretton Woods.
 
-## 2.3 Gold as a Historical Constraint
+The Bretton Woods system extended gold-convertibility logic into the post-war international monetary order. Foreign currencies were fixed to the U.S. dollar, and the dollar was convertible into gold at a fixed rate of $35 per ounce for official foreign holders. Federal Reserve History describes Bretton Woods as a system of currency convertibility that lasted until 1971. Eichengreen (1992) emphasises that the arrangement depended on confidence in U.S. reserve management, policy discipline, and political commitment as much as on gold itself.
 
-Gold is the standard historical example of commodity-backed money.
+Bretton Woods was therefore a **hybrid** system. Most countries held dollars as reserves rather than converting every international claim directly into bullion. The United States became the central reserve issuer. As world trade and foreign dollar holdings grew, official dollar claims could rise toward — and in crisis conditions beyond — the quantity of gold the United States was willing or able to redeem at the fixed price. Economists often describe this as a **Triffin-style tension**: the reserve-currency country must supply international liquidity, but growing liability issuance can undermine confidence in convertibility.
 
-Its strength was easy to understand. Gold could not be printed. Producing more gold required mining, labour, capital, time, and risk. A government or bank that promised convertibility into gold was making a claim that could, in principle, be tested. If too many paper claims were created relative to gold reserves, holders could demand redemption.
+By the late 1960s, that tension became harder to manage. U.S. balance-of-payments deficits, Vietnam War and Great Society spending, and rising foreign official dollar holdings increased redemption pressure. Federal Reserve History and U.S. Department of State accounts link the closing of the gold window in August 1971 to those pressures: foreign governments and central banks sought gold for dollars faster than the U.S. gold stock could comfortably support at the fixed price (Federal Reserve History, 2013; U.S. Department of State, n.d.). President Nixon suspended dollar–gold convertibility and announced temporary wage and price controls — the “Nixon shock.” Bretton Woods did not collapse because gold ceased to be scarce, but because **paper claims grew faster than credible settlement capacity**.
 
-This gave gold-backed money a physical discipline. Money creation was connected to the production or custody of a scarce commodity. That discipline helped explain why gold became associated with long-run monetary credibility.
+The suspension of dollar–gold convertibility in 1971 shows the operational fragility of physical backing. The lesson is not simply that gold failed. It is that a physical backing system can break when redemption promises, reserve capacity, political commitments, and international confidence no longer align. For an energy-linked system, the implication is direct: a claim linked to a real asset is only credible if the settlement architecture can actually support the claim — not merely if the asset exists in principle.
 
-But gold also had weaknesses.
-
-First, gold required trusted custody. Most users did not personally inspect gold reserves. They trusted banks, governments, vaults, auditors, and international settlement arrangements. This created a gap between the promise of physical backing and the practical reality of verification.
-
-Second, gold was expensive and slow to move. A modern economy requires fast settlement across borders and institutions. Physical gold movement is not well suited to that scale.
-
-Third, gold supply was geographically and politically concentrated. If the system depends on a small number of custodians or reserve holders, the system inherits their political constraints.
-
-Fourth, gold convertibility created pressure during stress. When holders doubted the ability of an issuer to redeem claims, they had an incentive to demand gold early. This made the system vulnerable to reserve runs and policy conflict.
-
-These problems became visible in the breakdown of Bretton Woods. The United States suspended dollar convertibility into gold in 1971, ending the main gold-convertibility commitment of the post-war monetary system (Eichengreen, 1992; Federal Reserve History, 2013; U.S. Department of State, n.d.).
-
-The lesson is not simply that gold was bad or that commodity constraints are useless. The better lesson is that a monetary constraint must be both economically meaningful and operationally workable. Gold had physical scarcity, but its verification, custody, settlement, and political structure became too fragile for the system built around it.
+Gold is useful as a historical analogy, but the analogy must be limited. Gold is scarce, durable, relatively uniform, and directly storable. Energy is time-dependent, location-dependent, infrastructure-dependent, and difficult to store directly at scale without conversion or storage technologies. Energy therefore cannot simply copy gold convertibility. If energy is to act as a constraint, it requires verified production data, risk pricing, settlement rules, and governance limits rather than physical hoarding alone.
 
 ## 2.4 Fiat Money and Institutional Credibility
 
-Fiat money solved some of gold's operational problems.
+Fiat money provides a contrasting model of credibility. In fiat systems, money is supported by legal tender status, state authority, payment infrastructure, taxation systems, central-bank credibility, and public acceptance. This makes fiat a system of institutional constraint rather than physical convertibility.
 
-It can be created, transferred, and settled without moving a physical commodity. It gives central banks and governments flexibility to respond to recessions, banking crises, wars, and liquidity shortages. It fits modern payment systems more easily than a physical commodity standard.
+The strength of fiat money is flexibility. Without a fixed commodity constraint, monetary authorities can manage liquidity, support payment systems, act as lenders of last resort, and respond to crises. However, the same flexibility creates the discipline problem discussed by Kydland and Prescott (1977) and Barro and Gordon (1983). When issuance is not constrained by convertibility, users must trust institutions to manage monetary discretion responsibly. Fiat credibility therefore shifts from physical convertibility to institutional quality.
 
-But fiat money shifts the source of credibility. Instead of depending on a commodity constraint, it depends on institutions. Users trust that central banks, governments, and legal systems will manage issuance responsibly.
+Central-bank credibility depends heavily on whether public expectations remain anchored. When economic agents view a central bank as credible, inflation expectations are more likely to remain stable, strengthening the effectiveness of monetary policy (Federal Reserve Bank of St. Louis, 2010). Institutional credibility is not automatic. It must be maintained through policy performance, communication, legal authority, and expectations management.
 
-This can work well when institutions are strong and policy is credible. But the constraint is still discretionary. The issuer can change policy. The money supply can expand. Rules can be revised. In many cases, this flexibility is intentional and useful. The problem is that users must trust the institution's judgment over time.
+Fiat systems also embed credibility in **infrastructure and law**, not only in central-bank reputation. Legal tender status, taxation in the unit of account, lender-of-last-resort facilities, deposit insurance in many jurisdictions, and payment-system oversight create switching costs and shared expectations. These structures are difficult for a permissionless token issuer to replicate. A smart contract can encode transfer rules, but it cannot automatically inherit tax authority, crisis liquidity backstops, or the legal enforceability that supports sovereign money.
 
-This is why monetary economics has long studied the tension between rules and discretion (Friedman, 1960; Barro and Gordon, 1983). Rules can be rigid, but they limit opportunistic policy changes. Discretion can be flexible, but it depends on credibility.
+The fiat model matters for energy-linked digital finance because many digital systems attempt to create claims without the institutional depth that supports sovereign money. Central banks operate within legal mandates, payment systems, public accountability structures, and macroeconomic policy frameworks. A token issuer or smart-contract system may not have comparable safeguards. If an energy-linked digital claim is not supported by full institutional credibility, it must rely more heavily on transparent rules, reliable data, priced risk, settlement protection, and constrained governance. Where sovereign money relies on law and policy credibility, an energy-linked claim would need a narrower but **inspectable** substitute: verified production evidence, bounded issuance, explicit pricing, protected settlement, and governance limits.
 
-The relevance for this thesis is not that fiat money is always bad. The point is narrower: fiat money does not provide an external physical production constraint. Its credibility is mainly institutional. This leaves room to study whether a digital system can use a real-world input, such as energy, as a different kind of constraint.
+This thesis does not argue that energy should replace fiat money in general. It asks a narrower question: whether energy can provide a credible constraint for specific digital financial claims under carefully defined conditions.
 
-## 2.5 Cryptocurrency and the Gap Between Code and Value
+## 2.5 Bitcoin, Protocol Scarcity, and Proof-of-Work
 
-Cryptocurrency introduced a new form of monetary constraint: code.
+Bitcoin is the central digital-asset case for this thesis because it introduced a protocol-based model of scarcity. Nakamoto (2008) proposed a peer-to-peer electronic cash system that uses proof-of-work to timestamp transactions and make historical changes costly. Bitcoin’s issuance schedule is defined by protocol rules rather than discretionary monetary policy. This gives Bitcoin a different credibility structure from both gold and fiat: it is neither physically redeemable like gold nor institutionally managed like fiat, but constrained by code, distributed consensus, and proof-of-work mining.
 
-Bitcoin is the clearest example. It limits coin creation through protocol rules and uses proof-of-work mining to make block production costly (Nakamoto, 2008). Mining requires electricity and hardware, so new Bitcoin is not created without real expenditure.
+Proof-of-work connects digital scarcity to physical resource expenditure. Miners use electricity and hardware to compete for block rewards and transaction fees. This makes Bitcoin different from ordinary digital information, which can usually be copied at low cost. However, Bitcoin resembles gold in costly production but not in redeemable backing. Bitcoin holders do not receive a claim on the electricity used to mine Bitcoin. Mining expenditure supports network security and issuance competition, but it does not create a direct energy entitlement.
 
-This makes Bitcoin important for this thesis because it connects digital money with energy cost. It is not an energy-backed currency in the direct sense. Bitcoin holders do not own a claim on electricity. But Bitcoin shows that digital scarcity can be linked to a real production cost.
+Bitcoin therefore provides evidence that energy can matter in digital value formation, but not that energy cost mechanically determines market value. Cryptocurrency-return literature supports caution. Liu and Tsyvinski (2021) document that cryptocurrency returns behave differently from traditional asset classes and are shaped by crypto-specific factors. Energy expenditure may be informative without being sufficient. A serious empirical design must treat energy cost as one possible valuation component among several, not as the single determinant of price.
 
-However, the connection is indirect. Mining cost may influence Bitcoin's value, but it does not mechanically determine it. Bitcoin's market price also depends on demand, liquidity, regulation, narratives, macro conditions, and investor expectations. Prior work has studied production cost and cryptocurrency returns, but the relationship remains conditional rather than automatic (Hayes, 2019; Liu and Tsyvinski, 2021).
+Bitcoin’s limitation motivates the thesis’s move from passive energy expenditure to designed energy-linked claims. If energy is to constrain digital financial claims more directly, the system must specify accepted energy data, issuance rules, valuation methods, settlement obligations, and governance limits. Bitcoin serves as the empirical starting point, not the final model.
 
-This distinction is central. Bitcoin demonstrates that energy can be connected to digital value, but it also shows the limits of passive energy anchoring. The system uses energy to secure the network, but it does not create a direct settlement rule between energy production and monetary claims.
+![Bitcoin (consumption) vs SPK (production) — architectural contrast.](empirical_results/figures/production_vs_consumption.png)
 
-That is why this thesis does not stop at Bitcoin. Bitcoin is evidence, not the full design. It helps answer whether energy cost can matter in a digital market. It does not answer how an energy-linked digital financial instrument should be priced, collateralised, settled, or governed.
+*Figure 2.2. Passive mining expenditure vs designed surplus-production rules (Ch 3 vs Ch 5).*
 
-## 2.6 Why Energy Is a Serious Candidate
+## 2.6 Bitcoin Energy Valuation and Cryptocurrency Returns
 
-Energy is worth studying because it has several properties that are unusual when compared with other possible monetary or financial anchors.
+Bitcoin energy-valuation literature asks whether mining cost helps explain Bitcoin’s market value. Hayes (2019) studies Bitcoin price relative to marginal production cost and finds support for a fundamental-value interpretation linked to mining inputs. This literature is important because it treats Bitcoin as a digital asset whose production requires measurable expenditure, especially electricity cost and hardware efficiency.
 
-First, energy has real cost. Electricity must be generated, converted, transmitted, or stored. Even renewable energy requires panels, turbines, inverters, land, grid connection, maintenance, and financing. This makes energy different from a purely symbolic backing asset.
+Hayes’s production-cost logic is useful motivation for empirical testing, but it should not be interpreted as proving a guaranteed intrinsic value or a mechanical energy floor. Mining costs vary with electricity prices, hardware efficiency, network difficulty, and miner behaviour. Market price can diverge from production cost during bubbles, crashes, and changing demand conditions. The thesis therefore uses production-cost logic as motivation for Chapter 3, not as a complete theory of Bitcoin value.
 
-Second, energy is useful. It is not merely a collectible or conventional store of value. Energy is required for almost every form of production and economic activity. Households, factories, data centres, transportation networks, and financial infrastructure all depend on it.
+Improved measurability of mining electricity use strengthens the empirical opportunity. The Cambridge Bitcoin Electricity Consumption Index provides estimates of Bitcoin’s power demand and electricity consumption, while Cambridge mining-map materials track geographic hashrate distribution over time (Cambridge Centre for Alternative Finance, n.d.-a; Cambridge Centre for Alternative Finance, n.d.-b; Cambridge Centre for Alternative Finance, n.d.-c). Cambridge’s methodology updates make clear that these measures are model-based estimates rather than direct observation of every miner’s electricity use. This distinction matters because any cumulative energy-cost benchmark depends on estimated inputs.
 
-Third, energy is increasingly measurable. Public datasets such as NASA POWER provide satellite-derived solar and meteorological data, while NREL PVWatts estimates photovoltaic production from system and location inputs (NASA POWER, n.d.; NREL, n.d.). These tools do not by themselves prove actual site-level production, but they make energy potential and resource conditions more observable.
+Mining geography matters because energy cost is location-dependent. Electricity prices, energy mixes, regulatory conditions, and infrastructure constraints vary across locations. The China mining-ban period is especially relevant because it created a major shift in the geographic distribution of Bitcoin mining. If mining geography changes, the cost structure of mining may also change, which may affect any relationship between energy cost and Bitcoin valuation.
 
-Fourth, energy can be linked to digital contracts. Smart contracts cannot verify the physical world by themselves, but they can enforce rules once data is supplied. If energy data is signed, checked, priced, and limited by contract rules, then financial claims can be made conditional on energy evidence.
+This thesis uses the Cumulative Energy Investment Ratio, or CEIR, as a valuation-ratio test rather than a claim of intrinsic value. CEIR compares Bitcoin’s market capitalisation with cumulative estimated mining electricity cost and asks whether that ratio contains information about future returns. Chapter 3 tests this question directly. The literature reviewed here motivates that test; it does not prejudge the result.
 
-These features make energy more than a normal commodity input. It is a physical production base, a universal economic input, a measurable resource, and a possible settlement reference.
+## 2.7 Renewable-Energy Finance, Data, and Risk
 
-At the same time, energy has major complications. It is local, variable, and difficult to store. A kilowatt-hour in one place and time can have a different economic value from a kilowatt-hour elsewhere. Solar and wind output change with weather. Grid prices change with demand and congestion. Actual production requires meter, inverter, or grid data; satellite data only estimates resource conditions and potential output.
+Renewable-energy finance provides the production side of the thesis because it concerns real electricity output rather than electricity consumed in mining. Renewable assets generate output that can serve households, firms, grids, and infrastructure. However, renewable-energy production does not have stable or uniform financial value. Its value depends on output variability, location, timing, grid connection, storage, tariffs, curtailment, and settlement rules.
 
-These complications do not make energy unusable. They explain why energy cannot support credible digital finance without explicit pricing and settlement rules.
+Levelised-cost studies such as Lazard (2025) show that renewables can be highly cost-competitive for new-build generation. Cost competitiveness matters because the thesis is not based on the idea that renewable energy is merely symbolic. However, levelised cost does not itself create a financial claim. A low generation cost does not prove that a token linked to energy is credible. Credibility still requires measurement, pricing, claim definition, and settlement.
 
-## 2.7 Conditions for Energy to Work as a Constraint
+The International Energy Agency (2023) emphasises that mobilising investment and finance remains a central challenge for clean-energy transitions, especially in emerging and developing economies. Energy-linked digital finance can be framed as a possible financing architecture, not merely a token experiment. However, digital finance does not automatically reduce financing risk unless it improves the credibility of claims.
 
-Energy can only function as a credible financial constraint if several conditions are met.
+Public energy datasets are useful for modelling but insufficient for final settlement. NASA POWER provides satellite-derived solar and meteorological data, while NREL PVWatts estimates photovoltaic production from location and system inputs (NASA POWER, n.d.; NREL, n.d.). These tools support benchmarking and cold-start analysis. They cannot by themselves prove that a specific site produced, exported, stored, or settled a given amount of electricity. For energy-linked finance, modelling data and settlement-grade evidence must be treated as different categories.
 
-First, the energy input must be observable. A system must define what energy is being measured: generation, surplus export, avoided consumption, or resource potential. These are not the same. A solar irradiance estimate is not the same as a signed meter reading. A renewable-energy claim must specify its data source.
+Because renewable-energy output and value are uncertain, energy-linked digital claims should not be issued merely because a project is associated with renewable production. A credible claim requires a method for translating energy uncertainty into financial terms, including expected production, volatility, shortfall risk, basis risk, settlement timing, and data reliability. Renewable-energy finance therefore leads directly into the pricing literature reviewed next.
 
-Second, the measurement must be verifiable enough for the claim being made. Public satellite data may be enough for modelling and benchmarking. It is not enough for final site-level settlement. Actual settlement requires stronger evidence, such as meter data, inverter logs, grid records, or audited operator submissions.
+## 2.8 Pricing Energy-Linked Claims
 
-Third, issuance must be rule-bound. If energy data can be ignored or overridden by an issuer, then energy is not really constraining the system. A credible design must define when tokens or contracts can be created and what prevents over-creation.
+Pricing is necessary because energy-linked claims have uncertain payoffs. Black and Scholes (1973) introduced a foundational continuous-time option-pricing framework, while Cox, Ross, and Rubinstein (1979) developed a binomial approach that represents uncertainty through discrete up-and-down movements. These models are not directly sufficient for all electricity markets, but they provide a disciplined language for modelling uncertainty, volatility, time, discounting, and payoff structure. This thesis uses that logic to frame renewable-energy-linked claims as uncertain financial claims rather than simple fixed promises.
 
-Fourth, risk must be priced. Renewable-energy output is uncertain. A system that creates financial claims from energy must account for volatility, shortfall risk, basis risk, and measurement error. This is why pricing is not a side issue; it is part of credibility.
+Black–Scholes is useful as a benchmark, but its standard assumptions are restrictive for electricity and renewable-energy applications. Electricity prices can show spikes, seasonality, mean reversion, congestion effects, and non-storability. Renewable-energy output depends on weather and site conditions rather than only traded asset dynamics. This thesis does not treat Black–Scholes as a final electricity-market model. It uses option-style reasoning as a transparent starting point.
 
-Fifth, settlement must be protected. If a claim promises energy value, the system must define what happens when output is lower than expected or when data is disputed. Collateral, reserves, margin, caps, and governance delay are all possible tools. Without settlement protection, an energy-linked claim can become a weak promise rather than a credible instrument.
+The Cox–Ross–Rubinstein binomial model is especially useful because it provides a transparent numerical method that can be explained and implemented in a thesis setting. For an energy-linked claim, binomial pricing can serve as a cold-start approach under explicit assumptions about volatility, time horizon, discount rate, and payoff structure. Chapter 4 implements this approach; the present section only positions it in the literature.
 
-These conditions turn the energy idea into a research programme. The question is not simply whether energy is valuable. The question is whether energy can be measured, priced, and connected to enforceable financial rules.
+Electricity-market literature shows why energy pricing is more difficult than standard financial pricing. Bessembinder and Lemmon (2002) emphasise that electricity cannot be economically stored and that familiar arbitrage-based methods are not directly applicable for pricing power derivative contracts. Deng and Oren (2006) review electricity derivatives and risk-management practices in power markets, highlighting distinctive risks faced by generators, load-serving entities, and market participants. A renewable-energy-linked claim is exposed not only to ordinary price uncertainty, but also to physical and market-structure constraints.
 
-## 2.8 Objections and Limits
+For this thesis, pricing is part of credibility, not only valuation. If an energy-linked claim is issued without accounting for volatility, output uncertainty, location, shortfall risk, oracle error, or settlement timing, then the claim may be under-collateralised or misleading. Explicit pricing makes these risks visible before issuance and settlement. That is why Chapter 4 precedes the implementation framework in Chapter 5.
 
-There are several objections to energy as a monetary or financial constraint.
+## 2.9 Smart Contracts, Oracles, Tokenisation, and Governance
 
-The first objection is that energy is not storable like gold. This is true. Electricity is difficult to store directly and must usually be consumed, exported, curtailed, or converted. This means energy cannot be treated as a simple vault asset. Any energy-linked design must use measurement, pricing, and settlement rather than physical hoarding.
+Smart contracts are relevant because they can encode rules for issuance, transfer, redemption, and settlement. Cong and He (2019) analyse how blockchain and smart contracts can affect economic organisation by reducing certain verification and enforcement costs. Automation can make rules more transparent, but it does not guarantee credibility. A smart contract can enforce a weak rule, accept bad data, or automate an under-collateralised claim.
 
-The second objection is that energy is not uniform. This is also true. Location, time, grid access, and technology matter. But this is not only a weakness. It is also why energy-linked finance requires pricing models and local data. The thesis does not assume all kilowatt-hours have the same value in all conditions.
+Tokenisation is relevant because energy-linked finance would likely involve digital claims representing some relationship to energy production, value, or settlement. Bank for International Settlements (2023) work on tokenisation and unified ledgers emphasises that tokenisation can improve programmability and settlement when assets and money exist on a common platform with clear rules and governance. Tokenisation by itself does not make a claim credible. The question is what the token represents, how the obligation is verified, how settlement occurs, and who can change the rules.
 
-The third objection is that measurement can be manipulated. This is a serious issue. Meter data can be wrong, operator reports can be falsified, and satellite data can only estimate resource conditions. This is why verification and governance are part of the framework. Energy-linked finance is only credible if the data layer is credible.
+The oracle problem is central because energy production is off-chain. Blockchains cannot natively observe physical energy production. A contract cannot independently know whether electricity was generated, exported, stored, curtailed, or settled without a data bridge. Oracle systems provide that bridge, but they introduce trust, reliability, and governance problems (Chainlink, 2025). For energy-linked claims, oracle design is part of the financial constraint, not a minor technical detail.
 
-The fourth objection is that financial claims need demand, liquidity, law, and trust. This thesis accepts that point. It does not claim that a working prototype or a good model automatically creates a market. Market adoption, legal classification, user protection, and regulation remain outside the core claim of this chapter.
+Decentralised oracle networks may reduce reliance on single data providers, but distributing data on-chain does not automatically solve the truth problem. If the underlying meter, reporting process, or data source is unreliable, aggregation does not make it true. Governance therefore matters because administrative powers can undermine otherwise credible constraints. If an administrator can mint without evidence, change pricing parameters without limits, replace oracles without delay, or override redemption rules, then energy is not truly constraining the system.
 
-The fifth objection is that energy may be better understood as a commodity, not money. This thesis does not deny that. The argument is not that energy by itself is already money. The argument is that energy may provide a verifiable constraint for digital financial claims, and that those claims may be relevant to digital monetary credibility.
+Smart contracts can help express the thesis’s five conditions in software, but production readiness would still require legal agreements, audits, live data infrastructure, reserves, dispute mechanisms, cybersecurity, and regulatory analysis. Chapter 5 tests technical expressibility under those limits.
 
-## 2.9 Chapter Conclusion
+### 2.9.1 Relation to Stablecoin Design (Comparison, Not Identity)
+
+Readers familiar with stablecoins may ask how this thesis relates to USDC, DAI, or other dollar-pegged instruments.
+
+**Stablecoins** are mainly **liability designs**: who holds reserves, how redemption works, how the peg is defended under stress, and how attestations are published. **This thesis** studies whether **energy production and measurement** can act as an **issuance and settlement constraint** — with USD used only as a **valuation reference** in the pricing layer, not as a promised market peg.
+
+That makes the present work a **step before** stablecoin claims. A credible stablecoin story would still need everything in this thesis — verified data, bounded issuance, priced risk, protected settlement, and governance limits — **plus** reserve policy, legal classification, liquidity, and peg operations at scale. The Sepolia prototype in Chapter 5 is feasibility evidence for the constraint layer, not proof of dollar parity.
+
+## 2.10 Synthesis and Research Gap
+
+The literatures reviewed in this chapter show that credible financial systems depend on constraints, but those constraints differ across systems. Gold uses physical convertibility, fiat money uses institutional credibility, Bitcoin uses protocol scarcity and proof-of-work, renewable energy provides real production under uncertainty, pricing theory models uncertain payoffs, and smart contracts encode rules. The thesis problem appears at their intersection: how to connect real energy production or cost to digital financial claims without overclaiming backing, ignoring risk, or relying on unrestricted discretion.
+
+The gap is not that no one has studied credibility, Bitcoin energy use, renewable-energy finance, option pricing, or smart contracts. The gap is that these literatures do not yet provide a joint framework for using energy as a credible digital financial constraint. Bitcoin literature shows energy expenditure but not direct energy claims. Renewable-energy finance shows real production but not token issuance rules. Pricing literature shows how to value uncertainty but not how to connect valuation to digital settlement. Smart-contract literature shows programmable enforcement but not whether the enforced claim is economically credible.
+
+This thesis responds to the gap with a five-condition framework. Energy can act as a credible constraint only when:
+
+**1. Reliable energy data.** The system must define what is measured and accept only evidence strong enough for the claim. Satellite irradiance is not a signed meter reading. Modelling data is not final site-level settlement.
+
+**2. Rule-bound issuance.** Tokens or contracts may be created only when accepted energy evidence is present. If an issuer can mint without verification, energy is not constraining the system.
+
+**3. Explicit pricing and risk controls.** Renewable output is uncertain. Volatility, shortfall risk, basis risk, and oracle error must be priced or bounded before claims are issued at scale.
+
+**4. Protected settlement.** The system must define what is owed, what happens under shortfall or dispute, and what collateral, reserve, or margin rules apply.
+
+**5. Limited governance.** Administrators must not be able to override constraints instantly. Governance delay, role separation, audit trails, and emergency procedures are part of credibility.
+
+Several objections to energy as a monetary or financial constraint remain important. Energy is not storable like gold; measurement can be manipulated; kilowatt-hours are not uniform across time and place; and financial claims still need demand, liquidity, law, and trust. This thesis accepts those limits. It does not claim that energy by itself is already money. It claims that energy may provide a verifiable constraint for digital financial claims when the five conditions are met.
+
+The remaining chapters operationalise this gap. Chapter 3 tests whether energy cost appears to matter in Bitcoin valuation. Chapter 4 develops a renewable-energy pricing framework to make energy-linked risk explicit before issuance. Chapter 5 turns the framework into proof-of-concept software to test whether the constraints can be represented in smart contracts.
+
+## 2.11 Chapter Conclusion
 
 This chapter has argued that the central issue is not whether money should be gold, fiat, Bitcoin, or energy. The central issue is credibility: what limits money or financial claims, and can users verify those limits?
 
-Gold provided a physical production constraint but failed as a scalable modern settlement system. Fiat money provides flexibility but depends on institutional credibility. Bitcoin provides technical scarcity and an indirect energy cost, but its connection between energy and value is passive and market-dependent.
+Gold provided a physical production constraint but failed as a scalable modern settlement system. Fiat money provides flexibility but depends on institutional credibility. Bitcoin provides technical scarcity and an indirect energy cost, but its connection between energy and value is passive and market-dependent. Renewable-energy finance and pricing literature show that real production and uncertain payoffs must be treated explicitly. Smart-contract and oracle literature show that rules can be encoded, but not that weak claims become credible through automation alone.
 
 Energy is worth testing because it combines real production cost, economic usefulness, increasing measurability, and compatibility with digital contract rules. But energy also creates hard problems: locality, volatility, non-storability, measurement risk, and settlement risk.
 
-The conclusion is therefore bounded. Energy is not automatically a monetary base. It becomes relevant only if a system can measure it, price its risk, limit issuance by rule, and protect settlement. This leads directly to Chapter 3, which asks whether energy cost has empirically mattered in Bitcoin, the most important existing case of digital money connected to energy expenditure.
+The conclusion is therefore bounded. Energy is not automatically a monetary base. It becomes relevant only if a system can measure it, price its risk, limit issuance by rule, protect settlement, and limit governance. Chapter 3 begins the empirical test using Bitcoin, the clearest existing case of digital money connected to energy expenditure.
+
+> **Key takeaway:** Every monetary system uses a constraint — gold, institutions, or code. Energy is worth testing because it ties claims to real production, but only with explicit data, pricing, settlement, and governance rules.
 
 ## References
 
 Barro, R. J., & Gordon, D. B. (1983). Rules, discretion and reputation in a model of monetary policy. *Journal of Monetary Economics, 12*(1), 101-121.
 
-Cambridge Centre for Alternative Finance. (n.d.). *Cambridge Bitcoin Electricity Consumption Index*. Cambridge Judge Business School. https://ccaf.io/cbnsi/cbeci
+Bessembinder, H., & Lemmon, M. L. (2002). Equilibrium pricing and optimal hedging in electricity forward markets. *Journal of Finance, 57*(3), 1347-1382.
+
+Black, F., & Scholes, M. (1973). The pricing of options and corporate liabilities. *Journal of Political Economy, 81*(3), 637-654.
+
+Bordo, M. D. (1993). The gold standard, Bretton Woods and other monetary regimes: A historical appraisal. *Federal Reserve Bank of St. Louis Review, 75*(2), 123-191.
+
+Cambridge Centre for Alternative Finance. (n.d.-a). *Cambridge Bitcoin Electricity Consumption Index: Methodology*. Cambridge Judge Business School. https://ccaf.io/cbnsi/cbeci/methodology
+
+Cambridge Centre for Alternative Finance. (n.d.-b). *CBECI Mining Map: Methodology*. Cambridge Judge Business School. https://ccaf.io/cbnsi/cbeci/mining_map/methodology
+
+Cambridge Centre for Alternative Finance. (n.d.-c). *Cambridge Bitcoin Electricity Consumption Index*. Cambridge Judge Business School. https://ccaf.io/cbnsi/cbeci
+
+Chainlink. (2025). *The blockchain oracle problem*. https://chain.link/education-hub/oracle-problem
+
+Cong, L. W., & He, Z. (2019). Blockchain disruption and smart contracts. *The Review of Financial Studies, 32*(5), 1754-1797.
+
+Cox, J. C., Ross, S. A., & Rubinstein, M. (1979). Option pricing: A simplified approach. *Journal of Financial Economics, 7*(3), 229-263.
+
+Deng, S. J., & Oren, S. S. (2006). Electricity derivatives and risk management. *Energy, 31*(6-7), 940-953.
 
 Eichengreen, B. (1992). *Golden Fetters: The Gold Standard and the Great Depression, 1919-1939*. Oxford University Press.
+
+Federal Reserve Bank of St. Louis. (2010). *Central bank credibility and inflation expectations*. https://www.stlouisfed.org/publications/regional-economist/january-2010/central-bank-credibility-and-inflation-expectations
 
 Federal Reserve History. (2013). *Nixon Ends Convertibility of U.S. Dollars to Gold and Announces Wage/Price Controls*. https://www.federalreservehistory.org/essays/gold_convertibility_ends
 
 Friedman, M. (1960). *A Program for Monetary Stability*. Fordham University Press.
 
 Hayes, A. S. (2019). Bitcoin price and its marginal cost of production: Support for a fundamental value. *Applied Economics Letters, 26*(7), 554-560.
+
+International Energy Agency. (2023). *Scaling Up Private Finance for Clean Energy in Emerging and Developing Economies*. https://www.iea.org/reports/scaling-up-private-finance-for-clean-energy-in-emerging-and-developing-economies
+
+Kydland, F. E., & Prescott, E. C. (1977). Rules rather than discretion: The inconsistency of optimal plans. *Journal of Political Economy, 85*(3), 473-491.
+
+Lazard. (2025). *Levelized Cost of Energy+*. https://www.lazard.com/research-insights/levelized-cost-of-energyplus-lcoeplus/
 
 Liu, Y., & Tsyvinski, A. (2021). Risks and returns of cryptocurrency. *The Review of Financial Studies, 34*(6), 2689-2727.
 
@@ -166,5 +220,7 @@ Nakamoto, S. (2008). *Bitcoin: A Peer-to-Peer Electronic Cash System*. https://b
 NASA POWER. (n.d.). *Prediction of Worldwide Energy Resources*. NASA Langley Research Center. https://power.larc.nasa.gov/
 
 National Renewable Energy Laboratory. (n.d.). *PVWatts API*. https://developer.nrel.gov/docs/solar/pvwatts/
+
+U.S. Department of State, Office of the Historian. (n.d.). *Nixon and the End of the Bretton Woods System, 1971-1973*. https://history.state.gov/milestones/1969-1976/nixon-shock
 
 U.S. Department of State, Office of the Historian. (n.d.). *Nixon and the End of the Bretton Woods System, 1971-1973*. https://history.state.gov/milestones/1969-1976/nixon-shock
