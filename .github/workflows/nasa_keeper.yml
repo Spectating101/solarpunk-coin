@@ -1,14 +1,11 @@
-name: NASA Solar Keeper
+name: NASA Solar Keeper (legacy)
 
-# Runs daily at 01:00 UTC (09:00 Taiwan time).
-# Fetches real solar irradiance for Taoyuan from NASA POWER and pushes
-# it to the live SolarPunk contracts on Sepolia as oracle index updates.
-# The resulting log is committed back to the repo as a permanent research record.
+# DEPRECATED for Public Lab v1.0 — targets pre-v1 Sepolia contracts (0x1D55… / 0xe40A…),
+# not canonical SPK v1 (0x8e189…). Schedule disabled 2026-07-06.
+# Manual dispatch only for historical derivatives/options experiments.
 
 on:
-  schedule:
-    - cron: "0 1 * * *"   # 01:00 UTC daily
-  workflow_dispatch:        # allow manual trigger for testing
+  workflow_dispatch:
 
 jobs:
   keeper:

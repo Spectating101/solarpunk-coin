@@ -135,8 +135,8 @@ function evaluateLaunchGate(options = {}) {
     ),
     check(
       "Frontend proof surface exists",
-      exists(root, "frontend/src/components/SPKMintDemo.jsx") && exists(root, "frontend/src/components/ProofDashboard.jsx"),
-      "Frontend has proof dashboard and SPK mint product surface.",
+      exists(root, "frontend/src/components/PublicLabLanding.jsx") && exists(root, "frontend/src/components/SpkV1Console.jsx"),
+      "Frontend has Public Lab landing and SPK v1 console.",
       "frontend/src"
     ),
     check(

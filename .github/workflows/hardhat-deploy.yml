@@ -1,7 +1,16 @@
-name: hardhat-deploy
+name: hardhat-deploy (legacy)
+
+# DEPRECATED — deploys pre-SP-v1 stack via scripts/deploy.js.
+# Canonical Public Lab v1.0 is already on Sepolia (see state/runtime/spk_v1.json).
+# Requires workflow input confirm_legacy=true to run.
 
 on:
   workflow_dispatch:
+    inputs:
+      confirm_legacy:
+        description: Type true to deploy the legacy stack (not SPK v1)
+        required: true
+        default: 'false'
 
 jobs:
   deploy:
@@ -17,6 +26,13 @@ jobs:
 
       - name: Install
         run: npm install
+
+      - name: Block accidental legacy deploy
+        run: |
+          if [ "${{ github.event.inputs.confirm_legacy }}" != "true" ]; then
+            echo "Refusing legacy deploy. Set confirm_legacy=true if you really intend scripts/deploy.js."
+            exit 1
+          fi
 
       - name: Check deployment secrets
         env:

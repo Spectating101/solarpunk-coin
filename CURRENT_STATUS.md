@@ -30,7 +30,9 @@
 
 **On-chain (last indexed sync 2026-06-10):** ~5,499 SPK supply · 442 SPK settled · **21** network payments · ~96.7% circulation · peg off · $0.05/kWh reference.
 
-> **Ops note:** Refresh with `npm run foundation:sync` when `SEPOLIA_RPC` in `.env` is working. Packaging (2026-07-02) could not refresh sync — public RPC returned 403/archive-token errors.
+> **Ops note:** Refresh with `npm run foundation:sync` when `SEPOLIA_RPC` in `.env` is working. Public RPC (`publicnode`) may return 403 — use Alchemy/Infura URL in `.env`.
+
+**Legacy automation (2026-07-06):** NASA daily keeper and `hardhat-deploy` workflow disabled for Public Lab v1 — they targeted pre-v1 contracts. See `frontend/src/components/archive/`.
 
 ---
 

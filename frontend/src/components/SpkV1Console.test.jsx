@@ -47,7 +47,7 @@ describe('SpkV1Console', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/SPK v1 demo/i)).toBeInTheDocument();
+      expect(screen.getByText(/lab unit console/i)).toBeInTheDocument();
     });
 
     expect(screen.getByText(/5,404/)).toBeInTheDocument();

@@ -1,6 +1,10 @@
 /**
  * nasa_keeper.js — Daily NASA POWER → Sepolia oracle keeper
  *
+ * @deprecated Public Lab v1.0 uses SPK v1 contracts (0x8e189…). This script
+ * targets the legacy May 2026 stack (0x1D55… / 0xe40A…). Scheduled CI disabled.
+ * Manual use only for historical derivatives experiments.
+ *
  * Fetches real solar irradiance data for Taoyuan, Taiwan from NASA POWER,
  * normalises it against the historical monthly mean so the index sits
  * around 1.0 (average day), and pushes it to live Sepolia contracts.
