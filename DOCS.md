@@ -29,6 +29,8 @@ Then [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md), then `C
 | 6 | [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) | Generated foundation metrics |
 | 7 | [`docs/product/PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md) | Closed pilot data request |
 | 8 | [`docs/product/SPK_V1_OPERATOR.md`](./docs/product/SPK_V1_OPERATOR.md) | Operator cycles |
+| 9 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to replicate and contribute |
+| 10 | [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md) | Run local / Sepolia / evidence / adapters |
 
 **When documents disagree:** **Public Lab v1 framing** + `CURRENT_STATUS.md` + `spk_v1.json` win.
 
@@ -105,7 +107,9 @@ Legacy Sepolia stacks (`0x1D55…`, `0x8ceDa…` May 2026 proof) are **archive**
 
 Optional sequel after v1.0 freeze: [`docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md`](./docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md) — 14-day validation → 90-day pilot if external hook appears.
 
-Visual polish (ChatGPT): [`docs/project/VISUAL_REVIEW_WORKFLOW.md`](./docs/project/VISUAL_REVIEW_WORKFLOW.md) — `npm run demo:screenshots` → upload `screenshots/public-lab-screenshots.zip`.
+Visual polish (ChatGPT): [`docs/project/VISUAL_REVIEW_WORKFLOW.md`](./docs/project/VISUAL_REVIEW_WORKFLOW.md) — `npm run demo:screenshots` → upload `screenshots/chatgpt-visual-audit-live.zip`.
+
+Open lab extension: [`docs/project/EXTENSION_POINTS.md`](./docs/project/EXTENSION_POINTS.md) · [`docs/project/ROADMAP.md`](./docs/project/ROADMAP.md).
 
 ---
 

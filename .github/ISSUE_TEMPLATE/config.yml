@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Public Lab v1.0 doc
+    url: https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PUBLIC_LAB_V1.md
+    about: What the lab is and is not
+  - name: Open lab workflows
+    url: https://github.com/Spectating101/solarpunk-coin/blob/main/docs/project/OPEN_LAB_WORKFLOWS.md
+    about: Run, replicate, and extend the lab

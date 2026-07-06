@@ -40,7 +40,7 @@ Full intake spec: [`CLOSED_PILOT_EXECUTION_PACKAGE.md`](./CLOSED_PILOT_EXECUTION
 
 ## Contact
 
-Open a GitHub issue (closed pilot template):  
-https://github.com/Spectating101/solarpunk-coin/issues/new?template=public-lab-pilot.md
+Open a GitHub issue:  
+https://github.com/Spectating101/solarpunk-coin/issues/new?template=energy-data-experiment.md
 
 Or email the repo maintainer with subject: **SolarPunk closed pilot data ask**.

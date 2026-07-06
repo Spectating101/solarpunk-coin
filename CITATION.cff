@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: SolarPunk Public Lab
+message: If you use this software or lab in academic work, please cite it.
+type: software
+license: MIT
+repository-code: https://github.com/Spectating101/solarpunk-coin
+url: https://spectating101.github.io/solarpunk-coin/demo/
+version: 1.0.0
+date-released: 2026-07-02
+authors:
+  - family-names: Ongko
+    given-names: Christopher
+    affiliation: Yuan Ze University
+keywords:
+  - renewable energy
+  - settlement
+  - blockchain
+  - Sepolia
+  - energy evidence
+  - testnet laboratory
+abstract: >
+  SolarPunk Public Lab v1.0 is an open research testbed for energy-standard
+  settlement experiments: verified renewable-surplus evidence, bounded SPK
+  issuance on Sepolia, network payments, and explicit launch gates. Not a
+  token sale, mainnet system, or legal tender claim.

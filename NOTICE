@@ -1,0 +1,17 @@
+# Notice
+
+**SolarPunk Public Lab v1.0** — Copyright (c) 2024–2026 SolarPunk Bitcoin Project contributors.
+
+Software is licensed under the [MIT License](./LICENSE).
+
+## Attribution
+
+If you fork, replicate, or build on this lab:
+
+- Cite via [CITATION.cff](./CITATION.cff)
+- Link to Public Lab v1.0 and state that your deployment is a **derivative experiment**
+- Do not imply the original authors endorse your fork, token, or mainnet deployment
+
+## What this notice does not do
+
+MIT allows commercial use and modification. This notice requests **attribution and accurate framing**; it is not a separate license.

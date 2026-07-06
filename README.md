@@ -11,7 +11,8 @@ It is **not** a monetary product, token sale, stablecoin, legal tender, mainnet 
 > **Documentation map:** [`DOCS.md`](./DOCS.md)
 
 **Demo:** https://spectating101.github.io/solarpunk-coin/demo/  
-**Closed pilot data ask:** [`docs/product/PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md)
+**Closed pilot data ask:** [`docs/product/PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md)  
+**Open lab:** [`CONTRIBUTING.md`](./CONTRIBUTING.md) · [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md)
 
 ---
 
@@ -72,6 +73,7 @@ Not claimed: mainnet, token sale, legal tender, revenue-grade meter finality, pr
 | SPK v1 technical spec | `docs/product/SPK_V1.md`, `state/runtime/` |
 | Thesis (bounded) | `thesis_package/`, `thesis_package/SPK_V1_EVIDENCE.md` |
 | Institutional path (post-thesis) | `docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md` |
+| **Open lab (replicate / extend)** | `CONTRIBUTING.md`, `docs/project/OPEN_LAB_WORKFLOWS.md` |
 | Bitcoin CEIR empirics | `thesis_package/empirical_results/` |
 | CEIR → SPK exploration (off-thesis) | `docs/exploration/`, `npm run exploration:tier-c` |
 | Options pricing | `energy_derivatives/spk_derivatives/` |

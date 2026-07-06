@@ -3,7 +3,7 @@
 **Updated:** 2026-07-06  
 **Public Lab v1.0 freeze:** SolarPunk is packaged as a **public testnet laboratory for energy-standard settlement**. Public Lab is the current endpoint. Closed pilot and paid/mainnet are **future gated work**, not active v1 obligations.
 
-**Disclosure mode:** Thesis/advisor artifact first. No public launch, contributor docs, or marketing until after thesis submission (reassess after defense).
+**Open lab mode:** Replicate, fork, and extend via [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md). Not a token sale, mainnet launch, or investment product.
 
 **Entry point:** [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md) · [`DOCS.md`](./DOCS.md)
 
