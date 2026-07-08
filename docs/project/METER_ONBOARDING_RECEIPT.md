@@ -1,14 +1,14 @@
 # Meter Onboarding Output
 
-- generated_at: `2026-05-14T12:15:06.094Z`
-- registry_path: `state/attestations/pilot_meter_registry_demo.json`
-- meter_id: `TW-TY-0099`
-- site_id: `pilot-rooftop-demo`
+- generated_at: `2026-07-08T06:29:16.943Z`
+- registry_path: `data/attestations/meter_registry.json`
+- meter_id: `TW-TY-0001`
+- site_id: `taoyuan-rooftop-a`
 - device_address: `0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258`
-- capacity_kw: `45`
+- capacity_kw: `120`
 - active_after: `2026-01-01T00:00:00Z`
 - active_until: `2027-01-01T00:00:00Z`
-- registry_meter_count: `3`
+- registry_meter_count: `2`
 
 ## Custody Note
 

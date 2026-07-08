@@ -1,0 +1,14 @@
+{
+  "schema": "SPK_CUMULATIVE_METER_SNAPSHOT_V1",
+  "provider": "your_gateway_or_inverter_api",
+  "captured_at": "2026-01-15T00:00:00Z",
+  "meter_id": "YOUR-METER-ID",
+  "site_id": "your-site-id",
+  "counters": {
+    "generation_kwh_total": 0,
+    "site_load_kwh_total": 0,
+    "export_kwh_total": 0,
+    "curtailed_kwh_total": 0
+  },
+  "_comment": "Copy to operator_start.json and operator_end.json with real cumulative counters. End values must be >= start. Do not commit real site data to the public repo."
+}

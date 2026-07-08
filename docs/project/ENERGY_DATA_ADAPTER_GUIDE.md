@@ -20,12 +20,15 @@ Meter/inverter export
 
 Public Lab today uses **L0 fixture/sample** data for the open demo. The **next external gate** is one real operator export (L2+ provenance) — see [`PILOT_DATA_ASK.md`](../product/PILOT_DATA_ASK.md).
 
+**Operator quickstart:** [`HARDWARE_OPERATOR_QUICKSTART.md`](../product/HARDWARE_OPERATOR_QUICKSTART.md)
+
 ---
 
 ## Supported entry points
 
 | Command | Use case |
 |---------|----------|
+| `npm run hardware:validate` | **Start here** — sample or operator path in one command |
 | `npm run attestations:fixture` | Build signed fixture bundle from repo sample |
 | `npm run attestations:import-csv` | CSV with interval counters |
 | `npm run meter:onboard` | Register meter metadata (site, capacity, device address) |

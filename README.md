@@ -12,6 +12,8 @@ It is **not** a monetary product, token sale, stablecoin, legal tender, mainnet 
 
 **Demo:** https://spectating101.github.io/solarpunk-coin/demo/  
 **Closed pilot data ask:** [`docs/product/PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md)  
+**Hardware quickstart:** [`docs/product/HARDWARE_OPERATOR_QUICKSTART.md`](./docs/product/HARDWARE_OPERATOR_QUICKSTART.md)  
+**Deploy / publish:** [`docs/product/PUBLIC_LAB_DEPLOYMENT.md`](./docs/product/PUBLIC_LAB_DEPLOYMENT.md)  
 **Open lab:** [`CONTRIBUTING.md`](./CONTRIBUTING.md) · [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md)
 
 ---
@@ -57,6 +59,9 @@ Not claimed: mainnet, token sale, legal tender, revenue-grade meter finality, pr
 | Command | Purpose |
 |---------|---------|
 | `npm run spk:v1:cycle:sepolia` | Attested mint + network payments + optional redeem |
+| `npm run hardware:validate` | Sample or operator meter path → attestation bundle + provenance tier |
+| `npm run public-lab:preflight` | Pre-publish checks (tests, gates, demo runtime) |
+| `npm run public-lab:publish` | Preflight + build + mirror demo to `docs/demo/` |
 | `CYCLE_MINT_MODE=meter npm run spk:v1:cycle:sepolia` | Mint from meter bundle (scaled, replay-safe) |
 | `npm run spk:v1:sync` | Index chain events → runtime JSON |
 | `npm run spk:v1:evidence:export` | Regenerate evidence pack |

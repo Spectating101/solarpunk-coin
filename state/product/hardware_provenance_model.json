@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-05-18T10:13:02.155Z",
+  "generated_at": "2026-07-08T10:03:11.794Z",
   "title": "SolarPunk Hardware Provenance Model",
   "purpose": "Make physical hardware risk explicit before treating meter or inverter data as real-value SPK mint input.",
   "source_artifact": "state/product/inverter_meter_adapter_receipt.json",
   "current_hardware_level": "L0",
   "current_hardware_label": "Adapter sample or fixture",
   "current_source": {
-    "provider": "sample-cumulative",
-    "mode": "sample_cumulative_snapshot_pair",
-    "evidence_grade": "adapter_sample_or_review",
+    "provider": "meter-csv",
+    "mode": "spk_meter_csv_import_v1",
+    "evidence_grade": "unknown",
     "real_operator_source": false,
-    "accepted_surplus_kwh": 996.2
+    "accepted_surplus_kwh": 1985.5
   },
   "launch_decision": {
     "public_lab": "acceptable_for_testnet_and_demo",
@@ -43,12 +43,12 @@
         "No utility or revenue-grade corroboration"
       ],
       "simulation": {
-        "accepted_surplus_kwh": 996.2,
-        "measurement_uncertainty_band_kwh": 49.81,
-        "risk_reserve_kwh": 996.2,
+        "accepted_surplus_kwh": 1985.5,
+        "measurement_uncertainty_band_kwh": 99.275,
+        "risk_reserve_kwh": 1985.5,
         "risk_adjusted_real_value_kwh": 0,
         "capped_out_kwh": 0,
-        "testnet_or_lab_kwh": 996.2
+        "testnet_or_lab_kwh": 1985.5
       }
     },
     {
@@ -70,12 +70,12 @@
         "Audit trail may not prove uninterrupted measurement"
       ],
       "simulation": {
-        "accepted_surplus_kwh": 996.2,
-        "measurement_uncertainty_band_kwh": 29.886,
-        "risk_reserve_kwh": 597.72,
+        "accepted_surplus_kwh": 1985.5,
+        "measurement_uncertainty_band_kwh": 59.565,
+        "risk_reserve_kwh": 1191.3,
         "risk_adjusted_real_value_kwh": 250,
-        "capped_out_kwh": 148.48,
-        "testnet_or_lab_kwh": 996.2
+        "capped_out_kwh": 544.2,
+        "testnet_or_lab_kwh": 1985.5
       }
     },
     {
@@ -97,12 +97,12 @@
         "Utility settlement data is still external corroboration"
       ],
       "simulation": {
-        "accepted_surplus_kwh": 996.2,
-        "measurement_uncertainty_band_kwh": 14.943,
-        "risk_reserve_kwh": 298.86,
-        "risk_adjusted_real_value_kwh": 697.34,
+        "accepted_surplus_kwh": 1985.5,
+        "measurement_uncertainty_band_kwh": 29.7825,
+        "risk_reserve_kwh": 595.65,
+        "risk_adjusted_real_value_kwh": 1389.85,
         "capped_out_kwh": 0,
-        "testnet_or_lab_kwh": 996.2
+        "testnet_or_lab_kwh": 1985.5
       }
     },
     {
@@ -123,12 +123,12 @@
         "Still needs dispute and rollback procedure"
       ],
       "simulation": {
-        "accepted_surplus_kwh": 996.2,
-        "measurement_uncertainty_band_kwh": 4.981,
-        "risk_reserve_kwh": 119.544,
-        "risk_adjusted_real_value_kwh": 876.656,
+        "accepted_surplus_kwh": 1985.5,
+        "measurement_uncertainty_band_kwh": 9.9275,
+        "risk_reserve_kwh": 238.26,
+        "risk_adjusted_real_value_kwh": 1747.24,
         "capped_out_kwh": 0,
-        "testnet_or_lab_kwh": 996.2
+        "testnet_or_lab_kwh": 1985.5
       }
     },
     {
@@ -148,12 +148,12 @@
         "Environmental claims still need REC/T-REC/EAC ownership and retirement handling"
       ],
       "simulation": {
-        "accepted_surplus_kwh": 996.2,
-        "measurement_uncertainty_band_kwh": 1.9924,
-        "risk_reserve_kwh": 49.81,
-        "risk_adjusted_real_value_kwh": 946.39,
+        "accepted_surplus_kwh": 1985.5,
+        "measurement_uncertainty_band_kwh": 3.971,
+        "risk_reserve_kwh": 99.275,
+        "risk_adjusted_real_value_kwh": 1886.225,
         "capped_out_kwh": 0,
-        "testnet_or_lab_kwh": 996.2
+        "testnet_or_lab_kwh": 1985.5
       }
     }
   ],

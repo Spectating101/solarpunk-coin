@@ -308,6 +308,15 @@ async function buildReadingForProvider(options = {}) {
 function resolvePrivateKey(options = {}) {
   if (options.privateKey) return options.privateKey;
   if (options.useDevFixtureKey) return DEVICE_KEYS[options.meterId || "TW-TY-0001"] || null;
+  const provider = options.provider || "sample-cumulative";
+  if (
+    !options.unsigned &&
+    !options.privateKey &&
+    provider === "sample-cumulative" &&
+    DEVICE_KEYS[options.meterId || "TW-TY-0001"]
+  ) {
+    return DEVICE_KEYS[options.meterId || "TW-TY-0001"];
+  }
   return null;
 }
 

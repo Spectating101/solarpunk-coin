@@ -102,6 +102,15 @@ npm run demo:screenshots
 
 Test the **energy evidence → attestation** path with sample or your own data.
 
+**One-command validation (recommended):**
+
+```bash
+npm run hardware:validate              # sample fixture (L0)
+npm run hardware:validate:operator   # your JSON snapshots (needs METER_PRIVATE_KEY)
+```
+
+Full guide: [`HARDWARE_OPERATOR_QUICKSTART.md`](../product/HARDWARE_OPERATOR_QUICKSTART.md)
+
 **Sample / fixture path (no real operator):**
 
 ```bash

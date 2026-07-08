@@ -1,24 +1,25 @@
 # Product Launch Gate
 
-> **ARCHIVED:** Launch-gate script output from a ended phase. Ignore decisions here. See [`../../DOCS.md`](../../DOCS.md) for current product.
-
-- generated_at: `2026-06-06T18:17:35.082Z`
-- decision: Do not launch yet; public testnet proof surface is blocked.
-- recommended_current_launch: `none`
+- generated_at: `2026-07-08T10:03:10.983Z`
+- decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
+- recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
 
 ## Mode Status
 
 | Mode | Status | Passed | Blocking |
 |---|---:|---:|---:|
-| SolarPunk Public Lab | `blocked` | 19 | 1 |
-| Closed testnet pilot | `blocked` | 20 | 5 |
-| Paid/mainnet product | `blocked` | 20 | 10 |
+| SolarPunk Public Lab | `launchable` | 20 | 0 |
+| Closed testnet pilot | `blocked` | 21 | 4 |
+| Paid/mainnet product | `blocked` | 21 | 9 |
 
 ## Next Actions
 
-- Do not launch externally yet.
-- Repair the public testnet proof path first: SPK mint proof, public readback, daily keeper evidence, and frontend build.
+- Launch the SolarPunk Public Lab now: demo, docs, Sepolia proof, meter CSV onboarding, operator data intake, inverter adapter sample, public solar replay, NREL/PVWatts training/map baselines, hardware provenance model, and closed-pilot execution package.
+- Next build target: governed attested-SPK redeploy, one real operator meter/inverter export through the adapter, and anchor economics that clear the launch-readiness thresholds.
+- Use the economic launch-readiness gate to size required realized $/kWh, max capex, support capital, and service-revenue terms before promising a pilot.
+- Use the monetary stress harness to size any named reserve before promising redemption.
+- Keep paid/mainnet launch blocked until audit, legal scope, redemption policy, economic terms, and shortfall policy are resolved.
 
 ## SolarPunk Public Lab
 
@@ -28,9 +29,9 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- BLOCK `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-21 (16 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-07-06 (2 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
-- PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
+- PASS `Frontend proof surface exists`: Frontend has Public Lab landing and SPK v1 console.
   Evidence: `frontend/src`
 - PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
@@ -71,9 +72,9 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- BLOCK `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-21 (16 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-07-06 (2 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
-- PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
+- PASS `Frontend proof surface exists`: Frontend has Public Lab landing and SPK v1 console.
   Evidence: `frontend/src`
 - PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`
@@ -128,9 +129,9 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- BLOCK `Daily keeper evidence is fresh`: Latest keeper run is 2026-05-21 (16 days old).
+- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-07-06 (2 days old).
   Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
-- PASS `Frontend proof surface exists`: Frontend has proof dashboard and SPK mint product surface.
+- PASS `Frontend proof surface exists`: Frontend has Public Lab landing and SPK v1 console.
   Evidence: `frontend/src`
 - PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
   Evidence: `docs/product/PILOT_CSV_RECEIPT.md`

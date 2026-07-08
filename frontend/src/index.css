@@ -2368,6 +2368,23 @@ p {
 }
 
 /* Audience CTAs */
+.public-lab-get-started .public-lab-code-snippet {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(7, 13, 8, 0.85);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted-readable);
+  overflow-x: auto;
+}
+
+.public-lab-get-started .audience-cta-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .audience-cta-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

@@ -195,3 +195,14 @@ spk_simulation_results.csv
 
 # Generated demo screenshots (npm run demo:screenshots)
 screenshots/
+
+# Operator hardware exports (keep templates/samples only)
+data/inverter/my_site_*.json
+data/inverter/operator_*.json
+!data/inverter/operator_snapshot_template.json
+data/meter/my_*.csv
+data/meter/operator_*.csv
+data/meter/normalized_*.csv
+data/meter/green_button_normalized.csv
+!data/meter/green_button_sample.csv
+!data/meter/spk_meter_import_template.csv

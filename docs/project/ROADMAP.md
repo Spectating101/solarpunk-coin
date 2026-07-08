@@ -23,6 +23,8 @@ Open research lab trajectory for SolarPunk Public Lab v1.0 — **not** a product
 
 - [x] `OPEN_LAB_WORKFLOWS.md` — replicate without maintainer
 - [x] `ENERGY_DATA_ADAPTER_GUIDE.md` — meter/inverter path
+- [x] `HARDWARE_OPERATOR_QUICKSTART.md` — self-service hardware validation
+- [x] `npm run hardware:validate` — one-command sample/operator pipeline
 - [x] `EXTENSION_POINTS.md` — safe fork surfaces
 - [x] Issue templates — replication, energy data, bugs
 - [ ] Refresh `foundation:sync` when stable RPC available (stale index date)

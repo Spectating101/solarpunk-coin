@@ -1,11 +1,11 @@
 # SolarPunk Hardware Provenance Model
 
-- generated_at: `2026-05-18T10:13:02.155Z`
+- generated_at: `2026-07-08T10:03:11.794Z`
 - source_artifact: `state/product/inverter_meter_adapter_receipt.json`
 - current_hardware_level: `L0`
 - current_hardware_label: `Adapter sample or fixture`
 - current_real_operator_source: `false`
-- accepted_surplus_basis: `996.2 kWh`
+- accepted_surplus_basis: `1985.5 kWh`
 
 ## Purpose
 
@@ -25,9 +25,9 @@ This document exists because a real paid product cannot simply say that inverter
 |---|---|---:|---:|---:|---:|---|---|
 | L0 | Adapter sample or fixture | 32 | 100% | 0 | 0 | false | false |
 | L1 | Operator-signed export | 52 | 60% | 250 | 250 | false | false |
-| L2 | Live inverter or gateway signed counter | 70 | 30% | 2500 | 697.34 | true | false |
-| L3 | Revenue-grade meter with gateway custody | 84 | 12% | 10000 | 876.656 | true | false |
-| L4 | Utility or settlement-corroborated meter | 93 | 5% | 50000 | 946.39 | true | true |
+| L2 | Live inverter or gateway signed counter | 70 | 30% | 2500 | 1389.85 | true | false |
+| L3 | Revenue-grade meter with gateway custody | 84 | 12% | 10000 | 1747.24 | true | false |
+| L4 | Utility or settlement-corroborated meter | 93 | 5% | 50000 | 1886.225 | true | true |
 
 ## Tier Meaning
 
@@ -38,7 +38,7 @@ This document exists because a real paid product cannot simply say that inverter
 - measurement_uncertainty_pct: `5`
 - custody_risk_pct: `100`
 - real_value_haircut_pct: `100`
-- simulated_risk_reserve_kwh: `996.2`
+- simulated_risk_reserve_kwh: `1985.5`
 
 Missing:
 - No real operator source
@@ -53,7 +53,7 @@ Missing:
 - measurement_uncertainty_pct: `3`
 - custody_risk_pct: `35`
 - real_value_haircut_pct: `60`
-- simulated_risk_reserve_kwh: `597.72`
+- simulated_risk_reserve_kwh: `1191.3`
 
 Missing:
 - Manual export can be curated before signing
@@ -68,7 +68,7 @@ Missing:
 - measurement_uncertainty_pct: `1.5`
 - custody_risk_pct: `15`
 - real_value_haircut_pct: `30`
-- simulated_risk_reserve_kwh: `298.86`
+- simulated_risk_reserve_kwh: `595.65`
 
 Missing:
 - Inverter telemetry is not always revenue-grade billing data
@@ -83,7 +83,7 @@ Missing:
 - measurement_uncertainty_pct: `0.5`
 - custody_risk_pct: `6`
 - real_value_haircut_pct: `12`
-- simulated_risk_reserve_kwh: `119.544`
+- simulated_risk_reserve_kwh: `238.26`
 
 Missing:
 - Still needs third-party audit of the adapter and custody process
@@ -97,7 +97,7 @@ Missing:
 - measurement_uncertainty_pct: `0.2`
 - custody_risk_pct: `2`
 - real_value_haircut_pct: `5`
-- simulated_risk_reserve_kwh: `49.81`
+- simulated_risk_reserve_kwh: `99.275`
 
 Missing:
 - Paid launch still requires audit, legal scope, reserve policy, and production governance

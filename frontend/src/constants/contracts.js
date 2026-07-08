@@ -28,7 +28,11 @@ export const FALLBACK_SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com
 export const SEPOLIA_RPC_URL = normalizeSepoliaRpc(import.meta.env.VITE_RPC_URL);
 export const GITHUB_REPO = "https://github.com/Spectating101/solarpunk-coin";
 export const KEEPER_WORKFLOW = `${GITHUB_REPO}/actions/workflows/nasa_keeper.yml`;
-export const PUBLIC_LAB_INQUIRY_URL = `${GITHUB_REPO}/issues/new?template=public-lab-pilot.md`;
+export const PUBLIC_LAB_INQUIRY_URL = `${GITHUB_REPO}/issues/new?template=energy-data-experiment.md`;
+export const HARDWARE_QUICKSTART_URL = `${GITHUB_REPO}/blob/main/docs/product/HARDWARE_OPERATOR_QUICKSTART.md`;
+export const PUBLIC_LAB_DEPLOYMENT_URL = `${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB_DEPLOYMENT.md`;
+export const OPEN_LAB_WORKFLOWS_URL = `${GITHUB_REPO}/blob/main/docs/project/OPEN_LAB_WORKFLOWS.md`;
+export const PUBLIC_LAB_DEMO_URL = "https://spectating101.github.io/solarpunk-coin/demo/";
 
 export const LIVE_OPTION_SERIES = {
   id: "0xd49655e45fedd336468b39b170f4a6fef123c5e96b4b3745a8de5def356a5637",

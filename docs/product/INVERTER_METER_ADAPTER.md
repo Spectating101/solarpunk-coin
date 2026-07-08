@@ -1,6 +1,6 @@
 # SolarPunk Inverter/Meter Adapter Output
 
-- generated_at: `2026-06-28T17:44:41.175Z`
+- generated_at: `2026-07-08T06:30:01.191Z`
 - provider: `sample-cumulative`
 - source_mode: `sample_cumulative_snapshot_pair`
 - evidence_grade: `adapter_sample_or_review`

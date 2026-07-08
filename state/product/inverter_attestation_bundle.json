@@ -1,8 +1,9 @@
 {
-  "generated_at": "2026-05-18T16:12:55.417Z",
+  "generated_at": "2026-07-08T06:30:01.198Z",
+  "bundle_schema": "SPK_ATTESTATION_BUNDLE_V2",
   "source_schema": "SPK_RAW_METER_READINGS_V1",
-  "registry_schema": "SPK_METER_REGISTRY_V1",
-  "batch_id": "sample-cumulative_1779120775411",
+  "registry_schema": "SPK_METER_REGISTRY_V2",
+  "batch_id": "sample-cumulative_1783492201191",
   "min_quality_threshold": 0.9,
   "summary": {
     "input_records": 1,
@@ -25,7 +26,10 @@
       "device_address": "0x71B2B3e1B74b6AeAC7F454D1c0807C1956223258",
       "payload_hash": "0xd4ecbe5d55f7718a4c562569515e51d9c7dc58f2ad3361cc9a845704c7c7d0e4",
       "signature": "0x4718f29f34b197ea447f2053a99a902ec90b63870ca9ba7413710dc4095bb8c40d72e51add7ed3f1f0cb06912962b2536c68947dc654825e473399ea541c5be91c",
-      "record_hash": "b7738c6044153f9ac6854683baabd54f5d319526dbef2b1c7e90a9f9fd4dd711"
+      "location_country": "TW",
+      "grid_zone": "unknown",
+      "energy_vintage": "2026-02",
+      "record_hash": "cd84d8703af8731125cdcd304eca74d713373579c2889adee09da77a03578f0e"
     }
   ],
   "rejected_attestations": []

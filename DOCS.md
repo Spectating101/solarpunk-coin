@@ -31,6 +31,8 @@ Then [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md), then `C
 | 8 | [`docs/product/SPK_V1_OPERATOR.md`](./docs/product/SPK_V1_OPERATOR.md) | Operator cycles |
 | 9 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | How to replicate and contribute |
 | 10 | [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md) | Run local / Sepolia / evidence / adapters |
+| 11 | [`docs/product/PUBLIC_LAB_DEPLOYMENT.md`](./docs/product/PUBLIC_LAB_DEPLOYMENT.md) | **Launch / publish** demo + preflight |
+| 12 | [`docs/product/HARDWARE_OPERATOR_QUICKSTART.md`](./docs/product/HARDWARE_OPERATOR_QUICKSTART.md) | **Hardware operators** — validate real exports |
 
 **When documents disagree:** **Public Lab v1 framing** + `CURRENT_STATUS.md` + `spk_v1.json` win.
 

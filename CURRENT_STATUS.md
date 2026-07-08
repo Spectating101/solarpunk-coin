@@ -5,7 +5,7 @@
 
 **Open lab mode:** Replicate, fork, and extend via [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md). Not a token sale, mainnet launch, or investment product.
 
-**Entry point:** [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md) · [`DOCS.md`](./DOCS.md)
+**Entry point:** [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md) · [`docs/product/PUBLIC_LAB_DEPLOYMENT.md`](./docs/product/PUBLIC_LAB_DEPLOYMENT.md) · [`DOCS.md`](./DOCS.md)
 
 ---
 
@@ -57,6 +57,8 @@
 | Weekly rhythm | `npm run foundation:weekly` |
 | Full cycle | `npm run foundation:cycle` |
 | Refresh public demo | `npm run foundation:refresh` |
+| **Preflight + publish demo** | `npm run public-lab:preflight` · `npm run public-lab:publish` |
+| **Hardware validate (sample)** | `npm run hardware:validate` |
 
 **Deployer:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54` — Sepolia ETH for cycles. See [`docs/foundation/AUTONOMOUS_OPS.md`](./docs/foundation/AUTONOMOUS_OPS.md).
 

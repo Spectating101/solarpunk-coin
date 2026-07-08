@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "at": "2026-07-08T10:03:11.815Z",
+  "checks": [
+    {
+      "name": "runtime_json",
+      "pass": true,
+      "detail": "/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/state/runtime/spk_v1.json"
+    },
+    {
+      "name": "spk_contract",
+      "pass": true,
+      "detail": "0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128"
+    },
+    {
+      "name": "peg_off",
+      "pass": true,
+      "detail": "peg=false"
+    },
+    {
+      "name": "network_payments",
+      "pass": true,
+      "detail": "21"
+    },
+    {
+      "name": "public_lab_launchable",
+      "pass": true,
+      "detail": "public_testnet_product"
+    },
+    {
+      "name": "attestation_tests",
+      "pass": true,
+      "detail": "19 passing"
+    },
+    {
+      "name": "hardware_validate_sample",
+      "pass": true,
+      "detail": "sample path ok"
+    },
+    {
+      "name": "demo_runtime_copied",
+      "pass": true,
+      "detail": "/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/frontend/public/spk_v1.json"
+    },
+    {
+      "name": "public_lab_landing",
+      "pass": true,
+      "detail": "/home/phyrexian/Downloads/llm_automation/project_portfolio/Solarpunk-bitcoin/frontend/src/components/PublicLabLanding.jsx"
+    }
+  ]
+}

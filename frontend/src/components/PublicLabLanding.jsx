@@ -12,6 +12,9 @@ import {
 } from 'lucide-react';
 import {
   GITHUB_REPO,
+  HARDWARE_QUICKSTART_URL,
+  OPEN_LAB_WORKFLOWS_URL,
+  PUBLIC_LAB_DEPLOYMENT_URL,
   PUBLIC_LAB_INQUIRY_URL,
   SEPOLIA_EXPLORER,
   SPK_V1,
@@ -45,7 +48,7 @@ const AUDIENCE_CARDS = [
   {
     icon: Database,
     title: 'Energy operators',
-    body: 'Test how meter or inverter export data becomes auditable settlement evidence without a token sale.',
+    body: 'Validate meter, inverter, or Green Button exports through the attestation pipeline — then mint on your own Sepolia deploy.',
   },
   {
     icon: Cpu,
@@ -109,7 +112,7 @@ export default function PublicLabLanding({ onOpenConsole }) {
   const dataSource = live.status === 'ok' ? 'Live Sepolia reads' : 'Cached runtime JSON';
 
   const pipelineSteps = [
-    { label: 'Meter / inverter data', status: 'L0 fixture/sample today' },
+    { label: 'Meter / inverter data', status: 'Self-serve validate (L0–L2)' },
     { label: 'Attestation', status: 'Signed + replay-safe' },
     { label: 'SPK mint', status: 'Bounded issuance' },
     {
@@ -187,8 +190,8 @@ export default function PublicLabLanding({ onOpenConsole }) {
             <a className="wallet-button" href={EVIDENCE_URL} target="_blank" rel="noreferrer">
               <FileText size={17} /> Review the evidence
             </a>
-            <a className="ghost-button ghost-button-green" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
-              <ExternalLink size={17} /> Contribute meter data
+            <a className="ghost-button ghost-button-green" href={HARDWARE_QUICKSTART_URL} target="_blank" rel="noreferrer">
+              <Database size={17} /> Test your hardware data
             </a>
           </div>
           {onOpenConsole ? (
@@ -219,6 +222,32 @@ export default function PublicLabLanding({ onOpenConsole }) {
           </ul>
         </aside>
       </header>
+
+      {/* §1b Get started */}
+      <section className="public-lab-section public-lab-get-started" aria-labelledby="get-started-heading">
+        <h2 id="get-started-heading">Get started in the lab</h2>
+        <p className="public-lab-section-lead">
+          Clone the repo, validate sample energy evidence, or bring your own meter export — no maintainer required.
+        </p>
+        <pre className="public-lab-code-snippet">{`git clone https://github.com/Spectating101/solarpunk-coin.git
+cd solarpunk-coin && npm install
+npm run hardware:validate          # sample path (L0)
+npm run public-lab:preflight       # before you publish or fork`}</pre>
+        <div className="audience-cta-grid">
+          <a className="audience-cta-card" href={HARDWARE_QUICKSTART_URL} target="_blank" rel="noreferrer">
+            <span className="audience-cta-role">I have hardware / utility data</span>
+            <span className="audience-cta-action">Hardware operator quickstart →</span>
+          </a>
+          <a className="audience-cta-card" href={OPEN_LAB_WORKFLOWS_URL} target="_blank" rel="noreferrer">
+            <span className="audience-cta-role">I want to replicate locally</span>
+            <span className="audience-cta-action">Open lab workflows →</span>
+          </a>
+          <a className="audience-cta-card" href={PUBLIC_LAB_DEPLOYMENT_URL} target="_blank" rel="noreferrer">
+            <span className="audience-cta-role">I maintain or fork the lab</span>
+            <span className="audience-cta-action">Deployment playbook →</span>
+          </a>
+        </div>
+      </section>
 
       {/* §2 Proof pipeline */}
       <section className="public-lab-section" aria-labelledby="pipeline-heading">
@@ -367,14 +396,14 @@ export default function PublicLabLanding({ onOpenConsole }) {
           semi-real renewable-energy dataset passed through the same attestation and testnet settlement pipeline.
         </p>
         <div className="public-lab-cta">
-          <a className="wallet-button" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
-            <Database size={17} /> Contribute one meter export
+          <a className="wallet-button" href={HARDWARE_QUICKSTART_URL} target="_blank" rel="noreferrer">
+            <Database size={17} /> Run hardware validation
+          </a>
+          <a className="ghost-button" href={PUBLIC_LAB_INQUIRY_URL} target="_blank" rel="noreferrer">
+            <ExternalLink size={17} /> Propose closed pilot data
           </a>
           <a className="ghost-button" href={PILOT_ASK_DOC} target="_blank" rel="noreferrer">
             <BookOpen size={17} /> Read the data ask
-          </a>
-          <a className="ghost-button" href={GITHUB_REPO} target="_blank" rel="noreferrer">
-            <ExternalLink size={17} /> GitHub
           </a>
         </div>
       </section>
@@ -387,9 +416,9 @@ export default function PublicLabLanding({ onOpenConsole }) {
             <span className="audience-cta-role">I&apos;m a researcher</span>
             <span className="audience-cta-action">Thesis &amp; evidence pack →</span>
           </a>
-          <a className="audience-cta-card" href={PILOT_ASK_DOC} target="_blank" rel="noreferrer">
+          <a className="audience-cta-card" href={HARDWARE_QUICKSTART_URL} target="_blank" rel="noreferrer">
             <span className="audience-cta-role">I have energy data</span>
-            <span className="audience-cta-action">Pilot data ask →</span>
+            <span className="audience-cta-action">Hardware quickstart →</span>
           </a>
           <button type="button" className="audience-cta-card audience-cta-button" onClick={onOpenConsole}>
             <span className="audience-cta-role">I&apos;m technical</span>

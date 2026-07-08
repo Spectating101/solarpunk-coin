@@ -57,7 +57,9 @@ SolarPunk Public Lab v1.0 is a public testnet laboratory for an energy-standard 
 
 **Evidence pack:** [`thesis_package/SPK_V1_EVIDENCE.md`](../../thesis_package/SPK_V1_EVIDENCE.md)  
 **Runtime JSON:** [`state/runtime/spk_v1.json`](../../state/runtime/spk_v1.json)  
-**Live demo:** https://spectating101.github.io/solarpunk-coin/demo/
+**Live demo:** https://spectating101.github.io/solarpunk-coin/demo/  
+**Deploy / publish:** [`PUBLIC_LAB_DEPLOYMENT.md`](./PUBLIC_LAB_DEPLOYMENT.md)  
+**Hardware operators:** [`HARDWARE_OPERATOR_QUICKSTART.md`](./HARDWARE_OPERATOR_QUICKSTART.md)
 
 ## Launch gates
 
@@ -74,9 +76,11 @@ Details: [`CLOSED_PILOT_EXECUTION_PACKAGE.md`](./CLOSED_PILOT_EXECUTION_PACKAGE.
 ```bash
 npm install
 npx hardhat test
+npm run hardware:validate          # sample energy evidence path
 npm run spk:v1:sync          # requires .env SEPOLIA_RPC + PRIVATE_KEY
 npm run spk:v1:evidence:export
 npm run foundation:health
+npm run public-lab:preflight   # before publishing demo
 cd frontend && npm install && npm run dev
 ```
 
