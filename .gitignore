@@ -167,6 +167,7 @@ energy_derivatives/data/*.json
 !energy_derivatives/data/.gitkeep
 *.png
 *.pdf
+!energy_constraint_thesis_final_submission_*.pdf
 *.html
 !docs/index.html
 !docs/demo/index.html

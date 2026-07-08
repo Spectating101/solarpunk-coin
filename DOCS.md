@@ -42,6 +42,9 @@ Then [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md), then `C
 
 ```bash
 npx hardhat test                # 109 contract tests
+npm run hardware:validate       # sample operator energy-evidence path
+npm run public-lab:preflight      # before publishing demo
+npm run public-lab:publish        # preflight + build + docs/demo mirror
 npm run spk:v1:sync             # refresh state from chain (.env RPC)
 npm run spk:v1:evidence:export  # regenerate evidence pack
 npm run foundation:health       # sync age + operator gas
@@ -67,6 +70,9 @@ Demo: https://spectating101.github.io/solarpunk-coin/demo/
 | Path | What |
 |------|------|
 | `docs/product/PUBLIC_LAB_V1.md` | **Start here** for public framing |
+| `docs/product/PUBLIC_LAB_DEPLOYMENT.md` | Launch / publish demo + preflight |
+| `docs/product/HARDWARE_OPERATOR_QUICKSTART.md` | Hardware operators — validate exports |
+| `data/meter/` | CSV / Green Button templates |
 | `contracts/` | Solidity source |
 | `frontend/` | Public Lab landing + SPK console |
 | `thesis_package/` | Thesis chapters and empirics |

@@ -14,6 +14,7 @@ import {
   GITHUB_REPO,
   HARDWARE_QUICKSTART_URL,
   OPEN_LAB_WORKFLOWS_URL,
+  DOCS_MAP_URL,
   PUBLIC_LAB_DEPLOYMENT_URL,
   PUBLIC_LAB_INQUIRY_URL,
   SEPOLIA_EXPLORER,
@@ -245,6 +246,10 @@ npm run public-lab:preflight       # before you publish or fork`}</pre>
           <a className="audience-cta-card" href={PUBLIC_LAB_DEPLOYMENT_URL} target="_blank" rel="noreferrer">
             <span className="audience-cta-role">I maintain or fork the lab</span>
             <span className="audience-cta-action">Deployment playbook →</span>
+          </a>
+          <a className="audience-cta-card" href={DOCS_MAP_URL} target="_blank" rel="noreferrer">
+            <span className="audience-cta-role">I want the full doc map</span>
+            <span className="audience-cta-action">Documentation index (DOCS.md) →</span>
           </a>
         </div>
       </section>

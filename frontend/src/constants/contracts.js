@@ -33,6 +33,7 @@ export const HARDWARE_QUICKSTART_URL = `${GITHUB_REPO}/blob/main/docs/product/HA
 export const PUBLIC_LAB_DEPLOYMENT_URL = `${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB_DEPLOYMENT.md`;
 export const OPEN_LAB_WORKFLOWS_URL = `${GITHUB_REPO}/blob/main/docs/project/OPEN_LAB_WORKFLOWS.md`;
 export const PUBLIC_LAB_DEMO_URL = "https://spectating101.github.io/solarpunk-coin/demo/";
+export const DOCS_MAP_URL = `${GITHUB_REPO}/blob/main/DOCS.md`;
 
 export const LIVE_OPTION_SERIES = {
   id: "0xd49655e45fedd336468b39b170f4a6fef123c5e96b4b3745a8de5def356a5637",
