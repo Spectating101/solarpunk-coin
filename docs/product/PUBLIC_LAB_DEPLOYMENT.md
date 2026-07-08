@@ -86,7 +86,7 @@ npm run public-lab:publish
 | SPK CSV | `npm run hardware:validate -- --operator --csv=data/meter/export.csv` |
 | Green Button CSV | `npm run meter:green-button -- --in=...` then `--csv=normalized.csv` |
 
-**Canonical Sepolia minting** is minter-gated. Operators mint on **their deploy**, not `divx8e189…` unless invited to closed pilot.
+**Canonical Sepolia minting** is minter-gated. Operators mint on **their deploy**, not `0x8e189…` unless invited to closed pilot.
 
 ---
 

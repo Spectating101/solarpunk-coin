@@ -1,7 +1,7 @@
 {
   "name": "solarpunkcoin-contracts",
   "version": "1.0.0",
-  "description": "SolarPunkCoin: Energy-backed stablecoin smart contracts",
+  "description": "SolarPunk Public Lab: energy-standard settlement contracts on Sepolia (testnet research lab)",
   "main": "index.js",
   "scripts": {
     "test": "hardhat test",
@@ -144,10 +144,12 @@
   "keywords": [
     "solidity",
     "ethereum",
-    "polygon",
-    "stablecoin",
+    "sepolia",
+    "energy-standard",
+    "settlement",
+    "testnet-lab",
     "energy",
-    "defi"
+    "public-lab"
   ],
   "author": "SolarPunkCoin Team",
   "license": "MIT",
