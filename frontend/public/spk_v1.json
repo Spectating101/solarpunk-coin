@@ -1,7 +1,7 @@
 {
   "schema": "SPK_V1_RUNTIME",
   "version": "1.0.0",
-  "product": "SPK Network Money",
+  "product": "SolarPunk Public Lab",
   "launch_mode": "unified_sepolia_lean",
   "launched_at": "2026-06-07T15:18:37.521Z",
   "network": "sepolia",

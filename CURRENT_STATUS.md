@@ -1,7 +1,9 @@
 # Current status
 
-**Updated:** 2026-07-09  
+**Updated:** 2026-07-10  
 **Public Lab v1.0 freeze:** SolarPunk is packaged as a **public testnet laboratory for energy-standard settlement**. Public Lab is the current endpoint. Closed pilot and paid/mainnet are **future gated work**, not active v1 obligations.
+
+**Operating mode:** [Maintenance](./docs/project/MAINTENANCE.md) — feature-complete Public Lab; quarterly checks; wake path in [`docs/project/WAKE_PATH.md`](./docs/project/WAKE_PATH.md).
 
 **Open lab mode:** Replicate, fork, and extend via [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md). Not a token sale, mainnet launch, or investment product.
 
@@ -48,13 +50,15 @@
 
 ---
 
-## Operator (optional maintenance)
+## Operator (quarterly maintenance)
+
+Default cadence is **quarterly** — see [`docs/project/MAINTENANCE.md`](./docs/project/MAINTENANCE.md). Weekly cycles are optional, not required.
 
 | Check | Command |
 |-------|---------|
 | Gas + sync health | `npm run foundation:health` |
 | Sync ledger | `npm run foundation:sync` |
-| Weekly rhythm | `npm run foundation:weekly` |
+| Optional weekly rhythm | `npm run foundation:weekly` |
 | Full cycle | `npm run foundation:cycle` |
 | Refresh public demo | `npm run foundation:refresh` |
 | **Preflight + publish demo** | `npm run public-lab:preflight` · `npm run public-lab:publish` |

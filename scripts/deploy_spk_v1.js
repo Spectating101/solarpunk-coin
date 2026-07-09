@@ -104,7 +104,7 @@ async function main() {
   const runtime = {
     schema: "SPK_V1_RUNTIME",
     version: "1.0.0",
-    product: "SPK Network Money",
+    product: "SolarPunk Public Lab",
     launched_at: new Date().toISOString(),
     network: networkName,
     chain_id: Number(network.chainId),

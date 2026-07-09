@@ -6,6 +6,13 @@ SolarPunk Public Lab is a public Sepolia testnet laboratory for an energy-standa
 
 It is **not** a monetary product, token sale, stablecoin, legal tender, mainnet launch, or legal claim on delivered energy.
 
+## Project status
+
+**Public Lab v1.0 is feature-complete and in maintenance mode.**  
+The Sepolia lab, demo, and evidence pack remain public. Active development is not the default. Quarterly health checks are enough. To resume a closed pilot, see [`docs/project/WAKE_PATH.md`](./docs/project/WAKE_PATH.md).
+
+Cite via [`CITATION.cff`](./CITATION.cff). Forks must not imply official endorsement — [`TRADEMARK.md`](./TRADEMARK.md).
+
 > **Start here:** [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md)  
 > **Current state:** [`CURRENT_STATUS.md`](./CURRENT_STATUS.md)  
 > **Documentation map:** [`DOCS.md`](./DOCS.md)

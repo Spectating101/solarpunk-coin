@@ -8,11 +8,11 @@ Use this kit for X/Twitter, LinkedIn, Farcaster, Reddit, Discord, Telegram group
 
 One-line:
 
-> SolarPunk Public Lab is an open Sepolia proof environment where signed renewable-energy meter data becomes a replay-protected SPK mint with public transactions and reproducible evidence.
+> SolarPunk Public Lab v1.0 is a public Sepolia laboratory for energy-standard settlement (peg off). Looking for critique and real meter/inverter export formats — not a token sale.
 
 Short version:
 
-> I opened SolarPunk Public Lab: a testnet proof that signed renewable-energy meter readings can be verified into an oracle-signed source hash and used to mint SPK on Sepolia with replay protection. It is not a token sale or mainnet product. It is a public lab for inspection, criticism, and pilot data conversations.
+> SolarPunk Public Lab v1.0 is a public Sepolia laboratory for energy-standard settlement: verified renewable-surplus evidence can produce bounded SPK issuance and network payments. It is not a token sale or mainnet product. It is open for inspection, criticism, and pilot data conversations.
 
 Do not say:
 
@@ -25,15 +25,14 @@ Do not say:
 
 ## Primary Links
 
-- Demo: `https://spectating101.github.io/solarpunk-coin/`
+- Demo: `https://spectating101.github.io/solarpunk-coin/demo/`
 - GitHub: `https://github.com/Spectating101/solarpunk-coin`
-- Public lab model: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PUBLIC_LAB.md`
-- Product launch gate: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PRODUCT_LAUNCH_GATE.md`
-- Currency system lab: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/CURRENCY_SYSTEM_LAB.md`
-- SPK intelligence layer: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_INTELLIGENCE_LAYER.md`
-- SPK product proof: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_ATTESTED_MINT_PROOF.md`
-- Public readback: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/SPK_PUBLIC_READBACK.md`
-- Pilot inquiry: `https://github.com/Spectating101/solarpunk-coin/issues/new?template=public-lab-pilot.md`
+- Public Lab v1.0: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PUBLIC_LAB_V1.md`
+- Current status: `https://github.com/Spectating101/solarpunk-coin/blob/main/CURRENT_STATUS.md`
+- Maintenance mode: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/project/MAINTENANCE.md`
+- Hardware quickstart: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/HARDWARE_OPERATOR_QUICKSTART.md`
+- Pilot data ask: `https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PILOT_DATA_ASK.md`
+- Pilot inquiry issue: `https://github.com/Spectating101/solarpunk-coin/issues/new?template=energy-data-experiment.md`
 
 ## X / Farcaster Post
 

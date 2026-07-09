@@ -2,6 +2,8 @@
 
 **Purpose:** Keep docs aligned with the repo. Markdown drifts; commands and `state/` JSON do not.
 
+**Operating mode:** See [`MAINTENANCE.md`](./MAINTENANCE.md). In maintenance mode, prefer quarterly sync over treating stale index age as an incident.
+
 ## Canonical order (when facts conflict)
 
 1. `DOCS.md` — entry map (humans + AI); update when doc structure changes
@@ -54,4 +56,4 @@ rg "79/79|102/102|55/55|Polygon Mumbai|Amoy-primary|launchable now|production-re
 
 ## Product / launch docs
 
-`docs/product/PUBLIC_LAB.md`, `PRODUCT_LAUNCH_GATE.md`, and related packets were written for a **testnet outreach phase**. That phase is no longer the project focus. Keep them as research appendices or archive under `docs/archive/` when rewriting — do not let them override `CURRENT_STATUS.md`.
+[`PUBLIC_LAB_V1.md`](../product/PUBLIC_LAB_V1.md) is current. `docs/product/PUBLIC_LAB.md`, `PRODUCT_LAUNCH_GATE.md`, and related packets were written for a **testnet outreach phase** — keep as research appendices or archive; do not let them override `CURRENT_STATUS.md`.

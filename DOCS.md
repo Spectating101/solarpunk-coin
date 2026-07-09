@@ -33,6 +33,8 @@ Then [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md), then `C
 | 10 | [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md) | Run local / Sepolia / evidence / adapters |
 | 11 | [`docs/product/PUBLIC_LAB_DEPLOYMENT.md`](./docs/product/PUBLIC_LAB_DEPLOYMENT.md) | **Launch / publish** demo + preflight |
 | 12 | [`docs/product/HARDWARE_OPERATOR_QUICKSTART.md`](./docs/product/HARDWARE_OPERATOR_QUICKSTART.md) | **Hardware operators** — validate real exports |
+| 13 | [`docs/project/MAINTENANCE.md`](./docs/project/MAINTENANCE.md) | Maintenance mode + quarterly checklist |
+| 14 | [`docs/project/WAKE_PATH.md`](./docs/project/WAKE_PATH.md) | When/how to leave maintenance for a pilot |
 
 **When documents disagree:** **Public Lab v1 framing** + `CURRENT_STATUS.md` + `spk_v1.json` win.
 
@@ -123,5 +125,6 @@ Open lab extension: [`docs/project/EXTENSION_POINTS.md`](./docs/project/EXTENSIO
 
 ## Maintenance
 
-See [`docs/project/DOC_MAINTENANCE.md`](./docs/project/DOC_MAINTENANCE.md).  
+Default mode: [`docs/project/MAINTENANCE.md`](./docs/project/MAINTENANCE.md) (quarterly).  
+Doc hygiene: [`docs/project/DOC_MAINTENANCE.md`](./docs/project/DOC_MAINTENANCE.md).  
 After operator cycles: `spk:v1:sync` then `spk:v1:evidence:export`.
