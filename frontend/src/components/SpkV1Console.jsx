@@ -169,8 +169,13 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
 
       <header className="spk-demo-hero">
         <div>
-          <p className="eyebrow">Sepolia testnet · lab unit console</p>
-          <h1>SPK console</h1>
+          <p className="eyebrow">Sepolia testnet · advanced proof</p>
+          <h1>Advanced — Sepolia Proof</h1>
+          <p className="spk-console-lead">
+            Optional wallet path. The browser Evidence Lab and Currency Lab are the default experience.
+            MetaMask is optional for read-only metrics; Sepolia ETH and operator-supplied test SPK are
+            required only to send payments. This console demonstrates public testnet execution only.
+          </p>
           <p className="spk-demo-lead">
             Technical view: bounded SPK mint from verified surplus kWh, network payments on-chain.
             Connect wallet on Sepolia to send a testnet settlement payment.

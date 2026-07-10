@@ -26,16 +26,17 @@ import useSpkV1Live from '../hooks/useSpkV1Live';
 const EVIDENCE_URL = `${GITHUB_REPO}/blob/main/thesis_package/SPK_V1_EVIDENCE.md`;
 const PUBLIC_LAB_DOC = `${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB_V1.md`;
 const PILOT_ASK_DOC = `${GITHUB_REPO}/blob/main/docs/product/PILOT_DATA_ASK.md`;
-const THESIS_READING_URL = `${GITHUB_REPO}/blob/main/thesis_package/output/reading/full/THESIS_GROUNDED.md`;
+const CEIR_DIAGNOSIS_URL = `${GITHUB_REPO}/blob/main/thesis_package/CEIR_FINAL_DIAGNOSIS.md`;
+const THESIS_PDF_URL = `${GITHUB_REPO}/blob/main/energy_constraint_thesis_final_submission_v10.pdf`;
 
 const COMPARISON_ROWS = [
   { foundation: 'Fiat', mechanism: 'Authority', problem: 'Discretionary expansion' },
   { foundation: 'Gold', mechanism: 'Inert scarcity', problem: 'Scarce but unproductive' },
-  { foundation: 'Bitcoin', mechanism: 'Proof-of-work burn', problem: 'Scarcity through energy cost' },
+  { foundation: 'Bitcoin', mechanism: 'Proof-of-work expenditure', problem: 'Passive cost ratios fail clean identification' },
   {
     foundation: 'SolarPunk lab',
-    mechanism: 'Verified renewable surplus',
-    problem: 'Productive issuance — still externally unproven',
+    mechanism: 'Explicit evidence + constraints',
+    problem: 'Architecture demonstrated — market/legal backing not claimed',
     highlight: true,
   },
 ];
@@ -44,12 +45,12 @@ const AUDIENCE_CARDS = [
   {
     icon: FlaskConical,
     title: 'Researchers',
-    body: 'A reproducible lab for energy-constrained digital finance — thesis evidence, CEIR empirics, and testnet settlement.',
+    body: 'A reproducible lab for energy-constrained digital finance — thesis evidence, CEIR diagnosis, and testnet settlement.',
   },
   {
     icon: Database,
     title: 'Energy operators',
-    body: 'Validate meter, inverter, or Green Button exports through the attestation pipeline — then mint on your own Sepolia deploy.',
+    body: 'Validate meter or inverter exports in the browser Evidence Lab — live minting stays gated and separate.',
   },
   {
     icon: Cpu,
@@ -85,7 +86,12 @@ function PipelineStep({ label, status }) {
   );
 }
 
-export default function PublicLabLanding({ onOpenConsole }) {
+export default function PublicLabLanding({
+  onOpenEvidence,
+  onOpenCurrency,
+  onOpenSepolia,
+  onOpenResearch,
+}) {
   const [runtime, setRuntime] = useState(null);
   const [error, setError] = useState(null);
   const live = useSpkV1Live(runtime);
@@ -173,33 +179,36 @@ export default function PublicLabLanding({ onOpenConsole }) {
         <div className="public-lab-hero-main">
           <p className="eyebrow">SolarPunk Public Lab v1.0 · Sepolia testnet</p>
           <h1>
-            <span className="public-lab-hook-accent">A fourth foundation</span>
+            <span className="public-lab-hook-accent">Explicit constraints</span>
             {' '}
-            for digital money:{' '}
-            <span className="public-lab-hook-surplus">verified renewable surplus</span>.
+            for energy-linked settlement — not a passive cost narrative.
           </h1>
           <p className="public-lab-subhead">
-            Fiat issues by authority. Gold rests on inert scarcity. Bitcoin proves scarcity through energy burn.
-            SolarPunk tests whether digital settlement units can instead be issued from{' '}
-            <strong>productive renewable surplus</strong>.
+            Passive mining-cost ratios do not identify a unique energy-value anchor. Public Lab
+            therefore tests an explicit alternative: admissible evidence, rule-bound issuance,
+            explicit risk treatment, settlement accounting, and constrained governance.
           </p>
           <p className="public-lab-proofline">
-            Public Lab v1.0 runs this architecture on Sepolia: energy evidence → bounded SPK issuance →
-            network settlement → launch gates.
+            Do not read renewable surplus as automatic monetary value. The lab demonstrates
+            architecture: energy evidence → bounded issuance → circulation → settlement / shortfall
+            → launch gates.
           </p>
           <div className="public-lab-cta public-lab-cta-hero">
-            <a className="wallet-button" href={EVIDENCE_URL} target="_blank" rel="noreferrer">
-              <FileText size={17} /> Review the evidence
-            </a>
-            <a className="ghost-button ghost-button-green" href={HARDWARE_QUICKSTART_URL} target="_blank" rel="noreferrer">
-              <Database size={17} /> Test your hardware data
-            </a>
-          </div>
-          {onOpenConsole ? (
-            <button type="button" className="public-lab-console-link" onClick={onOpenConsole}>
-              Open technical console →
+            <button type="button" className="wallet-button" onClick={onOpenEvidence}>
+              <FlaskConical size={17} /> Open Evidence Lab
             </button>
-          ) : null}
+            <button type="button" className="ghost-button ghost-button-green" onClick={onOpenCurrency}>
+              <FileText size={17} /> Open Currency Lab
+            </button>
+          </div>
+          <div className="public-lab-secondary-links">
+            <button type="button" className="public-lab-console-link" onClick={onOpenSepolia}>
+              Advanced — Sepolia Proof →
+            </button>
+            <button type="button" className="public-lab-console-link" onClick={onOpenResearch}>
+              Research links →
+            </button>
+          </div>
         </div>
         <aside className="public-lab-hero-proof-card" aria-label="Live lab snapshot">
           <p className="public-lab-hero-proof-eyebrow">Live on Sepolia</p>
@@ -226,30 +235,27 @@ export default function PublicLabLanding({ onOpenConsole }) {
 
       {/* §1b Get started */}
       <section className="public-lab-section public-lab-get-started" aria-labelledby="get-started-heading">
-        <h2 id="get-started-heading">Get started in the lab</h2>
+        <h2 id="get-started-heading">Use the lab in the browser</h2>
         <p className="public-lab-section-lead">
-          Clone the repo, validate sample energy evidence, or bring your own meter export — no maintainer required.
+          No clone required for the default experience. Validate sample energy evidence, simulate
+          issuance and settlement, then inspect Sepolia separately if you want the advanced path.
         </p>
-        <pre className="public-lab-code-snippet">{`git clone https://github.com/Spectating101/solarpunk-coin.git
-cd solarpunk-coin && npm install
-npm run hardware:validate          # sample path (L0)
-npm run public-lab:preflight       # before you publish or fork`}</pre>
         <div className="audience-cta-grid">
+          <button type="button" className="audience-cta-card" onClick={onOpenEvidence}>
+            <span className="audience-cta-role">1 · Evidence Lab</span>
+            <span className="audience-cta-action">Load sample CSV → validate → receipt</span>
+          </button>
+          <button type="button" className="audience-cta-card" onClick={onOpenCurrency}>
+            <span className="audience-cta-role">2 · Currency Lab</span>
+            <span className="audience-cta-action">Simulate issuance, payments, shortfall</span>
+          </button>
+          <button type="button" className="audience-cta-card" onClick={onOpenSepolia}>
+            <span className="audience-cta-role">3 · Sepolia Proof</span>
+            <span className="audience-cta-action">Read-only metrics · optional MetaMask</span>
+          </button>
           <a className="audience-cta-card" href={HARDWARE_QUICKSTART_URL} target="_blank" rel="noreferrer">
-            <span className="audience-cta-role">I have hardware / utility data</span>
-            <span className="audience-cta-action">Hardware operator quickstart →</span>
-          </a>
-          <a className="audience-cta-card" href={OPEN_LAB_WORKFLOWS_URL} target="_blank" rel="noreferrer">
-            <span className="audience-cta-role">I want to replicate locally</span>
-            <span className="audience-cta-action">Open lab workflows →</span>
-          </a>
-          <a className="audience-cta-card" href={PUBLIC_LAB_DEPLOYMENT_URL} target="_blank" rel="noreferrer">
-            <span className="audience-cta-role">I maintain or fork the lab</span>
-            <span className="audience-cta-action">Deployment playbook →</span>
-          </a>
-          <a className="audience-cta-card" href={DOCS_MAP_URL} target="_blank" rel="noreferrer">
-            <span className="audience-cta-role">I want the full doc map</span>
-            <span className="audience-cta-action">Documentation index (DOCS.md) →</span>
+            <span className="audience-cta-role">Optional · CLI / hardware</span>
+            <span className="audience-cta-action">Operator commands for forks →</span>
           </a>
         </div>
       </section>
@@ -417,23 +423,28 @@ npm run public-lab:preflight       # before you publish or fork`}</pre>
       <section className="public-lab-section" aria-labelledby="entry-heading">
         <h2 id="entry-heading">Find your entry point</h2>
         <div className="audience-cta-grid">
-          <a className="audience-cta-card" href={THESIS_READING_URL} target="_blank" rel="noreferrer">
+          <button type="button" className="audience-cta-card audience-cta-button" onClick={onOpenResearch}>
             <span className="audience-cta-role">I&apos;m a researcher</span>
-            <span className="audience-cta-action">Thesis &amp; evidence pack →</span>
-          </a>
-          <a className="audience-cta-card" href={HARDWARE_QUICKSTART_URL} target="_blank" rel="noreferrer">
+            <span className="audience-cta-action">Thesis, CEIR diagnosis, evidence →</span>
+          </button>
+          <button type="button" className="audience-cta-card audience-cta-button" onClick={onOpenEvidence}>
             <span className="audience-cta-role">I have energy data</span>
-            <span className="audience-cta-action">Hardware quickstart →</span>
-          </a>
-          <button type="button" className="audience-cta-card audience-cta-button" onClick={onOpenConsole}>
+            <span className="audience-cta-action">Evidence Lab (browser) →</span>
+          </button>
+          <button type="button" className="audience-cta-card audience-cta-button" onClick={onOpenSepolia}>
             <span className="audience-cta-role">I&apos;m technical</span>
-            <span className="audience-cta-action">SPK console &amp; contracts →</span>
+            <span className="audience-cta-action">Advanced — Sepolia Proof →</span>
           </button>
           <a className="audience-cta-card" href={PUBLIC_LAB_DOC} target="_blank" rel="noreferrer">
             <span className="audience-cta-role">I&apos;m an advisor / reviewer</span>
             <span className="audience-cta-action">Public Lab v1 doc →</span>
           </a>
         </div>
+        <p className="muted" style={{ marginTop: '0.75rem' }}>
+          <a href={THESIS_PDF_URL} target="_blank" rel="noreferrer">Thesis PDF (v10)</a>
+          {' · '}
+          <a href={CEIR_DIAGNOSIS_URL} target="_blank" rel="noreferrer">CEIR final diagnosis</a>
+        </p>
       </section>
 
       {/* Non-claims */}

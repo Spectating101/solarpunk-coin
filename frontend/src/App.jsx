@@ -2,12 +2,24 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import PublicLabLanding from './components/PublicLabLanding';
+import EvidenceLab from './components/EvidenceLab';
+import CurrencyLab from './components/CurrencyLab';
+import ResearchPanel from './components/ResearchPanel';
 import SpkV1Console from './components/SpkV1Console';
 import { GITHUB_REPO } from './constants/contracts';
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
 
+const TABS = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'evidence', label: 'Evidence Lab' },
+  { id: 'currency', label: 'Currency Lab' },
+  { id: 'sepolia', label: 'Sepolia Proof' },
+  { id: 'research', label: 'Research' },
+];
+
 function App() {
-  const [tab, setTab] = useState('lab');
+  const [tab, setTab] = useState('overview');
+  const [receipt, setReceipt] = useState(null);
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
@@ -92,26 +104,22 @@ function App() {
           </div>
         </div>
         <div className="app-minimal-actions">
-          <nav className="app-tab-nav" aria-label="Demo sections">
-            <button
-              type="button"
-              className={tab === 'lab' ? 'app-tab active' : 'app-tab'}
-              onClick={() => setTab('lab')}
-            >
-              Public Lab
-            </button>
-            <button
-              type="button"
-              className={tab === 'console' ? 'app-tab active' : 'app-tab'}
-              onClick={() => setTab('console')}
-            >
-              SPK console
-            </button>
+          <nav className="app-tab-nav" aria-label="Lab sections">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                className={tab === t.id ? 'app-tab active' : 'app-tab'}
+                onClick={() => setTab(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
           </nav>
           <a href={GITHUB_REPO} target="_blank" rel="noreferrer" className="ghost-link">
             <Github size={16} /> GitHub
           </a>
-          {tab === 'console' && (
+          {tab === 'sepolia' && (
             account ? (
               <div className="wallet-pill">
                 <span />
@@ -134,7 +142,7 @@ function App() {
         </div>
       ) : null}
 
-      {tab === 'console' && wrongNetwork ? (
+      {tab === 'sepolia' && wrongNetwork ? (
         <div className="spk-network-banner" role="status">
           <AlertTriangle size={16} />
           Switch MetaMask to <strong>Sepolia</strong> to send payments.
@@ -142,9 +150,23 @@ function App() {
         </div>
       ) : null}
 
-      {tab === 'lab' ? (
-        <PublicLabLanding onOpenConsole={() => setTab('console')} />
-      ) : (
+      {tab === 'overview' ? (
+        <PublicLabLanding
+          onOpenEvidence={() => setTab('evidence')}
+          onOpenCurrency={() => setTab('currency')}
+          onOpenSepolia={() => setTab('sepolia')}
+          onOpenResearch={() => setTab('research')}
+        />
+      ) : null}
+      {tab === 'evidence' ? (
+        <EvidenceLab
+          onReceiptReady={(built) => {
+            setReceipt(built);
+          }}
+        />
+      ) : null}
+      {tab === 'currency' ? <CurrencyLab receipt={receipt} /> : null}
+      {tab === 'sepolia' ? (
         <SpkV1Console
           provider={provider}
           signer={signer}
@@ -153,7 +175,8 @@ function App() {
           connecting={isConnecting}
           wrongNetwork={wrongNetwork}
         />
-      )}
+      ) : null}
+      {tab === 'research' ? <ResearchPanel /> : null}
     </div>
   );
 }
