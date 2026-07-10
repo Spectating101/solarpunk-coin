@@ -61,7 +61,7 @@ function summarizeNextActions(modes) {
   }
   return [
     "Do not launch externally yet.",
-    "Repair the public testnet proof path first: SPK mint proof, public readback, daily keeper evidence, and frontend build.",
+    "Repair the public testnet proof path first: SPK mint proof, public readback, keeper archive evidence, and frontend build.",
   ];
 }
 
@@ -128,10 +128,12 @@ function evaluateLaunchGate(options = {}) {
       "docs/project/ATTESTED_SPK_DEPLOYMENT.md"
     ),
     check(
-      "Daily keeper evidence is fresh",
-      Number(operational.total_successful_runs || keeper.total_successful_runs || 0) >= 14 && keeperAgeDays <= 3,
-      `Latest keeper run is ${keeperLastDate || "unknown"} (${Number.isFinite(keeperAgeDays) ? keeperAgeDays : "n/a"} days old).`,
-      "docs/project/DAILY_EXPERIMENT_STATUS.md"
+      "Daily keeper evidence archive exists",
+      Number(operational.total_successful_runs || keeper.total_successful_runs || 0) >= 14,
+      // NASA daily keeper retired for Public Lab v1 (2026-07-06); historical runs remain evidence.
+      // Freshness no longer blocks Public Lab publish — see docs/project/LEGACY_AUTOMATION.md
+      `Keeper retired for Public Lab v1; archive has ${Number(operational.total_successful_runs || keeper.total_successful_runs || 0)} successful runs (last ${keeperLastDate || "unknown"}, ${Number.isFinite(keeperAgeDays) ? keeperAgeDays : "n/a"} days ago).`,
+      "docs/project/LEGACY_AUTOMATION.md"
     ),
     check(
       "Frontend proof surface exists",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T16:56:36.932Z",
+  "generated_at": "2026-07-10T08:04:26.454Z",
   "decision": "Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.",
   "recommended_current_launch": "public_testnet_product",
   "next_build_target": "closed_testnet_pilot",
@@ -33,11 +33,11 @@
           "evidence": "docs/project/ATTESTED_SPK_DEPLOYMENT.md"
         },
         {
-          "name": "Daily keeper evidence is fresh",
+          "name": "Daily keeper evidence archive exists",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-07-06 (2 days old).",
-          "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
+          "message": "Keeper retired for Public Lab v1; archive has 44 successful runs (last 2026-07-06, 4 days ago).",
+          "evidence": "docs/project/LEGACY_AUTOMATION.md"
         },
         {
           "name": "Frontend proof surface exists",
@@ -182,11 +182,11 @@
           "evidence": "docs/project/ATTESTED_SPK_DEPLOYMENT.md"
         },
         {
-          "name": "Daily keeper evidence is fresh",
+          "name": "Daily keeper evidence archive exists",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-07-06 (2 days old).",
-          "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
+          "message": "Keeper retired for Public Lab v1; archive has 44 successful runs (last 2026-07-06, 4 days ago).",
+          "evidence": "docs/project/LEGACY_AUTOMATION.md"
         },
         {
           "name": "Frontend proof surface exists",
@@ -380,11 +380,11 @@
           "evidence": "docs/project/ATTESTED_SPK_DEPLOYMENT.md"
         },
         {
-          "name": "Daily keeper evidence is fresh",
+          "name": "Daily keeper evidence archive exists",
           "pass": true,
           "blocking": true,
-          "message": "Latest keeper run is 2026-07-06 (2 days old).",
-          "evidence": "docs/project/DAILY_EXPERIMENT_STATUS.md"
+          "message": "Keeper retired for Public Lab v1; archive has 44 successful runs (last 2026-07-06, 4 days ago).",
+          "evidence": "docs/project/LEGACY_AUTOMATION.md"
         },
         {
           "name": "Frontend proof surface exists",

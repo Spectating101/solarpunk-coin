@@ -1,6 +1,6 @@
 # SolarPunk Hardware Provenance Model
 
-- generated_at: `2026-07-08T16:56:37.645Z`
+- generated_at: `2026-07-10T08:04:27.159Z`
 - source_artifact: `state/product/inverter_meter_adapter_receipt.json`
 - current_hardware_level: `L0`
 - current_hardware_label: `Adapter sample or fixture`

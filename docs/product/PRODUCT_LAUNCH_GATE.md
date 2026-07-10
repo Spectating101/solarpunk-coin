@@ -1,6 +1,6 @@
 # Product Launch Gate
 
-- generated_at: `2026-07-08T16:56:36.932Z`
+- generated_at: `2026-07-10T08:04:26.454Z`
 - decision: Launch the SolarPunk Public Lab; keep closed-pilot and paid/mainnet gates blocked until their missing controls are resolved.
 - recommended_current_launch: `public_testnet_product`
 - next_build_target: `closed_testnet_pilot`
@@ -29,8 +29,8 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-07-06 (2 days old).
-  Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
+- PASS `Daily keeper evidence archive exists`: Keeper retired for Public Lab v1; archive has 44 successful runs (last 2026-07-06, 4 days ago).
+  Evidence: `docs/project/LEGACY_AUTOMATION.md`
 - PASS `Frontend proof surface exists`: Frontend has Public Lab landing and SPK v1 console.
   Evidence: `frontend/src`
 - PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
@@ -72,8 +72,8 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-07-06 (2 days old).
-  Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
+- PASS `Daily keeper evidence archive exists`: Keeper retired for Public Lab v1; archive has 44 successful runs (last 2026-07-06, 4 days ago).
+  Evidence: `docs/project/LEGACY_AUTOMATION.md`
 - PASS `Frontend proof surface exists`: Frontend has Public Lab landing and SPK v1 console.
   Evidence: `frontend/src`
 - PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.
@@ -129,8 +129,8 @@
   Evidence: `docs/product/SPK_PUBLIC_READBACK.md`
 - PASS `Source verified proof stack`: Attested SPK proof contracts are source-verified on Sepolia.
   Evidence: `docs/project/ATTESTED_SPK_DEPLOYMENT.md`
-- PASS `Daily keeper evidence is fresh`: Latest keeper run is 2026-07-06 (2 days old).
-  Evidence: `docs/project/DAILY_EXPERIMENT_STATUS.md`
+- PASS `Daily keeper evidence archive exists`: Keeper retired for Public Lab v1; archive has 44 successful runs (last 2026-07-06, 4 days ago).
+  Evidence: `docs/project/LEGACY_AUTOMATION.md`
 - PASS `Frontend proof surface exists`: Frontend has Public Lab landing and SPK v1 console.
   Evidence: `frontend/src`
 - PASS `Pilot CSV proof exists`: Pilot CSV proof produces accepted readings, source hash, and SPK mint preview.

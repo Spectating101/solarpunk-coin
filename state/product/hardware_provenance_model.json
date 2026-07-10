@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T16:56:37.645Z",
+  "generated_at": "2026-07-10T08:04:27.159Z",
   "title": "SolarPunk Hardware Provenance Model",
   "purpose": "Make physical hardware risk explicit before treating meter or inverter data as real-value SPK mint input.",
   "source_artifact": "state/product/inverter_meter_adapter_receipt.json",
