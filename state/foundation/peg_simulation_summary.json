@@ -1,7 +1,5 @@
 {
-  "ok": true,
+  "ok": false,
   "script": "scripts/simulate_peg.py",
-  "stdout_tail": "Running SolarPunkCoin Peg Stabilization Simulation\n   Duration: 1000 days\n   Initial Supply: 1,000,000 SPK\n   Daily Surplus: 1,000 kWh\n   Peg Band: +/-5.0%\n   Control Gains (P/I): 0.5/0.1\n   Supply-Price Elasticity: 0.8\n\n\n============================================================\nSIMULATION RESULTS\n============================================================\n\nPrice Dynamics:\n  Average Price: $0.9973\n  Volatility: 3.42%/day\n  Min/Max: $0.8682 / $1.1233\n\nPeg Performance:\n  Avg Deviation: -27 bps\n  Std Deviation: 413 bps\n  Max Deviation: 1318 bps\n  In +/-5% Band: 78.6% of days\n\nSupply Management:\n  Initial Supply: 1,000,000 SPK\n  Final Supply: 832,682 SPK\n  Growth: +-16.73%\n  Cumulative Minted: 19,129,257 SPK\n  Cumulative Burned: 20,295,575 SPK\n\nControl Actions:\n  Mint Days: 499\n  Burn Days: 501\n  Hold Days: 0\nChart saved to spk_simulation.png\n\nSimulation complete!\n\nKey Takeaway:\nPI control is EFFECTIVE - peg maintained >70% of time\n\nFull results saved to spk_simulation_results.csv\n",
-  "max_deviation_bps": "1318 bps",
-  "pct_in_band": "78.6% of days"
+  "stdout_tail": ""
 }
