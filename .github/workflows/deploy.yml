@@ -1,3 +1,9 @@
+# Verify Public Lab demo build
+#
+# GitHub Pages for this repo is served from /docs on main (legacy).
+# Live demo path: https://spectating101.github.io/solarpunk-coin/demo/
+# Publishing: commit updates under docs/demo/ (npm run public-lab:publish locally).
+
 name: Deploy to GitHub Pages
 
 on:
@@ -7,8 +13,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pages"
@@ -24,8 +28,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: "22"
+          # Root package-lock.json is gitignored; cache frontend lock instead.
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Preflight Public Lab
         run: |
@@ -35,18 +41,8 @@ jobs:
       - name: Build and mirror demo to docs/demo
         run: bash scripts/publish_demo_to_docs.sh
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./frontend/dist
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Confirm demo artifact
+        run: |
+          test -f docs/demo/index.html
+          test -f docs/demo/spk_v1.json
+          node -e 'const j=require("./docs/demo/spk_v1.json"); if(!j.contracts?.solar_punk_coin) process.exit(1); console.log(j.product, j.contracts.solar_punk_coin);'
