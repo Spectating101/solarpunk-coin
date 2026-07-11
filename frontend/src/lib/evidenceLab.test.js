@@ -111,6 +111,19 @@ describe('evidenceLab', () => {
     expect(result.rejected.some((r) => r.meter_id === 'B' && r.issues.includes('non_monotonic_cumulative'))).toBe(true);
   });
 
+  it('evaluates cumulative monotonicity in chronological order, not CSV row order', () => {
+    const csv = `timestamp,generation_kwh,consumption_kwh,cumulative_kwh,meter_id
+2026-01-15T09:00:00Z,1,0,101,A
+2026-01-15T08:00:00Z,1,0,100,A
+2026-01-15T10:00:00Z,1,0,102,A
+`;
+    const { headers, rows } = parseCsv(csv);
+    const result = validateMeterRows(rows, autoMapColumns(headers));
+    expect(result.rejected.some((r) => r.issues.includes('non_monotonic_cumulative'))).toBe(false);
+    expect(result.accepted).toHaveLength(3);
+    expect(result.accepted.map((r) => r.cumulative_kwh)).toEqual([100, 101, 102]);
+  });
+
   it('does not treat generation-only data as eligible surplus', async () => {
     const csv = `timestamp,generation_kwh
 2026-01-15T08:00:00Z,10

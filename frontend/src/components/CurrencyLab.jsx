@@ -145,6 +145,8 @@ export default function CurrencyLab({ receipt }) {
         <p className="muted" title={constraintTips.issuance?.tip}>
           Illustrative issuance cap under the Public Lab 1 SPK / eligible surplus kWh rule.
           Replay of the same evidence hash is blocked. Payments do not reduce settlement capacity.
+          Settlement capacity starts as an illustrative full-cover baseline equal to issued SPK —
+          issuance does not economically fund settlement.
         </p>
       </div>
 

@@ -147,6 +147,11 @@ function median(values) {
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
+/**
+ * Heuristic interval-gap detection (not comprehensive missing-data detection).
+ * Uses median inter-arrival within each meter; only evaluates groups with ≥3 rows.
+ * Gaps are warnings, not row rejections.
+ */
 export function detectIntervalGaps(acceptedRows, { multiplier = 2 } = {}) {
   const byMeter = new Map();
   for (const row of acceptedRows) {
@@ -189,6 +194,10 @@ function mappingHasSurplusBasis(mapping) {
 
 /**
  * Validate mapped rows. Returns accepted rows, rejects, gaps, totals, issuance eligibility.
+ *
+ * Two-stage flow:
+ * 1) parse + reject malformed / negative / duplicate / timezone issues;
+ * 2) per meter, sort by canonical timestamp, then apply cumulative monotonicity.
  */
 export function validateMeterRows(rawRows, mapping) {
   if (!mapping.timestamp) {
@@ -228,11 +237,11 @@ export function validateMeterRows(rawRows, mapping) {
     };
   }
 
-  const accepted = [];
+  const candidates = [];
   const rejected = [];
   const seenTimestamps = new Map(); // meterKey|iso
-  const prevCumulative = new Map(); // meterKey
 
+  // Stage 1: parse and reject malformed / negative / duplicate / timezone issues.
   rawRows.forEach((raw, index) => {
     const issues = [];
     const meterId = mapping.meter_id ? String(raw[mapping.meter_id] || '').trim() || null : null;
@@ -266,10 +275,6 @@ export function validateMeterRows(rawRows, mapping) {
     if (mapping.cumulative_kwh) {
       cumulative = toNumber(raw[mapping.cumulative_kwh]);
       if (cumulative == null || Number.isNaN(cumulative)) issues.push('malformed_cumulative');
-      else {
-        const prev = prevCumulative.get(meterKey);
-        if (prev != null && cumulative < prev) issues.push('non_monotonic_cumulative');
-      }
     }
 
     if (iso) {
@@ -287,7 +292,6 @@ export function validateMeterRows(rawRows, mapping) {
     }
 
     seenTimestamps.set(`${meterKey}|${iso}`, index);
-    if (cumulative != null) prevCumulative.set(meterKey, cumulative);
 
     const { surplus, basis, surplus_basis_ok } = computeEligibleSurplus({
       generation,
@@ -295,7 +299,7 @@ export function validateMeterRows(rawRows, mapping) {
       exportKwh,
     });
 
-    accepted.push({
+    candidates.push({
       row_index: index + 1,
       timestamp: iso,
       generation_kwh: generation,
@@ -303,10 +307,48 @@ export function validateMeterRows(rawRows, mapping) {
       export_kwh: exportKwh,
       cumulative_kwh: cumulative,
       meter_id: meterId,
+      meter_key: meterKey,
       eligible_surplus_kwh: Number(surplus.toFixed(6)),
       surplus_basis: basis,
       surplus_basis_ok,
     });
+  });
+
+  // Stage 2: chronological cumulative monotonicity per meter.
+  const accepted = [];
+  const byMeter = new Map();
+  for (const row of candidates) {
+    if (!byMeter.has(row.meter_key)) byMeter.set(row.meter_key, []);
+    byMeter.get(row.meter_key).push(row);
+  }
+
+  for (const rows of byMeter.values()) {
+    const sorted = [...rows].sort((a, b) => {
+      const dt = Date.parse(a.timestamp) - Date.parse(b.timestamp);
+      return dt !== 0 ? dt : a.row_index - b.row_index;
+    });
+    let prevCumulative = null;
+    for (const row of sorted) {
+      if (row.cumulative_kwh != null) {
+        if (prevCumulative != null && row.cumulative_kwh < prevCumulative) {
+          rejected.push({
+            row_index: row.row_index,
+            issues: ['non_monotonic_cumulative'],
+            meter_id: row.meter_id,
+          });
+          continue;
+        }
+        prevCumulative = row.cumulative_kwh;
+      }
+      const { meter_key: _mk, ...publicRow } = row;
+      accepted.push(publicRow);
+    }
+  }
+
+  // Keep accepted rows in chronological order for downstream gap heuristics.
+  accepted.sort((a, b) => {
+    const dt = Date.parse(a.timestamp) - Date.parse(b.timestamp);
+    return dt !== 0 ? dt : a.row_index - b.row_index;
   });
 
   const gap_warnings = detectIntervalGaps(accepted);
@@ -411,6 +453,7 @@ export async function buildEvidenceReceipt(acceptedRows, totals, meta = {}) {
       meter_id: r.meter_id ?? null,
     })),
     gap_warnings: meta.gap_warnings || [],
+    gap_detection: 'heuristic_median_cadence_per_meter_min_3_rows',
     issuance_eligible: Boolean(totals?.issuance_eligible),
     issuance_reason: totals?.issuance_reason || null,
     surplus_basis_used: totals?.surplus_basis_used || [],

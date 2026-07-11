@@ -137,7 +137,8 @@ export function issueSpk(sim, amount) {
   next.balances.issued_spk = Number(qty.toFixed(6));
   next.balances.circulating_spk = Number(qty.toFixed(6));
   next.balances.remaining_spk = Number(qty.toFixed(6));
-  // Settlement capacity is funded by issuance — not reduced by later payments.
+  // Illustrative baseline: settlement capacity initialized equal to issued SPK (full-cover assumption).
+  // Issuance does not economically fund settlement capacity.
   next.balances.settlement_capacity_spk = Number(qty.toFixed(6));
   next.evidence.consumed_for_mint = true;
   next.seen_evidence_hashes.push(next.evidence.evidence_hash);
@@ -147,7 +148,7 @@ export function issueSpk(sim, amount) {
     constraint: 'issuance',
     ok: true,
     severity: 'success',
-    detail: `Issued ${qty} simulated SPK; settlement capacity set to ${qty} SPK.`,
+    detail: `Issued ${qty} simulated SPK. Illustrative baseline: settlement capacity initialized equal to issued SPK (full-cover assumption).`,
     amount: qty,
   });
 

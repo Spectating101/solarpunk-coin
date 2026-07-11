@@ -246,7 +246,10 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
           </p>
           {result.gap_warnings?.length > 0 ? (
             <details>
-              <summary>Interval gap warnings ({result.gap_warnings.length})</summary>
+              <summary>Interval gap warnings ({result.gap_warnings.length}) — heuristic</summary>
+              <p className="muted">
+                Heuristic only (median cadence per meter, ≥3 rows). Not comprehensive missing-data detection.
+              </p>
               <ul className="reject-list">
                 {result.gap_warnings.slice(0, 20).map((g, i) => (
                   <li key={i}>

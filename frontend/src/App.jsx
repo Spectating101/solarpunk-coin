@@ -135,7 +135,7 @@ function App() {
         </div>
       </header>
 
-      {connectError ? (
+      {connectError && tab === 'sepolia' ? (
         <div className="spk-network-banner spk-error-banner" role="alert">
           <AlertTriangle size={16} />
           {connectError}
