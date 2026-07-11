@@ -7,6 +7,7 @@ on:
       - 'contracts/protocol/**'
       - 'test/ConstraintProtocol.test.js'
       - 'scripts/protocol_alpha_demo.mjs'
+      - 'scripts/capture_constraint_protocol_alpha.mjs'
       - 'frontend/**'
       - 'docs/protocol/**'
       - '.github/workflows/constraint_protocol_alpha.yml'
@@ -55,3 +56,25 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: frontend
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture protocol alpha browser flows
+        run: |
+          cd frontend
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/protocol-alpha-preview.log 2>&1 &
+          cd ..
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail http://127.0.0.1:4173/ >/dev/null
+          node scripts/capture_constraint_protocol_alpha.mjs _review_protocol_alpha
+
+      - name: Upload protocol alpha visual review
+        uses: actions/upload-artifact@v4
+        with:
+          name: constraint-protocol-alpha-visual
+          path: _review_protocol_alpha/
+          retention-days: 14
