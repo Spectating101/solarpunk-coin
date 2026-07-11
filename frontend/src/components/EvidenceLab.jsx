@@ -1,5 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { AlertTriangle, Download, FileUp, FlaskConical, Hash, CheckCircle2 } from 'lucide-react';
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  Download,
+  FileUp,
+  FlaskConical,
+  Hash,
+} from 'lucide-react';
 import {
   MAX_FILE_BYTES,
   autoMapColumns,
@@ -12,7 +20,12 @@ import { CONSTRAINTS } from '../lib/currencyLab';
 
 const SAMPLE_URL = `${import.meta.env.BASE_URL}samples/public_lab_sample_meter.csv`;
 
-export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
+export default function EvidenceLab({
+  activeReceipt,
+  onContinue,
+  onReceiptReady,
+  onReceiptInvalidated,
+}) {
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
   const [filename, setFilename] = useState(null);
@@ -43,6 +56,7 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
       setError(validation.error || 'Validation failed');
       return;
     }
+
     const built = await buildEvidenceReceipt(validation.accepted, validation.totals, {
       filename: name,
       source,
@@ -117,7 +131,8 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
   };
 
   const previewRows = useMemo(() => rawRows.slice(0, previewLimit), [rawRows, previewLimit]);
-  const fmt = (v) => (v == null ? '—' : String(v));
+  const fmt = (value) => (value == null ? '—' : String(value));
+  const sessionReceipt = receipt || activeReceipt;
 
   return (
     <section className="workbench-panel evidence-lab" aria-labelledby="evidence-lab-heading">
@@ -145,6 +160,18 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
           <input type="file" accept=".csv,text/csv" onChange={onFile} hidden />
         </label>
       </div>
+
+      {activeReceipt && !receipt && status === 'idle' ? (
+        <div className="workbench-session-note" role="status">
+          A browser-session receipt is already active: <code>{activeReceipt.evidence_hash.slice(0, 12)}…</code>.
+          Load new evidence to replace it, or continue with the existing receipt.
+          <div className="workbench-card-actions">
+            <button type="button" className="inline-link-button" onClick={onContinue}>
+              Continue to Currency Lab <ArrowRight size={15} aria-hidden />
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       <aside className="workbench-callout" role="note">
         <AlertTriangle size={16} aria-hidden />
@@ -183,8 +210,8 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
                   onChange={(e) => remap(field, e.target.value)}
                 >
                   <option value="">—</option>
-                  {headers.map((h) => (
-                    <option key={h} value={h}>{h}</option>
+                  {headers.map((header) => (
+                    <option key={header} value={header}>{header}</option>
                   ))}
                 </select>
               </label>
@@ -200,22 +227,25 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
             <table className="workbench-table">
               <thead>
                 <tr>
-                  {headers.map((h) => (
-                    <th key={h}>{h}</th>
+                  {headers.map((header) => (
+                    <th key={header}>{header}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {previewRows.map((row, i) => (
-                  <tr key={i}>
-                    {headers.map((h) => (
-                      <td key={h}>{row[h]}</td>
+                {previewRows.map((row, index) => (
+                  <tr key={index}>
+                    {headers.map((header) => (
+                      <td key={header}>{row[header]}</td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          {rawRows.length > previewLimit ? (
+            <p className="muted">Showing {previewLimit} of {rawRows.length} rows.</p>
+          ) : null}
         </div>
       ) : null}
 
@@ -251,11 +281,11 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
                 Heuristic only (median cadence per meter, ≥3 rows). Not comprehensive missing-data detection.
               </p>
               <ul className="reject-list">
-                {result.gap_warnings.slice(0, 20).map((g, i) => (
-                  <li key={i}>
-                    {g.meter_id || 'default'}: {g.start} → {g.end}
-                    {' '}(Δ {Math.round(g.observed_delta_ms / 60000)} min; expected ~
-                    {Math.round(g.expected_cadence_ms / 60000)} min)
+                {result.gap_warnings.slice(0, 20).map((gap, index) => (
+                  <li key={index}>
+                    {gap.meter_id || 'default'}: {gap.start} → {gap.end}
+                    {' '}(Δ {Math.round(gap.observed_delta_ms / 60000)} min; expected ~
+                    {Math.round(gap.expected_cadence_ms / 60000)} min)
                   </li>
                 ))}
               </ul>
@@ -265,9 +295,9 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
             <details>
               <summary>Rejected row details ({result.rejected.length})</summary>
               <ul className="reject-list">
-                {result.rejected.slice(0, 20).map((r) => (
-                  <li key={r.row_index}>
-                    Row {r.row_index}: {r.issues.join(', ')}
+                {result.rejected.slice(0, 20).map((rejected) => (
+                  <li key={rejected.row_index}>
+                    Row {rejected.row_index}: {rejected.issues.join(', ')}
                   </li>
                 ))}
               </ul>
@@ -287,14 +317,25 @@ export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
             Status: local validation · unsigned ·{' '}
             <strong>not accepted for live minting</strong>
           </p>
-          <button
-            type="button"
-            className="wallet-button"
-            onClick={() => downloadJson(`spk-evidence-receipt-${receipt.evidence_hash.slice(0, 8)}.json`, receipt)}
-          >
-            <Download size={16} /> Download JSON receipt
-          </button>
+          <div className="workbench-card-actions">
+            <button
+              type="button"
+              className="wallet-button"
+              onClick={() => downloadJson(`spk-evidence-receipt-${receipt.evidence_hash.slice(0, 8)}.json`, receipt)}
+            >
+              <Download size={16} /> Download JSON receipt
+            </button>
+            <button type="button" className="ghost-button" onClick={onContinue}>
+              Continue to Currency Lab <ArrowRight size={15} aria-hidden />
+            </button>
+          </div>
         </div>
+      ) : null}
+
+      {!receipt && sessionReceipt && status !== 'idle' ? (
+        <p className="muted" role="status">
+          A replacement validation is in progress. The prior session receipt has been invalidated until validation succeeds.
+        </p>
       ) : null}
     </section>
   );

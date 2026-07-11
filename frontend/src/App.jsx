@@ -4,10 +4,17 @@ import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import PublicLabLanding from './components/PublicLabLanding';
 import EvidenceLab from './components/EvidenceLab';
 import CurrencyLab from './components/CurrencyLab';
+import LabSessionBar from './components/LabSessionBar';
 import ResearchPanel from './components/ResearchPanel';
 import SpkV1Console from './components/SpkV1Console';
 import { GITHUB_REPO } from './constants/contracts';
+import {
+  clearSessionReceipt,
+  loadSessionReceipt,
+  saveSessionReceipt,
+} from './lib/sessionReceipt';
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
+import './workbenchSession.css';
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
@@ -17,15 +24,61 @@ const TABS = [
   { id: 'research', label: 'Research' },
 ];
 
+const TAB_IDS = new Set(TABS.map((tab) => tab.id));
+
+function tabFromHash() {
+  if (typeof window === 'undefined') return 'overview';
+  const candidate = window.location.hash.replace(/^#/, '').toLowerCase();
+  return TAB_IDS.has(candidate) ? candidate : 'overview';
+}
+
 function App() {
-  const [tab, setTab] = useState('overview');
-  const [receipt, setReceipt] = useState(null);
+  const [tab, setTab] = useState(tabFromHash);
+  const [receipt, setReceipt] = useState(loadSessionReceipt);
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [chainId, setChainId] = useState(null);
   const [connectError, setConnectError] = useState(null);
+
+  const navigate = useCallback((nextTab) => {
+    if (!TAB_IDS.has(nextTab)) return;
+    if (window.location.hash !== `#${nextTab}`) {
+      window.location.hash = nextTab;
+    } else {
+      setTab(nextTab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
+
+  const acceptReceipt = useCallback((built) => {
+    const summary = saveSessionReceipt(built);
+    setReceipt(summary || built);
+  }, []);
+
+  const invalidateReceipt = useCallback(() => {
+    clearSessionReceipt();
+    setReceipt(null);
+  }, []);
+
+  useEffect(() => {
+    if (!window.location.hash) {
+      window.history.replaceState(
+        null,
+        '',
+        `${window.location.pathname}${window.location.search}#overview`,
+      );
+    }
+
+    const syncHash = () => {
+      setTab(tabFromHash());
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('hashchange', syncHash);
+    return () => window.removeEventListener('hashchange', syncHash);
+  }, []);
 
   const refreshChain = useCallback(async (p) => {
     if (!p) return;
@@ -92,6 +145,7 @@ function App() {
   };
 
   const wrongNetwork = account && chainId != null && chainId !== SEPOLIA_CHAIN_ID;
+  const showSessionBar = ['evidence', 'currency', 'sepolia'].includes(tab);
 
   return (
     <div className="app-minimal">
@@ -110,7 +164,8 @@ function App() {
                 key={t.id}
                 type="button"
                 className={tab === t.id ? 'app-tab active' : 'app-tab'}
-                onClick={() => setTab(t.id)}
+                onClick={() => navigate(t.id)}
+                aria-current={tab === t.id ? 'page' : undefined}
               >
                 {t.label}
               </button>
@@ -135,6 +190,15 @@ function App() {
         </div>
       </header>
 
+      {showSessionBar ? (
+        <LabSessionBar
+          receipt={receipt}
+          activeTab={tab}
+          onNavigate={navigate}
+          onClearReceipt={invalidateReceipt}
+        />
+      ) : null}
+
       {connectError && tab === 'sepolia' ? (
         <div className="spk-network-banner spk-error-banner" role="alert">
           <AlertTriangle size={16} />
@@ -152,23 +216,27 @@ function App() {
 
       {tab === 'overview' ? (
         <PublicLabLanding
-          onOpenEvidence={() => setTab('evidence')}
-          onOpenCurrency={() => setTab('currency')}
-          onOpenSepolia={() => setTab('sepolia')}
-          onOpenResearch={() => setTab('research')}
+          onOpenEvidence={() => navigate('evidence')}
+          onOpenCurrency={() => navigate('currency')}
+          onOpenSepolia={() => navigate('sepolia')}
+          onOpenResearch={() => navigate('research')}
         />
       ) : null}
       {tab === 'evidence' ? (
         <EvidenceLab
-          onReceiptReady={(built) => {
-            setReceipt(built);
-          }}
-          onReceiptInvalidated={() => {
-            setReceipt(null);
-          }}
+          activeReceipt={receipt}
+          onContinue={() => navigate('currency')}
+          onReceiptReady={acceptReceipt}
+          onReceiptInvalidated={invalidateReceipt}
         />
       ) : null}
-      {tab === 'currency' ? <CurrencyLab receipt={receipt} /> : null}
+      {tab === 'currency' ? (
+        <CurrencyLab
+          receipt={receipt}
+          onOpenEvidence={() => navigate('evidence')}
+          onOpenSepolia={() => navigate('sepolia')}
+        />
+      ) : null}
       {tab === 'sepolia' ? (
         <SpkV1Console
           provider={provider}
