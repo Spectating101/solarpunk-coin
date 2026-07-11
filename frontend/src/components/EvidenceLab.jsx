@@ -12,7 +12,7 @@ import { CONSTRAINTS } from '../lib/currencyLab';
 
 const SAMPLE_URL = `${import.meta.env.BASE_URL}samples/public_lab_sample_meter.csv`;
 
-export default function EvidenceLab({ onReceiptReady }) {
+export default function EvidenceLab({ onReceiptReady, onReceiptInvalidated }) {
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
   const [filename, setFilename] = useState(null);
@@ -25,10 +25,17 @@ export default function EvidenceLab({ onReceiptReady }) {
 
   const dataConstraint = CONSTRAINTS.find((c) => c.id === 'data');
 
+  const invalidate = useCallback(() => {
+    setReceipt(null);
+    onReceiptInvalidated?.();
+  }, [onReceiptInvalidated]);
+
   const runValidation = useCallback(async (rows, map, name, source) => {
     setStatus('validating');
     setError(null);
     setReceipt(null);
+    onReceiptInvalidated?.();
+
     const validation = validateMeterRows(rows, map);
     setResult(validation);
     if (!validation.ok) {
@@ -39,18 +46,20 @@ export default function EvidenceLab({ onReceiptReady }) {
     const built = await buildEvidenceReceipt(validation.accepted, validation.totals, {
       filename: name,
       source,
+      rejected: validation.rejected,
+      gap_warnings: validation.gap_warnings,
     });
     setReceipt(built);
     setStatus('success');
     onReceiptReady?.(built, validation);
-  }, [onReceiptReady]);
+  }, [onReceiptReady, onReceiptInvalidated]);
 
   const ingestText = useCallback(async (text, name, source) => {
     try {
+      invalidate();
       setStatus('loading');
       setError(null);
       setResult(null);
-      setReceipt(null);
       const { headers: hdrs, rows } = parseCsv(text);
       const map = autoMapColumns(hdrs);
       setHeaders(hdrs);
@@ -59,12 +68,16 @@ export default function EvidenceLab({ onReceiptReady }) {
       setFilename(name);
       await runValidation(rows, map, name, source);
     } catch (err) {
+      invalidate();
       setStatus('error');
       setError(err.message || String(err));
+      setResult(null);
+      setReceipt(null);
     }
-  }, [runValidation]);
+  }, [invalidate, runValidation]);
 
   const loadSample = async () => {
+    invalidate();
     setStatus('loading');
     setError(null);
     try {
@@ -73,6 +86,7 @@ export default function EvidenceLab({ onReceiptReady }) {
       const text = await res.text();
       await ingestText(text, 'public_lab_sample_meter.csv', 'bundled_sample');
     } catch (err) {
+      invalidate();
       setStatus('error');
       setError(err.message || String(err));
     }
@@ -82,9 +96,12 @@ export default function EvidenceLab({ onReceiptReady }) {
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
+    invalidate();
     if (file.size > MAX_FILE_BYTES) {
       setStatus('error');
       setError(`File too large (${file.size} bytes). Limit is ${MAX_FILE_BYTES} bytes.`);
+      setResult(null);
+      setReceipt(null);
       return;
     }
     const text = await file.text();
@@ -92,6 +109,7 @@ export default function EvidenceLab({ onReceiptReady }) {
   };
 
   const remap = async (canonical, header) => {
+    invalidate();
     const next = { ...mapping, [canonical]: header || undefined };
     if (!header) delete next[canonical];
     setMapping(next);
@@ -99,17 +117,18 @@ export default function EvidenceLab({ onReceiptReady }) {
   };
 
   const previewRows = useMemo(() => rawRows.slice(0, previewLimit), [rawRows, previewLimit]);
+  const fmt = (v) => (v == null ? '—' : String(v));
 
   return (
     <section className="workbench-panel evidence-lab" aria-labelledby="evidence-lab-heading">
       <header className="workbench-panel-header">
-        <p className="eyebrow">Browser-local · no upload server</p>
+        <p className="eyebrow">Browser-local · unsigned · no upload server</p>
         <h1 id="evidence-lab-heading">
           <FlaskConical size={22} aria-hidden /> Evidence Lab
         </h1>
         <p className="workbench-lead">
-          Validate a meter CSV in your browser, compute eligible surplus, and download a SHA-256
-          evidence receipt. Nothing is minted on-chain from this step.
+          Validate a meter CSV in your browser and download a SHA-256 evidence receipt.
+          Generation alone is not surplus. Nothing is minted on-chain from this step.
         </p>
         <p className="constraint-chip" title={dataConstraint?.tip}>
           Constraint: {dataConstraint?.label}
@@ -130,9 +149,9 @@ export default function EvidenceLab({ onReceiptReady }) {
       <aside className="workbench-callout" role="note">
         <AlertTriangle size={16} aria-hidden />
         <div>
-          <strong>Boundaries:</strong> validated locally · evidence receipt generated ·{' '}
-          <em>not</em> accepted for live minting · <em>not</em> proof of physical truth or
-          revenue-grade meter finality. Files stay in your browser.
+          <strong>Boundaries:</strong> validated locally · unsigned receipt ·{' '}
+          <em>not</em> accepted for live minting · <em>not</em> physical truth / revenue-grade.
+          Timestamps must include <code>Z</code> or a UTC offset. Files stay in your browser.
         </div>
       </aside>
 
@@ -151,7 +170,10 @@ export default function EvidenceLab({ onReceiptReady }) {
       {headers.length > 0 ? (
         <div className="workbench-card">
           <h2>Column mapping</h2>
-          <p className="muted">Required: timestamp, generation_kwh. Optional: consumption, export, meter_id, cumulative.</p>
+          <p className="muted">
+            Surplus basis requires <strong>export</strong> or <strong>generation + consumption</strong>.
+            Generation-only data can be inspected but cannot create an issuance cap.
+          </p>
           <div className="mapping-grid">
             {['timestamp', 'generation_kwh', 'consumption_kwh', 'export_kwh', 'meter_id', 'cumulative_kwh'].map((field) => (
               <label key={field} className="mapping-field">
@@ -194,9 +216,6 @@ export default function EvidenceLab({ onReceiptReady }) {
               </tbody>
             </table>
           </div>
-          {rawRows.length > previewLimit ? (
-            <p className="muted">Showing {previewLimit} of {rawRows.length} rows.</p>
-          ) : null}
         </div>
       ) : null}
 
@@ -208,12 +227,37 @@ export default function EvidenceLab({ onReceiptReady }) {
           <ul className="stat-grid">
             <li><span>Accepted rows</span><strong>{result.totals.accepted_rows}</strong></li>
             <li><span>Rejected rows</span><strong>{result.totals.rejected_rows}</strong></li>
-            <li><span>Generation</span><strong>{result.totals.generation_kwh} kWh</strong></li>
-            <li><span>Consumption</span><strong>{result.totals.consumption_kwh} kWh</strong></li>
-            <li><span>Export</span><strong>{result.totals.export_kwh} kWh</strong></li>
+            <li><span>Gap warnings</span><strong>{result.totals.gap_warning_count}</strong></li>
+            <li><span>Generation</span><strong>{fmt(result.totals.generation_kwh)} kWh</strong></li>
+            <li><span>Consumption</span><strong>{fmt(result.totals.consumption_kwh)} kWh</strong></li>
+            <li><span>Export</span><strong>{fmt(result.totals.export_kwh)} kWh</strong></li>
             <li><span>Eligible surplus</span><strong>{result.totals.eligible_surplus_kwh} kWh</strong></li>
-            <li><span>Issuance cap</span><strong>{result.totals.issuance_cap_spk} SPK</strong></li>
+            <li>
+              <span>Issuance eligible</span>
+              <strong>{result.totals.issuance_eligible ? 'yes' : 'no'}</strong>
+            </li>
           </ul>
+          <p className="muted">
+            {result.totals.illustrative_cap_label}:{' '}
+            <strong>{result.totals.issuance_cap_spk} SPK</strong>
+            {!result.totals.issuance_eligible ? (
+              <> · reason: <code>{result.totals.issuance_reason}</code></>
+            ) : null}
+          </p>
+          {result.gap_warnings?.length > 0 ? (
+            <details>
+              <summary>Interval gap warnings ({result.gap_warnings.length})</summary>
+              <ul className="reject-list">
+                {result.gap_warnings.slice(0, 20).map((g, i) => (
+                  <li key={i}>
+                    {g.meter_id || 'default'}: {g.start} → {g.end}
+                    {' '}(Δ {Math.round(g.observed_delta_ms / 60000)} min; expected ~
+                    {Math.round(g.expected_cadence_ms / 60000)} min)
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ) : null}
           {result.rejected.length > 0 ? (
             <details>
               <summary>Rejected row details ({result.rejected.length})</summary>
@@ -236,6 +280,10 @@ export default function EvidenceLab({ onReceiptReady }) {
           </h2>
           <p className="mono-hash">{receipt.evidence_hash}</p>
           <p className="muted">{receipt.disclaimer}</p>
+          <p className="muted">
+            Status: local validation · unsigned ·{' '}
+            <strong>not accepted for live minting</strong>
+          </p>
           <button
             type="button"
             className="wallet-button"

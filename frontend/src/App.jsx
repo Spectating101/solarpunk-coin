@@ -163,6 +163,9 @@ function App() {
           onReceiptReady={(built) => {
             setReceipt(built);
           }}
+          onReceiptInvalidated={() => {
+            setReceipt(null);
+          }}
         />
       ) : null}
       {tab === 'currency' ? <CurrencyLab receipt={receipt} /> : null}

@@ -1,16 +1,22 @@
 import React from 'react';
 import { BookOpen, ExternalLink, FileText } from 'lucide-react';
-import { GITHUB_REPO, DOCS_MAP_URL, PUBLIC_LAB_DEMO_URL } from '../constants/contracts';
+import {
+  GITHUB_REPO,
+  DOCS_MAP_URL,
+  PUBLIC_LAB_DEMO_URL,
+  THESIS_CANONICAL_URL,
+  CEIR_DIAGNOSIS_URL,
+} from '../constants/contracts';
 
 const LINKS = [
   {
-    title: 'Thesis (v10 submission PDF)',
-    href: `${GITHUB_REPO}/blob/main/energy_constraint_thesis_final_submission_v10.pdf`,
-    note: 'Canonical rendered manuscript. Corrected CEIR-boundary revision may replace this when committed.',
+    title: 'Thesis PDF (temporary development link)',
+    href: THESIS_CANONICAL_URL,
+    note: 'Points at v10 until the CEIR-boundary revised PDF is committed. Not a claim that v10 is final.',
   },
   {
     title: 'CEIR final diagnosis',
-    href: `${GITHUB_REPO}/blob/main/thesis_package/CEIR_FINAL_DIAGNOSIS.md`,
+    href: CEIR_DIAGNOSIS_URL,
     note: 'Boundary / negative-identification audit — not a validation of SPK.',
   },
   {
@@ -54,8 +60,8 @@ export default function ResearchPanel() {
           <BookOpen size={22} aria-hidden /> Research
         </h1>
         <p className="workbench-lead">
-          Thesis, CEIR diagnosis, evidence pack, and limitations. The retired Markdown grounded
-          manuscript is not the primary thesis link.
+          Thesis (temporary link), CEIR diagnosis, evidence pack, and limitations. The retired
+          Markdown grounded manuscript is not the primary thesis link.
         </p>
       </header>
 

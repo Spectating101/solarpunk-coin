@@ -17,20 +17,27 @@ export default function CurrencyLab({ receipt }) {
   const [payAmount, setPayAmount] = useState('5');
   const [message, setMessage] = useState(null);
 
+  const eligible = receipt?.totals?.issuance_eligible;
   const cap = receipt?.totals?.issuance_cap_spk ?? 0;
 
   useEffect(() => {
     if (!receipt?.evidence_hash) {
       setSim(null);
+      setMessage(null);
       return;
     }
     const base = createSimulation({
       evidenceHash: receipt.evidence_hash,
       issuanceCapSpk: receipt.totals?.issuance_cap_spk ?? 0,
       surplusKwh: receipt.totals?.eligible_surplus_kwh ?? 0,
+      issuanceEligible: Boolean(receipt.totals?.issuance_eligible),
     });
     setSim(base);
-    setIssueAmount(String(Math.min(20, receipt.totals?.issuance_cap_spk ?? 0) || ''));
+    setIssueAmount(
+      receipt.totals?.issuance_eligible
+        ? String(Math.min(20, receipt.totals?.issuance_cap_spk ?? 0) || '')
+        : '',
+    );
     setMessage(null);
   }, [receipt]);
 
@@ -38,7 +45,10 @@ export default function CurrencyLab({ receipt }) {
     if (!sim) return;
     const out = fn(sim);
     setSim(out.sim);
-    setMessage(out.ok ? { tone: 'ok', text: out.sim.events.at(-1)?.detail } : { tone: 'err', text: out.error });
+    const last = out.sim.events.at(-1);
+    const severity = out.severity || last?.severity || (out.ok ? 'success' : 'error');
+    const tone = severity === 'success' ? 'ok' : 'err';
+    setMessage({ tone, text: last?.detail || out.error || 'Done' });
   };
 
   const constraintTips = useMemo(() => Object.fromEntries(CONSTRAINTS.map((c) => [c.id, c])), []);
@@ -52,13 +62,13 @@ export default function CurrencyLab({ receipt }) {
             <Coins size={22} aria-hidden /> Currency Lab
           </h1>
           <p className="workbench-lead">
-            Complete Evidence Lab first. This panel simulates bounded issuance, typed payments,
-            settlement, and shortfalls from your local evidence receipt.
+            Complete Evidence Lab first with admissible surplus evidence. This panel simulates
+            bounded issuance, typed payments, and settlement capacity — without minting.
           </p>
         </header>
         <div className="workbench-empty" role="status">
-          No evidence receipt yet. Open <strong>Evidence Lab</strong>, load the sample CSV, and
-          download or keep the receipt in session.
+          No active evidence receipt. Open <strong>Evidence Lab</strong>, load the sample CSV, and
+          keep a successful receipt in session. A failed replacement CSV clears this panel.
         </div>
       </section>
     );
@@ -72,16 +82,26 @@ export default function CurrencyLab({ receipt }) {
           <Coins size={22} aria-hidden /> Currency Lab
         </h1>
         <p className="workbench-lead">
-          Issue up to the evidence cap, allocate SERVICE / LABOR / GOODS / NETWORK payments, and
-          surface shortfalls explicitly. This does not call mint functions.
+          Issue up to the illustrative evidence cap, allocate typed payments, and settle against
+          explicit settlement capacity (not the payer wallet). This does not call mint functions.
         </p>
       </header>
 
       <aside className="workbench-callout" role="note">
         <ShieldAlert size={16} aria-hidden />
         <div>
-          Bound to evidence hash <code>{receipt.evidence_hash.slice(0, 16)}…</code> · cap{' '}
-          <strong>{cap} SPK</strong>. Live minting remains gated and separate.
+          Bound to evidence hash <code>{receipt.evidence_hash.slice(0, 16)}…</code>
+          {' · '}
+          {eligible ? (
+            <>
+              illustrative cap <strong>{cap} SPK</strong> (1 SPK / eligible surplus kWh rule)
+            </>
+          ) : (
+            <>
+              <strong>issuance not eligible</strong> ({receipt.totals?.issuance_reason})
+            </>
+          )}
+          . Live minting remains gated and separate.
         </div>
       </aside>
 
@@ -109,20 +129,27 @@ export default function CurrencyLab({ receipt }) {
               min="0"
               step="0.1"
               value={issueAmount}
+              disabled={!eligible}
               onChange={(e) => setIssueAmount(e.target.value)}
             />
           </label>
-          <button type="button" className="wallet-button" onClick={() => apply((s) => issueSpk(s, issueAmount))}>
+          <button
+            type="button"
+            className="wallet-button"
+            disabled={!eligible}
+            onClick={() => apply((s) => issueSpk(s, issueAmount))}
+          >
             Issue simulated SPK
           </button>
         </div>
         <p className="muted" title={constraintTips.issuance?.tip}>
-          Issuance constraint: cannot exceed cap; replay of the same evidence hash is blocked.
+          Illustrative issuance cap under the Public Lab 1 SPK / eligible surplus kWh rule.
+          Replay of the same evidence hash is blocked. Payments do not reduce settlement capacity.
         </p>
       </div>
 
       <div className="workbench-card">
-        <h2>2. Typed payments</h2>
+        <h2>2. Typed payments (payer wallet)</h2>
         <div className="inline-form">
           <label>
             Type
@@ -153,7 +180,10 @@ export default function CurrencyLab({ receipt }) {
       </div>
 
       <div className="workbench-card">
-        <h2>3. Scenarios</h2>
+        <h2>3. Settlement scenarios</h2>
+        <p className="muted">
+          Shortfall stresses <em>settlement capacity</em>, not the payer’s remaining wallet balance.
+        </p>
         <div className="workbench-actions">
           <button type="button" className="ghost-button" onClick={() => apply((s) => runScenario(s, 'normal'))}>
             Normal settlement
@@ -176,11 +206,23 @@ export default function CurrencyLab({ receipt }) {
             <h2>Balances</h2>
             <ul className="stat-grid">
               <li><span>Issued</span><strong>{sim.balances.issued_spk}</strong></li>
+              <li><span>Payer remaining</span><strong>{sim.balances.remaining_spk}</strong></li>
               <li><span>Paid</span><strong>{sim.balances.paid_spk}</strong></li>
               <li><span>Redeemed</span><strong>{sim.balances.redeemed_spk}</strong></li>
-              <li><span>Remaining</span><strong>{sim.balances.remaining_spk}</strong></li>
+              <li><span>Settlement capacity</span><strong>{sim.balances.settlement_capacity_spk}</strong></li>
               <li><span>Circulating</span><strong>{sim.balances.circulating_spk}</strong></li>
             </ul>
+            {sim.obligations.at(-1) ? (
+              <div className="settlement-breakdown">
+                <h3>Latest settlement</h3>
+                <ul className="stat-grid">
+                  <li><span>Outstanding claim</span><strong>{sim.obligations.at(-1).outstanding_claim_spk}</strong></li>
+                  <li><span>Capacity (pre-cover)</span><strong>{sim.obligations.at(-1).settlement_capacity_spk}</strong></li>
+                  <li><span>Covered</span><strong>{sim.obligations.at(-1).covered_spk}</strong></li>
+                  <li><span>Shortfall</span><strong>{sim.obligations.at(-1).shortfall_spk}</strong></li>
+                </ul>
+              </div>
+            ) : null}
           </div>
 
           <div className="workbench-card">

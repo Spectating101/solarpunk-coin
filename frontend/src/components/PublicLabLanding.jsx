@@ -19,6 +19,8 @@ import {
   PUBLIC_LAB_INQUIRY_URL,
   SEPOLIA_EXPLORER,
   SPK_V1,
+  THESIS_CANONICAL_URL,
+  CEIR_DIAGNOSIS_URL,
 } from '../constants/contracts';
 import { loadSpkV1Runtime } from '../lib/runtime';
 import useSpkV1Live from '../hooks/useSpkV1Live';
@@ -26,8 +28,6 @@ import useSpkV1Live from '../hooks/useSpkV1Live';
 const EVIDENCE_URL = `${GITHUB_REPO}/blob/main/thesis_package/SPK_V1_EVIDENCE.md`;
 const PUBLIC_LAB_DOC = `${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB_V1.md`;
 const PILOT_ASK_DOC = `${GITHUB_REPO}/blob/main/docs/product/PILOT_DATA_ASK.md`;
-const CEIR_DIAGNOSIS_URL = `${GITHUB_REPO}/blob/main/thesis_package/CEIR_FINAL_DIAGNOSIS.md`;
-const THESIS_PDF_URL = `${GITHUB_REPO}/blob/main/energy_constraint_thesis_final_submission_v10.pdf`;
 
 const COMPARISON_ROWS = [
   { foundation: 'Fiat', mechanism: 'Authority', problem: 'Discretionary expansion' },
@@ -118,15 +118,18 @@ export default function PublicLabLanding({
   const currencyAddress = runtime?.contracts?.currency_system || SPK_V1.currencySystem;
   const dataSource = live.status === 'ok' ? 'Live Sepolia reads' : 'Cached runtime JSON';
 
-  const pipelineSteps = [
-    { label: 'Meter / inverter data', status: 'Self-serve validate (L0–L2)' },
-    { label: 'Attestation', status: 'Signed + replay-safe' },
-    { label: 'SPK mint', status: 'Bounded issuance' },
+  const browserPath = [
+    { label: 'Local evidence validation', status: 'Browser schema checks' },
+    { label: 'Unsigned receipt', status: 'SHA-256 · not live mint' },
+    { label: 'Off-chain simulation', status: 'Currency Lab' },
+  ];
+  const sepoliaPath = [
+    { label: 'Operator attestation', status: 'Gated · signed' },
+    { label: 'Bounded testnet mint', status: 'Accepted lab evidence' },
     {
-      label: 'Network payment',
+      label: 'Network settlement',
       status: paymentCount != null ? `${paymentCount} indexed payments` : 'Indexed payments',
     },
-    { label: 'Launch gate', status: 'Public Lab shipped · pilot blocked' },
   ];
 
   const proofRows = [
@@ -262,18 +265,28 @@ export default function PublicLabLanding({
 
       {/* §2 Proof pipeline */}
       <section className="public-lab-section" aria-labelledby="pipeline-heading">
-        <h2 id="pipeline-heading">The proof pipeline</h2>
+        <h2 id="pipeline-heading">Two paths — do not confuse them</h2>
         <p className="public-lab-section-lead">
-          One screen: how renewable evidence becomes a bounded settlement object on testnet.
+          The browser workbench validates and simulates. Live Sepolia minting stays operator-gated.
+          Browser validation is not L2 provenance and does not sign attestations.
         </p>
-        <div className="public-lab-pipeline">
-          {pipelineSteps.map((step) => (
-            <PipelineStep
-              key={step.label}
-              label={step.label}
-              status={step.status}
-            />
-          ))}
+        <div className="dual-path-grid">
+          <div>
+            <h3 className="dual-path-title">Browser path</h3>
+            <div className="public-lab-pipeline">
+              {browserPath.map((step) => (
+                <PipelineStep key={step.label} label={step.label} status={step.status} />
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="dual-path-title">Operator-gated Sepolia path</h3>
+            <div className="public-lab-pipeline">
+              {sepoliaPath.map((step) => (
+                <PipelineStep key={step.label} label={step.label} status={step.status} />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -441,7 +454,7 @@ export default function PublicLabLanding({
           </a>
         </div>
         <p className="muted" style={{ marginTop: '0.75rem' }}>
-          <a href={THESIS_PDF_URL} target="_blank" rel="noreferrer">Thesis PDF (v10)</a>
+          <a href={THESIS_CANONICAL_URL} target="_blank" rel="noreferrer">Thesis PDF (temporary v10 link)</a>
           {' · '}
           <a href={CEIR_DIAGNOSIS_URL} target="_blank" rel="noreferrer">CEIR final diagnosis</a>
         </p>

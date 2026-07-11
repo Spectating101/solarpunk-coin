@@ -2983,3 +2983,25 @@ button.audience-cta-card {
     white-space: nowrap;
   }
 }
+
+.dual-path-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.dual-path-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.settlement-breakdown {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.1));
+}
+
+.settlement-breakdown h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}

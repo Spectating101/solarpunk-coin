@@ -177,7 +177,7 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
             required only to send payments. This console demonstrates public testnet execution only.
           </p>
           <p className="spk-demo-lead">
-            Technical view: bounded SPK mint from verified surplus kWh, network payments on-chain.
+            Technical view: bounded SPK from accepted testnet surplus evidence, network payments on-chain.
             Connect wallet on Sepolia to send a testnet settlement payment.
           </p>
         </div>
@@ -222,7 +222,7 @@ export default function SpkV1Console({ provider, signer, account, onConnect, con
           {impliedSupplyUsd != null ? (
             <span>Implied supply <strong>~${impliedSupplyUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })}</strong></span>
           ) : null}
-          <span className="muted">Energy anchor · dollar translation</span>
+          <span className="muted">USD reference · expression only · peg off</span>
         </div>
       ) : null}
 
