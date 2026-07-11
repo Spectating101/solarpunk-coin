@@ -1,0 +1,68 @@
+name: Deploy Constraint Protocol Alpha to Sepolia
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: 'Exact 40-character commit SHA being deployed; also used in immutable policy manifest URIs'
+        required: true
+        type: string
+      confirm:
+        description: 'Type DEPLOY_CONSTRAINT_ALPHA_TO_SEPOLIA'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: constraint-protocol-alpha-sepolia
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment: constraint-protocol-alpha-sepolia
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout selected workflow ref
+        uses: actions/checkout@v4
+
+      - name: Verify explicit deployment confirmation and immutable source ref
+        env:
+          SOURCE_REF: ${{ inputs.source_ref }}
+          CONFIRM: ${{ inputs.confirm }}
+          CHECKED_OUT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test "$CONFIRM" = "DEPLOY_CONSTRAINT_ALPHA_TO_SEPOLIA"
+          [[ "$SOURCE_REF" =~ ^[0-9a-fA-F]{40}$ ]]
+          test "${SOURCE_REF,,}" = "${CHECKED_OUT_SHA,,}"
+          echo "Deploying exact commit $CHECKED_OUT_SHA"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Re-run protocol alpha gates
+        run: |
+          node --test packages/constraint-core/test/*.test.mjs
+          npx hardhat test test/ConstraintProtocol.test.js
+
+      - name: Deploy public alpha reference contracts
+        env:
+          SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          PROTOCOL_ALPHA_DEPLOY_CONFIRM: '1'
+          PROTOCOL_ALPHA_SOURCE_REF: ${{ inputs.source_ref }}
+        run: npx hardhat run scripts/deploy_constraint_protocol_alpha.js --network sepolia
+
+      - name: Upload deployment runtime
+        uses: actions/upload-artifact@v4
+        with:
+          name: constraint-protocol-alpha-sepolia-runtime-${{ github.sha }}
+          path: state/protocol/constraint_protocol_alpha_runtime.json
+          retention-days: 90

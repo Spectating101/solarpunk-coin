@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constraint Claim Manifest v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "claim_id",
+    "subject",
+    "evidence_hash",
+    "policy_id",
+    "policy_version",
+    "policy_manifest_hash",
+    "provenance_level",
+    "quantity",
+    "quantity_base_units",
+    "quantity_decimals",
+    "unit",
+    "decision",
+    "state",
+    "blockers",
+    "warnings",
+    "settlement_capacity_required",
+    "history"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.claim_manifest.v1" },
+    "claim_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "subject": { "type": "string", "minLength": 1 },
+    "evidence_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "policy_id": { "type": "string", "minLength": 1 },
+    "policy_version": { "type": "string", "pattern": "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$" },
+    "policy_manifest_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "provenance_level": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+    "quantity": { "type": "number", "minimum": 0 },
+    "quantity_base_units": { "type": "string", "pattern": "^[0-9]+$" },
+    "quantity_decimals": { "type": "integer", "minimum": 0, "maximum": 18 },
+    "unit": { "type": "string", "minLength": 1 },
+    "decision": { "enum": ["ADMIT_WITH_LIMIT", "BLOCKED"] },
+    "state": {
+      "enum": [
+        "RAW",
+        "NORMALIZED",
+        "VERIFIED",
+        "ADMITTED",
+        "ISSUABLE",
+        "ISSUED",
+        "ACTIVE",
+        "SETTLEMENT_DUE",
+        "SETTLED",
+        "PARTIAL",
+        "SHORTFALL",
+        "DISPUTED",
+        "REVOKED",
+        "EXPIRED",
+        "BLOCKED"
+      ]
+    },
+    "blockers": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "settlement_capacity_required": { "type": "boolean" },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sequence", "from", "to", "reason", "actor"],
+        "properties": {
+          "sequence": { "type": "integer", "minimum": 0 },
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "reason": { "type": ["string", "null"] },
+          "actor": { "type": "string" }
+        }
+      }
+    },
+    "issued_quantity": { "type": "number", "exclusiveMinimum": 0 },
+    "issued_quantity_base_units": { "type": "string", "pattern": "^[0-9]+$" }
+  }
+}

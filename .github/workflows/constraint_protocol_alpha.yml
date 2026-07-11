@@ -5,6 +5,7 @@ on:
     paths:
       - 'packages/constraint-core/**'
       - 'protocol/policies/**'
+      - 'protocol/schema/**'
       - 'contracts/protocol/**'
       - 'test/ConstraintProtocol.test.js'
       - 'scripts/protocol_alpha_demo.mjs'
@@ -13,6 +14,7 @@ on:
       - 'frontend/**'
       - 'docs/protocol/**'
       - '.github/workflows/constraint_protocol_alpha.yml'
+      - '.github/workflows/deploy_constraint_protocol_alpha_sepolia.yml'
   workflow_dispatch:
 
 permissions:
@@ -37,6 +39,10 @@ jobs:
 
       - name: Test constraint core and policy conformance
         run: node --test packages/constraint-core/test/*.test.mjs
+
+      - name: Check SDK package contents
+        run: npm pack --dry-run
+        working-directory: packages/constraint-core
 
       - name: Run deterministic alpha demo
         run: node scripts/protocol_alpha_demo.mjs
@@ -84,6 +90,13 @@ jobs:
           path: |
             state/protocol/constraint_protocol_alpha_demo.json
             state/protocol/constraint_protocol_alpha_runtime.json
+          retention-days: 14
+
+      - name: Upload deployable frontend build
+        uses: actions/upload-artifact@v4
+        with:
+          name: constraint-protocol-alpha-site
+          path: frontend/dist/
           retention-days: 14
 
       - name: Upload protocol alpha visual review

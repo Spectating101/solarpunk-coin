@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constraint Provenance Decision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "level",
+    "rank",
+    "label",
+    "stage",
+    "default_haircut_pct",
+    "default_cap_kwh_day",
+    "closed_pilot_candidate",
+    "paid_launch_hardware_candidate",
+    "cryptographically_verified",
+    "trusted_operator_context",
+    "reasons",
+    "missing_for_next_level",
+    "explicit_boundary"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.provenance_decision.v1" },
+    "level": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+    "rank": { "type": "integer", "minimum": 0, "maximum": 4 },
+    "label": { "type": "string", "minLength": 1 },
+    "stage": { "type": "string", "minLength": 1 },
+    "default_haircut_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+    "default_cap_kwh_day": { "type": "number", "minimum": 0 },
+    "closed_pilot_candidate": { "type": "boolean" },
+    "paid_launch_hardware_candidate": { "type": "boolean" },
+    "cryptographically_verified": { "type": "boolean" },
+    "trusted_operator_context": { "type": "boolean" },
+    "reasons": { "type": "array", "items": { "type": "string" } },
+    "missing_for_next_level": { "type": "array", "items": { "type": "string" } },
+    "explicit_boundary": { "type": "string", "minLength": 1 }
+  }
+}
