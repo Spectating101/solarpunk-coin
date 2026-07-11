@@ -93,8 +93,7 @@ export interface ProvenanceDecision {
   explicit_boundary: string;
 }
 
-export interface PolicyManifest {
-  schema: 'solarpunk.constraint.policy_manifest.v1';
+export interface PolicyDefinition {
   id: string;
   version: string;
   name: string;
@@ -121,6 +120,10 @@ export interface PolicyManifest {
     authority: string | null;
     mutable_by: string | null;
   };
+}
+
+export interface PolicyManifest extends PolicyDefinition {
+  schema: 'solarpunk.constraint.policy_manifest.v1';
 }
 
 export interface PolicyDecision {
@@ -216,7 +219,7 @@ export interface ProvenanceContext {
   external_corroboration?: boolean;
 }
 
-export const BUILTIN_POLICIES: PolicyManifest[];
+export const BUILTIN_POLICIES: PolicyDefinition[];
 export const CLAIM_STATES: ClaimState[];
 export const PROVENANCE_LEVELS: Array<Record<string, unknown>>;
 export const GENERIC_FIELD_ALIASES: Record<string, string[]>;
@@ -240,12 +243,12 @@ export function provenanceById(id: ProvenanceLevel | string): Record<string, any
 export function provenanceRank(id: ProvenanceLevel | string): number;
 export function classifyProvenance(evidence: EvidenceEnvelope | NormalizedEvidence, context?: ProvenanceContext): ProvenanceDecision;
 
-export function policyById(id: string): PolicyManifest | null;
-export function policyManifestBody(policy: PolicyManifest | Record<string, any>): PolicyManifest;
-export function hashPolicyManifest(policy: PolicyManifest | Record<string, any>): Promise<string>;
+export function policyById(id: string): PolicyDefinition | null;
+export function policyManifestBody(policy: PolicyDefinition | PolicyManifest | Record<string, any>): PolicyManifest;
+export function hashPolicyManifest(policy: PolicyDefinition | PolicyManifest | Record<string, any>): Promise<string>;
 export function policyVersionCode(version: string): number;
-export function evaluatePolicy(args: { evidence: EvidenceEnvelope; provenance: ProvenanceDecision; policy: PolicyManifest }): PolicyDecision;
-export function comparePolicies(args: { evidence: EvidenceEnvelope; provenance: ProvenanceDecision; policies?: PolicyManifest[] }): PolicyDecision[];
+export function evaluatePolicy(args: { evidence: EvidenceEnvelope; provenance: ProvenanceDecision; policy: PolicyDefinition | PolicyManifest }): PolicyDecision;
+export function comparePolicies(args: { evidence: EvidenceEnvelope; provenance: ProvenanceDecision; policies?: Array<PolicyDefinition | PolicyManifest> }): PolicyDecision[];
 
 export function quantityToBaseUnits(value: string | number, decimals?: number): bigint;
 export function baseUnitsToQuantityString(value: string | number | bigint, decimals?: number): string;
