@@ -2,10 +2,12 @@
 pragma solidity ^0.8.24;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
+import {PolicyRegistry} from "./PolicyRegistry.sol";
 
 /// @title ClaimRegistry
-/// @notice Minimal public-alpha state machine for bounded claims admitted under an external policy.
-/// @dev This registry does not represent token ownership, legal redemption rights, or reserve custody.
+/// @notice Public-alpha state machine for bounded claims admitted under an active, versioned policy manifest.
+/// @dev Authorized claim issuers attest that off-chain deterministic policy evaluation was performed. This
+///      registry binds claims to the active policy hash/version but does not re-run arbitrary evidence adapters.
 contract ClaimRegistry is AccessControl {
     bytes32 public constant CLAIM_ISSUER_ROLE = keccak256("CLAIM_ISSUER_ROLE");
     bytes32 public constant SETTLEMENT_ROLE = keccak256("SETTLEMENT_ROLE");
@@ -27,34 +29,46 @@ contract ClaimRegistry is AccessControl {
     struct Claim {
         bytes32 evidenceHash;
         bytes32 policyId;
+        bytes32 policyManifestHash;
         uint128 admittedQuantity;
         uint128 issuedQuantity;
         address subject;
         ClaimState state;
+        uint64 policyVersion;
         uint64 createdAt;
+        uint8 quantityDecimals;
     }
 
+    PolicyRegistry public immutable policyRegistry;
     mapping(bytes32 claimId => Claim claim) private _claims;
 
     event ClaimCreated(
         bytes32 indexed claimId,
         bytes32 indexed evidenceHash,
         bytes32 indexed policyId,
+        bytes32 policyManifestHash,
+        uint64 policyVersion,
         uint128 admittedQuantity,
+        uint8 quantityDecimals,
         address subject
     );
     event ClaimIssued(bytes32 indexed claimId, uint128 quantity);
     event ClaimStateChanged(bytes32 indexed claimId, ClaimState fromState, ClaimState toState, bytes32 reasonCode);
     event ClaimSettlementRecorded(bytes32 indexed claimId, uint128 coveredQuantity, uint128 shortfallQuantity, ClaimState resultState);
 
+    error InvalidRegistry();
     error ClaimAlreadyExists();
     error ClaimNotFound();
     error InvalidClaimInput();
+    error InvalidQuantityDecimals();
     error InvalidState();
     error QuantityExceedsAdmission();
     error SettlementDoesNotReconcile();
+    error PolicyBindingMismatch();
 
-    constructor(address admin) {
+    constructor(address admin, PolicyRegistry registry) {
+        if (address(registry) == address(0)) revert InvalidRegistry();
+        policyRegistry = registry;
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(CLAIM_ISSUER_ROLE, admin);
     }
@@ -63,7 +77,10 @@ contract ClaimRegistry is AccessControl {
         bytes32 claimId,
         bytes32 evidenceHash,
         bytes32 policyId,
+        bytes32 policyManifestHash,
+        uint64 policyVersion,
         uint128 admittedQuantity,
+        uint8 quantityDecimals,
         address subject
     ) external onlyRole(CLAIM_ISSUER_ROLE) {
         if (_claims[claimId].state != ClaimState.None) revert ClaimAlreadyExists();
@@ -71,21 +88,43 @@ contract ClaimRegistry is AccessControl {
             claimId == bytes32(0) ||
             evidenceHash == bytes32(0) ||
             policyId == bytes32(0) ||
+            policyManifestHash == bytes32(0) ||
+            policyVersion == 0 ||
             admittedQuantity == 0 ||
             subject == address(0)
         ) revert InvalidClaimInput();
+        if (quantityDecimals > 18) revert InvalidQuantityDecimals();
+
+        PolicyRegistry.Policy memory policy = policyRegistry.getPolicy(policyId);
+        if (
+            !policy.active ||
+            policy.version != policyVersion ||
+            policy.manifestHash != policyManifestHash
+        ) revert PolicyBindingMismatch();
 
         _claims[claimId] = Claim({
             evidenceHash: evidenceHash,
             policyId: policyId,
+            policyManifestHash: policyManifestHash,
             admittedQuantity: admittedQuantity,
             issuedQuantity: 0,
             subject: subject,
             state: ClaimState.Admitted,
-            createdAt: uint64(block.timestamp)
+            policyVersion: policyVersion,
+            createdAt: uint64(block.timestamp),
+            quantityDecimals: quantityDecimals
         });
 
-        emit ClaimCreated(claimId, evidenceHash, policyId, admittedQuantity, subject);
+        emit ClaimCreated(
+            claimId,
+            evidenceHash,
+            policyId,
+            policyManifestHash,
+            policyVersion,
+            admittedQuantity,
+            quantityDecimals,
+            subject
+        );
     }
 
     function issueClaim(bytes32 claimId, uint128 quantity) external onlyRole(CLAIM_ISSUER_ROLE) {
@@ -147,9 +186,7 @@ contract ClaimRegistry is AccessControl {
     }
 
     function getClaim(bytes32 claimId) external view returns (Claim memory) {
-        Claim memory claim = _claims[claimId];
-        if (claim.state == ClaimState.None) revert ClaimNotFound();
-        return claim;
+        return _claimView(claimId);
     }
 
     function issuedQuantity(bytes32 claimId) external view returns (uint128) {

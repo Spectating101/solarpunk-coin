@@ -22,7 +22,7 @@ BOUNDED CLAIM
 SETTLEMENT RESULT
 ```
 
-Every stage should produce `PASS`, `WARNING`, or `BLOCK` reasons that can be shown to a reviewer or consumed by software.
+Every stage should produce reasons that can be shown to a reviewer or consumed by software.
 
 ## Adapters in alpha
 
@@ -33,6 +33,12 @@ Every stage should produce `PASS`, `WARNING`, or `BLOCK` reasons that can be sho
 - signed meter-reading attestation inspection
 
 Live LAN polling, private-key signing, meter onboarding, and authoritative mint operations remain operator-side. The browser alpha intentionally does not receive private keys or claim physical truth.
+
+## Signed evidence semantics
+
+Signed readings are inspected record by record. Invalid or duplicate rows are rejected. If valid accepted attestations remain, rejected input rows are recorded separately and do not automatically invalidate the accepted evidence subset.
+
+Cryptographic validity against a browser-supplied registry does not establish trusted operator provenance. The provenance classifier requires a trusted operator context before L1+.
 
 ## Policy model
 
@@ -45,6 +51,55 @@ Bundled examples:
 - `ENERGY-STRICT-003`: L4 external corroboration required
 - `SPK-ENERGY-001`: SPK retained as one reference application policy
 
+Canonical JSON manifests live in `protocol/policies/`.
+
+Use:
+
+```js
+import {
+  buildEvidenceEnvelope,
+  classifyProvenance,
+  comparePolicies,
+  createClaimManifest,
+  normalizeCumulativePair,
+} from '@solarpunk/constraint-core';
+
+const normalized = normalizeCumulativePair(startSnapshot, endSnapshot);
+const evidence = await buildEvidenceEnvelope(normalized);
+const provenance = classifyProvenance(evidence, { sample_fixture: true });
+const decisions = comparePolicies({ evidence, provenance });
+const decision = decisions.find((item) => item.policy_id === 'LAB-OPEN-001');
+const claim = await createClaimManifest({ evidence, provenance, policyDecision: decision });
+```
+
+## Policy identity
+
+`policyManifestBody()` creates the canonical manifest object. `hashPolicyManifest()` applies stable recursively sorted-key serialization and SHA-256.
+
+Claim manifests bind:
+
+```text
+evidence hash
+policy ID
+semantic policy version
+policy manifest hash
+subject
+scaled quantity
+quantity decimals
+unit
+```
+
+## Decimal-safe quantities
+
+Policy manifests declare `issuance.decimals`.
+
+```js
+quantityToBaseUnits('996.2', 6);       // 996200000n
+baseUnitsToQuantityString(996200000n, 6); // '996.2'
+```
+
+Hidden precision beyond the declared decimals is rejected.
+
 ## Claim states
 
 ```text
@@ -56,6 +111,15 @@ RAW → NORMALIZED → VERIFIED → ADMITTED → ISSUABLE → ISSUED → ACTIVE
 ```
 
 Additional terminal or control states: `BLOCKED`, `DISPUTED`, `REVOKED`, `EXPIRED`.
+
+## Reproduce
+
+```bash
+node --test packages/constraint-core/test/*.test.mjs
+node scripts/protocol_alpha_demo.mjs
+npx hardhat test test/ConstraintProtocol.test.js
+npx hardhat run scripts/deploy_constraint_protocol_alpha.js
+```
 
 ## Boundaries
 

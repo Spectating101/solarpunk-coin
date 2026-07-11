@@ -5,18 +5,23 @@ import {
   BUILTIN_POLICIES,
   applySettlementResult,
   attestationInspectionAsEvidence,
+  baseUnitsToQuantityString,
   buildEvidenceEnvelope,
   classifyProvenance,
   comparePolicies,
   createClaimManifest,
+  evaluatePolicy,
   evaluateSettlement,
+  hashPolicyManifest,
   inspectSignedEvidence,
   makeIssuedClaim,
   normalizeCumulativePair,
   normalizeFroniusPair,
   normalizeGreenButtonCsv,
   policyById,
-  evaluatePolicy,
+  policyManifestBody,
+  policyVersionCode,
+  quantityToBaseUnits,
 } from '../src/index.js';
 
 const repoJson = async (path) => JSON.parse(await readFile(new URL(`../../../${path}`, import.meta.url), 'utf8'));
@@ -92,6 +97,27 @@ test('browser-supplied signed evidence remains L0 without trusted operator conte
   assert.equal(decisions.find((item) => item.policy_id === 'ENERGY-PILOT-002').decision, 'BLOCKED');
 });
 
+test('policy manifests hash deterministically and semantic versions map to monotonic registry codes', async () => {
+  const policy = policyById('ENERGY-PILOT-002');
+  const body = policyManifestBody(policy);
+  const hashA = await hashPolicyManifest(policy);
+  const hashB = await hashPolicyManifest({ ...policy, admission: { ...policy.admission } });
+
+  assert.equal(body.schema, 'solarpunk.constraint.policy_manifest.v1');
+  assert.equal(body.issuance.decimals, 6);
+  assert.match(hashA, /^[a-f0-9]{64}$/);
+  assert.equal(hashA, hashB);
+  assert.equal(policyVersionCode('1.0.0'), 1_000_000);
+  assert.equal(policyVersionCode('1.2.3'), 1_002_003);
+});
+
+test('base-unit conversion is deterministic and rejects hidden precision', () => {
+  assert.equal(quantityToBaseUnits('20', 6), 20_000_000n);
+  assert.equal(quantityToBaseUnits('996.2', 6), 996_200_000n);
+  assert.equal(baseUnitsToQuantityString(996_200_000n, 6), '996.2');
+  assert.throws(() => quantityToBaseUnits('1.0000001', 6), /exceeds 6 decimal places/);
+});
+
 test('same evidence yields different decisions under first-class policies', async () => {
   const start = await repoJson('data/inverter/sample_cumulative_start.json');
   const end = await repoJson('data/inverter/sample_cumulative_end.json');
@@ -102,6 +128,21 @@ test('same evidence yields different decisions under first-class policies', asyn
   assert.equal(decisions.find((item) => item.policy_id === 'LAB-OPEN-001').decision, 'ADMIT_WITH_LIMIT');
   assert.equal(decisions.find((item) => item.policy_id === 'ENERGY-PILOT-002').decision, 'BLOCKED');
   assert.equal(decisions.find((item) => item.policy_id === 'ENERGY-STRICT-003').decision, 'BLOCKED');
+});
+
+test('claim manifest binds the exact policy manifest hash and scaled quantity', async () => {
+  const start = await repoJson('data/inverter/sample_cumulative_start.json');
+  const end = await repoJson('data/inverter/sample_cumulative_end.json');
+  const evidence = await buildEvidenceEnvelope(normalizeCumulativePair(start, end));
+  const provenance = classifyProvenance(evidence, { sample_fixture: true });
+  const policy = policyById('LAB-OPEN-001');
+  const decision = evaluatePolicy({ evidence, provenance, policy });
+  const claim = await createClaimManifest({ evidence, provenance, policyDecision: decision });
+
+  assert.equal(claim.policy_manifest_hash, await hashPolicyManifest(policy));
+  assert.equal(claim.quantity_decimals, 6);
+  assert.equal(claim.quantity_base_units, '996200000');
+  assert.match(claim.claim_id, /^[a-f0-9]{64}$/);
 });
 
 test('claim state and settlement make shortfall explicit', async () => {
@@ -115,9 +156,12 @@ test('claim state and settlement make shortfall explicit', async () => {
   const settlement = evaluateSettlement({ claim: active, settlement_capacity: 8 });
   const finalClaim = applySettlementResult(active, settlement);
 
+  assert.equal(active.issued_quantity_base_units, '20000000');
   assert.equal(settlement.result, 'PARTIAL');
   assert.equal(settlement.covered_quantity, 8);
+  assert.equal(settlement.covered_base_units, '8000000');
   assert.equal(settlement.shortfall_quantity, 12);
+  assert.equal(settlement.shortfall_base_units, '12000000');
   assert.equal(settlement.constraint_status.settlement, 'BLOCKED');
   assert.equal(finalClaim.state, 'PARTIAL');
 });

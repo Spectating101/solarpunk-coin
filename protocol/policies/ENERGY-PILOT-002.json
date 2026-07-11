@@ -1,0 +1,29 @@
+{
+  "schema": "solarpunk.constraint.policy_manifest.v1",
+  "id": "ENERGY-PILOT-002",
+  "version": "1.0.0",
+  "name": "Risk-boxed Energy Pilot",
+  "description": "Closed-pilot candidate policy for signed live inverter or gateway counters with a provenance haircut and bounded claim size.",
+  "min_provenance_level": "L2",
+  "admission": {
+    "require_positive_surplus": true,
+    "require_zero_blockers": true,
+    "require_signed_evidence": true,
+    "require_external_corroboration": false
+  },
+  "issuance": {
+    "unit": "ENERGY_CLAIM_UNIT",
+    "decimals": 6,
+    "rate_per_surplus_kwh": 1,
+    "haircut_pct": 30,
+    "absolute_cap": 2500
+  },
+  "settlement": {
+    "explicit_capacity_required": true,
+    "legal_redemption_not_implied": true
+  },
+  "governance": {
+    "authority": "named pilot policy authority",
+    "mutable_by": "governed policy registry"
+  }
+}

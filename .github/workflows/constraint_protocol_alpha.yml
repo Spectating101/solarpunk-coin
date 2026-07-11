@@ -4,9 +4,11 @@ on:
   pull_request:
     paths:
       - 'packages/constraint-core/**'
+      - 'protocol/policies/**'
       - 'contracts/protocol/**'
       - 'test/ConstraintProtocol.test.js'
       - 'scripts/protocol_alpha_demo.mjs'
+      - 'scripts/deploy_constraint_protocol_alpha.js'
       - 'scripts/capture_constraint_protocol_alpha.mjs'
       - 'frontend/**'
       - 'docs/protocol/**'
@@ -33,14 +35,17 @@ jobs:
       - name: Install root dependencies
         run: npm install
 
-      - name: Test constraint core
-        run: node --test packages/constraint-core/test/constraint-core.test.mjs
+      - name: Test constraint core and policy conformance
+        run: node --test packages/constraint-core/test/*.test.mjs
 
       - name: Run deterministic alpha demo
         run: node scripts/protocol_alpha_demo.mjs
 
       - name: Test protocol contracts
         run: npx hardhat test test/ConstraintProtocol.test.js
+
+      - name: Deploy local protocol smoke stack
+        run: npx hardhat run scripts/deploy_constraint_protocol_alpha.js
 
       - name: Test complete contract suite
         run: npx hardhat test
@@ -71,6 +76,15 @@ jobs:
           done
           curl --fail http://127.0.0.1:4173/ >/dev/null
           node scripts/capture_constraint_protocol_alpha.mjs _review_protocol_alpha
+
+      - name: Upload protocol alpha runtime proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: constraint-protocol-alpha-runtime
+          path: |
+            state/protocol/constraint_protocol_alpha_demo.json
+            state/protocol/constraint_protocol_alpha_runtime.json
+          retention-days: 14
 
       - name: Upload protocol alpha visual review
         uses: actions/upload-artifact@v4
