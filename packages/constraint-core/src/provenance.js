@@ -64,8 +64,8 @@ function upgradeRequirements(level) {
     case 'L0':
       return [
         'named real operator source',
-        'device or gateway identity',
-        'signed operator evidence',
+        'device or gateway identity anchored outside the uploaded registry',
+        'signed operator evidence under a documented custody process',
       ];
     case 'L1':
       return [
@@ -96,24 +96,31 @@ function upgradeRequirements(level) {
 export function classifyProvenance(normalized, context = {}) {
   let id = 'L0';
   const reasons = [];
+  const trustedOperator = Boolean(context.trusted_operator_context || context.real_operator_source);
 
-  if (context.external_corroboration && context.revenue_grade) {
+  if (context.external_corroboration && context.revenue_grade && trustedOperator) {
     id = 'L4';
-    reasons.push('Revenue-grade source is externally corroborated for the same claim window.');
-  } else if (context.revenue_grade && context.gateway_custody) {
+    reasons.push('Revenue-grade source is externally corroborated for the same claim window under a trusted operator context.');
+  } else if (context.revenue_grade && context.gateway_custody && trustedOperator) {
     id = 'L3';
-    reasons.push('Revenue-grade measurement is tied to controlled gateway custody and auditable logs.');
+    reasons.push('Revenue-grade measurement is tied to controlled gateway custody and auditable logs under a trusted operator context.');
   } else if (
-    context.real_operator_source &&
+    trustedOperator &&
     context.signed &&
     (context.live_gateway || normalized?.capabilities?.live_gateway_candidate)
   ) {
     id = 'L2';
     reasons.push('Named real operator source uses signed live inverter/gateway counter evidence.');
-  } else if (context.operator_signed || (context.real_operator_source && context.signed)) {
+  } else if (trustedOperator && (context.operator_signed || context.signed)) {
     id = 'L1';
     reasons.push('Named operator evidence is signed, but hardware custody/finality is not established.');
   } else {
+    if (context.operator_signed && !trustedOperator) {
+      reasons.push('A signed payload was supplied, but the browser does not accept a self-asserted operator context as provenance evidence.');
+    }
+    if (context.cryptographically_verified || normalized?.capabilities?.cryptographically_verified) {
+      reasons.push('Signatures are cryptographically self-consistent against the supplied registry, but the browser has not established that registry as a trusted named-operator identity source.');
+    }
     reasons.push('Sample, fixture, browser-local, or otherwise uncorroborated evidence remains public-lab only.');
   }
 
@@ -128,6 +135,8 @@ export function classifyProvenance(normalized, context = {}) {
     default_cap_kwh_day: level.cap_kwh_day,
     closed_pilot_candidate: level.closed_pilot,
     paid_launch_hardware_candidate: level.paid_launch,
+    cryptographically_verified: Boolean(context.cryptographically_verified || normalized?.capabilities?.cryptographically_verified),
+    trusted_operator_context: trustedOperator,
     reasons,
     missing_for_next_level: upgradeRequirements(level.id),
     explicit_boundary:

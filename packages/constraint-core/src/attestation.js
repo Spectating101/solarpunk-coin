@@ -192,9 +192,12 @@ export async function inspectSignedEvidence(payload, registry, options = {}) {
 }
 
 export function attestationInspectionAsEvidence(inspection) {
+  const acceptedRecords = Number(inspection.summary.accepted_records || 0);
+  const rejectedRecords = Number(inspection.summary.rejected_records || 0);
+
   return {
     schema: 'solarpunk.constraint.evidence_envelope.v1',
-    adapter: { id: 'signed-meter-attestation-inspector', version: '1.0.0' },
+    adapter: { id: 'signed-meter-attestation-inspector', version: '1.0.1' },
     source: { kind: 'signed_meter_readings', cryptographically_verified: true },
     intervals: inspection.accepted_attestations.map((row) => ({
       meter_id: row.meter_id,
@@ -212,20 +215,30 @@ export function attestationInspectionAsEvidence(inspection) {
       record_hash: row.record_hash,
       attestor: row.attestor,
     })),
-    diagnostics: inspection.row_checks.flatMap((row) => row.checks.map((item) => ({ ...item, row_index: row.index, meter_id: row.meter_id }))),
+    diagnostics: inspection.row_checks.flatMap((row) => row.checks.map((item) => ({
+      ...item,
+      scope: 'record',
+      row_index: row.index,
+      meter_id: row.meter_id,
+      record_accepted: row.accepted,
+    }))),
     capabilities: {
       identity: true,
       signed: true,
+      cryptographically_verified: true,
       signature_verification: true,
       replay_checks: true,
       capacity_sanity: true,
       energy_balance: true,
     },
     summary: {
-      interval_count: inspection.summary.accepted_records,
+      interval_count: acceptedRecords,
       total_eligible_surplus_kwh: inspection.summary.total_surplus_kwh,
-      blocker_count: inspection.summary.rejected_records,
-      warning_count: 0,
+      // Rejected records are excluded from the accepted evidence subset. They do not invalidate
+      // valid accepted records unless the entire bundle has no accepted evidence.
+      blocker_count: acceptedRecords > 0 ? 0 : rejectedRecords,
+      rejected_input_records: rejectedRecords,
+      warning_count: rejectedRecords,
     },
     evidence_hash: inspection.evidence_hash,
     hash_algorithm: 'SHA-256',

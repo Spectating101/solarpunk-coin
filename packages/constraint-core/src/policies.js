@@ -125,16 +125,20 @@ export function evaluatePolicy({ evidence, provenance, policy }) {
   const warnings = [];
   const totalSurplus = Number(evidence.summary?.total_eligible_surplus_kwh || 0);
   const blockerCount = Number(evidence.summary?.blocker_count || 0);
+  const rejectedInputRecords = Number(evidence.summary?.rejected_input_records || 0);
   const provenancePass = provenanceRank(provenance.level) >= provenanceRank(policy.min_provenance_level);
 
   if (!provenancePass) blockers.push(`requires provenance ${policy.min_provenance_level} or better; received ${provenance.level}`);
   if (policy.admission.require_positive_surplus && totalSurplus <= 0) blockers.push('requires positive admitted surplus');
-  if (policy.admission.require_zero_blockers && blockerCount > 0) blockers.push(`evidence contains ${blockerCount} blocking diagnostic(s)`);
+  if (policy.admission.require_zero_blockers && blockerCount > 0) blockers.push(`evidence contains ${blockerCount} envelope-level blocking diagnostic(s)`);
   if (policy.admission.require_signed_evidence && !evidence.capabilities?.signed) blockers.push('requires signed evidence');
   if (policy.admission.require_external_corroboration && !evidence.capabilities?.external_corroboration && provenance.level !== 'L4') {
     blockers.push('requires external utility/settlement corroboration');
   }
 
+  if (rejectedInputRecords > 0) {
+    warnings.push(`${rejectedInputRecords} input record(s) were rejected and excluded from the accepted evidence subset.`);
+  }
   if (policy.settlement.legal_redemption_not_implied) {
     warnings.push('Policy evaluation does not create legal redemption rights or prove named settlement capacity.');
   }
@@ -167,6 +171,7 @@ export function evaluatePolicy({ evidence, provenance, policy }) {
     maximum_claim_quantity: admitted ? round(maximum) : 0,
     blockers,
     warnings,
+    rejected_input_records: rejectedInputRecords,
     settlement_capacity_required: Boolean(policy.settlement.explicit_capacity_required),
     governance_authority: policy.governance.authority,
   };

@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+  attestationInspectionAsEvidence,
   buildEvidenceEnvelope,
   classifyProvenance,
   comparePolicies,
+  inspectSignedEvidence,
   normalizeCumulativePair,
 } from '@solarpunk/constraint-core';
 
@@ -31,6 +33,15 @@ const END = {
   },
 };
 
+const SIGNED_READING = {
+  schema: 'SPK_RAW_METER_READINGS_V1',
+  min_quality_threshold: 0.9,
+  batch_id: 'frontend-fixture',
+  readings: [],
+};
+
+const EMPTY_REGISTRY = { schema: 'SPK_METER_REGISTRY_V2', meters: [] };
+
 describe('Constraint Protocol browser core', () => {
   it('normalizes evidence and compares policies in the frontend runtime', async () => {
     const normalized = normalizeCumulativePair(START, END);
@@ -42,5 +53,15 @@ describe('Constraint Protocol browser core', () => {
     expect(provenance.level).toBe('L0');
     expect(decisions.find((item) => item.policy_id === 'LAB-OPEN-001').admitted).toBe(true);
     expect(decisions.find((item) => item.policy_id === 'ENERGY-PILOT-002').admitted).toBe(false);
+  });
+
+  it('does not upgrade browser-supplied signed evidence to operator provenance by assertion alone', async () => {
+    const inspection = await inspectSignedEvidence(SIGNED_READING, EMPTY_REGISTRY);
+    const evidence = attestationInspectionAsEvidence(inspection);
+    const provenance = classifyProvenance(evidence, { operator_signed: true });
+
+    expect(provenance.level).toBe('L0');
+    expect(provenance.trusted_operator_context).toBe(false);
+    expect(provenance.reasons.join(' ')).toMatch(/self-asserted operator context/i);
   });
 });

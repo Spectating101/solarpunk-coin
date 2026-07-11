@@ -56,7 +56,7 @@ test('Fronius pair exposes estimate warnings rather than claiming revenue-grade 
   assert.ok(normalized.diagnostics.some((item) => item.code === 'grid_sign_convention' && item.status === 'WARNING'));
 });
 
-test('signed attestation inspector reproduces accepted/rejected fixture boundary', async () => {
+test('signed attestation inspector accepts the valid subset and reports rejected input records separately', async () => {
   const payload = await repoJson('data/attestations/raw_meter_readings.json');
   const registry = await repoJson('data/attestations/meter_registry.json');
   const inspection = await inspectSignedEvidence(payload, registry, { now: Math.floor(Date.parse('2026-07-10T00:00:00Z') / 1000) });
@@ -67,8 +67,29 @@ test('signed attestation inspector reproduces accepted/rejected fixture boundary
   assert.equal(inspection.summary.verified_signatures, 2);
   assert.equal(inspection.summary.total_surplus_kwh, 2606.7);
   assert.equal(evidence.capabilities.signed, true);
+  assert.equal(evidence.summary.blocker_count, 0);
+  assert.equal(evidence.summary.rejected_input_records, 2);
+  assert.equal(evidence.summary.warning_count, 2);
   assert.ok(inspection.rejected_attestations.some((row) => row.reason === 'duplicate meter nonce'));
   assert.ok(inspection.rejected_attestations.some((row) => row.reason.includes('quality_score below threshold')));
+});
+
+test('browser-supplied signed evidence remains L0 without trusted operator context', async () => {
+  const payload = await repoJson('data/attestations/raw_meter_readings.json');
+  const registry = await repoJson('data/attestations/meter_registry.json');
+  const inspection = await inspectSignedEvidence(payload, registry, { now: Math.floor(Date.parse('2026-07-10T00:00:00Z') / 1000) });
+  const evidence = attestationInspectionAsEvidence(inspection);
+  const provenance = classifyProvenance(evidence, { operator_signed: true });
+  const decisions = comparePolicies({ evidence, provenance });
+
+  assert.equal(provenance.level, 'L0');
+  assert.equal(provenance.cryptographically_verified, true);
+  assert.equal(provenance.trusted_operator_context, false);
+  assert.ok(provenance.reasons.some((reason) => reason.includes('self-asserted operator context')));
+  assert.equal(decisions.find((item) => item.policy_id === 'LAB-OPEN-001').decision, 'ADMIT_WITH_LIMIT');
+  assert.equal(decisions.find((item) => item.policy_id === 'LAB-OPEN-001').rejected_input_records, 2);
+  assert.ok(decisions.find((item) => item.policy_id === 'LAB-OPEN-001').warnings.some((warning) => warning.includes('2 input record')));
+  assert.equal(decisions.find((item) => item.policy_id === 'ENERGY-PILOT-002').decision, 'BLOCKED');
 });
 
 test('same evidence yields different decisions under first-class policies', async () => {
