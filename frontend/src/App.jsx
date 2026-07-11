@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
+import ConstraintProtocolLab from './components/ConstraintProtocolLab';
 import PublicLabLanding from './components/PublicLabLanding';
 import EvidenceLab from './components/EvidenceLab';
 import CurrencyLab from './components/CurrencyLab';
@@ -15,9 +16,11 @@ import {
 } from './lib/sessionReceipt';
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
 import './workbenchSession.css';
+import './constraintProtocol.css';
 
 const TABS = [
-  { id: 'overview', label: 'Overview' },
+  { id: 'protocol', label: 'Protocol Alpha' },
+  { id: 'overview', label: 'SPK Reference' },
   { id: 'evidence', label: 'Evidence Lab' },
   { id: 'currency', label: 'Currency Lab' },
   { id: 'sepolia', label: 'Sepolia Proof' },
@@ -27,9 +30,9 @@ const TABS = [
 const TAB_IDS = new Set(TABS.map((tab) => tab.id));
 
 function tabFromHash() {
-  if (typeof window === 'undefined') return 'overview';
+  if (typeof window === 'undefined') return 'protocol';
   const candidate = window.location.hash.replace(/^#/, '').toLowerCase();
-  return TAB_IDS.has(candidate) ? candidate : 'overview';
+  return TAB_IDS.has(candidate) ? candidate : 'protocol';
 }
 
 function App() {
@@ -67,7 +70,7 @@ function App() {
       window.history.replaceState(
         null,
         '',
-        `${window.location.pathname}${window.location.search}#overview`,
+        `${window.location.pathname}${window.location.search}#protocol`,
       );
     }
 
@@ -154,7 +157,7 @@ function App() {
           <div className="brand-mark">SP</div>
           <div>
             <div className="brand-name">SolarPunk</div>
-            <div className="brand-sub">Public Lab v1.0 · Sepolia</div>
+            <div className="brand-sub">Constraint Protocol alpha · SPK reference app</div>
           </div>
         </div>
         <div className="app-minimal-actions">
@@ -214,6 +217,9 @@ function App() {
         </div>
       ) : null}
 
+      {tab === 'protocol' ? (
+        <ConstraintProtocolLab onOpenSepolia={() => navigate('sepolia')} />
+      ) : null}
       {tab === 'overview' ? (
         <PublicLabLanding
           onOpenEvidence={() => navigate('evidence')}

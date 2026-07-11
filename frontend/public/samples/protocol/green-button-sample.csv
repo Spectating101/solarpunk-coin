@@ -1,0 +1,8 @@
+Interval Start,Interval End,Usage,Units,Flow Direction
+2026-01-15T08:00:00Z,2026-01-15T09:00:00Z,1.2,kWh,Reverse (Export)
+2026-01-15T09:00:00Z,2026-01-15T10:00:00Z,2.4,kWh,Reverse (Export)
+2026-01-15T10:00:00Z,2026-01-15T11:00:00Z,0.8,kWh,Forward (Import)
+2026-01-15T11:00:00Z,2026-01-15T12:00:00Z,3.1,kWh,Reverse (Export)
+2026-01-16T08:00:00Z,2026-01-16T09:00:00Z,1.5,kWh,Reverse (Export)
+2026-01-16T09:00:00Z,2026-01-16T10:00:00Z,2.0,kWh,Reverse (Export)
+2026-01-16T18:00:00Z,2026-01-16T19:00:00Z,1.1,kWh,Forward (Import)

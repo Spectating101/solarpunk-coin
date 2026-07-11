@@ -1,0 +1,68 @@
+{
+  "schema": "SPK_RAW_METER_READINGS_V1",
+  "generated_at": "2026-05-14T10:43:06.253Z",
+  "batch_id": "batch_2026_02_12_a",
+  "min_quality_threshold": 0.9,
+  "readings": [
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-11T00:00:00Z",
+      "window_end": "2026-02-11T23:59:59Z",
+      "generation_kwh": 1984.2,
+      "site_load_kwh": 563.7,
+      "export_kwh": 1100.5,
+      "curtailed_kwh": 320,
+      "quality_score": 0.98,
+      "source": "edge_meter_gateway_v1",
+      "nonce": "TW-TY-0001:2026-02-11",
+      "payload_hash": "0x7c04fd8ee0fd101afc3ab9fe16b4b7cd63db80d6ad91c45e86aca8df0f8cd34f",
+      "signature": "0x004a3cefa52199ab32f9952968af1e6a4ca44fd6f867e0923a94ee0fa67b1ef33ca0f1ef72db9b922332d1934365a2b09730cc99ca4109ef38147271019a87711b"
+    },
+    {
+      "meter_id": "TW-TY-0002",
+      "site_id": "taoyuan-rooftop-b",
+      "window_start": "2026-02-11T00:00:00Z",
+      "window_end": "2026-02-11T23:59:59Z",
+      "generation_kwh": 1705,
+      "site_load_kwh": 518.8,
+      "export_kwh": 946.2,
+      "curtailed_kwh": 240,
+      "quality_score": 0.95,
+      "source": "edge_meter_gateway_v1",
+      "nonce": "TW-TY-0002:2026-02-11",
+      "payload_hash": "0xfb81b3b66b26a522cb1dbe9a10a69125cfdb814d0f864e3dbeddc9f7a5d66fca",
+      "signature": "0x8a8e328579be7562b73dd33a19dada08045ffadc2c5261fa6301e19c1bf8ff0c24f5a7b9b0dc7b55c4b879b44d37ed9069688a538d84b41e02d69fe8e20bddc81c"
+    },
+    {
+      "meter_id": "TW-TY-0001",
+      "site_id": "taoyuan-rooftop-a",
+      "window_start": "2026-02-11T00:00:00Z",
+      "window_end": "2026-02-11T23:59:59Z",
+      "generation_kwh": 1984.2,
+      "site_load_kwh": 563.7,
+      "export_kwh": 1100.5,
+      "curtailed_kwh": 320,
+      "quality_score": 0.98,
+      "source": "edge_meter_gateway_v1",
+      "nonce": "TW-TY-0001:2026-02-11",
+      "payload_hash": "0x7c04fd8ee0fd101afc3ab9fe16b4b7cd63db80d6ad91c45e86aca8df0f8cd34f",
+      "signature": "0x004a3cefa52199ab32f9952968af1e6a4ca44fd6f867e0923a94ee0fa67b1ef33ca0f1ef72db9b922332d1934365a2b09730cc99ca4109ef38147271019a87711b"
+    },
+    {
+      "meter_id": "TW-TY-0002",
+      "site_id": "taoyuan-rooftop-b",
+      "window_start": "2026-02-12T00:00:00Z",
+      "window_end": "2026-02-12T23:59:59Z",
+      "generation_kwh": 1300,
+      "site_load_kwh": 500,
+      "export_kwh": 650,
+      "curtailed_kwh": 150,
+      "quality_score": 0.7,
+      "source": "edge_meter_gateway_v1",
+      "nonce": "TW-TY-0002:2026-02-12",
+      "payload_hash": "0x9544796ed70497f478d7ebb3568768fa164c60065cf72a4b8818696cf442fd02",
+      "signature": "0x84af070854eaceb6ee9e70a3ad511d7019c65ded66281a47699427364a81cbd53d3cdcae47c716fba4b054b51ed9e9efc505a1a7b586b39ba27a1e22d40668a51c"
+    }
+  ]
+}
