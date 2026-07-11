@@ -1,0 +1,57 @@
+name: Constraint Protocol Alpha CI
+
+on:
+  pull_request:
+    paths:
+      - 'packages/constraint-core/**'
+      - 'contracts/protocol/**'
+      - 'test/ConstraintProtocol.test.js'
+      - 'scripts/protocol_alpha_demo.mjs'
+      - 'frontend/**'
+      - 'docs/protocol/**'
+      - '.github/workflows/constraint_protocol_alpha.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  alpha:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Test constraint core
+        run: node --test packages/constraint-core/test/constraint-core.test.mjs
+
+      - name: Run deterministic alpha demo
+        run: node scripts/protocol_alpha_demo.mjs
+
+      - name: Test protocol contracts
+        run: npx hardhat test test/ConstraintProtocol.test.js
+
+      - name: Test complete contract suite
+        run: npx hardhat test
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Test frontend
+        run: npm run test:run
+        working-directory: frontend
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: frontend
