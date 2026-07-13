@@ -1,6 +1,6 @@
 # Interface and Value Delivery
 
-**Status:** active public-interface track  
+**Status:** review-ready interface pass; static deployment intentionally deferred  
 **Updated:** 2026-07-13  
 **Scope:** empirical policy evaluation, reproducibility, evidence-to-claim inspection, and the SolarPunk reference application
 
@@ -37,7 +37,7 @@ The decision brief is the public entry point. The deeper surfaces provide progre
 
 ### 1. Decision support
 
-The empirical interface can state the cost and benefit of a declared policy on a common historical sample:
+The empirical interface states the cost and benefit of a declared policy on a common historical sample:
 
 - historical coverage;
 - shortfall-event frequency;
@@ -46,15 +46,29 @@ The empirical interface can state the cost and benefit of a declared policy on a
 - binding-constraint attribution;
 - severe historical stress failure.
 
-The interface must show both the improvement and the exposure cost. It must not label a stricter policy as automatically better.
+The interface shows both the improvement and the exposure cost. It does not label a stricter policy as automatically better.
 
-### 2. Reproducible public evidence
+The final brief also exposes a non-obvious result that should not be hidden: the guarded policy reduced the frequency of shortfall events, but mean shortfall severity conditional on a failure increased slightly in the published 20- and 60-session samples.
+
+### 2. Reviewer-ready decision receipt
+
+The entry surface provides:
+
+- 20- and 60-session decision views;
+- source-package identity and SHA-256 receipt;
+- common-sample counts and identity exclusions;
+- explicit residual-risk language;
+- horizon sensitivity;
+- a downloadable Markdown decision memo generated from the committed aggregate files;
+- direct continuation into the study, reproduction receipt, and claim lab.
+
+### 3. Reproducible public evidence
 
 The public release exposes aggregate research artifacts, exact source-package identity, methods, and integrity hashes without redistributing licensed CRSP or Refinitiv row-level observations.
 
 Browser reproduction proves byte identity of the published aggregate bundle. It does not prove source truth, policy optimality, or future adequacy.
 
-### 3. Claim explainability
+### 4. Claim explainability
 
 The protocol lab can explain why a bounded quantity was admitted:
 
@@ -71,7 +85,7 @@ source evidence
 
 The strongest current protocol value is inspectability. It is not production trustlessness, legal enforceability, reserve custody, or mainnet readiness.
 
-### 4. SolarPunk continuity
+### 5. SolarPunk continuity
 
 SolarPunk remains the original energy-finance thesis and Sepolia reference application. It is not erased by the generalized lab, and the generalized lab must not be presented as though the thesis always had a separately approved product identity.
 
@@ -84,6 +98,7 @@ SolarPunk remains the original energy-finance thesis and Sepolia reference appli
 5. **No raw-data leakage.** Public empirical surfaces remain aggregate only.
 6. **No protocol mythology.** On-chain references support inspectability; they do not create legal or economic truth.
 7. **Keep SolarPunk legible.** The original thesis/reference application remains a distinct route.
+8. **Do not tax research visitors for wallet code.** The Sepolia console and `ethers` load only when `#sepolia` is opened.
 
 ## Current implementation
 
@@ -103,38 +118,52 @@ Routes:
 
 The `#study` route is intentionally reached through the decision brief while the top navigation continues to identify the broader section as **Decision Brief**.
 
-## Validation gates for the current interface pass
+The Sepolia console is route-split with `React.lazy`, and its wallet provider initializes only when the Sepolia route is active. A Web3 chunk may remain in the production assets, but it must not be eagerly module-preloaded by the Decision Brief entry HTML.
 
-Before merge:
+## Validation record for the interface pass
+
+The branch CI and browser-review workflow exercise the complete public-alpha stack. Before static publication, the local deployment agent should confirm the same checks on the final reviewed head.
 
 ```text
-[ ] frontend tests green
-[ ] Vite production build green
-[ ] desktop Chromium walkthrough complete
-[ ] mobile Chromium walkthrough complete
-[ ] 20-session values match committed summary
-[ ] 60-session values match committed summary
-[ ] peak stress values match committed stress run
-[ ] all three continuation buttons route correctly
-[ ] no empirical artifacts or policy formulas changed
-[ ] no protocol core, contracts, runtime, or thesis artifacts changed
+[x] protocol core and policy conformance green
+[x] protocol contract tests green
+[x] complete Hardhat suite green
+[x] frontend tests green, including dedicated Decision Brief tests
+[x] Vite production build green
+[x] desktop Chromium walkthrough complete
+[x] mobile Chromium walkthrough complete
+[x] 20-session values match committed summary
+[x] 60-session values match committed summary
+[x] peak stress values match committed stress run
+[x] continuation buttons route correctly
+[x] 19 visual-review screenshots produced
+[x] no empirical artifacts or policy formulas changed
+[x] no protocol core, contracts, runtime, or thesis artifacts changed
 ```
 
-## Highest-value next interface work
+## Release handoff
+
+The static release procedure and hard boundaries are recorded in:
+
+[`LOCAL_AGENT_INTERFACE_HANDOFF.md`](./LOCAL_AGENT_INTERFACE_HANDOFF.md)
+
+That handoff covers checkout, tests, production build, screenshot generation, performance inspection, Pages publication, post-publication verification, and rollback. It explicitly excludes contract deployment.
+
+## Highest-value next work
 
 Do not add more generic dashboards by default.
 
 The next useful steps are:
 
-1. visual QA and screenshot review of the decision brief on desktop and mobile;
-2. one downloadable decision memo generated from the published aggregate run;
-3. one concrete field case after a real L2 operator or gateway evidence source exists;
-4. explorer/readback proof only after an explicitly approved Sepolia protocol deployment;
-5. a final naming decision only when the project is being submitted, published, or presented to external users.
+1. review and merge pull request `#4`;
+2. publish the reviewed static interface through the existing Pages path;
+3. obtain one concrete field case from a real L2 operator or gateway evidence source;
+4. add explorer/readback proof only after an explicitly approved Sepolia protocol deployment;
+5. make a final public naming decision only when the project is being submitted, published, or presented to external users.
 
 ## Stop rule
 
-After the decision brief is validated and deployed, stop adding interface surface until one of these appears:
+After the reviewed interface is merged and statically published, stop adding interface surface until one of these appears:
 
 - a real external evidence source;
 - reviewer or user feedback showing a concrete comprehension gap;
