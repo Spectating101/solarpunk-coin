@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import ConstraintProtocolLab from './components/ConstraintProtocolLab';
+import DecisionBrief from './components/DecisionBrief';
 import EmpiricalRunsLab from './components/EmpiricalRunsLab';
 import EmpiricalReproductionLab from './components/EmpiricalReproductionLab';
 import PublicLabLanding from './components/PublicLabLanding';
@@ -19,20 +20,22 @@ import {
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
 import './workbenchSession.css';
 import './constraintProtocol.css';
+import './decisionBrief.css';
 import './empiricalRuns.css';
 import './empiricalReproduction.css';
 
 const NAV_TABS = [
-  { id: 'runs', label: 'Empirical Runs' },
+  { id: 'runs', label: 'Decision Brief' },
   { id: 'reproduce', label: 'Reproduce' },
-  { id: 'protocol', label: 'Protocol Lab' },
-  { id: 'overview', label: 'SPK Reference' },
+  { id: 'protocol', label: 'Claim Lab' },
+  { id: 'overview', label: 'SolarPunk' },
   { id: 'sepolia', label: 'Sepolia Proof' },
   { id: 'research', label: 'Research' },
 ];
 
 const ROUTE_IDS = new Set([
   ...NAV_TABS.map((tab) => tab.id),
+  'study',
   'evidence',
   'currency',
 ]);
@@ -157,15 +160,16 @@ function App() {
 
   const wrongNetwork = account && chainId != null && chainId !== SEPOLIA_CHAIN_ID;
   const showSessionBar = ['evidence', 'currency', 'sepolia'].includes(tab);
+  const activeNavTab = tab === 'study' ? 'runs' : tab;
 
   return (
     <div className="app-minimal">
       <header className="app-minimal-top">
         <div className="brand-block">
-          <div className="brand-mark">C</div>
+          <div className="brand-mark">P</div>
           <div>
-            <div className="brand-name">Constraint</div>
-            <div className="brand-sub">empirical claim lab · protocol public alpha</div>
+            <div className="brand-name">Policy Lab</div>
+            <div className="brand-sub">historical policy evaluation · bounded claims</div>
           </div>
         </div>
         <div className="app-minimal-actions">
@@ -174,9 +178,9 @@ function App() {
               <button
                 key={t.id}
                 type="button"
-                className={tab === t.id ? 'app-tab active' : 'app-tab'}
+                className={activeNavTab === t.id ? 'app-tab active' : 'app-tab'}
                 onClick={() => navigate(t.id)}
-                aria-current={tab === t.id ? 'page' : undefined}
+                aria-current={activeNavTab === t.id ? 'page' : undefined}
               >
                 {t.label}
               </button>
@@ -226,10 +230,17 @@ function App() {
       ) : null}
 
       {tab === 'runs' ? (
+        <DecisionBrief
+          onOpenStudy={() => navigate('study')}
+          onOpenReproduce={() => navigate('reproduce')}
+          onOpenProtocol={() => navigate('protocol')}
+        />
+      ) : null}
+      {tab === 'study' ? (
         <EmpiricalRunsLab onOpenProtocol={() => navigate('protocol')} />
       ) : null}
       {tab === 'reproduce' ? (
-        <EmpiricalReproductionLab onOpenRuns={() => navigate('runs')} />
+        <EmpiricalReproductionLab onOpenRuns={() => navigate('study')} />
       ) : null}
       {tab === 'protocol' ? (
         <ConstraintProtocolLab onOpenSepolia={() => navigate('sepolia')} />
