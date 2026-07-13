@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import ConstraintProtocolLab from './components/ConstraintProtocolLab';
 import DecisionBrief from './components/DecisionBrief';
@@ -104,41 +103,59 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!window.ethereum) return undefined;
+    if (tab !== 'sepolia' || !window.ethereum) return undefined;
 
-    const p = new ethers.BrowserProvider(window.ethereum);
-    setProvider(p);
+    let active = true;
+    let browserProvider = null;
+    let onAccountsChanged = null;
+    let onChainChanged = null;
 
-    const syncAccount = async (accounts) => {
-      if (accounts?.[0]) {
-        setAccount(accounts[0]);
-        setSigner(await p.getSigner());
-      } else {
-        setAccount(null);
-        setSigner(null);
-      }
-      await refreshChain(p);
+    const initializeWallet = async () => {
+      const { BrowserProvider } = await import('ethers');
+      if (!active) return;
+
+      browserProvider = new BrowserProvider(window.ethereum);
+      setProvider(browserProvider);
+
+      const syncAccount = async (accounts) => {
+        if (!active) return;
+        if (accounts?.[0]) {
+          setAccount(accounts[0]);
+          setSigner(await browserProvider.getSigner());
+        } else {
+          setAccount(null);
+          setSigner(null);
+        }
+        await refreshChain(browserProvider);
+      };
+
+      browserProvider.send('eth_accounts', [])
+        .then((accounts) => syncAccount(accounts))
+        .catch(() => {});
+
+      onAccountsChanged = (accounts) => { syncAccount(accounts); };
+      onChainChanged = () => { refreshChain(browserProvider); };
+
+      window.ethereum.on('accountsChanged', onAccountsChanged);
+      window.ethereum.on('chainChanged', onChainChanged);
     };
 
-    p.send('eth_accounts', [])
-      .then((accounts) => syncAccount(accounts))
-      .catch(() => {});
-
-    const onAccountsChanged = (accounts) => { syncAccount(accounts); };
-    const onChainChanged = () => { refreshChain(p); };
-
-    window.ethereum.on('accountsChanged', onAccountsChanged);
-    window.ethereum.on('chainChanged', onChainChanged);
+    initializeWallet().catch((error) => {
+      if (!active) return;
+      setProvider(null);
+      setConnectError(error?.message || 'Wallet provider failed to initialize.');
+    });
 
     return () => {
-      window.ethereum.removeListener('accountsChanged', onAccountsChanged);
-      window.ethereum.removeListener('chainChanged', onChainChanged);
+      active = false;
+      if (onAccountsChanged) window.ethereum.removeListener('accountsChanged', onAccountsChanged);
+      if (onChainChanged) window.ethereum.removeListener('chainChanged', onChainChanged);
     };
-  }, [refreshChain]);
+  }, [refreshChain, tab]);
 
   const connectWallet = async () => {
     if (!provider) {
-      setConnectError('MetaMask not detected. Install the extension and reload this page.');
+      setConnectError('MetaMask not detected or still loading. Install the extension and reload this page.');
       return;
     }
     setIsConnecting(true);
