@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import ConstraintProtocolLab from './components/ConstraintProtocolLab';
 import EmpiricalRunsLab from './components/EmpiricalRunsLab';
+import EmpiricalReproductionLab from './components/EmpiricalReproductionLab';
 import PublicLabLanding from './components/PublicLabLanding';
 import EvidenceLab from './components/EvidenceLab';
 import CurrencyLab from './components/CurrencyLab';
@@ -19,9 +20,11 @@ import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet
 import './workbenchSession.css';
 import './constraintProtocol.css';
 import './empiricalRuns.css';
+import './empiricalReproduction.css';
 
 const NAV_TABS = [
   { id: 'runs', label: 'Empirical Runs' },
+  { id: 'reproduce', label: 'Reproduce' },
   { id: 'protocol', label: 'Protocol Lab' },
   { id: 'overview', label: 'SPK Reference' },
   { id: 'sepolia', label: 'Sepolia Proof' },
@@ -224,6 +227,9 @@ function App() {
 
       {tab === 'runs' ? (
         <EmpiricalRunsLab onOpenProtocol={() => navigate('protocol')} />
+      ) : null}
+      {tab === 'reproduce' ? (
+        <EmpiricalReproductionLab onOpenRuns={() => navigate('runs')} />
       ) : null}
       {tab === 'protocol' ? (
         <ConstraintProtocolLab onOpenSepolia={() => navigate('sepolia')} />
