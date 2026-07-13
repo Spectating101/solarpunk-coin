@@ -3,6 +3,13 @@
   max-width: 1240px;
 }
 
+/* Empirical Runs is intentionally a three-pane instrument. The legacy 920px
+   Public Lab shell made the workspace collapse at desktop widths, causing the
+   metric row and dossier to compete for the same narrow center column. */
+.app-minimal:has(.empirical-lab) {
+  max-width: 1560px;
+}
+
 .protocol-table code {
   white-space: normal;
   overflow-wrap: anywhere;
