@@ -120,7 +120,7 @@ The existing Sepolia reference remains inspectable:
 
 SPK is a testnet lab unit, not legal money, a stablecoin, a token sale, or a legal claim on delivered energy.
 
-SolarPunk product docs remain under [`docs/product/`](./docs/product/) and the canonical final revised thesis PDF is `energy_constraint_thesis_final_submission_revised.pdf`.
+SolarPunk product docs remain under [`docs/product/`](./docs/product/). The final revised thesis is maintained as a submission artifact outside the public repo until its final PDF is deliberately published; the SPK reference tab keeps the older v10 link explicitly labeled temporary.
 
 ## Public-data and licence boundary
 
@@ -154,7 +154,7 @@ The principal protocol trust boundary also remains explicit: an authorized claim
 | Browser lab | `frontend/src/components/ConstraintProtocolLab.jsx` |
 | Browser reproduction | `frontend/src/components/EmpiricalReproductionLab.jsx` |
 | SPK reference application | `docs/product/`, `state/runtime/`, `spk_v1/` |
-| Thesis | `energy_constraint_thesis_final_submission_revised.pdf`, `thesis_package/` |
+| Thesis support material | `thesis_package/` |
 | CEIR negative-identification closure | `thesis_package/CEIR_FINAL_DIAGNOSIS.md` |
 
 ## Release posture
