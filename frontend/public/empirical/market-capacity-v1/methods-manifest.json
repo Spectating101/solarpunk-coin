@@ -1,0 +1,78 @@
+{
+  "cleaning": [
+    {
+      "excluded_ric_count": 7,
+      "rule": "Fail closed on RIC identity collisions by excluding all RICs mapped to >1 PERMNO in the delivered panel.",
+      "step": 1
+    },
+    {
+      "rule": "Use market_value, volatility_60d, and adv_20d as time-t observed policy inputs.",
+      "step": 2
+    },
+    {
+      "rule": "Define realized capacity ratio as 1 + min(0, min-forward cumulative return) at 20/60 sessions.",
+      "step": 3
+    },
+    {
+      "rule": "Evaluate policies on a common complete-case sample for each horizon.",
+      "step": 4
+    }
+  ],
+  "metrics": {
+    "binding_constraint": "for VOL-LIQ-003, the lower of volatility capacity and liquidity capacity",
+    "coverage_rate": "share of observations where permitted capacity ratio <= realized downside-only capacity ratio",
+    "mean_permitted_capacity_ratio": "average policy-permitted capacity divided by time-t market value",
+    "shortfall_event_rate": "share with positive permitted-minus-realized capacity"
+  },
+  "policy_definitions": [
+    {
+      "claim": "Reference baseline only; not a market standard or optimized rule.",
+      "formula": "permitted_ratio = 0.80",
+      "name": "Fixed 20% haircut",
+      "parameters": {
+        "fixed_haircut_pct": 20.0
+      },
+      "policy_id": "COLLATERAL-FIXED-20",
+      "role": "baseline"
+    },
+    {
+      "claim": "Predeclared research rule; not fitted to maximize historical coverage.",
+      "formula": "haircut = clip(0.10 + 0.50 * volatility_60d, 0.15, 0.60); permitted_ratio = 1 - haircut",
+      "name": "Volatility-adaptive haircut",
+      "parameters": {
+        "base": 0.1,
+        "max_haircut": 0.6,
+        "min_haircut": 0.15,
+        "volatility_multiplier": 0.5
+      },
+      "policy_id": "COLLATERAL-VOL-002",
+      "role": "adaptive"
+    },
+    {
+      "claim": "Predeclared research rule exposing a binding-constraint comparison; not fitted to maximize historical coverage.",
+      "formula": "permitted_ratio = min(volatility_capacity, liquidity_capacity); liquidity_capacity = clip(0.50 + 50 * (adv_20d / market_value), 0.60, 0.95)",
+      "name": "Volatility + liquidity guard",
+      "parameters": {
+        "liquidity_base": 0.5,
+        "max_liquidity_capacity": 0.95,
+        "min_liquidity_capacity": 0.6,
+        "turnover_multiplier": 50.0
+      },
+      "policy_id": "COLLATERAL-VOL-LIQ-003",
+      "role": "guarded"
+    }
+  ],
+  "reproduction_boundary": "Exact raw-row reproduction requires the licensed source package. Public artifacts reproduce aggregate policy outputs and disclose formulas, sample rules, hashes, and counts.",
+  "schema": "constraint.empirical.methods_manifest.v1",
+  "source_dataset_sha256": "792c3ad99311cff2b18e9dcdb58fbfedcf74a1bf95c1a0691673d06492b5e0e5",
+  "source_license": "internal_yzu_licensed_no_redistribution",
+  "source_methods_disclosure": {
+    "esg": "Not used in empirical policy evaluation because delivered coverage is insufficient.",
+    "market_evidence": "CRSP daily market fields with Refinitiv .SPX-derived universe construction; source package methods retained privately."
+  },
+  "source_period": {
+    "end": "2024-12-31",
+    "start": "2018-01-02"
+  },
+  "study_id": "constraint-market-capacity-v1-public-aggregate"
+}
