@@ -30,6 +30,12 @@ function pp(value, digits = 2) {
   return `${(Number(value) * 100).toFixed(digits)} pp`;
 }
 
+function signedPp(value, digits = 2) {
+  if (value == null || Number.isNaN(Number(value))) return '—';
+  const number = Number(value);
+  return `${number >= 0 ? '+' : '−'}${Math.abs(number * 100).toFixed(digits)} pp`;
+}
+
 function fmt(value) {
   if (value == null || Number.isNaN(Number(value))) return '—';
   return Number(value).toLocaleString();
@@ -81,6 +87,8 @@ function decisionForHorizon(summary, horizon) {
     coverageGain: guarded.coverage_rate - fixed.coverage_rate,
     capacityCost: fixed.mean_permitted_capacity_ratio - guarded.mean_permitted_capacity_ratio,
     shortfallReduction: fixed.shortfall_event_rate - guarded.shortfall_event_rate,
+    conditionalSeverityChange:
+      guarded.mean_shortfall_ratio_conditional - fixed.mean_shortfall_ratio_conditional,
   };
 }
 
@@ -91,12 +99,12 @@ function buildDecisionMemo({ summary, decision, peakStress, fixedStress, guarded
     `**Study ID:** \`${summary.study_id}\`\n\n` +
     `**Generated:** ${generatedAt}\n\n` +
     `## Decision statement\n\n` +
-    `At the ${decision.horizon}-session horizon, the volatility-plus-liquidity guard improved historical coverage by ${pp(decision.coverageGain)} relative to the fixed 20% haircut while reducing mean permitted capacity by ${pp(decision.capacityCost)}. Shortfall-event incidence fell by ${pp(decision.shortfallReduction)}. This is a historical policy trade-off, not evidence that either rule is optimal or production-ready.\n\n` +
+    `At the ${decision.horizon}-session horizon, the volatility-plus-liquidity guard improved historical coverage by ${pp(decision.coverageGain)} relative to the fixed 20% haircut while reducing mean permitted capacity by ${pp(decision.capacityCost)}. Shortfall-event incidence fell by ${pp(decision.shortfallReduction)}, but mean shortfall severity conditional on a failure changed by ${signedPp(decision.conditionalSeverityChange)}. This is a historical policy trade-off, not evidence that either rule is optimal or production-ready.\n\n` +
     `## Common-sample comparison\n\n` +
-    `| Policy | Coverage | Shortfall events | Mean permitted capacity |\n` +
-    `|---|---:|---:|---:|\n` +
-    `| Fixed 20% haircut | ${pct(decision.fixed.coverage_rate)} | ${pct(decision.fixed.shortfall_event_rate)} | ${pct(decision.fixed.mean_permitted_capacity_ratio)} |\n` +
-    `| Volatility + liquidity guard | ${pct(decision.guarded.coverage_rate)} | ${pct(decision.guarded.shortfall_event_rate)} | ${pct(decision.guarded.mean_permitted_capacity_ratio)} |\n\n` +
+    `| Policy | Coverage | Shortfall events | Mean permitted capacity | Conditional shortfall severity |\n` +
+    `|---|---:|---:|---:|---:|\n` +
+    `| Fixed 20% haircut | ${pct(decision.fixed.coverage_rate)} | ${pct(decision.fixed.shortfall_event_rate)} | ${pct(decision.fixed.mean_permitted_capacity_ratio)} | ${pct(decision.fixed.mean_shortfall_ratio_conditional)} |\n` +
+    `| Volatility + liquidity guard | ${pct(decision.guarded.coverage_rate)} | ${pct(decision.guarded.shortfall_event_rate)} | ${pct(decision.guarded.mean_permitted_capacity_ratio)} | ${pct(decision.guarded.mean_shortfall_ratio_conditional)} |\n\n` +
     `Common observations: ${fmt(decision.guarded.observation_count)}.\n\n` +
     `## Failure-visible stress replay\n\n` +
     `Peak published replay: ${peakStress?.date || '—'} (${peakStress?.horizon_sessions || 20} sessions). Fixed-policy shortfall events were ${pct(fixedStress?.shortfall_event_rate)}; guarded-policy shortfall events were ${pct(guardedStress?.shortfall_event_rate)}. The guarded rule remained materially inadequate under this realized stress.\n\n` +
@@ -191,12 +199,14 @@ export default function DecisionBrief({
     coverageGain,
     capacityCost,
     shortfallReduction,
+    conditionalSeverityChange,
   } = decision;
 
   const memo = buildDecisionMemo({ summary, decision, peakStress, fixedStress, guardedStress });
   const residualLabel = guarded.shortfall_event_rate < 0.02
     ? 'Lower failure incidence; no adequacy proof'
     : 'Improved, but residual failure remains material';
+  const severityTone = conditionalSeverityChange > 0 ? 'warning' : 'good';
 
   return (
     <section className="decision-brief" aria-labelledby="decision-brief-heading">
@@ -287,10 +297,10 @@ export default function DecisionBrief({
           tone="warning"
         />
         <BriefMetric
-          label="Shortfall incidence reduced"
-          value={pp(shortfallReduction)}
-          detail={`${pct(fixed.shortfall_event_rate)} → ${pct(guarded.shortfall_event_rate)}`}
-          tone="good"
+          label="Conditional shortfall severity"
+          value={signedPp(conditionalSeverityChange)}
+          detail={`${pct(fixed.mean_shortfall_ratio_conditional)} → ${pct(guarded.mean_shortfall_ratio_conditional)} when failure occurs`}
+          tone={severityTone}
         />
         <BriefMetric
           label="Residual guarded shortfall"
@@ -307,7 +317,9 @@ export default function DecisionBrief({
           <p>
             At the {horizon}-session horizon, the volatility-plus-liquidity rule added {pp(coverageGain)}
             {' '}of coverage relative to the fixed 20% haircut while reducing mean permitted capacity by
-            {' '}{pp(capacityCost)}. The result supports a measurable trade-off—not an automatic recommendation.
+            {' '}{pp(capacityCost)}. Shortfall events became less frequent, but conditional severity changed by
+            {' '}{signedPp(conditionalSeverityChange)} when failure still occurred. The result supports a measured
+            trade-off—not an automatic recommendation.
           </p>
           <div className="decision-interpretation-tags" aria-label="Decision interpretation">
             <span>same evidence</span><span>same outcome definition</span><span>policy changed</span>
@@ -357,6 +369,7 @@ export default function DecisionBrief({
                 <div><dt>Coverage gain</dt><dd>+{pp(row.coverageGain)}</dd></div>
                 <div><dt>Capacity cost</dt><dd>{pp(row.capacityCost)}</dd></div>
                 <div><dt>Guarded shortfall</dt><dd>{pct(row.guarded.shortfall_event_rate)}</dd></div>
+                <div><dt>Conditional severity Δ</dt><dd>{signedPp(row.conditionalSeverityChange)}</dd></div>
               </dl>
               <small>{horizon === row.horizon ? 'ACTIVE DECISION VIEW' : 'SELECT HORIZON'}</small>
             </button>
