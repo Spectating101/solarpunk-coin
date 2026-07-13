@@ -1,0 +1,214 @@
+{
+  "rows": [
+    {
+      "coverage_rate": 0.154354,
+      "haircut_pct": 0,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.050741,
+      "permitted_capacity_ratio": 1.0,
+      "shortfall_event_rate": 0.845954
+    },
+    {
+      "coverage_rate": 0.62995,
+      "haircut_pct": 5,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.021424,
+      "permitted_capacity_ratio": 0.95,
+      "shortfall_event_rate": 0.37008
+    },
+    {
+      "coverage_rate": 0.855088,
+      "haircut_pct": 10,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.00937,
+      "permitted_capacity_ratio": 0.9,
+      "shortfall_event_rate": 0.14494
+    },
+    {
+      "coverage_rate": 0.941408,
+      "haircut_pct": 15,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.004642,
+      "permitted_capacity_ratio": 0.85,
+      "shortfall_event_rate": 0.058595
+    },
+    {
+      "coverage_rate": 0.972518,
+      "haircut_pct": 20,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.00261,
+      "permitted_capacity_ratio": 0.8,
+      "shortfall_event_rate": 0.027487
+    },
+    {
+      "coverage_rate": 0.984739,
+      "haircut_pct": 25,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.001589,
+      "permitted_capacity_ratio": 0.75,
+      "shortfall_event_rate": 0.015267
+    },
+    {
+      "coverage_rate": 0.990386,
+      "haircut_pct": 30,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.000982,
+      "permitted_capacity_ratio": 0.7,
+      "shortfall_event_rate": 0.009614
+    },
+    {
+      "coverage_rate": 0.994172,
+      "haircut_pct": 35,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.000602,
+      "permitted_capacity_ratio": 0.65,
+      "shortfall_event_rate": 0.005828
+    },
+    {
+      "coverage_rate": 0.99639,
+      "haircut_pct": 40,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.000373,
+      "permitted_capacity_ratio": 0.6,
+      "shortfall_event_rate": 0.00361
+    },
+    {
+      "coverage_rate": 0.997733,
+      "haircut_pct": 45,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.000228,
+      "permitted_capacity_ratio": 0.55,
+      "shortfall_event_rate": 0.002267
+    },
+    {
+      "coverage_rate": 0.998553,
+      "haircut_pct": 50,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 0.000136,
+      "permitted_capacity_ratio": 0.5,
+      "shortfall_event_rate": 0.001447
+    },
+    {
+      "coverage_rate": 0.999149,
+      "haircut_pct": 55,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 7.9e-05,
+      "permitted_capacity_ratio": 0.45,
+      "shortfall_event_rate": 0.000851
+    },
+    {
+      "coverage_rate": 0.999473,
+      "haircut_pct": 60,
+      "horizon_sessions": 20,
+      "mean_shortfall_ratio_unconditional": 4.5e-05,
+      "permitted_capacity_ratio": 0.4,
+      "shortfall_event_rate": 0.000527
+    },
+    {
+      "coverage_rate": 0.097071,
+      "haircut_pct": 0,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.089606,
+      "permitted_capacity_ratio": 1.0,
+      "shortfall_event_rate": 0.90312
+    },
+    {
+      "coverage_rate": 0.431596,
+      "haircut_pct": 5,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.05312,
+      "permitted_capacity_ratio": 0.95,
+      "shortfall_event_rate": 0.568421
+    },
+    {
+      "coverage_rate": 0.668891,
+      "haircut_pct": 10,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.031032,
+      "permitted_capacity_ratio": 0.9,
+      "shortfall_event_rate": 0.331127
+    },
+    {
+      "coverage_rate": 0.814609,
+      "haircut_pct": 15,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.01846,
+      "permitted_capacity_ratio": 0.85,
+      "shortfall_event_rate": 0.185396
+    },
+    {
+      "coverage_rate": 0.89399,
+      "haircut_pct": 20,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.011384,
+      "permitted_capacity_ratio": 0.8,
+      "shortfall_event_rate": 0.106027
+    },
+    {
+      "coverage_rate": 0.936307,
+      "haircut_pct": 25,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.007251,
+      "permitted_capacity_ratio": 0.75,
+      "shortfall_event_rate": 0.0637
+    },
+    {
+      "coverage_rate": 0.959837,
+      "haircut_pct": 30,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.004715,
+      "permitted_capacity_ratio": 0.7,
+      "shortfall_event_rate": 0.040167
+    },
+    {
+      "coverage_rate": 0.973534,
+      "haircut_pct": 35,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.003083,
+      "permitted_capacity_ratio": 0.65,
+      "shortfall_event_rate": 0.026467
+    },
+    {
+      "coverage_rate": 0.98218,
+      "haircut_pct": 40,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.00199,
+      "permitted_capacity_ratio": 0.6,
+      "shortfall_event_rate": 0.017822
+    },
+    {
+      "coverage_rate": 0.988131,
+      "haircut_pct": 45,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.001256,
+      "permitted_capacity_ratio": 0.55,
+      "shortfall_event_rate": 0.01187
+    },
+    {
+      "coverage_rate": 0.992303,
+      "haircut_pct": 50,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.000774,
+      "permitted_capacity_ratio": 0.5,
+      "shortfall_event_rate": 0.007698
+    },
+    {
+      "coverage_rate": 0.995228,
+      "haircut_pct": 55,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.000465,
+      "permitted_capacity_ratio": 0.45,
+      "shortfall_event_rate": 0.004774
+    },
+    {
+      "coverage_rate": 0.997193,
+      "haircut_pct": 60,
+      "horizon_sessions": 60,
+      "mean_shortfall_ratio_unconditional": 0.000277,
+      "permitted_capacity_ratio": 0.4,
+      "shortfall_event_rate": 0.002807
+    }
+  ],
+  "schema": "constraint.empirical.policy_frontier.v1",
+  "study_id": "constraint-market-capacity-v1-public-aggregate"
+}

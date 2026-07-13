@@ -1,0 +1,152 @@
+{
+  "binding_constraint_attribution": {
+    "liquidity_capacity_binding_rate": 0.347623,
+    "observation_count": 734379,
+    "policy_id": "COLLATERAL-VOL-LIQ-003",
+    "sample": "20-session common sample",
+    "volatility_capacity_binding_rate": 0.652377
+  },
+  "comparison_sample": {
+    "20_session_observations": 734379,
+    "60_session_observations": 716659,
+    "rule": "Common sample across all three policies at each horizon."
+  },
+  "conservative_evaluation_view": {
+    "ambiguous_identity_rule": "Exclude any RIC mapped to more than one PERMNO in the delivered panel.",
+    "ambiguous_rics_excluded_count": 7,
+    "forward_floor_rule": "Downside-only: min(0, source min-forward cumulative return); positive forward paths do not increase time-t collateral floor.",
+    "permnos": 443,
+    "rics": 443,
+    "rows": 760931
+  },
+  "delivered_panel": {
+    "permnos": 457,
+    "rics": 450,
+    "rows": 777764
+  },
+  "interpretation_boundary": "Historical coverage is an empirical diagnostic, not proof of legal enforceability, future performance, or production risk adequacy.",
+  "peak_stress_run_id": "CP-MKT-STRESS-0002",
+  "period": {
+    "end": "2024-12-31",
+    "start": "2018-01-02"
+  },
+  "policies": [
+    {
+      "claim": "Reference baseline only; not a market standard or optimized rule.",
+      "formula": "permitted_ratio = 0.80",
+      "name": "Fixed 20% haircut",
+      "parameters": {
+        "fixed_haircut_pct": 20.0
+      },
+      "policy_id": "COLLATERAL-FIXED-20",
+      "role": "baseline"
+    },
+    {
+      "claim": "Predeclared research rule; not fitted to maximize historical coverage.",
+      "formula": "haircut = clip(0.10 + 0.50 * volatility_60d, 0.15, 0.60); permitted_ratio = 1 - haircut",
+      "name": "Volatility-adaptive haircut",
+      "parameters": {
+        "base": 0.1,
+        "max_haircut": 0.6,
+        "min_haircut": 0.15,
+        "volatility_multiplier": 0.5
+      },
+      "policy_id": "COLLATERAL-VOL-002",
+      "role": "adaptive"
+    },
+    {
+      "claim": "Predeclared research rule exposing a binding-constraint comparison; not fitted to maximize historical coverage.",
+      "formula": "permitted_ratio = min(volatility_capacity, liquidity_capacity); liquidity_capacity = clip(0.50 + 50 * (adv_20d / market_value), 0.60, 0.95)",
+      "name": "Volatility + liquidity guard",
+      "parameters": {
+        "liquidity_base": 0.5,
+        "max_liquidity_capacity": 0.95,
+        "min_liquidity_capacity": 0.6,
+        "turnover_multiplier": 50.0
+      },
+      "policy_id": "COLLATERAL-VOL-LIQ-003",
+      "role": "guarded"
+    }
+  ],
+  "policy_metrics": [
+    {
+      "coverage_rate": 0.972518,
+      "horizon_sessions": 20,
+      "mean_permitted_capacity_ratio": 0.8,
+      "mean_shortfall_ratio_conditional": 0.094955,
+      "mean_shortfall_ratio_unconditional": 0.00261,
+      "median_permitted_capacity_ratio": 0.8,
+      "observation_count": 734379,
+      "p95_shortfall_ratio_conditional": 0.306252,
+      "policy_id": "COLLATERAL-FIXED-20",
+      "shortfall_event_rate": 0.027487
+    },
+    {
+      "coverage_rate": 0.986941,
+      "horizon_sessions": 20,
+      "mean_permitted_capacity_ratio": 0.743669,
+      "mean_shortfall_ratio_conditional": 0.112919,
+      "mean_shortfall_ratio_unconditional": 0.001475,
+      "median_permitted_capacity_ratio": 0.764678,
+      "observation_count": 734379,
+      "p95_shortfall_ratio_conditional": 0.319371,
+      "policy_id": "COLLATERAL-VOL-002",
+      "shortfall_event_rate": 0.013059
+    },
+    {
+      "coverage_rate": 0.988626,
+      "horizon_sessions": 20,
+      "mean_permitted_capacity_ratio": 0.716849,
+      "mean_shortfall_ratio_conditional": 0.112262,
+      "mean_shortfall_ratio_unconditional": 0.001277,
+      "median_permitted_capacity_ratio": 0.731598,
+      "observation_count": 734379,
+      "p95_shortfall_ratio_conditional": 0.322299,
+      "policy_id": "COLLATERAL-VOL-LIQ-003",
+      "shortfall_event_rate": 0.011374
+    },
+    {
+      "coverage_rate": 0.89399,
+      "horizon_sessions": 60,
+      "mean_permitted_capacity_ratio": 0.8,
+      "mean_shortfall_ratio_conditional": 0.107373,
+      "mean_shortfall_ratio_unconditional": 0.011384,
+      "median_permitted_capacity_ratio": 0.8,
+      "observation_count": 716659,
+      "p95_shortfall_ratio_conditional": 0.339773,
+      "policy_id": "COLLATERAL-FIXED-20",
+      "shortfall_event_rate": 0.106027
+    },
+    {
+      "coverage_rate": 0.939424,
+      "horizon_sessions": 60,
+      "mean_permitted_capacity_ratio": 0.743314,
+      "mean_shortfall_ratio_conditional": 0.11909,
+      "mean_shortfall_ratio_unconditional": 0.007214,
+      "median_permitted_capacity_ratio": 0.764415,
+      "observation_count": 716659,
+      "p95_shortfall_ratio_conditional": 0.353015,
+      "policy_id": "COLLATERAL-VOL-002",
+      "shortfall_event_rate": 0.060576
+    },
+    {
+      "coverage_rate": 0.949118,
+      "horizon_sessions": 60,
+      "mean_permitted_capacity_ratio": 0.716617,
+      "mean_shortfall_ratio_conditional": 0.116411,
+      "mean_shortfall_ratio_unconditional": 0.005923,
+      "median_permitted_capacity_ratio": 0.731498,
+      "observation_count": 716659,
+      "p95_shortfall_ratio_conditional": 0.349677,
+      "policy_id": "COLLATERAL-VOL-LIQ-003",
+      "shortfall_event_rate": 0.050882
+    }
+  ],
+  "public_data_boundary": "Aggregated, normalized research outputs only. No licensed CRSP/Refinitiv row-level observations are redistributed.",
+  "schema": "constraint.empirical.market_capacity_summary.v1",
+  "source_dataset_id": "constraint_market_capacity_v1",
+  "source_dataset_sha256": "792c3ad99311cff2b18e9dcdb58fbfedcf74a1bf95c1a0691673d06492b5e0e5",
+  "source_license": "internal_yzu_licensed_no_redistribution",
+  "study_id": "constraint-market-capacity-v1-public-aggregate",
+  "study_name": "Market Collateral Capacity — historical policy evaluation"
+}

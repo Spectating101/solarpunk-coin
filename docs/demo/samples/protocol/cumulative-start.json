@@ -1,0 +1,13 @@
+{
+  "schema": "SPK_CUMULATIVE_METER_SNAPSHOT_V1",
+  "provider": "solar_gateway_cumulative_v1",
+  "captured_at": "2026-02-14T00:00:00Z",
+  "meter_id": "TW-TY-0001",
+  "site_id": "taoyuan-rooftop-a",
+  "counters": {
+    "generation_kwh_total": 125000,
+    "site_load_kwh_total": 45500,
+    "export_kwh_total": 61000,
+    "curtailed_kwh_total": 18500
+  }
+}
