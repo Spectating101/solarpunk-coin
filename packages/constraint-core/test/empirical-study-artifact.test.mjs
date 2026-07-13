@@ -1,20 +1,25 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 const root = '../../../frontend/public/empirical/market-capacity-v1/';
-const readJson = async (name) => JSON.parse(await readFile(new URL(`${root}${name}`, import.meta.url), 'utf8'));
+const readText = async (name) => readFile(new URL(`${root}${name}`, import.meta.url), 'utf8');
+const readJson = async (name) => JSON.parse(await readText(name));
 const study = {
   summary: await readJson('market-capacity-summary.json'),
   frontier: await readJson('policy-frontier.json'),
   yearly: await readJson('yearly-policy-results.json'),
   stress_runs: await readJson('stress-reference-runs.json'),
   methods: await readJson('methods-manifest.json'),
+  integrity: await readJson('bundle-integrity.json'),
 };
 
 const metric = (policyId, horizon) => study.summary.policy_metrics.find(
   (row) => row.policy_id === policyId && row.horizon_sessions === horizon,
 );
+
+const sha256 = (value) => createHash('sha256').update(value, 'utf8').digest('hex');
 
 test('market-capacity empirical bundle stays aggregate-only and license bounded', () => {
   assert.equal(study.summary.source_license, 'internal_yzu_licensed_no_redistribution');
@@ -23,6 +28,14 @@ test('market-capacity empirical bundle stays aggregate-only and license bounded'
   const serialized = JSON.stringify(study).toLowerCase();
   for (const prohibited of ['"permno"', '"ric"', '"security_id"', '"close_price"', '"company_name"']) {
     assert.equal(serialized.includes(prohibited), false, `public bundle leaked row-level field ${prohibited}`);
+  }
+});
+
+test('empirical bundle integrity manifest pins exact committed bytes', async () => {
+  assert.equal(study.integrity.hash_algorithm, 'SHA-256');
+  assert.equal(study.integrity.source_dataset_sha256, study.summary.source_dataset_sha256);
+  for (const [name, expected] of Object.entries(study.integrity.files)) {
+    assert.equal(sha256(await readText(name)), expected, `${name} byte identity drifted`);
   }
 });
 
