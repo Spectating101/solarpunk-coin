@@ -27,8 +27,6 @@ export const SEPOLIA_EXPLORER = "https://sepolia.etherscan.io";
 export const FALLBACK_SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
 export const SEPOLIA_RPC_URL = normalizeSepoliaRpc(import.meta.env.VITE_RPC_URL);
 export const GITHUB_REPO = "https://github.com/Spectating101/solarpunk-coin";
-export const THESIS_CANONICAL_URL = `${GITHUB_REPO}/blob/main/energy_constraint_thesis_final_submission_revised.pdf`;
-export const THESIS_LINK_STATUS = "final_revised_ceir_boundary_submission";
 export const CEIR_DIAGNOSIS_URL = `${GITHUB_REPO}/blob/main/thesis_package/CEIR_FINAL_DIAGNOSIS.md`;
 export const KEEPER_WORKFLOW = `${GITHUB_REPO}/actions/workflows/nasa_keeper.yml`;
 export const PUBLIC_LAB_INQUIRY_URL = `${GITHUB_REPO}/issues/new?template=energy-data-experiment.md`;
