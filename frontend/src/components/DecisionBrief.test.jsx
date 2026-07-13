@@ -24,6 +24,7 @@ const summary = {
       coverage_rate: 0.972518,
       shortfall_event_rate: 0.027487,
       mean_permitted_capacity_ratio: 0.8,
+      mean_shortfall_ratio_conditional: 0.094955,
     },
     {
       policy_id: 'COLLATERAL-VOL-LIQ-003',
@@ -32,6 +33,7 @@ const summary = {
       coverage_rate: 0.988626,
       shortfall_event_rate: 0.011374,
       mean_permitted_capacity_ratio: 0.716849,
+      mean_shortfall_ratio_conditional: 0.112262,
     },
     {
       policy_id: 'COLLATERAL-FIXED-20',
@@ -40,6 +42,7 @@ const summary = {
       coverage_rate: 0.89399,
       shortfall_event_rate: 0.106027,
       mean_permitted_capacity_ratio: 0.8,
+      mean_shortfall_ratio_conditional: 0.107373,
     },
     {
       policy_id: 'COLLATERAL-VOL-LIQ-003',
@@ -48,6 +51,7 @@ const summary = {
       coverage_rate: 0.949118,
       shortfall_event_rate: 0.050882,
       mean_permitted_capacity_ratio: 0.716617,
+      mean_shortfall_ratio_conditional: 0.116411,
     },
   ],
 };
@@ -97,6 +101,7 @@ describe('DecisionBrief', () => {
 
     expect(screen.getAllByText('+1.61 pp').length).toBeGreaterThan(0);
     expect(screen.getAllByText('8.32 pp').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('+1.73 pp').length).toBeGreaterThan(0);
     expect(screen.getByText('734,379 observations')).toBeInTheDocument();
     expect(screen.getAllByText('80.52%').length).toBeGreaterThan(0);
     expect(screen.getByRole('button', { name: /download decision memo/i })).toBeInTheDocument();
@@ -110,6 +115,7 @@ describe('DecisionBrief', () => {
 
     expect(screen.getAllByText('+5.51 pp').length).toBeGreaterThan(0);
     expect(screen.getAllByText('8.34 pp').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('+0.90 pp').length).toBeGreaterThan(0);
     expect(screen.getAllByText('5.09%').length).toBeGreaterThan(0);
     expect(fetch).toHaveBeenCalledTimes(2);
   });
