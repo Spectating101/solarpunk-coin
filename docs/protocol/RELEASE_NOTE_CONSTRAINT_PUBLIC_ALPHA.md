@@ -8,6 +8,8 @@ Release posture: public research/protocol alpha.
 
 The default public route is **Empirical Runs**.
 
+The repository citation identity is **Constraint Protocol Public Alpha v0.1.0-alpha**; SolarPunk/SPK remains the motivating Sepolia reference application.
+
 ## Shipped surfaces
 
 1. **Empirical Runs** — historical policy comparison on an aggregate, licence-bounded CRSP/Refinitiv-derived study surface.
