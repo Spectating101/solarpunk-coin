@@ -5,8 +5,11 @@ import {
   BookOpen,
   CheckCircle2,
   Database,
+  Download,
   FlaskConical,
   GitCompareArrows,
+  Hash,
+  RotateCcw,
   ShieldAlert,
   SlidersHorizontal,
   Waypoints,
@@ -15,6 +18,7 @@ import {
 const STUDY_ROOT = `${import.meta.env.BASE_URL}empirical/market-capacity-v1`;
 const FIXED_POLICY_ID = 'COLLATERAL-FIXED-20';
 const GUARDED_POLICY_ID = 'COLLATERAL-VOL-LIQ-003';
+const HORIZONS = [20, 60];
 
 function pct(value, digits = 2) {
   if (value == null || Number.isNaN(Number(value))) return '—';
@@ -31,6 +35,29 @@ function fmt(value) {
   return Number(value).toLocaleString();
 }
 
+function shortHash(value, chars = 14) {
+  if (!value) return '—';
+  return `${String(value).slice(0, chars)}…`;
+}
+
+async function fetchJson(file) {
+  const response = await fetch(`${STUDY_ROOT}/${file}`);
+  if (!response.ok) throw new Error(`${file} unavailable (${response.status})`);
+  return response.json();
+}
+
+function downloadText(filename, value) {
+  const blob = new Blob([value], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
 function BriefMetric({ label, value, detail, tone = 'neutral' }) {
   return (
     <article className={`decision-metric ${tone}`}>
@@ -39,6 +66,46 @@ function BriefMetric({ label, value, detail, tone = 'neutral' }) {
       <small>{detail}</small>
     </article>
   );
+}
+
+function decisionForHorizon(summary, horizon) {
+  const rows = summary.policy_metrics.filter((row) => row.horizon_sessions === horizon);
+  const fixed = rows.find((row) => row.policy_id === FIXED_POLICY_ID);
+  const guarded = rows.find((row) => row.policy_id === GUARDED_POLICY_ID);
+  if (!fixed || !guarded) return null;
+
+  return {
+    horizon,
+    fixed,
+    guarded,
+    coverageGain: guarded.coverage_rate - fixed.coverage_rate,
+    capacityCost: fixed.mean_permitted_capacity_ratio - guarded.mean_permitted_capacity_ratio,
+    shortfallReduction: fixed.shortfall_event_rate - guarded.shortfall_event_rate,
+  };
+}
+
+function buildDecisionMemo({ summary, decision, peakStress, fixedStress, guardedStress }) {
+  const generatedAt = new Date().toISOString();
+  return `# Policy Decision Brief\n\n` +
+    `**Study:** ${summary.study_name}\n\n` +
+    `**Study ID:** \`${summary.study_id}\`\n\n` +
+    `**Generated:** ${generatedAt}\n\n` +
+    `## Decision statement\n\n` +
+    `At the ${decision.horizon}-session horizon, the volatility-plus-liquidity guard improved historical coverage by ${pp(decision.coverageGain)} relative to the fixed 20% haircut while reducing mean permitted capacity by ${pp(decision.capacityCost)}. Shortfall-event incidence fell by ${pp(decision.shortfallReduction)}. This is a historical policy trade-off, not evidence that either rule is optimal or production-ready.\n\n` +
+    `## Common-sample comparison\n\n` +
+    `| Policy | Coverage | Shortfall events | Mean permitted capacity |\n` +
+    `|---|---:|---:|---:|\n` +
+    `| Fixed 20% haircut | ${pct(decision.fixed.coverage_rate)} | ${pct(decision.fixed.shortfall_event_rate)} | ${pct(decision.fixed.mean_permitted_capacity_ratio)} |\n` +
+    `| Volatility + liquidity guard | ${pct(decision.guarded.coverage_rate)} | ${pct(decision.guarded.shortfall_event_rate)} | ${pct(decision.guarded.mean_permitted_capacity_ratio)} |\n\n` +
+    `Common observations: ${fmt(decision.guarded.observation_count)}.\n\n` +
+    `## Failure-visible stress replay\n\n` +
+    `Peak published replay: ${peakStress?.date || '—'} (${peakStress?.horizon_sessions || 20} sessions). Fixed-policy shortfall events were ${pct(fixedStress?.shortfall_event_rate)}; guarded-policy shortfall events were ${pct(guardedStress?.shortfall_event_rate)}. The guarded rule remained materially inadequate under this realized stress.\n\n` +
+    `## Evidence receipt\n\n` +
+    `- Source package: \`${summary.source_dataset_id}\`\n` +
+    `- Source SHA-256: \`${summary.source_dataset_sha256}\`\n` +
+    `- Historical period: ${summary.period.start} to ${summary.period.end}\n` +
+    `- Public boundary: ${summary.public_data_boundary}\n\n` +
+    `## Interpretation boundary\n\n${summary.interpretation_boundary}\n`;
 }
 
 export default function DecisionBrief({
@@ -50,19 +117,15 @@ export default function DecisionBrief({
   const [stressRuns, setStressRuns] = useState(null);
   const [horizon, setHorizon] = useState(20);
   const [error, setError] = useState(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let alive = true;
+    setError(null);
 
     Promise.all([
-      fetch(`${STUDY_ROOT}/market-capacity-summary.json`).then((response) => {
-        if (!response.ok) throw new Error(`Summary unavailable (${response.status})`);
-        return response.json();
-      }),
-      fetch(`${STUDY_ROOT}/stress-reference-runs.json`).then((response) => {
-        if (!response.ok) throw new Error(`Stress runs unavailable (${response.status})`);
-        return response.json();
-      }),
+      fetchJson('market-capacity-summary.json'),
+      fetchJson('stress-reference-runs.json'),
     ])
       .then(([summaryValue, stressValue]) => {
         if (!alive) return;
@@ -76,48 +139,45 @@ export default function DecisionBrief({
     return () => {
       alive = false;
     };
-  }, []);
+  }, [attempt]);
 
   const decision = useMemo(() => {
     if (!summary || !stressRuns) return null;
+    const selected = decisionForHorizon(summary, horizon);
+    if (!selected) return null;
 
-    const rows = summary.policy_metrics.filter((row) => row.horizon_sessions === horizon);
-    const fixed = rows.find((row) => row.policy_id === FIXED_POLICY_ID);
-    const guarded = rows.find((row) => row.policy_id === GUARDED_POLICY_ID);
     const peakStress = stressRuns.runs.find((run) => run.run_id === summary.peak_stress_run_id)
       || stressRuns.runs[0];
     const fixedStress = peakStress?.policy_results.find((row) => row.policy_id === FIXED_POLICY_ID);
     const guardedStress = peakStress?.policy_results.find((row) => row.policy_id === GUARDED_POLICY_ID);
 
-    if (!fixed || !guarded) return null;
-
-    return {
-      fixed,
-      guarded,
-      peakStress,
-      fixedStress,
-      guardedStress,
-      coverageGain: guarded.coverage_rate - fixed.coverage_rate,
-      capacityCost: fixed.mean_permitted_capacity_ratio - guarded.mean_permitted_capacity_ratio,
-      shortfallReduction: fixed.shortfall_event_rate - guarded.shortfall_event_rate,
-    };
+    return { ...selected, peakStress, fixedStress, guardedStress };
   }, [summary, stressRuns, horizon]);
+
+  const horizonDecisions = useMemo(() => {
+    if (!summary) return [];
+    return HORIZONS.map((value) => decisionForHorizon(summary, value)).filter(Boolean);
+  }, [summary]);
 
   if (error) {
     return (
       <section className="decision-load-state error" role="alert">
-        <ShieldAlert size={22} />
+        <ShieldAlert size={24} />
         <strong>Decision brief failed to load.</strong>
         <span>{error}</span>
+        <button type="button" className="ghost-button" onClick={() => setAttempt((value) => value + 1)}>
+          <RotateCcw size={15} /> Retry published bundle
+        </button>
       </section>
     );
   }
 
   if (!summary || !decision) {
     return (
-      <section className="decision-load-state">
-        <FlaskConical size={22} />
+      <section className="decision-load-state" aria-live="polite" aria-busy="true">
+        <div className="decision-loader" aria-hidden><FlaskConical size={22} /></div>
         <strong>Loading published policy results…</strong>
+        <span>Reading the committed aggregate receipt and stress replays.</span>
       </section>
     );
   }
@@ -133,15 +193,26 @@ export default function DecisionBrief({
     shortfallReduction,
   } = decision;
 
+  const memo = buildDecisionMemo({ summary, decision, peakStress, fixedStress, guardedStress });
+  const residualLabel = guarded.shortfall_event_rate < 0.02
+    ? 'Lower failure incidence; no adequacy proof'
+    : 'Improved, but residual failure remains material';
+
   return (
     <section className="decision-brief" aria-labelledby="decision-brief-heading">
       <header className="decision-hero">
         <div className="decision-hero-copy">
+          <div className="decision-status-line">
+            <span className="decision-live-dot" aria-hidden />
+            <span>Published aggregate</span>
+            <span aria-hidden>·</span>
+            <span>{horizon}-session decision view</span>
+          </div>
           <p className="decision-kicker">Public research lab · decision brief</p>
           <h1 id="decision-brief-heading">What did the stricter rule buy—and where did it still fail?</h1>
           <p className="decision-lede">
-            This page translates the published empirical run into a decision. The full study, exact
-            aggregate bundle, and evidence-to-claim laboratory remain available for inspection.
+            Start with the decision, not the machinery. Compare the historical benefit, the capacity
+            surrendered to obtain it, and the stress case that neither rule solved.
           </p>
           <div className="decision-actions">
             <button type="button" className="wallet-button" onClick={onOpenStudy}>
@@ -156,33 +227,44 @@ export default function DecisionBrief({
           </div>
         </div>
 
-        <aside className="decision-scope" aria-label="Study scope">
-          <div>
-            <span>Historical panel</span>
-            <strong>{summary.period.start} → {summary.period.end}</strong>
+        <aside className="decision-research-receipt" aria-label="Published study receipt">
+          <div className="decision-receipt-head">
+            <div>
+              <span>Research receipt</span>
+              <strong>{summary.study_id}</strong>
+            </div>
+            <Hash size={18} aria-hidden />
           </div>
-          <div>
-            <span>Delivered evidence</span>
-            <strong>{fmt(summary.delivered_panel.rows)} security-days</strong>
-          </div>
-          <div>
-            <span>Public boundary</span>
-            <strong>Aggregates only</strong>
-          </div>
+          <dl>
+            <div><dt>Historical panel</dt><dd>{summary.period.start} → {summary.period.end}</dd></div>
+            <div><dt>Common sample</dt><dd>{fmt(guarded.observation_count)} observations</dd></div>
+            <div><dt>Identity control</dt><dd>{summary.conservative_evaluation_view.ambiguous_rics_excluded_count} ambiguous RICs excluded</dd></div>
+            <div><dt>Source SHA-256</dt><dd><code title={summary.source_dataset_sha256}>{shortHash(summary.source_dataset_sha256, 18)}</code></dd></div>
+            <div><dt>Public boundary</dt><dd>Aggregate results only</dd></div>
+          </dl>
+          <button
+            type="button"
+            className="decision-memo-button"
+            onClick={() => downloadText(`policy-decision-brief-${horizon}-session.md`, memo)}
+          >
+            <Download size={15} /> Download decision memo
+          </button>
         </aside>
       </header>
 
       <div className="decision-control-row">
         <div>
           <p className="decision-kicker">Evaluation horizon</p>
-          <strong>Compare all policies on one common observation sample.</strong>
+          <strong>Every comparison uses one common complete-case sample.</strong>
         </div>
-        <div className="decision-horizon-toggle" aria-label="Evaluation horizon">
-          {[20, 60].map((value) => (
+        <div className="decision-horizon-toggle" role="group" aria-label="Evaluation horizon">
+          {HORIZONS.map((value) => (
             <button
               key={value}
               type="button"
               className={horizon === value ? 'active' : ''}
+              aria-pressed={horizon === value}
+              aria-label={`Use ${value}-session horizon`}
               onClick={() => setHorizon(value)}
             >
               {value} sessions
@@ -211,39 +293,74 @@ export default function DecisionBrief({
           tone="good"
         />
         <BriefMetric
-          label="Common observations"
-          value={fmt(guarded.observation_count)}
-          detail={`${horizon}-session complete-case comparison`}
+          label="Residual guarded shortfall"
+          value={pct(guarded.shortfall_event_rate)}
+          detail={residualLabel}
+          tone={guarded.shortfall_event_rate > 0.03 ? 'danger' : 'neutral'}
         />
       </div>
 
       <section className="decision-conclusion">
         <div className="decision-conclusion-copy">
           <p className="decision-kicker">Decision statement</p>
-          <h2>
-            The guarded rule improved historical coverage, but the improvement was purchased by
-            permitting less financial capacity.
-          </h2>
+          <h2>The guarded rule reduced historical failure by admitting less exposure.</h2>
           <p>
-            At the {horizon}-session horizon, the volatility-plus-liquidity rule added
-            {' '}{pp(coverageGain)} of coverage relative to the fixed 20% haircut while reducing
-            mean permitted capacity by {pp(capacityCost)}. That is the observable policy trade-off;
-            it is not proof that either rule is economically optimal.
+            At the {horizon}-session horizon, the volatility-plus-liquidity rule added {pp(coverageGain)}
+            {' '}of coverage relative to the fixed 20% haircut while reducing mean permitted capacity by
+            {' '}{pp(capacityCost)}. The result supports a measurable trade-off—not an automatic recommendation.
           </p>
+          <div className="decision-interpretation-tags" aria-label="Decision interpretation">
+            <span>same evidence</span><span>same outcome definition</span><span>policy changed</span>
+          </div>
         </div>
 
-        <div className="decision-receipt" aria-label="Trade-off receipt">
-          <div>
+        <div className="decision-receipt" aria-label="Policy trade-off receipt">
+          <article>
             <span>Fixed baseline</span>
             <strong>{pct(fixed.mean_permitted_capacity_ratio)} permitted</strong>
             <small>{pct(fixed.shortfall_event_rate)} shortfall events</small>
+          </article>
+          <div className="decision-receipt-delta">
+            <ArrowRight size={18} aria-hidden />
+            <span>−{pp(capacityCost)} capacity</span>
           </div>
-          <ArrowRight size={18} />
-          <div>
+          <article className="guarded">
             <span>Guarded rule</span>
             <strong>{pct(guarded.mean_permitted_capacity_ratio)} permitted</strong>
             <small>{pct(guarded.shortfall_event_rate)} shortfall events</small>
+          </article>
+        </div>
+      </section>
+
+      <section className="decision-sensitivity">
+        <div className="decision-section-heading">
+          <div>
+            <p className="decision-kicker">Horizon sensitivity</p>
+            <h2>The conclusion strengthens over 60 sessions, but the remaining failure rate also becomes material.</h2>
           </div>
+          <Activity size={22} aria-hidden />
+        </div>
+        <div className="decision-sensitivity-grid">
+          {horizonDecisions.map((row) => (
+            <button
+              key={row.horizon}
+              type="button"
+              className={horizon === row.horizon ? 'active' : ''}
+              aria-pressed={horizon === row.horizon}
+              onClick={() => setHorizon(row.horizon)}
+            >
+              <div className="decision-sensitivity-title">
+                <span>{row.horizon} sessions</span>
+                <strong>{fmt(row.guarded.observation_count)} common observations</strong>
+              </div>
+              <dl>
+                <div><dt>Coverage gain</dt><dd>+{pp(row.coverageGain)}</dd></div>
+                <div><dt>Capacity cost</dt><dd>{pp(row.capacityCost)}</dd></div>
+                <div><dt>Guarded shortfall</dt><dd>{pct(row.guarded.shortfall_event_rate)}</dd></div>
+              </dl>
+              <small>{horizon === row.horizon ? 'ACTIVE DECISION VIEW' : 'SELECT HORIZON'}</small>
+            </button>
+          ))}
         </div>
       </section>
 
@@ -273,15 +390,15 @@ export default function DecisionBrief({
             <small>{pct(guardedStress?.coverage_rate)} coverage</small>
           </div>
           <div className="danger">
-            <span>Residual failure</span>
+            <span>Residual stress failure</span>
             <strong>{pct(guardedStress?.shortfall_event_rate)}</strong>
             <small>the stricter rule remained inadequate</small>
           </div>
         </div>
 
         <p className="decision-stress-note">
-          The lab does not hide this result. A rule can dominate a baseline historically and still be
-          unacceptable under severe realized stress.
+          The stress replay is held at its published 20-session horizon. It is deliberately shown beside
+          either summary horizon because it is the clearest counterexample to overclaiming policy adequacy.
         </p>
       </section>
 
@@ -296,24 +413,23 @@ export default function DecisionBrief({
 
         <div className="decision-value-grid">
           <article>
-            <GitCompareArrows size={20} />
+            <GitCompareArrows size={20} aria-hidden />
             <span>01 · Policy comparison</span>
             <h3>What exposure did each declared rule permit?</h3>
-            <p>Hold evidence and outcome definitions fixed; change the policy and measure capacity, coverage, and shortfall.</p>
+            <p>Hold evidence and outcome definitions fixed; change policy and measure capacity, coverage, and shortfall.</p>
           </article>
           <article>
-            <SlidersHorizontal size={20} />
+            <SlidersHorizontal size={20} aria-hidden />
             <span>02 · Constraint attribution</span>
             <h3>Which guard actually capped the decision?</h3>
             <p>
               In the 20-session guarded sample, volatility bound
-              {' '}{pct(summary.binding_constraint_attribution.volatility_capacity_binding_rate, 1)}
-              {' '}and liquidity bound
+              {' '}{pct(summary.binding_constraint_attribution.volatility_capacity_binding_rate, 1)} and liquidity bound
               {' '}{pct(summary.binding_constraint_attribution.liquidity_capacity_binding_rate, 1)}.
             </p>
           </article>
           <article>
-            <Waypoints size={20} />
+            <Waypoints size={20} aria-hidden />
             <span>03 · Claim explanation</span>
             <h3>Why was a bounded quantity allowed to exist?</h3>
             <p>Trace local evidence through normalization, provenance, policy admission, claim quantity, and settlement outcome.</p>
@@ -333,24 +449,24 @@ export default function DecisionBrief({
         <div className="decision-path-grid">
           <button type="button" onClick={onOpenStudy}>
             <span>01</span>
-            <Database size={18} />
+            <Database size={18} aria-hidden />
             <strong>Interrogate the full study</strong>
             <small>Policy table, frontier, annual surface, stress dates, and methods.</small>
-            <ArrowRight size={15} />
+            <ArrowRight size={15} aria-hidden />
           </button>
           <button type="button" onClick={onOpenReproduce}>
             <span>02</span>
-            <Activity size={18} />
+            <Activity size={18} aria-hidden />
             <strong>Verify the aggregate release</strong>
             <small>Recompute hashes over the exact committed public study files.</small>
-            <ArrowRight size={15} />
+            <ArrowRight size={15} aria-hidden />
           </button>
           <button type="button" onClick={onOpenProtocol}>
             <span>03</span>
-            <Waypoints size={18} />
+            <Waypoints size={18} aria-hidden />
             <strong>Run evidence through a claim policy</strong>
             <small>Use sample or local evidence and make settlement failure visible.</small>
-            <ArrowRight size={15} />
+            <ArrowRight size={15} aria-hidden />
           </button>
         </div>
       </section>
