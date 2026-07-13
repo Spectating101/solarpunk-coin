@@ -1,0 +1,29 @@
+{
+  "schema": "solarpunk.constraint.policy_manifest.v1",
+  "id": "LAB-OPEN-001",
+  "version": "1.0.0",
+  "name": "Public Lab Open Demonstration",
+  "description": "Admits deterministic local evidence for illustrative claim and settlement simulation. It never authorizes live minting or real-value issuance.",
+  "min_provenance_level": "L0",
+  "admission": {
+    "require_positive_surplus": true,
+    "require_zero_blockers": true,
+    "require_signed_evidence": false,
+    "require_external_corroboration": false
+  },
+  "issuance": {
+    "unit": "CLAIM_UNIT",
+    "decimals": 6,
+    "rate_per_surplus_kwh": 1,
+    "haircut_pct": 0,
+    "absolute_cap": 10000
+  },
+  "settlement": {
+    "explicit_capacity_required": true,
+    "legal_redemption_not_implied": true
+  },
+  "governance": {
+    "authority": "browser-local demonstration policy",
+    "mutable_by": "policy publisher in future protocol deployment"
+  }
+}

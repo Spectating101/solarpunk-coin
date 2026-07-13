@@ -1,8 +1,11 @@
-# Verify Public Lab demo build
+# Build and publish the Constraint / SolarPunk lab to the repository's legacy
+# GitHub Pages source: /docs on main.
 #
-# GitHub Pages for this repo is served from /docs on main (legacy).
-# Live demo path: https://spectating101.github.io/solarpunk-coin/demo/
-# Publishing: commit updates under docs/demo/ (npm run public-lab:publish locally).
+# Live path: https://spectating101.github.io/solarpunk-coin/demo/
+#
+# The workflow mirrors the current Vite build into docs/demo and commits only
+# generated demo changes back to main. GitHub's GITHUB_TOKEN push does not
+# recursively trigger another workflow run.
 
 name: Deploy to GitHub Pages
 
@@ -12,24 +15,25 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          # Root package-lock.json is gitignored; cache frontend lock instead.
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
@@ -41,8 +45,23 @@ jobs:
       - name: Build and mirror demo to docs/demo
         run: bash scripts/publish_demo_to_docs.sh
 
-      - name: Confirm demo artifact
+      - name: Confirm Constraint empirical surface
         run: |
           test -f docs/demo/index.html
           test -f docs/demo/spk_v1.json
+          test -f docs/demo/empirical/market-capacity-v1/market-capacity-summary.json
+          test -f docs/demo/empirical/market-capacity-v1/methods-manifest.json
           node -e 'const j=require("./docs/demo/spk_v1.json"); if(!j.contracts?.solar_punk_coin) process.exit(1); console.log(j.product, j.contracts.solar_punk_coin);'
+          node -e 'const j=require("./docs/demo/empirical/market-capacity-v1/market-capacity-summary.json"); if(!j.policy_metrics?.length) process.exit(1); console.log(j.study_id, j.policy_metrics.length);'
+
+      - name: Commit deployable Pages mirror
+        run: |
+          if git diff --quiet -- docs/demo; then
+            echo "docs/demo already matches the current build"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/demo
+          git commit -m "Publish Constraint empirical lab [skip ci]"
+          git push origin HEAD:main

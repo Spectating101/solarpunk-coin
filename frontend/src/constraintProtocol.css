@@ -1,0 +1,592 @@
+.protocol-alpha {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
+}
+
+.protocol-alpha-hero {
+  display: grid;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 1rem auto 2rem;
+  padding: 2.2rem 2.3rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  background:
+    linear-gradient(145deg, rgba(52, 211, 153, 0.07), rgba(13, 23, 16, 0.92) 42%),
+    var(--surface);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.2);
+}
+
+.protocol-alpha-hero h1 {
+  max-width: 760px;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 6vw, 5.2rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+}
+
+.protocol-alpha-hero > p:not(.eyebrow) {
+  max-width: 780px;
+  color: var(--muted-readable);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.protocol-alpha-boundary {
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid var(--amber);
+  background: var(--amber-dim);
+  color: #efc17d;
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  line-height: 1.55;
+}
+
+.protocol-flow {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 auto 2rem;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(7, 13, 8, 0.72);
+}
+
+.protocol-flow-step {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(16, 31, 20, 0.64);
+}
+
+.protocol-flow-step span,
+.protocol-stage-index,
+.protocol-card-kicker {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.protocol-flow-step strong {
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.protocol-flow-arrow {
+  display: none;
+  color: var(--dim);
+}
+
+.protocol-stage {
+  margin-top: 1.25rem;
+  padding: 1.35rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(13, 23, 16, 0.9);
+}
+
+.protocol-stage-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+  color: var(--green);
+}
+
+.protocol-stage-heading h2 {
+  margin-top: 0.25rem;
+  color: var(--text);
+  font-size: clamp(1.25rem, 3vw, 1.9rem);
+}
+
+.protocol-source-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.protocol-source-card,
+.protocol-policy-card {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-3);
+  color: var(--muted-readable);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 150ms ease, transform 150ms ease, background 150ms ease;
+}
+
+.protocol-source-card:hover,
+.protocol-policy-card:hover,
+.protocol-source-card.active,
+.protocol-policy-card.active {
+  border-color: var(--border-strong);
+  background: rgba(52, 211, 153, 0.055);
+  transform: translateY(-1px);
+}
+
+.protocol-source-card.active,
+.protocol-policy-card.active {
+  box-shadow: inset 0 0 0 1px rgba(52, 211, 153, 0.25);
+}
+
+.protocol-source-card svg {
+  color: var(--green);
+}
+
+.protocol-source-card strong,
+.protocol-policy-card > strong {
+  color: var(--text);
+  font-size: 0.88rem;
+}
+
+.protocol-source-card span,
+.protocol-policy-card span,
+.protocol-policy-card small {
+  color: var(--muted-readable);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.protocol-policy-card small {
+  color: #e1a55a;
+}
+
+.protocol-intake-card {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: rgba(7, 13, 8, 0.68);
+}
+
+.protocol-intake-title {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.protocol-intake-card p:not(.protocol-intake-title) {
+  margin-top: 0.2rem;
+  color: var(--muted-readable);
+  line-height: 1.5;
+}
+
+.protocol-intake-actions,
+.protocol-stage-actions,
+.protocol-settlement-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.6rem;
+}
+
+.protocol-file-list,
+.protocol-muted {
+  color: var(--muted-readable);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.protocol-evidence-summary,
+.protocol-claim-card,
+.protocol-settlement-result {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.protocol-evidence-summary > div,
+.protocol-claim-card > div,
+.protocol-settlement-result > div:not(.protocol-constraint-matrix) {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(7, 13, 8, 0.62);
+}
+
+.protocol-evidence-summary span,
+.protocol-claim-card span,
+.protocol-settlement-result span {
+  color: var(--muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.protocol-evidence-summary strong,
+.protocol-claim-card strong,
+.protocol-settlement-result strong,
+.protocol-evidence-summary code,
+.protocol-claim-card code {
+  overflow: hidden;
+  color: var(--text);
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.protocol-evidence-summary code,
+.protocol-claim-card code {
+  color: var(--green);
+  font-family: var(--font-mono);
+}
+
+.protocol-transform-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.protocol-transform-card {
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(7, 13, 8, 0.56);
+}
+
+.protocol-table-scroll {
+  overflow-x: auto;
+  margin-top: 0.6rem;
+}
+
+.protocol-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+
+.protocol-table th,
+.protocol-table td {
+  padding: 0.58rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-readable);
+  text-align: left;
+  vertical-align: top;
+}
+
+.protocol-table th {
+  color: var(--muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.protocol-table code {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+}
+
+.protocol-check-list {
+  display: grid;
+  gap: 0.45rem;
+  max-height: 380px;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.protocol-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+.protocol-check > div {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.protocol-check strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
+.protocol-check span {
+  color: var(--muted-readable);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.protocol-check.pass svg { color: var(--green); }
+.protocol-check.warning svg { color: var(--amber); }
+.protocol-check.block svg { color: var(--red); }
+
+.provenance-ladder {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.provenance-level {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  min-height: 88px;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(7, 13, 8, 0.58);
+}
+
+.provenance-level strong {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+}
+
+.provenance-level span {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.provenance-level em {
+  align-self: end;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-style: normal;
+  letter-spacing: 0.07em;
+}
+
+.provenance-level.active {
+  border-color: var(--green);
+  background: var(--green-dim);
+}
+
+.provenance-level.active strong {
+  color: var(--green);
+}
+
+.protocol-provenance-decision {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.8rem;
+  padding: 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+}
+
+.protocol-provenance-decision > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.protocol-provenance-decision span {
+  color: var(--muted);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+.protocol-provenance-decision strong {
+  color: var(--text);
+}
+
+.protocol-provenance-decision p {
+  grid-column: 1 / -1;
+  color: var(--muted-readable);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.protocol-policy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.protocol-policy-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.protocol-policy-card code {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+}
+
+.protocol-decision {
+  padding: 0.24rem 0.38rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.56rem !important;
+}
+
+.protocol-decision.admit {
+  background: var(--green-dim);
+  color: var(--green) !important;
+}
+
+.protocol-decision.block {
+  background: rgba(239, 68, 68, 0.11);
+  color: #f48888 !important;
+}
+
+.protocol-build-claim {
+  margin-top: 0.9rem;
+}
+
+.protocol-claim-card {
+  margin-bottom: 0.8rem;
+}
+
+.protocol-settlement-controls {
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: rgba(7, 13, 8, 0.62);
+}
+
+.protocol-settlement-controls label {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 190px;
+  color: var(--muted-readable);
+  font-size: 0.72rem;
+}
+
+.protocol-settlement-controls input {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.protocol-settlement-result {
+  margin-top: 0.8rem;
+}
+
+.protocol-settlement-result .shortfall {
+  border-color: rgba(217, 119, 6, 0.55);
+  background: rgba(217, 119, 6, 0.1);
+}
+
+.protocol-settlement-result .shortfall strong {
+  color: #efb35f;
+}
+
+.protocol-constraint-matrix {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-top: 0.2rem;
+}
+
+.protocol-constraint-matrix span {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+}
+
+.protocol-constraint-matrix span.pass { color: var(--green); border-color: rgba(52, 211, 153, 0.35); }
+.protocol-constraint-matrix span.warning { color: #efb35f; border-color: rgba(217, 119, 6, 0.45); }
+.protocol-constraint-matrix span.blocked { color: #f48888; border-color: rgba(239, 68, 68, 0.45); }
+
+.protocol-settlement-result > p {
+  grid-column: 1 / -1;
+  color: var(--muted-readable);
+  font-size: 0.74rem;
+  line-height: 1.55;
+}
+
+.protocol-stage-actions {
+  margin-top: 0.9rem;
+}
+
+@media (max-width: 980px) {
+  .protocol-source-grid,
+  .protocol-policy-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .protocol-transform-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .protocol-flow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .protocol-alpha {
+    padding: 1.25rem 0.8rem 4rem;
+  }
+
+  .protocol-alpha-hero,
+  .protocol-stage {
+    padding: 1rem;
+  }
+
+  .protocol-alpha-hero h1 {
+    font-size: clamp(2.2rem, 13vw, 3.8rem);
+  }
+
+  .protocol-flow,
+  .protocol-source-grid,
+  .protocol-policy-grid,
+  .protocol-evidence-summary,
+  .protocol-claim-card,
+  .protocol-settlement-result,
+  .protocol-provenance-decision {
+    grid-template-columns: 1fr;
+  }
+
+  .protocol-flow {
+    gap: 0.3rem;
+  }
+
+  .provenance-ladder {
+    grid-template-columns: 1fr;
+  }
+
+  .provenance-level {
+    min-height: auto;
+  }
+
+  .protocol-intake-actions,
+  .protocol-stage-actions,
+  .protocol-settlement-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .protocol-settlement-controls label {
+    min-width: 0;
+  }
+}

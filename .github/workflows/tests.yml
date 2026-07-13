@@ -101,14 +101,15 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '22'
         cache: 'npm'
         cache-dependency-path: frontend/package-lock.json
 
+    - name: Install protocol workspace dependencies
+      run: npm install
+
     - name: Install frontend dependencies
-      run: |
-        npm --prefix frontend install
+      run: npm --prefix frontend install
 
     - name: Run frontend tests
-      run: |
-        npm --prefix frontend run test:run
+      run: npm --prefix frontend run test:run

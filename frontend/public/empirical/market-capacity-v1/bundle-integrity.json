@@ -1,0 +1,16 @@
+{
+  "schema": "constraint.empirical.bundle_integrity.v1",
+  "study_id": "constraint-market-capacity-v1-public-aggregate",
+  "source_dataset_sha256": "792c3ad99311cff2b18e9dcdb58fbfedcf74a1bf95c1a0691673d06492b5e0e5",
+  "hash_algorithm": "SHA-256",
+  "hash_scope": "exact committed UTF-8 file bytes",
+  "files": {
+    "market-capacity-summary.json": "052c88c3ac1841f6b62d48abb2fdbdd8b49f66f3f83a4d890bc1d0dc20df1461",
+    "methods-manifest.json": "8a1fa8c96197d0177b6ed64d6e1ab75f1852467b6484b2d6973e70de9f8ea0a4",
+    "policy-frontier.json": "f9e20411029449af6f8a3f8797145f0c4924ba58e6c44ab0078634ea0ea530c5",
+    "stress-reference-runs.json": "e92edbd49346990743032e07b313c81a9061d5c78a77951fd3c54a8f94dc8088",
+    "yearly-policy-results.json": "8c433adba1323bd6c8983d52295d47c13fabab7a9a8dd364eff5d2755629e42b"
+  },
+  "reproduction_claim": "Public visitors can verify that the aggregate study files loaded by the browser exactly match this committed integrity manifest. Raw-row reproduction still requires the licensed source package.",
+  "boundary": "This receipt proves byte identity of the published aggregate bundle, not truth of the licensed source observations, economic optimality, or future policy adequacy."
+}

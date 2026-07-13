@@ -1,0 +1,73 @@
+{
+  "schema": "solarpunk.constraint.conformance_vectors.alpha_v1",
+  "vector_version": "1.0.0",
+  "fixtures": {
+    "cumulative_start": "data/inverter/sample_cumulative_start.json",
+    "cumulative_end": "data/inverter/sample_cumulative_end.json",
+    "green_button": "data/meter/green_button_sample.csv",
+    "fronius_start": "data/inverter/fronius_powerflow_start.json",
+    "fronius_end": "data/inverter/fronius_powerflow_end.json",
+    "signed_readings": "data/attestations/raw_meter_readings.json",
+    "meter_registry": "data/attestations/meter_registry.json"
+  },
+  "expected": {
+    "cumulative_evidence": {
+      "adapter_id": "cumulative-meter-pair",
+      "interval_count": 1,
+      "eligible_surplus_kwh": 996.2,
+      "evidence_hash": "dc66428665c3b2c360bb7c458abf9d41896c81cfaf0aa2cb23898fcfb39bf4c2"
+    },
+    "policy_manifest_hashes": {
+      "LAB-OPEN-001": "3034ad4b133de1c0ba5cb146826d54f85a82e036427de56f301756d18f01ef0c",
+      "ENERGY-PILOT-002": "af5af987d4641287481b4d8b0fb708308897d9c1ffcd2a0a0cf3716c2a933d2a",
+      "ENERGY-STRICT-003": "f703d95353dd1994731d6ef8f3900d66e9b45dfe5fd0cb2c04aa2b3fc503f14e",
+      "SPK-ENERGY-001": "66f242a03b05ea5d0d2f82bd212048771c1bcacc9b162f789bdd925d3142629a"
+    },
+    "policy_decisions_l0": {
+      "LAB-OPEN-001": { "decision": "ADMIT_WITH_LIMIT", "maximum_claim_quantity": 996.2 },
+      "ENERGY-PILOT-002": { "decision": "BLOCKED", "maximum_claim_quantity": 0 },
+      "ENERGY-STRICT-003": { "decision": "BLOCKED", "maximum_claim_quantity": 0 },
+      "SPK-ENERGY-001": { "decision": "BLOCKED", "maximum_claim_quantity": 0 }
+    },
+    "demo_claim": {
+      "subject": "constraint-protocol-alpha-demo",
+      "policy_id": "LAB-OPEN-001",
+      "policy_manifest_hash": "3034ad4b133de1c0ba5cb146826d54f85a82e036427de56f301756d18f01ef0c",
+      "quantity": 996.2,
+      "quantity_decimals": 6,
+      "quantity_base_units": "996200000",
+      "claim_id": "19928ed361c7ba07311c7eded78f69196b9806d761c935c3f3785b02255787f4"
+    },
+    "settlement": {
+      "issued_quantity": 20,
+      "issued_quantity_base_units": "20000000",
+      "settlement_capacity": 8,
+      "covered_quantity": 8,
+      "covered_base_units": "8000000",
+      "shortfall_quantity": 12,
+      "shortfall_base_units": "12000000",
+      "result": "PARTIAL"
+    },
+    "green_button": {
+      "interval_count": 2,
+      "eligible_surplus_kwh": 10.2,
+      "generation_kwh_first_interval": null,
+      "diagnostic_code": "utility_generation_unknown"
+    },
+    "fronius": {
+      "generation_kwh": 5.2,
+      "site_load_kwh": 2.8,
+      "export_kwh": 2.4,
+      "diagnostic_code": "grid_sign_convention"
+    },
+    "signed_evidence": {
+      "accepted_records": 2,
+      "rejected_records": 2,
+      "verified_signatures": 2,
+      "accepted_surplus_kwh": 2606.7,
+      "envelope_blocker_count": 0,
+      "rejected_input_records": 2,
+      "provenance_level_without_trusted_operator": "L0"
+    }
+  }
+}

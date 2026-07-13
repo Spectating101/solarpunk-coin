@@ -1,19 +1,95 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
+import ConstraintProtocolLab from './components/ConstraintProtocolLab';
+import EmpiricalRunsLab from './components/EmpiricalRunsLab';
+import EmpiricalReproductionLab from './components/EmpiricalReproductionLab';
 import PublicLabLanding from './components/PublicLabLanding';
+import EvidenceLab from './components/EvidenceLab';
+import CurrencyLab from './components/CurrencyLab';
+import LabSessionBar from './components/LabSessionBar';
+import ResearchPanel from './components/ResearchPanel';
 import SpkV1Console from './components/SpkV1Console';
 import { GITHUB_REPO } from './constants/contracts';
+import {
+  clearSessionReceipt,
+  loadSessionReceipt,
+  saveSessionReceipt,
+} from './lib/sessionReceipt';
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
+import './workbenchSession.css';
+import './constraintProtocol.css';
+import './empiricalRuns.css';
+import './empiricalReproduction.css';
+
+const NAV_TABS = [
+  { id: 'runs', label: 'Empirical Runs' },
+  { id: 'reproduce', label: 'Reproduce' },
+  { id: 'protocol', label: 'Protocol Lab' },
+  { id: 'overview', label: 'SPK Reference' },
+  { id: 'sepolia', label: 'Sepolia Proof' },
+  { id: 'research', label: 'Research' },
+];
+
+const ROUTE_IDS = new Set([
+  ...NAV_TABS.map((tab) => tab.id),
+  'evidence',
+  'currency',
+]);
+
+function tabFromHash() {
+  if (typeof window === 'undefined') return 'runs';
+  const candidate = window.location.hash.replace(/^#/, '').toLowerCase();
+  return ROUTE_IDS.has(candidate) ? candidate : 'runs';
+}
 
 function App() {
-  const [tab, setTab] = useState('lab');
+  const [tab, setTab] = useState(tabFromHash);
+  const [receipt, setReceipt] = useState(loadSessionReceipt);
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [chainId, setChainId] = useState(null);
   const [connectError, setConnectError] = useState(null);
+
+  const navigate = useCallback((nextTab) => {
+    if (!ROUTE_IDS.has(nextTab)) return;
+    if (window.location.hash !== `#${nextTab}`) {
+      window.location.hash = nextTab;
+    } else {
+      setTab(nextTab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
+
+  const acceptReceipt = useCallback((built) => {
+    const summary = saveSessionReceipt(built);
+    setReceipt(summary || built);
+  }, []);
+
+  const invalidateReceipt = useCallback(() => {
+    clearSessionReceipt();
+    setReceipt(null);
+  }, []);
+
+  useEffect(() => {
+    if (!window.location.hash) {
+      window.history.replaceState(
+        null,
+        '',
+        `${window.location.pathname}${window.location.search}#runs`,
+      );
+    }
+
+    const syncHash = () => {
+      setTab(tabFromHash());
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('hashchange', syncHash);
+    return () => window.removeEventListener('hashchange', syncHash);
+  }, []);
 
   const refreshChain = useCallback(async (p) => {
     if (!p) return;
@@ -80,38 +156,36 @@ function App() {
   };
 
   const wrongNetwork = account && chainId != null && chainId !== SEPOLIA_CHAIN_ID;
+  const showSessionBar = ['evidence', 'currency', 'sepolia'].includes(tab);
 
   return (
     <div className="app-minimal">
       <header className="app-minimal-top">
         <div className="brand-block">
-          <div className="brand-mark">SP</div>
+          <div className="brand-mark">C</div>
           <div>
-            <div className="brand-name">SolarPunk</div>
-            <div className="brand-sub">Public Lab v1.0 · Sepolia</div>
+            <div className="brand-name">Constraint</div>
+            <div className="brand-sub">empirical claim lab · protocol public alpha</div>
           </div>
         </div>
         <div className="app-minimal-actions">
-          <nav className="app-tab-nav" aria-label="Demo sections">
-            <button
-              type="button"
-              className={tab === 'lab' ? 'app-tab active' : 'app-tab'}
-              onClick={() => setTab('lab')}
-            >
-              Public Lab
-            </button>
-            <button
-              type="button"
-              className={tab === 'console' ? 'app-tab active' : 'app-tab'}
-              onClick={() => setTab('console')}
-            >
-              SPK console
-            </button>
+          <nav className="app-tab-nav" aria-label="Lab sections">
+            {NAV_TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                className={tab === t.id ? 'app-tab active' : 'app-tab'}
+                onClick={() => navigate(t.id)}
+                aria-current={tab === t.id ? 'page' : undefined}
+              >
+                {t.label}
+              </button>
+            ))}
           </nav>
           <a href={GITHUB_REPO} target="_blank" rel="noreferrer" className="ghost-link">
             <Github size={16} /> GitHub
           </a>
-          {tab === 'console' && (
+          {tab === 'sepolia' && (
             account ? (
               <div className="wallet-pill">
                 <span />
@@ -127,14 +201,23 @@ function App() {
         </div>
       </header>
 
-      {connectError ? (
+      {showSessionBar ? (
+        <LabSessionBar
+          receipt={receipt}
+          activeTab={tab}
+          onNavigate={navigate}
+          onClearReceipt={invalidateReceipt}
+        />
+      ) : null}
+
+      {connectError && tab === 'sepolia' ? (
         <div className="spk-network-banner spk-error-banner" role="alert">
           <AlertTriangle size={16} />
           {connectError}
         </div>
       ) : null}
 
-      {tab === 'console' && wrongNetwork ? (
+      {tab === 'sepolia' && wrongNetwork ? (
         <div className="spk-network-banner" role="status">
           <AlertTriangle size={16} />
           Switch MetaMask to <strong>Sepolia</strong> to send payments.
@@ -142,9 +225,39 @@ function App() {
         </div>
       ) : null}
 
-      {tab === 'lab' ? (
-        <PublicLabLanding onOpenConsole={() => setTab('console')} />
-      ) : (
+      {tab === 'runs' ? (
+        <EmpiricalRunsLab onOpenProtocol={() => navigate('protocol')} />
+      ) : null}
+      {tab === 'reproduce' ? (
+        <EmpiricalReproductionLab onOpenRuns={() => navigate('runs')} />
+      ) : null}
+      {tab === 'protocol' ? (
+        <ConstraintProtocolLab onOpenSepolia={() => navigate('sepolia')} />
+      ) : null}
+      {tab === 'overview' ? (
+        <PublicLabLanding
+          onOpenEvidence={() => navigate('evidence')}
+          onOpenCurrency={() => navigate('currency')}
+          onOpenSepolia={() => navigate('sepolia')}
+          onOpenResearch={() => navigate('research')}
+        />
+      ) : null}
+      {tab === 'evidence' ? (
+        <EvidenceLab
+          activeReceipt={receipt}
+          onContinue={() => navigate('currency')}
+          onReceiptReady={acceptReceipt}
+          onReceiptInvalidated={invalidateReceipt}
+        />
+      ) : null}
+      {tab === 'currency' ? (
+        <CurrencyLab
+          receipt={receipt}
+          onOpenEvidence={() => navigate('evidence')}
+          onOpenSepolia={() => navigate('sepolia')}
+        />
+      ) : null}
+      {tab === 'sepolia' ? (
         <SpkV1Console
           provider={provider}
           signer={signer}
@@ -153,7 +266,8 @@ function App() {
           connecting={isConnecting}
           wrongNetwork={wrongNetwork}
         />
-      )}
+      ) : null}
+      {tab === 'research' ? <ResearchPanel /> : null}
     </div>
   );
 }

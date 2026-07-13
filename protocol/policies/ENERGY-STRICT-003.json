@@ -1,0 +1,29 @@
+{
+  "schema": "solarpunk.constraint.policy_manifest.v1",
+  "id": "ENERGY-STRICT-003",
+  "version": "1.0.0",
+  "name": "Externally Corroborated Energy Claim",
+  "description": "Strict policy requiring utility or settlement corroboration and applying the L4 evidence haircut before claim issuance.",
+  "min_provenance_level": "L4",
+  "admission": {
+    "require_positive_surplus": true,
+    "require_zero_blockers": true,
+    "require_signed_evidence": true,
+    "require_external_corroboration": true
+  },
+  "issuance": {
+    "unit": "CORROBORATED_ENERGY_CLAIM",
+    "decimals": 6,
+    "rate_per_surplus_kwh": 1,
+    "haircut_pct": 5,
+    "absolute_cap": 50000
+  },
+  "settlement": {
+    "explicit_capacity_required": true,
+    "legal_redemption_not_implied": true
+  },
+  "governance": {
+    "authority": "production candidate policy authority",
+    "mutable_by": "governed policy registry after audit"
+  }
+}

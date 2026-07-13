@@ -1,0 +1,14 @@
+{
+  "name": "@solarpunk/constraint-core",
+  "version": "0.1.0-alpha.1",
+  "description": "Deterministic evidence, policy, claim, provenance, and settlement primitives for constrained real-world financial claims.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": "./src/index.js",
+  "files": ["src", "README.md"],
+  "peerDependencies": {
+    "ethers": ">=6.7.0"
+  },
+  "license": "MIT"
+}

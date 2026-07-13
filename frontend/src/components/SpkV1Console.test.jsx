@@ -47,7 +47,7 @@ describe('SpkV1Console', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/lab unit console/i)).toBeInTheDocument();
+      expect(screen.getByText(/Advanced — Sepolia Proof/i)).toBeInTheDocument();
     });
 
     expect(screen.getByText(/5,404/)).toBeInTheDocument();

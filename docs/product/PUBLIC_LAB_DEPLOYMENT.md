@@ -1,135 +1,130 @@
-# Public Lab deployment & launch playbook
+# Constraint empirical lab deployment playbook
 
-How to ship and maintain **SolarPunk Public Lab v1.0** as a valuable public testnet laboratory — demo, docs, evidence, and operator onboarding.
+How to publish and maintain the public Constraint empirical and protocol lab while preserving the SolarPunk/SPK reference application.
 
-**Live demo:** https://spectating101.github.io/solarpunk-coin/demo/  
-**Product definition:** [`PUBLIC_LAB_V1.md`](./PUBLIC_LAB_V1.md)
+**Live demo:** https://spectating101.github.io/solarpunk-coin/demo/
 
----
+## What “launched” means
 
-## What “launched” means here
-
-Public Lab is **not** a token sale or mainnet product. A successful launch means:
+A successful public-alpha launch means:
 
 | Surface | Success criterion |
-|---------|-------------------|
-| **GitHub Pages demo** | Landing + SPK console load; runtime JSON present |
-| **Sepolia reference** | Inspectable contracts + indexed payment ledger |
-| **Reproducibility** | Clone → test → `hardware:validate` passes |
-| **Operator path** | Hardware quickstart + CSV/Green Button + fork deploy docs |
-| **Honest gates** | Closed pilot + mainnet remain blocked in UI and scripts |
+|---|---|
+| **Empirical Runs** | Aggregate study, frontier, stress replay, methods, and run dossier load from committed public artifacts |
+| **Protocol Lab** | Evidence → normalization → diagnostics → provenance → policy → bounded claim → settlement works locally in-browser |
+| **SPK Reference** | Existing Sepolia reference application and runtime remain available and accurately bounded |
+| **Reproducibility** | Core, conformance, contract, frontend, and Chromium flows pass in CI |
+| **Licence boundary** | No licensed CRSP/Refinitiv row-level observations appear in the public empirical bundle |
+| **Honest gates** | No mainnet, legal redemption, reserve custody, production collateral-control, or certified-meter claim |
 
----
-
-## One-command preflight (before every publish)
+## Preflight
 
 ```bash
 npm install
 npm run public-lab:preflight
 ```
 
-Checks: runtime JSON, launch gate, attestation tests, sample hardware validation, copies `spk_v1.json` into `frontend/public/`.
+The preflight verifies the retained SPK runtime/reference gates and prepares the frontend runtime asset.
 
----
+The Constraint alpha CI separately verifies:
 
-## Publish demo (maintainer)
+- JavaScript and Python protocol conformance;
+- empirical aggregate-only invariants;
+- reference contracts and local deployment smoke;
+- frontend tests and production build;
+- desktop and mobile Chromium flows.
 
-```bash
-# Refresh on-chain index when SEPOLIA_RPC works in .env
-npm run foundation:sync
+## Publishing
 
-# Full publish: preflight → build → docs/demo mirror
-npm run public-lab:publish
+GitHub Pages for this repository is served from `/docs` on `main`.
+
+On every `main` push, `.github/workflows/deploy.yml` now:
+
+1. runs the public-lab preflight;
+2. builds the current frontend;
+3. mirrors `frontend/dist` into `docs/demo/`;
+4. verifies the empirical bundle and retained SPK runtime;
+5. commits generated `docs/demo` changes back to `main` with `[skip ci]`.
+
+The live path is:
+
+```text
+https://spectating101.github.io/solarpunk-coin/demo/
 ```
 
-**CI:** `.github/workflows/deploy.yml` runs on every `main` push — builds frontend, mirrors to `docs/demo/`, deploys GitHub Pages.
+A manual workflow dispatch remains available under **Deploy to GitHub Pages**.
 
-**Manual trigger:** GitHub Actions → “Deploy to GitHub Pages” → `workflow_dispatch`.
+## Public empirical artifacts
 
----
+The deployed interface reads aggregate artifacts from:
 
-## What visitors should do (value paths)
+```text
+frontend/public/empirical/market-capacity-v1/
+```
 
-### Researchers (5 min)
+Required files:
 
-1. Open demo URL → Review evidence link  
-2. Clone repo → `npx hardhat test` (109)  
-3. Read `thesis_package/SPK_V1_EVIDENCE.md`
+- `market-capacity-summary.json`
+- `methods-manifest.json`
+- `policy-frontier.json`
+- `stress-reference-runs.json`
+- `yearly-policy-results.json`
 
-### Energy operators with hardware (30 min)
+The source CRSP/Refinitiv panel remains internal and is identified by hash only. The public-data test blocks prohibited row-level fields.
 
-1. Read [`HARDWARE_OPERATOR_QUICKSTART.md`](./HARDWARE_OPERATOR_QUICKSTART.md)  
-2. `npm run hardware:validate` (sample)  
-3. Export counters or Green Button CSV → `npm run hardware:validate -- --operator --csv=...`  
-4. Deploy **your** Sepolia stack: `npm run spk:v1:deploy:sepolia:lean`
+## Visitor paths
 
-### Developers / Ethereum builders
+### Risk / finance reviewer
 
-1. [`OPEN_LAB_WORKFLOWS.md`](../project/OPEN_LAB_WORKFLOWS.md)  
-2. SPK console tab on demo (wallet → Sepolia)  
-3. Fork contracts; keep launch gates
+1. Open **Empirical Runs**.
+2. Compare fixed, volatility-adaptive, and volatility+liquidity policies.
+3. Inspect coverage-versus-capacity trade-offs.
+4. Open stress replays and Methods.
 
-### Closed pilot (canonical lab upgrade)
+### Researcher
 
-1. [`PILOT_DATA_ASK.md`](./PILOT_DATA_ASK.md)  
-2. [Energy data issue](https://github.com/Spectating101/solarpunk-coin/issues/new?template=energy-data-experiment.md) — no secrets in public
+1. Inspect the source-package hash and conservative cleaning rules.
+2. Read `docs/protocol/EMPIRICAL_RUNS_V1.md`.
+3. Review common-sample results, binding attribution, and limitations.
 
----
+### Protocol / infrastructure reviewer
 
-## Operator data paths (summary)
+1. Open **Protocol Lab**.
+2. Run a bundled evidence example.
+3. Inspect normalization, diagnostics, provenance, policy comparison, claim identity, and settlement shortfall.
+4. Review schemas, conformance vectors, threat model, and reference contracts.
 
-| Input | Command |
-|-------|---------|
-| Sample fixture | `npm run hardware:validate` |
-| Cumulative JSON snapshots | `npm run hardware:validate -- --operator --provider=cumulative-json --start=... --end=...` |
-| Fronius LAN | `npm run hardware:validate -- --operator --provider=fronius-powerflow --host=192.168.x.x` |
-| SPK CSV | `npm run hardware:validate -- --operator --csv=data/meter/export.csv` |
-| Green Button CSV | `npm run meter:green-button -- --in=...` then `--csv=normalized.csv` |
+### SPK / thesis reference reviewer
 
-**Canonical Sepolia minting** is minter-gated. Operators mint on **their deploy**, not `0x8e189…` unless invited to closed pilot.
-
----
+1. Open **SPK Reference** and **Sepolia Proof**.
+2. Review the retained testnet evidence pack and explicit launch limitations.
+3. Treat SPK as a reference application, not the protocol ceiling.
 
 ## Release checklist
 
-- [ ] `npm run public-lab:preflight` passes  
-- [ ] `npx hardhat test` passes (109)  
-- [ ] `state/runtime/spk_v1.json` synced (or note stale date in release note)  
-- [ ] Demo screenshots optional: `npm run demo:screenshots`  
-- [ ] Tag `public-lab-v1.x` if material release ([`PUBLIC_LAB_V1_RELEASE_NOTE.md`](./PUBLIC_LAB_V1_RELEASE_NOTE.md))  
-- [ ] Push `main` → verify Pages deploy green  
+- [ ] Exact branch-head Constraint Alpha CI succeeds.
+- [ ] Desktop/mobile visual artifact reviewed.
+- [ ] Public empirical bundle remains aggregate-only.
+- [ ] Research surface contains no stale temporary thesis link.
+- [ ] Merge approved branch to `main`.
+- [ ] `Deploy to GitHub Pages` succeeds.
+- [ ] Verify `/demo/#runs`, `/demo/#protocol`, `/demo/#overview`, and `/demo/#research`.
+- [ ] Confirm no mainnet or production claims were introduced.
 
----
+## Explicitly outside this launch
 
-## Stale index / RPC
+- Mainnet or paid product
+- Token sale / ICO
+- Legal collateral or redemption rights
+- Reserve custody
+- Production oracle or evaluator finality
+- Certified hardware provenance
+- Production collateral-control or risk adequacy
+- Formal security audit sign-off
 
-If `foundation:sync` fails (public RPC 403):
+See:
 
-- Demo still works from cached `frontend/public/spk_v1.json`  
-- Note sync date on landing (auto from runtime)  
-- Fix `.env` `SEPOLIA_RPC` with Alchemy/Infura URL  
-
----
-
-## Files that power the public surface
-
-| Asset | Path |
-|-------|------|
-| Landing UI | `frontend/src/components/PublicLabLanding.jsx` |
-| Console | `frontend/src/components/SpkV1Console.jsx` |
-| Runtime snapshot | `frontend/public/spk_v1.json` ← `state/runtime/spk_v1.json` |
-| Pages build | `frontend/dist` → `docs/demo/` |
-| Launch gate | `scripts/product_launch_gate.js` |
-| Hardware validate | `scripts/hardware_validate.js` |
-
----
-
-## Explicitly not in Public Lab v1 launch scope
-
-- Mainnet / paid product  
-- Token sale / ICO  
-- Live dollar peg on canonical deployment  
-- Permissionless mint on reference contracts for all operators  
-- Production audit sign-off  
-
-See launch gates in UI and [`PRODUCT_LAUNCH_GATE.md`](./PRODUCT_LAUNCH_GATE.md).
+- `docs/protocol/EMPIRICAL_RUNS_V1.md`
+- `docs/protocol/CONSTRAINT_PROTOCOL_ALPHA.md`
+- `docs/protocol/PUBLIC_ALPHA_READINESS.md`
+- `docs/protocol/THREAT_MODEL_ALPHA.md`

@@ -1,0 +1,70 @@
+/* Alpha hardening after deployable browser review. Keep SPK reference surfaces unchanged. */
+.app-minimal:has(.protocol-alpha) {
+  max-width: 1240px;
+}
+
+/* Empirical Runs is intentionally a three-pane instrument. The legacy 920px
+   Public Lab shell made the workspace collapse at desktop widths, causing the
+   metric row and dossier to compete for the same narrow center column. */
+.app-minimal:has(.empirical-lab) {
+  max-width: 1560px;
+}
+
+.protocol-table code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 680px) {
+  .app-minimal {
+    max-width: 100%;
+    padding: 12px 0 40px;
+    overflow-x: hidden;
+  }
+
+  .app-minimal-top {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 12px 18px;
+    padding-bottom: 12px;
+  }
+
+  .app-minimal-top .brand-block {
+    padding: 4px 0 10px;
+    border-bottom: 0;
+  }
+
+  .app-minimal-actions {
+    width: 100%;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .app-tab-nav {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-tab-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-tab {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .app-minimal-actions > .ghost-link,
+  .app-minimal-actions > .wallet-button,
+  .app-minimal-actions > .wallet-pill {
+    flex: 0 0 auto;
+  }
+}

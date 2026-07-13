@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constraint Settlement Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "claim_id",
+    "unit",
+    "quantity_decimals",
+    "outstanding_claim_quantity",
+    "outstanding_claim_base_units",
+    "settlement_capacity",
+    "settlement_capacity_base_units",
+    "covered_quantity",
+    "covered_base_units",
+    "shortfall_quantity",
+    "shortfall_base_units",
+    "result",
+    "constraint_status",
+    "boundary"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.settlement_result.v1" },
+    "claim_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "unit": { "type": "string", "minLength": 1 },
+    "quantity_decimals": { "type": "integer", "minimum": 0, "maximum": 18 },
+    "outstanding_claim_quantity": { "type": "number", "minimum": 0 },
+    "outstanding_claim_base_units": { "type": "string", "pattern": "^[0-9]+$" },
+    "settlement_capacity": { "type": "number", "minimum": 0 },
+    "settlement_capacity_base_units": { "type": "string", "pattern": "^[0-9]+$" },
+    "covered_quantity": { "type": "number", "minimum": 0 },
+    "covered_base_units": { "type": "string", "pattern": "^[0-9]+$" },
+    "shortfall_quantity": { "type": "number", "minimum": 0 },
+    "shortfall_base_units": { "type": "string", "pattern": "^[0-9]+$" },
+    "result": { "enum": ["SETTLED", "PARTIAL", "SHORTFALL"] },
+    "constraint_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "issuance", "risk", "settlement", "governance"],
+      "properties": {
+        "data": { "enum": ["PASS", "BLOCKED"] },
+        "issuance": { "enum": ["PASS", "BLOCKED"] },
+        "risk": { "enum": ["PASS", "WARNING"] },
+        "settlement": { "enum": ["PASS", "BLOCKED"] },
+        "governance": { "const": "PASS" }
+      }
+    },
+    "boundary": { "type": "string", "minLength": 1 }
+  }
+}
