@@ -49,7 +49,7 @@ const desktop = await newPage({ width: 1440, height: 1000 });
 await openBrief(desktop.page);
 await shot(desktop.page, '01-decision-brief-20-session.png');
 await desktop.page.getByRole('button', { name: /Use 60-session horizon/i }).click();
-await desktop.page.getByText('5.09%', { exact: true }).waitFor();
+await desktop.page.getByText('5.09%', { exact: true }).first().waitFor();
 await shot(desktop.page, '02-decision-brief-60-session.png');
 
 await openStudy(desktop.page);
