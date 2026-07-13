@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import ConstraintProtocolLab from './components/ConstraintProtocolLab';
 import DecisionBrief from './components/DecisionBrief';
@@ -9,7 +9,6 @@ import EvidenceLab from './components/EvidenceLab';
 import CurrencyLab from './components/CurrencyLab';
 import LabSessionBar from './components/LabSessionBar';
 import ResearchPanel from './components/ResearchPanel';
-import SpkV1Console from './components/SpkV1Console';
 import { GITHUB_REPO } from './constants/contracts';
 import {
   clearSessionReceipt,
@@ -22,6 +21,8 @@ import './constraintProtocol.css';
 import './decisionBrief.css';
 import './empiricalRuns.css';
 import './empiricalReproduction.css';
+
+const SpkV1Console = lazy(() => import('./components/SpkV1Console'));
 
 const NAV_TABS = [
   { id: 'runs', label: 'Decision Brief' },
@@ -116,6 +117,7 @@ function App() {
 
       browserProvider = new BrowserProvider(window.ethereum);
       setProvider(browserProvider);
+      setConnectError(null);
 
       const syncAccount = async (accounts) => {
         if (!active) return;
@@ -286,14 +288,16 @@ function App() {
         />
       ) : null}
       {tab === 'sepolia' ? (
-        <SpkV1Console
-          provider={provider}
-          signer={signer}
-          account={account}
-          onConnect={connectWallet}
-          connecting={isConnecting}
-          wrongNetwork={wrongNetwork}
-        />
+        <Suspense fallback={<section className="reproduction-load" aria-live="polite"><strong>Loading Sepolia proof…</strong></section>}>
+          <SpkV1Console
+            provider={provider}
+            signer={signer}
+            account={account}
+            onConnect={connectWallet}
+            connecting={isConnecting}
+            wrongNetwork={wrongNetwork}
+          />
+        </Suspense>
       ) : null}
       {tab === 'research' ? <ResearchPanel /> : null}
     </div>
