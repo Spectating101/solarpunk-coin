@@ -95,10 +95,10 @@ describe('DecisionBrief', () => {
 
     await screen.findByRole('heading', { name: /what did the stricter rule buy/i });
 
-    expect(screen.getByText('+1.61 pp')).toBeInTheDocument();
-    expect(screen.getByText('8.32 pp')).toBeInTheDocument();
+    expect(screen.getAllByText('+1.61 pp').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('8.32 pp').length).toBeGreaterThan(0);
     expect(screen.getByText('734,379 observations')).toBeInTheDocument();
-    expect(screen.getByText('80.52%')).toBeInTheDocument();
+    expect(screen.getAllByText('80.52%').length).toBeGreaterThan(0);
     expect(screen.getByRole('button', { name: /download decision memo/i })).toBeInTheDocument();
   });
 
@@ -110,7 +110,7 @@ describe('DecisionBrief', () => {
 
     expect(screen.getAllByText('+5.51 pp').length).toBeGreaterThan(0);
     expect(screen.getAllByText('8.34 pp').length).toBeGreaterThan(0);
-    expect(screen.getByText('5.09%')).toBeInTheDocument();
+    expect(screen.getAllByText('5.09%').length).toBeGreaterThan(0);
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
