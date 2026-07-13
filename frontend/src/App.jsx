@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import ConstraintProtocolLab from './components/ConstraintProtocolLab';
+import EmpiricalRunsLab from './components/EmpiricalRunsLab';
 import PublicLabLanding from './components/PublicLabLanding';
 import EvidenceLab from './components/EvidenceLab';
 import CurrencyLab from './components/CurrencyLab';
@@ -17,22 +18,26 @@ import {
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
 import './workbenchSession.css';
 import './constraintProtocol.css';
+import './empiricalRuns.css';
 
-const TABS = [
-  { id: 'protocol', label: 'Protocol Alpha' },
+const NAV_TABS = [
+  { id: 'runs', label: 'Empirical Runs' },
+  { id: 'protocol', label: 'Protocol Lab' },
   { id: 'overview', label: 'SPK Reference' },
-  { id: 'evidence', label: 'Evidence Lab' },
-  { id: 'currency', label: 'Currency Lab' },
   { id: 'sepolia', label: 'Sepolia Proof' },
   { id: 'research', label: 'Research' },
 ];
 
-const TAB_IDS = new Set(TABS.map((tab) => tab.id));
+const ROUTE_IDS = new Set([
+  ...NAV_TABS.map((tab) => tab.id),
+  'evidence',
+  'currency',
+]);
 
 function tabFromHash() {
-  if (typeof window === 'undefined') return 'protocol';
+  if (typeof window === 'undefined') return 'runs';
   const candidate = window.location.hash.replace(/^#/, '').toLowerCase();
-  return TAB_IDS.has(candidate) ? candidate : 'protocol';
+  return ROUTE_IDS.has(candidate) ? candidate : 'runs';
 }
 
 function App() {
@@ -46,7 +51,7 @@ function App() {
   const [connectError, setConnectError] = useState(null);
 
   const navigate = useCallback((nextTab) => {
-    if (!TAB_IDS.has(nextTab)) return;
+    if (!ROUTE_IDS.has(nextTab)) return;
     if (window.location.hash !== `#${nextTab}`) {
       window.location.hash = nextTab;
     } else {
@@ -70,7 +75,7 @@ function App() {
       window.history.replaceState(
         null,
         '',
-        `${window.location.pathname}${window.location.search}#protocol`,
+        `${window.location.pathname}${window.location.search}#runs`,
       );
     }
 
@@ -154,15 +159,15 @@ function App() {
     <div className="app-minimal">
       <header className="app-minimal-top">
         <div className="brand-block">
-          <div className="brand-mark">SP</div>
+          <div className="brand-mark">C</div>
           <div>
-            <div className="brand-name">SolarPunk</div>
-            <div className="brand-sub">Constraint Protocol alpha · SPK reference app</div>
+            <div className="brand-name">Constraint</div>
+            <div className="brand-sub">empirical claim lab · protocol public alpha</div>
           </div>
         </div>
         <div className="app-minimal-actions">
           <nav className="app-tab-nav" aria-label="Lab sections">
-            {TABS.map((t) => (
+            {NAV_TABS.map((t) => (
               <button
                 key={t.id}
                 type="button"
@@ -217,6 +222,9 @@ function App() {
         </div>
       ) : null}
 
+      {tab === 'runs' ? (
+        <EmpiricalRunsLab onOpenProtocol={() => navigate('protocol')} />
+      ) : null}
       {tab === 'protocol' ? (
         <ConstraintProtocolLab onOpenSepolia={() => navigate('sepolia')} />
       ) : null}
