@@ -4,15 +4,19 @@ import {
   GITHUB_REPO,
   DOCS_MAP_URL,
   PUBLIC_LAB_DEMO_URL,
-  THESIS_CANONICAL_URL,
   CEIR_DIAGNOSIS_URL,
 } from '../constants/contracts';
 
 const LINKS = [
   {
-    title: 'Thesis PDF (temporary development link)',
-    href: THESIS_CANONICAL_URL,
-    note: 'Points at v10 until the CEIR-boundary revised PDF is committed. Not a claim that v10 is final.',
+    title: 'Constraint empirical runs methods',
+    href: `${GITHUB_REPO}/blob/main/docs/protocol/EMPIRICAL_RUNS_V1.md`,
+    note: 'Source identity, conservative cleaning, declared policy formulas, aggregate results, and reproduction boundary.',
+  },
+  {
+    title: 'Constraint Protocol alpha specification',
+    href: `${GITHUB_REPO}/blob/main/docs/protocol/CONSTRAINT_PROTOCOL_ALPHA.md`,
+    note: 'Evidence, provenance, policy, bounded claims, settlement, and explicit alpha limitations.',
   },
   {
     title: 'CEIR final diagnosis',
@@ -27,12 +31,12 @@ const LINKS = [
   {
     title: 'SPK v1 evidence pack',
     href: `${GITHUB_REPO}/blob/main/thesis_package/SPK_V1_EVIDENCE.md`,
-    note: 'Sepolia contracts, payments, and reproduction notes.',
+    note: 'Sepolia contracts, payments, and reproduction notes for the reference application.',
   },
   {
     title: 'Public Lab v1.0 limitations',
     href: `${GITHUB_REPO}/blob/main/docs/product/PUBLIC_LAB_V1.md`,
-    note: 'What the lab is and is not; launch gates.',
+    note: 'What the reference lab is and is not; launch gates.',
   },
   {
     title: 'Source code',
@@ -47,7 +51,7 @@ const LINKS = [
   {
     title: 'Citation / demo URL',
     href: PUBLIC_LAB_DEMO_URL,
-    note: 'Public demo mirror (when published).',
+    note: 'Public empirical and protocol lab.',
   },
 ];
 
@@ -60,8 +64,9 @@ export default function ResearchPanel() {
           <BookOpen size={22} aria-hidden /> Research
         </h1>
         <p className="workbench-lead">
-          Thesis (temporary link), CEIR diagnosis, evidence pack, and limitations. The retired
-          Markdown grounded manuscript is not the primary thesis link.
+          Methods, protocol specification, empirical boundary evidence, reference-application proof,
+          limitations, and reproduction paths. The final thesis PDF is intentionally not represented by
+          the retired temporary v10 development link.
         </p>
       </header>
 
