@@ -36,7 +36,7 @@ function downloadReceipt(receipt) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'constraint-public-reproduction-receipt.json';
+  anchor.download = 'policy-lab-public-reproduction-receipt.json';
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
@@ -114,7 +114,7 @@ export default function EmpiricalReproductionLab({ onOpenRuns }) {
     <section className="reproduction-lab" aria-labelledby="reproduction-heading">
       <header className="reproduction-hero">
         <div>
-          <p className="empirical-kicker">Constraint · reproduce public run</p>
+          <p className="empirical-kicker">Policy Lab · reproduce public run</p>
           <h1 id="reproduction-heading">Do the published study bytes match the committed receipt?</h1>
           <p>The browser independently fetches each public aggregate artifact, computes SHA-256 over the exact UTF-8 bytes, and compares the result with the committed integrity manifest.</p>
         </div>
@@ -183,7 +183,7 @@ export default function EmpiricalReproductionLab({ onOpenRuns }) {
           </dl>
           <button type="button" className="ghost-button empirical-download" onClick={() => downloadReceipt(receipt)}><Download size={15} /> Download receipt</button>
           <button type="button" className="ghost-button empirical-download" onClick={copyReceipt}><Copy size={15} /> {copied ? 'Copied' : 'Copy receipt JSON'}</button>
-          <button type="button" className="reproduction-return" onClick={onOpenRuns}>Return to empirical runs <ArrowRight size={15} /></button>
+          <button type="button" className="reproduction-return" onClick={onOpenRuns}>Return to full study <ArrowRight size={15} /></button>
           <div className="dossier-boundary"><Hash size={15} /><p>This check runs locally in the browser. It does not upload licensed source data or require a wallet.</p></div>
         </aside>
       </div>
