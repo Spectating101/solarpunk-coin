@@ -1,120 +1,166 @@
-# SolarPunk Public Lab v1.0
+# Constraint Protocol Public Alpha
 
-**A renewable-energy issuance standard for programmable settlement.**
+**An empirical claim lab for testing the rules that turn external evidence into bounded financial claims.**
 
-SolarPunk Public Lab is a public Sepolia testnet laboratory for an energy-standard settlement architecture: verified renewable-surplus evidence can produce bounded SPK issuance, circulate through network payments, and remain constrained by explicit settlement and governance gates.
+Constraint asks a narrower and more operational question than tokenization alone:
 
-It is **not** a monetary product, token sale, stablecoin, legal tender, mainnet launch, or legal claim on delivered energy.
+> Given evidence **E**, provenance classification **A**, and declared policy **P**, what claim quantity may be admitted — and what happens when the resulting obligation cannot settle?
 
-## Project status
+The public surface combines historical policy replay with an executable protocol laboratory:
 
-**Public Lab v1.0 is feature-complete and in maintenance mode.**  
-The Sepolia lab, demo, and evidence pack remain public. Active development is not the default. Quarterly health checks are enough. To resume a closed pilot, see [`docs/project/WAKE_PATH.md`](./docs/project/WAKE_PATH.md).
-
-Cite via [`CITATION.cff`](./CITATION.cff). Forks must not imply official endorsement — [`TRADEMARK.md`](./TRADEMARK.md).
-
-> **Start here:** [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md)  
-> **Current state:** [`CURRENT_STATUS.md`](./CURRENT_STATUS.md)  
-> **Documentation map:** [`DOCS.md`](./DOCS.md)
+`evidence → provenance → versioned policy → bounded claim → settlement result`
 
 **Demo:** https://spectating101.github.io/solarpunk-coin/demo/  
-**Closed pilot data ask:** [`docs/product/PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md)  
-**Hardware quickstart:** [`docs/product/HARDWARE_OPERATOR_QUICKSTART.md`](./docs/product/HARDWARE_OPERATOR_QUICKSTART.md)  
-**Deploy / publish:** [`docs/product/PUBLIC_LAB_DEPLOYMENT.md`](./docs/product/PUBLIC_LAB_DEPLOYMENT.md)  
-**Open lab:** [`CONTRIBUTING.md`](./CONTRIBUTING.md) · [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md)
+**Protocol specification:** [`docs/protocol/CONSTRAINT_PROTOCOL_ALPHA.md`](./docs/protocol/CONSTRAINT_PROTOCOL_ALPHA.md)  
+**Empirical study:** [`docs/protocol/EMPIRICAL_RUNS_V1.md`](./docs/protocol/EMPIRICAL_RUNS_V1.md)  
+**Threat model:** [`docs/protocol/THREAT_MODEL_ALPHA.md`](./docs/protocol/THREAT_MODEL_ALPHA.md)  
+**Readiness boundary:** [`docs/protocol/PUBLIC_ALPHA_READINESS.md`](./docs/protocol/PUBLIC_ALPHA_READINESS.md)
 
----
+## What the public lab does
+
+### Empirical Runs
+
+A licensed CRSP/Refinitiv market-capacity panel was evaluated through conservative, aggregate-only research policies.
+
+Delivered source package:
+
+- 777,764 security-days;
+- 2018-01-02 through 2024-12-31;
+- 457 PERMNOs / 450 RICs in the delivered panel;
+- source SHA-256 `792c3ad99311cff2b18e9dcdb58fbfedcf74a1bf95c1a0691673d06492b5e0e5`;
+- licence boundary `internal_yzu_licensed_no_redistribution`.
+
+Constraint fails closed on ambiguous RIC identity relationships, uses only time-t market inputs for policy evaluation, clamps the realized-capacity floor to downside-only outcomes, and compares policies on common complete-case samples.
+
+20-session common sample (`N = 734,379`):
+
+| Policy | Historical coverage | Shortfall events | Mean permitted capacity |
+|---|---:|---:|---:|
+| `COLLATERAL-FIXED-20` | 97.2518% | 2.7487% | 80.0000% |
+| `COLLATERAL-VOL-002` | 98.6941% | 1.3059% | 74.3669% |
+| `COLLATERAL-VOL-LIQ-003` | 98.8626% | 1.1374% | 71.6849% |
+
+The interface exposes both sides of the trade-off. The guarded reference policy adds 1.61 percentage points of historical coverage relative to the fixed baseline while reducing mean permitted capacity by 8.32 percentage points.
+
+The stress replay on 2020-02-21 is intentionally ugly: fixed 20% generated 91.31% shortfall events; the volatility + liquidity rule reduced that to 80.52% and still failed badly. A stricter explicit rule can remain inadequate under severe realized stress.
+
+### Browser reproduction receipt
+
+The public `Reproduce` route fetches the committed aggregate study artifacts, computes SHA-256 over the exact UTF-8 bytes in the visitor's browser, and compares every result against `bundle-integrity.json`.
+
+This proves byte identity of the published aggregate bundle. It does **not** prove truth of the licensed source observations, optimality of the research policies, or future adequacy.
+
+### Protocol Lab
+
+Five local evidence paths are available:
+
+1. cumulative meter / inverter counters;
+2. Green Button / utility interval CSV;
+3. Fronius PowerFlow snapshot pairs;
+4. signed meter readings plus registry context;
+5. generic interval CSV.
+
+The browser normalizes evidence, emits deterministic diagnostics, separates cryptographic consistency from trusted operator provenance, compares the same evidence under multiple versioned policies, creates a bounded claim manifest, and evaluates settlement coverage / shortfall.
+
+The canonical demo deliberately reaches:
+
+`valid evidence → valid policy admission → bounded issuance → insufficient settlement capacity → PARTIAL`
+
+## Protocol objects
+
+- `@solarpunk/constraint-core` — shared browser/Node implementation;
+- independent Python conformance implementation;
+- Draft 2020-12 JSON Schemas for evidence, provenance, policy, claim, and settlement;
+- pinned `alpha-v1` JS/Python conformance vectors;
+- `PolicyRegistry.sol`;
+- `ClaimRegistry.sol`;
+- `SettlementLedger.sol`.
+
+Claims bind exact evidence hash, policy ID, semantic version, policy-manifest hash, subject, quantity/base units, decimal scale, unit, provenance, and claim state.
+
+The first-admission replay key is policy specific:
+
+`keccak256(evidenceHash, policyId, policyManifestHash, policyVersion, subject)`
+
+This is not claimed as a universal physical-property or legal-right retirement rule.
 
 ## Quick start
 
 ```bash
-npm install && npx hardhat compile
+npm install
 
-# Local full loop
-npm run spk:v1:launch
+# Protocol core, conformance, empirical bundle invariants
+npm --prefix packages/constraint-core test
 
-# Sepolia — operator cycle (requires .env PRIVATE_KEY + SEPOLIA_RPC)
-npm run spk:v1:cycle:sepolia
-npm run spk:v1:sync
-npm run spk:v1:evidence:export
+# Deterministic protocol demo
+node scripts/protocol_alpha_demo.mjs
+
+# Reference EVM stack
+npx hardhat test test/ConstraintProtocol.test.js
+hardhat run scripts/deploy_constraint_protocol_alpha.js
+
+# Frontend
+cd frontend
+npm install
+npm run dev
 ```
 
-**Canonical runtime:** `state/runtime/spk_v1.json` → `frontend/public/spk_v1.json`
+The full alpha CI also runs the independent Python implementation, package/wheel checks, JS/Python quickstart parity, complete Hardhat suite, frontend tests/build, local EVM smoke deployment, and real Chromium desktop/mobile review flows.
+
+## SolarPunk / SPK reference application
+
+Constraint was discovered through the SolarPunk energy-finance thesis and Public Lab. SPK remains a reference application and thesis artifact; it is no longer the protocol primitive or product ceiling.
+
+The existing Sepolia reference remains inspectable:
 
 | Contract | Sepolia address |
-|----------|-----------------|
-| SolarPunkCoin (lab unit SPK) | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
+|---|---|
+| SolarPunkCoin lab unit | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
 | SolarPunkCurrencySystem | `0x520162252F9B94824417678525FFd69145014970` |
 
----
+SPK is a testnet lab unit, not legal money, a stablecoin, a token sale, or a legal claim on delivered energy.
 
-## What Public Lab v1.0 proves
+SolarPunk product docs remain under [`docs/product/`](./docs/product/) and the canonical final revised thesis PDF is `energy_constraint_thesis_final_submission_revised.pdf`.
 
-1. **Energy evidence → issuance** — signed surplus attestation or meter bundle → bounded SPK mint (peg off)
-2. **Circulation** — typed network payments (SERVICE, LABOR, GOODS, NETWORK) with invoice replay protection
-3. **Settlement metrics** — on-chain circulation vs redemption share
-4. **Reproducibility** — operator cycles, sync, evidence export, 109 contract tests
+## Public-data and licence boundary
 
-**SPK** is the **lab unit** inside this architecture (~1 kWh surplus per SPK on testnet), not a claim of legal money.
+No licensed CRSP or Refinitiv row-level observations are committed to the public empirical bundle.
 
-Not claimed: mainnet, token sale, legal tender, revenue-grade meter finality, production governance, live dollar peg.
+CI fails if prohibited row-level fields such as `permno`, `ric`, `security_id`, `close_price`, or `company_name` appear in the serialized public study package. The public lab exposes aggregate policy results, methods, formulas, sample counts, stress definitions, source-package identity, and exact aggregate-file hashes.
 
----
+## Not claimed
 
-## Commands
+Public Alpha does **not** establish:
 
-| Command | Purpose |
-|---------|---------|
-| `npm run spk:v1:cycle:sepolia` | Attested mint + network payments + optional redeem |
-| `npm run hardware:validate` | Sample or operator meter path → attestation bundle + provenance tier |
-| `npm run public-lab:preflight` | Pre-publish checks (tests, gates, demo runtime) |
-| `npm run public-lab:publish` | Preflight + build + mirror demo to `docs/demo/` |
-| `CYCLE_MINT_MODE=meter npm run spk:v1:cycle:sepolia` | Mint from meter bundle (scaled, replay-safe) |
-| `npm run spk:v1:sync` | Index chain events → runtime JSON |
-| `npm run spk:v1:evidence:export` | Regenerate evidence pack |
-| `npm run foundation:health` | Operator + sync readiness |
-| `npx hardhat test` | 109 on-chain rule tests |
+- legal underlying-resource ownership;
+- environmental-attribute ownership or retirement;
+- legal redemption rights;
+- reserve custody;
+- production collateral-control adequacy;
+- certified meter finality;
+- production oracle finality;
+- formal audit completion;
+- production governance;
+- mainnet readiness.
 
----
+The principal protocol trust boundary also remains explicit: an authorized claim issuer currently asserts that deterministic off-chain policy evaluation occurred correctly. The reference EVM does not re-execute arbitrary JavaScript or Python adapter/policy logic.
 
-## Repo map
+## Project map
 
 | Track | Location |
-|-------|----------|
-| **Public Lab v1.0** | `docs/product/PUBLIC_LAB_V1.md` |
-| SPK v1 technical spec | `docs/product/SPK_V1.md`, `state/runtime/` |
-| Thesis (bounded) | `thesis_package/`, `thesis_package/SPK_V1_EVIDENCE.md` |
-| Institutional path (post-thesis) | `docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md` |
-| **Open lab (replicate / extend)** | `CONTRIBUTING.md`, `docs/project/OPEN_LAB_WORKFLOWS.md` |
-| Bitcoin CEIR empirics | `thesis_package/empirical_results/` |
-| CEIR → SPK exploration (off-thesis) | `docs/exploration/`, `npm run exploration:tier-c` |
-| Options pricing | `energy_derivatives/spk_derivatives/` |
+|---|---|
+| Constraint protocol alpha | `docs/protocol/`, `packages/constraint-core/`, `contracts/protocol/` |
+| Empirical Runs | `docs/protocol/EMPIRICAL_RUNS_V1.md`, `frontend/public/empirical/` |
+| Browser lab | `frontend/src/components/ConstraintProtocolLab.jsx` |
+| Browser reproduction | `frontend/src/components/EmpiricalReproductionLab.jsx` |
+| SPK reference application | `docs/product/`, `state/runtime/`, `spk_v1/` |
+| Thesis | `energy_constraint_thesis_final_submission_revised.pdf`, `thesis_package/` |
+| CEIR negative-identification closure | `thesis_package/CEIR_FINAL_DIAGNOSIS.md` |
 
----
+## Release posture
 
-## Foundation layer
+Constraint is a **public research/protocol alpha**. SolarPunk Public Lab remains a bounded Sepolia reference application.
 
-Energy-standard settlement with **USD reference for expression** (peg **off** on chain) — research laboratory, not L1 competition.
+The next field-value gate is one real L2 operator / inverter / gateway evidence source. The next protocol-research gate is reducing first-admission issuer trust without forcing arbitrary evidence adapters into Solidity.
 
-- [`docs/foundation/MONETARY_FOUNDATION.md`](./docs/foundation/MONETARY_FOUNDATION.md) — architecture north star
-- [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) — generated metrics
-
-```bash
-npm run foundation:build   # export foundation status from runtime
-npm run foundation:sync    # Sepolia sync + foundation export
-npm run foundation:cycle   # operator cycle + sync + foundation
-```
-
----
-
-## Development
-
-```bash
-cd frontend && npm install && npm run dev   # Public Lab landing + SPK console
-npx hardhat test                            # contracts
-npm run spk:v1:test                         # runtime smoke
-```
-
-Push to `main` deploys the frontend to GitHub Pages via `.github/workflows/deploy.yml`.
-
-**Release:** tag `public-lab-v1.0` — see [`docs/product/PUBLIC_LAB_V1_RELEASE_NOTE.md`](./docs/product/PUBLIC_LAB_V1_RELEASE_NOTE.md).
+Cite via [`CITATION.cff`](./CITATION.cff). Forks must not imply official endorsement; see [`TRADEMARK.md`](./TRADEMARK.md).
