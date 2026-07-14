@@ -17,7 +17,7 @@ export async function createDecisionClaimManifest({
   const decision = decisionResultBody(decisionInput);
   const expectedDecisionId = await hashDecisionResultBody(decision);
   if (decision.decision_id !== expectedDecisionId) {
-    throw new Error('DecisionResult decision_id does not match canonical decision body');
+    throw new Error('DecisionResult identity mismatch: decision_id does not match canonical decision body');
   }
   if (decision.decision !== 'ADMIT_WITH_LIMIT') {
     throw new Error('DecisionResult must be ADMIT_WITH_LIMIT before claim creation');
