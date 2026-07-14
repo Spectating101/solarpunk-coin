@@ -7,7 +7,8 @@ import {
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 
 function label(value) {
-  return String(value || '—').replaceAll('_', ' ').toLowerCase();
+  const normalized = String(value || '—').replaceAll('_', ' ').toLowerCase();
+  return normalized === 'min provenance' ? 'minimum provenance' : normalized;
 }
 
 function cellSummary(run) {
@@ -137,7 +138,7 @@ export default function CompareWorkspace({ onOpenDecision }) {
               <span className="case-map-boundary">click any cell to inspect its decision</span>
             </div>
             <div className="wb-table-scroll">
-              <table className="comparison-matrix">
+              <table className="comparison-matrix" aria-label="Case policy decision matrix">
                 <thead>
                   <tr>
                     <th>Case</th>
@@ -208,7 +209,7 @@ export default function CompareWorkspace({ onOpenDecision }) {
               <div><span className="wb-section-label">Capacity table</span><h3>Admitted decisions only</h3></div>
             </div>
             <div className="wb-table-scroll">
-              <table className="wb-data-table">
+              <table className="wb-data-table" aria-label="Admitted decision capacity table">
                 <thead><tr><th>Case</th><th>Policy</th><th>Decision ID</th><th>Admitted max</th><th>Binding ceiling</th></tr></thead>
                 <tbody>
                   {matrix.flatMap((row) => row.runs.filter((run) => run.decision.capacity.evaluated).map((run) => (
