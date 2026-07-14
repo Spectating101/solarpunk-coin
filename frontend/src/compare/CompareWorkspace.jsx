@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
   GitCompareArrows,
-  LoaderCircle,
   ShieldAlert,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
@@ -130,7 +129,7 @@ export default function CompareWorkspace({ onOpenDecision }) {
       </section>
 
       {error ? <div className="workbench-error" role="alert"><ShieldAlert size={18} /> {error}</div> : null}
-      {loading ? <div className="compare-loading"><LoaderCircle className="spin" size={22} /> Evaluating comparison matrix…</div> : (
+      {loading ? <div className="compare-loading" aria-live="polite">Evaluating comparison matrix…</div> : (
         <>
           <section className="compare-panel">
             <div className="constraint-section-heading">
@@ -220,7 +219,7 @@ export default function CompareWorkspace({ onOpenDecision }) {
                       <td>{run.decision.capacity.admitted_maximum} {run.decision.capacity.unit}</td>
                       <td>{label(run.decision.capacity.binding_constraints.join(', '))}</td>
                     </tr>
-                  )))}
+                  ))) }
                 </tbody>
               </table>
             </div>
