@@ -16,7 +16,8 @@ const LAYERS = [
 ];
 
 function formatRule(value) {
-  return String(value || '—').replaceAll('_', ' ').toLowerCase();
+  const normalized = String(value || '—').replaceAll('_', ' ').toLowerCase();
+  return normalized === 'min provenance' ? 'minimum provenance' : normalized;
 }
 
 function pointPosition(caseManifest) {
