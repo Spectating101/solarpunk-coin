@@ -6,11 +6,13 @@ Public Alpha publishes machine-readable Draft 2020-12 JSON Schemas for portable 
 |---|---|
 | `evidence-envelope.v1.schema.json` | `solarpunk.constraint.evidence_envelope.v1` |
 | `provenance-decision.v1.schema.json` | `solarpunk.constraint.provenance_decision.v1` |
+| `provenance-scenario.v1.schema.json` | `solarpunk.constraint.provenance_scenario.v1` |
 | `policy-manifest.v1.schema.json` | `solarpunk.constraint.policy_manifest.v1` |
 | `policy-manifest.v2.schema.json` | `solarpunk.constraint.policy_manifest.v2` |
 | `claim-manifest.v1.schema.json` | `solarpunk.constraint.claim_manifest.v1` |
 | `settlement-result.v1.schema.json` | `solarpunk.constraint.settlement_result.v1` |
 | `case-manifest.v1.schema.json` | `solarpunk.constraint.case_manifest.v1` |
+| `case-pack.v1.schema.json` | `solarpunk.constraint.case_pack.v1` |
 | `context-manifest.v1.schema.json` | `solarpunk.constraint.context_manifest.v1` |
 | `constraint-evaluation.v1.schema.json` | `solarpunk.constraint.constraint_evaluation.v1` |
 | `decision-result.v1.schema.json` | `solarpunk.constraint.decision_result.v1` |
@@ -25,6 +27,14 @@ These schemas define portable object shapes. They do not certify the truth of ev
 `policy_manifest.v2` is the case-workbench rule-list shape. It declares ordered admission and quantity rules by calculator ID and parameter object. Existing v1 policy IDs are not reused with different rule semantics.
 
 The V2 policy schema does not define a universal rules language. It references a bounded deterministic calculator registry published by the core package.
+
+## Case packs and assurance scenarios
+
+`case_pack.v1` is a manifest for a bounded research case set. It identifies case, evidence, context, assurance-scenario, and policy files plus the pack's empirical-claim boundary.
+
+`provenance_scenario.v1` represents a declared classification context used to test assurance counterfactuals. Its contract fixes `observed_evidence_changed` to `false` so a higher-assurance scenario cannot be presented as though new evidence was silently supplied.
+
+A provenance scenario is not a provenance decision. The existing classifier still derives the L0-L4 `ProvenanceDecision` from evidence plus the declared context.
 
 ## Case-workbench decision boundary
 
@@ -46,8 +56,11 @@ A `DecisionResult` is therefore a deterministic research decision under declared
 
 The evidence, policy, claim, case, context, constraint-evaluation, and decision objects use deterministic hashes implemented by `@solarpunk/constraint-core` where their object contracts define identity.
 
+V2 decision evaluation recomputes the portable evidence identity body before accepting an `evidence_hash`. Retaining an old hash after modifying source semantics, canonical intervals, summary, or capabilities fails closed. Diagnostics and presentation metadata remain outside evidence identity according to the existing evidence-envelope contract.
+
 A JSON object can be structurally schema-valid while still failing:
 
+- evidence identity verification;
 - evidence diagnostics;
 - provenance classification;
 - policy admission;
