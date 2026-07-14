@@ -1,33 +1,38 @@
 cff-version: 1.2.0
-title: Constraint Protocol Public Alpha
-message: If you use Constraint, its empirical policy-evaluation surface, or the protocol lab in academic work, please cite this software artifact.
+title: "Policy Lab: Case-Based Constraint Research Workbench"
+message: "If you use the case workbench, empirical policy-evaluation study, or SolarPunk reference implementation in academic work, please cite this software artifact."
 type: software
 license: MIT
 repository-code: https://github.com/Spectating101/solarpunk-coin
 url: https://spectating101.github.io/solarpunk-coin/demo/
-version: 0.1.0-alpha
-date-released: 2026-07-13
+version: 0.2.0-alpha
+date-released: 2026-07-14
 authors:
   - family-names: Ongko
     given-names: Christopher
     affiliation: Yuan Ze University
 keywords:
-  - constrained claims
+  - bounded decisions
+  - decision provenance
   - policy evaluation
   - financial capacity
   - empirical finance
-  - provenance
-  - settlement
+  - evidence assurance
+  - binding constraints
+  - settlement stress
   - reproducible research
-  - real-world assets
-  - protocol design
+  - research software
 abstract: >
-  Constraint is a public research and protocol alpha for testing the rules that
-  turn external evidence into bounded financial claims. The public lab combines
-  aggregate historical policy replay, binding-constraint attribution, stress
-  replays, browser-side aggregate-bundle verification, deterministic evidence
-  normalization, provenance classification, versioned policy decisions, bounded
-  claim manifests, and explicit settlement shortfall accounting. SolarPunk/SPK
-  remains a Sepolia reference application that motivated the generalized
-  protocol. Constraint does not claim production risk adequacy, legal collateral
-  rights, reserve custody, production oracle finality, or mainnet readiness.
+  Policy Lab is a descriptive public interface for a case-based research workbench
+  that evaluates how explicit evidence and policy rules block, bound, and settle
+  financial claims. The software separates admission gates, comparable quantity
+  ceilings, and settlement constraints; attributes blocking and binding rules;
+  preserves deterministic decision identity under declared case, evidence,
+  context, policy, and calculator inputs; and emits decision receipts for
+  inspection and reproduction. A separate aggregate market-capacity study exposes
+  historical policy trade-offs without redistributing licensed row-level data.
+  SolarPunk Public Lab and the Energy Standard remain the original energy-linked
+  digital-finance reference domain and Sepolia application. The software does not
+  claim real operator validation, legal collateral or redemption rights, reserve
+  custody, empirical geospatial policy superiority, production oracle finality,
+  production governance, or mainnet readiness.
