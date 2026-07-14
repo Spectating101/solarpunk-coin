@@ -11,6 +11,7 @@ export { buildEvidenceEnvelope } from './portableEvidence.js';
 export * from './attestation.js';
 export * from './provenance.js';
 export * from './policies.js';
+export * from './casePolicies.js';
 export * from './case.js';
 export * from './context.js';
 export * from './constraints.js';
