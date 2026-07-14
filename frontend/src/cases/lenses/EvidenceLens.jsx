@@ -27,7 +27,7 @@ export default function EvidenceLens() {
           <span>{semanticLabel('MODELED')}</span>
           <ShieldCheck size={22} />
           <strong>{contexts[0]?.values?.annual_ac_kwh} kWh/year</strong>
-          <p>{contexts[0]?.temporal_semantics?.kind} · observed case window: no</p>
+          <p>{contexts[0]?.temporal_semantics?.kind} · modeled TMY context · not observed meter evidence</p>
         </article>
         <article className="semantic-card declared">
           <span>ASSURANCE SCENARIO</span>
