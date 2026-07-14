@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constraint Evaluation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "calculator_id",
+    "calculator_version",
+    "constraint_class",
+    "policy_rule_id",
+    "status",
+    "unit",
+    "quantity_decimals",
+    "capacity",
+    "input_refs",
+    "observed_inputs",
+    "parameters",
+    "assumptions",
+    "warnings",
+    "explanation",
+    "boundary",
+    "evaluation_id"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.constraint_evaluation.v1" },
+    "calculator_id": { "type": "string", "minLength": 1 },
+    "calculator_version": { "type": "string", "minLength": 1 },
+    "constraint_class": {
+      "enum": ["ADMISSION_GATE", "QUANTITY_CEILING", "SETTLEMENT_CONSTRAINT"]
+    },
+    "policy_rule_id": { "type": ["string", "null"] },
+    "status": { "enum": ["PASS", "BLOCK", "WARNING", "NOT_APPLICABLE"] },
+    "unit": { "type": ["string", "null"] },
+    "quantity_decimals": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "integer", "minimum": 0, "maximum": 18 }
+      ]
+    },
+    "capacity": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "number", "minimum": 0 }
+      ]
+    },
+    "input_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "observed_inputs": { "type": "object" },
+    "parameters": { "type": "object" },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "explanation": { "type": "string", "minLength": 1 },
+    "boundary": { "type": "string", "minLength": 1 },
+    "evaluation_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}
