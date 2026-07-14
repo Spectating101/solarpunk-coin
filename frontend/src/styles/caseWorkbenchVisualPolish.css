@@ -1,0 +1,115 @@
+/* Post-browser-review hardening for the V2 case workbench. */
+
+/* Keep linked spatial dots at their declared coordinates while separating nearby
+   PHX/AUS labels. The accessible case list remains the primary keyboard selector. */
+.case-map-point span,
+.case-map-point code {
+  position: relative;
+}
+
+.case-map-point[data-case-id="PHX-001"] span,
+.case-map-point[data-case-id="PHX-001"] code {
+  transform: translate(-42px, -20px);
+}
+
+.case-map-point[data-case-id="AUS-001"] span,
+.case-map-point[data-case-id="AUS-001"] code {
+  transform: translate(12px, 18px);
+}
+
+/* The three-pane desktop workspace cannot support the original fixed 84/180px
+   admission columns without clipping calculator identity. Let the rule and its
+   explanation share the available center-pane width on separate rows. */
+.constraint-rule-row {
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "status rule toggle"
+    "status explanation toggle";
+  gap: 4px 12px;
+}
+
+.constraint-rule-status {
+  grid-area: status;
+}
+
+.constraint-rule-row > strong {
+  grid-area: rule;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 8px;
+  min-width: 0;
+  align-items: baseline;
+}
+
+.constraint-rule-row > strong code {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  overflow-wrap: anywhere;
+}
+
+.constraint-rule-row > span:nth-of-type(2) {
+  grid-area: explanation;
+  min-width: 0;
+}
+
+.constraint-rule-row > svg {
+  grid-area: toggle;
+}
+
+/* Capacity rows retain one-line numerical comparison without reserving a fixed
+   150px unit column that crushes the ceiling name. */
+.quantity-ceiling-row {
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  grid-template-areas: "name value unit toggle";
+  gap: 8px;
+}
+
+.quantity-ceiling-row > span { grid-area: name; }
+.quantity-ceiling-row > b { grid-area: value; min-width: 52px; }
+.quantity-ceiling-row > code { grid-area: unit; white-space: nowrap; }
+.quantity-ceiling-row > svg { grid-area: toggle; }
+
+/* Long deterministic identities and parameter objects need full card width.
+   Keep the compact two-column treatment for the human-scale Rule/Class rows. */
+.constraint-detail dl div:nth-child(n + 3) {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+/* Settlement comparison is sequential inspection, not a two-column dashboard.
+   A single column prevents 64-character identities from making a narrow card
+   thousands of pixels tall and stretching its sibling to match. */
+.stress-diff-grid {
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.stress-diff-grid > article {
+  align-self: start;
+}
+
+.stress-diff-grid .dossier-list.wide div {
+  grid-template-columns: 100px minmax(0, 1fr);
+}
+
+@media (max-width: 680px) {
+  .case-map-point[data-case-id="PHX-001"] span {
+    transform: translate(-26px, -16px);
+  }
+
+  .case-map-point[data-case-id="AUS-001"] span {
+    transform: translate(10px, 16px);
+  }
+
+  .quantity-ceiling-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "name value toggle"
+      "unit unit unit";
+  }
+
+  .stress-diff-grid .dossier-list.wide div {
+    grid-template-columns: 1fr;
+  }
+}
