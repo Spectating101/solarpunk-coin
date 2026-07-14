@@ -173,6 +173,7 @@ export default function CaseExplorer({ onOpenCase }) {
                   type="button"
                   tabIndex={-1}
                   key={caseManifest.case_id}
+                  data-case-id={caseManifest.case_id}
                   className={`case-map-point ${pointTone(run)} ${activeCaseId === caseManifest.case_id ? 'active' : ''}`}
                   style={position}
                   onClick={() => selectCase(caseManifest.case_id)}
