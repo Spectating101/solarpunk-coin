@@ -64,15 +64,16 @@ jobs:
 
       - name: Capture case workbench browser flows
         run: |
+          set -o pipefail
           cd frontend
-          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/case-workbench-preview.log 2>&1 &
+          npm run preview -- --host 127.0.0.1 --port 4173 > ../_ci_logs/browser-preview.log 2>&1 &
           cd ..
           for i in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then break; fi
             sleep 1
           done
           curl --fail http://127.0.0.1:4173/ >/dev/null
-          node scripts/capture_case_workbench_v2.mjs _review_case_workbench_v2
+          node scripts/capture_case_workbench_v2.mjs _review_case_workbench_v2 2>&1 | tee _ci_logs/browser-capture.log
 
       - name: Upload V2 CI diagnostics
         if: always()
