@@ -21,6 +21,11 @@ async function shot(name, target = page) {
   await target.screenshot({ path: path.join(outputDir, name), fullPage: true });
 }
 
+async function selectL0(target = page) {
+  await target.getByLabel('Assurance context').selectOption('PROVENANCE-L0-BASE');
+  await target.getByRole('heading', { name: /why is this case blocked/i }).waitFor({ state: 'visible' });
+}
+
 async function selectL2(target = page) {
   await target.getByLabel('Assurance context').selectOption('PROVENANCE-L2-COUNTERFACTUAL');
   await target.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
@@ -43,11 +48,13 @@ await page.getByRole('region', { name: /PROVENANCE_POLICY_CAPACITY rule detail/i
 await shot('04-binding-ceiling-detail.png');
 
 await open('#compare', 'Where do policies disagree');
-await page.getByRole('table').first().waitFor({ state: 'visible' });
+await page.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
 await page.getByText('quantity not evaluated', { exact: false }).first().waitFor({ state: 'visible' });
 await shot('05-compare-decision-matrix.png');
 
-await open('#case/TYN-001', 'Why is this case blocked?');
+await open('#case/TYN-001');
+await selectL0();
+await page.getByText('NOT EXECUTED', { exact: true }).waitFor({ state: 'visible' });
 await selectL2();
 await page.getByRole('button', { name: /^Stress$/i }).click();
 await page.getByText('What happens when declared settlement capacity falls?', { exact: false }).waitFor({ state: 'visible' });
@@ -92,7 +99,7 @@ await mobilePage.getByRole('heading', { name: /why is this case limited to 126/i
 await shot('13-mobile-admitted-case.png', mobilePage);
 
 await openMobile('#compare', 'Where do policies disagree');
-await mobilePage.getByRole('table').first().waitFor({ state: 'visible' });
+await mobilePage.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
 await shot('14-mobile-compare.png', mobilePage);
 
 await openMobile('#receipts', 'Share the decision identity, not a screenshot.');
