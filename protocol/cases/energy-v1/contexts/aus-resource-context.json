@@ -1,0 +1,29 @@
+{
+  "schema": "solarpunk.constraint.context_manifest.v1",
+  "context_id": "resource:aus-001:pvwatts-v1",
+  "context_type": "resource_model",
+  "label": "AUS-001 PVWatts resource baseline",
+  "source": {
+    "provider": "PVWatts",
+    "dataset": "NSRDB PSM V3 GOES tmy-2020 3.2.0",
+    "source_kind": "typical_meteorological_year",
+    "source_document": "docs/product/NREL_SOLAR_TRAINING_LAB.md"
+  },
+  "spatial_identity": {
+    "latitude": 30.2672,
+    "longitude": -97.7431,
+    "spatial_reference": "WGS84"
+  },
+  "temporal_semantics": {
+    "kind": "TMY",
+    "observed_case_window": false,
+    "model_window_basis": "tmy-2020"
+  },
+  "values": {
+    "annual_ac_kwh": 14761.5443,
+    "system_capacity_kw": 10
+  },
+  "hash_algorithm": "SHA-256",
+  "boundary": "Modeled PVWatts resource context; not observed generation evidence and not claim authority.",
+  "context_hash": "58677055d6ab4e94752c248ce4d4df9f04a098b07e5e237c459a9211907c1425"
+}
