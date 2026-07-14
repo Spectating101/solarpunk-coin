@@ -1,0 +1,29 @@
+{
+  "schema": "solarpunk.constraint.context_manifest.v1",
+  "context_id": "resource:tyn-001:pvwatts-v1",
+  "context_type": "resource_model",
+  "label": "TYN-001 PVWatts resource baseline",
+  "source": {
+    "provider": "PVWatts",
+    "dataset": "NSRDB PSM V3 Himawari tmy-2020 3.2.0",
+    "source_kind": "typical_meteorological_year",
+    "source_document": "docs/product/NREL_SOLAR_TRAINING_LAB.md"
+  },
+  "spatial_identity": {
+    "latitude": 24.99,
+    "longitude": 121.3,
+    "spatial_reference": "WGS84"
+  },
+  "temporal_semantics": {
+    "kind": "TMY",
+    "observed_case_window": false,
+    "model_window_basis": "tmy-2020"
+  },
+  "values": {
+    "annual_ac_kwh": 11743.0994,
+    "system_capacity_kw": 10
+  },
+  "hash_algorithm": "SHA-256",
+  "boundary": "Modeled PVWatts resource context; not observed generation evidence and not claim authority.",
+  "context_hash": "21ea4b63125630a928522c81b76528bfbb1b5f35906a132ee96cac93ca9a5dce"
+}
