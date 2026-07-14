@@ -9,7 +9,7 @@
 
 .case-map-point[data-case-id="PHX-001"] span,
 .case-map-point[data-case-id="PHX-001"] code {
-  transform: translate(-42px, -20px);
+  transform: translate(0, -24px);
 }
 
 .case-map-point[data-case-id="AUS-001"] span,
@@ -57,17 +57,24 @@
   grid-area: toggle;
 }
 
-/* Capacity rows retain one-line numerical comparison without reserving a fixed
-   150px unit column that crushes the ceiling name. */
+/* Keep the ceiling name and numerical maximum together while moving the shared
+   claim unit onto a dedicated second row. This prevents values such as
+   225.210125 from visually colliding with ENERGY_CLAIM_UNIT. */
 .quantity-ceiling-row {
-  grid-template-columns: minmax(0, 1fr) auto auto auto;
-  grid-template-areas: "name value unit toggle";
-  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "name value toggle"
+    "unit unit unit";
+  gap: 5px 8px;
 }
 
 .quantity-ceiling-row > span { grid-area: name; }
 .quantity-ceiling-row > b { grid-area: value; min-width: 52px; }
-.quantity-ceiling-row > code { grid-area: unit; white-space: nowrap; }
+.quantity-ceiling-row > code {
+  grid-area: unit;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 .quantity-ceiling-row > svg { grid-area: toggle; }
 
 /* Long deterministic identities and parameter objects need full card width.
@@ -93,23 +100,48 @@
   grid-template-columns: 100px minmax(0, 1fr);
 }
 
+/* Four settlement metrics are too dense inside the center pane. Use a 2 × 2
+   instrument grid on desktop and preserve a one-column reading order on mobile. */
+.stress-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.stress-metrics div:nth-child(2n) {
+  border-right: 0;
+}
+
+.stress-metrics div:nth-child(n + 3) {
+  border-top: 1px solid var(--border);
+}
+
+.stress-metrics small {
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 680px) {
   .case-map-point[data-case-id="PHX-001"] span {
-    transform: translate(-26px, -16px);
+    transform: translate(0, -20px);
   }
 
   .case-map-point[data-case-id="AUS-001"] span {
     transform: translate(10px, 16px);
   }
 
-  .quantity-ceiling-row {
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      "name value toggle"
-      "unit unit unit";
-  }
-
   .stress-diff-grid .dossier-list.wide div {
     grid-template-columns: 1fr;
+  }
+
+  .stress-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .stress-metrics div {
+    border-right: 0;
+    border-top: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stress-metrics div:last-child {
+    border-bottom: 0;
   }
 }
