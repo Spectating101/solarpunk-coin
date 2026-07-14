@@ -59,7 +59,7 @@ export default function ConstraintsLens() {
 
   if (!activeRun) return <div className="wb-lens-loading">Evaluating committed case…</div>;
 
-  const { decision, provenance } = activeRun;
+  const { decision } = activeRun;
   const blocked = decision.decision === 'BLOCKED';
   const primaryRule = blocked
     ? decision.admission.blocking_rules[0]
@@ -105,7 +105,7 @@ export default function ConstraintsLens() {
                 {evaluation.status === 'BLOCK' ? <Ban size={15} /> : <Check size={15} />}
                 {evaluation.status}
               </span>
-              <strong>{label(evaluation.calculator_id)}</strong>
+              <strong>{label(evaluation.calculator_id)} <code>{evaluation.calculator_id}</code></strong>
               <span>{evaluation.explanation}</span>
               <ChevronDown size={14} />
             </button>
