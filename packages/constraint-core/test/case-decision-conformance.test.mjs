@@ -2,16 +2,11 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   buildContextManifest,
+  buildEvidenceEnvelope,
   casePolicyById,
   classifyProvenance,
   evaluateCaseDecision,
 } from '../src/index.js';
-
-const EVIDENCE_HASHES = {
-  TYN: '1010101010101010101010101010101010101010101010101010101010101010',
-  AUS: '2020202020202020202020202020202020202020202020202020202020202020',
-  PHX: '3030303030303030303030303030303030303030303030303030303030303030',
-};
 
 const SITE_INPUTS = {
   TYN: { case_id: 'TYN-001', site_id: 'taoyuan_10kw', latitude: 24.99, longitude: 121.3, annual_ac_kwh: 11743.0994, surplus: 180 },
@@ -19,12 +14,16 @@ const SITE_INPUTS = {
   PHX: { case_id: 'PHX-001', site_id: 'phoenix_10kw', latitude: 33.4484, longitude: -112.074, annual_ac_kwh: 17551.196, surplus: 320 },
 };
 
-function evidenceFor(siteKey, evidenceHash = EVIDENCE_HASHES[siteKey]) {
+async function evidenceFor(siteKey, identityTag = 'baseline') {
   const site = SITE_INPUTS[siteKey];
-  return {
-    schema: 'solarpunk.constraint.evidence_envelope.v1',
+  return buildEvidenceEnvelope({
     adapter: { id: 'controlled-case-fixture', version: '1.0.0' },
-    source: { label: `${site.case_id} signed sample fixture`, sample_fixture: true },
+    source: {
+      kind: 'signed_sample_fixture',
+      case_id: site.case_id,
+      identity_tag: identityTag,
+      sample_fixture: true,
+    },
     intervals: [],
     diagnostics: [],
     capabilities: {
@@ -40,9 +39,7 @@ function evidenceFor(siteKey, evidenceHash = EVIDENCE_HASHES[siteKey]) {
       warning_count: 0,
       rejected_input_records: 0,
     },
-    evidence_hash: evidenceHash,
-    hash_algorithm: 'SHA-256',
-  };
+  }, { source_label: `${site.case_id} signed sample fixture`, browser_local: true });
 }
 
 async function contextFor(siteKey, annualOverride = null) {
@@ -113,7 +110,7 @@ function provenanceFor(evidence, level) {
 }
 
 async function evaluate(siteKey, policyId, provenanceLevel, options = {}) {
-  const evidence = evidenceFor(siteKey, options.evidenceHash);
+  const evidence = await evidenceFor(siteKey, options.evidenceIdentityTag);
   const context = await contextFor(siteKey, options.annualOverride);
   const caseManifest = caseFor(siteKey, evidence.evidence_hash, context.context_id);
   return evaluateCaseDecision({
@@ -147,7 +144,7 @@ test('same pilot policy can become resource-bound in a different modeled context
   assert.deepEqual(decision.capacity.binding_constraints, ['RESOURCE_CONTEXT_CAPACITY']);
 });
 
-test('open policy can remain evidence-bound where observed fixture quantity is below modeled context', async () => {
+test('open policy can remain evidence-bound where fixture quantity is below modeled context', async () => {
   const decision = await evaluate('PHX', 'LAB-CASE-OPEN-004', 'L0');
   assert.equal(decision.decision, 'ADMIT_WITH_LIMIT');
   assert.equal(decision.capacity.admitted_maximum, 320);
@@ -174,7 +171,7 @@ test('material policy, context, and evidence identity changes change decision id
   const changedPolicy = await evaluate('AUS', 'ENERGY-CASE-PILOT-005', 'L2', { policy: policyFork });
   const changedContext = await evaluate('AUS', 'ENERGY-CASE-PILOT-005', 'L2', { annualOverride: 15000 });
   const changedEvidence = await evaluate('AUS', 'ENERGY-CASE-PILOT-005', 'L2', {
-    evidenceHash: '4040404040404040404040404040404040404040404040404040404040404040',
+    evidenceIdentityTag: 'changed-source-identity',
   });
 
   assert.notEqual(baseline.decision_id, changedPolicy.decision_id);
@@ -182,8 +179,29 @@ test('material policy, context, and evidence identity changes change decision id
   assert.notEqual(baseline.decision_id, changedEvidence.decision_id);
 });
 
+test('tampered evidence content with a retained old hash fails closed', async () => {
+  const evidence = await evidenceFor('TYN');
+  const context = await contextFor('TYN');
+  const caseManifest = caseFor('TYN', evidence.evidence_hash, context.context_id);
+  const tampered = {
+    ...evidence,
+    summary: {
+      ...evidence.summary,
+      total_eligible_surplus_kwh: 9999,
+    },
+  };
+
+  await assert.rejects(evaluateCaseDecision({
+    caseManifest,
+    evidenceByHash: { [evidence.evidence_hash]: tampered },
+    contextsById: { [context.context_id]: context },
+    provenance: provenanceFor(evidence, 'L2'),
+    policy: casePolicyById('ENERGY-CASE-PILOT-005'),
+  }), /evidence hash mismatch/);
+});
+
 test('V2 capacity ignores legacy provenance default haircut and cap fields', async () => {
-  const evidence = evidenceFor('TYN');
+  const evidence = await evidenceFor('TYN');
   const context = await contextFor('TYN');
   const caseManifest = caseFor('TYN', evidence.evidence_hash, context.context_id);
   const provenance = provenanceFor(evidence, 'L2');
