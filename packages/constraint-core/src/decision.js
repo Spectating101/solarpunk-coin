@@ -2,6 +2,7 @@ import { caseManifestBody, hashCaseManifest } from './case.js';
 import { casePolicyManifestBody, hashCasePolicyManifest } from './casePolicies.js';
 import { constraintEvaluationBody, createCalculatorRegistry } from './constraints.js';
 import { contextManifestBody, hashContextManifest } from './context.js';
+import { verifyEvidenceEnvelopeHash } from './portableEvidence.js';
 import { round, sha256Hex, stableStringify } from './stable.js';
 
 export const DECISION_RESULT_SCHEMA = 'solarpunk.constraint.decision_result.v1';
@@ -226,16 +227,19 @@ async function resolveContexts(caseManifest, contextsById) {
   return contexts;
 }
 
-function resolveEvidence(caseManifest, evidenceByHash) {
+async function resolveEvidence(caseManifest, evidenceByHash) {
   if (!caseManifest.evidence_refs.length) throw new Error('case requires at least one evidence_ref');
-  return caseManifest.evidence_refs.map((evidenceHash) => {
+  const resolved = [];
+  for (const evidenceHash of caseManifest.evidence_refs) {
     const evidence = lookup(evidenceByHash, evidenceHash);
     if (!evidence) throw new Error(`missing required evidence: ${evidenceHash}`);
     if (evidence.evidence_hash !== evidenceHash) {
       throw new Error(`evidence hash identity mismatch for ${evidenceHash}`);
     }
-    return evidence;
-  });
+    await verifyEvidenceEnvelopeHash(evidence);
+    resolved.push(evidence);
+  }
+  return resolved;
 }
 
 function resolveProvenance({ evidenceList, provenance, provenanceByEvidence }) {
@@ -261,7 +265,7 @@ export async function evaluateCaseDecision({
   const caseHash = await hashCaseManifest(caseManifest);
   const policy = casePolicyManifestBody(policyInput);
   const policyManifestHash = await hashCasePolicyManifest(policy);
-  const evidenceList = resolveEvidence(caseManifest, evidenceByHash);
+  const evidenceList = await resolveEvidence(caseManifest, evidenceByHash);
   const resolvedProvenance = resolveProvenance({ evidenceList, provenance, provenanceByEvidence });
   const contexts = await resolveContexts(caseManifest, contextsById);
   const evidence = evidenceList.length === 1 ? evidenceList[0] : null;
