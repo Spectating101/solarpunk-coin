@@ -1,4 +1,7 @@
-import { constraintEvaluationBody } from './constraints.js';
+import { caseManifestBody, hashCaseManifest } from './case.js';
+import { casePolicyManifestBody, hashCasePolicyManifest } from './casePolicies.js';
+import { constraintEvaluationBody, createCalculatorRegistry } from './constraints.js';
+import { contextManifestBody, hashContextManifest } from './context.js';
 import { round, sha256Hex, stableStringify } from './stable.js';
 
 export const DECISION_RESULT_SCHEMA = 'solarpunk.constraint.decision_result.v1';
@@ -192,4 +195,173 @@ export function decisionResultBody(value) {
     ...body,
     decision_id: sha256(value.decision_id, 'decision_id'),
   };
+}
+
+function lookup(collection, key) {
+  if (collection instanceof Map) return collection.get(key);
+  if (collection && typeof collection === 'object') return collection[key];
+  return undefined;
+}
+
+function uniqueWarnings(evaluations, policy) {
+  const warnings = evaluations.flatMap((item) => item.warnings || []);
+  if (policy.settlement?.legal_redemption_not_implied) {
+    warnings.push('Policy evaluation does not create legal redemption rights or prove named settlement capacity.');
+  }
+  return [...new Set(warnings)];
+}
+
+async function resolveContexts(caseManifest, contextsById) {
+  const contexts = [];
+  for (const contextId of caseManifest.context_refs) {
+    const raw = lookup(contextsById, contextId);
+    if (!raw) throw new Error(`missing required context: ${contextId}`);
+    const context = contextManifestBody(raw);
+    const expectedHash = await hashContextManifest(context);
+    if (context.context_hash !== expectedHash) {
+      throw new Error(`context hash mismatch for ${contextId}`);
+    }
+    contexts.push(context);
+  }
+  return contexts;
+}
+
+function resolveEvidence(caseManifest, evidenceByHash) {
+  if (!caseManifest.evidence_refs.length) throw new Error('case requires at least one evidence_ref');
+  return caseManifest.evidence_refs.map((evidenceHash) => {
+    const evidence = lookup(evidenceByHash, evidenceHash);
+    if (!evidence) throw new Error(`missing required evidence: ${evidenceHash}`);
+    if (evidence.evidence_hash !== evidenceHash) {
+      throw new Error(`evidence hash identity mismatch for ${evidenceHash}`);
+    }
+    return evidence;
+  });
+}
+
+function resolveProvenance({ evidenceList, provenance, provenanceByEvidence }) {
+  if (provenance?.level) return provenance;
+  if (evidenceList.length !== 1) {
+    throw new Error('explicit provenance is required when a case contains multiple evidence envelopes');
+  }
+  const resolved = lookup(provenanceByEvidence, evidenceList[0].evidence_hash);
+  if (!resolved?.level) throw new Error(`missing provenance decision for ${evidenceList[0].evidence_hash}`);
+  return resolved;
+}
+
+export async function evaluateCaseDecision({
+  caseManifest: caseInput,
+  evidenceByHash,
+  contextsById,
+  provenance = null,
+  provenanceByEvidence = null,
+  policy: policyInput,
+  calculatorRegistry = createCalculatorRegistry(),
+}) {
+  const caseManifest = caseManifestBody(caseInput);
+  const caseHash = await hashCaseManifest(caseManifest);
+  const policy = casePolicyManifestBody(policyInput);
+  const policyManifestHash = await hashCasePolicyManifest(policy);
+  const evidenceList = resolveEvidence(caseManifest, evidenceByHash);
+  const resolvedProvenance = resolveProvenance({ evidenceList, provenance, provenanceByEvidence });
+  const contexts = await resolveContexts(caseManifest, contextsById);
+  const evidence = evidenceList.length === 1 ? evidenceList[0] : null;
+
+  const admissionEvaluations = [];
+  for (const rule of policy.admission_rules) {
+    admissionEvaluations.push(await calculatorRegistry.evaluateRule({
+      rule,
+      caseManifest,
+      evidence,
+      evidenceList,
+      provenance: resolvedProvenance,
+      contexts,
+      policy,
+      priorEvaluations: admissionEvaluations,
+    }));
+  }
+
+  const blockingRules = admissionEvaluations
+    .filter((item) => item.status === 'BLOCK')
+    .map((item) => item.calculator_id);
+
+  if (blockingRules.length > 0) {
+    return buildDecisionResult({
+      case_id: caseManifest.case_id,
+      case_hash: caseHash,
+      policy_id: policy.id,
+      policy_version: policy.version,
+      policy_manifest_hash: policyManifestHash,
+      evidence_hashes: evidenceList.map((item) => item.evidence_hash),
+      context_refs: contexts.map((item) => ({
+        context_id: item.context_id,
+        context_hash: item.context_hash,
+      })),
+      admission: {
+        result: 'BLOCK',
+        evaluations: admissionEvaluations,
+        blocking_rules: blockingRules,
+      },
+      capacity: {
+        evaluated: false,
+        unit: null,
+        quantity_decimals: null,
+        evaluations: [],
+        admitted_maximum: 0,
+        binding_constraints: [],
+      },
+      decision: 'BLOCKED',
+      warnings: uniqueWarnings(admissionEvaluations, policy),
+      boundary: 'Research decision under declared evidence, context, and policy inputs; not legal issuance authority.',
+    });
+  }
+
+  const capacityEvaluations = [];
+  for (const rule of policy.quantity_rules) {
+    capacityEvaluations.push(await calculatorRegistry.evaluateRule({
+      rule,
+      caseManifest,
+      evidence,
+      evidenceList,
+      provenance: resolvedProvenance,
+      contexts,
+      policy,
+      priorEvaluations: capacityEvaluations,
+    }));
+  }
+
+  const comparable = assertComparableCapacityUnits(capacityEvaluations);
+  const admittedMaximum = Math.min(...comparable.evaluations.map((item) => Number(item.capacity)));
+  const canonicalMaximum = round(admittedMaximum);
+  const bindingConstraints = comparable.evaluations
+    .filter((item) => Number(item.capacity) === canonicalMaximum)
+    .map((item) => item.calculator_id);
+
+  return buildDecisionResult({
+    case_id: caseManifest.case_id,
+    case_hash: caseHash,
+    policy_id: policy.id,
+    policy_version: policy.version,
+    policy_manifest_hash: policyManifestHash,
+    evidence_hashes: evidenceList.map((item) => item.evidence_hash),
+    context_refs: contexts.map((item) => ({
+      context_id: item.context_id,
+      context_hash: item.context_hash,
+    })),
+    admission: {
+      result: 'PASS',
+      evaluations: admissionEvaluations,
+      blocking_rules: [],
+    },
+    capacity: {
+      evaluated: true,
+      unit: comparable.unit,
+      quantity_decimals: comparable.quantity_decimals,
+      evaluations: capacityEvaluations,
+      admitted_maximum: canonicalMaximum,
+      binding_constraints: bindingConstraints,
+    },
+    decision: 'ADMIT_WITH_LIMIT',
+    warnings: uniqueWarnings([...admissionEvaluations, ...capacityEvaluations], policy),
+    boundary: 'Research decision under declared evidence, modeled context, and policy inputs; not legal issuance authority or proof of settlement capacity.',
+  });
 }
