@@ -1,0 +1,14 @@
+{
+  "schema": "solarpunk.constraint.provenance_scenario.v1",
+  "scenario_id": "PROVENANCE-L1-COUNTERFACTUAL",
+  "name": "Trusted operator-signed assurance counterfactual",
+  "kind": "ASSURANCE_COUNTERFACTUAL",
+  "provenance_context": {
+    "trusted_operator_context": true,
+    "operator_signed": true,
+    "signed": true,
+    "cryptographically_verified": true
+  },
+  "observed_evidence_changed": false,
+  "boundary": "Declared assurance counterfactual only. The evidence hash is unchanged and no real trusted operator identity, custody process, or new observed evidence is supplied."
+}
