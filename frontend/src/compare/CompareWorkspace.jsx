@@ -141,14 +141,14 @@ export default function CompareWorkspace({ onOpenDecision }) {
               <table className="comparison-matrix" aria-label="Case policy decision matrix">
                 <thead>
                   <tr>
-                    <th>Case</th>
-                    {pack.policies.map((policy) => <th key={policy.id}>{policy.id}<small>{policy.name}</small></th>)}
+                    <th scope="col">Case</th>
+                    {pack.policies.map((policy) => <th scope="col" key={policy.id}>{policy.id}<small>{policy.name}</small></th>)}
                   </tr>
                 </thead>
                 <tbody>
                   {matrix.map((row) => (
                     <tr key={row.caseId}>
-                      <th>{row.caseId}<small>{pack.casesById[row.caseId].subject.replace(' controlled energy case', '')}</small></th>
+                      <th scope="row">{row.caseId}<small>{pack.casesById[row.caseId].subject.replace(' controlled energy case', '')}</small></th>
                       {row.runs.map((run) => {
                         const summary = cellSummary(run);
                         return (
@@ -210,7 +210,7 @@ export default function CompareWorkspace({ onOpenDecision }) {
             </div>
             <div className="wb-table-scroll">
               <table className="wb-data-table" aria-label="Admitted decision capacity table">
-                <thead><tr><th>Case</th><th>Policy</th><th>Decision ID</th><th>Admitted max</th><th>Binding ceiling</th></tr></thead>
+                <thead><tr><th scope="col">Case</th><th scope="col">Policy</th><th scope="col">Decision ID</th><th scope="col">Admitted max</th><th scope="col">Binding ceiling</th></tr></thead>
                 <tbody>
                   {matrix.flatMap((row) => row.runs.filter((run) => run.decision.capacity.evaluated).map((run) => (
                     <tr key={run.key}>
