@@ -1,0 +1,51 @@
+{
+  "schema": "solarpunk.constraint.policy_manifest.v2",
+  "id": "ENERGY-CASE-STRICT-006",
+  "version": "1.0.0",
+  "name": "Externally Corroborated Energy Case Policy",
+  "description": "Strict research policy requiring L4 externally corroborated assurance before comparing evidence, policy-owned assurance capacity, modeled resource context, and an absolute cap.",
+  "admission_rules": [
+    { "rule_id": "energy.strict.positive-surplus.v1", "calculator_id": "POSITIVE_SURPLUS", "parameters": {} },
+    { "rule_id": "energy.strict.zero-blockers.v1", "calculator_id": "ZERO_BLOCKERS", "parameters": {} },
+    { "rule_id": "energy.strict.signed-evidence.v1", "calculator_id": "SIGNED_EVIDENCE", "parameters": {} },
+    { "rule_id": "energy.strict.minimum-provenance.v1", "calculator_id": "MIN_PROVENANCE", "parameters": { "minimum": "L4" } },
+    { "rule_id": "energy.strict.external-corroboration.v1", "calculator_id": "EXTERNAL_CORROBORATION", "parameters": {} }
+  ],
+  "quantity_rules": [
+    {
+      "rule_id": "energy.strict.evidence-capacity.v1",
+      "calculator_id": "EVIDENCE_BACKED_CAPACITY",
+      "parameters": { "unit": "ENERGY_CLAIM_UNIT", "quantity_decimals": 6, "rate": 1 }
+    },
+    {
+      "rule_id": "energy.strict.provenance-capacity.v1",
+      "calculator_id": "PROVENANCE_POLICY_CAPACITY",
+      "parameters": {
+        "unit": "ENERGY_CLAIM_UNIT",
+        "quantity_decimals": 6,
+        "source_calculator_id": "EVIDENCE_BACKED_CAPACITY",
+        "capacity_multiplier_by_level": { "L0": 0, "L1": 0.4, "L2": 0.7, "L3": 0.88, "L4": 0.95 }
+      }
+    },
+    {
+      "rule_id": "energy.strict.resource-context.v1",
+      "calculator_id": "RESOURCE_CONTEXT_CAPACITY",
+      "parameters": {
+        "unit": "ENERGY_CLAIM_UNIT",
+        "quantity_decimals": 6,
+        "context_type": "resource_model",
+        "value_path": "values.annual_ac_kwh",
+        "days_per_year": 365,
+        "rate": 1,
+        "capacity_multiplier": 1
+      }
+    },
+    {
+      "rule_id": "energy.strict.absolute-cap.v1",
+      "calculator_id": "ABSOLUTE_POLICY_CAP",
+      "parameters": { "unit": "ENERGY_CLAIM_UNIT", "quantity_decimals": 6, "maximum": 50000 }
+    }
+  ],
+  "settlement": { "explicit_capacity_required": true, "legal_redemption_not_implied": true },
+  "governance": { "authority": "production-candidate research policy authority", "mutable_by": "governed policy registry after audit" }
+}
