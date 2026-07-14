@@ -1,0 +1,38 @@
+{
+  "schema": "solarpunk.constraint.policy_manifest.v2",
+  "id": "LAB-CASE-OPEN-004",
+  "version": "1.0.0",
+  "name": "Open Case Demonstration",
+  "description": "Research-only case policy that admits deterministic sample evidence after basic evidence gates and compares evidence, modeled resource, and absolute quantity ceilings.",
+  "admission_rules": [
+    { "rule_id": "case.open.positive-surplus.v1", "calculator_id": "POSITIVE_SURPLUS", "parameters": {} },
+    { "rule_id": "case.open.zero-blockers.v1", "calculator_id": "ZERO_BLOCKERS", "parameters": {} }
+  ],
+  "quantity_rules": [
+    {
+      "rule_id": "case.open.evidence-capacity.v1",
+      "calculator_id": "EVIDENCE_BACKED_CAPACITY",
+      "parameters": { "unit": "ENERGY_CLAIM_UNIT", "quantity_decimals": 6, "rate": 1 }
+    },
+    {
+      "rule_id": "case.open.resource-context.v1",
+      "calculator_id": "RESOURCE_CONTEXT_CAPACITY",
+      "parameters": {
+        "unit": "ENERGY_CLAIM_UNIT",
+        "quantity_decimals": 6,
+        "context_type": "resource_model",
+        "value_path": "values.annual_ac_kwh",
+        "days_per_year": 365,
+        "rate": 1,
+        "capacity_multiplier": 1
+      }
+    },
+    {
+      "rule_id": "case.open.absolute-cap.v1",
+      "calculator_id": "ABSOLUTE_POLICY_CAP",
+      "parameters": { "unit": "ENERGY_CLAIM_UNIT", "quantity_decimals": 6, "maximum": 10000 }
+    }
+  ],
+  "settlement": { "explicit_capacity_required": true, "legal_redemption_not_implied": true },
+  "governance": { "authority": "browser-local research demonstration", "mutable_by": "declared temporary policy fork" }
+}
