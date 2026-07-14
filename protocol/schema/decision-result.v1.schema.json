@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constraint Decision Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "case_id",
+    "case_hash",
+    "policy_id",
+    "policy_version",
+    "policy_manifest_hash",
+    "evidence_hashes",
+    "context_refs",
+    "admission",
+    "capacity",
+    "decision",
+    "warnings",
+    "boundary",
+    "decision_id"
+  ],
+  "$defs": {
+    "evaluation": { "$ref": "./constraint-evaluation.v1.schema.json" },
+    "contextRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_id", "context_hash"],
+      "properties": {
+        "context_id": { "type": "string", "minLength": 1 },
+        "context_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  },
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.decision_result.v1" },
+    "case_id": { "type": "string", "minLength": 1 },
+    "case_hash": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      ]
+    },
+    "policy_id": { "type": "string", "minLength": 1 },
+    "policy_version": { "type": "string", "minLength": 1 },
+    "policy_manifest_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "evidence_hashes": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+      "uniqueItems": true
+    },
+    "context_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/contextRef" }
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "evaluations", "blocking_rules"],
+      "properties": {
+        "result": { "enum": ["PASS", "BLOCK"] },
+        "evaluations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evaluation" }
+        },
+        "blocking_rules": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "capacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluated",
+        "unit",
+        "quantity_decimals",
+        "evaluations",
+        "admitted_maximum",
+        "binding_constraints"
+      ],
+      "properties": {
+        "evaluated": { "type": "boolean" },
+        "unit": { "type": ["string", "null"] },
+        "quantity_decimals": {
+          "anyOf": [
+            { "type": "null" },
+            { "type": "integer", "minimum": 0, "maximum": 18 }
+          ]
+        },
+        "evaluations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evaluation" }
+        },
+        "admitted_maximum": { "type": "number", "minimum": 0 },
+        "binding_constraints": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "decision": { "enum": ["BLOCKED", "ADMIT_WITH_LIMIT"] },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "boundary": { "type": "string", "minLength": 1 },
+    "decision_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}
