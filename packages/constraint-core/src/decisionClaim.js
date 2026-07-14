@@ -1,4 +1,4 @@
-import { decisionResultBody } from './decision.js';
+import { decisionResultBody, hashDecisionResultBody } from './decision.js';
 import { quantityToBaseUnits } from './claim.js';
 import { sha256Hex, stableStringify } from './stable.js';
 
@@ -15,6 +15,10 @@ export async function createDecisionClaimManifest({
   subject = 'browser-local-case-subject',
 }) {
   const decision = decisionResultBody(decisionInput);
+  const expectedDecisionId = await hashDecisionResultBody(decision);
+  if (decision.decision_id !== expectedDecisionId) {
+    throw new Error('DecisionResult decision_id does not match canonical decision body');
+  }
   if (decision.decision !== 'ADMIT_WITH_LIMIT') {
     throw new Error('DecisionResult must be ADMIT_WITH_LIMIT before claim creation');
   }
