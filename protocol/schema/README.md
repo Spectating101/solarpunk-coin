@@ -7,6 +7,7 @@ Public Alpha publishes machine-readable Draft 2020-12 JSON Schemas for portable 
 | `evidence-envelope.v1.schema.json` | `solarpunk.constraint.evidence_envelope.v1` |
 | `provenance-decision.v1.schema.json` | `solarpunk.constraint.provenance_decision.v1` |
 | `policy-manifest.v1.schema.json` | `solarpunk.constraint.policy_manifest.v1` |
+| `policy-manifest.v2.schema.json` | `solarpunk.constraint.policy_manifest.v2` |
 | `claim-manifest.v1.schema.json` | `solarpunk.constraint.claim_manifest.v1` |
 | `settlement-result.v1.schema.json` | `solarpunk.constraint.settlement_result.v1` |
 | `case-manifest.v1.schema.json` | `solarpunk.constraint.case_manifest.v1` |
@@ -16,6 +17,14 @@ Public Alpha publishes machine-readable Draft 2020-12 JSON Schemas for portable 
 | `decision-receipt.v1.schema.json` | `solarpunk.constraint.decision_receipt.v1` |
 
 These schemas define portable object shapes. They do not certify the truth of evidence or the authority of an issuer.
+
+## Policy schema split
+
+`policy_manifest.v1` remains the Public Alpha fixed-haircut policy shape used by the existing Claim Lab.
+
+`policy_manifest.v2` is the case-workbench rule-list shape. It declares ordered admission and quantity rules by calculator ID and parameter object. Existing v1 policy IDs are not reused with different rule semantics.
+
+The V2 policy schema does not define a universal rules language. It references a bounded deterministic calculator registry published by the core package.
 
 ## Case-workbench decision boundary
 
