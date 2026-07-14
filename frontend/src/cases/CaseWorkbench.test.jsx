@@ -72,7 +72,7 @@ describe('case workbench investigation flow', () => {
     fireEvent.click(screen.getByRole('button', { name: /40% capacity/i }));
 
     await screen.findByText('PARTIAL');
-    expect(screen.getByText('50.4')).toBeInTheDocument();
-    expect(screen.getByText('75.6')).toBeInTheDocument();
+    expect(screen.getAllByText('50.4').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('75.6').length).toBeGreaterThan(0);
   });
 });
