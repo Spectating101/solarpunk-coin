@@ -1,0 +1,39 @@
+{
+  "schema": "solarpunk.constraint.case_pack.v1",
+  "case_pack_id": "energy-reference-cases-v1",
+  "domain": "energy_linked_finance",
+  "purpose": "Controlled mechanism and decision-structure demonstration for the case workbench.",
+  "empirical_claim": false,
+  "case_ids": [
+    "TYN-001",
+    "AUS-001",
+    "PHX-001"
+  ],
+  "case_files": [
+    "cases/TYN-001.json",
+    "cases/AUS-001.json",
+    "cases/PHX-001.json"
+  ],
+  "context_files": [
+    "contexts/tyn-resource-context.json",
+    "contexts/aus-resource-context.json",
+    "contexts/phx-resource-context.json"
+  ],
+  "evidence_files": [
+    "evidence/tyn-sample-evidence.json",
+    "evidence/aus-sample-evidence.json",
+    "evidence/phx-sample-evidence.json"
+  ],
+  "provenance_scenario_files": [
+    "scenarios/provenance-L0.json",
+    "scenarios/provenance-L1.json",
+    "scenarios/provenance-L2.json",
+    "scenarios/provenance-L4.json"
+  ],
+  "policy_ids": [
+    "LAB-CASE-OPEN-004",
+    "ENERGY-CASE-PILOT-005",
+    "ENERGY-CASE-STRICT-006"
+  ],
+  "boundary": "Modeled resource contexts are not realized operator outcomes. Sample evidence is a controlled fixture. The pack demonstrates decision mechanics and does not establish empirical geospatial policy superiority, claim authority, or production readiness."
+}

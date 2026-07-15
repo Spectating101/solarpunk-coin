@@ -1,26 +1,288 @@
-# Constraint Protocol Public Alpha
+# Policy Lab — Case-Based Constraint Research Workbench
 
-**An empirical claim lab for testing the rules that turn external evidence into bounded financial claims.**
+**A public research workbench for investigating what blocks admission, what bounds financial quantity, and what fails at settlement.**
 
-Constraint asks a narrower and more operational question than tokenization alone:
+The project began as SolarPunk Public Lab and the Energy Standard thesis: an attempt to ask when external energy evidence can credibly constrain a digital financial claim. The repository now exposes that question as an inspectable research method.
 
-> Given evidence **E**, provenance classification **A**, and declared policy **P**, what claim quantity may be admitted — and what happens when the resulting obligation cannot settle?
+> Given a declared case, evidence **E**, analytical context **C**, and versioned policy **P**, which admission rule blocks the case, which comparable quantity ceiling binds the maximum, and what happens when the resulting obligation cannot settle?
 
-The public surface combines historical policy replay with an executable protocol laboratory:
+```text
+case
+  ↓
+observed / controlled evidence + modeled context
+  ↓
+versioned policy
+  ↓
+admission gates
+  ↓
+quantity ceilings
+  ↓
+deterministic DecisionResult
+  ↓
+bounded claim
+  ↓
+settlement result
+  ↓
+decision receipt / lineage / reproduction
+```
 
-`evidence → provenance → versioned policy → bounded claim → settlement result`
+**Public demo:** https://spectating101.github.io/solarpunk-coin/demo/  
+**Project recovery / source hierarchy:** [`PROJECT_RECOVERY.md`](./PROJECT_RECOVERY.md)  
+**Platform blueprint:** [`docs/project/PLATFORM_BLUEPRINT.md`](./docs/project/PLATFORM_BLUEPRINT.md)  
+**Implementation handoff:** [`docs/project/V2_IMPLEMENTATION_HANDOFF.md`](./docs/project/V2_IMPLEMENTATION_HANDOFF.md)
 
-**Demo:** https://spectating101.github.io/solarpunk-coin/demo/  
-**Protocol specification:** [`docs/protocol/CONSTRAINT_PROTOCOL_ALPHA.md`](./docs/protocol/CONSTRAINT_PROTOCOL_ALPHA.md)  
-**Empirical study:** [`docs/protocol/EMPIRICAL_RUNS_V1.md`](./docs/protocol/EMPIRICAL_RUNS_V1.md)  
-**Threat model:** [`docs/protocol/THREAT_MODEL_ALPHA.md`](./docs/protocol/THREAT_MODEL_ALPHA.md)  
-**Readiness boundary:** [`docs/protocol/PUBLIC_ALPHA_READINESS.md`](./docs/protocol/PUBLIC_ALPHA_READINESS.md)
+> The repository uses inherited `constraint-*` package, schema, and study namespaces internally. **Policy Lab** and **case-based constraint research workbench** are descriptive labels, not claims that the entire original SolarPunk project was permanently renamed.
 
-## What the public lab does
+---
 
-### Empirical Runs
+## Five-minute investigation
 
-A licensed CRSP/Refinitiv market-capacity panel was evaluated through conservative, aggregate-only research policies.
+The controlled energy case pack is deliberately small. It exists to demonstrate the decision structure, not to claim empirical geographic superiority.
+
+### 1. Open `TYN-001` under the pilot policy
+
+```text
+decision
+BLOCKED
+
+blocking rule
+MIN_PROVENANCE
+
+required
+L2
+
+current assurance scenario
+L0
+
+quantity evaluation
+NOT EXECUTED
+```
+
+### 2. Preview the declared L2 assurance counterfactual
+
+The evidence hash stays unchanged. The assurance scenario changes explicitly and produces a new deterministic decision identity.
+
+```text
+decision
+ADMIT WITH LIMIT
+
+admitted maximum
+126 ENERGY_CLAIM_UNIT
+
+binding ceiling
+PROVENANCE_POLICY_CAPACITY
+```
+
+### 3. Compare the same policy across modeled contexts
+
+```text
+TYN-001 / L2 / pilot
+126
+PROVENANCE_POLICY_CAPACITY binds
+
+AUS-001 / L2 / pilot
+283.09811
+RESOURCE_CONTEXT_CAPACITY binds
+
+PHX-001 / open
+320
+EVIDENCE_BACKED_CAPACITY binds
+```
+
+### 4. Replay settlement stress
+
+For the admitted Taoyuan case:
+
+```text
+100% declared settlement capacity
+→ SETTLED
+
+40% declared settlement capacity
+→ PARTIAL
+→ 50.4 covered
+→ 75.6 shortfall
+
+0% declared settlement capacity
+→ SHORTFALL
+```
+
+### 5. Inspect the receipt
+
+Each run retains case, evidence, context, policy, calculator, and decision identity for comparison and reproduction.
+
+The lab is designed so a reviewer can ask:
+
+- what evidence exists?
+- what is observed, controlled, modeled, declared, or derived?
+- why was the case blocked?
+- what bounded the admitted quantity?
+- what changed in a counterfactual?
+- what failed under stress?
+- which exact policy and inputs produced the result?
+
+---
+
+## Research interface
+
+The V2 workbench is organized around research tasks rather than repository modules.
+
+| Surface | Research task |
+|---|---|
+| **Cases** | inspect a case and identify its blocking rule or binding quantity ceiling |
+| **Compare** | compare case × policy decisions, capacity, and binding attribution |
+| **Studies** | inspect published aggregate empirical studies and stress replays |
+| **Receipts** | inspect deterministic decision identity, lineage, and export artifacts |
+| **Reference** | inspect SolarPunk / SPK, Sepolia proof, and supporting research material |
+
+The main Case Workspace uses three persistent panes:
+
+```text
+CASE IDENTITY
+      │
+      ├──────── DECISION WORKSPACE ────────┤
+      │                                    │
+      │                                    DECISION DOSSIER
+```
+
+Case lenses:
+
+```text
+Evidence
+Constraints
+Stress
+Lineage
+```
+
+The map is a linked case surface. It is not presented as a solar atlas or GIS product.
+
+---
+
+## Decision semantics
+
+The workbench keeps three constraint classes separate.
+
+### Admission gates
+
+Boolean or categorical rules:
+
+```text
+POSITIVE_SURPLUS
+ZERO_BLOCKERS
+SIGNED_EVIDENCE
+MIN_PROVENANCE
+EXTERNAL_CORROBORATION
+```
+
+Output:
+
+```text
+PASS | BLOCK
+```
+
+A blocked case does **not** execute quantity evaluation.
+
+### Quantity ceilings
+
+Rules that return a maximum in a common claim unit:
+
+```text
+EVIDENCE_BACKED_CAPACITY
+PROVENANCE_POLICY_CAPACITY
+RESOURCE_CONTEXT_CAPACITY
+ABSOLUTE_POLICY_CAP
+```
+
+Only comparable quantity ceilings enter the binding operation:
+
+```text
+admitted maximum = minimum applicable quantity ceiling
+```
+
+The lower ceiling, or deterministic tie set, is attributed as binding.
+
+### Settlement constraints
+
+Settlement remains a separate lifecycle stage:
+
+```text
+outstanding claim
+vs
+settlement capacity
+```
+
+Output:
+
+```text
+SETTLED | PARTIAL | SHORTFALL
+```
+
+Admission, quantity, and settlement are intentionally **not** collapsed into one scalar `min()` model.
+
+---
+
+## Portable research objects
+
+The shared `@solarpunk/constraint-core` package now exposes deterministic objects and rule evaluation used by Node and the browser workbench.
+
+Key objects:
+
+```text
+CaseManifest
+ContextManifest
+EvidenceEnvelope
+ProvenanceDecision
+PolicyManifest v2
+ConstraintEvaluation
+DecisionResult
+ClaimManifest v2
+SettlementResult
+DecisionReceipt
+```
+
+A V2 claim is bound to a verified `DecisionResult`. Claim creation recomputes the canonical decision body and rejects a stale or tampered `decision_id`.
+
+Decision identity excludes evaluation time. Equivalent declared case, evidence, context, policy, calculator versions, and rule results should produce the same decision identity. Timestamp belongs in the receipt.
+
+Public JSON Schemas live under [`protocol/schema/`](./protocol/schema/).
+
+---
+
+## Data semantics and trust boundaries
+
+The interface distinguishes:
+
+```text
+OBSERVED / CONTROLLED EVIDENCE
+MODELED CONTEXT
+DECLARED POLICY
+DERIVED RESULT
+```
+
+The initial three-site case pack uses **controlled signed-capability fixtures** and modeled PVWatts / TMY resource contexts.
+
+It does **not** claim:
+
+- real operator validation;
+- verified physical meter truth;
+- environmental-attribute ownership;
+- legal redemption rights;
+- reserve custody;
+- empirical geospatial policy superiority;
+- production collateral-control adequacy;
+- production governance;
+- mainnet readiness.
+
+A signature establishes cryptographic consistency with a declared key/registry context. It does not establish physical truth, device custody, calibration, legal title, or settlement enforceability.
+
+A modeled PVWatts / TMY resource value is analytical context. It is not observed meter evidence or mint authority.
+
+The next field-value gate is one real L2 operator / inverter / gateway evidence source.
+
+---
+
+## Published market-capacity study
+
+The repository also contains a separate aggregate historical policy study using a licensed CRSP / Refinitiv market-capacity panel.
 
 Delivered source package:
 
@@ -30,8 +292,6 @@ Delivered source package:
 - source SHA-256 `792c3ad99311cff2b18e9dcdb58fbfedcf74a1bf95c1a0691673d06492b5e0e5`;
 - licence boundary `internal_yzu_licensed_no_redistribution`.
 
-Constraint fails closed on ambiguous RIC identity relationships, uses only time-t market inputs for policy evaluation, clamps the realized-capacity floor to downside-only outcomes, and compares policies on common complete-case samples.
-
 20-session common sample (`N = 734,379`):
 
 | Policy | Historical coverage | Shortfall events | Mean permitted capacity |
@@ -40,127 +300,105 @@ Constraint fails closed on ambiguous RIC identity relationships, uses only time-
 | `COLLATERAL-VOL-002` | 98.6941% | 1.3059% | 74.3669% |
 | `COLLATERAL-VOL-LIQ-003` | 98.8626% | 1.1374% | 71.6849% |
 
-The interface exposes both sides of the trade-off. The guarded reference policy adds 1.61 percentage points of historical coverage relative to the fixed baseline while reducing mean permitted capacity by 8.32 percentage points.
+The guarded reference policy added 1.61 percentage points of historical coverage relative to the fixed baseline while reducing mean permitted capacity by 8.32 percentage points.
 
-The stress replay on 2020-02-21 is intentionally ugly: fixed 20% generated 91.31% shortfall events; the volatility + liquidity rule reduced that to 80.52% and still failed badly. A stricter explicit rule can remain inadequate under severe realized stress.
+The 2020-02-21 stress replay remains intentionally visible: the fixed baseline produced 91.31% shortfall events; the volatility + liquidity rule reduced the rate to 80.52% and still failed badly.
 
-### Browser reproduction receipt
+This study demonstrates policy trade-offs and binding-capacity attribution in a separate empirical domain. It does **not** prove the Energy Standard thesis or validate the controlled energy case pack.
 
-The public `Reproduce` route fetches the committed aggregate study artifacts, computes SHA-256 over the exact UTF-8 bytes in the visitor's browser, and compares every result against `bundle-integrity.json`.
+No licensed CRSP or Refinitiv row-level observations are redistributed. The public study exposes aggregates, formulas, sample definitions, source-package identity, and exact aggregate-file hashes.
 
-This proves byte identity of the published aggregate bundle. It does **not** prove truth of the licensed source observations, optimality of the research policies, or future adequacy.
+---
 
-### Protocol Lab
+## SolarPunk / Energy Standard reference
 
-Five local evidence paths are available:
+The original project is SolarPunk Public Lab / the Energy Standard project.
 
-1. cumulative meter / inverter counters;
-2. Green Button / utility interval CSV;
-3. Fronius PowerFlow snapshot pairs;
-4. signed meter readings plus registry context;
-5. generic interval CSV.
+The thesis asks a bounded question:
 
-The browser normalizes evidence, emits deterministic diagnostics, separates cryptographic consistency from trusted operator provenance, compares the same evidence under multiple versioned policies, creates a bounded claim manifest, and evaluates settlement coverage / shortfall.
+> Can energy act as a credible constraint for digital money through energy-linked financial contracts, and what conditions are needed for that constraint to work?
 
-The canonical demo deliberately reaches:
+Its five-constraint architecture is:
 
-`valid evidence → valid policy admission → bounded issuance → insufficient settlement capacity → PARTIAL`
+1. reliable energy data;
+2. rule-bound issuance;
+3. explicit pricing and risk controls;
+4. protected settlement and redemption accounting;
+5. limited governance.
 
-## Protocol objects
+The workbench operationalizes those concerns as explicit research stages. It does not replace the thesis with a generic policy-engine claim.
 
-- `@solarpunk/constraint-core` — shared browser/Node implementation;
-- independent Python conformance implementation;
-- Draft 2020-12 JSON Schemas for evidence, provenance, policy, claim, and settlement;
-- pinned `alpha-v1` JS/Python conformance vectors;
-- `PolicyRegistry.sol`;
-- `ClaimRegistry.sol`;
-- `SettlementLedger.sol`.
-
-Claims bind exact evidence hash, policy ID, semantic version, policy-manifest hash, subject, quantity/base units, decimal scale, unit, provenance, and claim state.
-
-The first-admission replay key is policy specific:
-
-`keccak256(evidenceHash, policyId, policyManifestHash, policyVersion, subject)`
-
-This is not claimed as a universal physical-property or legal-right retirement rule.
-
-## Quick start
-
-```bash
-npm install
-
-# Protocol core, conformance, empirical bundle invariants
-npm --prefix packages/constraint-core test
-
-# Deterministic protocol demo
-node scripts/protocol_alpha_demo.mjs
-
-# Reference EVM stack
-npx hardhat test test/ConstraintProtocol.test.js
-hardhat run scripts/deploy_constraint_protocol_alpha.js
-
-# Frontend
-cd frontend
-npm install
-npm run dev
-```
-
-The full alpha CI also runs the independent Python implementation, package/wheel checks, JS/Python quickstart parity, complete Hardhat suite, frontend tests/build, local EVM smoke deployment, and real Chromium desktop/mobile review flows.
-
-## SolarPunk / SPK reference application
-
-Constraint was discovered through the SolarPunk energy-finance thesis and Public Lab. SPK remains a reference application and thesis artifact; it is no longer the protocol primitive or product ceiling.
-
-The existing Sepolia reference remains inspectable:
+SPK remains a testnet reference application.
 
 | Contract | Sepolia address |
 |---|---|
 | SolarPunkCoin lab unit | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
 | SolarPunkCurrencySystem | `0x520162252F9B94824417678525FFd69145014970` |
 
-SPK is a testnet lab unit, not legal money, a stablecoin, a token sale, or a legal claim on delivered energy.
+SPK is not legal money, a stablecoin, a token sale, or a legal claim on delivered energy.
 
-SolarPunk product docs remain under [`docs/product/`](./docs/product/). The final revised thesis is maintained as a submission artifact outside the public repo until its final PDF is deliberately published; the SPK reference tab keeps the older v10 link explicitly labeled temporary.
+---
 
-## Public-data and licence boundary
+## Quick start
 
-No licensed CRSP or Refinitiv row-level observations are committed to the public empirical bundle.
+```bash
+npm install
 
-CI fails if prohibited row-level fields such as `permno`, `ric`, `security_id`, `close_price`, or `company_name` appear in the serialized public study package. The public lab exposes aggregate policy results, methods, formulas, sample counts, stress definitions, source-package identity, and exact aggregate-file hashes.
+# Deterministic core, schemas, case-pack and decision conformance
+node --test packages/constraint-core/test/*.test.mjs
 
-## Not claimed
+# SDK/package contents
+npm pack --dry-run --prefix packages/constraint-core
 
-Public Alpha does **not** establish:
+# Reference EVM tests
+npx hardhat test test/ConstraintProtocol.test.js
+npx hardhat test
 
-- legal underlying-resource ownership;
-- environmental-attribute ownership or retirement;
-- legal redemption rights;
-- reserve custody;
-- production collateral-control adequacy;
-- certified meter finality;
-- production oracle finality;
-- formal audit completion;
-- production governance;
-- mainnet readiness.
+# Frontend
+cd frontend
+npm install
+npm run test:run
+npm run build
+npm run dev
+```
 
-The principal protocol trust boundary also remains explicit: an authorized claim issuer currently asserts that deterministic off-chain policy evaluation occurred correctly. The reference EVM does not re-execute arbitrary JavaScript or Python adapter/policy logic.
+Case Workbench browser review from repository root, with the Vite preview at `127.0.0.1:4173`:
+
+```bash
+node scripts/capture_case_workbench_v2.mjs _review_case_workbench_v2
+```
+
+The current V2 review workflow covers 15 desktop/mobile investigation states including blocked admission, an explicit L2 assurance fork, binding-ceiling inspection, 3 × 3 comparison, partial settlement stress, lineage, receipt/capsule inspection, the market-capacity study, SolarPunk reference, and mobile states.
+
+---
 
 ## Project map
 
 | Track | Location |
 |---|---|
-| Constraint protocol alpha | `docs/protocol/`, `packages/constraint-core/`, `contracts/protocol/` |
-| Empirical Runs | `docs/protocol/EMPIRICAL_RUNS_V1.md`, `frontend/public/empirical/` |
-| Browser lab | `frontend/src/components/ConstraintProtocolLab.jsx` |
-| Browser reproduction | `frontend/src/components/EmpiricalReproductionLab.jsx` |
-| SPK reference application | `docs/product/`, `state/runtime/`, `spk_v1/` |
+| V2 case workbench core | `packages/constraint-core/src/` |
+| V2 schemas | `protocol/schema/` |
+| V2 policy manifests | `protocol/policies-v2/` |
+| Controlled energy case pack | `protocol/cases/energy-v1/` |
+| Case workbench frontend | `frontend/src/cases/`, `frontend/src/compare/`, `frontend/src/receipts/` |
+| Market-capacity empirical study | `frontend/public/empirical/`, `docs/protocol/EMPIRICAL_RUNS_V1.md` |
+| SolarPunk reference application | `docs/product/`, `state/runtime/`, `spk_v1/` |
 | Thesis support material | `thesis_package/` |
-| CEIR negative-identification closure | `thesis_package/CEIR_FINAL_DIAGNOSIS.md` |
+| Product / thesis direction | `docs/project/CASE_WORKBENCH_PRODUCT_AND_THESIS_DIRECTION.md` |
 
-## Release posture
+---
 
-Constraint is a **public research/protocol alpha**. SolarPunk Public Lab remains a bounded Sepolia reference application.
+## Research and release posture
 
-The next field-value gate is one real L2 operator / inverter / gateway evidence source. The next protocol-research gate is reducing first-admission issuer trust without forcing arbitrary evidence adapters into Solidity.
+This repository is a public research-software artifact and experimental workbench.
 
-Cite via [`CITATION.cff`](./CITATION.cff). Forks must not imply official endorsement; see [`TRADEMARK.md`](./TRADEMARK.md).
+The current high-value next steps are deliberately external:
+
+1. publish the validated static workbench;
+2. integrate the implemented decision architecture into the thesis surgically;
+3. obtain one real operator / inverter / gateway evidence case;
+4. only then consider arbitrary evidence → local V2 case creation or a domain-specific risk calculator.
+
+The project stop rule is intentional. More locations, AI assistants, new policy families, GIS infrastructure, backends, or contracts are not added merely to make the repository look larger.
+
+Cite via [`CITATION.cff`](./CITATION.cff). GitHub release / archival guidance is recorded in [`docs/project/PUBLIC_CONVERSION_PLAYBOOK.md`](./docs/project/PUBLIC_CONVERSION_PLAYBOOK.md).

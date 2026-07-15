@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constraint Context Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "context_id",
+    "context_type",
+    "label",
+    "source",
+    "spatial_identity",
+    "temporal_semantics",
+    "values",
+    "hash_algorithm",
+    "boundary",
+    "context_hash"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.context_manifest.v1" },
+    "context_id": { "type": "string", "minLength": 1 },
+    "context_type": { "type": "string", "minLength": 1 },
+    "label": { "type": "string", "minLength": 1 },
+    "source": { "type": "object" },
+    "spatial_identity": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["latitude", "longitude", "spatial_reference"],
+          "properties": {
+            "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+            "longitude": { "type": "number", "minimum": -180, "maximum": 180 },
+            "spatial_reference": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "temporal_semantics": { "type": ["object", "null"] },
+    "values": { "type": "object" },
+    "hash_algorithm": { "const": "SHA-256" },
+    "boundary": { "type": "string", "minLength": 1 },
+    "context_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

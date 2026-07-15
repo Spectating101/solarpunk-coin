@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constraint Provenance Scenario v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "scenario_id",
+    "name",
+    "kind",
+    "provenance_context",
+    "observed_evidence_changed",
+    "boundary"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.provenance_scenario.v1" },
+    "scenario_id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "kind": { "enum": ["BASE_ASSURANCE_CONTEXT", "ASSURANCE_COUNTERFACTUAL"] },
+    "provenance_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sample_fixture": { "type": "boolean" },
+        "cryptographically_verified": { "type": "boolean" },
+        "trusted_operator_context": { "type": "boolean" },
+        "real_operator_source": { "type": "boolean" },
+        "operator_signed": { "type": "boolean" },
+        "signed": { "type": "boolean" },
+        "live_gateway": { "type": "boolean" },
+        "revenue_grade": { "type": "boolean" },
+        "gateway_custody": { "type": "boolean" },
+        "external_corroboration": { "type": "boolean" }
+      }
+    },
+    "observed_evidence_changed": { "const": false },
+    "boundary": { "type": "string", "minLength": 1 }
+  }
+}

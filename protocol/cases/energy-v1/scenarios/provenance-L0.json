@@ -1,0 +1,13 @@
+{
+  "schema": "solarpunk.constraint.provenance_scenario.v1",
+  "scenario_id": "PROVENANCE-L0-BASE",
+  "name": "Sample fixture assurance",
+  "kind": "BASE_ASSURANCE_CONTEXT",
+  "provenance_context": {
+    "sample_fixture": true,
+    "signed": true,
+    "cryptographically_verified": false
+  },
+  "observed_evidence_changed": false,
+  "boundary": "Base classification for the controlled signed-capability fixture. No trusted named-operator context or physical source verification is established."
+}

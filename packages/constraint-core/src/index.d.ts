@@ -1,6 +1,9 @@
 export type DiagnosticStatus = 'PASS' | 'WARNING' | 'BLOCK';
 export type ProvenanceLevel = 'L0' | 'L1' | 'L2' | 'L3' | 'L4';
 export type PolicyDecisionStatus = 'ADMIT_WITH_LIMIT' | 'BLOCKED';
+export type ConstraintClass = 'ADMISSION_GATE' | 'QUANTITY_CEILING' | 'SETTLEMENT_CONSTRAINT';
+export type ConstraintStatus = 'PASS' | 'BLOCK' | 'WARNING' | 'NOT_APPLICABLE';
+export type DecisionStatus = 'ADMIT_WITH_LIMIT' | 'BLOCKED';
 export type ClaimState =
   | 'RAW'
   | 'NORMALIZED'
@@ -151,6 +154,127 @@ export interface PolicyDecision {
   governance_authority: string | null;
 }
 
+export interface CaseManifest {
+  schema: 'solarpunk.constraint.case_manifest.v1';
+  case_id: string;
+  subject: string;
+  case_type: string;
+  spatial_identity: {
+    site_id: string | null;
+    latitude: number;
+    longitude: number;
+    spatial_reference: string;
+  } | null;
+  measurement_window: { start: string; end: string } | null;
+  evidence_refs: string[];
+  context_refs: string[];
+  default_policy_ref: { id: string; version: string } | null;
+  boundaries: string[];
+}
+
+export interface ContextManifest {
+  schema: 'solarpunk.constraint.context_manifest.v1';
+  context_id: string;
+  context_type: string;
+  label: string;
+  source: Record<string, unknown>;
+  spatial_identity: {
+    latitude: number;
+    longitude: number;
+    spatial_reference: string;
+  } | null;
+  temporal_semantics: Record<string, unknown> | null;
+  values: Record<string, unknown>;
+  hash_algorithm: 'SHA-256';
+  boundary: string;
+  context_hash: string;
+}
+
+export interface ConstraintEvaluation {
+  schema: 'solarpunk.constraint.constraint_evaluation.v1';
+  calculator_id: string;
+  calculator_version: string;
+  constraint_class: ConstraintClass;
+  policy_rule_id: string | null;
+  status: ConstraintStatus;
+  unit: string | null;
+  quantity_decimals: number | null;
+  capacity: number | null;
+  input_refs: string[];
+  observed_inputs: Record<string, unknown>;
+  parameters: Record<string, unknown>;
+  assumptions: string[];
+  warnings: string[];
+  explanation: string;
+  boundary: string;
+  evaluation_id: string;
+}
+
+export interface DecisionResult {
+  schema: 'solarpunk.constraint.decision_result.v1';
+  case_id: string;
+  case_hash: string | null;
+  policy_id: string;
+  policy_version: string;
+  policy_manifest_hash: string;
+  evidence_hashes: string[];
+  context_refs: Array<{ context_id: string; context_hash: string }>;
+  admission: {
+    result: 'PASS' | 'BLOCK';
+    evaluations: ConstraintEvaluation[];
+    blocking_rules: string[];
+  };
+  capacity: {
+    evaluated: boolean;
+    unit: string | null;
+    quantity_decimals: number | null;
+    evaluations: ConstraintEvaluation[];
+    admitted_maximum: number;
+    binding_constraints: string[];
+  };
+  decision: DecisionStatus;
+  warnings: string[];
+  boundary: string;
+  decision_id: string;
+}
+
+export interface DecisionReceipt {
+  schema: 'solarpunk.constraint.decision_receipt.v1';
+  decision_id: string;
+  case_id: string;
+  evaluated_at: string;
+  policy: { id: string; version: string; manifest_hash: string };
+  evidence: Array<{ hash: string; raw_included: boolean }>;
+  contexts: Array<{ id: string; hash: string }>;
+  runtime: { package: string; package_version: string | null; source_revision: string };
+  evaluated_rules: Array<{
+    evaluation_id: string;
+    calculator_id: string;
+    calculator_version: string;
+    policy_rule_id: string | null;
+    constraint_class: ConstraintClass;
+    status: ConstraintStatus;
+  }>;
+  blocking_rules: string[];
+  binding_constraints: string[];
+  result: DecisionStatus;
+  data_boundary: string;
+}
+
+export interface ConstraintCalculator {
+  id: string;
+  version: string;
+  constraintClass: ConstraintClass;
+  boundary: string;
+  evaluate(args: Record<string, any>): Record<string, any> | Promise<Record<string, any>>;
+}
+
+export interface CalculatorRegistry {
+  calculatorById(id: string): Omit<ConstraintCalculator, 'evaluate'> | null;
+  listCalculators(): Array<Omit<ConstraintCalculator, 'evaluate'>>;
+  evaluateRule(args: { rule: Record<string, any>; [key: string]: any }): Promise<ConstraintEvaluation>;
+}
+
 export interface ClaimHistoryEvent {
   sequence: number;
   from: string;
@@ -219,6 +343,12 @@ export interface ProvenanceContext {
   external_corroboration?: boolean;
 }
 
+export const CASE_MANIFEST_SCHEMA: 'solarpunk.constraint.case_manifest.v1';
+export const CONTEXT_MANIFEST_SCHEMA: 'solarpunk.constraint.context_manifest.v1';
+export const CONSTRAINT_EVALUATION_SCHEMA: 'solarpunk.constraint.constraint_evaluation.v1';
+export const DECISION_RESULT_SCHEMA: 'solarpunk.constraint.decision_result.v1';
+export const DECISION_RECEIPT_SCHEMA: 'solarpunk.constraint.decision_receipt.v1';
+export const CONSTRAINT_CLASSES: ConstraintClass[];
 export const BUILTIN_POLICIES: PolicyDefinition[];
 export const CLAIM_STATES: ClaimState[];
 export const PROVENANCE_LEVELS: Array<Record<string, unknown>>;
@@ -249,6 +379,31 @@ export function hashPolicyManifest(policy: PolicyDefinition | PolicyManifest | R
 export function policyVersionCode(version: string): number;
 export function evaluatePolicy(args: { evidence: EvidenceEnvelope; provenance: ProvenanceDecision; policy: PolicyDefinition | PolicyManifest }): PolicyDecision;
 export function comparePolicies(args: { evidence: EvidenceEnvelope; provenance: ProvenanceDecision; policies?: Array<PolicyDefinition | PolicyManifest> }): PolicyDecision[];
+
+export function caseManifestBody(value: CaseManifest | Record<string, any>): CaseManifest;
+export function hashCaseManifest(value: CaseManifest | Record<string, any>): Promise<string>;
+export function buildContextManifest(value: Record<string, any>): Promise<ContextManifest>;
+export function contextManifestBody(value: ContextManifest | Record<string, any>): ContextManifest;
+export function hashContextManifest(value: ContextManifest | Record<string, any>): Promise<string>;
+export function buildConstraintEvaluation(value: Record<string, any>): Promise<ConstraintEvaluation>;
+export function constraintEvaluationBody(value: ConstraintEvaluation | Record<string, any>): ConstraintEvaluation;
+export function createCalculatorRegistry(calculators?: ConstraintCalculator[]): CalculatorRegistry;
+export function assertComparableCapacityUnits(evaluations: ConstraintEvaluation[]): {
+  unit: string;
+  quantity_decimals: number;
+  evaluations: ConstraintEvaluation[];
+};
+export function hashDecisionResultBody(value: DecisionResult | Record<string, any>): Promise<string>;
+export function buildDecisionResult(value: Record<string, any>): Promise<DecisionResult>;
+export function decisionResultBody(value: DecisionResult | Record<string, any>): DecisionResult;
+export function buildDecisionReceipt(args: {
+  decision: DecisionResult;
+  evaluated_at?: string;
+  runtime: { package: string; package_version?: string | null; source_revision: string };
+  data_boundary: string;
+  raw_evidence_included?: boolean;
+}): DecisionReceipt;
+export function receiptSummary(receipt: DecisionReceipt): Record<string, unknown>;
 
 export function quantityToBaseUnits(value: string | number, decimals?: number): bigint;
 export function baseUnitsToQuantityString(value: string | number | bigint, decimals?: number): string;

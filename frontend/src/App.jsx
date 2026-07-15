@@ -1,5 +1,9 @@
 import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
+import CaseExplorer from './cases/CaseExplorer';
+import CaseWorkspace from './cases/CaseWorkspace';
+import CompareWorkspace from './compare/CompareWorkspace';
+import ReceiptsWorkspace from './receipts/ReceiptsWorkspace';
 import ConstraintProtocolLab from './components/ConstraintProtocolLab';
 import DecisionBrief from './components/DecisionBrief';
 import EmpiricalRunsLab from './components/EmpiricalRunsLab';
@@ -16,38 +20,29 @@ import {
   saveSessionReceipt,
 } from './lib/sessionReceipt';
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
+import {
+  PRIMARY_NAV,
+  isSepoliaRoute,
+  parseHashRoute,
+  primarySection,
+  routeToHash,
+} from './app/routes';
 import './workbenchSession.css';
 import './constraintProtocol.css';
 import './decisionBrief.css';
 import './empiricalRuns.css';
 import './empiricalReproduction.css';
+import './styles/caseWorkbench.css';
 
 const SpkV1Console = lazy(() => import('./components/SpkV1Console'));
 
-const NAV_TABS = [
-  { id: 'runs', label: 'Decision Brief' },
-  { id: 'reproduce', label: 'Reproduce' },
-  { id: 'protocol', label: 'Claim Lab' },
-  { id: 'overview', label: 'SolarPunk' },
-  { id: 'sepolia', label: 'Sepolia Proof' },
-  { id: 'research', label: 'Research' },
-];
-
-const ROUTE_IDS = new Set([
-  ...NAV_TABS.map((tab) => tab.id),
-  'study',
-  'evidence',
-  'currency',
-]);
-
-function tabFromHash() {
-  if (typeof window === 'undefined') return 'runs';
-  const candidate = window.location.hash.replace(/^#/, '').toLowerCase();
-  return ROUTE_IDS.has(candidate) ? candidate : 'runs';
+function routeFromHash() {
+  if (typeof window === 'undefined') return { section: 'cases', id: null };
+  return parseHashRoute(window.location.hash);
 }
 
 function App() {
-  const [tab, setTab] = useState(tabFromHash);
+  const [route, setRoute] = useState(routeFromHash);
   const [receipt, setReceipt] = useState(loadSessionReceipt);
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
@@ -56,12 +51,15 @@ function App() {
   const [chainId, setChainId] = useState(null);
   const [connectError, setConnectError] = useState(null);
 
-  const navigate = useCallback((nextTab) => {
-    if (!ROUTE_IDS.has(nextTab)) return;
-    if (window.location.hash !== `#${nextTab}`) {
-      window.location.hash = nextTab;
+  const navigate = useCallback((nextRoute) => {
+    const resolved = typeof nextRoute === 'string'
+      ? parseHashRoute(`#${nextRoute}`)
+      : nextRoute;
+    const nextHash = routeToHash(resolved);
+    if (window.location.hash !== nextHash) {
+      window.location.hash = nextHash;
     } else {
-      setTab(nextTab);
+      setRoute(parseHashRoute(nextHash));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, []);
@@ -81,12 +79,12 @@ function App() {
       window.history.replaceState(
         null,
         '',
-        `${window.location.pathname}${window.location.search}#runs`,
+        `${window.location.pathname}${window.location.search}#cases`,
       );
     }
 
     const syncHash = () => {
-      setTab(tabFromHash());
+      setRoute(routeFromHash());
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -103,8 +101,10 @@ function App() {
     }
   }, []);
 
+  const sepRoute = isSepoliaRoute(route);
+
   useEffect(() => {
-    if (tab !== 'sepolia' || !window.ethereum) return undefined;
+    if (!sepRoute || !window.ethereum) return undefined;
 
     let active = true;
     let browserProvider = null;
@@ -153,7 +153,7 @@ function App() {
       if (onAccountsChanged) window.ethereum.removeListener('accountsChanged', onAccountsChanged);
       if (onChainChanged) window.ethereum.removeListener('chainChanged', onChainChanged);
     };
-  }, [refreshChain, tab]);
+  }, [refreshChain, sepRoute]);
 
   const connectWallet = async () => {
     if (!provider) {
@@ -178,37 +178,37 @@ function App() {
   };
 
   const wrongNetwork = account && chainId != null && chainId !== SEPOLIA_CHAIN_ID;
-  const showSessionBar = ['evidence', 'currency', 'sepolia'].includes(tab);
-  const activeNavTab = tab === 'study' ? 'runs' : tab;
+  const showSessionBar = ['evidence', 'currency'].includes(route.section) || sepRoute;
+  const activePrimary = primarySection(route);
 
   return (
     <div className="app-minimal">
-      <header className="app-minimal-top">
+      <header className="app-minimal-top workbench-app-top">
         <div className="brand-block">
           <div className="brand-mark">P</div>
           <div>
             <div className="brand-name">Policy Lab</div>
-            <div className="brand-sub">historical policy evaluation · bounded claims</div>
+            <div className="brand-sub">case research · bounded decisions · reproducible receipts</div>
           </div>
         </div>
         <div className="app-minimal-actions">
-          <nav className="app-tab-nav" aria-label="Lab sections">
-            {NAV_TABS.map((t) => (
+          <nav className="app-tab-nav" aria-label="Research workbench sections">
+            {PRIMARY_NAV.map((item) => (
               <button
-                key={t.id}
+                key={item.section}
                 type="button"
-                className={activeNavTab === t.id ? 'app-tab active' : 'app-tab'}
-                onClick={() => navigate(t.id)}
-                aria-current={activeNavTab === t.id ? 'page' : undefined}
+                className={activePrimary === item.section ? 'app-tab active' : 'app-tab'}
+                onClick={() => navigate({ section: item.section })}
+                aria-current={activePrimary === item.section ? 'page' : undefined}
               >
-                {t.label}
+                {item.label}
               </button>
             ))}
           </nav>
           <a href={GITHUB_REPO} target="_blank" rel="noreferrer" className="ghost-link">
             <Github size={16} /> GitHub
           </a>
-          {tab === 'sepolia' && (
+          {sepRoute && (
             account ? (
               <div className="wallet-pill">
                 <span />
@@ -227,20 +227,20 @@ function App() {
       {showSessionBar ? (
         <LabSessionBar
           receipt={receipt}
-          activeTab={tab}
+          activeTab={sepRoute ? 'sepolia' : route.section}
           onNavigate={navigate}
           onClearReceipt={invalidateReceipt}
         />
       ) : null}
 
-      {connectError && tab === 'sepolia' ? (
+      {connectError && sepRoute ? (
         <div className="spk-network-banner spk-error-banner" role="alert">
           <AlertTriangle size={16} />
           {connectError}
         </div>
       ) : null}
 
-      {tab === 'sepolia' && wrongNetwork ? (
+      {sepRoute && wrongNetwork ? (
         <div className="spk-network-banner" role="status">
           <AlertTriangle size={16} />
           Switch MetaMask to <strong>Sepolia</strong> to send payments.
@@ -248,46 +248,63 @@ function App() {
         </div>
       ) : null}
 
-      {tab === 'runs' ? (
+      {route.section === 'cases' ? (
+        <CaseExplorer onOpenCase={(caseId) => navigate({ section: 'case', id: caseId })} />
+      ) : null}
+      {route.section === 'case' ? (
+        <CaseWorkspace caseId={route.id} onNavigate={navigate} />
+      ) : null}
+      {route.section === 'compare' ? (
+        <CompareWorkspace onOpenDecision={(caseId) => navigate({ section: 'case', id: caseId })} />
+      ) : null}
+      {route.section === 'receipts' || route.section === 'receipt' ? (
+        <ReceiptsWorkspace
+          receiptId={route.section === 'receipt' ? route.id : null}
+          onOpenReceipt={(decisionId) => navigate({ section: 'receipt', id: decisionId })}
+        />
+      ) : null}
+
+      {route.section === 'studies' || (route.section === 'study' && route.view === 'brief') ? (
         <DecisionBrief
-          onOpenStudy={() => navigate('study')}
-          onOpenReproduce={() => navigate('reproduce')}
-          onOpenProtocol={() => navigate('protocol')}
+          onOpenStudy={() => navigate({ section: 'study', id: 'market-capacity-v1', view: 'detail' })}
+          onOpenReproduce={() => navigate({ section: 'study', id: 'market-capacity-v1', view: 'reproduce' })}
+          onOpenProtocol={() => navigate({ section: 'legacy-protocol' })}
         />
       ) : null}
-      {tab === 'study' ? (
-        <EmpiricalRunsLab onOpenProtocol={() => navigate('protocol')} />
+      {route.section === 'study' && route.view === 'detail' ? (
+        <EmpiricalRunsLab onOpenProtocol={() => navigate({ section: 'legacy-protocol' })} />
       ) : null}
-      {tab === 'reproduce' ? (
-        <EmpiricalReproductionLab onOpenRuns={() => navigate('study')} />
+      {route.section === 'study' && route.view === 'reproduce' ? (
+        <EmpiricalReproductionLab onOpenRuns={() => navigate({ section: 'study', id: 'market-capacity-v1', view: 'detail' })} />
       ) : null}
-      {tab === 'protocol' ? (
-        <ConstraintProtocolLab onOpenSepolia={() => navigate('sepolia')} />
+      {route.section === 'legacy-protocol' ? (
+        <ConstraintProtocolLab onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })} />
       ) : null}
-      {tab === 'overview' ? (
+
+      {route.section === 'reference' && (!route.id || route.id === 'solarpunk') ? (
         <PublicLabLanding
-          onOpenEvidence={() => navigate('evidence')}
-          onOpenCurrency={() => navigate('currency')}
-          onOpenSepolia={() => navigate('sepolia')}
-          onOpenResearch={() => navigate('research')}
+          onOpenEvidence={() => navigate({ section: 'evidence' })}
+          onOpenCurrency={() => navigate({ section: 'currency' })}
+          onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })}
+          onOpenResearch={() => navigate({ section: 'research' })}
         />
       ) : null}
-      {tab === 'evidence' ? (
+      {route.section === 'evidence' ? (
         <EvidenceLab
           activeReceipt={receipt}
-          onContinue={() => navigate('currency')}
+          onContinue={() => navigate({ section: 'currency' })}
           onReceiptReady={acceptReceipt}
           onReceiptInvalidated={invalidateReceipt}
         />
       ) : null}
-      {tab === 'currency' ? (
+      {route.section === 'currency' ? (
         <CurrencyLab
           receipt={receipt}
-          onOpenEvidence={() => navigate('evidence')}
-          onOpenSepolia={() => navigate('sepolia')}
+          onOpenEvidence={() => navigate({ section: 'evidence' })}
+          onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })}
         />
       ) : null}
-      {tab === 'sepolia' ? (
+      {sepRoute ? (
         <Suspense fallback={<section className="reproduction-load" aria-live="polite"><strong>Loading Sepolia proof…</strong></section>}>
           <SpkV1Console
             provider={provider}
@@ -299,7 +316,7 @@ function App() {
           />
         </Suspense>
       ) : null}
-      {tab === 'research' ? <ResearchPanel /> : null}
+      {route.section === 'research' ? <ResearchPanel /> : null}
     </div>
   );
 }

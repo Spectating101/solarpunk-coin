@@ -1,0 +1,100 @@
+name: Case Workbench V2 CI
+
+on:
+  pull_request:
+    paths:
+      - 'packages/constraint-core/**'
+      - 'protocol/policies-v2/**'
+      - 'protocol/cases/**'
+      - 'protocol/schema/**'
+      - 'frontend/**'
+      - 'scripts/capture_case_workbench_v2.mjs'
+      - '.github/workflows/case_workbench_v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  workbench:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Test deterministic workbench core
+        run: |
+          mkdir -p _ci_logs
+          set -o pipefail
+          node --test packages/constraint-core/test/*.test.mjs 2>&1 | tee _ci_logs/core-test.log
+
+      - name: Check SDK package contents
+        run: npm pack --dry-run --prefix packages/constraint-core
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Test frontend workbench
+        run: |
+          set -o pipefail
+          npm run test:run 2>&1 | tee ../_ci_logs/frontend-test.log
+        working-directory: frontend
+
+      - name: Build frontend workbench
+        env:
+          VITE_SOURCE_REVISION: ${{ github.sha }}
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee ../_ci_logs/frontend-build.log
+        working-directory: frontend
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture case workbench browser flows
+        run: |
+          set -o pipefail
+          cd frontend
+          npm run preview -- --host 127.0.0.1 --port 4173 > ../_ci_logs/browser-preview.log 2>&1 &
+          cd ..
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail http://127.0.0.1:4173/ >/dev/null
+          node scripts/capture_case_workbench_v2.mjs _review_case_workbench_v2 2>&1 | tee _ci_logs/browser-capture.log
+
+      - name: Upload V2 CI diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: case-workbench-v2-ci-diagnostics
+          path: _ci_logs/
+          retention-days: 5
+
+      - name: Upload V2 visual review
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: case-workbench-v2-visual
+          path: _review_case_workbench_v2/
+          retention-days: 14
+
+      - name: Upload V2 deployable site
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: case-workbench-v2-site
+          path: frontend/dist/
+          retention-days: 14

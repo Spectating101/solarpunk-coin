@@ -1,0 +1,14 @@
+{
+  "schema": "solarpunk.constraint.provenance_scenario.v1",
+  "scenario_id": "PROVENANCE-L2-COUNTERFACTUAL",
+  "name": "Signed live-gateway assurance counterfactual",
+  "kind": "ASSURANCE_COUNTERFACTUAL",
+  "provenance_context": {
+    "trusted_operator_context": true,
+    "signed": true,
+    "live_gateway": true,
+    "cryptographically_verified": true
+  },
+  "observed_evidence_changed": false,
+  "boundary": "Declared assurance counterfactual only. The evidence hash is unchanged and no real live gateway, trusted operator identity, or new observed evidence is supplied."
+}
