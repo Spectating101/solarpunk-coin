@@ -4,14 +4,25 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // IMPORTANT: Replace 'Solarpunk-bitcoin' with your actual repository name
-  // If deploying to a custom domain or Vercel, you can remove this line or set it to '/'
-  base: './', 
+  // The deployable site is mirrored below /demo/ on GitHub Pages and can also
+  // be served from any static preview root.
+  base: './',
   server: {
     host: true,
     port: 3000
   },
   build: {
+    // Keep the wallet-only Web3 stack out of the entry-page preload list.
+    // The lazy Sepolia console will request these chunks when #sepolia opens.
+    modulePreload: {
+      resolveDependencies(filename, deps, { hostType }) {
+        if (hostType !== 'html') return deps
+        return deps.filter((dependency) => (
+          !dependency.includes('web3-')
+          && !dependency.includes('SpkV1Console-')
+        ))
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks(id) {

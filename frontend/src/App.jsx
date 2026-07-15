@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { AlertTriangle, Github, Wallet } from 'lucide-react';
 import ConstraintProtocolLab from './components/ConstraintProtocolLab';
+import DecisionBrief from './components/DecisionBrief';
 import EmpiricalRunsLab from './components/EmpiricalRunsLab';
 import EmpiricalReproductionLab from './components/EmpiricalReproductionLab';
 import PublicLabLanding from './components/PublicLabLanding';
@@ -9,7 +9,6 @@ import EvidenceLab from './components/EvidenceLab';
 import CurrencyLab from './components/CurrencyLab';
 import LabSessionBar from './components/LabSessionBar';
 import ResearchPanel from './components/ResearchPanel';
-import SpkV1Console from './components/SpkV1Console';
 import { GITHUB_REPO } from './constants/contracts';
 import {
   clearSessionReceipt,
@@ -19,20 +18,24 @@ import {
 import { ensureSepolia, readWalletChainId, SEPOLIA_CHAIN_ID } from './lib/wallet';
 import './workbenchSession.css';
 import './constraintProtocol.css';
+import './decisionBrief.css';
 import './empiricalRuns.css';
 import './empiricalReproduction.css';
 
+const SpkV1Console = lazy(() => import('./components/SpkV1Console'));
+
 const NAV_TABS = [
-  { id: 'runs', label: 'Empirical Runs' },
+  { id: 'runs', label: 'Decision Brief' },
   { id: 'reproduce', label: 'Reproduce' },
-  { id: 'protocol', label: 'Protocol Lab' },
-  { id: 'overview', label: 'SPK Reference' },
+  { id: 'protocol', label: 'Claim Lab' },
+  { id: 'overview', label: 'SolarPunk' },
   { id: 'sepolia', label: 'Sepolia Proof' },
   { id: 'research', label: 'Research' },
 ];
 
 const ROUTE_IDS = new Set([
   ...NAV_TABS.map((tab) => tab.id),
+  'study',
   'evidence',
   'currency',
 ]);
@@ -101,41 +104,60 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!window.ethereum) return undefined;
+    if (tab !== 'sepolia' || !window.ethereum) return undefined;
 
-    const p = new ethers.BrowserProvider(window.ethereum);
-    setProvider(p);
+    let active = true;
+    let browserProvider = null;
+    let onAccountsChanged = null;
+    let onChainChanged = null;
 
-    const syncAccount = async (accounts) => {
-      if (accounts?.[0]) {
-        setAccount(accounts[0]);
-        setSigner(await p.getSigner());
-      } else {
-        setAccount(null);
-        setSigner(null);
-      }
-      await refreshChain(p);
+    const initializeWallet = async () => {
+      const { BrowserProvider } = await import('ethers');
+      if (!active) return;
+
+      browserProvider = new BrowserProvider(window.ethereum);
+      setProvider(browserProvider);
+      setConnectError(null);
+
+      const syncAccount = async (accounts) => {
+        if (!active) return;
+        if (accounts?.[0]) {
+          setAccount(accounts[0]);
+          setSigner(await browserProvider.getSigner());
+        } else {
+          setAccount(null);
+          setSigner(null);
+        }
+        await refreshChain(browserProvider);
+      };
+
+      browserProvider.send('eth_accounts', [])
+        .then((accounts) => syncAccount(accounts))
+        .catch(() => {});
+
+      onAccountsChanged = (accounts) => { syncAccount(accounts); };
+      onChainChanged = () => { refreshChain(browserProvider); };
+
+      window.ethereum.on('accountsChanged', onAccountsChanged);
+      window.ethereum.on('chainChanged', onChainChanged);
     };
 
-    p.send('eth_accounts', [])
-      .then((accounts) => syncAccount(accounts))
-      .catch(() => {});
-
-    const onAccountsChanged = (accounts) => { syncAccount(accounts); };
-    const onChainChanged = () => { refreshChain(p); };
-
-    window.ethereum.on('accountsChanged', onAccountsChanged);
-    window.ethereum.on('chainChanged', onChainChanged);
+    initializeWallet().catch((error) => {
+      if (!active) return;
+      setProvider(null);
+      setConnectError(error?.message || 'Wallet provider failed to initialize.');
+    });
 
     return () => {
-      window.ethereum.removeListener('accountsChanged', onAccountsChanged);
-      window.ethereum.removeListener('chainChanged', onChainChanged);
+      active = false;
+      if (onAccountsChanged) window.ethereum.removeListener('accountsChanged', onAccountsChanged);
+      if (onChainChanged) window.ethereum.removeListener('chainChanged', onChainChanged);
     };
-  }, [refreshChain]);
+  }, [refreshChain, tab]);
 
   const connectWallet = async () => {
     if (!provider) {
-      setConnectError('MetaMask not detected. Install the extension and reload this page.');
+      setConnectError('MetaMask not detected or still loading. Install the extension and reload this page.');
       return;
     }
     setIsConnecting(true);
@@ -157,15 +179,16 @@ function App() {
 
   const wrongNetwork = account && chainId != null && chainId !== SEPOLIA_CHAIN_ID;
   const showSessionBar = ['evidence', 'currency', 'sepolia'].includes(tab);
+  const activeNavTab = tab === 'study' ? 'runs' : tab;
 
   return (
     <div className="app-minimal">
       <header className="app-minimal-top">
         <div className="brand-block">
-          <div className="brand-mark">C</div>
+          <div className="brand-mark">P</div>
           <div>
-            <div className="brand-name">Constraint</div>
-            <div className="brand-sub">empirical claim lab · protocol public alpha</div>
+            <div className="brand-name">Policy Lab</div>
+            <div className="brand-sub">historical policy evaluation · bounded claims</div>
           </div>
         </div>
         <div className="app-minimal-actions">
@@ -174,9 +197,9 @@ function App() {
               <button
                 key={t.id}
                 type="button"
-                className={tab === t.id ? 'app-tab active' : 'app-tab'}
+                className={activeNavTab === t.id ? 'app-tab active' : 'app-tab'}
                 onClick={() => navigate(t.id)}
-                aria-current={tab === t.id ? 'page' : undefined}
+                aria-current={activeNavTab === t.id ? 'page' : undefined}
               >
                 {t.label}
               </button>
@@ -226,10 +249,17 @@ function App() {
       ) : null}
 
       {tab === 'runs' ? (
+        <DecisionBrief
+          onOpenStudy={() => navigate('study')}
+          onOpenReproduce={() => navigate('reproduce')}
+          onOpenProtocol={() => navigate('protocol')}
+        />
+      ) : null}
+      {tab === 'study' ? (
         <EmpiricalRunsLab onOpenProtocol={() => navigate('protocol')} />
       ) : null}
       {tab === 'reproduce' ? (
-        <EmpiricalReproductionLab onOpenRuns={() => navigate('runs')} />
+        <EmpiricalReproductionLab onOpenRuns={() => navigate('study')} />
       ) : null}
       {tab === 'protocol' ? (
         <ConstraintProtocolLab onOpenSepolia={() => navigate('sepolia')} />
@@ -258,14 +288,16 @@ function App() {
         />
       ) : null}
       {tab === 'sepolia' ? (
-        <SpkV1Console
-          provider={provider}
-          signer={signer}
-          account={account}
-          onConnect={connectWallet}
-          connecting={isConnecting}
-          wrongNetwork={wrongNetwork}
-        />
+        <Suspense fallback={<section className="reproduction-load" aria-live="polite"><strong>Loading Sepolia proof…</strong></section>}>
+          <SpkV1Console
+            provider={provider}
+            signer={signer}
+            account={account}
+            onConnect={connectWallet}
+            connecting={isConnecting}
+            wrongNetwork={wrongNetwork}
+          />
+        </Suspense>
       ) : null}
       {tab === 'research' ? <ResearchPanel /> : null}
     </div>

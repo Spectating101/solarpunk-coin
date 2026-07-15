@@ -3,6 +3,12 @@
   max-width: 1240px;
 }
 
+/* The answer-first brief needs enough width for its evidence receipt and policy
+   comparison. The legacy 920px shell is retained for the compact SPK console. */
+.app-minimal:has(.decision-brief) {
+  max-width: 1460px;
+}
+
 /* Empirical Runs is intentionally a three-pane instrument. The legacy 920px
    Public Lab shell made the workspace collapse at desktop widths, causing the
    metric row and dossier to compete for the same narrow center column. */
@@ -10,10 +16,66 @@
   max-width: 1560px;
 }
 
+.app-minimal-top .brand-block {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.app-minimal:has(.decision-brief) .app-minimal-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  margin-bottom: 0;
+  padding: 12px 0;
+  background: linear-gradient(180deg, rgba(7, 13, 8, 0.97), rgba(7, 13, 8, 0.88));
+  backdrop-filter: blur(18px);
+}
+
+.decision-sensitivity-grid dl {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .protocol-table code {
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+@media (max-width: 1120px) {
+  .app-minimal:has(.decision-brief) .app-minimal-top {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .app-minimal:has(.decision-brief) .app-minimal-actions {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .app-minimal:has(.decision-brief) .app-tab-nav {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-minimal:has(.decision-brief) .app-tab-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-minimal:has(.decision-brief) .app-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 900px) {
+  .decision-sensitivity-grid dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 680px) {
@@ -23,12 +85,16 @@
     overflow-x: hidden;
   }
 
-  .app-minimal-top {
+  .app-minimal-top,
+  .app-minimal:has(.decision-brief) .app-minimal-top {
+    position: static;
     align-items: stretch;
     flex-direction: column;
     gap: 10px;
     margin: 0 12px 18px;
-    padding-bottom: 12px;
+    padding: 0 0 12px;
+    background: transparent;
+    backdrop-filter: none;
   }
 
   .app-minimal-top .brand-block {
@@ -66,5 +132,11 @@
   .app-minimal-actions > .wallet-button,
   .app-minimal-actions > .wallet-pill {
     flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .decision-sensitivity-grid dl {
+    grid-template-columns: 1fr;
   }
 }
