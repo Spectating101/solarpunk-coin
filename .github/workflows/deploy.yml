@@ -58,6 +58,9 @@ jobs:
           VITE_SOURCE_REVISION: ${{ github.sha }}
         run: bash scripts/publish_demo_to_docs.sh
 
+      - name: Verify default bundle boundaries
+        run: node scripts/check_frontend_bundle.mjs docs/demo
+
       - name: Confirm flagship research surfaces
         run: |
           test -f docs/demo/index.html
