@@ -70,17 +70,22 @@ function transitionSummary(matrix) {
   ];
 }
 
-export default function CompareWorkspace({ onOpenDecision }) {
+export default function CompareWorkspace({ scenarioId = null, onNavigate }) {
   const {
     pack,
     activeScenarioId,
     selectCase,
     selectPolicy,
+    selectScenario,
     compare,
   } = useCaseWorkbench();
   const [matrix, setMatrix] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (scenarioId && scenarioId !== activeScenarioId) selectScenario(scenarioId);
+  }, [scenarioId, activeScenarioId, selectScenario]);
 
   useEffect(() => {
     let active = true;
@@ -104,10 +109,22 @@ export default function CompareWorkspace({ onOpenDecision }) {
 
   const transitions = useMemo(() => transitionSummary(matrix), [matrix]);
 
+  const changeScenario = (nextScenarioId) => {
+    if (!selectScenario(nextScenarioId)) return;
+    onNavigate({ section: 'compare', scenarioId: nextScenarioId });
+  };
+
   const openRun = (run) => {
     selectCase(run.caseManifest.case_id);
     selectPolicy(run.policy.id);
-    onOpenDecision(run.caseManifest.case_id);
+    selectScenario(run.scenario.scenario_id);
+    onNavigate({
+      section: 'case',
+      id: run.caseManifest.case_id,
+      policyId: run.policy.id,
+      scenarioId: run.scenario.scenario_id,
+      lens: 'constraints',
+    });
   };
 
   return (
@@ -118,14 +135,21 @@ export default function CompareWorkspace({ onOpenDecision }) {
           <h1 id="compare-title">Where do policies disagree—and what actually binds?</h1>
           <p>
             Nine deterministic decisions are evaluated from three committed cases and three V2 policies.
-            The active assurance scenario stays fixed so policy and case differences remain inspectable.
+            The selected assurance scenario stays fixed so policy and case differences remain inspectable.
           </p>
         </div>
-        <div className="wb-identity-card">
-          <span>Assurance scenario</span>
+        <div className="wb-identity-card compare-scenario-card">
+          <label className="wb-select-field">
+            <span>Assurance scenario</span>
+            <select value={activeScenarioId} onChange={(event) => changeScenario(event.target.value)}>
+              {pack.scenarios.map((scenario) => (
+                <option key={scenario.scenario_id} value={scenario.scenario_id}>{scenario.name}</option>
+              ))}
+            </select>
+          </label>
           <strong>{activeScenarioId}</strong>
           <code>3 cases × 3 policies</code>
-          <small>Admission state is not called coverage.</small>
+          <small>Scenario state is encoded in the URL. Admission state is not called coverage.</small>
         </div>
       </section>
 
@@ -135,7 +159,7 @@ export default function CompareWorkspace({ onOpenDecision }) {
           <section className="compare-panel">
             <div className="constraint-section-heading">
               <div><span className="wb-section-label">Decision matrix</span><h3>Case × policy</h3></div>
-              <span className="case-map-boundary">click any cell to inspect its decision</span>
+              <span className="case-map-boundary">click any cell to inspect its exact state</span>
             </div>
             <div className="wb-table-scroll">
               <table className="comparison-matrix" aria-label="Case policy decision matrix">
