@@ -22,16 +22,6 @@ async function shot(name, target = page) {
   await target.screenshot({ path: path.join(outputDir, name), fullPage: true });
 }
 
-async function selectL0(target = page) {
-  await target.getByLabel('Assurance context').selectOption('PROVENANCE-L0-BASE');
-  await target.getByRole('heading', { name: /why is this case blocked/i }).waitFor({ state: 'visible' });
-}
-
-async function selectL2(target = page) {
-  await target.getByLabel('Assurance context').selectOption('PROVENANCE-L2-COUNTERFACTUAL');
-  await target.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
-}
-
 await open('#lab', 'Investigate how evidence becomes a bounded financial decision.');
 await page.getByRole('button', { name: /start the five-minute investigation/i }).waitFor({ state: 'visible' });
 await shot('00-lab-overview.png');
@@ -56,7 +46,7 @@ await page.getByRole('region', { name: /PROVENANCE_POLICY_CAPACITY rule detail/i
 await shot('04-binding-ceiling-detail.png');
 
 await open(compareHash, 'What changed in the policy before the outcomes changed?');
-await page.getByText('SIGNED EVIDENCE', { exact: false }).first().waitFor({ state: 'visible' });
+await page.getByText(/signed evidence/i).first().waitFor({ state: 'visible' });
 await page.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
 await page.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ state: 'visible' });
 await shot('05-compare-decision-matrix.png');
