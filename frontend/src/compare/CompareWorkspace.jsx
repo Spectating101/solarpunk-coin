@@ -5,6 +5,10 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
+import PolicyDiffPanel from './PolicyDiffPanel';
+
+const DEFAULT_BASELINE_POLICY_ID = 'LAB-CASE-OPEN-004';
+const DEFAULT_COMPARISON_POLICY_ID = 'ENERGY-CASE-PILOT-005';
 
 function label(value) {
   const normalized = String(value || '—').replaceAll('_', ' ').toLowerCase();
@@ -72,6 +76,8 @@ function transitionSummary(matrix) {
 
 export default function CompareWorkspace({
   scenarioId = null,
+  baselinePolicyId = null,
+  comparisonPolicyId = null,
   onNavigate = null,
   onOpenDecision = null,
 }) {
@@ -86,6 +92,13 @@ export default function CompareWorkspace({
   const [matrix, setMatrix] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const resolvedBaselinePolicyId = pack.policiesById[baselinePolicyId]
+    ? baselinePolicyId
+    : DEFAULT_BASELINE_POLICY_ID;
+  const resolvedComparisonPolicyId = pack.policiesById[comparisonPolicyId]
+    ? comparisonPolicyId
+    : DEFAULT_COMPARISON_POLICY_ID;
 
   useEffect(() => {
     if (scenarioId && scenarioId !== activeScenarioId) selectScenario(scenarioId);
@@ -113,11 +126,30 @@ export default function CompareWorkspace({
 
   const transitions = useMemo(() => transitionSummary(matrix), [matrix]);
 
+  const navigateCompare = ({
+    nextScenarioId = activeScenarioId,
+    nextBaselinePolicyId = resolvedBaselinePolicyId,
+    nextComparisonPolicyId = resolvedComparisonPolicyId,
+  } = {}) => {
+    if (typeof onNavigate !== 'function') return;
+    onNavigate({
+      section: 'compare',
+      scenarioId: nextScenarioId,
+      baselinePolicyId: nextBaselinePolicyId,
+      comparisonPolicyId: nextComparisonPolicyId,
+    });
+  };
+
   const changeScenario = (nextScenarioId) => {
     if (!selectScenario(nextScenarioId)) return;
-    if (typeof onNavigate === 'function') {
-      onNavigate({ section: 'compare', scenarioId: nextScenarioId });
-    }
+    navigateCompare({ nextScenarioId });
+  };
+
+  const changePolicyDiff = ({
+    baselinePolicyId: nextBaselinePolicyId,
+    comparisonPolicyId: nextComparisonPolicyId,
+  }) => {
+    navigateCompare({ nextBaselinePolicyId, nextComparisonPolicyId });
   };
 
   const openRun = (run) => {
@@ -159,9 +191,16 @@ export default function CompareWorkspace({
           </label>
           <strong>{activeScenarioId}</strong>
           <code>3 cases × 3 policies</code>
-          <small>Scenario state is encoded in the URL. Admission state is not called coverage.</small>
+          <small>Scenario and policy-diff state are encoded in the URL. Admission state is not called coverage.</small>
         </div>
       </section>
+
+      <PolicyDiffPanel
+        policies={pack.policies}
+        baselinePolicyId={resolvedBaselinePolicyId}
+        comparisonPolicyId={resolvedComparisonPolicyId}
+        onChange={changePolicyDiff}
+      />
 
       {error ? <div className="workbench-error" role="alert"><ShieldAlert size={18} /> {error}</div> : null}
       {loading ? <div className="compare-loading" aria-live="polite">Evaluating comparison matrix…</div> : (
