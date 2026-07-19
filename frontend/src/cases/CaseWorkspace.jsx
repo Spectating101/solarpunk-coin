@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   Download,
@@ -109,12 +109,6 @@ export default function CaseWorkspace({
   }, [initialLens, lens]);
 
   const activeCase = pack.casesById[activeCaseId];
-  const lensView = useMemo(() => {
-    if (lens === 'evidence') return <EvidenceLens />;
-    if (lens === 'stress') return <StressLens />;
-    if (lens === 'lineage') return <LineageLens />;
-    return <ConstraintsLens />;
-  }, [lens, activeRun?.decision?.decision_id]);
 
   const navigateState = (overrides = {}) => onNavigate({
     section: 'case',
@@ -136,6 +130,11 @@ export default function CaseWorkspace({
     setLens(nextLens);
     navigateState({ lens: nextLens });
   };
+
+  let lensView = <ConstraintsLens onSelectScenario={changeScenario} />;
+  if (lens === 'evidence') lensView = <EvidenceLens />;
+  if (lens === 'stress') lensView = <StressLens />;
+  if (lens === 'lineage') lensView = <LineageLens />;
 
   const downloadReceipt = () => {
     if (!activeReceipt || !activeRun) return;
