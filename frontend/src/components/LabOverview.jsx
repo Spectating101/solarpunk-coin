@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Waypoints,
 } from 'lucide-react';
+import '../styles/flagshipHardening.css';
 
 const SURFACES = [
   {
