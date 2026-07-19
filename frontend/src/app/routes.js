@@ -33,8 +33,7 @@ export const PRIMARY_NAV = Object.freeze([
 ]);
 
 function queryValue(params, name) {
-  const value = params.get(name);
-  return value ? decodeURIComponent(value) : null;
+  return params.get(name) || null;
 }
 
 function routeQuery(route, names) {
