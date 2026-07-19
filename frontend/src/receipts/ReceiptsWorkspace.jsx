@@ -175,7 +175,7 @@ function RequestedReceiptState({ receiptId, routeContext, activeRun, reconstruct
       <h2>The requested receipt is not available.</h2>
       <p>
         Policy Lab will not silently substitute a different browser-session receipt. The encoded inputs
-        either do not reconstruct this decision under the current runtime or the link lacks sufficient context.
+        either do not reconstruct this decision under the current runtime or the link lacks valid context.
       </p>
       <dl className="dossier-list wide">
         <div><dt>Requested decision</dt><dd><code>{receiptId}</code></dd></div>
@@ -184,7 +184,7 @@ function RequestedReceiptState({ receiptId, routeContext, activeRun, reconstruct
         {routeContext?.policyId ? <div><dt>Policy</dt><dd>{routeContext.policyId}</dd></div> : null}
         {routeContext?.scenarioId ? <div><dt>Scenario</dt><dd>{routeContext.scenarioId}</dd></div> : null}
       </dl>
-      {routeContext?.caseId ? (
+      {routeContext?.caseId && typeof onNavigate === 'function' ? (
         <button type="button" className="wb-primary-action" onClick={() => onNavigate({
           section: 'case',
           id: routeContext.caseId,
@@ -206,6 +206,7 @@ export default function ReceiptsWorkspace({
   onNavigate,
 }) {
   const {
+    pack,
     runsByKey,
     receiptsById,
     activeRun,
@@ -218,12 +219,18 @@ export default function ReceiptsWorkspace({
     loading,
   } = useCaseWorkbench();
 
+  const contextValid = !routeContext || (
+    (!routeContext.caseId || Boolean(pack.casesById[routeContext.caseId]))
+    && (!routeContext.policyId || Boolean(pack.policiesById[routeContext.policyId]))
+    && (!routeContext.scenarioId || Boolean(pack.scenariosById[routeContext.scenarioId]))
+  );
+
   useEffect(() => {
-    if (!routeContext) return;
+    if (!routeContext || !contextValid) return;
     if (routeContext.caseId) selectCase(routeContext.caseId);
     if (routeContext.policyId) selectPolicy(routeContext.policyId);
     if (routeContext.scenarioId) selectScenario(routeContext.scenarioId);
-  }, [routeContext?.caseId, routeContext?.policyId, routeContext?.scenarioId, selectCase, selectPolicy, selectScenario]);
+  }, [routeContext?.caseId, routeContext?.policyId, routeContext?.scenarioId, contextValid, selectCase, selectPolicy, selectScenario]);
 
   const runByDecisionId = useMemo(() => Object.fromEntries(
     Object.values(runsByKey).map((run) => [run.decision.decision_id, run]),
@@ -238,7 +245,12 @@ export default function ReceiptsWorkspace({
     && (!routeContext.policyId || routeContext.policyId === activePolicyId)
     && (!routeContext.scenarioId || routeContext.scenarioId === activeScenarioId)
   );
-  const reconstructing = Boolean(receiptId && routeContext && (!contextMatched || loading || !activeRun));
+  const reconstructing = Boolean(
+    receiptId
+    && routeContext
+    && contextValid
+    && (!contextMatched || loading || !activeRun),
+  );
 
   if (receiptId || selectedId) {
     return (
@@ -260,7 +272,7 @@ export default function ReceiptsWorkspace({
                   type="button"
                   key={receipt.decision_id}
                   className={selectedId === receipt.decision_id ? 'active' : ''}
-                  onClick={() => run && onOpenReceipt(run)}
+                  onClick={() => run && typeof onOpenReceipt === 'function' && onOpenReceipt(run)}
                 >
                   <span>
                     <strong>{receipt.case_id}</strong>
