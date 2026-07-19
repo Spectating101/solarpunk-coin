@@ -5,9 +5,11 @@ import {
   FileArchive,
   FileCheck2,
   Fingerprint,
+  ShieldAlert,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import {
+  decisionArtifactStem,
   decisionMemo,
   downloadJson,
   downloadText,
@@ -40,6 +42,7 @@ function ReceiptDetail({ run, receipt }) {
   }, [run?.decision?.decision_id, receipt?.evaluated_at]);
 
   if (!run || !receipt) return <div className="wb-lens-loading">Select a decision receipt.</div>;
+  const artifactStem = decisionArtifactStem(run);
 
   return (
     <section className="receipt-detail">
@@ -53,19 +56,19 @@ function ReceiptDetail({ run, receipt }) {
       </div>
 
       <div className="receipt-action-row">
-        <button type="button" onClick={() => downloadJson(`decision-receipt-${run.caseManifest.case_id.toLowerCase()}.json`, receipt)}>
+        <button type="button" onClick={() => downloadJson(`decision-receipt-${artifactStem}.json`, receipt)}>
           <Download size={15} /> Receipt JSON
         </button>
-        <button type="button" onClick={() => downloadText(`decision-memo-${run.caseManifest.case_id.toLowerCase()}.md`, decisionMemo(run))}>
+        <button type="button" onClick={() => downloadText(`decision-memo-${artifactStem}.md`, decisionMemo(run))}>
           <Download size={15} /> Decision memo
         </button>
-        <button type="button" disabled={!capsule} onClick={() => capsule && downloadCapsuleBundle(capsule)}>
+        <button type="button" disabled={!capsule} onClick={() => capsule && downloadCapsuleBundle(capsule, run)}>
           <FileArchive size={15} /> Capsule bundle
         </button>
         <button
           type="button"
           disabled={!capsule}
-          onClick={() => capsule && downloadCapsuleFile('capsule.json', capsule.files['capsule.json'], 'application/json')}
+          onClick={() => capsule && downloadCapsuleFile(`capsule-manifest-${artifactStem}.json`, capsule.files['capsule.json'], 'application/json')}
         >
           <Download size={15} /> Capsule manifest
         </button>
@@ -78,6 +81,7 @@ function ReceiptDetail({ run, receipt }) {
           <dl className="dossier-list wide">
             <div><dt>ID</dt><dd>{receipt.policy.id}</dd></div>
             <div><dt>Version</dt><dd>{receipt.policy.version}</dd></div>
+            <div><dt>Assurance scenario</dt><dd>{run.scenario.scenario_id}</dd></div>
             <div><dt>Manifest hash</dt><dd><code>{receipt.policy.manifest_hash}</code></dd></div>
           </dl>
         </article>
@@ -152,34 +156,103 @@ function ReceiptDetail({ run, receipt }) {
   );
 }
 
-export default function ReceiptsWorkspace({ receiptId = null, onOpenReceipt }) {
+function RequestedReceiptState({ receiptId, routeContext, activeRun, reconstructing, onNavigate }) {
+  if (reconstructing) {
+    return (
+      <section className="receipt-request-state" aria-live="polite" aria-busy="true">
+        <Fingerprint size={24} />
+        <h2>Reconstructing the requested decision.</h2>
+        <p>The encoded case, policy, and assurance scenario are being evaluated before the receipt is displayed.</p>
+        <code>{receiptId}</code>
+      </section>
+    );
+  }
+
+  const actualDecisionId = activeRun?.decision?.decision_id || null;
+  return (
+    <section className="receipt-request-state error" role="alert">
+      <ShieldAlert size={24} />
+      <h2>The requested receipt is not available.</h2>
+      <p>
+        Policy Lab will not silently substitute a different browser-session receipt. The encoded inputs
+        either do not reconstruct this decision under the current runtime or the link lacks sufficient context.
+      </p>
+      <dl className="dossier-list wide">
+        <div><dt>Requested decision</dt><dd><code>{receiptId}</code></dd></div>
+        {actualDecisionId ? <div><dt>Reconstructed decision</dt><dd><code>{actualDecisionId}</code></dd></div> : null}
+        {routeContext?.caseId ? <div><dt>Case</dt><dd>{routeContext.caseId}</dd></div> : null}
+        {routeContext?.policyId ? <div><dt>Policy</dt><dd>{routeContext.policyId}</dd></div> : null}
+        {routeContext?.scenarioId ? <div><dt>Scenario</dt><dd>{routeContext.scenarioId}</dd></div> : null}
+      </dl>
+      {routeContext?.caseId ? (
+        <button type="button" className="wb-primary-action" onClick={() => onNavigate({
+          section: 'case',
+          id: routeContext.caseId,
+          policyId: routeContext.policyId,
+          scenarioId: routeContext.scenarioId,
+          lens: 'constraints',
+        })}>
+          Inspect encoded decision inputs <ArrowRight size={15} />
+        </button>
+      ) : null}
+    </section>
+  );
+}
+
+export default function ReceiptsWorkspace({
+  receiptId = null,
+  routeContext = null,
+  onOpenReceipt,
+  onNavigate,
+}) {
   const {
     runsByKey,
     receiptsById,
+    activeRun,
+    activeCaseId,
+    activePolicyId,
+    activeScenarioId,
+    selectCase,
+    selectPolicy,
+    selectScenario,
+    loading,
   } = useCaseWorkbench();
+
+  useEffect(() => {
+    if (!routeContext) return;
+    if (routeContext.caseId) selectCase(routeContext.caseId);
+    if (routeContext.policyId) selectPolicy(routeContext.policyId);
+    if (routeContext.scenarioId) selectScenario(routeContext.scenarioId);
+  }, [routeContext?.caseId, routeContext?.policyId, routeContext?.scenarioId, selectCase, selectPolicy, selectScenario]);
 
   const runByDecisionId = useMemo(() => Object.fromEntries(
     Object.values(runsByKey).map((run) => [run.decision.decision_id, run]),
   ), [runsByKey]);
   const receipts = useMemo(() => Object.values(receiptsById)
     .sort((a, b) => b.evaluated_at.localeCompare(a.evaluated_at)), [receiptsById]);
-  const selectedId = receiptId && receiptsById[receiptId]
-    ? receiptId
-    : receipts[0]?.decision_id || null;
+  const selectedId = receiptId || receipts[0]?.decision_id || null;
+  const selectedRun = selectedId ? runByDecisionId[selectedId] : null;
+  const selectedReceipt = selectedId ? receiptsById[selectedId] : null;
+  const contextMatched = !routeContext || (
+    (!routeContext.caseId || routeContext.caseId === activeCaseId)
+    && (!routeContext.policyId || routeContext.policyId === activePolicyId)
+    && (!routeContext.scenarioId || routeContext.scenarioId === activeScenarioId)
+  );
+  const reconstructing = Boolean(receiptId && routeContext && (!contextMatched || loading || !activeRun));
 
   if (receiptId || selectedId) {
     return (
       <main className="receipts-workspace" aria-labelledby="receipts-title">
         <section className="receipt-index-header">
           <div>
-            <span className="wb-kicker"><FileCheck2 size={13} /> Receipts · browser evaluation history</span>
+            <span className="wb-kicker"><FileCheck2 size={13} /> Receipts · decisions evaluated in this browser session</span>
             <h1 id="receipts-title">Share the decision identity, not a screenshot.</h1>
-            <p>Receipts summarize the deterministic decision and runtime audit context. Capsule exports preserve portable research objects while excluding raw evidence rows by default.</p>
+            <p>Receipts summarize deterministic decisions and runtime audit context. Durable links encode the case, policy, and assurance scenario; capsule exports exclude raw evidence rows by default.</p>
           </div>
         </section>
         <div className="receipts-layout">
           <aside className="receipt-index-list">
-            <span className="wb-section-label">Evaluated decisions</span>
+            <span className="wb-section-label">Session decision receipts</span>
             {receipts.map((receipt) => {
               const run = runByDecisionId[receipt.decision_id];
               return (
@@ -187,9 +260,13 @@ export default function ReceiptsWorkspace({ receiptId = null, onOpenReceipt }) {
                   type="button"
                   key={receipt.decision_id}
                   className={selectedId === receipt.decision_id ? 'active' : ''}
-                  onClick={() => onOpenReceipt(receipt.decision_id)}
+                  onClick={() => run && onOpenReceipt(run)}
                 >
-                  <span><strong>{receipt.case_id}</strong><small>{receipt.policy.id}</small></span>
+                  <span>
+                    <strong>{receipt.case_id}</strong>
+                    <small>{receipt.policy.id}</small>
+                    <small>{run?.scenario?.scenario_id || 'scenario unavailable'}</small>
+                  </span>
                   <code>{receipt.result}</code>
                   <small>{run?.decision.decision === 'BLOCKED'
                     ? label(run.decision.admission.blocking_rules[0])
@@ -199,7 +276,17 @@ export default function ReceiptsWorkspace({ receiptId = null, onOpenReceipt }) {
               );
             })}
           </aside>
-          <ReceiptDetail run={runByDecisionId[selectedId]} receipt={receiptsById[selectedId]} />
+          {selectedRun && selectedReceipt ? (
+            <ReceiptDetail run={selectedRun} receipt={selectedReceipt} />
+          ) : (
+            <RequestedReceiptState
+              receiptId={receiptId}
+              routeContext={routeContext}
+              activeRun={activeRun}
+              reconstructing={reconstructing}
+              onNavigate={onNavigate}
+            />
+          )}
         </div>
       </main>
     );
