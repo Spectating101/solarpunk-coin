@@ -1,5 +1,9 @@
 import { sha256Hex } from '@solarpunk/constraint-core';
-import { decisionMemo, WORKBENCH_RUNTIME } from './caseWorkbenchRuntime';
+import {
+  decisionArtifactStem,
+  decisionMemo,
+  WORKBENCH_RUNTIME,
+} from './caseWorkbenchRuntime';
 
 function jsonText(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
@@ -76,10 +80,10 @@ function citationFor(run) {
     'authors:',
     '  - family-names: Ongko',
     '    given-names: Christopher',
-    `identifiers:`,
-    `  - type: other`,
+    'identifiers:',
+    '  - type: other',
     `    value: "${run.decision.decision_id}"`,
-    `    description: "Deterministic DecisionResult identity"`,
+    '    description: "Deterministic DecisionResult identity"',
     '',
   ].join('\n');
 }
@@ -121,7 +125,14 @@ export async function buildResearchCapsule(run, receipt = run.receipt) {
   const manifestBody = {
     schema: 'solarpunk.constraint.research_capsule.v1',
     case_id: run.caseManifest.case_id,
+    policy: {
+      id: run.policy.id,
+      version: run.policy.version,
+      manifest_hash: run.decision.policy_manifest_hash,
+    },
+    assurance_scenario: run.scenario.scenario_id,
     decision_id: run.decision.decision_id,
+    source_revision: WORKBENCH_RUNTIME.source_revision,
     files: fileEntries,
     raw_evidence_included: false,
     data_boundary: 'Capsule contains declared case/policy/context objects, derived decision artifacts, and evidence metadata. Raw evidence rows are excluded.',
@@ -150,7 +161,7 @@ export function downloadCapsuleFile(filename, content, type = 'application/octet
   URL.revokeObjectURL(url);
 }
 
-export function downloadCapsuleBundle(capsule) {
+export function downloadCapsuleBundle(capsule, run) {
   const bundle = {
     schema: 'solarpunk.constraint.research_capsule_bundle.v1',
     manifest: capsule.manifest,
@@ -158,7 +169,7 @@ export function downloadCapsuleBundle(capsule) {
     boundary: 'Portable JSON bundle for static-host export. It is not a ZIP archive or legal certificate.',
   };
   downloadCapsuleFile(
-    `research-capsule-${capsule.manifest.case_id.toLowerCase()}.json`,
+    `research-capsule-${decisionArtifactStem(run)}.json`,
     jsonText(bundle),
     'application/json',
   );
