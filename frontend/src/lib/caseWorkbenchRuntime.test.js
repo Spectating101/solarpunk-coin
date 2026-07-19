@@ -86,7 +86,7 @@ describe('browser case workbench runtime', () => {
     expect(stem).toContain(run.decision.decision_id.slice(0, 12));
   });
 
-  it('builds a portable capsule manifest with raw evidence excluded', async () => {
+  it('builds an interoperable capsule with RO-Crate and PROV-JSONLD metadata', async () => {
     const run = await evaluateCaseRun({
       caseId: 'TYN-001',
       policyId: 'ENERGY-CASE-PILOT-005',
@@ -99,15 +99,33 @@ describe('browser case workbench runtime', () => {
     expect(capsule.manifest.policy.id).toBe('ENERGY-CASE-PILOT-005');
     expect(capsule.manifest.assurance_scenario).toBe('PROVENANCE-L2-COUNTERFACTUAL');
     expect(capsule.manifest.source_revision).toBeTruthy();
-    expect(capsule.manifest.files).toHaveLength(10);
+    expect(capsule.manifest.interoperability.ro_crate_profile).toBe('https://w3id.org/ro/crate/1.3');
+    expect(capsule.manifest.files).toHaveLength(12);
     expect(capsule.manifest.files.map((file) => file.path)).toEqual(expect.arrayContaining([
       'decision-result.json',
       'decision-receipt.json',
       'lineage.json',
       'reproduction.json',
+      'prov.jsonld',
+      'ro-crate-metadata.json',
       'decision-memo.md',
       'CITATION.cff',
     ]));
     expect(capsule.files['evidence-metadata.json']).toContain('"raw_data_included": false');
+
+    const roCrate = JSON.parse(capsule.files['ro-crate-metadata.json']);
+    expect(roCrate['@context']).toBe('https://w3id.org/ro/crate/1.3/context');
+    expect(roCrate['@graph']).toEqual(expect.arrayContaining([
+      expect.objectContaining({ '@id': 'ro-crate-metadata.json' }),
+      expect.objectContaining({ '@id': './', '@type': 'Dataset' }),
+    ]));
+
+    const prov = JSON.parse(capsule.files['prov.jsonld']);
+    expect(prov['@graph']).toEqual(expect.arrayContaining([
+      expect.objectContaining({ '@type': 'Activity' }),
+      expect.objectContaining({ '@type': 'Entity', type: ['spk:DecisionResult'] }),
+      expect.objectContaining({ '@type': 'Generation' }),
+      expect.objectContaining({ '@type': 'Derivation' }),
+    ]));
   });
 });
