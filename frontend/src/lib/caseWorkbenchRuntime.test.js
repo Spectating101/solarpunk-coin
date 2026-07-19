@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  decisionArtifactStem,
   evaluateCaseRun,
   runSettlementStress,
 } from './caseWorkbenchRuntime';
@@ -72,6 +73,19 @@ describe('browser case workbench runtime', () => {
     expect(shortfall.settlement.shortfall_quantity).toBe(126);
   });
 
+  it('builds collision-resistant artifact names from the complete decision identity', async () => {
+    const run = await evaluateCaseRun({
+      caseId: 'TYN-001',
+      policyId: 'ENERGY-CASE-PILOT-005',
+      scenarioId: 'PROVENANCE-L2-COUNTERFACTUAL',
+    });
+    const stem = decisionArtifactStem(run);
+    expect(stem).toContain('tyn-001');
+    expect(stem).toContain('energy-case-pilot-005');
+    expect(stem).toContain('provenance-l2-counterfactual');
+    expect(stem).toContain(run.decision.decision_id.slice(0, 12));
+  });
+
   it('builds a portable capsule manifest with raw evidence excluded', async () => {
     const run = await evaluateCaseRun({
       caseId: 'TYN-001',
@@ -82,6 +96,9 @@ describe('browser case workbench runtime', () => {
 
     expect(capsule.manifest.schema).toBe('solarpunk.constraint.research_capsule.v1');
     expect(capsule.manifest.raw_evidence_included).toBe(false);
+    expect(capsule.manifest.policy.id).toBe('ENERGY-CASE-PILOT-005');
+    expect(capsule.manifest.assurance_scenario).toBe('PROVENANCE-L2-COUNTERFACTUAL');
+    expect(capsule.manifest.source_revision).toBeTruthy();
     expect(capsule.manifest.files).toHaveLength(10);
     expect(capsule.manifest.files.map((file) => file.path)).toEqual(expect.arrayContaining([
       'decision-result.json',
