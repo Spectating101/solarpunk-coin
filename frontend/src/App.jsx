@@ -274,6 +274,8 @@ function App() {
       {route.section === 'compare' ? (
         <CompareWorkspace
           scenarioId={route.scenarioId}
+          baselinePolicyId={route.baselinePolicyId}
+          comparisonPolicyId={route.comparisonPolicyId}
           onNavigate={navigate}
         />
       ) : null}
