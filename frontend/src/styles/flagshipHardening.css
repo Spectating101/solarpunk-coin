@@ -1,0 +1,93 @@
+.compare-scenario-card .wb-select-field {
+  margin: 0 0 6px;
+}
+
+.compare-scenario-card .wb-select-field select {
+  min-height: 42px;
+}
+
+.receipt-request-state {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-height: 520px;
+  padding: 32px;
+  background: rgba(9, 17, 11, 0.84);
+}
+
+.receipt-request-state > svg {
+  color: var(--wb-violet);
+}
+
+.receipt-request-state.error > svg {
+  color: var(--red);
+}
+
+.receipt-request-state h2 {
+  max-width: 720px;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.receipt-request-state > p {
+  max-width: 760px;
+  color: var(--muted-readable);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.receipt-request-state > code {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted-readable);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.receipt-index-list button > span {
+  gap: 3px;
+}
+
+.receipt-index-list button > span small:last-child {
+  color: var(--wb-violet);
+  font-size: 8px;
+}
+
+.case-workspace-identity span,
+.case-map-boundary,
+.case-semantic-boundary span,
+.case-boundary-stack p,
+.dossier-list dt,
+.dossier-list dd code,
+.dossier-list dd small,
+.constraint-detail dt,
+.constraint-detail dd code,
+.constraint-detail-note span,
+.constraint-detail > small {
+  font-size: max(10px, 0.625rem);
+}
+
+@media (max-width: 680px) {
+  .app-tab-nav {
+    padding-right: 28px;
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 34px), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 34px), transparent 100%);
+  }
+
+  .case-map-panel {
+    grid-template-rows: auto minmax(320px, 55vh) auto;
+  }
+
+  .case-map-world {
+    min-height: 320px;
+  }
+
+  .receipt-request-state {
+    min-height: 0;
+    padding: 22px 18px;
+  }
+}
