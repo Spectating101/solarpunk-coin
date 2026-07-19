@@ -9,6 +9,7 @@ on:
       - 'protocol/schema/**'
       - 'frontend/**'
       - 'scripts/capture_case_workbench_v2.mjs'
+      - 'scripts/check_frontend_bundle.mjs'
       - '.github/workflows/case_workbench_v2.yml'
   workflow_dispatch:
 
@@ -58,6 +59,9 @@ jobs:
           set -o pipefail
           npm run build 2>&1 | tee ../_ci_logs/frontend-build.log
         working-directory: frontend
+
+      - name: Verify default bundle boundaries
+        run: node scripts/check_frontend_bundle.mjs frontend/dist | tee _ci_logs/frontend-bundle-check.log
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
