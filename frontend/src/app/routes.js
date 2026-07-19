@@ -62,9 +62,19 @@ export function parseHashRoute(hash = '') {
   const scenarioId = queryValue(params, 'scenario');
   const caseId = queryValue(params, 'case');
   const lens = queryValue(params, 'lens');
+  const baselinePolicyId = queryValue(params, 'baseline');
+  const comparisonPolicyId = queryValue(params, 'comparison');
 
   if (section === 'case') return { section: 'case', id, policyId, scenarioId, lens };
-  if (section === 'compare') return { section: 'compare', id: null, scenarioId };
+  if (section === 'compare') {
+    return {
+      section: 'compare',
+      id: null,
+      scenarioId,
+      baselinePolicyId,
+      comparisonPolicyId,
+    };
+  }
   if (section === 'study') return { section: 'study', id, view: 'detail' };
   if (section === 'receipt') return { section: 'receipt', id, caseId, policyId, scenarioId };
   if (section === 'reference') return { section: 'reference', id };
@@ -83,7 +93,11 @@ export function routeToHash(route) {
     return `#case/${encodeURIComponent(route.id)}${query}`;
   }
   if (section === 'compare') {
-    return `#compare${routeQuery(route, [['scenario', 'scenarioId']])}`;
+    return `#compare${routeQuery(route, [
+      ['scenario', 'scenarioId'],
+      ['baseline', 'baselinePolicyId'],
+      ['comparison', 'comparisonPolicyId'],
+    ])}`;
   }
   if (section === 'study') {
     if (route.view === 'brief') return '#runs';
