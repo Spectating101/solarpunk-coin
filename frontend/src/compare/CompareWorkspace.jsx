@@ -70,7 +70,11 @@ function transitionSummary(matrix) {
   ];
 }
 
-export default function CompareWorkspace({ scenarioId = null, onNavigate }) {
+export default function CompareWorkspace({
+  scenarioId = null,
+  onNavigate = null,
+  onOpenDecision = null,
+}) {
   const {
     pack,
     activeScenarioId,
@@ -111,20 +115,26 @@ export default function CompareWorkspace({ scenarioId = null, onNavigate }) {
 
   const changeScenario = (nextScenarioId) => {
     if (!selectScenario(nextScenarioId)) return;
-    onNavigate({ section: 'compare', scenarioId: nextScenarioId });
+    if (typeof onNavigate === 'function') {
+      onNavigate({ section: 'compare', scenarioId: nextScenarioId });
+    }
   };
 
   const openRun = (run) => {
     selectCase(run.caseManifest.case_id);
     selectPolicy(run.policy.id);
     selectScenario(run.scenario.scenario_id);
-    onNavigate({
-      section: 'case',
-      id: run.caseManifest.case_id,
-      policyId: run.policy.id,
-      scenarioId: run.scenario.scenario_id,
-      lens: 'constraints',
-    });
+    if (typeof onNavigate === 'function') {
+      onNavigate({
+        section: 'case',
+        id: run.caseManifest.case_id,
+        policyId: run.policy.id,
+        scenarioId: run.scenario.scenario_id,
+        lens: 'constraints',
+      });
+      return;
+    }
+    if (typeof onOpenDecision === 'function') onOpenDecision(run.caseManifest.case_id);
   };
 
   return (
