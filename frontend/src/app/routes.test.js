@@ -12,13 +12,20 @@ describe('case workbench route model', () => {
     expect(parseHashRoute('#')).toEqual({ section: 'lab', id: null });
   });
 
-  it('parses durable case and receipt identities', () => {
+  it('parses durable case, comparison, and receipt identities', () => {
     expect(parseHashRoute('#case/TYN-001?policy=ENERGY-CASE-PILOT-005&scenario=PROVENANCE-L2-COUNTERFACTUAL&lens=lineage')).toEqual({
       section: 'case',
       id: 'TYN-001',
       policyId: 'ENERGY-CASE-PILOT-005',
       scenarioId: 'PROVENANCE-L2-COUNTERFACTUAL',
       lens: 'lineage',
+    });
+    expect(parseHashRoute('#compare?scenario=PROVENANCE-L2-COUNTERFACTUAL&baseline=LAB-CASE-OPEN-004&comparison=ENERGY-CASE-PILOT-005')).toEqual({
+      section: 'compare',
+      id: null,
+      scenarioId: 'PROVENANCE-L2-COUNTERFACTUAL',
+      baselinePolicyId: 'LAB-CASE-OPEN-004',
+      comparisonPolicyId: 'ENERGY-CASE-PILOT-005',
     });
     expect(parseHashRoute('#receipt/abc123?case=TYN-001&policy=ENERGY-CASE-PILOT-005&scenario=PROVENANCE-L2-COUNTERFACTUAL')).toEqual({
       section: 'receipt',
@@ -57,7 +64,12 @@ describe('case workbench route model', () => {
         scenarioId: 'PROVENANCE-L2-COUNTERFACTUAL',
         lens: 'stress',
       },
-      { section: 'compare', scenarioId: 'PROVENANCE-L1-COUNTERFACTUAL' },
+      {
+        section: 'compare',
+        scenarioId: 'PROVENANCE-L1-COUNTERFACTUAL',
+        baselinePolicyId: 'LAB-CASE-OPEN-004',
+        comparisonPolicyId: 'ENERGY-CASE-STRICT-006',
+      },
       { section: 'receipts' },
       {
         section: 'receipt',
@@ -76,6 +88,8 @@ describe('case workbench route model', () => {
       if (route.scenarioId) expect(parsed.scenarioId).toBe(route.scenarioId);
       if (route.caseId) expect(parsed.caseId).toBe(route.caseId);
       if (route.lens) expect(parsed.lens).toBe(route.lens);
+      if (route.baselinePolicyId) expect(parsed.baselinePolicyId).toBe(route.baselinePolicyId);
+      if (route.comparisonPolicyId) expect(parsed.comparisonPolicyId).toBe(route.comparisonPolicyId);
     }
   });
 
