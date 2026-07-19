@@ -5,7 +5,10 @@
   "type": "module",
   "main": "./src/index.js",
   "types": "./src/workbench.d.ts",
-  "exports": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./workbench": "./src/workbench.js"
+  },
   "files": ["src", "README.md"],
   "peerDependencies": {
     "ethers": ">=6.7.0"
