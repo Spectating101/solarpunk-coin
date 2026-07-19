@@ -4,7 +4,6 @@ import CaseExplorer from './cases/CaseExplorer';
 import CaseWorkspace from './cases/CaseWorkspace';
 import CompareWorkspace from './compare/CompareWorkspace';
 import ReceiptsWorkspace from './receipts/ReceiptsWorkspace';
-import ConstraintProtocolLab from './components/ConstraintProtocolLab';
 import DecisionBrief from './components/DecisionBrief';
 import EmpiricalRunsLab from './components/EmpiricalRunsLab';
 import EmpiricalReproductionLab from './components/EmpiricalReproductionLab';
@@ -32,6 +31,7 @@ import './empiricalReproduction.css';
 import './styles/caseWorkbench.css';
 import './styles/labOverview.css';
 
+const ConstraintProtocolLab = lazy(() => import('./components/ConstraintProtocolLab'));
 const PublicLabLanding = lazy(() => import('./components/PublicLabLanding'));
 const EvidenceLab = lazy(() => import('./components/EvidenceLab'));
 const CurrencyLab = lazy(() => import('./components/CurrencyLab'));
@@ -308,7 +308,9 @@ function App() {
         <EmpiricalReproductionLab onOpenRuns={() => navigate({ section: 'study', id: 'market-capacity-v1', view: 'detail' })} />
       ) : null}
       {route.section === 'legacy-protocol' ? (
-        <ConstraintProtocolLab onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })} />
+        <Suspense fallback={<RouteFallback label="Loading protocol laboratory…" />}>
+          <ConstraintProtocolLab onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })} />
+        </Suspense>
       ) : null}
 
       {route.section === 'reference' && (!route.id || route.id === 'solarpunk') ? (
