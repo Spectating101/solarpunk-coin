@@ -4,6 +4,7 @@ import { chromium } from 'playwright';
 
 const outputDir = path.resolve(process.argv[2] || '_review_case_workbench_v2');
 const baseUrl = process.env.CASE_WORKBENCH_URL || 'http://127.0.0.1:4173/';
+const compareHash = '#compare?scenario=PROVENANCE-L2-COUNTERFACTUAL&baseline=LAB-CASE-OPEN-004&comparison=ENERGY-CASE-PILOT-005';
 
 await fs.rm(outputDir, { recursive: true, force: true });
 await fs.mkdir(outputDir, { recursive: true });
@@ -45,13 +46,17 @@ await shot('02-case-blocked-l0.png');
 
 await page.getByRole('button', { name: /preview l2 without changing the evidence hash/i }).click();
 await page.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
+if (!page.url().includes('scenario=PROVENANCE-L2-COUNTERFACTUAL')) {
+  throw new Error('Counterfactual action did not persist assurance scenario in the URL');
+}
 await shot('03-case-counterfactual-l2.png');
 
 await page.getByRole('button', { name: /provenance policy capacity/i }).last().click();
 await page.getByRole('region', { name: /PROVENANCE_POLICY_CAPACITY rule detail/i }).waitFor({ state: 'visible' });
 await shot('04-binding-ceiling-detail.png');
 
-await open('#compare?scenario=PROVENANCE-L2-COUNTERFACTUAL', 'Where do policies disagree');
+await open(compareHash, 'What changed in the policy before the outcomes changed?');
+await page.getByText('SIGNED EVIDENCE', { exact: false }).first().waitFor({ state: 'visible' });
 await page.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
 await page.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ state: 'visible' });
 await shot('05-compare-decision-matrix.png');
@@ -99,7 +104,7 @@ await mobilePage.getByLabel('Assurance context').selectOption('PROVENANCE-L2-COU
 await mobilePage.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
 await shot('13-mobile-admitted-case.png', mobilePage);
 
-await openMobile('#compare?scenario=PROVENANCE-L2-COUNTERFACTUAL', 'Where do policies disagree');
+await openMobile(compareHash, 'What changed in the policy before the outcomes changed?');
 await mobilePage.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
 await shot('14-mobile-compare.png', mobilePage);
 
