@@ -3,9 +3,9 @@ import {
   ArrowRight,
   Braces,
   Check,
-  CircleMinus,
-  CirclePlus,
   GitCompareArrows,
+  MinusCircle,
+  PlusCircle,
   SlidersHorizontal,
 } from 'lucide-react';
 
@@ -76,8 +76,8 @@ function value(value) {
 }
 
 function StatusIcon({ status }) {
-  if (status === 'ADDED') return <CirclePlus size={15} />;
-  if (status === 'REMOVED') return <CircleMinus size={15} />;
+  if (status === 'ADDED') return <PlusCircle size={15} />;
+  if (status === 'REMOVED') return <MinusCircle size={15} />;
   if (status === 'UNCHANGED') return <Check size={15} />;
   return <SlidersHorizontal size={15} />;
 }
@@ -117,7 +117,9 @@ function RuleDiffRow({ row }) {
         </div>
       ) : null}
       {row.status === 'UNCHANGED' ? (
-        <div className="policy-diff-unchanged">Same calculator and parameters in both policies.</div>
+        <div className="policy-diff-unchanged">
+          Same calculator and parameters. Rule declarations: <code>{row.before.rule_id}</code> → <code>{row.after.rule_id}</code>.
+        </div>
       ) : null}
     </article>
   );
@@ -172,10 +174,13 @@ export default function PolicyDiffPanel({
   const comparison = policiesById[comparisonPolicyId] || policies[1] || policies[0];
   const diff = useMemo(() => diffPolicyManifests(baseline, comparison), [baseline, comparison]);
 
-  const change = (next) => onChange({
-    baselinePolicyId: next.baselinePolicyId || baseline.id,
-    comparisonPolicyId: next.comparisonPolicyId || comparison.id,
-  });
+  const change = (next) => {
+    if (typeof onChange !== 'function') return;
+    onChange({
+      baselinePolicyId: next.baselinePolicyId || baseline.id,
+      comparisonPolicyId: next.comparisonPolicyId || comparison.id,
+    });
+  };
 
   return (
     <section className="policy-diff-panel" aria-labelledby="policy-diff-title">
