@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import {
+  decisionArtifactStem,
   decisionMemo,
   downloadJson,
   downloadText,
@@ -26,6 +27,7 @@ const LENSES = [
   { id: 'stress', label: 'Stress', icon: Waves },
   { id: 'lineage', label: 'Lineage', icon: Network },
 ];
+const LENS_IDS = new Set(LENSES.map((item) => item.id));
 
 function label(value) {
   return String(value || '—').replaceAll('_', ' ').toLowerCase();
@@ -68,7 +70,13 @@ function DecisionDossier({ run }) {
   );
 }
 
-export default function CaseWorkspace({ caseId, onNavigate }) {
+export default function CaseWorkspace({
+  caseId,
+  policyId = null,
+  scenarioId = null,
+  initialLens = null,
+  onNavigate,
+}) {
   const {
     pack,
     activeCaseId,
@@ -82,11 +90,23 @@ export default function CaseWorkspace({ caseId, onNavigate }) {
     loading,
     error,
   } = useCaseWorkbench();
-  const [lens, setLens] = useState('constraints');
+  const [lens, setLens] = useState(LENS_IDS.has(initialLens) ? initialLens : 'constraints');
 
   useEffect(() => {
     if (caseId && caseId !== activeCaseId) selectCase(caseId);
   }, [caseId, activeCaseId, selectCase]);
+
+  useEffect(() => {
+    if (policyId && policyId !== activePolicyId) selectPolicy(policyId);
+  }, [policyId, activePolicyId, selectPolicy]);
+
+  useEffect(() => {
+    if (scenarioId && scenarioId !== activeScenarioId) selectScenario(scenarioId);
+  }, [scenarioId, activeScenarioId, selectScenario]);
+
+  useEffect(() => {
+    if (initialLens && LENS_IDS.has(initialLens) && initialLens !== lens) setLens(initialLens);
+  }, [initialLens, lens]);
 
   const activeCase = pack.casesById[activeCaseId];
   const lensView = useMemo(() => {
@@ -96,13 +116,34 @@ export default function CaseWorkspace({ caseId, onNavigate }) {
     return <ConstraintsLens />;
   }, [lens, activeRun?.decision?.decision_id]);
 
+  const navigateState = (overrides = {}) => onNavigate({
+    section: 'case',
+    id: overrides.caseId || caseId || activeCaseId,
+    policyId: overrides.policyId || activePolicyId,
+    scenarioId: overrides.scenarioId || activeScenarioId,
+    lens: overrides.lens || lens,
+  });
+
+  const changePolicy = (nextPolicyId) => {
+    if (selectPolicy(nextPolicyId)) navigateState({ policyId: nextPolicyId });
+  };
+
+  const changeScenario = (nextScenarioId) => {
+    if (selectScenario(nextScenarioId)) navigateState({ scenarioId: nextScenarioId });
+  };
+
+  const changeLens = (nextLens) => {
+    setLens(nextLens);
+    navigateState({ lens: nextLens });
+  };
+
   const downloadReceipt = () => {
-    if (!activeReceipt) return;
-    downloadJson(`decision-receipt-${activeCaseId.toLowerCase()}.json`, activeReceipt);
+    if (!activeReceipt || !activeRun) return;
+    downloadJson(`decision-receipt-${decisionArtifactStem(activeRun)}.json`, activeReceipt);
   };
   const downloadMemo = () => {
     if (!activeRun) return;
-    downloadText(`decision-memo-${activeCaseId.toLowerCase()}.md`, decisionMemo(activeRun));
+    downloadText(`decision-memo-${decisionArtifactStem(activeRun)}.md`, decisionMemo(activeRun));
   };
 
   return (
@@ -114,11 +155,12 @@ export default function CaseWorkspace({ caseId, onNavigate }) {
         <div className="case-workspace-identity">
           <span>CASE <code>{activeCaseId}</code></span>
           <span>POLICY <code>{activePolicyId}@{pack.policiesById[activePolicyId].version}</code></span>
+          <span>SCENARIO <code>{activeScenarioId}</code></span>
           <span>DECISION <code>{activeRun?.decision?.decision_id?.slice(0, 12) || 'evaluating…'}</code></span>
-          <span className="local-mode">PUBLIC CASE PACK</span>
+          <span className="local-mode">URL-BOUND STATE</span>
         </div>
         <div className="case-workspace-actions">
-          <button type="button" onClick={() => onNavigate({ section: 'compare' })}><GitCompareArrows size={15} /> Compare</button>
+          <button type="button" onClick={() => onNavigate({ section: 'compare', scenarioId: activeScenarioId })}><GitCompareArrows size={15} /> Compare</button>
           <button type="button" onClick={downloadReceipt} disabled={!activeReceipt}><Download size={15} /> Receipt</button>
           <button type="button" onClick={downloadMemo} disabled={!activeRun}><Download size={15} /> Memo</button>
         </div>
@@ -136,14 +178,14 @@ export default function CaseWorkspace({ caseId, onNavigate }) {
 
           <label className="wb-select-field">
             <span>Declared policy</span>
-            <select value={activePolicyId} onChange={(event) => selectPolicy(event.target.value)}>
+            <select value={activePolicyId} onChange={(event) => changePolicy(event.target.value)}>
               {pack.policies.map((policy) => <option key={policy.id} value={policy.id}>{policy.name}</option>)}
             </select>
           </label>
 
           <label className="wb-select-field">
             <span>Assurance context</span>
-            <select value={activeScenarioId} onChange={(event) => selectScenario(event.target.value)}>
+            <select value={activeScenarioId} onChange={(event) => changeScenario(event.target.value)}>
               {pack.scenarios.map((scenario) => <option key={scenario.scenario_id} value={scenario.scenario_id}>{scenario.name}</option>)}
             </select>
           </label>
@@ -166,7 +208,7 @@ export default function CaseWorkspace({ caseId, onNavigate }) {
                   type="button"
                   key={item.id}
                   className={lens === item.id ? 'active' : ''}
-                  onClick={() => setLens(item.id)}
+                  onClick={() => changeLens(item.id)}
                   aria-current={lens === item.id ? 'page' : undefined}
                 >
                   <Icon size={16} /> {item.label}
