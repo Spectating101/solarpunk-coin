@@ -23,16 +23,18 @@ describe('ReceiptsWorkspace', () => {
     expect(screen.getByText('@solarpunk/constraint-core')).toBeInTheDocument();
   });
 
-  it('builds a capsule manifest with hashed portable files and raw evidence excluded', async () => {
+  it('builds a standards-mapped capsule with hashed portable files and raw evidence excluded', async () => {
     renderReceipts();
 
     await screen.findByText(/research capsule/i);
     await waitFor(() => {
-      expect(screen.getByText(/10 portable files/i)).toBeInTheDocument();
+      expect(screen.getByText(/12 portable files/i)).toBeInTheDocument();
     });
     expect(screen.getByText('decision-result.json')).toBeInTheDocument();
     expect(screen.getByText('decision-receipt.json')).toBeInTheDocument();
     expect(screen.getByText('lineage.json')).toBeInTheDocument();
+    expect(screen.getByText('prov.jsonld')).toBeInTheDocument();
+    expect(screen.getByText('ro-crate-metadata.json')).toBeInTheDocument();
     expect(screen.getByText(/raw evidence rows are excluded/i)).toBeInTheDocument();
   });
 });

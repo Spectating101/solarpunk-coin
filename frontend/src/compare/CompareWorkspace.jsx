@@ -5,6 +5,10 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
+import PolicyDiffPanel from './PolicyDiffPanel';
+
+const DEFAULT_BASELINE_POLICY_ID = 'LAB-CASE-OPEN-004';
+const DEFAULT_COMPARISON_POLICY_ID = 'ENERGY-CASE-PILOT-005';
 
 function label(value) {
   const normalized = String(value || '—').replaceAll('_', ' ').toLowerCase();
@@ -70,17 +74,35 @@ function transitionSummary(matrix) {
   ];
 }
 
-export default function CompareWorkspace({ onOpenDecision }) {
+export default function CompareWorkspace({
+  scenarioId = null,
+  baselinePolicyId = null,
+  comparisonPolicyId = null,
+  onNavigate = null,
+  onOpenDecision = null,
+}) {
   const {
     pack,
     activeScenarioId,
     selectCase,
     selectPolicy,
+    selectScenario,
     compare,
   } = useCaseWorkbench();
   const [matrix, setMatrix] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const resolvedBaselinePolicyId = pack.policiesById[baselinePolicyId]
+    ? baselinePolicyId
+    : DEFAULT_BASELINE_POLICY_ID;
+  const resolvedComparisonPolicyId = pack.policiesById[comparisonPolicyId]
+    ? comparisonPolicyId
+    : DEFAULT_COMPARISON_POLICY_ID;
+
+  useEffect(() => {
+    if (scenarioId && scenarioId !== activeScenarioId) selectScenario(scenarioId);
+  }, [scenarioId, activeScenarioId, selectScenario]);
 
   useEffect(() => {
     let active = true;
@@ -104,10 +126,47 @@ export default function CompareWorkspace({ onOpenDecision }) {
 
   const transitions = useMemo(() => transitionSummary(matrix), [matrix]);
 
+  const navigateCompare = ({
+    nextScenarioId = activeScenarioId,
+    nextBaselinePolicyId = resolvedBaselinePolicyId,
+    nextComparisonPolicyId = resolvedComparisonPolicyId,
+  } = {}) => {
+    if (typeof onNavigate !== 'function') return;
+    onNavigate({
+      section: 'compare',
+      scenarioId: nextScenarioId,
+      baselinePolicyId: nextBaselinePolicyId,
+      comparisonPolicyId: nextComparisonPolicyId,
+    });
+  };
+
+  const changeScenario = (nextScenarioId) => {
+    if (!selectScenario(nextScenarioId)) return;
+    navigateCompare({ nextScenarioId });
+  };
+
+  const changePolicyDiff = ({
+    baselinePolicyId: nextBaselinePolicyId,
+    comparisonPolicyId: nextComparisonPolicyId,
+  }) => {
+    navigateCompare({ nextBaselinePolicyId, nextComparisonPolicyId });
+  };
+
   const openRun = (run) => {
     selectCase(run.caseManifest.case_id);
     selectPolicy(run.policy.id);
-    onOpenDecision(run.caseManifest.case_id);
+    selectScenario(run.scenario.scenario_id);
+    if (typeof onNavigate === 'function') {
+      onNavigate({
+        section: 'case',
+        id: run.caseManifest.case_id,
+        policyId: run.policy.id,
+        scenarioId: run.scenario.scenario_id,
+        lens: 'constraints',
+      });
+      return;
+    }
+    if (typeof onOpenDecision === 'function') onOpenDecision(run.caseManifest.case_id);
   };
 
   return (
@@ -118,16 +177,30 @@ export default function CompareWorkspace({ onOpenDecision }) {
           <h1 id="compare-title">Where do policies disagree—and what actually binds?</h1>
           <p>
             Nine deterministic decisions are evaluated from three committed cases and three V2 policies.
-            The active assurance scenario stays fixed so policy and case differences remain inspectable.
+            The selected assurance scenario stays fixed so policy and case differences remain inspectable.
           </p>
         </div>
-        <div className="wb-identity-card">
-          <span>Assurance scenario</span>
+        <div className="wb-identity-card compare-scenario-card">
+          <label className="wb-select-field">
+            <span>Assurance scenario</span>
+            <select value={activeScenarioId} onChange={(event) => changeScenario(event.target.value)}>
+              {pack.scenarios.map((scenario) => (
+                <option key={scenario.scenario_id} value={scenario.scenario_id}>{scenario.name}</option>
+              ))}
+            </select>
+          </label>
           <strong>{activeScenarioId}</strong>
           <code>3 cases × 3 policies</code>
-          <small>Admission state is not called coverage.</small>
+          <small>Scenario and policy-diff state are encoded in the URL. Admission state is not called coverage.</small>
         </div>
       </section>
+
+      <PolicyDiffPanel
+        policies={pack.policies}
+        baselinePolicyId={resolvedBaselinePolicyId}
+        comparisonPolicyId={resolvedComparisonPolicyId}
+        onChange={changePolicyDiff}
+      />
 
       {error ? <div className="workbench-error" role="alert"><ShieldAlert size={18} /> {error}</div> : null}
       {loading ? <div className="compare-loading" aria-live="polite">Evaluating comparison matrix…</div> : (
@@ -135,7 +208,7 @@ export default function CompareWorkspace({ onOpenDecision }) {
           <section className="compare-panel">
             <div className="constraint-section-heading">
               <div><span className="wb-section-label">Decision matrix</span><h3>Case × policy</h3></div>
-              <span className="case-map-boundary">click any cell to inspect its decision</span>
+              <span className="case-map-boundary">click any cell to inspect its exact state</span>
             </div>
             <div className="wb-table-scroll">
               <table className="comparison-matrix" aria-label="Case policy decision matrix">

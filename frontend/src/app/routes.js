@@ -1,4 +1,5 @@
 const STATIC_SECTIONS = new Set([
+  'lab',
   'cases',
   'compare',
   'studies',
@@ -23,6 +24,7 @@ const LEGACY_ROUTES = Object.freeze({
 });
 
 export const PRIMARY_NAV = Object.freeze([
+  { section: 'lab', label: 'Overview' },
   { section: 'cases', label: 'Cases' },
   { section: 'compare', label: 'Compare' },
   { section: 'studies', label: 'Studies' },
@@ -30,33 +32,86 @@ export const PRIMARY_NAV = Object.freeze([
   { section: 'reference', label: 'Reference' },
 ]);
 
+function queryValue(params, name) {
+  return params.get(name) || null;
+}
+
+function routeQuery(route, names) {
+  const params = new URLSearchParams();
+  for (const [queryName, routeName] of names) {
+    const value = route?.[routeName];
+    if (value) params.set(queryName, value);
+  }
+  const query = params.toString();
+  return query ? `?${query}` : '';
+}
+
 export function parseHashRoute(hash = '') {
   const raw = String(hash).replace(/^#/, '').trim();
-  if (!raw) return { section: 'cases', id: null };
-  const legacy = LEGACY_ROUTES[raw.toLowerCase()];
+  if (!raw) return { section: 'lab', id: null };
+
+  const [rawPath, rawQuery = ''] = raw.split('?');
+  const legacy = LEGACY_ROUTES[rawPath.toLowerCase()];
   if (legacy) return { ...legacy };
 
-  const [rawSection, ...rest] = raw.split('/').filter(Boolean);
-  const section = String(rawSection || 'cases').toLowerCase();
+  const params = new URLSearchParams(rawQuery);
+  const [rawSection, ...rest] = rawPath.split('/').filter(Boolean);
+  const section = String(rawSection || 'lab').toLowerCase();
   const id = rest.length ? decodeURIComponent(rest.join('/')) : null;
+  const policyId = queryValue(params, 'policy');
+  const scenarioId = queryValue(params, 'scenario');
+  const caseId = queryValue(params, 'case');
+  const lens = queryValue(params, 'lens');
+  const baselinePolicyId = queryValue(params, 'baseline');
+  const comparisonPolicyId = queryValue(params, 'comparison');
 
-  if (section === 'case') return { section: 'case', id };
+  if (section === 'case') return { section: 'case', id, policyId, scenarioId, lens };
+  if (section === 'compare') {
+    return {
+      section: 'compare',
+      id: null,
+      scenarioId,
+      baselinePolicyId,
+      comparisonPolicyId,
+    };
+  }
   if (section === 'study') return { section: 'study', id, view: 'detail' };
-  if (section === 'receipt') return { section: 'receipt', id };
+  if (section === 'receipt') return { section: 'receipt', id, caseId, policyId, scenarioId };
   if (section === 'reference') return { section: 'reference', id };
   if (STATIC_SECTIONS.has(section)) return { section, id: null };
-  return { section: 'cases', id: null, invalid: raw };
+  return { section: 'lab', id: null, invalid: raw };
 }
 
 export function routeToHash(route) {
-  const section = route?.section || 'cases';
-  if (section === 'case') return `#case/${encodeURIComponent(route.id)}`;
+  const section = route?.section || 'lab';
+  if (section === 'case') {
+    const query = routeQuery(route, [
+      ['policy', 'policyId'],
+      ['scenario', 'scenarioId'],
+      ['lens', 'lens'],
+    ]);
+    return `#case/${encodeURIComponent(route.id)}${query}`;
+  }
+  if (section === 'compare') {
+    return `#compare${routeQuery(route, [
+      ['scenario', 'scenarioId'],
+      ['baseline', 'baselinePolicyId'],
+      ['comparison', 'comparisonPolicyId'],
+    ])}`;
+  }
   if (section === 'study') {
     if (route.view === 'brief') return '#runs';
     if (route.view === 'reproduce') return '#reproduce';
     return route.id === 'market-capacity-v1' ? '#study' : `#study/${encodeURIComponent(route.id)}`;
   }
-  if (section === 'receipt') return `#receipt/${encodeURIComponent(route.id)}`;
+  if (section === 'receipt') {
+    const query = routeQuery(route, [
+      ['case', 'caseId'],
+      ['policy', 'policyId'],
+      ['scenario', 'scenarioId'],
+    ]);
+    return `#receipt/${encodeURIComponent(route.id)}${query}`;
+  }
   if (section === 'reference') {
     if (route.id === 'solarpunk') return '#overview';
     if (route.id === 'sepolia') return '#sepolia';

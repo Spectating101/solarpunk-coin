@@ -13,10 +13,15 @@ function renderCompare(openDecision = vi.fn()) {
 }
 
 describe('CompareWorkspace', () => {
-  it('renders a 3 × 3 deterministic case-policy matrix under one assurance scenario', async () => {
+  it('renders a policy manifest diff and 3 × 3 decision matrix under one assurance scenario', async () => {
     renderCompare();
 
     expect(screen.getByRole('heading', { name: /where do policies disagree/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /what changed in the policy before the outcomes changed/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/baseline policy/i)).toHaveValue('LAB-CASE-OPEN-004');
+    expect(screen.getByLabelText(/comparison policy/i)).toHaveValue('ENERGY-CASE-PILOT-005');
+    expect(screen.getAllByText('SIGNED_EVIDENCE').length).toBeGreaterThan(0);
+
     const table = await screen.findByRole('table', { name: /case policy decision matrix/i });
     const headers = within(table).getAllByRole('columnheader');
     expect(headers).toHaveLength(4);

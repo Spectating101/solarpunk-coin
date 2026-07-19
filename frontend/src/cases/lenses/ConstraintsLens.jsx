@@ -40,7 +40,7 @@ function ConstraintDetail({ evaluation }) {
   );
 }
 
-export default function ConstraintsLens() {
+export default function ConstraintsLens({ onSelectScenario = null }) {
   const {
     activeRun,
     activeScenarioId,
@@ -65,6 +65,13 @@ export default function ConstraintsLens() {
     ? decision.admission.blocking_rules[0]
     : decision.capacity.binding_constraints[0];
   const l2Scenario = pack.scenariosById['PROVENANCE-L2-COUNTERFACTUAL'];
+  const previewL2 = () => {
+    if (typeof onSelectScenario === 'function') {
+      onSelectScenario(l2Scenario.scenario_id);
+      return;
+    }
+    selectScenario(l2Scenario.scenario_id);
+  };
 
   return (
     <div className="constraints-lens">
@@ -134,7 +141,7 @@ export default function ConstraintsLens() {
             <button
               type="button"
               className="counterfactual-action"
-              onClick={() => selectScenario(l2Scenario.scenario_id)}
+              onClick={previewL2}
             >
               <GitCompareArrows size={17} />
               <span>

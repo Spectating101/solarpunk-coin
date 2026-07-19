@@ -4,15 +4,11 @@ import CaseExplorer from './cases/CaseExplorer';
 import CaseWorkspace from './cases/CaseWorkspace';
 import CompareWorkspace from './compare/CompareWorkspace';
 import ReceiptsWorkspace from './receipts/ReceiptsWorkspace';
-import ConstraintProtocolLab from './components/ConstraintProtocolLab';
 import DecisionBrief from './components/DecisionBrief';
 import EmpiricalRunsLab from './components/EmpiricalRunsLab';
 import EmpiricalReproductionLab from './components/EmpiricalReproductionLab';
-import PublicLabLanding from './components/PublicLabLanding';
-import EvidenceLab from './components/EvidenceLab';
-import CurrencyLab from './components/CurrencyLab';
+import LabOverview from './components/LabOverview';
 import LabSessionBar from './components/LabSessionBar';
-import ResearchPanel from './components/ResearchPanel';
 import { GITHUB_REPO } from './constants/contracts';
 import {
   clearSessionReceipt,
@@ -33,12 +29,26 @@ import './decisionBrief.css';
 import './empiricalRuns.css';
 import './empiricalReproduction.css';
 import './styles/caseWorkbench.css';
+import './styles/labOverview.css';
 
+const ConstraintProtocolLab = lazy(() => import('./components/ConstraintProtocolLab'));
+const PublicLabLanding = lazy(() => import('./components/PublicLabLanding'));
+const EvidenceLab = lazy(() => import('./components/EvidenceLab'));
+const CurrencyLab = lazy(() => import('./components/CurrencyLab'));
+const ResearchPanel = lazy(() => import('./components/ResearchPanel'));
 const SpkV1Console = lazy(() => import('./components/SpkV1Console'));
 
 function routeFromHash() {
-  if (typeof window === 'undefined') return { section: 'cases', id: null };
+  if (typeof window === 'undefined') return { section: 'lab', id: null };
   return parseHashRoute(window.location.hash);
+}
+
+function RouteFallback({ label = 'Loading research surface…' }) {
+  return (
+    <section className="reproduction-load" aria-live="polite" aria-busy="true">
+      <strong>{label}</strong>
+    </section>
+  );
 }
 
 function App() {
@@ -79,7 +89,7 @@ function App() {
       window.history.replaceState(
         null,
         '',
-        `${window.location.pathname}${window.location.search}#cases`,
+        `${window.location.pathname}${window.location.search}#lab`,
       );
     }
 
@@ -248,19 +258,39 @@ function App() {
         </div>
       ) : null}
 
+      {route.section === 'lab' ? <LabOverview onNavigate={navigate} /> : null}
       {route.section === 'cases' ? (
         <CaseExplorer onOpenCase={(caseId) => navigate({ section: 'case', id: caseId })} />
       ) : null}
       {route.section === 'case' ? (
-        <CaseWorkspace caseId={route.id} onNavigate={navigate} />
+        <CaseWorkspace
+          caseId={route.id}
+          policyId={route.policyId}
+          scenarioId={route.scenarioId}
+          initialLens={route.lens}
+          onNavigate={navigate}
+        />
       ) : null}
       {route.section === 'compare' ? (
-        <CompareWorkspace onOpenDecision={(caseId) => navigate({ section: 'case', id: caseId })} />
+        <CompareWorkspace
+          scenarioId={route.scenarioId}
+          baselinePolicyId={route.baselinePolicyId}
+          comparisonPolicyId={route.comparisonPolicyId}
+          onNavigate={navigate}
+        />
       ) : null}
       {route.section === 'receipts' || route.section === 'receipt' ? (
         <ReceiptsWorkspace
           receiptId={route.section === 'receipt' ? route.id : null}
-          onOpenReceipt={(decisionId) => navigate({ section: 'receipt', id: decisionId })}
+          routeContext={route.section === 'receipt' ? route : null}
+          onOpenReceipt={(run) => navigate({
+            section: 'receipt',
+            id: run.decision.decision_id,
+            caseId: run.caseManifest.case_id,
+            policyId: run.policy.id,
+            scenarioId: run.scenario.scenario_id,
+          })}
+          onNavigate={navigate}
         />
       ) : null}
 
@@ -278,34 +308,42 @@ function App() {
         <EmpiricalReproductionLab onOpenRuns={() => navigate({ section: 'study', id: 'market-capacity-v1', view: 'detail' })} />
       ) : null}
       {route.section === 'legacy-protocol' ? (
-        <ConstraintProtocolLab onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })} />
+        <Suspense fallback={<RouteFallback label="Loading protocol laboratory…" />}>
+          <ConstraintProtocolLab onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })} />
+        </Suspense>
       ) : null}
 
       {route.section === 'reference' && (!route.id || route.id === 'solarpunk') ? (
-        <PublicLabLanding
-          onOpenEvidence={() => navigate({ section: 'evidence' })}
-          onOpenCurrency={() => navigate({ section: 'currency' })}
-          onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })}
-          onOpenResearch={() => navigate({ section: 'research' })}
-        />
+        <Suspense fallback={<RouteFallback label="Loading SolarPunk reference lab…" />}>
+          <PublicLabLanding
+            onOpenEvidence={() => navigate({ section: 'evidence' })}
+            onOpenCurrency={() => navigate({ section: 'currency' })}
+            onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })}
+            onOpenResearch={() => navigate({ section: 'research' })}
+          />
+        </Suspense>
       ) : null}
       {route.section === 'evidence' ? (
-        <EvidenceLab
-          activeReceipt={receipt}
-          onContinue={() => navigate({ section: 'currency' })}
-          onReceiptReady={acceptReceipt}
-          onReceiptInvalidated={invalidateReceipt}
-        />
+        <Suspense fallback={<RouteFallback label="Loading browser evidence lab…" />}>
+          <EvidenceLab
+            activeReceipt={receipt}
+            onContinue={() => navigate({ section: 'currency' })}
+            onReceiptReady={acceptReceipt}
+            onReceiptInvalidated={invalidateReceipt}
+          />
+        </Suspense>
       ) : null}
       {route.section === 'currency' ? (
-        <CurrencyLab
-          receipt={receipt}
-          onOpenEvidence={() => navigate({ section: 'evidence' })}
-          onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })}
-        />
+        <Suspense fallback={<RouteFallback label="Loading currency simulation lab…" />}>
+          <CurrencyLab
+            receipt={receipt}
+            onOpenEvidence={() => navigate({ section: 'evidence' })}
+            onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })}
+          />
+        </Suspense>
       ) : null}
       {sepRoute ? (
-        <Suspense fallback={<section className="reproduction-load" aria-live="polite"><strong>Loading Sepolia proof…</strong></section>}>
+        <Suspense fallback={<RouteFallback label="Loading Sepolia proof…" />}>
           <SpkV1Console
             provider={provider}
             signer={signer}
@@ -316,7 +354,11 @@ function App() {
           />
         </Suspense>
       ) : null}
-      {route.section === 'research' ? <ResearchPanel /> : null}
+      {route.section === 'research' ? (
+        <Suspense fallback={<RouteFallback label="Loading research reference…" />}>
+          <ResearchPanel />
+        </Suspense>
+      ) : null}
     </div>
   );
 }

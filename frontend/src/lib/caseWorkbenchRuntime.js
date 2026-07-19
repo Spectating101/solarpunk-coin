@@ -7,7 +7,7 @@ import {
   evaluateSettlement,
   evaluateSettlementConstraint,
   makeIssuedClaim,
-} from '@solarpunk/constraint-core';
+} from '@solarpunk/constraint-core/workbench';
 import {
   ENERGY_CASE_PACK,
   caseDecisionKey,
@@ -16,13 +16,31 @@ import {
 export const WORKBENCH_RUNTIME = Object.freeze({
   package: '@solarpunk/constraint-core',
   package_version: '0.1.0-alpha.1',
-  source_revision: import.meta.env.VITE_SOURCE_REVISION || 'agent/case-workbench-v2',
+  source_revision: import.meta.env.VITE_SOURCE_REVISION || 'unversioned-local-build',
 });
 
 function requireIndexed(index, id, label) {
   const value = index[id];
   if (!value) throw new Error(`unknown ${label}: ${id}`);
   return value;
+}
+
+function artifactPart(value) {
+  return String(value || 'unknown')
+    .trim()
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase();
+}
+
+export function decisionArtifactStem(run) {
+  if (!run?.decision?.decision_id) return 'decision-artifact';
+  return [
+    run.caseManifest.case_id,
+    run.policy.id,
+    run.scenario.scenario_id,
+    run.decision.decision_id.slice(0, 12),
+  ].map(artifactPart).join('-');
 }
 
 export async function evaluateCaseRun({ caseId, policyId, scenarioId }) {
