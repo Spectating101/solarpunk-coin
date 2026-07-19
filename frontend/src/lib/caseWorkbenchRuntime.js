@@ -7,7 +7,7 @@ import {
   evaluateSettlement,
   evaluateSettlementConstraint,
   makeIssuedClaim,
-} from '@solarpunk/constraint-core';
+} from '@solarpunk/constraint-core/workbench';
 import {
   ENERGY_CASE_PACK,
   caseDecisionKey,
