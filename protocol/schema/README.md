@@ -1,6 +1,6 @@
 # Constraint Protocol JSON Schemas
 
-Public Alpha publishes machine-readable Draft 2020-12 JSON Schemas for portable protocol objects and the provenance decision. The case-workbench V2 branch extends that portable object set without changing the existing v1 evidence, provenance, policy, claim, or settlement identifiers.
+Public Alpha publishes machine-readable Draft 2020-12 JSON Schemas for portable protocol objects and the provenance decision. The case-workbench V2 object set extends the portable contracts without changing the existing v1 evidence, provenance, policy, claim, or settlement identifiers.
 
 | Schema | Runtime identifier |
 |---|---|
@@ -17,8 +17,24 @@ Public Alpha publishes machine-readable Draft 2020-12 JSON Schemas for portable 
 | `constraint-evaluation.v1.schema.json` | `solarpunk.constraint.constraint_evaluation.v1` |
 | `decision-result.v1.schema.json` | `solarpunk.constraint.decision_result.v1` |
 | `decision-receipt.v1.schema.json` | `solarpunk.constraint.decision_receipt.v1` |
+| `operator-source-manifest.v1.schema.json` | `solarpunk.operator_source_manifest.v1` |
+| `operator-source-receipt.v1.schema.json` | `solarpunk.operator_source_receipt.v1` |
 
 These schemas define portable object shapes. They do not certify the truth of evidence or the authority of an issuer.
+
+## Operator source intake boundary
+
+The operator source manifest records declared custody, acquisition, permission, measurement semantics, device metadata, assertions, and referenced artifacts before normalization.
+
+The corresponding receipt binds the source-file hash and canonical manifest hash while excluding raw source rows. It fixes:
+
+```text
+default_assurance_scenario = PROVENANCE-L0-BASE
+automatic_promotion_allowed = false
+source_truth_certification = NOT_CLAIMED
+```
+
+Permission to publish is not provenance. Declared artifact filenames are not verified artifacts. A self-authored manifest cannot establish L1–L4 assurance.
 
 ## Policy schema split
 
@@ -54,12 +70,13 @@ A `DecisionResult` is therefore a deterministic research decision under declared
 
 ## Deterministic identity
 
-The evidence, policy, claim, case, context, constraint-evaluation, and decision objects use deterministic hashes implemented by `@solarpunk/constraint-core` where their object contracts define identity.
+The evidence, policy, claim, case, context, constraint-evaluation, decision, operator-source manifest, and operator-source receipt objects use deterministic hashes implemented by `@solarpunk/constraint-core` where their contracts define identity.
 
 V2 decision evaluation recomputes the portable evidence identity body before accepting an `evidence_hash`. Retaining an old hash after modifying source semantics, canonical intervals, summary, or capabilities fails closed. Diagnostics and presentation metadata remain outside evidence identity according to the existing evidence-envelope contract.
 
 A JSON object can be structurally schema-valid while still failing:
 
+- source-file or custody-receipt identity verification;
 - evidence identity verification;
 - evidence diagnostics;
 - provenance classification;
