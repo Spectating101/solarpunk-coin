@@ -9,8 +9,8 @@
     "local_only": true,
     "case_id": "OPS-001",
     "operator_format_sample": true,
-    "sample_fixture": false,
-    "custody": "unchecked_public_lab_operator_csv_shape",
+    "sample_fixture": true,
+    "custody": "synthetic_public_lab_operator_csv_fixture",
     "signature_semantics": "unsigned_generic_interval_csv"
   },
   "intervals": [
@@ -135,13 +135,13 @@
     {
       "code": "operator_format_sample",
       "status": "WARNING",
-      "detail": "Operator-shaped CSV normalized through generic-interval-csv. Not signed, not mint authority, not a named closed-pilot custody archive."
+      "detail": "Synthetic operator-shaped CSV normalized through generic-interval-csv. Not signed, not source-truth evidence, not mint authority, and not a named operator custody archive."
     }
   ],
   "meta": {
-    "source_label": "OPS-001 operator-format CSV sample (public-lab fixture shape)",
+    "source_label": "OPS-001 synthetic operator-format CSV fixture",
     "browser_local": true
   },
-  "evidence_hash": "6d3e724bd4dc5b9a8ec8383eda1d35598eccbb953844c90810427451e3f28c5e",
+  "evidence_hash": "32e4320749d6f3decc6a64656176af76bbc837b5573e734b40b96bdead3b076c",
   "hash_algorithm": "SHA-256"
 }
