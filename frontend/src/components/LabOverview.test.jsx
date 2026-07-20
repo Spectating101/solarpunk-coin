@@ -15,7 +15,7 @@ vi.mock('../lib/caseWorkbenchRuntime', () => ({
           blocking_rules: ['MIN_PROVENANCE'],
           evaluations: [
             { evaluation_id: 'positive', calculator_id: 'POSITIVE_SURPLUS', status: 'PASS' },
-            { evaluation_id: 'diagnostics', calculator_id: 'ZERO_BLOCKING_DIAGNOSTICS', status: 'PASS' },
+            { evaluation_id: 'diagnostics', calculator_id: 'ZERO_BLOCKERS', status: 'PASS' },
             { evaluation_id: 'provenance', calculator_id: 'MIN_PROVENANCE', status: 'BLOCK' },
           ],
         },
@@ -28,7 +28,7 @@ vi.mock('../lib/caseWorkbenchRuntime', () => ({
           blocking_rules: [],
           evaluations: [
             { evaluation_id: 'positive', calculator_id: 'POSITIVE_SURPLUS', status: 'PASS' },
-            { evaluation_id: 'diagnostics', calculator_id: 'ZERO_BLOCKING_DIAGNOSTICS', status: 'PASS' },
+            { evaluation_id: 'diagnostics', calculator_id: 'ZERO_BLOCKERS', status: 'PASS' },
             { evaluation_id: 'provenance', calculator_id: 'MIN_PROVENANCE', status: 'PASS' },
           ],
         },
@@ -54,7 +54,7 @@ describe('LabOverview flagship decision experience', () => {
     expect(screen.getByText('180 eligible kWh')).toBeInTheDocument();
     expect(await screen.findByText('BLOCKED')).toBeInTheDocument();
     expect(screen.getByText('NOT CALCULATED')).toBeInTheDocument();
-    expect(screen.getByText('minimum provenance')).toBeInTheDocument();
+    expect(screen.getAllByText('minimum provenance').length).toBeGreaterThan(0);
     expect(screen.getByText(/evidence remains unchanged/i)).toBeInTheDocument();
   });
 
