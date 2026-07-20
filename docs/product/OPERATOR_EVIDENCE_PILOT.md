@@ -1,16 +1,16 @@
-# Operator evidence pilot (Gate 1)
+# Operator-format evidence pipeline pilot (Gate 1A)
 
-**Branch:** `feat/operator-evidence-pilot`  
-**Status:** pack-integrated pilot — operator-shaped CSV through the full Case Workbench V2 pipeline  
-**Thesis PDF:** out of scope for this gate
+**Status:** pack-integrated synthetic operator-format fixture through the full Case Workbench V2 pipeline  
+**Real-operator Gate 1:** still open  
+**Thesis PDF:** out of scope
 
 ## Goal
 
-Force one external-shaped evidence source through:
+Validate the complete software path:
 
 ```text
-External source
-→ normalized evidence
+Operator-format CSV fixture
+→ generic adapter normalization
 → diagnostics
 → evidence hash
 → provenance classification
@@ -18,71 +18,77 @@ External source
 → policy decision
 → settlement stress
 → receipt
-→ research capsule
+→ privacy-safe research capsule
 ```
 
-without pretending the source is stronger than it is.
+without implying that a synthetic sample is observed operator evidence.
 
-## Source chosen
+## Source
 
 | Field | Value |
-|-------|--------|
+|---|---|
 | Path | `data/operator/sample_operator_export.csv` |
-| Shape | Operator intake CSV (window_start/end, generation, site_load, export, …) |
+| Epistemic status | Synthetic public-lab fixture using an operator-like column shape |
 | Adapter | `generic-interval-csv` via `normalizeGenericCsv` |
 | Case | `OPS-001` |
-| Evidence file | `protocol/cases/energy-v1/evidence/ops-sample-evidence.json` |
+| Evidence | `protocol/cases/energy-v1/evidence/ops-sample-evidence.json` |
 
-This is the **checked-in operator-format public-lab sample**, not a named closed-pilot custody archive. That is intentional for Gate 1 reproducibility: the pipeline and honesty boundaries are what we prove first. A later named operator file can replace the CSV without changing the adapter path.
+The source is deliberately reproducible and public. It does **not** have named operator custody, trusted identity, device signatures, or external corroboration.
 
-## Honesty boundaries
+## Declared boundaries
 
+- `source.operator_format_sample = true`
+- `source.sample_fixture = true`
 - `capabilities.signed = false`
-- `operator_signed = false`
-- `sample_fixture = false` on source (unlike TYN/AUS/PHX controlled fixtures)
-- Diagnostic `operator_format_sample` WARNING on the envelope
-- Case boundaries state: not mint authority; TYN PVWatts context is TMY alignment only
-- Capsule / receipt: `raw_evidence_included = false` (hashes + metadata only)
+- `capabilities.cryptographically_verified = false`
+- `capabilities.external_corroboration = false`
+- diagnostic `operator_format_sample = WARNING`
+- raw interval rows are excluded from receipts and capsules
+- the reused Taoyuan PVWatts context is modeled TMY context, not observed generation
 
-## Expected decisions (L0 base scenario)
+## Expected L0 decisions
 
-| Policy | Expected | Why |
-|--------|----------|-----|
-| `ENERGY-CASE-PILOT-005` | **BLOCKED** | Requires signed evidence + MIN_PROVENANCE L2 |
-| `LAB-CASE-OPEN-004` | **ADMIT_WITH_LIMIT** @ 103.8 | Positive surplus + zero blockers; evidence-backed capacity binds |
+| Policy | Expected | Reason |
+|---|---|---|
+| `ENERGY-CASE-PILOT-005` | **BLOCKED** | `SIGNED_EVIDENCE` and `MIN_PROVENANCE` fail |
+| `LAB-CASE-OPEN-004` | **ADMIT_WITH_LIMIT** at **103.8** | Evidence-backed capacity binds |
 
-A blocked pilot result is a **successful** Gate 1 scientific outcome.
+A blocked pilot result is the correct scientific outcome for unsigned fixture evidence.
 
 ## Commands
 
 ```bash
-# Rebuild committed evidence + case from the CSV (deterministic)
-node scripts/build_operator_case_evidence.mjs
+# Rebuild committed evidence and case objects deterministically
+npm run case:ops-evidence
 
-# Unit / integration tests
-node --test packages/constraint-core/test/operator-evidence-gate1.test.mjs
-node --test packages/constraint-core/test/energy-case-pack.test.mjs
+# Gate 1A unit and pack tests
+npm run case:gate1:test
 
-# Full report + privacy-safe capsule artifacts
+# Generate the end-to-end report and privacy-safe capsule locally
 npm run case:gate1
-# → state/product/operator_evidence_gate1/
+# output: state/product/operator_evidence_gate1/
 ```
 
-In the browser workbench (after this branch is running locally): open **Cases → OPS-001**, leave assurance at L0, compare pilot vs open policies, export capsule from Receipts.
+In the browser, open **Cases → OPS-001**, keep assurance at L0, compare pilot and open policies, inspect settlement stress, and export the receipt/capsule.
 
-## Completion checklist
+## Gate 1A completion
 
-- [x] External-shaped source through normalize → envelope → case pack  
-- [x] Explicit identity, window, and data boundary  
-- [x] Diagnostics visible (operator_format_sample warning)  
-- [x] Raw evidence can stay out of exports (capsule metadata only)  
-- [x] Rerun produces the same evidence hash / decision path under tests  
-- [ ] Named real operator archive (next increment — swap CSV, keep adapter)
+- [x] Adapter accepts an operator-format CSV shape
+- [x] Normalization and evidence hashing are deterministic
+- [x] Unsigned provenance remains L0
+- [x] Pilot policy blocks before quantity evaluation
+- [x] Open policy admits with an evidence-backed ceiling
+- [x] Settlement shortfall remains visible
+- [x] Receipt and capsule exclude raw interval rows
+- [x] Public interface exposes the case
 
-## What this does *not* do
+## What remains for real-operator Gate 1
 
-- No IndexedDB project workspace (Gate 2)  
-- No unrestricted policy editor (Gate 3)  
-- No independent capsule verifier CLI (Gate 4)  
-- No UI redesign of Overview / Cases  
-- No thesis PDF / Docs publish changes  
+Run the same path against a source with at least one of the following:
+
+- named operator provenance and documented custody;
+- an exported inverter or utility file supplied by its owner;
+- signed meter evidence tied to a declared device registry;
+- an anonymized real archive whose origin and transformation steps can be documented.
+
+That later result may still be blocked. The completion criterion is credible source provenance and reproducible processing, not admission.
