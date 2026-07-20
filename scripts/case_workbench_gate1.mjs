@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 /**
- * Gate 1 end-to-end: OPS-001 through pilot BLOCK, open ADMIT, settlement stress,
- * and a privacy-safe research capsule (no raw evidence rows).
+ * Gate 1A end-to-end: OPS-001 synthetic operator-format fixture through pilot
+ * BLOCK, open ADMIT, settlement stress, and a privacy-safe research capsule.
+ *
+ * This proves the adapter and V2 execution path. It does not close the named
+ * real-operator evidence gate.
  */
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -17,7 +20,6 @@ import {
   verifyEvidenceEnvelopeHash,
 } from '../packages/constraint-core/src/workbench.js';
 import { buildResearchCapsule } from '../frontend/src/lib/researchCapsule.js';
-import { readFile } from 'node:fs/promises';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PACK = path.join(ROOT, 'protocol/cases/energy-v1');
@@ -68,9 +70,9 @@ const receipt = buildDecisionReceipt({
   runtime: {
     package: '@solarpunk/constraint-core',
     package_version: '0.1.0-alpha.1',
-    source_revision: process.env.VITE_SOURCE_REVISION || 'gate1-local',
+    source_revision: process.env.VITE_SOURCE_REVISION || 'gate1a-local',
   },
-  data_boundary: 'OPS-001 operator-format CSV summarized by evidence identity and metadata. Raw interval rows are excluded from receipts and capsules.',
+  data_boundary: 'OPS-001 is a synthetic operator-format fixture summarized by evidence identity and metadata. Raw interval rows are excluded from receipts and capsules.',
   raw_evidence_included: false,
 });
 
@@ -96,10 +98,16 @@ const capsuleHasIntervals = Object.values(capsule.files).some((content) => {
 });
 
 const report = {
-  schema: 'solarpunk.operator_evidence_gate1_report.v1',
+  schema: 'solarpunk.operator_evidence_gate1a_report.v1',
   generated_at: new Date().toISOString(),
+  gate: {
+    id: 'GATE_1A_OPERATOR_FORMAT_PIPELINE',
+    closes_real_operator_validation: false,
+    next_required_step: 'Run the same path against a named or custody-documented operator export.',
+  },
   source: {
     path: 'data/operator/sample_operator_export.csv',
+    epistemic_status: 'synthetic_operator_format_fixture',
     adapter: evidence.adapter,
     evidence_hash: evidence.evidence_hash,
     measurement_window: caseManifest.measurement_window,
@@ -138,12 +146,12 @@ const report = {
   capsule: {
     schema: capsule.manifest.schema,
     file_count: capsule.manifest.files.length,
-    files: capsule.manifest.files.map((f) => f.path),
+    files: capsule.manifest.files.map((file) => file.path),
     raw_evidence_included: capsule.manifest.raw_evidence_included,
     raw_intervals_present_in_files: capsuleHasIntervals,
   },
-  gate1_status: {
-    external_shaped_source_through_pipeline: true,
+  gate1a_status: {
+    synthetic_operator_format_source_through_pipeline: evidence.source.sample_fixture === true,
     honest_unsigned_capabilities: evidence.capabilities.signed === false,
     pilot_block_expected: pilot.decision.decision === 'BLOCKED',
     open_admit_with_limit: open.decision.decision === 'ADMIT_WITH_LIMIT',
@@ -160,6 +168,6 @@ for (const [name, content] of Object.entries(capsule.files)) {
   await writeFile(path.join(OUT_DIR, `capsule_${name}`), content.endsWith('\n') ? content : `${content}\n`);
 }
 
-const allOk = Object.values(report.gate1_status).every(Boolean);
+const allOk = Object.values(report.gate1a_status).every(Boolean);
 console.log(JSON.stringify({ ok: allOk, out_dir: path.relative(ROOT, OUT_DIR), report }, null, 2));
 if (!allOk) process.exit(1);
