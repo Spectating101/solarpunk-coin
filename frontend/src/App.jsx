@@ -1,5 +1,12 @@
 import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
-import { AlertTriangle, Github, Wallet } from 'lucide-react';
+import {
+  AlertTriangle,
+  ChevronRight,
+  Github,
+  Menu,
+  Wallet,
+  X,
+} from 'lucide-react';
 import CaseExplorer from './cases/CaseExplorer';
 import CaseWorkspace from './cases/CaseWorkspace';
 import CompareWorkspace from './compare/CompareWorkspace';
@@ -60,6 +67,7 @@ function App() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [chainId, setChainId] = useState(null);
   const [connectError, setConnectError] = useState(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const navigate = useCallback((nextRoute) => {
     const resolved = typeof nextRoute === 'string'
@@ -101,6 +109,19 @@ function App() {
     window.addEventListener('hashchange', syncHash);
     return () => window.removeEventListener('hashchange', syncHash);
   }, []);
+
+  useEffect(() => {
+    setMobileNavOpen(false);
+  }, [route.section, route.id]);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setMobileNavOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [mobileNavOpen]);
 
   const refreshChain = useCallback(async (p) => {
     if (!p) return;
@@ -190,6 +211,10 @@ function App() {
   const wrongNetwork = account && chainId != null && chainId !== SEPOLIA_CHAIN_ID;
   const showSessionBar = ['evidence', 'currency'].includes(route.section) || sepRoute;
   const activePrimary = primarySection(route);
+  const navigatePrimary = (section) => {
+    setMobileNavOpen(false);
+    navigate({ section });
+  };
 
   return (
     <div className="app-minimal">
@@ -202,20 +227,20 @@ function App() {
           </div>
         </div>
         <div className="app-minimal-actions">
-          <nav className="app-tab-nav" aria-label="Research workbench sections">
+          <nav className="app-tab-nav desktop-primary-nav" aria-label="Research workbench sections">
             {PRIMARY_NAV.map((item) => (
               <button
                 key={item.section}
                 type="button"
                 className={activePrimary === item.section ? 'app-tab active' : 'app-tab'}
-                onClick={() => navigate({ section: item.section })}
+                onClick={() => navigatePrimary(item.section)}
                 aria-current={activePrimary === item.section ? 'page' : undefined}
               >
                 {item.label}
               </button>
             ))}
           </nav>
-          <a href={GITHUB_REPO} target="_blank" rel="noreferrer" className="ghost-link">
+          <a href={GITHUB_REPO} target="_blank" rel="noreferrer" className="ghost-link desktop-repo-link">
             <Github size={16} /> GitHub
           </a>
           {sepRoute && (
@@ -231,6 +256,33 @@ function App() {
               </button>
             )
           )}
+          <button
+            type="button"
+            className="mobile-nav-trigger"
+            aria-expanded={mobileNavOpen}
+            aria-controls="mobile-primary-menu"
+            aria-label={mobileNavOpen ? 'Close primary navigation' : 'Open primary navigation'}
+            onClick={() => setMobileNavOpen((open) => !open)}
+          >
+            {mobileNavOpen ? <X size={18} /> : <Menu size={18} />}
+            <span>Menu</span>
+          </button>
+        </div>
+        <div id="mobile-primary-menu" className={mobileNavOpen ? 'mobile-primary-menu open' : 'mobile-primary-menu'}>
+          {PRIMARY_NAV.map((item) => (
+            <button
+              key={item.section}
+              type="button"
+              className={activePrimary === item.section ? 'active' : ''}
+              onClick={() => navigatePrimary(item.section)}
+              aria-current={activePrimary === item.section ? 'page' : undefined}
+            >
+              <span>{item.label}</span><ChevronRight size={16} />
+            </button>
+          ))}
+          <a href={GITHUB_REPO} target="_blank" rel="noreferrer">
+            <span><Github size={16} /> GitHub repository</span><ChevronRight size={16} />
+          </a>
         </div>
       </header>
 
