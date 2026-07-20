@@ -1,0 +1,301 @@
+/* v0.3 Studies: one empirical proof layer across decision, detail, and reproduction routes. */
+
+.study-proof-host {
+  position: relative;
+  z-index: 18;
+  width: min(1600px, calc(100% - 36px));
+  margin: 12px auto 0;
+}
+
+.study-proof-layer {
+  position: sticky;
+  top: 68px;
+  z-index: 18;
+}
+
+.study-proof-disclosure {
+  overflow: hidden;
+  border: 1px solid rgba(103, 232, 249, 0.22);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface-2) 95%, transparent);
+  box-shadow: 0 15px 38px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(18px);
+}
+
+.study-proof-disclosure > summary {
+  min-height: 58px;
+  padding: 10px 14px;
+}
+
+.study-proof-disclosure > summary strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.study-proof-disclosure > summary small {
+  color: var(--wb-cyan);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.study-proof-disclosure .responsive-disclosure-body {
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.study-proof-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(480px, 1.45fr);
+  grid-template-areas:
+    "copy nav"
+    "chain chain";
+  gap: 14px 18px;
+  padding: 14px;
+}
+
+.study-proof-copy {
+  grid-area: copy;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.study-proof-copy > p {
+  color: var(--muted-readable);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.study-proof-boundary {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding: 10px;
+  border: 1px solid rgba(217, 119, 6, 0.24);
+  border-radius: 8px;
+  background: var(--amber-dim);
+  color: var(--amber);
+}
+
+.study-proof-boundary svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.study-proof-boundary span {
+  color: var(--muted-readable);
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.study-proof-nav {
+  grid-area: nav;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.study-proof-nav a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 7px;
+  align-items: center;
+  min-height: 46px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(7, 13, 8, 0.62);
+  color: var(--muted-readable);
+  font-size: 10px;
+  text-decoration: none;
+}
+
+.study-proof-nav a:hover,
+.study-proof-nav a.active {
+  border-color: rgba(103, 232, 249, 0.34);
+  background: var(--wb-cyan-dim);
+  color: var(--text);
+}
+
+.study-proof-nav a.active {
+  box-shadow: inset 3px 0 0 var(--wb-cyan);
+}
+
+.study-proof-nav a > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.study-proof-nav a > svg:last-child {
+  color: var(--dim);
+}
+
+.study-proof-chain {
+  grid-area: chain;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.study-proof-stage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(9, 17, 11, 0.5);
+}
+
+.study-proof-stage.active {
+  border-color: rgba(167, 139, 250, 0.3);
+  background: var(--wb-violet-dim);
+}
+
+.study-proof-stage > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+.study-proof-stage.active > span {
+  border-color: rgba(167, 139, 250, 0.35);
+  color: var(--wb-violet);
+}
+
+.study-proof-stage > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.study-proof-stage strong {
+  color: var(--muted-readable);
+  font-size: 10px;
+}
+
+.study-proof-stage small {
+  overflow: hidden;
+  color: var(--dim);
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.study-proof-active .decision-brief,
+.study-proof-active .empirical-lab,
+.study-proof-active .reproduction-lab {
+  padding-top: 18px;
+}
+
+.study-proof-active .decision-hero,
+.study-proof-active .empirical-hero,
+.study-proof-active .reproduction-hero {
+  scroll-margin-top: 220px;
+}
+
+@media (max-width: 1180px) {
+  .study-proof-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "nav"
+      "chain";
+  }
+
+  .study-proof-nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 920px) {
+  .study-proof-host {
+    width: min(100% - 24px, 1600px);
+  }
+
+  .study-proof-layer {
+    top: 62px;
+  }
+
+  .study-proof-nav {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .study-proof-nav a {
+    flex: 0 0 min(210px, 58vw);
+    min-height: 48px;
+    scroll-snap-align: start;
+  }
+
+  .study-proof-chain {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .study-proof-stage {
+    flex: 0 0 min(240px, 68vw);
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 680px) {
+  .study-proof-host {
+    width: min(100% - 16px, 1600px);
+    margin-top: 8px;
+  }
+
+  .study-proof-layer {
+    position: relative;
+    top: auto;
+  }
+
+  .study-proof-disclosure > summary {
+    min-height: 54px;
+    padding: 9px 11px;
+  }
+
+  .study-proof-layout {
+    gap: 11px;
+    padding: 11px;
+  }
+
+  .study-proof-copy > p {
+    font-size: 10px;
+  }
+
+  .study-proof-boundary span {
+    font-size: 9px;
+  }
+
+  .study-proof-nav a {
+    flex-basis: min(225px, 76vw);
+    min-height: 48px;
+  }
+
+  .study-proof-stage {
+    flex-basis: min(250px, 78vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .study-proof-nav,
+  .study-proof-chain {
+    scroll-behavior: auto;
+  }
+}

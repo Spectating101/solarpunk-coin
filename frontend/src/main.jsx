@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { CaseWorkbenchProvider } from './app/CaseWorkbenchProvider';
+import StudyProofNavigator from './components/StudyProofNavigator';
 import './index.css';
 import './decisionBriefPolish.css';
 import './constraintProtocolHardening.css';
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CaseWorkbenchProvider>
       <App />
+      <StudyProofNavigator />
     </CaseWorkbenchProvider>
   </React.StrictMode>,
 );

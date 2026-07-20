@@ -82,7 +82,21 @@ await page.getByRole('navigation', { name: /receipt reading map/i }).waitFor({ s
 await shot('08-decision-receipt-capsule.png');
 
 await open('#runs', 'What did the stricter rule buy');
+await page.getByRole('navigation', { name: /study proof layer navigation/i }).waitFor({ state: 'visible' });
+await page.getByRole('link', { name: /decision brief/i }).waitFor({ state: 'visible' });
 await shot('09-market-capacity-study-entry.png');
+
+await page.getByRole('link', { name: /full study/i }).click();
+await page.getByRole('heading', { name: /policy decisions should survive contact/i }).waitFor({ state: 'visible' });
+await page.getByRole('link', { name: /full study/i }).getAttribute('aria-current').then((value) => {
+  if (value !== 'page') throw new Error('Full study route did not activate the empirical proof layer');
+});
+await shot('09a-market-capacity-full-study.png');
+
+await page.getByRole('link', { name: /verify bundle/i }).click();
+await page.getByRole('heading', { name: /do the published study bytes match/i }).waitFor({ state: 'visible' });
+await page.getByText(/does not certify licensed source truth/i).waitFor({ state: 'visible' });
+await shot('09b-market-capacity-reproduction.png');
 
 await open('#overview', 'SolarPunk');
 await shot('10-solarpunk-reference.png');
@@ -162,11 +176,23 @@ await mobilePage.getByRole('heading', { name: /12 portable files/i }).waitFor({ 
 await mobilePage.getByText('ro-crate-metadata.json', { exact: true }).waitFor({ state: 'visible' });
 await shot('19-mobile-receipt-capsule-expanded.png', mobilePage);
 
+await openMobile('#runs', 'What did the stricter rule buy');
+const studyProof = mobilePage.locator('#study-proof-navigation');
+await studyProof.waitFor({ state: 'visible' });
+if (await studyProof.getAttribute('open') !== null) {
+  throw new Error('Mobile Studies proof layer should begin collapsed');
+}
+await shot('20-mobile-study-proof-collapsed.png', mobilePage);
+await mobilePage.locator('#study-proof-navigation > summary').click();
+await mobilePage.getByRole('navigation', { name: /study proof layer navigation/i }).waitFor({ state: 'visible' });
+await mobilePage.getByText(/connected by the analytical method/i).waitFor({ state: 'visible' });
+await shot('20a-mobile-study-proof-expanded.png', mobilePage);
+
 await mobile.close();
 await browser.close();
 
 const files = await fs.readdir(outputDir);
-if (files.length !== 24) {
-  throw new Error(`Expected 24 flagship workbench review screenshots; received ${files.length}`);
+if (files.length !== 28) {
+  throw new Error(`Expected 28 flagship workbench review screenshots; received ${files.length}`);
 }
 console.log(`Captured ${files.length} flagship workbench screenshots in ${outputDir}`);
