@@ -17,6 +17,8 @@ describe('CompareWorkspace', () => {
     renderCompare();
 
     expect(screen.getByRole('heading', { name: /where do policies disagree/i })).toBeInTheDocument();
+    expect(screen.getByText(/12 deterministic decisions are evaluated from 4 committed cases and 3 V2 policies/i)).toBeInTheDocument();
+    expect(screen.getByText('4 cases × 3 policies')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /what changed in the policy before the outcomes changed/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/baseline policy/i)).toHaveValue('LAB-CASE-OPEN-004');
     expect(screen.getByLabelText(/comparison policy/i)).toHaveValue('ENERGY-CASE-PILOT-005');
