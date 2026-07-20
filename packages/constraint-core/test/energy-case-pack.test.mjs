@@ -105,7 +105,8 @@ test('committed case, context, evidence, and assurance scenario objects match pu
       assert.equal(item.source.sample_fixture, true);
     }
     if (item.adapter?.id === 'generic-interval-csv') {
-      assert.equal(item.source.sample_fixture, false);
+      assert.equal(item.source.sample_fixture, true);
+      assert.equal(item.source.operator_format_sample, true);
       assert.equal(item.capabilities.signed, false);
       assert.equal(item.capabilities.operator_signed, false);
     }
