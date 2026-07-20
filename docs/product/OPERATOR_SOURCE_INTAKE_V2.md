@@ -33,10 +33,16 @@ The intake receipt deliberately stops before provenance promotion.
 Copy the template outside the repository and fill it with a pseudonymous source identifier, acquisition path, permission scope, measurement window, sign convention, and any artifact references.
 
 ```bash
-npm run case:operator-intake -- \
+npm --prefix packages/constraint-core run operator-intake -- \
   --source=/private/operator-export.csv \
   --manifest=/private/operator-source-manifest.json \
   --out=state/private/operator-source-receipt.json
+```
+
+Run the focused tests with:
+
+```bash
+npm --prefix packages/constraint-core run operator-intake:test
 ```
 
 The command writes **only the receipt**. It does not copy the raw source file.
