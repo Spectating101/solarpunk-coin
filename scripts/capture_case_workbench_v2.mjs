@@ -66,7 +66,7 @@ await page.getByRole('button', { name: /40% capacity/i }).click();
 await page.getByText('PARTIAL', { exact: true }).waitFor({ state: 'visible' });
 await shot('06-settlement-stress-partial.png');
 
-await page.getByRole('button', { name: /^Lineage$/i }).click();
+await page.getByRole('navigation', { name: /investigation sequence/i }).getByRole('button', { name: /^Lineage$/i }).click();
 await page.getByText('Which declared objects and activities produced this result?', { exact: false }).waitFor({ state: 'visible' });
 await shot('07-decision-lineage.png');
 
