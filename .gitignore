@@ -63,7 +63,7 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# Scrapy stuff
 .scrapy
 
 # Sphinx documentation
@@ -196,6 +196,13 @@ spk_simulation_results.csv
 
 # Generated demo screenshots (npm run demo:screenshots)
 screenshots/
+
+# Private operator evidence and custody receipts
+state/private/
+data/operator/private_*
+data/operator/operator_export.*
+data/operator/operator_source_manifest.json
+!data/operator/operator_source_manifest.template.json
 
 # Operator hardware exports (keep templates/samples only)
 data/inverter/my_site_*.json
