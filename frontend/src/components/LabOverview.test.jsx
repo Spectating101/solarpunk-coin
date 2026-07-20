@@ -54,7 +54,7 @@ describe('LabOverview flagship decision experience', () => {
     expect(screen.getByText('180 eligible kWh')).toBeInTheDocument();
     expect(await screen.findByText('BLOCKED')).toBeInTheDocument();
     expect(screen.getByText('NOT CALCULATED')).toBeInTheDocument();
-    expect(screen.getAllByText('minimum provenance').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('min provenance').length).toBeGreaterThan(0);
     expect(screen.getByText(/evidence remains unchanged/i)).toBeInTheDocument();
   });
 
