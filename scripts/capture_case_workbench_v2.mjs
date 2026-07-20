@@ -63,7 +63,7 @@ await page.getByText('Which declared objects and activities produced this result
 await shot('07-decision-lineage.png');
 
 await open('#receipts', 'Share the decision identity, not a screenshot.');
-await page.getByText('12 portable files', { exact: false }).waitFor({ state: 'visible' });
+await page.getByText('12 portable files', { exact: false }).first().waitFor({ state: 'visible' });
 await page.getByText('ro-crate-metadata.json', { exact: true }).waitFor({ state: 'visible' });
 await page.getByRole('navigation', { name: /receipt reading map/i }).waitFor({ state: 'visible' });
 await shot('08-decision-receipt-capsule.png');
@@ -129,7 +129,7 @@ if (await mobilePage.locator('#receipt-capsule').getAttribute('open') !== null) 
 }
 await shot('18-mobile-receipt-collapsed.png', mobilePage);
 await mobilePage.locator('#receipt-capsule > summary').click();
-await mobilePage.getByText('12 portable files', { exact: false }).waitFor({ state: 'visible' });
+await mobilePage.getByText('12 portable files', { exact: false }).first().waitFor({ state: 'visible' });
 await mobilePage.getByText('ro-crate-metadata.json', { exact: true }).waitFor({ state: 'visible' });
 await shot('19-mobile-receipt-capsule-expanded.png', mobilePage);
 
