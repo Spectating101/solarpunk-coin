@@ -1,13 +1,13 @@
 # Research capsule verifier (Gate 4 slice)
 
-**Branch:** `feat/capsule-verifier`  
-**Status:** integrity + schema + optional pack replay
+**Status:** closed-world v1 integrity, schema, identity, privacy, and optional committed-pack replay
 
-## What it does
+## Commands
 
 ```bash
 npm run case:verify-capsule -- path/to/research-capsule-bundle.json
 npm run case:verify-capsule -- path/to/research-capsule-bundle.json --replay-from-pack
+npm run case:verify-capsule:test
 ```
 
 Example report:
@@ -21,19 +21,48 @@ Produced decision ID: …
 Source-truth certification: NOT CLAIMED
 ```
 
-## Checks
+## Closed-world v1 verification
 
-1. **Integrity** — every `manifest.files[].sha256` matches file bytes  
-2. **Schemas** — case / policy / context hash-check; evidence-metadata must not include raw rows  
-3. **Decision identity** — `decision_id` equals canonical DecisionResult body hash  
-4. **Optional pack replay** — resolve evidence by hash from `protocol/cases/energy-v1`, re-run `evaluateCaseDecision`, compare decision IDs  
+A v1 bundle must contain exactly:
 
-## What it deliberately does not claim
+- `capsule.json` as the manifest copy;
+- the 12 portable files declared by `manifest.files`.
 
-Reproduction proves **deterministic evaluation of declared portable objects**.  
-It does **not** prove physical meter truth, custody, or legal redemption.
+The verifier rejects missing files, duplicate or omitted declarations, undeclared extra files, digest mismatches, byte-length mismatches, a mismatched manifest copy, or an invalid `capsule_id`.
 
-Capsules exclude raw evidence rows. Full replay therefore needs `--replay-from-pack` (or a future external evidence sidecar).
+## Structural and identity checks
+
+The verifier validates and reconciles:
+
+1. bundle and capsule schemas;
+2. case, policy, context, DecisionResult, and receipt structures;
+3. evidence metadata, lineage, reproduction, RO-Crate, PROV-JSONLD, memo, and citation structures;
+4. canonical `decision_id` hashing;
+5. case and policy identities across manifest, decision, receipt, and reproduction;
+6. evidence hashes and context references across all portable objects;
+7. assurance scenario and runtime source revision;
+8. the declared privacy boundary and absence of raw interval rows.
+
+A self-consistent set of newly re-hashed files is still rejected when those objects disagree with each other.
+
+## Optional committed-pack replay
+
+`--replay-from-pack` resolves the capsule's evidence, contexts, assurance scenario, and committed case from `protocol/cases/energy-v1`, reruns `evaluateCaseDecision`, and compares the produced decision identity with the capsule.
+
+Because capsules exclude raw evidence rows, replay requires the referenced evidence to be available from the supplied pack. A future verifier may accept an external evidence sidecar under a separate trust boundary.
+
+## Verification boundary
+
+A PASS establishes internal consistency and deterministic reproducibility of the declared objects. It does **not** establish:
+
+- physical meter truth;
+- operator identity or custody;
+- external corroboration;
+- legal claim authority;
+- mint authority;
+- redemption rights.
+
+The report therefore always states `Source-truth certification: NOT CLAIMED`.
 
 ## Library API
 
@@ -44,8 +73,6 @@ import {
 } from '@solarpunk/constraint-core/workbench';
 ```
 
-## Tests
+## Adversarial tests
 
-```bash
-node --test packages/constraint-core/test/capsule-verify.test.mjs
-```
+The test suite covers successful replay plus file tampering, omitted digest declarations, undeclared files, malformed manifest copies, cross-object identity drift, malformed schemas, missing files, and missing bundles.
