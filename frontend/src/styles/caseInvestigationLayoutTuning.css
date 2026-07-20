@@ -1,0 +1,23 @@
+/* Final visual tuning for the Case Workspace continuation panel. */
+
+.case-next-actions {
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.case-next-actions > div:last-child {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+}
+
+.case-next-actions button {
+  justify-content: flex-start;
+  width: 100%;
+}
+
+@media (max-width: 680px) {
+  .case-next-actions > div:last-child {
+    grid-template-columns: 1fr;
+  }
+}
