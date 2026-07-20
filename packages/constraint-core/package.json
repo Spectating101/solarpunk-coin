@@ -7,13 +7,32 @@
   "types": "./src/workbench.d.ts",
   "exports": {
     ".": {
+      "types": "./src/workbench.d.ts",
       "browser": "./src/workbench.js",
       "default": "./src/index.js"
     },
-    "./full": "./src/index.js",
-    "./workbench": "./src/workbench.js"
+    "./full": {
+      "types": "./src/workbench.d.ts",
+      "default": "./src/index.js"
+    },
+    "./workbench": {
+      "types": "./src/workbench.d.ts",
+      "default": "./src/workbench.js"
+    },
+    "./capsule-verifier": {
+      "types": "./src/capsuleVerify.d.ts",
+      "default": "./src/capsuleVerify.js"
+    },
+    "./operator-intake": {
+      "types": "./src/operatorIntake.d.ts",
+      "default": "./src/operatorIntake.js"
+    }
   },
   "files": ["src", "README.md"],
+  "scripts": {
+    "operator-intake": "node ../../scripts/prepare_operator_source_intake.mjs",
+    "operator-intake:test": "node --test test/operator-source-intake.test.mjs"
+  },
   "peerDependencies": {
     "ethers": ">=6.7.0"
   },

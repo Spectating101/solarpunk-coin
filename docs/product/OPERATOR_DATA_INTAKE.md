@@ -1,6 +1,8 @@
 # SolarPunk Operator Data Intake
 
-This is the bridge for a real solar owner, lab, or university: send a CSV export, SolarPunk validates the rows, signs or verifies them, computes eligible surplus, and previews how much SPK cryptocurrency the data would mint under current testnet rules.
+> **Legacy V1 demonstration artifact.** This report predates the V2 source-custody model. Its locally signed readings and mint preview do not prove external operator custody and must not promote V2 assurance. For real-source validation, begin with [`OPERATOR_SOURCE_INTAKE_V2.md`](./OPERATOR_SOURCE_INTAKE_V2.md).
+
+This legacy demonstration accepts a CSV export, validates the rows, optionally signs demonstration readings, computes eligible surplus, and previews a testnet-era SPK result. It is retained for chronology and compatibility, not as the canonical Gate 1 workflow.
 
 ## Input
 
@@ -66,7 +68,7 @@ Checked-in sample is useful for demo and reviewer reproduction only; it cannot s
 - `weekly_shadow_pilot` (1500-5000/month): Process weekly exports, track accepted/rejected data, and show cumulative SPK preview under capped rules.
 - `closed_beta_setup` (7500-25000): Wire a signed inverter/gateway source, governed testnet deployment, monitoring, and audit-ready evidence.
 
-## Run With A Real Operator File
+## Historical command
 
 ```bash
 METER_PRIVATE_KEY=0x... node scripts/operator_data_intake.js \
@@ -75,9 +77,13 @@ METER_PRIVATE_KEY=0x... node scripts/operator_data_intake.js \
   --now=2026-05-19T00:00:00Z
 ```
 
+Do not use this command as the V2 custody gate. Generate an operator source receipt first.
+
 ## Boundaries
 
 - The sample file proves the intake mechanics, not a real external solar source.
+- A locally supplied key does not establish that the source operator signed or controlled the export.
+- Profile assertions do not establish L1–L4 provenance.
 - Unsigned data is schema-review evidence only and cannot mint SPK.
 - L0/L1 data can support demos and shadow pilots, but not paid public SPK issuance.
 - Paid public SPK still needs audit, legal/commercial scope, production deployment, reserve policy, and stronger hardware provenance.

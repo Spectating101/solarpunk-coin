@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Operator Source Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "generated_at",
+    "source_id",
+    "source_file",
+    "manifest",
+    "custody",
+    "declared_assertions",
+    "referenced_artifacts",
+    "verification",
+    "v2_admission",
+    "publication",
+    "boundaries",
+    "receipt_id"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.operator_source_receipt.v1" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "sha256", "bytes", "raw_included"],
+      "properties": {
+        "filename": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "raw_included": { "const": false }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "source_kind", "synthetic_fixture", "measurement_window"],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "source_kind": {
+          "enum": ["inverter_export", "meter_export", "utility_export", "gateway_api_snapshot", "operator_csv", "other"]
+        },
+        "synthetic_fixture": { "type": "boolean" },
+        "measurement_window": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "string", "format": "date-time" },
+            "end": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "custody": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationship",
+        "identifier",
+        "contact_disclosure",
+        "acquisition_method",
+        "custody_statement",
+        "permission_scope"
+      ],
+      "properties": {
+        "relationship": { "enum": ["owner", "operator", "authorized_researcher", "data_processor", "unknown"] },
+        "identifier": { "type": "string", "minLength": 1 },
+        "contact_disclosure": { "enum": ["public", "private", "not_provided"] },
+        "acquisition_method": { "enum": ["owner_export", "operator_export", "api_snapshot", "utility_download", "research_transfer", "other"] },
+        "custody_statement": { "type": "string", "minLength": 20 },
+        "permission_scope": { "enum": ["private_validation", "public_metadata_only", "public_anonymized_aggregate", "public_raw"] }
+      }
+    },
+    "declared_assertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_owner_confirmed", "live_api", "revenue_grade", "utility_corroborated", "device_signature_present"],
+      "properties": {
+        "source_owner_confirmed": { "type": "boolean" },
+        "live_api": { "type": "boolean" },
+        "revenue_grade": { "type": "boolean" },
+        "utility_corroborated": { "type": "boolean" },
+        "device_signature_present": { "type": "boolean" }
+      }
+    },
+    "referenced_artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_signature_file", "device_registry_file", "utility_corroboration_file", "api_snapshot_receipt_file"],
+      "properties": {
+        "source_signature_file": { "type": ["string", "null"] },
+        "device_registry_file": { "type": ["string", "null"] },
+        "utility_corroboration_file": { "type": ["string", "null"] },
+        "api_snapshot_receipt_file": { "type": ["string", "null"] }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_signature_verified", "device_registry_verified", "utility_corroboration_verified", "api_identity_verified", "source_truth_certification"],
+      "properties": {
+        "source_signature_verified": { "const": false },
+        "device_registry_verified": { "const": false },
+        "utility_corroboration_verified": { "const": false },
+        "api_identity_verified": { "const": false },
+        "source_truth_certification": { "const": "NOT_CLAIMED" }
+      }
+    },
+    "v2_admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default_assurance_scenario", "automatic_promotion_allowed", "promotion_requirements"],
+      "properties": {
+        "default_assurance_scenario": { "const": "PROVENANCE-L0-BASE" },
+        "automatic_promotion_allowed": { "const": false },
+        "promotion_requirements": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_receipt_allowed", "public_aggregates_allowed", "public_raw_allowed"],
+      "properties": {
+        "public_receipt_allowed": { "type": "boolean" },
+        "public_aggregates_allowed": { "type": "boolean" },
+        "public_raw_allowed": { "type": "boolean" }
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "receipt_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}
