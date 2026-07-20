@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CaseWorkbenchProvider } from '../app/CaseWorkbenchProvider';
 import CaseExplorer from './CaseExplorer';
@@ -52,7 +52,7 @@ describe('case workbench investigation flow', () => {
       expect(screen.getAllByText(/provenance policy capacity/i).length).toBeGreaterThan(0);
     });
     expect(screen.queryByText('NOT EXECUTED')).not.toBeInTheDocument();
-    expect(screen.getByText(/126 ENERGY_CLAIM_UNIT/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/126 ENERGY_CLAIM_UNIT/i).length).toBeGreaterThan(0);
     expect(screen.getByRole('status', { name: /investigation update/i })).toHaveTextContent(/assurance context changed/i);
     expect(screen.getByRole('status', { name: /investigation update/i })).toHaveTextContent(/not evaluated/i);
   });
@@ -61,7 +61,8 @@ describe('case workbench investigation flow', () => {
     renderWithWorkbench(<CaseWorkspace caseId="TYN-001" onNavigate={vi.fn()} />);
     await screen.findByText('NOT EXECUTED');
 
-    fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
+    const investigation = screen.getByRole('navigation', { name: /investigation sequence/i });
+    fireEvent.click(within(investigation).getByRole('button', { name: /^Evidence$/i }));
 
     expect(await screen.findByText('CONTROLLED EVIDENCE FIXTURE')).toBeInTheDocument();
     expect(screen.getByText('MODELED CONTEXT')).toBeInTheDocument();
@@ -74,7 +75,8 @@ describe('case workbench investigation flow', () => {
     renderWithWorkbench(<CaseWorkspace caseId="TYN-001" onNavigate={vi.fn()} />);
     await screen.findByText('NOT EXECUTED');
 
-    fireEvent.click(screen.getByRole('button', { name: /^Stress$/i }));
+    const investigation = screen.getByRole('navigation', { name: /investigation sequence/i });
+    fireEvent.click(within(investigation).getByRole('button', { name: /^Stress$/i }));
     expect(await screen.findByRole('heading', { name: /settlement stress is downstream of admission/i })).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/assurance context/i), {
