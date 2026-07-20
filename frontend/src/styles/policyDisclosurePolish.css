@@ -1,0 +1,52 @@
+/* Desktop keeps the complete policy diff visible; mobile uses native disclosure. */
+
+.policy-diff-rule-section,
+.policy-metadata-disclosure {
+  display: grid;
+  gap: 12px;
+}
+
+.policy-diff-rule-section > summary,
+.policy-metadata-disclosure > summary {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  list-style: none;
+}
+
+.policy-diff-rule-section > summary::-webkit-details-marker,
+.policy-metadata-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.policy-diff-rule-section > summary > div,
+.policy-metadata-disclosure > summary > div {
+  display: grid;
+  gap: 5px;
+}
+
+.policy-diff-rule-section > summary h3,
+.policy-metadata-disclosure > summary h3 {
+  font-size: 17px;
+}
+
+.policy-diff-rule-section > summary > span,
+.policy-metadata-disclosure > summary > span {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+@media (min-width: 681px) {
+  .policy-diff-rule-section > summary,
+  .policy-metadata-disclosure > summary {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .policy-diff-rule-section:not([open]) > .policy-diff-rule-list,
+  .policy-metadata-disclosure:not([open]) > .policy-metadata-grid {
+    display: grid !important;
+  }
+}
