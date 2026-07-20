@@ -22,9 +22,15 @@ async function shot(name, target = page) {
   await target.screenshot({ path: path.join(outputDir, name), fullPage: true });
 }
 
-await open('#lab', 'Investigate how evidence becomes a bounded financial decision.');
-await page.getByRole('button', { name: /start the five-minute investigation/i }).waitFor({ state: 'visible' });
-await shot('00-lab-overview.png');
+await open('#lab', 'A solar claim enters.');
+await page.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
+await page.getByRole('button', { name: /preview l2 assurance/i }).waitFor({ state: 'visible' });
+await shot('00-lab-overview-blocked.png');
+
+await page.getByRole('button', { name: /preview l2 assurance/i }).click();
+await page.getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
+await page.getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await shot('00a-lab-overview-admitted.png');
 
 await open('#cases', 'Investigate the rule that blocks or bounds the case.');
 await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
@@ -111,15 +117,21 @@ async function openMobile(hash, expected) {
   if (expected) await mobilePage.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-await openMobile('#lab', 'Investigate how evidence becomes a bounded financial decision.');
+await openMobile('#lab', 'A solar claim enters.');
 await mobilePage.getByRole('button', { name: /open primary navigation/i }).click();
 for (const label of ['Overview', 'Cases', 'Compare', 'Studies', 'Receipts', 'Reference']) {
   await mobilePage.getByRole('button', { name: label, exact: true }).waitFor({ state: 'visible' });
 }
 await shot('11-mobile-primary-navigation.png', mobilePage);
 await mobilePage.getByRole('button', { name: /close primary navigation/i }).click();
-await mobilePage.getByRole('button', { name: /start the five-minute investigation/i }).waitFor({ state: 'visible' });
-await shot('12-mobile-lab-overview.png', mobilePage);
+await mobilePage.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
+await mobilePage.getByRole('button', { name: /preview l2 assurance/i }).waitFor({ state: 'visible' });
+await shot('12-mobile-lab-overview-blocked.png', mobilePage);
+
+await mobilePage.getByRole('button', { name: /preview l2 assurance/i }).click();
+await mobilePage.getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
+await mobilePage.getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await shot('12a-mobile-lab-overview-admitted.png', mobilePage);
 
 await openMobile('#cases', 'Investigate the rule that blocks or bounds the case.');
 await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
@@ -192,7 +204,7 @@ await mobile.close();
 await browser.close();
 
 const files = await fs.readdir(outputDir);
-if (files.length !== 28) {
-  throw new Error(`Expected 28 flagship workbench review screenshots; received ${files.length}`);
+if (files.length !== 30) {
+  throw new Error(`Expected 30 flagship workbench review screenshots; received ${files.length}`);
 }
 console.log(`Captured ${files.length} flagship workbench screenshots in ${outputDir}`);
