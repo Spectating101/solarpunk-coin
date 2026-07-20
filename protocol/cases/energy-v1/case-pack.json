@@ -38,5 +38,5 @@
     "ENERGY-CASE-PILOT-005",
     "ENERGY-CASE-STRICT-006"
   ],
-  "boundary": "Modeled resource contexts are not realized operator outcomes. TYN/AUS/PHX sample evidence is a controlled fixture. OPS-001 uses an operator-format public-lab CSV sample through generic-interval-csv (unsigned; not closed-pilot custody). The pack demonstrates decision mechanics and does not establish empirical geospatial policy superiority, claim authority, or production readiness."
+  "boundary": "Modeled resource contexts are not realized operator outcomes. TYN/AUS/PHX evidence and OPS-001 are controlled fixtures. OPS-001 specifically exercises the generic-interval-csv adapter using a synthetic operator-format public-lab sample; it is unsigned and has no named operator custody. The pack demonstrates decision mechanics and does not establish empirical geospatial policy superiority, source truth, claim authority, or production readiness."
 }
