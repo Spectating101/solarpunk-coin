@@ -1,0 +1,56 @@
+/* Receipt selector and identity layout after introducing the scroll wrapper. */
+
+.receipt-index-scroll > button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title result"
+    "rule arrow";
+  gap: 4px 8px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: rgba(7, 13, 8, 0.72);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.receipt-index-scroll > button:hover,
+.receipt-index-scroll > button.active {
+  border-color: var(--border-strong);
+  background: var(--green-dim);
+}
+
+.receipt-index-scroll > button.active {
+  box-shadow: inset 3px 0 0 var(--green);
+}
+
+.receipt-detail-header {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.receipt-detail-header > code {
+  display: block;
+  max-width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(7, 13, 8, 0.74);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (max-width: 680px) {
+  .receipt-index-scroll > button {
+    min-height: 88px;
+    background: rgba(9, 17, 11, 0.94);
+  }
+
+  .receipt-detail-header h2 {
+    font-size: clamp(31px, 10vw, 42px);
+    line-height: 1.05;
+  }
+}
