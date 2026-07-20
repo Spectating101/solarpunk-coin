@@ -1,7 +1,7 @@
 {
   "schema": "solarpunk.constraint.case_manifest.v1",
   "case_id": "OPS-001",
-  "subject": "Operator-format CSV evidence pilot (Gate 1)",
+  "subject": "Operator-format CSV pipeline pilot (Gate 1A)",
   "case_type": "energy_site",
   "spatial_identity": {
     "site_id": "ops_sample_site",
@@ -14,7 +14,7 @@
     "end": "2026-05-08T00:00:00Z"
   },
   "evidence_refs": [
-    "6d3e724bd4dc5b9a8ec8383eda1d35598eccbb953844c90810427451e3f28c5e"
+    "32e4320749d6f3decc6a64656176af76bbc837b5573e734b40b96bdead3b076c"
   ],
   "context_refs": [
     "resource:tyn-001:pvwatts-v1"
@@ -24,9 +24,9 @@
     "version": "1.0.0"
   },
   "boundaries": [
-    "Operator-format CSV sample from data/operator/sample_operator_export.csv — public-lab shape, not a named closed-pilot archive.",
-    "Evidence is unsigned generic-interval-csv; capabilities.signed is false; not mint authority.",
+    "Synthetic operator-format CSV fixture from data/operator/sample_operator_export.csv; not a named operator archive or observed field dataset.",
+    "Evidence is unsigned generic-interval-csv; capabilities.signed is false; not source-truth certification or mint authority.",
     "Reuses the TYN modeled PVWatts resource context for window alignment only; that context is TMY, not observed generation.",
-    "A BLOCKED pilot-policy result is an expected and scientifically useful Gate 1 outcome."
+    "A BLOCKED pilot-policy result is an expected and scientifically useful Gate 1A pipeline outcome."
   ]
 }
