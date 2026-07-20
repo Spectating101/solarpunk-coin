@@ -1,5 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+
+function initiallyOpen(defaultOpen) {
+  if (defaultOpen) return true;
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
+  return window.matchMedia('(min-width: 681px)').matches;
+}
 
 export default function ResponsiveDisclosure({
   id,
@@ -10,9 +16,15 @@ export default function ResponsiveDisclosure({
   className = '',
   children,
 }) {
+  const [open, setOpen] = useState(() => initiallyOpen(defaultOpen));
   const classes = ['responsive-disclosure', className].filter(Boolean).join(' ');
   return (
-    <details id={id} className={classes} open={defaultOpen}>
+    <details
+      id={id}
+      className={classes}
+      open={open}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+    >
       <summary>
         <span>
           {label ? <small>{label}</small> : null}
