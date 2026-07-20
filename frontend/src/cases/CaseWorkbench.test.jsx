@@ -10,7 +10,7 @@ function renderWithWorkbench(node) {
 }
 
 describe('case workbench investigation flow', () => {
-  it('opens on the three-case research surface with Taoyuan blocked under the default pilot/L0 run', async () => {
+  it('opens on the four-case research surface with Taoyuan blocked under the default pilot/L0 run', async () => {
     const openCase = vi.fn();
     renderWithWorkbench(<CaseExplorer onOpenCase={openCase} />);
 
@@ -18,12 +18,19 @@ describe('case workbench investigation flow', () => {
     expect(screen.getAllByText('TYN-001').length).toBeGreaterThan(0);
     expect(screen.getAllByText('AUS-001').length).toBeGreaterThan(0);
     expect(screen.getAllByText('PHX-001').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('OPS-001').length).toBeGreaterThan(0);
 
     await waitFor(() => {
       expect(screen.getByText('BLOCKED')).toBeInTheDocument();
     });
     expect(screen.getAllByText(/minimum provenance/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/empirical claim: no/i)).toBeInTheDocument();
+
+    const mapToggle = screen.getByRole('button', { name: /show 3 mapped cases/i });
+    expect(mapToggle).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(mapToggle);
+    expect(mapToggle).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByRole('button', { name: /hide map/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /open case/i }));
     expect(openCase).toHaveBeenCalledWith('TYN-001');
