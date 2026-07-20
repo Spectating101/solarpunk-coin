@@ -13,10 +13,12 @@ function renderCompare(openDecision = vi.fn()) {
 }
 
 describe('CompareWorkspace', () => {
-  it('renders a policy manifest diff and 3 × 3 decision matrix under one assurance scenario', async () => {
+  it('renders a policy manifest diff and 4 × 3 decision matrix under one assurance scenario', async () => {
     renderCompare();
 
     expect(screen.getByRole('heading', { name: /where do policies disagree/i })).toBeInTheDocument();
+    expect(screen.getByText(/12 deterministic decisions are evaluated from 4 committed cases and 3 V2 policies/i)).toBeInTheDocument();
+    expect(screen.getByText('4 cases × 3 policies')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /what changed in the policy before the outcomes changed/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/baseline policy/i)).toHaveValue('LAB-CASE-OPEN-004');
     expect(screen.getByLabelText(/comparison policy/i)).toHaveValue('ENERGY-CASE-PILOT-005');
@@ -28,7 +30,8 @@ describe('CompareWorkspace', () => {
     expect(within(table).getByText('TYN-001')).toBeInTheDocument();
     expect(within(table).getByText('AUS-001')).toBeInTheDocument();
     expect(within(table).getByText('PHX-001')).toBeInTheDocument();
-    expect(within(table).getAllByRole('button')).toHaveLength(9);
+    expect(within(table).getByText('OPS-001')).toBeInTheDocument();
+    expect(within(table).getAllByRole('button')).toHaveLength(12);
   });
 
   it('reports blocking rules separately from admitted binding ceilings', async () => {

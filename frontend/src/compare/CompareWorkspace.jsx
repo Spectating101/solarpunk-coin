@@ -99,6 +99,9 @@ export default function CompareWorkspace({
   const resolvedComparisonPolicyId = pack.policiesById[comparisonPolicyId]
     ? comparisonPolicyId
     : DEFAULT_COMPARISON_POLICY_ID;
+  const caseCount = pack.manifest.case_ids.length;
+  const policyCount = pack.manifest.policy_ids.length;
+  const decisionCount = caseCount * policyCount;
 
   useEffect(() => {
     if (scenarioId && scenarioId !== activeScenarioId) selectScenario(scenarioId);
@@ -176,7 +179,7 @@ export default function CompareWorkspace({
           <span className="wb-kicker"><GitCompareArrows size={13} /> Compare · same declared assurance scenario</span>
           <h1 id="compare-title">Where do policies disagree—and what actually binds?</h1>
           <p>
-            Nine deterministic decisions are evaluated from three committed cases and three V2 policies.
+            {decisionCount} deterministic decisions are evaluated from {caseCount} committed cases and {policyCount} V2 policies.
             The selected assurance scenario stays fixed so policy and case differences remain inspectable.
           </p>
         </div>
@@ -190,7 +193,7 @@ export default function CompareWorkspace({
             </select>
           </label>
           <strong>{activeScenarioId}</strong>
-          <code>3 cases × 3 policies</code>
+          <code>{caseCount} cases × {policyCount} policies</code>
           <small>Scenario and policy-diff state are encoded in the URL. Admission state is not called coverage.</small>
         </div>
       </section>
