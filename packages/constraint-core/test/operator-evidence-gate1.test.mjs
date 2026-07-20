@@ -35,16 +35,14 @@ async function loadOps() {
   };
 }
 
-test('Gate 1: operator CSV re-normalizes to the committed OPS-001 evidence hash', async () => {
-  const csvText = await readFile(CSV_URL, 'utf8');
-  const committed = await readJson(PACK_ROOT, 'evidence/ops-sample-evidence.json');
+function normalizeOperatorFixture(csvText) {
   const normalized = normalizeGenericCsv(csvText);
   normalized.source = {
     ...normalized.source,
     case_id: 'OPS-001',
     operator_format_sample: true,
-    sample_fixture: false,
-    custody: 'unchecked_public_lab_operator_csv_shape',
+    sample_fixture: true,
+    custody: 'synthetic_public_lab_operator_csv_fixture',
     signature_semantics: 'unsigned_generic_interval_csv',
   };
   normalized.capabilities = {
@@ -61,7 +59,7 @@ test('Gate 1: operator CSV re-normalizes to the committed OPS-001 evidence hash'
     {
       code: 'operator_format_sample',
       status: 'WARNING',
-      detail: 'Operator-shaped CSV normalized through generic-interval-csv. Not signed, not mint authority, not a named closed-pilot custody archive.',
+      detail: 'Synthetic operator-shaped CSV normalized through generic-interval-csv. Not signed, not source-truth evidence, not mint authority, and not a named operator custody archive.',
     },
   ];
   normalized.summary = {
@@ -69,20 +67,32 @@ test('Gate 1: operator CSV re-normalizes to the committed OPS-001 evidence hash'
     warning_count: normalized.diagnostics.filter((item) => item.status === 'WARNING').length,
     blocker_count: normalized.diagnostics.filter((item) => item.status === 'BLOCK').length,
   };
-  const envelope = await buildEvidenceEnvelope(normalized, {
-    source_label: 'OPS-001 operator-format CSV sample (public-lab fixture shape)',
+  return normalized;
+}
+
+test('Gate 1A: operator-format fixture re-normalizes to the committed OPS-001 evidence hash', async () => {
+  const csvText = await readFile(CSV_URL, 'utf8');
+  const committed = await readJson(PACK_ROOT, 'evidence/ops-sample-evidence.json');
+  const envelope = await buildEvidenceEnvelope(normalizeOperatorFixture(csvText), {
+    source_label: 'OPS-001 synthetic operator-format CSV fixture',
     browser_local: true,
   });
+
   assert.equal(envelope.evidence_hash, committed.evidence_hash);
   assert.equal(await verifyEvidenceEnvelopeHash(committed), true);
+  assert.equal(committed.source.sample_fixture, true);
+  assert.equal(committed.source.operator_format_sample, true);
   assert.equal(committed.capabilities.signed, false);
+  assert.equal(committed.capabilities.cryptographically_verified, false);
   assert.match(committed.diagnostics.map((d) => d.code).join(','), /operator_format_sample/);
 });
 
-test('Gate 1: OPS-001 is BLOCKED under pilot policy at honest L0 (unsigned CSV)', async () => {
+test('Gate 1A: OPS-001 is BLOCKED under pilot policy at honest L0', async () => {
   const loaded = await loadOps();
+  assert.deepEqual(loaded.caseManifest.evidence_refs, [loaded.evidence.evidence_hash]);
   const provenance = classifyProvenance(loaded.evidence, loaded.scenario.provenance_context);
   assert.equal(provenance.level, 'L0');
+
   const decision = await evaluateCaseDecision({
     caseManifest: loaded.caseManifest,
     evidenceByHash: loaded.evidenceByHash,
@@ -90,13 +100,14 @@ test('Gate 1: OPS-001 is BLOCKED under pilot policy at honest L0 (unsigned CSV)'
     provenance,
     policy: casePolicyById('ENERGY-CASE-PILOT-005'),
   });
+
   assert.equal(decision.decision, 'BLOCKED');
-  assert.ok(decision.admission.blocking_rules.includes('SIGNED_EVIDENCE')
-    || decision.admission.blocking_rules.includes('MIN_PROVENANCE'));
+  assert.ok(decision.admission.blocking_rules.includes('SIGNED_EVIDENCE'));
+  assert.ok(decision.admission.blocking_rules.includes('MIN_PROVENANCE'));
   assert.equal(decision.capacity.evaluated, false);
 });
 
-test('Gate 1: OPS-001 admits under open lab policy; settlement stress works; capsule excludes raw rows', async () => {
+test('Gate 1A: open policy admits; settlement stress works; receipt excludes raw rows', async () => {
   const loaded = await loadOps();
   const provenance = classifyProvenance(loaded.evidence, loaded.scenario.provenance_context);
   const decision = await evaluateCaseDecision({
@@ -106,6 +117,7 @@ test('Gate 1: OPS-001 admits under open lab policy; settlement stress works; cap
     provenance,
     policy: casePolicyById('LAB-CASE-OPEN-004'),
   });
+
   assert.equal(decision.decision, 'ADMIT_WITH_LIMIT');
   assert.equal(decision.capacity.admitted_maximum, 103.8);
   assert.deepEqual(decision.capacity.binding_constraints, ['EVIDENCE_BACKED_CAPACITY']);
@@ -124,8 +136,8 @@ test('Gate 1: OPS-001 admits under open lab policy; settlement stress works; cap
 
   const receipt = buildDecisionReceipt({
     decision,
-    runtime: { package: '@solarpunk/constraint-core', package_version: '0.1.0-alpha.1', source_revision: 'gate1-test' },
-    data_boundary: 'Operator-format CSV evidence summarized by identity only; raw rows excluded.',
+    runtime: { package: '@solarpunk/constraint-core', package_version: '0.1.0-alpha.1', source_revision: 'gate1a-test' },
+    data_boundary: 'Synthetic operator-format fixture summarized by identity only; raw rows excluded.',
     raw_evidence_included: false,
   });
   assert.ok(receipt.evidence.every((item) => item.raw_included === false));
