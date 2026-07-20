@@ -1,6 +1,6 @@
 import React from 'react';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import StudyProofNavigator from './StudyProofNavigator';
 
 function installHeader() {
@@ -10,16 +10,38 @@ function installHeader() {
   return header;
 }
 
+function setViewportMatch(matches) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    configurable: true,
+    value: vi.fn().mockImplementation(() => ({
+      matches,
+      media: '',
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
 function setHash(value) {
   window.history.replaceState(null, '', `${window.location.pathname}${value}`);
-  window.dispatchEvent(new HashChangeEvent('hashchange'));
+  window.dispatchEvent(new Event('hashchange'));
 }
+
+beforeEach(() => {
+  setViewportMatch(true);
+});
 
 afterEach(() => {
   cleanup();
   document.body.innerHTML = '';
   document.body.className = '';
   window.history.replaceState(null, '', window.location.pathname);
+  vi.restoreAllMocks();
 });
 
 describe('StudyProofNavigator', () => {
@@ -65,6 +87,7 @@ describe('StudyProofNavigator', () => {
   });
 
   it('keeps the mobile disclosure operable with native details semantics', async () => {
+    setViewportMatch(false);
     installHeader();
     setHash('#runs');
     render(<StudyProofNavigator />);
@@ -72,7 +95,8 @@ describe('StudyProofNavigator', () => {
     const disclosure = await screen.findByText(/start with the empirical decision/i);
     const details = disclosure.closest('details');
     expect(details).not.toBeNull();
+    expect(details).not.toHaveAttribute('open');
     fireEvent.click(details.querySelector('summary'));
-    expect(details).toBeInTheDocument();
+    expect(details).toHaveAttribute('open');
   });
 });
