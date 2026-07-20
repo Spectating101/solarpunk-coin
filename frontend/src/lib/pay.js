@@ -1,8 +1,9 @@
 import { ethers } from 'ethers';
 
-/** Build unique invoice hash for UI payments (matches operator script style). */
+/** Build a collision-resistant invoice hash for UI payments. */
 export function buildUiInvoiceHash(payeeId) {
-  return ethers.id(`spk-v1:ui:${Date.now()}:${payeeId}`);
+  const nonce = ethers.hexlify(ethers.randomBytes(16));
+  return ethers.id(`spk-v1:ui:${Date.now()}:${nonce}:${payeeId}`);
 }
 
 export function paymentKindHash(role) {
