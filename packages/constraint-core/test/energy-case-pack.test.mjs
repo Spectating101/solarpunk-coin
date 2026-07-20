@@ -66,8 +66,9 @@ test('energy case pack is explicitly a controlled non-empirical mechanism demons
   assert.equal(loaded.pack.case_pack_id, 'energy-reference-cases-v1');
   assert.equal(loaded.pack.domain, 'energy_linked_finance');
   assert.equal(loaded.pack.empirical_claim, false);
-  assert.deepEqual(new Set(loaded.pack.case_ids), new Set(['TYN-001', 'AUS-001', 'PHX-001']));
+  assert.deepEqual(new Set(loaded.pack.case_ids), new Set(['TYN-001', 'AUS-001', 'PHX-001', 'OPS-001']));
   assert.match(loaded.pack.boundary, /not realized operator outcomes/i);
+  assert.match(loaded.pack.boundary, /OPS-001/i);
 });
 
 test('committed case, context, evidence, and assurance scenario objects match published schema contracts', async () => {
@@ -98,9 +99,16 @@ test('committed case, context, evidence, and assurance scenario objects match pu
   for (const item of Object.values(loaded.evidenceByHash)) {
     assert.equal(evidenceSchema.properties.schema.const, item.schema);
     assert.equal(await verifyEvidenceEnvelopeHash(item), true);
-    assert.equal(item.source.sample_fixture, true);
     assert.equal(item.capabilities.cryptographically_verified, false);
     assert.equal(item.capabilities.external_corroboration, false);
+    if (item.adapter?.id === 'controlled-case-fixture') {
+      assert.equal(item.source.sample_fixture, true);
+    }
+    if (item.adapter?.id === 'generic-interval-csv') {
+      assert.equal(item.source.sample_fixture, false);
+      assert.equal(item.capabilities.signed, false);
+      assert.equal(item.capabilities.operator_signed, false);
+    }
   }
 
   for (const item of Object.values(loaded.scenariosById)) {

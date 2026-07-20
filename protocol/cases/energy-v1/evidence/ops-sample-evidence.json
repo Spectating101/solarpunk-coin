@@ -1,0 +1,147 @@
+{
+  "schema": "solarpunk.constraint.evidence_envelope.v1",
+  "adapter": {
+    "id": "generic-interval-csv",
+    "version": "1.0.0"
+  },
+  "source": {
+    "kind": "generic_interval_csv",
+    "local_only": true,
+    "case_id": "OPS-001",
+    "operator_format_sample": true,
+    "sample_fixture": false,
+    "custody": "unchecked_public_lab_operator_csv_shape",
+    "signature_semantics": "unsigned_generic_interval_csv"
+  },
+  "intervals": [
+    {
+      "meter_id": null,
+      "site_id": null,
+      "window_start": "2026-05-01T00:00:00Z",
+      "window_end": "2026-05-01T23:59:59Z",
+      "generation_kwh": 31.2,
+      "site_load_kwh": 18.4,
+      "export_kwh": 12.8,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 12.8,
+      "surplus_basis": "export_plus_curtailed_capped_by_generation_minus_load",
+      "quality_score": 0.98,
+      "source": "browser_generic_csv"
+    },
+    {
+      "meter_id": null,
+      "site_id": null,
+      "window_start": "2026-05-02T00:00:00Z",
+      "window_end": "2026-05-02T23:59:59Z",
+      "generation_kwh": 28.6,
+      "site_load_kwh": 20.2,
+      "export_kwh": 8.4,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 8.4,
+      "surplus_basis": "export_plus_curtailed_capped_by_generation_minus_load",
+      "quality_score": 0.97,
+      "source": "browser_generic_csv"
+    },
+    {
+      "meter_id": null,
+      "site_id": null,
+      "window_start": "2026-05-03T00:00:00Z",
+      "window_end": "2026-05-03T23:59:59Z",
+      "generation_kwh": 34.9,
+      "site_load_kwh": 16.1,
+      "export_kwh": 18.8,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 18.8,
+      "surplus_basis": "export_plus_curtailed_capped_by_generation_minus_load",
+      "quality_score": 0.98,
+      "source": "browser_generic_csv"
+    },
+    {
+      "meter_id": null,
+      "site_id": null,
+      "window_start": "2026-05-04T00:00:00Z",
+      "window_end": "2026-05-04T23:59:59Z",
+      "generation_kwh": 41.3,
+      "site_load_kwh": 19.7,
+      "export_kwh": 21.6,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 21.6,
+      "surplus_basis": "export_plus_curtailed_capped_by_generation_minus_load",
+      "quality_score": 0.99,
+      "source": "browser_generic_csv"
+    },
+    {
+      "meter_id": null,
+      "site_id": null,
+      "window_start": "2026-05-05T00:00:00Z",
+      "window_end": "2026-05-05T23:59:59Z",
+      "generation_kwh": 22.4,
+      "site_load_kwh": 21,
+      "export_kwh": 1.4,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 1.4,
+      "surplus_basis": "export_plus_curtailed_capped_by_generation_minus_load",
+      "quality_score": 0.95,
+      "source": "browser_generic_csv"
+    },
+    {
+      "meter_id": null,
+      "site_id": null,
+      "window_start": "2026-05-06T00:00:00Z",
+      "window_end": "2026-05-06T23:59:59Z",
+      "generation_kwh": 37.8,
+      "site_load_kwh": 18.9,
+      "export_kwh": 18.9,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 18.9,
+      "surplus_basis": "export_plus_curtailed_capped_by_generation_minus_load",
+      "quality_score": 0.98,
+      "source": "browser_generic_csv"
+    },
+    {
+      "meter_id": null,
+      "site_id": null,
+      "window_start": "2026-05-07T00:00:00Z",
+      "window_end": "2026-05-07T23:59:59Z",
+      "generation_kwh": 39.5,
+      "site_load_kwh": 17.6,
+      "export_kwh": 21.9,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 21.9,
+      "surplus_basis": "export_plus_curtailed_capped_by_generation_minus_load",
+      "quality_score": 0.98,
+      "source": "browser_generic_csv"
+    }
+  ],
+  "summary": {
+    "interval_count": 7,
+    "total_eligible_surplus_kwh": 103.8,
+    "blocker_count": 0,
+    "warning_count": 1
+  },
+  "capabilities": {
+    "identity": false,
+    "cumulative_counters": false,
+    "complete_energy_balance": true,
+    "quality_score": true,
+    "browser_local": true,
+    "operator_signed": false,
+    "signed": false,
+    "cryptographically_verified": false,
+    "signature_verification": false,
+    "external_corroboration": false
+  },
+  "diagnostics": [
+    {
+      "code": "operator_format_sample",
+      "status": "WARNING",
+      "detail": "Operator-shaped CSV normalized through generic-interval-csv. Not signed, not mint authority, not a named closed-pilot custody archive."
+    }
+  ],
+  "meta": {
+    "source_label": "OPS-001 operator-format CSV sample (public-lab fixture shape)",
+    "browser_local": true
+  },
+  "evidence_hash": "6d3e724bd4dc5b9a8ec8383eda1d35598eccbb953844c90810427451e3f28c5e",
+  "hash_algorithm": "SHA-256"
+}

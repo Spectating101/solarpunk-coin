@@ -7,12 +7,14 @@
   "case_ids": [
     "TYN-001",
     "AUS-001",
-    "PHX-001"
+    "PHX-001",
+    "OPS-001"
   ],
   "case_files": [
     "cases/TYN-001.json",
     "cases/AUS-001.json",
-    "cases/PHX-001.json"
+    "cases/PHX-001.json",
+    "cases/OPS-001.json"
   ],
   "context_files": [
     "contexts/tyn-resource-context.json",
@@ -22,7 +24,8 @@
   "evidence_files": [
     "evidence/tyn-sample-evidence.json",
     "evidence/aus-sample-evidence.json",
-    "evidence/phx-sample-evidence.json"
+    "evidence/phx-sample-evidence.json",
+    "evidence/ops-sample-evidence.json"
   ],
   "provenance_scenario_files": [
     "scenarios/provenance-L0.json",
@@ -35,5 +38,5 @@
     "ENERGY-CASE-PILOT-005",
     "ENERGY-CASE-STRICT-006"
   ],
-  "boundary": "Modeled resource contexts are not realized operator outcomes. Sample evidence is a controlled fixture. The pack demonstrates decision mechanics and does not establish empirical geospatial policy superiority, claim authority, or production readiness."
+  "boundary": "Modeled resource contexts are not realized operator outcomes. TYN/AUS/PHX sample evidence is a controlled fixture. OPS-001 uses an operator-format public-lab CSV sample through generic-interval-csv (unsigned; not closed-pilot custody). The pack demonstrates decision mechanics and does not establish empirical geospatial policy superiority, claim authority, or production readiness."
 }

@@ -13,7 +13,7 @@ function renderCompare(openDecision = vi.fn()) {
 }
 
 describe('CompareWorkspace', () => {
-  it('renders a policy manifest diff and 3 × 3 decision matrix under one assurance scenario', async () => {
+  it('renders a policy manifest diff and 4 × 3 decision matrix under one assurance scenario', async () => {
     renderCompare();
 
     expect(screen.getByRole('heading', { name: /where do policies disagree/i })).toBeInTheDocument();
@@ -28,7 +28,8 @@ describe('CompareWorkspace', () => {
     expect(within(table).getByText('TYN-001')).toBeInTheDocument();
     expect(within(table).getByText('AUS-001')).toBeInTheDocument();
     expect(within(table).getByText('PHX-001')).toBeInTheDocument();
-    expect(within(table).getAllByRole('button')).toHaveLength(9);
+    expect(within(table).getByText('OPS-001')).toBeInTheDocument();
+    expect(within(table).getAllByRole('button')).toHaveLength(12);
   });
 
   it('reports blocking rules separately from admitted binding ceilings', async () => {
