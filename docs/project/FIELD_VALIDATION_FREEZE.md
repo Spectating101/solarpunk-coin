@@ -7,7 +7,7 @@
 
 ## Owner-authorized v0.3 polish exception
 
-The project owner authorized a bounded product-polish tranche before Gate 1B outreach. The exception is limited to:
+The project owner authorized a bounded product-polish program before Gate 1B outreach. The exception is limited to:
 
 1. complete and accessible navigation;
 2. mobile density and page-length reduction;
@@ -15,9 +15,19 @@ The project owner authorized a bounded product-polish tranche before Gate 1B out
 4. research-critical typography and contrast;
 5. analytical wayfinding;
 6. focus, keyboard, touch-target, and reduced-motion behavior;
-7. correction of stale or internally inconsistent public copy.
+7. correction of stale or internally inconsistent public copy;
+8. explicit navigation between an evaluated decision and its existing receipt;
+9. presentation-layer explanations of what changed when the user changes a declared policy or assurance scenario;
+10. correctness fixes required to keep controlled and non-spatial cases fully inspectable.
 
 This exception does not authorize new empirical claims, evidence sources, calculators, policy semantics, custody promotion, persistence infrastructure, accounts, AI assistants, GIS, token economics, or chain functionality.
+
+## Accepted and active tranches
+
+- **PR #17 — flagship navigation and analytical reading flow:** accepted and published.
+- **Case Workspace investigation flow:** explicitly authorized next. Scope is limited to persistent investigation navigation, current-decision context, transition explanation, mobile disclosure, non-spatial case safety, and direct routing to existing receipts.
+
+Studies and Reference-suite polish remain candidate follow-on tranches. They require the same bounded-scope review and do not inherit authorization for new research or infrastructure functionality.
 
 ## `main` accept list
 
@@ -45,8 +55,8 @@ Issue #3 remains open. Track sub-gates separately:
 - **1C** Authenticated operator evidence toward L1  
 - **1D** Live gateway path to L2  
 
-Field validation resumes after the owner accepts the v0.3 polish tranche. The decisive field milestone remains one external source, one custody receipt, one reproducible result, and one operator reaction.
+Field validation resumes after the owner accepts the v0.3 polish program. The decisive field milestone remains one external source, one custody receipt, one reproducible result, and one operator reaction.
 
-## Exit condition for the polish exception
+## Exit condition for each polish tranche
 
-The polish exception ends when its visual-review artifact and full repository CI matrix pass and the project owner accepts the public interface. Further substantial product branches must then either respond to Gate 1B evidence or receive a new explicit owner authorization with a bounded scope.
+A tranche ends only when its visual-review artifact and full repository CI matrix pass and the project owner accepts the public interface. Further substantial product branches must then either respond to Gate 1B evidence or receive a new explicit owner authorization with a bounded scope.
