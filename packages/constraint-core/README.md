@@ -7,6 +7,8 @@ This package generalizes the strongest machinery already present in SolarPunk be
 ## Core model
 
 ```text
+SOURCE CUSTODY RECEIPT
+      ↓
 SOURCE EVIDENCE
       ↓
 NORMALIZE
@@ -23,6 +25,49 @@ SETTLEMENT RESULT
 ```
 
 Every stage should produce reasons that can be shown to a reviewer or consumed by software.
+
+## Custody-first operator intake
+
+Real-source processing begins before normalization. `@solarpunk/constraint-core/operator-intake` binds an owner/operator-supplied file to:
+
+- immutable SHA-256 identity;
+- declared custodian relationship;
+- acquisition method and custody statement;
+- publication permission;
+- measurement window and sign convention;
+- device metadata;
+- referenced but unverified artifacts.
+
+```js
+import {
+  buildOperatorSourceReceipt,
+  verifyOperatorSourceReceipt,
+} from '@solarpunk/constraint-core/operator-intake';
+
+const receipt = await buildOperatorSourceReceipt({
+  sourceText: privateCsvText,
+  filename: 'operator-export.csv',
+  manifest: sourceManifest,
+  generatedAt: '2026-07-20T01:00:00Z',
+});
+
+const verification = await verifyOperatorSourceReceipt({
+  receipt,
+  sourceText: privateCsvText,
+  manifest: sourceManifest,
+});
+```
+
+The receipt excludes raw rows and always defaults to `PROVENANCE-L0-BASE`. Self-authored profile fields, local signatures, and referenced filenames cannot automatically promote evidence to L1–L4.
+
+CLI:
+
+```bash
+npm --prefix packages/constraint-core run operator-intake -- \
+  --source=/private/operator-export.csv \
+  --manifest=/private/operator-source-manifest.json \
+  --out=state/private/operator-source-receipt.json
+```
 
 ## Adapters in alpha
 
@@ -116,6 +161,7 @@ Additional terminal or control states: `BLOCKED`, `DISPUTED`, `REVOKED`, `EXPIRE
 
 ```bash
 node --test packages/constraint-core/test/*.test.mjs
+npm --prefix packages/constraint-core run operator-intake:test
 node scripts/protocol_alpha_demo.mjs
 npx hardhat test test/ConstraintProtocol.test.js
 npx hardhat run scripts/deploy_constraint_protocol_alpha.js
@@ -125,6 +171,8 @@ npx hardhat run scripts/deploy_constraint_protocol_alpha.js
 
 This package does not by itself establish:
 
+- physical source truth;
+- operator identity or custody beyond the declared intake receipt;
 - legal ownership of energy or environmental attributes;
 - legal redemption rights;
 - reserve custody;
