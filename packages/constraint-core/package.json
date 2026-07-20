@@ -14,6 +14,10 @@
     "./workbench": "./src/workbench.js"
   },
   "files": ["src", "README.md"],
+  "scripts": {
+    "operator-intake": "node ../../scripts/prepare_operator_source_intake.mjs",
+    "operator-intake:test": "node --test test/operator-source-intake.test.mjs"
+  },
   "peerDependencies": {
     "ethers": ">=6.7.0"
   },
