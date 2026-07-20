@@ -24,6 +24,12 @@ describe('CompareWorkspace', () => {
     expect(screen.getByLabelText(/comparison policy/i)).toHaveValue('ENERGY-CASE-PILOT-005');
     expect(screen.getAllByText('SIGNED_EVIDENCE').length).toBeGreaterThan(0);
 
+    const readingMap = screen.getByRole('navigation', { name: /compare reading map/i });
+    expect(within(readingMap).getByRole('link', { name: /policy diff/i })).toHaveAttribute('href', '#compare-policy-diff');
+    expect(within(readingMap).getByRole('link', { name: /decision matrix/i })).toHaveAttribute('href', '#compare-decision-matrix');
+    expect(within(readingMap).getByRole('link', { name: /attribution/i })).toHaveAttribute('href', '#compare-attribution');
+    expect(within(readingMap).getByRole('link', { name: /capacity/i })).toHaveAttribute('href', '#compare-capacity');
+
     const table = await screen.findByRole('table', { name: /case policy decision matrix/i });
     const headers = within(table).getAllByRole('columnheader');
     expect(headers).toHaveLength(4);
