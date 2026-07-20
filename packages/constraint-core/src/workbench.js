@@ -25,6 +25,7 @@ export * from './claim.js';
 export * from './decisionClaim.js';
 export * from './settlementConstraint.js';
 export * from './capsuleVerify.js';
+export * from './operatorIntake.js';
 
 export async function inspectSignedEvidence(...args) {
   const module = await import('./attestation.js');
