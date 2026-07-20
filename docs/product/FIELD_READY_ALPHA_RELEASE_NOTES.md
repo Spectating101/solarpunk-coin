@@ -33,7 +33,7 @@ A **field-ready** Policy Lab alpha for private operator evidence pilots. The pub
 - Template: `data/operator/operator_source_manifest.template.json`
 - Command: `npm --prefix packages/constraint-core run operator-intake -- --source=... --manifest=... --out=...`
 - Always: `PROVENANCE-L0-BASE`, `automatic_promotion_allowed=false`, `source_truth_certification=NOT_CLAIMED`
-- Raw source never copied into the public repository
+- Raw source is not copied by the intake command and private output paths are ignored by Git
 - Docs: `docs/product/OPERATOR_SOURCE_INTAKE_V2.md`
 
 ### Explicit non-claims
@@ -49,9 +49,9 @@ A **field-ready** Policy Lab alpha for private operator evidence pilots. The pub
 | Sub-gate | Milestone |
 |----------|-----------|
 | **1B** | Real-source software validation (external custody-documented export → L0 → capsule → verify). BLOCKED is OK. |
-| **1C** | Operator-signed validation (path toward L1) |
-| **1D** | Live gateway validation (real L2) |
+| **1C** | Authenticated operator evidence with independently checkable identity/custody (path toward L1) |
+| **1D** | Signed live-gateway validation with documented key custody (real L2) |
 
-## Freeze policy (`main` after this tag)
+## Freeze policy
 
-Accept only defects; security/privacy fixes; real-source ingestion changes; operator-feedback usability changes.
+After the freeze document lands on `main`, accept only defects; security/privacy fixes; real-source ingestion or verification changes; operator-feedback usability changes; and minimal field-program documentation or release metadata.
