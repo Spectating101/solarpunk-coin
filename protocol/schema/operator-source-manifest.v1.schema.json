@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Operator Source Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source_id",
+    "source_kind",
+    "synthetic_fixture",
+    "custodian",
+    "acquisition",
+    "measurement",
+    "device",
+    "assertions",
+    "artifacts",
+    "boundaries"
+  ],
+  "properties": {
+    "schema": { "const": "solarpunk.operator_source_manifest.v1" },
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_kind": {
+      "enum": [
+        "inverter_export",
+        "meter_export",
+        "utility_export",
+        "gateway_api_snapshot",
+        "operator_csv",
+        "other"
+      ]
+    },
+    "synthetic_fixture": { "type": "boolean" },
+    "custodian": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationship", "identifier", "contact_disclosure"],
+      "properties": {
+        "relationship": {
+          "enum": ["owner", "operator", "authorized_researcher", "data_processor", "unknown"]
+        },
+        "identifier": { "type": "string", "minLength": 1 },
+        "contact_disclosure": { "enum": ["public", "private", "not_provided"] }
+      }
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "acquired_at", "custody_statement", "permission_scope"],
+      "properties": {
+        "method": {
+          "enum": ["owner_export", "operator_export", "api_snapshot", "utility_download", "research_transfer", "other"]
+        },
+        "acquired_at": { "type": "string", "format": "date-time" },
+        "custody_statement": { "type": "string", "minLength": 20 },
+        "permission_scope": {
+          "enum": ["private_validation", "public_metadata_only", "public_anonymized_aggregate", "public_raw"]
+        }
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["window_start", "window_end", "timezone", "sign_convention"],
+      "properties": {
+        "window_start": { "type": "string", "format": "date-time" },
+        "window_end": { "type": "string", "format": "date-time" },
+        "timezone": { "type": "string", "minLength": 1 },
+        "sign_convention": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["generation", "site_load", "export", "curtailed"],
+          "properties": {
+            "generation": { "type": "string", "minLength": 1 },
+            "site_load": { "type": "string", "minLength": 1 },
+            "export": { "type": "string", "minLength": 1 },
+            "curtailed": { "type": ["string", "null"] }
+          }
+        }
+      }
+    },
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manufacturer", "model", "serial_hash", "capacity_kw", "accuracy_basis"],
+      "properties": {
+        "manufacturer": { "type": ["string", "null"] },
+        "model": { "type": ["string", "null"] },
+        "serial_hash": { "type": ["string", "null"] },
+        "capacity_kw": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "accuracy_basis": { "type": ["string", "null"] }
+      }
+    },
+    "assertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_owner_confirmed",
+        "live_api",
+        "revenue_grade",
+        "utility_corroborated",
+        "device_signature_present"
+      ],
+      "properties": {
+        "source_owner_confirmed": { "type": "boolean" },
+        "live_api": { "type": "boolean" },
+        "revenue_grade": { "type": "boolean" },
+        "utility_corroborated": { "type": "boolean" },
+        "device_signature_present": { "type": "boolean" }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_signature_file",
+        "device_registry_file",
+        "utility_corroboration_file",
+        "api_snapshot_receipt_file"
+      ],
+      "properties": {
+        "source_signature_file": { "type": ["string", "null"] },
+        "device_registry_file": { "type": ["string", "null"] },
+        "utility_corroboration_file": { "type": ["string", "null"] },
+        "api_snapshot_receipt_file": { "type": ["string", "null"] }
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
