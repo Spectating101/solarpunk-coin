@@ -35,7 +35,7 @@ describe('ReceiptsWorkspace', () => {
 
     await screen.findByText(/research capsule/i);
     await waitFor(() => {
-      expect(screen.getByText(/12 portable files/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/12 portable files/i).length).toBeGreaterThanOrEqual(2);
     });
     expect(screen.getByText('decision-result.json')).toBeInTheDocument();
     expect(screen.getByText('decision-receipt.json')).toBeInTheDocument();
