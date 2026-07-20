@@ -18,15 +18,17 @@ A deterministic **BLOCKED** result is acceptable.
 
 **Done when:** raw file never enters the public repo; source receipt reproduces; acquisition/permission metadata complete; normalization does not silently rewrite rows; manual mapping recorded; decision deterministic; capsule verifier passes; operator agrees limitations are accurate; operator understands block/admit; turnaround ≈ one working session.
 
-## Gate 1C — Operator-signed validation (toward L1)
+## Gate 1C — Authenticated operator evidence (toward L1)
 
 Obtain one of:
 
-- an export signed by the operator;
-- an operator assertion bound to the exact source hash;
+- an export signed by the operator or source device;
+- an authenticated operator declaration bound to the exact source hash and measurement window;
 - a device registry or signature artifact with independently checkable custody.
 
-**Done when:** a defensible L1 path exists without pretending live-gateway L2.
+A self-authored manifest field, unverified filename, or locally generated project key is not sufficient.
+
+**Done when:** the operator/source identity and signing or assertion path are independently checkable, and a defensible L1 classification can be reproduced without pretending live-gateway L2.
 
 ## Gate 1D — Live gateway validation (real L2)
 
@@ -41,4 +43,4 @@ Obtain one of:
 
 ## Tracking suggestion (GitHub)
 
-Post these three milestones as checklist comments or child issues linked to #3. Keep #3 as the L2 north star.
+Create three child issues linked to #3. Keep #3 as the L2 north star and close each child only against its explicit completion criteria.
