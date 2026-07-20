@@ -49,6 +49,7 @@ await open(compareHash, 'What changed in the policy before the outcomes changed?
 await page.getByText(/signed evidence/i).first().waitFor({ state: 'visible' });
 await page.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
 await page.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ state: 'visible' });
+await page.getByRole('navigation', { name: /compare reading map/i }).waitFor({ state: 'visible' });
 await shot('05-compare-decision-matrix.png');
 
 await open('#case/TYN-001?policy=ENERGY-CASE-PILOT-005&scenario=PROVENANCE-L2-COUNTERFACTUAL&lens=stress');
@@ -62,8 +63,9 @@ await page.getByText('Which declared objects and activities produced this result
 await shot('07-decision-lineage.png');
 
 await open('#receipts', 'Share the decision identity, not a screenshot.');
-await page.getByText('12 portable files', { exact: false }).waitFor({ state: 'visible' });
+await page.getByRole('heading', { name: /12 portable files/i }).waitFor({ state: 'visible' });
 await page.getByText('ro-crate-metadata.json', { exact: true }).waitFor({ state: 'visible' });
+await page.getByRole('navigation', { name: /receipt reading map/i }).waitFor({ state: 'visible' });
 await shot('08-decision-receipt-capsule.png');
 
 await open('#runs', 'What did the stricter rule buy');
@@ -82,35 +84,60 @@ async function openMobile(hash, expected) {
   if (expected) await mobilePage.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
+await openMobile('#lab', 'Investigate how evidence becomes a bounded financial decision.');
+await mobilePage.getByRole('button', { name: /open primary navigation/i }).click();
+for (const label of ['Overview', 'Cases', 'Compare', 'Studies', 'Receipts', 'Reference']) {
+  await mobilePage.getByRole('button', { name: label, exact: true }).waitFor({ state: 'visible' });
+}
+await shot('11-mobile-primary-navigation.png', mobilePage);
+await mobilePage.getByRole('button', { name: /close primary navigation/i }).click();
+await mobilePage.getByRole('button', { name: /start the five-minute investigation/i }).waitFor({ state: 'visible' });
+await shot('12-mobile-lab-overview.png', mobilePage);
+
 await openMobile('#cases', 'Investigate the rule that blocks or bounds the case.');
 await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
-await shot('11-mobile-case-explorer.png', mobilePage);
+const mapToggle = mobilePage.getByRole('button', { name: /show 3 mapped cases/i });
+await mapToggle.waitFor({ state: 'visible' });
+if (await mapToggle.getAttribute('aria-expanded') !== 'false') {
+  throw new Error('Mobile case map must begin collapsed');
+}
+await shot('13-mobile-case-explorer-collapsed.png', mobilePage);
+await mapToggle.click();
+await mobilePage.getByRole('button', { name: /hide map/i }).waitFor({ state: 'visible' });
+await shot('14-mobile-case-explorer-expanded.png', mobilePage);
 
 await openMobile('#case/TYN-001', 'Why is this case blocked?');
 await mobilePage.getByText('NOT EXECUTED', { exact: true }).waitFor({ state: 'visible' });
-await shot('12-mobile-blocked-case.png', mobilePage);
+await shot('15-mobile-blocked-case.png', mobilePage);
 
 await mobilePage.getByLabel('Assurance context').selectOption('PROVENANCE-L2-COUNTERFACTUAL');
 await mobilePage.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
-await shot('13-mobile-admitted-case.png', mobilePage);
+await shot('16-mobile-admitted-case.png', mobilePage);
 
 await openMobile(compareHash, 'What changed in the policy before the outcomes changed?');
 await mobilePage.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
-await shot('14-mobile-compare.png', mobilePage);
+await mobilePage.getByRole('navigation', { name: /compare reading map/i }).waitFor({ state: 'visible' });
+if (await mobilePage.locator('#compare-attribution').getAttribute('open') !== null) {
+  throw new Error('Mobile Compare attribution depth should begin collapsed');
+}
+await shot('17-mobile-compare.png', mobilePage);
 
 await openMobile('#receipts', 'Share the decision identity, not a screenshot.');
-await mobilePage.getByText('12 portable files', { exact: false }).waitFor({ state: 'visible' });
-await shot('15-mobile-receipt.png', mobilePage);
-
-await openMobile('#lab', 'Investigate how evidence becomes a bounded financial decision.');
-await mobilePage.getByRole('button', { name: /start the five-minute investigation/i }).waitFor({ state: 'visible' });
-await shot('16-mobile-lab-overview.png', mobilePage);
+await mobilePage.getByRole('navigation', { name: /receipt reading map/i }).waitFor({ state: 'visible' });
+if (await mobilePage.locator('#receipt-capsule').getAttribute('open') !== null) {
+  throw new Error('Mobile research capsule should begin collapsed');
+}
+await shot('18-mobile-receipt-collapsed.png', mobilePage);
+await mobilePage.locator('#receipt-capsule > summary').click();
+await mobilePage.getByRole('heading', { name: /12 portable files/i }).waitFor({ state: 'visible' });
+await mobilePage.getByText('ro-crate-metadata.json', { exact: true }).waitFor({ state: 'visible' });
+await shot('19-mobile-receipt-capsule-expanded.png', mobilePage);
 
 await mobile.close();
 await browser.close();
 
 const files = await fs.readdir(outputDir);
-if (files.length !== 17) {
-  throw new Error(`Expected 17 flagship workbench review screenshots; received ${files.length}`);
+if (files.length !== 20) {
+  throw new Error(`Expected 20 flagship workbench review screenshots; received ${files.length}`);
 }
 console.log(`Captured ${files.length} flagship workbench screenshots in ${outputDir}`);

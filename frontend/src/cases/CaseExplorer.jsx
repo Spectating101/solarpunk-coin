@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import {
   ArrowRight,
+  ChevronDown,
+  ChevronUp,
   CircleDot,
   Database,
   MapPinned,
@@ -73,6 +75,7 @@ export default function CaseExplorer({ onOpenCase }) {
   } = useCaseWorkbench();
   const [layer, setLayer] = useState('binding');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [mapExpanded, setMapExpanded] = useState(false);
 
   const activeCase = pack.casesById[activeCaseId];
   const activeRun = visibleRunsByCaseId[activeCaseId];
@@ -166,17 +169,28 @@ export default function CaseExplorer({ onOpenCase }) {
           </div>
         </aside>
 
-        <section className="case-map-panel" aria-label="Linked spatial case surface">
+        <section className={mapExpanded ? 'case-map-panel expanded' : 'case-map-panel'} aria-label="Linked spatial case surface">
           <div className="case-map-header">
             <div>
               <span className="wb-section-label"><MapPinned size={13} /> Linked case surface</span>
               <strong>{LAYERS.find((item) => item.id === layer)?.label}</strong>
             </div>
-            <span className="case-map-boundary">
-              {nonSpatialCount
-                ? `${nonSpatialCount} non-spatial case${nonSpatialCount === 1 ? '' : 's'} available in the list`
-                : 'modeled location · analytical link'}
-            </span>
+            <div className="case-map-header-actions">
+              <span className="case-map-boundary">
+                {nonSpatialCount
+                  ? `${nonSpatialCount} non-spatial case${nonSpatialCount === 1 ? '' : 's'} available in the list`
+                  : 'modeled location · analytical link'}
+              </span>
+              <button
+                type="button"
+                className="case-map-toggle"
+                aria-expanded={mapExpanded}
+                onClick={() => setMapExpanded((expanded) => !expanded)}
+              >
+                {mapExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                {mapExpanded ? 'Hide map' : `Show ${mappedCases.length} mapped cases`}
+              </button>
+            </div>
           </div>
           <div className="case-map-world" aria-hidden="true">
             <div className="case-map-grid-lines" />

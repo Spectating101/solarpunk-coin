@@ -8,6 +8,8 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
+import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
+import SectionNavigator from '../components/SectionNavigator';
 import {
   decisionArtifactStem,
   decisionMemo,
@@ -46,7 +48,7 @@ function ReceiptDetail({ run, receipt }) {
 
   return (
     <section className="receipt-detail">
-      <div className="receipt-detail-header">
+      <div id="receipt-summary" className="receipt-detail-header">
         <div>
           <span className="wb-kicker"><Fingerprint size={13} /> Decision receipt</span>
           <h2>{run.caseManifest.case_id} · {receipt.result.replaceAll('_', ' ')}</h2>
@@ -75,6 +77,16 @@ function ReceiptDetail({ run, receipt }) {
       </div>
       {capsuleError ? <div className="workbench-error" role="alert">{capsuleError}</div> : null}
 
+      <SectionNavigator
+        label="Receipt reading map"
+        items={[
+          { id: 'receipt-summary', label: 'Identity', meta: receipt.result.replaceAll('_', ' ') },
+          { id: 'receipt-rules', label: 'Rules', meta: `${receipt.evaluated_rules.length} evaluations` },
+          { id: 'receipt-inputs', label: 'Inputs', meta: 'evidence + context' },
+          { id: 'receipt-capsule', label: 'Capsule', meta: capsule ? `${capsule.manifest.files.length} files` : 'building' },
+        ]}
+      />
+
       <div className="receipt-grid">
         <article>
           <span className="wb-section-label">Policy identity</span>
@@ -96,62 +108,83 @@ function ReceiptDetail({ run, receipt }) {
         </article>
       </div>
 
-      <section className="receipt-rule-section">
-        <div className="constraint-section-heading">
-          <div><span className="wb-section-label">Evaluated rules</span><h3>{receipt.evaluated_rules.length} deterministic evaluations</h3></div>
-        </div>
-        <div className="receipt-rule-list">
-          {receipt.evaluated_rules.map((rule) => (
-            <div key={rule.evaluation_id} className={`receipt-rule ${rule.status.toLowerCase()}`}>
-              <span>{rule.status}</span>
-              <strong>{rule.calculator_id}</strong>
-              <code>{rule.calculator_version}</code>
-              <small>{label(rule.constraint_class)}</small>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="receipt-grid">
-        <article>
-          <span className="wb-section-label">Evidence receipt</span>
-          {receipt.evidence.map((item) => (
-            <div className="receipt-hash-block" key={item.hash}>
-              <code>{item.hash}</code>
-              <span>raw included: {String(item.raw_included)}</span>
-            </div>
-          ))}
-        </article>
-        <article>
-          <span className="wb-section-label">Context receipt</span>
-          {receipt.contexts.map((item) => (
-            <div className="receipt-hash-block" key={item.hash}>
-              <strong>{item.id}</strong>
-              <code>{item.hash}</code>
-            </div>
-          ))}
-        </article>
-      </section>
-
-      {capsule ? (
-        <section className="capsule-manifest-panel">
+      <ResponsiveDisclosure
+        id="receipt-rules"
+        label="Evaluated rules"
+        title={`${receipt.evaluated_rules.length} deterministic evaluations`}
+        meta={receipt.result.replaceAll('_', ' ')}
+      >
+        <section className="receipt-rule-section">
           <div className="constraint-section-heading">
-            <div><span className="wb-section-label">Research capsule</span><h3>{capsule.manifest.files.length} portable files</h3></div>
-            <code>{capsule.manifest.capsule_id}</code>
+            <div><span className="wb-section-label">Evaluated rules</span><h3>{receipt.evaluated_rules.length} deterministic evaluations</h3></div>
           </div>
-          <div className="capsule-file-list">
-            {capsule.manifest.files.map((file) => (
-              <div key={file.path}>
-                <FileCheck2 size={15} />
-                <strong>{file.path}</strong>
-                <span>{file.bytes} bytes</span>
-                <code>{file.sha256}</code>
+          <div className="receipt-rule-list">
+            {receipt.evaluated_rules.map((rule) => (
+              <div key={rule.evaluation_id} className={`receipt-rule ${rule.status.toLowerCase()}`}>
+                <span>{rule.status}</span>
+                <strong>{rule.calculator_id}</strong>
+                <code>{rule.calculator_version}</code>
+                <small>{label(rule.constraint_class)}</small>
               </div>
             ))}
           </div>
-          <p>{capsule.manifest.data_boundary}</p>
         </section>
-      ) : <div className="wb-lens-loading">Building capsule manifest and file hashes…</div>}
+      </ResponsiveDisclosure>
+
+      <ResponsiveDisclosure
+        id="receipt-inputs"
+        label="Input identities"
+        title="Evidence and context receipts"
+        meta={`${receipt.evidence.length} evidence · ${receipt.contexts.length} context`}
+      >
+        <section className="receipt-grid">
+          <article>
+            <span className="wb-section-label">Evidence receipt</span>
+            {receipt.evidence.map((item) => (
+              <div className="receipt-hash-block" key={item.hash}>
+                <code>{item.hash}</code>
+                <span>raw included: {String(item.raw_included)}</span>
+              </div>
+            ))}
+          </article>
+          <article>
+            <span className="wb-section-label">Context receipt</span>
+            {receipt.contexts.map((item) => (
+              <div className="receipt-hash-block" key={item.hash}>
+                <strong>{item.id}</strong>
+                <code>{item.hash}</code>
+              </div>
+            ))}
+          </article>
+        </section>
+      </ResponsiveDisclosure>
+
+      <ResponsiveDisclosure
+        id="receipt-capsule"
+        label="Research capsule"
+        title={capsule ? `${capsule.manifest.files.length} portable files` : 'Building portable files'}
+        meta="closed-world bundle"
+      >
+        {capsule ? (
+          <section className="capsule-manifest-panel">
+            <div className="constraint-section-heading">
+              <div><span className="wb-section-label">Research capsule</span><h3>{capsule.manifest.files.length} portable files</h3></div>
+              <code>{capsule.manifest.capsule_id}</code>
+            </div>
+            <div className="capsule-file-list">
+              {capsule.manifest.files.map((file) => (
+                <div key={file.path}>
+                  <FileCheck2 size={15} />
+                  <strong>{file.path}</strong>
+                  <span>{file.bytes} bytes</span>
+                  <code>{file.sha256}</code>
+                </div>
+              ))}
+            </div>
+            <p>{capsule.manifest.data_boundary}</p>
+          </section>
+        ) : <div className="wb-lens-loading">Building capsule manifest and file hashes…</div>}
+      </ResponsiveDisclosure>
     </section>
   );
 }
@@ -264,29 +297,31 @@ export default function ReceiptsWorkspace({
         </section>
         <div className="receipts-layout">
           <aside className="receipt-index-list">
-            <span className="wb-section-label">Session decision receipts</span>
-            {receipts.map((receipt) => {
-              const run = runByDecisionId[receipt.decision_id];
-              return (
-                <button
-                  type="button"
-                  key={receipt.decision_id}
-                  className={selectedId === receipt.decision_id ? 'active' : ''}
-                  onClick={() => run && typeof onOpenReceipt === 'function' && onOpenReceipt(run)}
-                >
-                  <span>
-                    <strong>{receipt.case_id}</strong>
-                    <small>{receipt.policy.id}</small>
-                    <small>{run?.scenario?.scenario_id || 'scenario unavailable'}</small>
-                  </span>
-                  <code>{receipt.result}</code>
-                  <small>{run?.decision.decision === 'BLOCKED'
-                    ? label(run.decision.admission.blocking_rules[0])
-                    : label(run?.decision.capacity.binding_constraints[0])}</small>
-                  <ArrowRight size={14} />
-                </button>
-              );
-            })}
+            <span className="wb-section-label">Browser-session decisions</span>
+            <div className="receipt-index-scroll">
+              {receipts.map((receipt) => {
+                const run = runByDecisionId[receipt.decision_id];
+                return (
+                  <button
+                    type="button"
+                    key={receipt.decision_id}
+                    className={selectedId === receipt.decision_id ? 'active' : ''}
+                    onClick={() => run && typeof onOpenReceipt === 'function' && onOpenReceipt(run)}
+                  >
+                    <span>
+                      <strong>{receipt.case_id}</strong>
+                      <small>{receipt.policy.id}</small>
+                      <small>{run?.scenario?.scenario_id || 'scenario unavailable'}</small>
+                    </span>
+                    <code>{receipt.result}</code>
+                    <small>{run?.decision.decision === 'BLOCKED'
+                      ? label(run.decision.admission.blocking_rules[0])
+                      : label(run?.decision.capacity.binding_constraints[0])}</small>
+                    <ArrowRight size={14} />
+                  </button>
+                );
+              })}
+            </div>
           </aside>
           {selectedRun && selectedReceipt ? (
             <ReceiptDetail run={selectedRun} receipt={selectedReceipt} />

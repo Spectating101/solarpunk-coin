@@ -8,6 +8,7 @@ import {
   PlusCircle,
   SlidersHorizontal,
 } from 'lucide-react';
+import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
 
 function stable(value) {
   return JSON.stringify(value ?? null);
@@ -129,11 +130,12 @@ function RuleSection({ title, rows }) {
   const changedRows = rows.filter((row) => row.status !== 'UNCHANGED');
   const unchangedRows = rows.filter((row) => row.status === 'UNCHANGED');
   return (
-    <section className="policy-diff-rule-section">
-      <header>
-        <div><span className="wb-section-label">Executable policy</span><h3>{title}</h3></div>
-        <span>{changedRows.length} changed · {unchangedRows.length} shared</span>
-      </header>
+    <ResponsiveDisclosure
+      className="policy-diff-rule-section"
+      label="Executable policy"
+      title={title}
+      meta={`${changedRows.length} changed · ${unchangedRows.length} shared`}
+    >
       <div className="policy-diff-rule-list">
         {changedRows.map((row) => <RuleDiffRow key={row.calculatorId} row={row} />)}
         {unchangedRows.length ? (
@@ -143,7 +145,7 @@ function RuleSection({ title, rows }) {
           </details>
         ) : null}
       </div>
-    </section>
+    </ResponsiveDisclosure>
   );
 }
 
@@ -183,7 +185,7 @@ export default function PolicyDiffPanel({
   };
 
   return (
-    <section className="policy-diff-panel" aria-labelledby="policy-diff-title">
+    <section id="compare-policy-diff" className="policy-diff-panel" aria-labelledby="policy-diff-title">
       <header className="policy-diff-heading">
         <div>
           <span className="wb-kicker"><GitCompareArrows size={13} /> Policy manifest diff · versioned rule declarations</span>
@@ -227,10 +229,17 @@ export default function PolicyDiffPanel({
       <RuleSection title="Admission gates" rows={diff.admission} />
       <RuleSection title="Quantity ceilings" rows={diff.quantity} />
 
-      <div className="policy-metadata-grid">
-        <MetadataDiff label="Settlement declaration" changes={diff.settlementChanges} />
-        <MetadataDiff label="Governance declaration" changes={diff.governanceChanges} />
-      </div>
+      <ResponsiveDisclosure
+        className="policy-metadata-disclosure"
+        label="Declared metadata"
+        title="Settlement and governance declarations"
+        meta={`${diff.summary.metadataChanged} changed field${diff.summary.metadataChanged === 1 ? '' : 's'}`}
+      >
+        <div className="policy-metadata-grid">
+          <MetadataDiff label="Settlement declaration" changes={diff.settlementChanges} />
+          <MetadataDiff label="Governance declaration" changes={diff.governanceChanges} />
+        </div>
+      </ResponsiveDisclosure>
     </section>
   );
 }

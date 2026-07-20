@@ -20,8 +20,8 @@ const SURFACES = [
     index: '01',
     label: 'Case workbench',
     title: 'Trace why a case is blocked, bounded, or exposed to settlement failure.',
-    description: 'Three committed energy cases move through controlled evidence, modeled context, declared assurance, versioned policy, typed constraints, and deterministic receipts.',
-    boundary: 'Controlled case pack · mechanism demonstration · no empirical geography claim',
+    description: 'Four committed research cases move through controlled or synthetic evidence, modeled context, declared assurance, versioned policy, typed constraints, and deterministic receipts.',
+    boundary: 'Controlled + synthetic case pack · mechanism demonstration · no empirical geography claim',
     action: 'Open canonical cases',
   },
   {
@@ -88,7 +88,7 @@ export default function LabOverview({ onNavigate }) {
           <strong>Evidence → policy → bounded decision → stress → receipt</strong>
           <p>Three public surfaces use that method differently. Their data boundaries remain explicit rather than being merged into one unsupported claim.</p>
           <div>
-            <small>Case pack</small><code>controlled</code>
+            <small>Case pack</small><code>controlled + synthetic</code>
             <small>Market study</small><code>aggregate empirical</code>
             <small>Reference lab</small><code>experimental</code>
           </div>
@@ -103,6 +103,7 @@ export default function LabOverview({ onNavigate }) {
           </div>
           <ShieldCheck size={24} aria-hidden />
         </header>
+        <p className="lab-overview-scroll-hint">Swipe horizontally to inspect all three research surfaces.</p>
 
         <div className="lab-surface-grid">
           {SURFACES.map((surface) => {
@@ -156,6 +157,7 @@ export default function LabOverview({ onNavigate }) {
           </div>
           <FileCheck2 size={24} aria-hidden />
         </header>
+        <p className="lab-overview-scroll-hint">Swipe horizontally to inspect each trust boundary.</p>
         <div className="lab-trust-grid">
           <article className="observed"><span>Evidence</span><strong>Observed or controlled source records</strong><p>Identity, adapter, capabilities, diagnostics, and hash remain inspectable.</p></article>
           <article className="modeled"><span>Context</span><strong>Modeled environmental or market context</strong><p>Context supports a calculation but is never relabeled as observed evidence.</p></article>

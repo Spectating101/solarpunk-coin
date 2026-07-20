@@ -6,6 +6,9 @@ import './index.css';
 import './decisionBriefPolish.css';
 import './constraintProtocolHardening.css';
 import './styles/caseWorkbenchVisualPolish.css';
+import './styles/productPolish.css';
+import './styles/policyDisclosurePolish.css';
+import './styles/receiptPolish.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

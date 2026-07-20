@@ -5,6 +5,8 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
+import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
+import SectionNavigator from '../components/SectionNavigator';
 import PolicyDiffPanel from './PolicyDiffPanel';
 
 const DEFAULT_BASELINE_POLICY_ID = 'LAB-CASE-OPEN-004';
@@ -198,6 +200,16 @@ export default function CompareWorkspace({
         </div>
       </section>
 
+      <SectionNavigator
+        label="Compare reading map"
+        items={[
+          { id: 'compare-policy-diff', label: 'Policy diff', meta: 'declared rules' },
+          { id: 'compare-decision-matrix', label: 'Decision matrix', meta: `${decisionCount} decisions` },
+          { id: 'compare-attribution', label: 'Attribution', meta: 'rules + transitions' },
+          { id: 'compare-capacity', label: 'Capacity', meta: 'admitted only' },
+        ]}
+      />
+
       <PolicyDiffPanel
         policies={pack.policies}
         baselinePolicyId={resolvedBaselinePolicyId}
@@ -208,99 +220,121 @@ export default function CompareWorkspace({
       {error ? <div className="workbench-error" role="alert"><ShieldAlert size={18} /> {error}</div> : null}
       {loading ? <div className="compare-loading" aria-live="polite">Evaluating comparison matrix…</div> : (
         <>
-          <section className="compare-panel">
-            <div className="constraint-section-heading">
-              <div><span className="wb-section-label">Decision matrix</span><h3>Case × policy</h3></div>
-              <span className="case-map-boundary">click any cell to inspect its exact state</span>
-            </div>
-            <div className="wb-table-scroll">
-              <table className="comparison-matrix" aria-label="Case policy decision matrix">
-                <thead>
-                  <tr>
-                    <th scope="col">Case</th>
-                    {pack.policies.map((policy) => <th scope="col" key={policy.id}>{policy.id}<small>{policy.name}</small></th>)}
-                  </tr>
-                </thead>
-                <tbody>
-                  {matrix.map((row) => (
-                    <tr key={row.caseId}>
-                      <th scope="row">{row.caseId}<small>{pack.casesById[row.caseId].subject.replace(' controlled energy case', '')}</small></th>
-                      {row.runs.map((run) => {
-                        const summary = cellSummary(run);
-                        return (
-                          <td key={run.key}>
-                            <button type="button" className={`matrix-cell ${summary.tone}`} onClick={() => openRun(run)}>
-                              <strong>{summary.result}</strong>
-                              <span>{label(summary.rule)}</span>
-                              <code>{summary.capacity == null ? 'quantity not evaluated' : `${summary.capacity} ${run.decision.capacity.unit}`}</code>
-                              <ArrowRight size={14} />
-                            </button>
-                          </td>
-                        );
-                      })}
+          <ResponsiveDisclosure
+            id="compare-decision-matrix"
+            label="Decision matrix"
+            title="Case × policy decisions"
+            meta={`${decisionCount} deterministic states`}
+            defaultOpen
+          >
+            <section className="compare-panel">
+              <div className="constraint-section-heading">
+                <div><span className="wb-section-label">Decision matrix</span><h3>Case × policy</h3></div>
+                <span className="case-map-boundary">click any cell to inspect its exact state</span>
+              </div>
+              <div className="wb-table-scroll">
+                <table className="comparison-matrix" aria-label="Case policy decision matrix">
+                  <thead>
+                    <tr>
+                      <th scope="col">Case</th>
+                      {pack.policies.map((policy) => <th scope="col" key={policy.id}>{policy.id}<small>{policy.name}</small></th>)}
                     </tr>
+                  </thead>
+                  <tbody>
+                    {matrix.map((row) => (
+                      <tr key={row.caseId}>
+                        <th scope="row">{row.caseId}<small>{pack.casesById[row.caseId].subject.replace(' controlled energy case', '')}</small></th>
+                        {row.runs.map((run) => {
+                          const summary = cellSummary(run);
+                          return (
+                            <td key={run.key}>
+                              <button type="button" className={`matrix-cell ${summary.tone}`} onClick={() => openRun(run)}>
+                                <strong>{summary.result}</strong>
+                                <span>{label(summary.rule)}</span>
+                                <code>{summary.capacity == null ? 'quantity not evaluated' : `${summary.capacity} ${run.decision.capacity.unit}`}</code>
+                                <ArrowRight size={14} />
+                              </button>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </ResponsiveDisclosure>
+
+          <ResponsiveDisclosure
+            id="compare-attribution"
+            label="Blocking and binding"
+            title="Primary attribution and policy transitions"
+            meta="why the result moved"
+          >
+            <section className="compare-two-column">
+              <article className="compare-panel">
+                <div className="constraint-section-heading">
+                  <div><span className="wb-section-label">Blocking / binding matrix</span><h3>Primary rule attribution</h3></div>
+                </div>
+                <div className="binding-matrix-grid">
+                  <div className="binding-matrix-spacer" />
+                  {pack.policies.map((policy) => <strong key={policy.id}>{policy.id.replace('ENERGY-CASE-', '').replace('LAB-CASE-', '')}</strong>)}
+                  {matrix.flatMap((row) => [
+                    <strong key={`${row.caseId}-label`}>{row.caseId}</strong>,
+                    ...row.runs.map((run) => {
+                      const summary = cellSummary(run);
+                      return <span key={run.key} className={summary.tone}>{label(summary.rule)}</span>;
+                    }),
+                  ])}
+                </div>
+              </article>
+
+              <article className="compare-panel">
+                <div className="constraint-section-heading">
+                  <div><span className="wb-section-label">Difference summary</span><h3>Compared with open policy</h3></div>
+                </div>
+                <div className="difference-summary-grid">
+                  {transitions.map(([name, count]) => (
+                    <div key={name}><strong>{count}</strong><span>{name}</span></div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+                </div>
+                <p className="compare-method-note">
+                  State transitions compare each pilot/strict decision with `LAB-CASE-OPEN-004` for the
+                  same case and assurance scenario. Capacity and binding-rule differences are reported only
+                  where both decisions reached quantity evaluation.
+                </p>
+              </article>
+            </section>
+          </ResponsiveDisclosure>
 
-          <section className="compare-two-column">
-            <article className="compare-panel">
+          <ResponsiveDisclosure
+            id="compare-capacity"
+            label="Capacity table"
+            title="Admitted decisions only"
+            meta="quantity-evaluated states"
+          >
+            <section className="compare-panel">
               <div className="constraint-section-heading">
-                <div><span className="wb-section-label">Blocking / binding matrix</span><h3>Primary rule attribution</h3></div>
+                <div><span className="wb-section-label">Capacity table</span><h3>Admitted decisions only</h3></div>
               </div>
-              <div className="binding-matrix-grid">
-                <div className="binding-matrix-spacer" />
-                {pack.policies.map((policy) => <strong key={policy.id}>{policy.id.replace('ENERGY-CASE-', '').replace('LAB-CASE-', '')}</strong>)}
-                {matrix.flatMap((row) => [
-                  <strong key={`${row.caseId}-label`}>{row.caseId}</strong>,
-                  ...row.runs.map((run) => {
-                    const summary = cellSummary(run);
-                    return <span key={run.key} className={summary.tone}>{label(summary.rule)}</span>;
-                  }),
-                ])}
+              <div className="wb-table-scroll">
+                <table className="wb-data-table" aria-label="Admitted decision capacity table">
+                  <thead><tr><th scope="col">Case</th><th scope="col">Policy</th><th scope="col">Decision ID</th><th scope="col">Admitted max</th><th scope="col">Binding ceiling</th></tr></thead>
+                  <tbody>
+                    {matrix.flatMap((row) => row.runs.filter((run) => run.decision.capacity.evaluated).map((run) => (
+                      <tr key={run.key}>
+                        <td><strong>{run.caseManifest.case_id}</strong></td>
+                        <td>{run.policy.id}</td>
+                        <td><code>{run.decision.decision_id.slice(0, 16)}…</code></td>
+                        <td>{run.decision.capacity.admitted_maximum} {run.decision.capacity.unit}</td>
+                        <td>{label(run.decision.capacity.binding_constraints.join(', '))}</td>
+                      </tr>
+                    ))) }
+                  </tbody>
+                </table>
               </div>
-            </article>
-
-            <article className="compare-panel">
-              <div className="constraint-section-heading">
-                <div><span className="wb-section-label">Difference summary</span><h3>Compared with open policy</h3></div>
-              </div>
-              <div className="difference-summary-grid">
-                {transitions.map(([name, count]) => (
-                  <div key={name}><strong>{count}</strong><span>{name}</span></div>
-                ))}
-              </div>
-              <p className="compare-method-note">
-                State transitions compare each pilot/strict decision with `LAB-CASE-OPEN-004` for the
-                same case and assurance scenario. Capacity and binding-rule differences are reported only
-                where both decisions reached quantity evaluation.
-              </p>
-            </article>
-          </section>
-
-          <section className="compare-panel">
-            <div className="constraint-section-heading">
-              <div><span className="wb-section-label">Capacity table</span><h3>Admitted decisions only</h3></div>
-            </div>
-            <div className="wb-table-scroll">
-              <table className="wb-data-table" aria-label="Admitted decision capacity table">
-                <thead><tr><th scope="col">Case</th><th scope="col">Policy</th><th scope="col">Decision ID</th><th scope="col">Admitted max</th><th scope="col">Binding ceiling</th></tr></thead>
-                <tbody>
-                  {matrix.flatMap((row) => row.runs.filter((run) => run.decision.capacity.evaluated).map((run) => (
-                    <tr key={run.key}>
-                      <td><strong>{run.caseManifest.case_id}</strong></td>
-                      <td>{run.policy.id}</td>
-                      <td><code>{run.decision.decision_id.slice(0, 16)}…</code></td>
-                      <td>{run.decision.capacity.admitted_maximum} {run.decision.capacity.unit}</td>
-                      <td>{label(run.decision.capacity.binding_constraints.join(', '))}</td>
-                    </tr>
-                  ))) }
-                </tbody>
-              </table>
-            </div>
-          </section>
+            </section>
+          </ResponsiveDisclosure>
         </>
       )}
     </main>
