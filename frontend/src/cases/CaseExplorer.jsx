@@ -21,8 +21,11 @@ function formatRule(value) {
 }
 
 function pointPosition(caseManifest) {
-  const latitude = Number(caseManifest.spatial_identity?.latitude || 0);
-  const longitude = Number(caseManifest.spatial_identity?.longitude || 0);
+  const spatial = caseManifest.spatial_identity;
+  if (!spatial) return null;
+  const latitude = Number(spatial.latitude);
+  const longitude = Number(spatial.longitude);
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
   return {
     left: `${((longitude + 180) / 360) * 100}%`,
     top: `${((90 - latitude) / 180) * 100}%`,
@@ -50,6 +53,12 @@ function pointTone(run) {
   if (binding === 'RESOURCE_CONTEXT_CAPACITY') return 'modeled';
   if (binding === 'PROVENANCE_POLICY_CAPACITY') return 'policy';
   return 'derived';
+}
+
+function caseLocation(caseManifest) {
+  const spatial = caseManifest.spatial_identity;
+  if (!spatial) return 'no asserted location';
+  return `${Number(spatial.latitude).toFixed(4)}, ${Number(spatial.longitude).toFixed(4)}`;
 }
 
 export default function CaseExplorer({ onOpenCase }) {
@@ -83,6 +92,8 @@ export default function CaseExplorer({ onOpenCase }) {
     if (statusFilter === 'blocked') return run.decision.decision === 'BLOCKED';
     return run.decision.decision === 'ADMIT_WITH_LIMIT';
   });
+  const mappedCases = visibleCases.filter((caseManifest) => pointPosition(caseManifest));
+  const nonSpatialCount = visibleCases.length - mappedCases.length;
 
   return (
     <main className="case-explorer" aria-labelledby="case-explorer-title">
@@ -161,13 +172,16 @@ export default function CaseExplorer({ onOpenCase }) {
               <span className="wb-section-label"><MapPinned size={13} /> Linked case surface</span>
               <strong>{LAYERS.find((item) => item.id === layer)?.label}</strong>
             </div>
-            <span className="case-map-boundary">modeled location · analytical link</span>
+            <span className="case-map-boundary">
+              {nonSpatialCount
+                ? `${nonSpatialCount} non-spatial case${nonSpatialCount === 1 ? '' : 's'} available in the list`
+                : 'modeled location · analytical link'}
+            </span>
           </div>
           <div className="case-map-world" aria-hidden="true">
             <div className="case-map-grid-lines" />
-            {visibleCases.map((caseManifest) => {
+            {mappedCases.map((caseManifest) => {
               const run = visibleRunsByCaseId[caseManifest.case_id];
-              const position = pointPosition(caseManifest);
               return (
                 <button
                   type="button"
@@ -175,7 +189,7 @@ export default function CaseExplorer({ onOpenCase }) {
                   key={caseManifest.case_id}
                   data-case-id={caseManifest.case_id}
                   className={`case-map-point ${pointTone(run)} ${activeCaseId === caseManifest.case_id ? 'active' : ''}`}
-                  style={position}
+                  style={pointPosition(caseManifest)}
                   onClick={() => selectCase(caseManifest.case_id)}
                 >
                   <i />
@@ -198,9 +212,7 @@ export default function CaseExplorer({ onOpenCase }) {
           <div className="active-case-title">
             <span>{activeCase.case_id}</span>
             <h2>{activeCase.subject.replace(' controlled energy case', '')}</h2>
-            <code>
-              {activeCase.spatial_identity.latitude.toFixed(4)}, {activeCase.spatial_identity.longitude.toFixed(4)}
-            </code>
+            <code>{caseLocation(activeCase)}</code>
           </div>
 
           {activeRun ? (
