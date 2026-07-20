@@ -32,10 +32,13 @@ await shot('01-case-explorer-binding-layer.png');
 
 await open('#case/TYN-001', 'Why is this case blocked?');
 await page.getByText('NOT EXECUTED', { exact: true }).waitFor({ state: 'visible' });
+await page.getByRole('navigation', { name: /investigation sequence/i }).waitFor({ state: 'visible' });
+await page.getByRole('button', { name: /^Open receipt$/i }).waitFor({ state: 'visible' });
 await shot('02-case-blocked-l0.png');
 
 await page.getByRole('button', { name: /preview l2 without changing the evidence hash/i }).click();
 await page.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
+await page.getByRole('status', { name: /investigation update/i }).waitFor({ state: 'visible' });
 if (!page.url().includes('scenario=PROVENANCE-L2-COUNTERFACTUAL')) {
   throw new Error('Counterfactual action did not persist assurance scenario in the URL');
 }
@@ -44,6 +47,11 @@ await shot('03-case-counterfactual-l2.png');
 await page.getByRole('button', { name: /provenance policy capacity/i }).last().click();
 await page.getByRole('region', { name: /PROVENANCE_POLICY_CAPACITY rule detail/i }).waitFor({ state: 'visible' });
 await shot('04-binding-ceiling-detail.png');
+
+await open('#case/OPS-001', 'Operator-format CSV pipeline pilot');
+await page.getByText('No asserted physical location', { exact: true }).waitFor({ state: 'visible' });
+await page.getByRole('heading', { name: /why is this case blocked/i }).waitFor({ state: 'visible' });
+await shot('04a-nonspatial-ops-case.png');
 
 await open(compareHash, 'What changed in the policy before the outcomes changed?');
 await page.getByText(/signed evidence/i).first().waitFor({ state: 'visible' });
@@ -58,9 +66,14 @@ await page.getByRole('button', { name: /40% capacity/i }).click();
 await page.getByText('PARTIAL', { exact: true }).waitFor({ state: 'visible' });
 await shot('06-settlement-stress-partial.png');
 
-await page.getByRole('button', { name: /^Lineage$/i }).click();
+await page.getByRole('navigation', { name: /investigation sequence/i }).getByRole('button', { name: /^Lineage$/i }).click();
 await page.getByText('Which declared objects and activities produced this result?', { exact: false }).waitFor({ state: 'visible' });
 await shot('07-decision-lineage.png');
+
+await page.getByRole('button', { name: /^Open receipt$/i }).click();
+await page.getByText('Share the decision identity, not a screenshot.', { exact: false }).waitFor({ state: 'visible' });
+if (!page.url().includes('#receipt/')) throw new Error('Case Workspace did not open a durable receipt route');
+await shot('07a-case-decision-receipt-route.png');
 
 await open('#receipts', 'Share the decision identity, not a screenshot.');
 await page.getByRole('heading', { name: /12 portable files/i }).waitFor({ state: 'visible' });
@@ -108,11 +121,27 @@ await shot('14-mobile-case-explorer-expanded.png', mobilePage);
 
 await openMobile('#case/TYN-001', 'Why is this case blocked?');
 await mobilePage.getByText('NOT EXECUTED', { exact: true }).waitFor({ state: 'visible' });
+await mobilePage.getByRole('navigation', { name: /investigation sequence/i }).waitFor({ state: 'visible' });
+if (await mobilePage.locator('#case-input-boundaries').getAttribute('open') !== null) {
+  throw new Error('Mobile case inputs should begin collapsed');
+}
+if (await mobilePage.locator('#case-decision-dossier').getAttribute('open') !== null) {
+  throw new Error('Mobile decision dossier should begin collapsed');
+}
 await shot('15-mobile-blocked-case.png', mobilePage);
+
+await mobilePage.locator('#case-input-boundaries > summary').click();
+await mobilePage.getByText(/controlled scenario demonstration/i).first().waitFor({ state: 'visible' });
+await shot('15a-mobile-case-inputs-expanded.png', mobilePage);
 
 await mobilePage.getByLabel('Assurance context').selectOption('PROVENANCE-L2-COUNTERFACTUAL');
 await mobilePage.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
+await mobilePage.getByRole('status', { name: /investigation update/i }).waitFor({ state: 'visible' });
 await shot('16-mobile-admitted-case.png', mobilePage);
+
+await mobilePage.locator('#case-decision-dossier > summary').click();
+await mobilePage.getByText('Policy hash', { exact: true }).waitFor({ state: 'visible' });
+await shot('16a-mobile-decision-dossier-expanded.png', mobilePage);
 
 await openMobile(compareHash, 'What changed in the policy before the outcomes changed?');
 await mobilePage.getByRole('table', { name: /case policy decision matrix/i }).waitFor({ state: 'visible' });
@@ -137,7 +166,7 @@ await mobile.close();
 await browser.close();
 
 const files = await fs.readdir(outputDir);
-if (files.length !== 20) {
-  throw new Error(`Expected 20 flagship workbench review screenshots; received ${files.length}`);
+if (files.length !== 24) {
+  throw new Error(`Expected 24 flagship workbench review screenshots; received ${files.length}`);
 }
 console.log(`Captured ${files.length} flagship workbench screenshots in ${outputDir}`);

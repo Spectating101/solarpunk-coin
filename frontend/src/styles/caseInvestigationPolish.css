@@ -1,0 +1,484 @@
+/* v0.3 Case Workspace: answer-first investigation flow without changing decision semantics. */
+
+.case-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.case-breadcrumb > span,
+.case-breadcrumb > strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.case-breadcrumb > strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.case-investigation-bar {
+  position: sticky;
+  top: 72px;
+  z-index: 14;
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.8fr);
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--surface-2) 94%, transparent);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(16px);
+}
+
+.case-investigation-bar.blocked {
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+.case-investigation-bar.admitted {
+  border-color: rgba(52, 211, 153, 0.26);
+}
+
+.case-investigation-result {
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-right: 1px solid var(--border);
+}
+
+.case-investigation-result small {
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.case-investigation-result strong {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.case-investigation-bar.blocked .case-investigation-result strong { color: #fecaca; }
+.case-investigation-bar.admitted .case-investigation-result strong { color: var(--green); }
+
+.case-investigation-result span {
+  overflow: hidden;
+  color: var(--muted-readable);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.case-investigation-lenses {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  min-width: 0;
+}
+
+.case-investigation-lenses button {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    "step icon title"
+    "step icon question";
+  gap: 1px 7px;
+  align-items: center;
+  min-width: 0;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-align: left;
+}
+
+.case-investigation-lenses button:hover,
+.case-investigation-lenses button.active {
+  border-color: var(--border-strong);
+  background: rgba(52, 211, 153, 0.07);
+  color: var(--text);
+}
+
+.case-investigation-lenses button > span {
+  grid-area: step;
+  align-self: stretch;
+  padding-right: 7px;
+  border-right: 1px solid var(--border);
+  color: var(--dim);
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+.case-investigation-lenses button > svg { grid-area: icon; }
+
+.case-investigation-lenses button > strong {
+  grid-area: title;
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.case-investigation-lenses button > small {
+  grid-area: question;
+  overflow: hidden;
+  color: var(--dim);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.case-decision-transition {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin: 0 0 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 10px;
+  background: var(--wb-violet-dim);
+}
+
+.case-decision-transition > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.case-decision-transition > div:first-child > strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.case-decision-transition p {
+  color: var(--muted-readable);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.case-transition-changes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.case-transition-changes > span {
+  display: grid;
+  grid-template-columns: minmax(70px, auto) auto minmax(70px, auto);
+  grid-template-areas:
+    "label label label"
+    "before arrow after";
+  gap: 3px 7px;
+  align-items: center;
+  min-width: 180px;
+  padding: 8px 10px;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 7px;
+  background: rgba(7, 13, 8, 0.48);
+}
+
+.case-transition-changes small {
+  grid-area: label;
+  color: var(--wb-violet);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+.case-transition-changes code {
+  overflow: hidden;
+  color: var(--muted-readable);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.case-transition-changes code:first-of-type { grid-area: before; }
+.case-transition-changes svg { grid-area: arrow; color: var(--wb-violet); }
+.case-transition-changes code:last-of-type { grid-area: after; }
+
+.case-decision-transition > button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.case-input-disclosure,
+.case-dossier-disclosure {
+  border: 0;
+  background: transparent;
+}
+
+.case-input-disclosure > summary,
+.case-dossier-disclosure > summary {
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.case-input-disclosure .responsive-disclosure-body,
+.case-dossier-disclosure .responsive-disclosure-body {
+  padding: 0;
+}
+
+.case-input-disclosure .case-source-summary {
+  margin-top: 16px;
+}
+
+.case-input-disclosure .case-boundary-stack {
+  display: grid;
+}
+
+.case-next-actions {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+  gap: 18px;
+  align-items: center;
+  margin-top: 28px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: rgba(9, 17, 11, 0.72);
+}
+
+.case-next-actions > div:first-child {
+  display: grid;
+  gap: 5px;
+}
+
+.case-next-actions > div:first-child > strong {
+  color: var(--muted-readable);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.case-next-actions > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.case-next-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  background: rgba(52, 211, 153, 0.06);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.case-next-actions button:hover { border-color: var(--green); }
+
+.case-dossier-disclosure .dossier-list,
+.case-dossier-disclosure .dossier-boundary {
+  min-width: 0;
+}
+
+@media (min-width: 1261px) {
+  .case-identity-pane,
+  .decision-dossier {
+    align-self: start;
+  }
+}
+
+@media (min-width: 921px) and (max-width: 1260px) {
+  .decision-dossier {
+    display: block;
+  }
+
+  .case-dossier-disclosure .responsive-disclosure-body {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr) 260px;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .case-dossier-disclosure .dossier-result,
+  .case-dossier-disclosure .dossier-boundary {
+    margin: 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .case-investigation-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .case-investigation-result {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "small strong"
+      "small span";
+    gap: 2px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .case-investigation-result small { grid-area: small; align-self: center; }
+  .case-investigation-result strong { grid-area: strong; }
+  .case-investigation-result span { grid-area: span; }
+
+  .case-decision-transition {
+    grid-template-columns: 1fr auto;
+  }
+
+  .case-transition-changes {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 920px) {
+  .case-investigation-bar {
+    top: 64px;
+  }
+
+  .case-investigation-lenses {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .case-investigation-lenses button {
+    flex: 0 0 min(210px, 58vw);
+    scroll-snap-align: start;
+  }
+
+  .case-next-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .case-next-actions > div:last-child {
+    justify-content: flex-start;
+  }
+
+  .decision-dossier {
+    display: block;
+  }
+}
+
+@media (max-width: 680px) {
+  .case-workspace-toolbar {
+    gap: 8px;
+  }
+
+  .case-breadcrumb {
+    width: 100%;
+  }
+
+  .case-workspace-identity {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 7px;
+    scrollbar-width: thin;
+  }
+
+  .case-workspace-identity span {
+    flex: 0 0 auto;
+  }
+
+  .case-workspace-actions {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .case-workspace-actions button {
+    flex: 0 0 auto;
+    min-height: 44px;
+  }
+
+  .case-investigation-bar {
+    top: 58px;
+    margin-inline: -2px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .case-investigation-result {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+    gap: 3px;
+  }
+
+  .case-investigation-result small,
+  .case-investigation-result strong,
+  .case-investigation-result span {
+    grid-area: auto;
+  }
+
+  .case-investigation-lenses button {
+    flex-basis: 188px;
+    min-height: 58px;
+  }
+
+  .case-decision-transition {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 13px;
+  }
+
+  .case-transition-changes {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .case-transition-changes > span {
+    min-width: 0;
+  }
+
+  .case-identity-pane {
+    padding: 16px 14px;
+  }
+
+  .case-input-disclosure > summary,
+  .case-dossier-disclosure > summary {
+    min-height: 48px;
+  }
+
+  .case-next-actions {
+    margin-top: 22px;
+    padding: 14px;
+  }
+
+  .case-next-actions > div:last-child {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .case-next-actions button {
+    justify-content: flex-start;
+    min-height: 44px;
+  }
+}

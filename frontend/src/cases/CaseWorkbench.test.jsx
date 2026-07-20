@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CaseWorkbenchProvider } from '../app/CaseWorkbenchProvider';
 import CaseExplorer from './CaseExplorer';
@@ -42,6 +42,8 @@ describe('case workbench investigation flow', () => {
     await screen.findByText('NOT EXECUTED');
     expect(screen.getByRole('heading', { name: /why is this case blocked/i })).toBeInTheDocument();
     expect(screen.getAllByText(/MIN_PROVENANCE/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('navigation', { name: /investigation sequence/i })).toBeInTheDocument();
+    expect(screen.getByLabelText('Constraints')).toHaveAttribute('aria-current', 'page');
 
     fireEvent.click(screen.getByRole('button', { name: /preview l2 without changing the evidence hash/i }));
 
@@ -50,26 +52,31 @@ describe('case workbench investigation flow', () => {
       expect(screen.getAllByText(/provenance policy capacity/i).length).toBeGreaterThan(0);
     });
     expect(screen.queryByText('NOT EXECUTED')).not.toBeInTheDocument();
-    expect(screen.getByText(/126 ENERGY_CLAIM_UNIT/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/126 ENERGY_CLAIM_UNIT/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('status', { name: /investigation update/i })).toHaveTextContent(/assurance context changed/i);
+    expect(screen.getByRole('status', { name: /investigation update/i })).toHaveTextContent(/not evaluated/i);
   });
 
   it('keeps controlled evidence and modeled context visibly distinct', async () => {
     renderWithWorkbench(<CaseWorkspace caseId="TYN-001" onNavigate={vi.fn()} />);
     await screen.findByText('NOT EXECUTED');
 
-    fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
+    const investigation = screen.getByRole('navigation', { name: /investigation sequence/i });
+    fireEvent.click(within(investigation).getByRole('button', { name: /^Evidence$/i }));
 
     expect(await screen.findByText('CONTROLLED EVIDENCE FIXTURE')).toBeInTheDocument();
     expect(screen.getByText('MODELED CONTEXT')).toBeInTheDocument();
     expect(screen.getAllByText(/TMY/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/not observed meter evidence/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Evidence')).toHaveAttribute('aria-current', 'page');
   });
 
   it('does not fabricate settlement stress for a blocked decision and exposes partial shortfall after admission', async () => {
     renderWithWorkbench(<CaseWorkspace caseId="TYN-001" onNavigate={vi.fn()} />);
     await screen.findByText('NOT EXECUTED');
 
-    fireEvent.click(screen.getByRole('button', { name: /^Stress$/i }));
+    const investigation = screen.getByRole('navigation', { name: /investigation sequence/i });
+    fireEvent.click(within(investigation).getByRole('button', { name: /^Stress$/i }));
     expect(await screen.findByRole('heading', { name: /settlement stress is downstream of admission/i })).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/assurance context/i), {
@@ -81,5 +88,30 @@ describe('case workbench investigation flow', () => {
     await screen.findByText('PARTIAL');
     expect(screen.getAllByText('50.4').length).toBeGreaterThan(0);
     expect(screen.getAllByText('75.6').length).toBeGreaterThan(0);
+  });
+
+  it('opens the exact current decision receipt with complete reconstruction context', async () => {
+    const onNavigate = vi.fn();
+    renderWithWorkbench(<CaseWorkspace caseId="TYN-001" onNavigate={onNavigate} />);
+    await screen.findByText('NOT EXECUTED');
+
+    fireEvent.click(screen.getByRole('button', { name: /^Open receipt$/i }));
+
+    expect(onNavigate).toHaveBeenCalledWith(expect.objectContaining({
+      section: 'receipt',
+      caseId: 'TYN-001',
+      policyId: 'ENERGY-CASE-PILOT-005',
+      scenarioId: 'PROVENANCE-L0-BASE',
+      id: expect.any(String),
+    }));
+  });
+
+  it('keeps the synthetic non-spatial OPS case fully investigable without inventing coordinates', async () => {
+    renderWithWorkbench(<CaseWorkspace caseId="OPS-001" onNavigate={vi.fn()} />);
+
+    expect(await screen.findByRole('heading', { name: /operator-format csv pipeline pilot/i })).toBeInTheDocument();
+    expect(screen.getByText('No asserted physical location')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /why is this case blocked/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/synthetic operator-format csv fixture/i).length).toBeGreaterThan(0);
   });
 });
