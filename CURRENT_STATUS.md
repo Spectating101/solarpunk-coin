@@ -17,7 +17,7 @@
 
 **Horizon:** Operating laboratory (structure), not stablecoin war (scale).
 
-**Thesis:** Final package ready (`energy_constraint_thesis_final_submission_v10.pdf`) — pending user submission.
+**Thesis:** Final package ready (`energy_constraint_thesis_final_submission.pdf`, repo root) — pending user submission. Canonical numbers/framing: `thesis_package/THESIS_SOURCE_OF_TRUTH.md`. Earlier iterations (pre-2026-07-10 CEIR correction) are archived under `thesis_package/_archive/superseded_2026-07/` — do not submit those.
 
 ---
 

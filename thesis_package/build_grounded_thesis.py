@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
 """
+DEPRECATED (2026-07-25). This pipeline built THESIS_GROUNDED_MANUSCRIPT.md from
+CHAPTER_*_GROUNDED_DRAFT.md, which stated the CEIR "regime-dependent energy anchor"
+claim retired by CEIR_FINAL_DIAGNOSIS.md (2026-07-10). Both the chapter drafts and
+the built manuscript are archived under thesis_package/_archive/superseded_2026-07/.
+
+The canonical thesis is now maintained directly (no build step):
+energy_constraint_thesis_final_submission.pdf (repo root). See
+THESIS_SOURCE_OF_TRUTH.md for the current numbers and Chapter 3 correction.
+
+Kept for reference only — do not run this to regenerate a submission.
+
+---
 Assemble grounded chapter drafts into one submission markdown, then optional DOCX.
 
 Usage:

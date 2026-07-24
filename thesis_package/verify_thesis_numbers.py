@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
 """
+DEPRECATED (2026-07-25). check_ceir() below asserts the retired Chapter 3 claim
+("Chow p-value should indicate break") that CEIR_FINAL_DIAGNOSIS.md (2026-07-10)
+disproved via negative controls and the preferred robust joint-Wald test (p ~ 0.13,
+does not reject stability). This script still reports thesis_verify_ok because it
+checks against the wrong ground truth — do not trust a passing run as evidence the
+thesis is accurate. See THESIS_SOURCE_OF_TRUTH.md for the corrected numbers.
+
+The manuscript this script validated (THESIS_GROUNDED_MANUSCRIPT.md) is archived
+under thesis_package/_archive/superseded_2026-07/. The canonical thesis is now
+maintained directly, with no build/verify pipeline: energy_constraint_thesis_final_submission.pdf.
+
+Kept for reference only (pricing/SPK checks below are still factually fine) — do
+not treat check_ceir()'s pass/fail as validation of Chapter 3.
+
+---
 Verify thesis canonical numbers against repo artifacts.
 
 Run after options_pricing.py / ceir_regression.py / generate_thesis_figures.py:

@@ -1,4 +1,17 @@
-# Thesis build (grounded chapters → DOCX)
+# Thesis build (grounded chapters → DOCX) — RETIRED 2026-07-25
+
+This pipeline and everything it built (`THESIS_GROUNDED_MANUSCRIPT.md`,
+`CHAPTER_*_GROUNDED_DRAFT.md`, `thesis_package/output/`) are archived under
+`thesis_package/_archive/superseded_2026-07/`. It also states a Chapter 3
+CEIR claim that a 2026-07-10 negative-control audit retired — see
+`THESIS_SOURCE_OF_TRUTH.md` and `CEIR_FINAL_DIAGNOSIS.md`.
+
+**The canonical thesis is now `energy_constraint_thesis_final_submission.pdf`
+(repo root), maintained directly with no build step.** The rest of this file
+is kept for historical reference only — do not run these commands to produce
+a submission.
+
+---
 
 ## Source files
 

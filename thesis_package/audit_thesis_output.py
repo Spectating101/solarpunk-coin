@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Audit built thesis PDF and manuscript for submission-quality issues."""
+"""
+DEPRECATED (2026-07-25). Default targets (output/reading/full/THESIS_GROUNDED.pdf,
+THESIS_GROUNDED_MANUSCRIPT.md) are archived under
+thesis_package/_archive/superseded_2026-07/ — that manuscript states the retired
+Chapter 3 CEIR claim (see THESIS_SOURCE_OF_TRUTH.md). The canonical thesis is now
+maintained directly: energy_constraint_thesis_final_submission.pdf (repo root),
+with no build pipeline behind it. Mechanical checks below (banned phrases,
+duplicate refs) may still be useful if pointed at a real PDF/manuscript, but a
+passing run says nothing about Chapter 3's empirical accuracy.
+
+Audit built thesis PDF and manuscript for submission-quality issues.
+"""
 
 from __future__ import annotations
 

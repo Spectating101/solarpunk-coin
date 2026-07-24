@@ -1,20 +1,24 @@
 # Submitting to Advisor — Quick Handoff
 
-**Primary file to send:** `energy_constraint_thesis_final_submission_v3.docx` (repo root, auto-exported)
+**Primary file to send:** `energy_constraint_thesis_final_submission.pdf` (repo root)
 
-**Source build:** `thesis_package/output/THESIS_GROUNDED.docx`
+This is a directly-maintained document — there is no markdown/DOCX build pipeline behind it. Edit it in your word processor directly; there is no `npm run thesis:all` step to rerun afterward.
 
-**Optional:** Per-chapter files in `thesis_package/output/chapters/CHAPTER_1.docx` … `CHAPTER_6.docx` if your advisor prefers reviewing one chapter at a time.
+Canonical numbers/framing reference (for checking any edits you make): `thesis_package/THESIS_SOURCE_OF_TRUTH.md`.
 
 ---
 
+## Known outstanding fixes before you send it
+
+1. **Citation error:** References cite "National Laboratory of the Rockies" / `developer.nlr.gov` — this should be **National Renewable Energy Laboratory (NREL)** / `developer.nrel.gov`. Appears in Ch.2 §2.7, Ch.4 §4.3/§4.3.1, and the References list.
+2. Double-check the Ethereum "The Merge" reference URL (`https://ethereum.org/roadmap/merge/`) resolves — an earlier draft used `https://ethereum.org/en/upgrades/merge/`.
+
 ## Before you attach the file (5 minutes)
 
-1. Open `THESIS_GROUNDED.docx` in Word.
-2. **References → Update Table of Contents** (entire table).
-3. Skim the **Abstract** and **Chapter 6 §6.2 roadmap** — they state the bounded claim in one page.
-4. Confirm your name and student ID on the cover block (edit in `build_grounded_thesis.py` → `build_front_matter()` if needed, then `npm run thesis:all`).
-5. Add page numbers if your department requires them (Insert → Page Number).
+1. Fix the two citation issues above.
+2. Skim the **Abstract** and **Chapter 6 §6.5–6.7** — they state the bounded, conditional claim in one page, including the negative Chapter 3 identification result.
+3. Confirm your name, student ID, and advisor name on the cover page.
+4. Add page numbers / update any Word field codes if your department requires it.
 
 ---
 
@@ -22,46 +26,33 @@
 
 | Layer | Claim | Boundary |
 |---|---|---|
-| Concept | Energy can **constrain** digital finance when five rules hold together | Not “energy = money” |
-| Empirics (Ch 3) | CEIR level spec ≈ −0.26 pre-ban (sig.), ≈ −0.07 post-ban (weak); Chow break; trading rule underperforms | Not a trading rule; Bitcoin-only |
-| Pricing (Ch 4) | Taiwan ATM call ≈ $0.01917 (binomial), ≈ $0.01957 (MC); oracle tolerance table | GBM benchmark; irradiance σ proxy |
-| Pricing (Ch 4) | Transparent option-style framework from public data | Not final market model |
-| Implementation (Ch 5) | Sepolia SPK v1 proves rules are **buildable** | Not production-ready; peg off |
+| Concept | Energy can **constrain** digital finance when five rules hold together | Not "energy = money" |
+| Empirics (Ch 3) | CEIR association is reproducible but does **not** identify an energy-specific effect — negative controls (TWh/days ratios), a broken price-merge, seed sensitivity, and the preferred robust break test all point the same way | Not "energy anchors Bitcoin"; this is a negative/boundary finding |
+| Pricing (Ch 4) | Taiwan ATM call ≈ $0.0192/kWh (binomial), ≈ $0.0196/kWh (MC); oracle-tolerance table | Declared-scenario inputs, not observed market data; GBM benchmark |
+| Implementation (Ch 5) | Sepolia SPK v1 + V2 case workbench prove the constraint architecture is **buildable** and produces auditable, reproducible decisions | Not production-ready; peg off; controlled fixtures, not operator data |
 | Product framing | Research + feasibility | **Not** a stablecoin launch |
 
 ---
 
 ## Suggested cover note (copy/edit)
 
-> Dear Professor [Name],
+> Dear Professor Kong,
 >
-> Please find attached my grounded thesis draft: *Energy as a Constraint: Credibility, Pricing, and Settlement in Energy-Linked Digital Finance*.
+> Please find attached my thesis draft: *Energy as a Constraint: Credibility, Pricing, and Settlement in Energy-Linked Digital Finance*.
 >
-> The argument is conditional: energy can discipline digital financial claims only when reliable data, rule-bound issuance, explicit pricing, protected settlement, and limited governance are designed together. Chapter 3 uses Bitcoin mining energy cost (CEIR); Chapter 4 prices renewable-energy risk; Chapter 5 maps the five-constraint framework to a Sepolia proof-of-concept (SPK v1). I do not claim production readiness or stablecoin parity.
+> The argument is conditional: energy can discipline digital financial claims only when reliable data, rule-bound issuance, explicit pricing, protected settlement, and limited governance are designed together. Chapter 3 tests Bitcoin mining-cost valuation (CEIR) and reports a negative identification result — the apparent association does not survive negative-control and robust break tests, which I treat as a finding rather than a setback. Chapter 4 prices renewable-energy risk under declared assumptions; Chapter 5 maps the five-constraint framework to a Sepolia proof-of-concept and a deterministic case-decision workbench. I do not claim production readiness or stablecoin parity.
 >
-> Each chapter opens with an “At a glance” summary. A one-page reader’s guide is in the repo at `thesis_package/THESIS_READERS_GUIDE.md` if useful.
+> I would especially welcome feedback on [Ch 3's negative-identification framing / Ch 4 pricing assumptions / Ch 5 implementation boundaries / overall structure].
 >
-> I would especially welcome feedback on [Ch 3 specification / Ch 4 pricing assumptions / Ch 5 implementation boundaries / overall framing].
->
-> Thank you,  
+> Thank you,
 > Christopher Ongko
 
 ---
 
-## Rebuild after any edit
+## If you need to hand a chapter-by-chapter version to your advisor
 
-```bash
-npm run thesis:all
-```
-
-This runs: figures → pricing → CEIR appendix → **number verification** → evidence refresh → DOCX → copies `energy_constraint_thesis_final_submission_v3.docx` to repo root.
-
-Canonical numbers snapshot: `thesis_package/THESIS_NUMBERS_MANIFEST.md` (auto-generated).
-
-Sources live in `thesis_package/CHAPTER_*_GROUNDED_DRAFT.md`. Canonical numbers: `THESIS_SOURCE_OF_TRUTH.md`.
-
----
+There is currently no automated chapter-splitter for this document (the old one built from the retired manuscript — see `thesis_package/_archive/superseded_2026-07/`). Export chapters manually from your word processor if needed.
 
 ## Internal checklist
 
-See `ADVISOR_FEEDBACK_CHECKLIST.md` for claim discipline and formatting items.
+See `ADVISOR_FEEDBACK_CHECKLIST.md` for claim discipline and formatting items (note: written against the earlier draft framing — re-check items against `THESIS_SOURCE_OF_TRUTH.md` before relying on it).
