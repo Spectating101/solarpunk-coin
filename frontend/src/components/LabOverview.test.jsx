@@ -44,6 +44,7 @@ vi.mock('../lib/caseWorkbenchRuntime', () => ({
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  window.history.replaceState(null, '', '/');
 });
 
 describe('LabOverview flagship decision experience', () => {
@@ -75,6 +76,20 @@ describe('LabOverview flagship decision experience', () => {
         scenarioId: 'PROVENANCE-L2-COUNTERFACTUAL',
       });
     });
+  });
+
+  it('switches to the full overview without losing the selected decision state', async () => {
+    render(<LabOverview onNavigate={vi.fn()} />);
+    await screen.findByText('BLOCKED');
+
+    fireEvent.click(screen.getByRole('button', { name: 'L2 counterfactual' }));
+    await screen.findByText('ADMIT WITH LIMIT');
+    fireEvent.click(screen.getByRole('button', { name: /full analysis/i }));
+
+    expect(screen.getByRole('heading', { name: /what constitutes the platform/i })).toBeInTheDocument();
+    expect(screen.getByText(/TYN-001 · L2 counterfactual/i)).toBeInTheDocument();
+    expect(screen.getByText('126')).toBeInTheDocument();
+    expect(window.location.search).toBe('?view=full');
   });
 
   it('carries the selected decision state into the full investigation', async () => {
