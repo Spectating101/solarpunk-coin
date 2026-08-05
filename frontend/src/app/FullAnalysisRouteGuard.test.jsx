@@ -34,8 +34,8 @@ describe('FullAnalysisRouteGuard', () => {
     window.history.replaceState(null, '', '/#programme');
     render(<FullAnalysisRouteGuard />);
 
-    window.location.hash = '#case/TYN-001';
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    window.history.replaceState(null, '', '/#case/TYN-001');
+    window.dispatchEvent(new Event('hashchange'));
 
     expect(new URLSearchParams(window.location.search).get('view')).toBe('full');
   });
