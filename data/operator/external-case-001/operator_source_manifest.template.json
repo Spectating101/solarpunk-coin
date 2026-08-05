@@ -1,0 +1,53 @@
+{
+  "schema": "solarpunk.operator_source_manifest.v1",
+  "source_id": "EXTERNAL-CASE-001-REPLACE-ME",
+  "source_kind": "inverter_export",
+  "synthetic_fixture": false,
+  "custodian": {
+    "relationship": "owner",
+    "identifier": "PRIVATE-SOURCE-HOLDER-REFERENCE",
+    "contact_disclosure": "private"
+  },
+  "acquisition": {
+    "method": "owner_export",
+    "acquired_at": "2026-01-01T00:00:00Z",
+    "custody_statement": "REPLACE: describe who exported the file, how it was transferred, and who has held it since acquisition.",
+    "permission_scope": "private_validation"
+  },
+  "measurement": {
+    "window_start": "2026-01-01T00:00:00+08:00",
+    "window_end": "2026-01-02T00:00:00+08:00",
+    "timezone": "Asia/Taipei",
+    "sign_convention": {
+      "generation": "REPLACE: explain the sign and unit semantics for generated energy.",
+      "site_load": "REPLACE: explain the sign and unit semantics for on-site consumption.",
+      "export": "REPLACE: explain the sign and unit semantics for grid export.",
+      "curtailed": null
+    }
+  },
+  "device": {
+    "manufacturer": null,
+    "model": null,
+    "serial_hash": null,
+    "capacity_kw": null,
+    "accuracy_basis": null
+  },
+  "assertions": {
+    "source_owner_confirmed": false,
+    "live_api": false,
+    "revenue_grade": false,
+    "utility_corroborated": false,
+    "device_signature_present": false
+  },
+  "artifacts": {
+    "source_signature_file": null,
+    "device_registry_file": null,
+    "utility_corroboration_file": null,
+    "api_snapshot_receipt_file": null
+  },
+  "boundaries": [
+    "Raw source rows and source-holder identity remain private unless separately authorized.",
+    "Manifest assertions do not promote assurance without independent artifact verification.",
+    "The source begins at PROVENANCE-L0-BASE and source truth is not certified by this manifest."
+  ]
+}
