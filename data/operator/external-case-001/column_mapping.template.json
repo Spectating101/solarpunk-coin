@@ -1,0 +1,61 @@
+{
+  "schema": "solarpunk.external_case.column_mapping.v1",
+  "source_id": "EXTERNAL-CASE-001-REPLACE-ME",
+  "source_format": "csv",
+  "encoding": "utf-8",
+  "delimiter": ",",
+  "decimal_separator": ".",
+  "interval_semantics": {
+    "kind": "interval",
+    "start_field": "REPLACE",
+    "end_field": "REPLACE",
+    "single_timestamp_field": null,
+    "interval_minutes": null,
+    "timezone_source": "manifest"
+  },
+  "energy_fields": {
+    "generation": {
+      "source_field": "REPLACE",
+      "source_unit": "kWh",
+      "target_unit": "kWh",
+      "conversion": "identity",
+      "nullable": false
+    },
+    "site_load": {
+      "source_field": "REPLACE",
+      "source_unit": "kWh",
+      "target_unit": "kWh",
+      "conversion": "identity",
+      "nullable": false
+    },
+    "export": {
+      "source_field": "REPLACE",
+      "source_unit": "kWh",
+      "target_unit": "kWh",
+      "conversion": "identity",
+      "nullable": false
+    },
+    "curtailed": {
+      "source_field": null,
+      "source_unit": "kWh",
+      "target_unit": "kWh",
+      "conversion": "identity",
+      "nullable": true
+    }
+  },
+  "identity_fields": {
+    "site_id": null,
+    "meter_id": null,
+    "device_id": null
+  },
+  "quality_fields": {
+    "quality_score": null,
+    "status": null
+  },
+  "missing_value_tokens": ["", "NA", "N/A", "null"],
+  "notes": [
+    "REPLACE: document cumulative-versus-interval semantics and any reset behavior.",
+    "REPLACE: document whether export is measured directly or derived.",
+    "Do not infer absent fields silently; record them as unavailable."
+  ]
+}
