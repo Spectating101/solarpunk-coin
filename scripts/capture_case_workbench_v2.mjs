@@ -5,6 +5,9 @@ import { chromium } from 'playwright';
 const outputDir = path.resolve(process.argv[2] || '_review_case_workbench_v2');
 const baseUrl = process.env.CASE_WORKBENCH_URL || 'http://127.0.0.1:4173/';
 const compareHash = '#compare?scenario=PROVENANCE-L2-COUNTERFACTUAL&baseline=LAB-CASE-OPEN-004&comparison=ENERGY-CASE-PILOT-005';
+const caseBlockedHash = '#case/TYN-001?policy=ENERGY-CASE-PILOT-005&scenario=PROVENANCE-L0-BASE&lens=constraints';
+const caseStressHash = '#case/TYN-001?policy=ENERGY-CASE-PILOT-005&scenario=PROVENANCE-L2-COUNTERFACTUAL&lens=stress';
+const opsBlockedHash = '#case/OPS-001?policy=ENERGY-CASE-PILOT-005&scenario=PROVENANCE-L0-BASE&lens=constraints';
 
 await fs.rm(outputDir, { recursive: true, force: true });
 await fs.mkdir(outputDir, { recursive: true });
@@ -22,21 +25,28 @@ async function shot(name, target = page) {
   await target.screenshot({ path: path.join(outputDir, name), fullPage: true });
 }
 
-await open('#lab', 'A solar claim enters.');
-await page.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
-await page.getByRole('button', { name: /preview l2 assurance/i }).waitFor({ state: 'visible' });
+async function selectAssurance(target, scenarioId) {
+  await target.getByLabel(/Proof \/ assurance|Active assurance scenario|Assurance context/i).selectOption(scenarioId);
+}
+
+await open('#lab', 'Can real-world evidence justify a financial claim?');
+await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
+await page.getByLabel(/Proof \/ assurance/i).waitFor({ state: 'visible' });
 await shot('00-lab-overview-blocked.png');
 
-await page.getByRole('button', { name: /preview l2 assurance/i }).click();
-await page.getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
-await page.getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await selectAssurance(page, 'PROVENANCE-L2-COUNTERFACTUAL');
+await page.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ state: 'visible' });
+await page.getByText('126', { exact: true }).first().waitFor({ state: 'visible' });
 await shot('00a-lab-overview-admitted.png');
+
+await selectAssurance(page, 'PROVENANCE-L0-BASE');
+await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
 
 await open('#cases', 'Investigate the rule that blocks or bounds the case.');
 await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
 await shot('01-case-explorer-binding-layer.png');
 
-await open('#case/TYN-001', 'Why is this case blocked?');
+await open(caseBlockedHash, 'Why is this case blocked?');
 await page.getByText('NOT EXECUTED', { exact: true }).waitFor({ state: 'visible' });
 await page.getByRole('navigation', { name: /investigation sequence/i }).waitFor({ state: 'visible' });
 await page.getByRole('button', { name: /^Open receipt$/i }).waitFor({ state: 'visible' });
@@ -54,7 +64,7 @@ await page.getByRole('button', { name: /provenance policy capacity/i }).last().c
 await page.getByRole('region', { name: /PROVENANCE_POLICY_CAPACITY rule detail/i }).waitFor({ state: 'visible' });
 await shot('04-binding-ceiling-detail.png');
 
-await open('#case/OPS-001', 'Operator-format CSV pipeline pilot');
+await open(opsBlockedHash, 'Operator-format CSV pipeline pilot');
 await page.getByText('No asserted physical location', { exact: true }).waitFor({ state: 'visible' });
 await page.getByRole('heading', { name: /why is this case blocked/i }).waitFor({ state: 'visible' });
 await shot('04a-nonspatial-ops-case.png');
@@ -66,7 +76,7 @@ await page.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ stat
 await page.getByRole('navigation', { name: /compare reading map/i }).waitFor({ state: 'visible' });
 await shot('05-compare-decision-matrix.png');
 
-await open('#case/TYN-001?policy=ENERGY-CASE-PILOT-005&scenario=PROVENANCE-L2-COUNTERFACTUAL&lens=stress');
+await open(caseStressHash);
 await page.getByText('What happens when declared settlement capacity falls?', { exact: false }).waitFor({ state: 'visible' });
 await page.getByRole('button', { name: /40% capacity/i }).click();
 await page.getByText('PARTIAL', { exact: true }).waitFor({ state: 'visible' });
@@ -117,21 +127,24 @@ async function openMobile(hash, expected) {
   if (expected) await mobilePage.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-await openMobile('#lab', 'A solar claim enters.');
+await openMobile('#lab', 'Can real-world evidence justify a financial claim?');
 await mobilePage.getByRole('button', { name: /open primary navigation/i }).click();
-for (const label of ['Overview', 'Cases', 'Compare', 'Studies', 'Receipts', 'Reference']) {
+for (const label of ['Overview', 'Investigate', 'Research', 'Field Use', 'Programme']) {
   await mobilePage.getByRole('button', { name: label, exact: true }).waitFor({ state: 'visible' });
 }
 await shot('11-mobile-primary-navigation.png', mobilePage);
 await mobilePage.getByRole('button', { name: /close primary navigation/i }).click();
-await mobilePage.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
-await mobilePage.getByRole('button', { name: /preview l2 assurance/i }).waitFor({ state: 'visible' });
+await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
+await mobilePage.getByLabel(/Proof \/ assurance/i).waitFor({ state: 'visible' });
 await shot('12-mobile-lab-overview-blocked.png', mobilePage);
 
-await mobilePage.getByRole('button', { name: /preview l2 assurance/i }).click();
-await mobilePage.getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
-await mobilePage.getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await selectAssurance(mobilePage, 'PROVENANCE-L2-COUNTERFACTUAL');
+await mobilePage.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ state: 'visible' });
+await mobilePage.getByText('126', { exact: true }).first().waitFor({ state: 'visible' });
 await shot('12a-mobile-lab-overview-admitted.png', mobilePage);
+
+await selectAssurance(mobilePage, 'PROVENANCE-L0-BASE');
+await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
 
 await openMobile('#cases', 'Investigate the rule that blocks or bounds the case.');
 await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
@@ -145,7 +158,7 @@ await mapToggle.click();
 await mobilePage.getByRole('button', { name: /hide map/i }).waitFor({ state: 'visible' });
 await shot('14-mobile-case-explorer-expanded.png', mobilePage);
 
-await openMobile('#case/TYN-001', 'Why is this case blocked?');
+await openMobile(caseBlockedHash, 'Why is this case blocked?');
 await mobilePage.getByText('NOT EXECUTED', { exact: true }).waitFor({ state: 'visible' });
 await mobilePage.getByRole('navigation', { name: /investigation sequence/i }).waitFor({ state: 'visible' });
 if (await mobilePage.locator('#case-input-boundaries').getAttribute('open') !== null) {
@@ -160,7 +173,7 @@ await mobilePage.locator('#case-input-boundaries > summary').click();
 await mobilePage.getByText(/controlled scenario demonstration/i).first().waitFor({ state: 'visible' });
 await shot('15a-mobile-case-inputs-expanded.png', mobilePage);
 
-await mobilePage.getByLabel('Assurance context').selectOption('PROVENANCE-L2-COUNTERFACTUAL');
+await mobilePage.getByRole('button', { name: /preview l2 without changing the evidence hash/i }).click();
 await mobilePage.getByRole('heading', { name: /why is this case limited to 126/i }).waitFor({ state: 'visible' });
 await mobilePage.getByRole('status', { name: /investigation update/i }).waitFor({ state: 'visible' });
 await shot('16-mobile-admitted-case.png', mobilePage);
