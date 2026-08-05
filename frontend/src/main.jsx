@@ -17,8 +17,8 @@ import './styles/caseInvestigationLayoutTuning.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <CaseWorkbenchProvider>
-      <FullAnalysisRouteGuard />
       <App />
+      <FullAnalysisRouteGuard />
       <StudyProofNavigator />
     </CaseWorkbenchProvider>
   </React.StrictMode>,
