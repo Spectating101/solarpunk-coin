@@ -1,5 +1,11 @@
 const STATIC_SECTIONS = new Set([
   'lab',
+  'investigate',
+  'research',
+  'field',
+  'programme',
+  'analysis',
+  'verify',
   'cases',
   'compare',
   'studies',
@@ -8,7 +14,6 @@ const STATIC_SECTIONS = new Set([
   'legacy-protocol',
   'evidence',
   'currency',
-  'research',
 ]);
 
 const LEGACY_ROUTES = Object.freeze({
@@ -18,18 +23,21 @@ const LEGACY_ROUTES = Object.freeze({
   protocol: { section: 'legacy-protocol', id: null, legacy: 'protocol' },
   overview: { section: 'reference', id: 'solarpunk', legacy: 'overview' },
   sepolia: { section: 'reference', id: 'sepolia', legacy: 'sepolia' },
-  research: { section: 'research', id: null, legacy: 'research' },
   evidence: { section: 'evidence', id: null, legacy: 'evidence' },
   currency: { section: 'currency', id: null, legacy: 'currency' },
 });
 
 export const PRIMARY_NAV = Object.freeze([
   { section: 'lab', label: 'Overview' },
-  { section: 'cases', label: 'Cases' },
-  { section: 'compare', label: 'Compare' },
-  { section: 'studies', label: 'Studies' },
-  { section: 'receipts', label: 'Receipts' },
-  { section: 'reference', label: 'Reference' },
+  { section: 'investigate', label: 'Investigate' },
+  { section: 'research', label: 'Research' },
+  { section: 'field', label: 'Field Use' },
+  { section: 'programme', label: 'Programme' },
+]);
+
+export const FULL_ANALYSIS_NAV = Object.freeze([
+  { section: 'analysis', label: 'Analysis Lab' },
+  { section: 'verify', label: 'Verification Hub' },
 ]);
 
 function queryValue(params, name) {
@@ -64,6 +72,7 @@ export function parseHashRoute(hash = '') {
   const lens = queryValue(params, 'lens');
   const baselinePolicyId = queryValue(params, 'baseline');
   const comparisonPolicyId = queryValue(params, 'comparison');
+  const tool = queryValue(params, 'tool');
 
   if (section === 'case') return { section: 'case', id, policyId, scenarioId, lens };
   if (section === 'compare') {
@@ -75,6 +84,7 @@ export function parseHashRoute(hash = '') {
       comparisonPolicyId,
     };
   }
+  if (section === 'analysis' || section === 'verify') return { section, id: null, tool };
   if (section === 'study') return { section: 'study', id, view: 'detail' };
   if (section === 'receipt') return { section: 'receipt', id, caseId, policyId, scenarioId };
   if (section === 'reference') return { section: 'reference', id };
@@ -99,6 +109,9 @@ export function routeToHash(route) {
       ['comparison', 'comparisonPolicyId'],
     ])}`;
   }
+  if (section === 'analysis' || section === 'verify') {
+    return `#${section}${routeQuery(route, [['tool', 'tool']])}`;
+  }
   if (section === 'study') {
     if (route.view === 'brief') return '#runs';
     if (route.view === 'reproduce') return '#reproduce';
@@ -122,11 +135,11 @@ export function routeToHash(route) {
 }
 
 export function primarySection(route) {
-  if (route.section === 'case') return 'cases';
-  if (route.section === 'study') return 'studies';
-  if (route.section === 'receipt') return 'receipts';
-  if (route.section === 'legacy-protocol') return 'cases';
-  return route.section;
+  if (['case', 'cases', 'compare', 'analysis', 'investigate'].includes(route.section)) return 'investigate';
+  if (['study', 'studies', 'research'].includes(route.section)) return 'research';
+  if (['field', 'evidence', 'currency'].includes(route.section)) return 'field';
+  if (['programme', 'receipts', 'receipt', 'verify', 'reference', 'legacy-protocol'].includes(route.section)) return 'programme';
+  return 'lab';
 }
 
 export function isSepoliaRoute(route) {
