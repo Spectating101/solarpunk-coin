@@ -59,11 +59,36 @@ const DISTINCTIONS = [
 ];
 
 const CLAIM_ROWS = [
-  ['Central thesis', 'Evidence can constrain a financial claim only through explicit purpose, policy, quantity, identity, and settlement rules.', 'STABLE'],
-  ['Institutional inference', 'Norway demonstrates separable measurement, admission, registry, cancellation, and settlement processes.', 'SOURCE-LINKED'],
-  ['Executable mechanism', 'The Policy Lab evaluates blocked, quantity-limited, and settlement-constrained decisions.', 'TESTED'],
-  ['Empirical extension', 'The market-capacity study evaluates capacity-versus-failure trade-offs in a separate financial domain.', 'TESTED'],
-  ['External validation', 'One attributable real energy source is still required.', 'OPEN'],
+  {
+    label: 'Central thesis',
+    claim: 'Evidence can constrain a financial claim only through explicit purpose, policy, quantity, identity, and settlement rules.',
+    status: 'STABLE',
+    focusId: 'authority-quantity',
+  },
+  {
+    label: 'Institutional inference',
+    claim: 'Norway demonstrates separable measurement, admission, registry, cancellation, and settlement processes.',
+    status: 'SOURCE-LINKED',
+    focusId: 'evidence-authority',
+  },
+  {
+    label: 'Executable mechanism',
+    claim: 'The Policy Lab evaluates blocked, quantity-limited, and settlement-constrained decisions.',
+    status: 'TESTED',
+    focusId: 'quantity-settlement',
+  },
+  {
+    label: 'Empirical extension',
+    claim: 'The market-capacity study evaluates capacity-versus-failure trade-offs in a separate financial domain.',
+    status: 'TESTED',
+    focusId: 'quantity-settlement',
+  },
+  {
+    label: 'External validation',
+    claim: 'One attributable real energy source is still required.',
+    status: 'OPEN',
+    focusId: 'signal-evidence',
+  },
 ];
 
 export default function ResearchSurface({ viewMode, onNavigate, onOpenFullAnalysis }) {
@@ -86,8 +111,8 @@ export default function ResearchSurface({ viewMode, onNavigate, onOpenFullAnalys
           <article className="platform-panel">
             <header><span>Claim hierarchy</span><h2>What is being claimed?</h2></header>
             <div className="platform-claim-list">
-              {CLAIM_ROWS.map(([label, claim, status]) => (
-                <button key={label} type="button" onClick={() => setActiveId(label === 'External validation' ? 'claim-money' : activeId)}>
+              {CLAIM_ROWS.map(({ label, claim, status, focusId }) => (
+                <button key={label} type="button" onClick={() => setActiveId(focusId)}>
                   <div><strong>{label}</strong><p>{claim}</p></div>
                   <StatusBadge tone={status === 'OPEN' ? 'warn' : 'pass'}>{status}</StatusBadge>
                 </button>
@@ -125,7 +150,10 @@ export default function ResearchSurface({ viewMode, onNavigate, onOpenFullAnalys
         </section>
 
         <section className="platform-panel research-source-trace">
-          <header><span>Active source trace</span><h2>Follow a research statement from source to executable result.</h2></header>
+          <header>
+            <span>Active source trace</span>
+            <h2>{active.label}: follow the statement from research claim to executable result.</h2>
+          </header>
           <div className="research-trace-flow">
             <button type="button">Source register</button><GitBranch size={16} />
             <button type="button">Institutional claim</button><GitBranch size={16} />
@@ -133,6 +161,7 @@ export default function ResearchSurface({ viewMode, onNavigate, onOpenFullAnalys
             <button type="button" onClick={() => onNavigate(active.caseRoute)}>Case mechanism</button><GitBranch size={16} />
             <button type="button" onClick={() => onNavigate({ section: 'verify', tool: 'lineage' })}>Decision object</button>
           </div>
+          <div className="platform-inline-proof"><BookOpen size={18} /><span>{active.example}</span></div>
         </section>
 
         <ResearchPanel />
