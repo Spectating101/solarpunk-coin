@@ -103,6 +103,19 @@ For the next owner-supplied source:
 
 A policy BLOCK remains an acceptable Gate 1 result.
 
+## External Case 001 kit
+
+Issue #26 is the first live use of this workflow. Create a private, source-independent workspace with:
+
+```bash
+node scripts/scaffold_external_case_001.mjs \
+  --out=/private/external-case-001
+```
+
+The scaffold supplies a case-specific manifest, explicit column-and-unit mapping, source-holder confirmation record, private/public/review directories, and defensive `.gitignore`. It never copies raw source data and defaults to private validation at L0.
+
+See `docs/external-cases/EXTERNAL_CASE_001_INTAKE.md` for the complete source, assurance, policy, reproduction, review, and publication workflow.
+
 ## Legacy warning
 
 `scripts/operator_data_intake.js` and its generated commercial/demo report predate the V2 custody model. They may generate locally signed demonstration readings and mint previews. They must not be used as proof of operator custody or as a V2 assurance classifier. Use this intake receipt first.
