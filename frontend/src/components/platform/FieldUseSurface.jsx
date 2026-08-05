@@ -23,23 +23,32 @@ const OPS_CASE_ID = 'OPS-001';
 const OPEN_POLICY_ID = 'LAB-CASE-OPEN-004';
 const PILOT_POLICY_ID = 'ENERGY-CASE-PILOT-005';
 const SCENARIO_OPTIONS = [
-  ['PROVENANCE-L0-BASE', 'Operator-shaped sample'],
-  ['PROVENANCE-L2-COUNTERFACTUAL', 'Declared signed-source scenario'],
-  ['PROVENANCE-L4-COUNTERFACTUAL', 'Declared corroborated scenario'],
+  ['PROVENANCE-L0-BASE', 'Operator-shaped sample · source L0'],
+  ['PROVENANCE-L2-COUNTERFACTUAL', 'Declared signed-source counterfactual · L2'],
+  ['PROVENANCE-L4-COUNTERFACTUAL', 'Declared corroborated counterfactual · L4'],
 ];
 
-const PIPELINE = [
-  ['Source identified', 'PASS'],
-  ['Custody declaration', 'SAMPLE'],
-  ['Permission scope', 'PUBLIC METADATA'],
-  ['Normalize rows', 'PASS'],
-  ['Run diagnostics', 'WARNING'],
-  ['Hash evidence', 'PASS'],
-  ['Classify assurance', 'L0'],
-  ['Evaluate policies', 'LIVE'],
-  ['Build receipt', 'PASS'],
-  ['Build capsule', 'PASS'],
-];
+function declaredScenarioLabel(scenarioId) {
+  if (scenarioId === 'PROVENANCE-L4-COUNTERFACTUAL') return 'DECLARED L4';
+  if (scenarioId === 'PROVENANCE-L2-COUNTERFACTUAL') return 'DECLARED L2';
+  return 'SOURCE L0';
+}
+
+function pipelineForScenario(scenarioId) {
+  return [
+    ['Source identified', 'PASS', 'pass'],
+    ['Custody declaration', 'SAMPLE', 'warn'],
+    ['Permission scope', 'PUBLIC METADATA', 'pass'],
+    ['Normalize rows', 'PASS', 'pass'],
+    ['Run diagnostics', 'WARNING', 'warn'],
+    ['Hash evidence', 'PASS', 'pass'],
+    ['Classify source evidence', 'L0', 'warn'],
+    ['Apply declared analysis context', declaredScenarioLabel(scenarioId), scenarioId === 'PROVENANCE-L0-BASE' ? 'neutral' : 'warn'],
+    ['Evaluate policies', 'LIVE', 'pass'],
+    ['Build receipt', 'PASS', 'pass'],
+    ['Build capsule', 'PASS', 'pass'],
+  ];
+}
 
 export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalysis }) {
   const { pack, compare } = useCaseWorkbench();
@@ -50,6 +59,7 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
 
   const caseManifest = pack.casesById[OPS_CASE_ID];
   const evidence = pack.evidenceByHash[caseManifest.evidence_refs[0]];
+  const pipeline = useMemo(() => pipelineForScenario(scenarioId), [scenarioId]);
 
   useEffect(() => {
     let active = true;
@@ -90,6 +100,19 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
           <LinkButton onClick={() => onNavigate({ section: 'verify', tool: 'capsule' })}>Verify active capsule</LinkButton>
         </PlatformPageIntro>
 
+        <section className="platform-active-state">
+          <div>
+            <span>Field analysis state</span>
+            <strong>{caseManifest.case_id} · source evidence L0 · {declaredScenarioLabel(scenarioId)}</strong>
+            <code>counterfactual context never promotes source truth automatically</code>
+          </div>
+          <div className="platform-state-controls">
+            <select aria-label="Declared field scenario" value={scenarioId} onChange={(event) => setScenarioId(event.target.value)}>
+              {SCENARIO_OPTIONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+          </div>
+        </section>
+
         <section className="platform-three-column field-full-grid">
           <article className="platform-panel">
             <header><span>Source and custody</span><h2>What entered the lab?</h2></header>
@@ -97,6 +120,8 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
               <div><dt>Case</dt><dd>{caseManifest.case_id}</dd></div>
               <div><dt>Source kind</dt><dd>{humanize(evidence.source.kind)}</dd></div>
               <div><dt>Custody</dt><dd>{humanize(evidence.source.custody)}</dd></div>
+              <div><dt>Source assurance</dt><dd>L0 · sample or public-lab fixture</dd></div>
+              <div><dt>Declared context</dt><dd>{declaredScenarioLabel(scenarioId)}</dd></div>
               <div><dt>Permission</dt><dd>public metadata only</dd></div>
               <div><dt>Measurement window</dt><dd>May 1–7, 2026</dd></div>
               <div><dt>Evidence hash</dt><dd><code>{shortHash(evidence.evidence_hash, 14, 10)}</code></dd></div>
@@ -112,7 +137,8 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
               ['Intake receipt', 'immutable source identity'],
               ['Generic interval adapter', `${evidence.summary.interval_count} normalized intervals`],
               ['Evidence diagnostics', `${evidence.summary.warning_count} warning · ${evidence.summary.blocker_count} blocker`],
-              ['EvidenceEnvelope', shortHash(evidence.evidence_hash)],
+              ['EvidenceEnvelope', `${shortHash(evidence.evidence_hash)} · source L0`],
+              ['Declared context', declaredScenarioLabel(scenarioId)],
               ['Policy decisions', 'pilot + open'],
               ['Receipt and capsule', 'privacy-safe portable artifacts'],
             ].map(([label, detail], index) => (
@@ -133,13 +159,15 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
                 <div>
                   <span>Pilot policy</span>
                   <strong>{pilotDecision?.decision?.replaceAll('_', ' ') || '—'}</strong>
-                  <small>{humanize(pilotDecision?.admission?.blocking_rules?.[0])}</small>
+                  <small>{pilotDecision?.decision === 'BLOCKED'
+                    ? humanize(pilotDecision?.admission?.blocking_rules?.join(', '))
+                    : `${formatQuantity(pilotDecision?.capacity?.admitted_maximum)} admitted`}</small>
                 </div>
                 <div>
                   <span>Open policy</span>
                   <strong>{openDecision?.decision?.replaceAll('_', ' ') || '—'}</strong>
                   <small>{openDecision?.decision === 'BLOCKED'
-                    ? humanize(openDecision?.admission?.blocking_rules?.[0])
+                    ? humanize(openDecision?.admission?.blocking_rules?.join(', '))
                     : `${formatQuantity(openDecision?.capacity?.admitted_maximum)} admitted`}</small>
                 </div>
               </div>
@@ -194,7 +222,7 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
       <PlatformPageIntro
         kicker="Field use · executable intake walkthrough"
         title="Process an operator-format source without pretending the format proves the source."
-        description="Run the synthetic OPS-001 fixture through normalization, diagnostics, evidence hashing, assurance classification, policy evaluation, receipt generation, and capsule packaging."
+        description="Run the synthetic OPS-001 fixture through normalization, diagnostics, evidence hashing, source classification, a separately declared analysis context, policy evaluation, receipt generation, and capsule packaging."
         viewMode="overview"
       >
         <LinkButton primary onClick={onOpenFullAnalysis}>Open full field analysis</LinkButton>
@@ -208,25 +236,26 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
             <strong>Operator-format CSV</strong>
             <span>{evidence.summary.interval_count} interval rows</span>
             <span>{formatQuantity(evidence.summary.total_eligible_surplus_kwh)} eligible kWh</span>
+            <span>Source evidence: L0</span>
             <code>{shortHash(evidence.evidence_hash)}</code>
           </div>
           <label>
-            Source condition
+            Declared analysis context
             <select value={scenarioId} onChange={(event) => setScenarioId(event.target.value)}>
               {SCENARIO_OPTIONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
             </select>
           </label>
-          <p className="platform-control-note">Scenario changes are explicit analytical declarations. They do not rewrite the fixture or certify source truth.</p>
+          <p className="platform-control-note">The source remains L0 in every option. L2 and L4 are explicit counterfactual contexts used to inspect policy behavior, not source-truth promotion.</p>
         </article>
 
         <article className="platform-panel">
           <header><span>Action</span><h2>Run the intake pipeline</h2></header>
           <div className="field-pipeline-list">
-            {PIPELINE.map(([label, status], index) => (
+            {pipeline.map(([label, status, tone], index) => (
               <div key={label}>
                 <span>{String(index + 1).padStart(2, '0')}</span>
                 <strong>{label}</strong>
-                <StatusBadge tone={status === 'WARNING' || status === 'SAMPLE' ? 'warn' : 'pass'}>{status}</StatusBadge>
+                <StatusBadge tone={tone}>{status}</StatusBadge>
               </div>
             ))}
           </div>
@@ -234,7 +263,8 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
 
         <article className="platform-panel">
           <header><span>Consequence</span><h2>Policy output</h2></header>
-          {loading ? <EmptyState>Running the declared source condition…</EmptyState> : null}
+          {loading ? <EmptyState>Running the declared analysis context…</EmptyState> : null}
+          {error ? <div className="workbench-error" role="alert">{error}</div> : null}
           {!loading ? (
             <div className="field-decision-stack">
               <div>
@@ -257,7 +287,7 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
           ) : null}
           <div className="platform-inline-proof">
             <ShieldCheck size={18} />
-            <span>Raw interval rows remain outside the public receipt and capsule.</span>
+            <span>Raw interval rows remain outside the public receipt and capsule. Declared counterfactuals do not certify custody or physical truth.</span>
           </div>
           <LinkButton onClick={() => onNavigate({ section: 'verify', tool: 'capsule' })}>Inspect privacy-safe artifacts</LinkButton>
         </article>
