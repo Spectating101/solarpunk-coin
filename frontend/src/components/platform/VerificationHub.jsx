@@ -92,7 +92,7 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
 
   return (
     <div className="verification-hub-shell">
-      <main className="platform-page verification-hub-intro">
+      <section className="platform-page verification-hub-intro" aria-label="Verification Hub introduction">
         <PlatformPageIntro
           kicker="Shared workspace · lineage, receipt, capsule, and objects"
           title="Verify the result from source identity to portable research artifact."
@@ -109,7 +109,7 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
             </button>
           ))}
         </nav>
-      </main>
+      </section>
 
       {tool === 'lineage' ? (
         <main className="platform-page verification-lineage">
@@ -163,7 +163,7 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
 
       {tool === 'receipt' ? (
         <>
-          <main className="platform-page receipt-integrity-preview">
+          <section className="platform-page receipt-integrity-preview" aria-label="Receipt integrity preview">
             <section className="platform-three-column">
               <article className="platform-panel">
                 <header><span>Active receipt</span><h2>{activeRun?.caseManifest?.case_id || 'Resolving'}</h2></header>
@@ -201,7 +201,7 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
                 </p>
               </article>
             </section>
-          </main>
+          </section>
           <ReceiptsWorkspace
             receiptId={routeContext?.receiptId || decision?.decision_id || null}
             routeContext={routeContext}

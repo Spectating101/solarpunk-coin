@@ -367,11 +367,11 @@ function App() {
       ) : null}
       {route.section === 'investigate' && viewMode === 'full' ? (
         <>
-          <main className="platform-page paired-full-bridge">
+          <section className="platform-page paired-full-bridge" aria-label="Full investigation bridge">
             <span className="wb-kicker">Full investigation · same active state</span>
             <h1>Every admission gate, quantity ceiling, stress condition, identity, and artifact.</h1>
             <p>The selected case, policy, assurance scenario, and settlement condition come directly from the shared workbench state.</p>
-          </main>
+          </section>
           <CaseWorkspace caseId={activeCaseId} policyId={activePolicyId} scenarioId={activeScenarioId} initialLens="constraints" onNavigate={navigate} />
         </>
       ) : null}

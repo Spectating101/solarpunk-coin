@@ -287,4 +287,25 @@ describe('paired platform surfaces', () => {
     fireEvent.click(screen.getByRole('button', { name: 'EvidenceEnvelope' }));
     expect(screen.getByText(/evidence-001/i)).toBeInTheDocument();
   });
+
+  it('keeps Analysis Lab and Verification Hub to a single main landmark', () => {
+    useCaseWorkbench.mockReturnValue(providerValue());
+
+    const { unmount: unmountAnalysis } = render(
+      <AnalysisLab initialTool="stress" onNavigate={vi.fn()} />,
+    );
+    expect(document.querySelector('.analysis-lab-intro')?.tagName).toBe('SECTION');
+    expect(document.querySelectorAll('main')).toHaveLength(1);
+    unmountAnalysis();
+
+    const { unmount: unmountVerify } = render(
+      <VerificationHub initialTool="lineage" onNavigate={vi.fn()} />,
+    );
+    expect(document.querySelector('.verification-hub-intro')?.tagName).toBe('SECTION');
+    expect(document.querySelectorAll('main')).toHaveLength(1);
+    unmountVerify();
+
+    render(<VerificationHub initialTool="objects" onNavigate={vi.fn()} />);
+    expect(document.querySelectorAll('main')).toHaveLength(1);
+  });
 });
