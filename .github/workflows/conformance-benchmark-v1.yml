@@ -1,6 +1,14 @@
 name: Conformance Benchmark v1
 
 on:
+  push:
+    branches:
+      - 'feat/conformance-benchmark-v1-c0-c2'
+    paths:
+      - 'benchmark/**'
+      - 'scripts/run_conformance_benchmark_v1.mjs'
+      - 'packages/constraint-core/**'
+      - '.github/workflows/conformance-benchmark-v1.yml'
   pull_request:
     paths:
       - 'benchmark/**'
