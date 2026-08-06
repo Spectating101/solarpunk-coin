@@ -13,6 +13,8 @@ canonical research + evidence + software
         ↓
 external cases + conformance benchmark
         ↓
+independent review + institutional discovery
+        ↓
 master registers + maturity scoreboard
         ↓
 package card and package manifest
@@ -33,10 +35,13 @@ Read in this order:
 3. `PROGRAMME_SCOREBOARD.md` — active evidence-bearing status register;
 4. `EXTERNAL_CASE_PORTFOLIO.md` — Cases 001–003 source and evaluation programme;
 5. `CONFORMANCE_BENCHMARK_V1.md` — behavioral benchmark and conformance specification;
-6. `../docs/project/PROGRAMME_CONVERSION_ARCHITECTURE.md` — workstreams and package families;
-7. package-local manifests and registers.
+6. `EXTERNAL_REVIEW_PROTOCOL.md` — independent domain, technical, research, and operational scrutiny;
+7. `INSTITUTIONAL_DISCOVERY_PROTOCOL.md` — interview, commitment, pilot, adoption, and stop rules;
+8. `PRE_EXISTING_ASSET_AND_LICENSE_INVENTORY.md` — founder, public, private, third-party, institutional, and future-commercial asset boundaries;
+9. `../docs/project/PROGRAMME_CONVERSION_ARCHITECTURE.md` — workstreams and package families;
+10. package-local manifests and registers.
 
-No venue deadline, competition narrative, incubator request, or commercial proposal may override this authority order.
+No venue deadline, competition narrative, incubator request, commercial proposal, reviewer opinion, or institutional request may override this authority order.
 
 ## Directory authority
 
@@ -46,13 +51,18 @@ submission/
 ├── PROGRAMME_SCOREBOARD.md
 ├── EXTERNAL_CASE_PORTFOLIO.md
 ├── CONFORMANCE_BENCHMARK_V1.md
+├── EXTERNAL_REVIEW_PROTOCOL.md
+├── INSTITUTIONAL_DISCOVERY_PROTOCOL.md
+├── PRE_EXISTING_ASSET_AND_LICENSE_INVENTORY.md
 ├── MASTER_ASSET_REGISTER.md
 ├── PACKAGE_CARDS.md
 ├── OVERLAP_AND_EXCLUSIVITY_REGISTER.md
 ├── templates/
 │   ├── PACKAGE_MANIFEST_TEMPLATE.md
 │   ├── CLAIM_REGISTER_TEMPLATE.md
-│   └── FINAL_QA_TEMPLATE.md
+│   ├── FINAL_QA_TEMPLATE.md
+│   ├── EXTERNAL_REVIEW_RECORD_TEMPLATE.md
+│   └── STAKEHOLDER_AND_PILOT_RECORD_TEMPLATE.md
 └── packages/
     ├── P1-ftsid-2026/
     ├── P2-technical-2026/
@@ -98,6 +108,7 @@ Additional files depend on the route:
 - software: release ID, tests, documentation, licence, archival artifact;
 - empirical papers: result-ledger extract, code/data reproduction path, robustness matrix;
 - institutional use: source relationship, workflow record, operator feedback, correction log;
+- independent review: frozen review package, findings, dispositions, corrections, and closure;
 - commercial proof: buyer role, scope, success criteria, quotation or contract, payment evidence, and renewal intent.
 
 ## Evidence labels
@@ -131,7 +142,7 @@ M0 CONTROLLED SYSTEM
 → M7 REPEATABLE PRODUCT / CATEGORY FORMATION
 ```
 
-A later gate does not erase the boundaries of an earlier one. For example, a paid pilot does not certify physical source truth, and a publication does not prove customer demand.
+A later gate does not erase the boundaries of an earlier one. A paid pilot does not certify physical source truth, a publication does not prove customer demand, and an external review does not become official approval.
 
 ## Package shipping states
 
@@ -149,20 +160,21 @@ PROPOSED
 → ARCHIVED / REVISED
 ```
 
-A package may not be marked `READY TO SHIP` until final QA and overlap review are complete. `USED` and `PAID` require attributable evidence rather than intent or discussion.
+A package may not be marked `READY TO SHIP` until final QA and overlap review are complete. `EXTERNAL REVIEW`, `USED`, and `PAID` require attributable evidence rather than intent or discussion.
 
 ## Current operating sequence
 
 1. complete issue #26 / External Case 001;
-2. freeze P0 and the maturity-control documents;
-3. implement the C0–C2 Conformance Benchmark v1 corpus;
+2. operate the maturity-control documents as P0;
+3. implement and validate the C0–C2 Conformance Benchmark v1 corpus;
 4. open Cases 002 and 003 only against deliberate contrasts;
-5. freeze P1 claim and evidence hierarchy;
-6. select or decline P2 based on actual evaluation contribution;
-7. update P3 against external-case evidence before further lifecycle expansion;
-8. treat P4 as a bounded commercialization experiment until problem and buyer evidence exists;
-9. recruit independent reviewers;
-10. use external results to decide which P5 specialist routes deserve production.
+5. freeze and run the independent review package;
+6. freeze P1 claim and evidence hierarchy;
+7. select or decline P2 based on actual evaluation contribution;
+8. update P3 against external-case evidence before further lifecycle expansion;
+9. run P4 institutional discovery as a bounded experiment;
+10. preserve the pre-existing asset and licence schedule before external agreements;
+11. use external results to decide which P5 specialist routes deserve production.
 
 ## Non-negotiable boundaries
 
@@ -175,7 +187,9 @@ A package may not be marked `READY TO SHIP` until final QA and overlap review ar
 - A competition application may not invent a customer, pilot, integration, or team contribution.
 - A grant headline amount is a project budget, not personal income or present valuation.
 - A benchmark created by the reference implementation is not automatically a neutral industry standard.
+- A reviewer does not imply endorsement outside the frozen review scope.
 - A conversation, expression of interest, free demonstration, paid pilot, recurring customer, and ecosystem adoption are distinct maturity states.
+- Public MIT assets are not exclusive merely because a future company commercializes complementary work.
 
 ## Work acceptance rule
 
