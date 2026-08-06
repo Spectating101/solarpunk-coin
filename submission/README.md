@@ -1,8 +1,8 @@
-# Submission Workspace
+# Submission and Programme Execution Workspace
 
-This directory is the operational packaging layer for the Solarpunk / CL–ECI / Policy Lab research programme.
+This directory is the operational conversion and maturity-control layer for the Solarpunk / CL–ECI / Policy Lab research programme.
 
-It does **not** replace the research foundation, repository source hierarchy, result ledger, institutional evidence, or software implementation. It converts those authorities into bounded external packages.
+It does **not** replace the research foundation, repository source hierarchy, result ledger, institutional evidence, software implementation, or external-case records. It converts those authorities into bounded external packages and tracks whether the programme has actually crossed external, research, institutional, and commercial maturity gates.
 
 ## Operating rule
 
@@ -11,20 +11,41 @@ It does **not** replace the research foundation, repository source hierarchy, re
 ```text
 canonical research + evidence + software
         ↓
-master registers
+external cases + conformance benchmark
         ↓
-package card
+master registers + maturity scoreboard
         ↓
-venue-specific package
+package card and package manifest
         ↓
-submission receipt / feedback / revision
+venue / pilot / institutional conversion
+        ↓
+submission, review, use, payment, or rejection evidence
+        ↓
+revised canonical programme
 ```
+
+## Execution authority
+
+Read in this order:
+
+1. `../PROJECT_RECOVERY.md` — repository-wide recovery and authority order;
+2. `../docs/project/MAXIMUM_VALUE_EXECUTION_PROGRAM.md` — maturity gates, sequencing, ownership, and stop rules;
+3. `PROGRAMME_SCOREBOARD.md` — active evidence-bearing status register;
+4. `EXTERNAL_CASE_PORTFOLIO.md` — Cases 001–003 source and evaluation programme;
+5. `CONFORMANCE_BENCHMARK_V1.md` — behavioral benchmark and conformance specification;
+6. `../docs/project/PROGRAMME_CONVERSION_ARCHITECTURE.md` — workstreams and package families;
+7. package-local manifests and registers.
+
+No venue deadline, competition narrative, incubator request, or commercial proposal may override this authority order.
 
 ## Directory authority
 
 ```text
 submission/
 ├── README.md
+├── PROGRAMME_SCOREBOARD.md
+├── EXTERNAL_CASE_PORTFOLIO.md
+├── CONFORMANCE_BENCHMARK_V1.md
 ├── MASTER_ASSET_REGISTER.md
 ├── PACKAGE_CARDS.md
 ├── OVERLAP_AND_EXCLUSIVITY_REGISTER.md
@@ -47,11 +68,11 @@ Empty package directories should not be created without a package manifest. A pa
 | Package ID | Authority | Primary routes |
 |---|---|---|
 | **P0** | canonical programme authority | all packages |
-| **P1** | integrated programme paper | FTSID |
-| **P2** | technical systems paper | IEEE ICDLT or BCK26 |
-| **P3** | executable climate-assurance product | ClimateChain, NTUB, GSC, Blockchain for Good |
-| **P4** | commercialization package | NSTC and later incubators |
-| **P5** | specialist durable publications | FINEC, Ledger, ACM DLT, Energy Informatics, JOSS |
+| **P1** | integrated programme paper | FTSID or successor integrated venue |
+| **P2** | technical systems paper | selected technical venue when evaluation-ready |
+| **P3** | executable climate/evidence product | climate, sustainability, fintech, and demonstration routes |
+| **P4** | commercialization and pilot package | incubators, FITI, institutional pilots, later funding |
+| **P5** | specialist durable publications | FINEC, Ledger, ACM DLT, Energy Informatics, JOSS or successors |
 
 ## Required package contents
 
@@ -75,7 +96,9 @@ Additional files depend on the route:
 - competitions: application copy, deck, demo script, video, judge Q&A;
 - funding: market problem, pilot, milestones, budget, team, IP position;
 - software: release ID, tests, documentation, licence, archival artifact;
-- empirical papers: result-ledger extract, code/data reproduction path, robustness matrix.
+- empirical papers: result-ledger extract, code/data reproduction path, robustness matrix;
+- institutional use: source relationship, workflow record, operator feedback, correction log;
+- commercial proof: buyer role, scope, success criteria, quotation or contract, payment evidence, and renewal intent.
 
 ## Evidence labels
 
@@ -89,11 +112,28 @@ Every package uses the same evidence-status vocabulary.
 | **Declared** | supplied as a scenario or policy context rather than independently verified |
 | **Derived** | calculated deterministically from identified inputs |
 | **Institutional analogy** | a bounded inference from observed institutional rules or processes |
-| **Externally validated** | reviewed or tested by an attributable external party under a defined process |
+| **Externally reviewed** | reviewed by an attributable external party under a defined scope |
+| **Externally operated** | completed by an attributable external operator under a documented workflow |
+| **Commercially validated** | supported by attributable buyer, contract, payment, or recurring-use evidence |
 
-No package may silently promote one evidence class into another.
+No package may silently promote one evidence class into another. External review, institutional operation, and commercial validation are separate states.
 
-## Shipping states
+## Programme maturity gates
+
+```text
+M0 CONTROLLED SYSTEM
+→ M1 EXTERNAL OPERABILITY
+→ M2 REPEATABLE EXTERNAL EVIDENCE
+→ M3 INDEPENDENT SCRUTINY
+→ M4 RESEARCH AUTHORITY
+→ M5 INSTITUTIONAL USE
+→ M6 COMMERCIAL PROOF
+→ M7 REPEATABLE PRODUCT / CATEGORY FORMATION
+```
+
+A later gate does not erase the boundaries of an earlier one. For example, a paid pilot does not certify physical source truth, and a publication does not prove customer demand.
+
+## Package shipping states
 
 ```text
 PROPOSED
@@ -101,39 +141,59 @@ PROPOSED
 → EVIDENCE FROZEN
 → DRAFT
 → INTERNAL REVIEW
+→ EXTERNAL REVIEW
 → FORMAT FROZEN
 → READY TO SHIP
-→ SUBMITTED
-→ DECIDED
+→ SUBMITTED / DEPLOYED
+→ DECIDED / USED / PAID
 → ARCHIVED / REVISED
 ```
 
-A package may not be marked `READY TO SHIP` until final QA and overlap review are complete.
+A package may not be marked `READY TO SHIP` until final QA and overlap review are complete. `USED` and `PAID` require attributable evidence rather than intent or discussion.
 
 ## Current operating sequence
 
-1. freeze P0 registers;
-2. choose P2 route: ICDLT or BCK;
-3. produce P1 FTSID paper;
-4. open P4 only after institutional eligibility is understood;
-5. derive NTUB from P3/P1 without creating a second product;
-6. develop P3 into the ClimateChain prototype;
-7. use external results to decide which P5 specialist routes deserve production.
+1. complete issue #26 / External Case 001;
+2. freeze P0 and the maturity-control documents;
+3. implement the C0–C2 Conformance Benchmark v1 corpus;
+4. open Cases 002 and 003 only against deliberate contrasts;
+5. freeze P1 claim and evidence hierarchy;
+6. select or decline P2 based on actual evaluation contribution;
+7. update P3 against external-case evidence before further lifecycle expansion;
+8. treat P4 as a bounded commercialization experiment until problem and buyer evidence exists;
+9. recruit independent reviewers;
+10. use external results to decide which P5 specialist routes deserve production.
 
 ## Non-negotiable boundaries
 
 - The project does not currently demonstrate a completed energy-backed currency.
 - A successful controlled case is not external validation.
+- A source-holder-reviewed external case is not physical meter certification.
 - Norway is not a deployment, endorsement, or proof of monetary feasibility.
 - Admission does not imply settlement.
 - Settlement does not imply circulation, liquidity, stable value, acceptance, or money.
 - A competition application may not invent a customer, pilot, integration, or team contribution.
 - A grant headline amount is a project budget, not personal income or present valuation.
+- A benchmark created by the reference implementation is not automatically a neutral industry standard.
+- A conversation, expression of interest, free demonstration, paid pilot, recurring customer, and ecosystem adoption are distinct maturity states.
+
+## Work acceptance rule
+
+Before new work begins, record:
+
+1. the maturity gate advanced;
+2. the evidence artifact expected;
+3. the claim that becomes permissible only if the work succeeds;
+4. the stop rule if the evidence does not appear;
+5. the privacy, publication, ownership, and non-claim boundary.
+
+Broad frontend, token, marketplace, AI, and speculative integration work remains deferred unless an external case, reviewer, publication, institutional user, or paid deployment demonstrates a concrete requirement.
 
 ## Related authorities
 
 - `../PROJECT_RECOVERY.md`
 - `../docs/research/ENERGY_SIGNALS_MONETARY_CONSTRAINTS_RESEARCH_FOUNDATION.md`
 - `../docs/research/institutional-evidence/norway/CL_ECI_MAPPING.md`
+- `../docs/project/MAXIMUM_VALUE_EXECUTION_PROGRAM.md`
 - `../docs/project/PROGRAMME_CONVERSION_ARCHITECTURE.md`
 - `../docs/project/SUBMISSION_PACKAGING_AND_DEADLINE_PLAN.md`
