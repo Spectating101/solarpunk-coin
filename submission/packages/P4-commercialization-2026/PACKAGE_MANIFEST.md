@@ -1,129 +1,239 @@
 # Package Manifest — `P4-COMMERCIALIZATION-2026-001`
 
-**Package title:** Policy Lab Commercialization Package  
-**Primary route:** NSTC Research Entrepreneurship through an eligible institution  
-**Later routes:** incubators, ecosystem funds, pilot proposals  
-**Status:** `ELIGIBILITY GATE`  
-**Version:** 0.1  
-**Created:** 2026-08-05  
-**Current official deadline:** 2026-09-03
+**Package title:** Policy Lab Commercialization and Institutional Adoption Package  
+**Primary route:** bounded incubator, pilot, and customer-discovery experiment  
+**Later routes:** FITI, institutional pilots, SBIR after incorporation, ecosystem or research-infrastructure funding  
+**Status:** `PROBLEM AND BUYER EVIDENCE GATE`  
+**Version:** 0.2  
+**Updated:** 2026-08-07
 
 ## 1. Conversion function
 
-Translate the intrinsic research and software assets into a credible pilot and commercialization proposal without surrendering research accuracy or inventing market evidence.
+Test whether any bounded part of the programme should become a company, specialist service, licensed component, institutional research infrastructure, or grant-backed public-interest project.
 
-## 2. Product framing
+Commercialization is one programme branch. Failure of a business hypothesis does not invalidate the research programme.
 
-> Policy Lab is an executable assurance system for evidence-dependent digital and financial claims. Renewable-energy claims are the initial deployment case.
+## 2. Current product hypothesis
 
-## 3. Initial customer/problem hypotheses
+> Policy Lab is an executable assurance and decision system for evidence-dependent institutional, sustainability, and financial claims. External energy evidence is the first proving domain.
 
-These are hypotheses, not validated customers:
+This is a hypothesis. The initial buyer, budget owner, urgency, and repeatable deliverable are not yet validated.
 
-- certificate or registry operators needing traceable admission and cancellation decisions;
-- energy or sustainability teams needing reproducible claim assurance;
-- auditors and compliance teams reviewing externally backed digital claims;
-- tokenization or fintech platforms needing bounded issuance controls;
-- research and policy organizations comparing institutional rule designs.
+## 3. Distinct commercialization hypotheses
 
-## 4. Commercial proposition
+### H1 — Evidence-readiness service
 
-The product does not sell a new currency. It provides:
+Potential buyer:
 
-- explicit evidence-status handling;
-- versioned policy evaluation;
-- bounded quantity authorization;
-- unique claim identity and anti-reuse;
-- correction and revision lineage;
-- settlement-stress analysis;
-- deterministic decision receipts.
+- energy operator;
+- ESCO or EMS provider;
+- sustainability consultant;
+- university or laboratory energy manager;
+- organization preparing a formal external claim.
 
-## 5. Selected assets
+Potential value:
 
-| Asset ID | Asset | Package role | Status |
-|---|---|---|---|
-| CON-002–005 | doctrine and boundaries | problem credibility | strong |
-| INS-001–005 | institutional evidence | domain credibility | strong |
-| TEC-001–008 | architecture and product functions | solution core | strong/partial |
-| ART-001–007 | controlled proof and public demo | feasibility evidence | strong/partial |
-| BUS-001–002 | assurance thesis and renewable case | market framing | strong concept |
-| BUS-003–006 | customer, pilot, market, budget | application core | proposed |
-| COM-005, 008–010 | brief, deck, demo, Q&A | application communication | proposed |
+- identify missing evidence and semantic problems before formal review;
+- reduce rework;
+- produce a reproducible decision package.
 
-## 6. Institutional and ownership gate
+### H2 — Institutional policy and decision engine
 
-Before a formal application, record:
+Potential buyer:
 
-1. eligible submitting institution or commercialization platform;
-2. required project leader and team structure;
-3. treatment of independently developed pre-existing research and software;
-4. treatment of future funded improvements;
-5. publication and open-source rights;
-6. overhead, licensing, revenue-share, or equity terms;
-7. withdrawal rights if terms are unacceptable.
+- research or policy organization;
+- green-finance or digital-asset team;
+- platform requiring explicit admission and quantity rules;
+- organization comparing institutional designs.
 
-This manifest records the issue but does not claim a legal conclusion.
+Potential value:
 
-## 7. Genuinely new work
+- versioned policies;
+- deterministic blocking and binding attribution;
+- reproducible receipts and counterfactual replay.
 
-| Work | Why required | Completion evidence |
+### H3 — Licensed infrastructure component
+
+Potential buyer:
+
+- established ESG, energy, registry, research, audit, or financial software provider.
+
+Potential value:
+
+- embed evidence, policy, receipt, or conformance functions inside an existing customer platform.
+
+### H4 — Grant-backed open research infrastructure
+
+Potential funder/user:
+
+- university;
+- research centre;
+- public programme;
+- standards or open-source ecosystem;
+- foundation or consortium.
+
+Potential value:
+
+- public benchmark, cases, reference implementation, research outputs, and interoperability.
+
+These hypotheses must be tested separately. Interest in one does not validate the others.
+
+## 4. Maturity prerequisites
+
+| Commercial claim | Minimum prerequisite |
+|---|---|
+| credible pilot proposal | External Case 001 and defined institutional workflow |
+| repeatable service hypothesis | three-case portfolio and effort measurements |
+| institutional adoption claim | attributable organization completes the workflow |
+| willingness-to-pay claim | quotation, budget confirmation, contract, or payment evidence |
+| recurring software hypothesis | three organizations request repeated use with similar workflow |
+| investable company claim | paid pilot, team, IP structure, repeatable buyer, and growth logic |
+| category or standard claim | independent users, contributors, governance, and external protocol use |
+
+## 5. Current evidence
+
+| Evidence class | Current state |
+|---|---|
+| technical feasibility | strong controlled foundation |
+| source-independent intake tooling | internally complete |
+| real external case | outstanding |
+| repeatability | not demonstrated |
+| independent review | not demonstrated |
+| institutional use | not demonstrated |
+| paying customer | not demonstrated |
+| buyer and budget owner | hypothesis only |
+| scalable market | not established |
+
+## 6. Commercial experiment
+
+### Stage 1 — Problem confirmation
+
+After an inspectable external case exists:
+
+- conduct 10–20 role-specific interviews;
+- record current process, failure points, delay, cost, decision authority, and alternatives;
+- ask for concrete workflow and budget evidence rather than general enthusiasm;
+- separate source partners, users, influencers, and buyers.
+
+### Stage 2 — Pilot offer
+
+Create one bounded offer with:
+
+- named buyer role;
+- source and permission requirements;
+- exact deliverables;
+- success and failure criteria;
+- duration;
+- price or funded-resource request;
+- public/private case rights;
+- explicit exclusions;
+- post-pilot decision.
+
+### Stage 3 — Delivery and repeatability
+
+Record:
+
+- founder and customer time;
+- adapter and policy work;
+- support burden;
+- defects and clarification cycles;
+- customer decision or action changed by the output;
+- willingness to repeat or pay again;
+- whether the workflow can be standardized.
+
+### Stage 4 — Company decision
+
+Form or fund a commercial entity only when:
+
+- a buyer and budget owner are identified;
+- at least one paid or formally committed pilot exists;
+- the team covers actual operational gaps;
+- pre-existing IP and future work are documented;
+- open-source and private commercial boundaries are defensible;
+- funding has a specific milestone use.
+
+## 7. Offer hypotheses
+
+These are test structures, not established prices or demand.
+
+| Offer | Initial deliverable | Evidence sought |
 |---|---|---|
-| Customer problem evidence | commercialization cannot rely on theory alone | interview/source register |
-| Buyer/user prioritization | identify first deployment surface | ranked hypothesis matrix |
-| Pilot design | convert architecture into bounded trial | partner profile, data, workflow, success criteria |
-| Market/competitor map | establish differentiation and alternatives | current evidence-backed analysis |
-| Milestone plan | show executable development path | staged deliverables and gates |
-| Budget | show funding use | route-compliant budget |
-| Team/capability map | identify gaps and responsibilities | named or role-based plan |
-| IP/pre-existing asset statement | preserve chronology and negotiate future work | dated asset and contribution record |
+| evidence-readiness review | field/unit/window mapping, gaps, blockers, next actions | urgency and value of early diagnosis |
+| complete evidence case | custody, adapter, diagnostics, policy decision, receipt, capsule | value of reproducible case package |
+| institutional policy pilot | repeated data, custom policy, workflow, training, management result | repeat use and organizational adoption |
+| licensed component or integration | API/schema/receipt integration into existing platform | partner distribution and technical leverage |
+| grant-backed research deployment | cases, benchmark, publications, public reference infrastructure | institutional and public-interest funding fit |
 
-## 8. Required deliverables
+Pricing must be derived from scope, delivery effort, alternatives, buyer value, case rights, and trust maturity. A free or discounted case must purchase explicit validation value rather than simply subsidize an organization.
 
-- one-page commercialization brief;
-- problem and customer evidence;
-- solution and product architecture;
-- current implementation proof;
-- pilot proposal;
-- milestone and risk plan;
-- budget;
-- team/capability statement;
-- IP/pre-existing asset statement;
-- public/non-confidential deck;
-- confidential technical appendix only when required;
-- application receipt and institutional decision record.
+## 8. Ownership and institutional gate
 
-## 9. Forbidden claims
+Before any incubator, grant, pilot, company, or collaboration agreement, record:
 
-- existing paying customers or institutional adoption without evidence;
-- production or security readiness;
-- legal validity of issuance, cancellation, or settlement;
+1. founder-owned pre-existing research, software, data, brands, and documentation;
+2. public MIT-licensed assets and their non-exclusive status;
+3. private source data and contractual restrictions;
+4. future funded work and ownership;
+5. university or programme claims to IP, overhead, revenue share, equity, or licensing;
+6. publication and open-source rights;
+7. collaborator and contractor contributions;
+8. withdrawal and termination rights;
+9. data protection, liability, and support boundaries.
+
+This package records required diligence and does not provide a legal conclusion.
+
+## 9. Required deliverables
+
+- one-page non-confidential brief;
+- External Case 001 or exact blocker;
+- customer and interview register;
+- ranked hypothesis matrix for H1–H4;
+- one pilot specification;
+- market and alternative map;
+- milestones and budget tied to maturity gates;
+- founder/team capability and gap map;
+- pre-existing asset and licence inventory;
+- public/private architecture;
+- pricing and delivery-effort hypotheses;
+- risk, stop, and pivot rules;
+- incubator, FITI, or funding application only after eligibility and evidence gates pass.
+
+## 10. Forbidden claims
+
+- paying customers, adoption, market validation, or demand without attributable evidence;
+- production security or operational readiness;
+- legal validity of issuance, cancellation, settlement, or certification;
 - guaranteed prevention of fraud or double counting outside the system boundary;
-- completed market validation;
-- grant headline amount as personal income or present company valuation.
+- a large total market as proof of reachable demand;
+- grant amount as personal income, company revenue, or present valuation;
+- company valuation before team, ownership, buyer, and commercial evidence;
+- neutral standard or ecosystem status before independent adoption.
 
-## 10. Go / stop rules
+## 11. Go / stop rules
 
 ### Go when
 
-- an eligible institutional route is confirmed;
-- pre-existing and future work can be treated under acceptable written terms;
-- a bounded first use case and pilot can be stated credibly;
-- the package can be prepared without sacrificing the core paper cycle.
+- a real external case makes the workflow inspectable;
+- interview evidence identifies a concrete role, problem, and cost;
+- a bounded pilot can be delivered without corrupting research priorities;
+- ownership and publication terms are acceptable;
+- funding has a specific maturity-gate use.
 
-### Stop, defer, or use another route when
+### Stop, defer, or change hypothesis when
 
-- institutional eligibility is absent;
-- ownership or publication terms are unacceptable or unclear;
-- the application requires invented traction;
-- customer/problem evidence cannot support the proposed product;
-- commercialization scope becomes a full token, exchange, or regulated financial business prematurely.
+- 20 relevant interviews produce fewer than three serious problem confirmations;
+- no qualified source or design partner allocates data, review time, authority, or budget;
+- every engagement remains bespoke with no reusable workflow;
+- incumbents or existing processes solve the problem adequately at lower switching cost;
+- an application requires invented traction or unacceptable ownership terms;
+- commercialization work displaces External Cases, benchmark, publication, or independent review without generating equivalent evidence.
 
-## 11. Next production actions
+## 12. Next production actions
 
-1. prepare a non-confidential one-page brief;
-2. create pre-existing asset chronology;
-3. draft institutional eligibility questions;
-4. rank initial users and buyer hypotheses;
-5. define one pilot workflow;
-6. create a milestone and budget skeleton;
-7. decide whether the current NSTC round is feasible or whether the package should target a later route.
+1. complete External Case 001;
+2. create the pre-existing asset and licence inventory;
+3. prepare role-specific interview questions and evidence register;
+4. rank H1–H4 only after initial interviews;
+5. define one bounded pilot and stop rule;
+6. use YZU incubator support for data access, introductions, legal/IP review, and market testing rather than presumed company formation;
+7. prepare FITI or later funding only after cases, buyer evidence, and team readiness exist.
