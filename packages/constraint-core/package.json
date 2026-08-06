@@ -31,7 +31,10 @@
   "files": ["src", "README.md"],
   "scripts": {
     "operator-intake": "node ../../scripts/prepare_operator_source_intake.mjs",
-    "operator-intake:test": "node --test test/operator-source-intake.test.mjs"
+    "operator-intake:test": "node --test test/operator-source-intake.test.mjs",
+    "conformance:v1": "node ../../scripts/run_conformance_benchmark_v1.mjs",
+    "conformance:v1:list": "node ../../scripts/run_conformance_benchmark_v1.mjs --list",
+    "conformance:v1:test": "node --test test/conformance-benchmark-v1.test.mjs"
   },
   "peerDependencies": {
     "ethers": ">=6.7.0"
