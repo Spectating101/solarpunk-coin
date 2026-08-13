@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { access, readFile } from 'node:fs/promises';
+import { access, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -89,4 +90,49 @@ test('benchmark runner list mode emits the frozen execution plan without running
   });
   assert.match(plan.claim_boundary, /neutral-standard status/i);
   assert.match(plan.claim_boundary, /research-boundary completion/i);
+});
+
+test('benchmark runner report mode preserves report schema and exact implementation provenance', async () => {
+  const tempDir = await mkdtemp(path.join(tmpdir(), 'solarpunk-conformance-'));
+  const reportPath = path.join(tempDir, 'report.json');
+  const fixtureSha = '0123456789abcdef0123456789abcdef01234567';
+
+  try {
+    const { stdout, stderr } = await execFileAsync(
+      process.execPath,
+      [runnerPath, `--out=${reportPath}`],
+      {
+        cwd: repoRoot,
+        env: {
+          ...process.env,
+          SOLARPUNK_IMPLEMENTATION_SHA: fixtureSha,
+        },
+      },
+    );
+    assert.equal(stderr, '');
+    assert.match(stdout, /PASS SOLARPUNK-CONFORMANCE-V1 0\.1\.0/);
+
+    const report = JSON.parse(await readFile(reportPath, 'utf8'));
+    assert.equal(report.schema, 'solarpunk.conformance_benchmark_report.v1');
+    assert.equal(report.plan_schema, 'solarpunk.conformance_benchmark_plan.v1');
+    assert.equal(report.benchmark_id, 'SOLARPUNK-CONFORMANCE-V1');
+    assert.equal(report.version, '0.1.0');
+    assert.equal(report.implementation_provenance.commit_sha, fixtureSha);
+    assert.equal(report.result, 'PASS');
+    assert.equal(report.exit_code, 0);
+    assert.equal(report.signal, null);
+    assert.equal(report.cases_declared, 21);
+    assert.deepEqual(report.namespace, {
+      research_boundaries: 'R1-R4',
+      conformance_families: 'CF1-CF9',
+      conformance_levels: 'C0-C4',
+      source_assurance: 'L0-L4',
+    });
+    assert.deepEqual(report.test_evidence.test_files, report.test_files);
+    assert.match(report.test_evidence.stdout, /tests/);
+    assert.ok(Array.isArray(report.non_claims));
+    assert.match(report.non_claims.join(' '), /does not certify source truth/i);
+  } finally {
+    await rm(tempDir, { recursive: true, force: true });
+  }
 });
