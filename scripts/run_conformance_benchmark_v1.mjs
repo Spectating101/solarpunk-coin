@@ -33,6 +33,14 @@ function uniqueTestFiles(cases) {
   return [...new Set(cases.filter((item) => item.coverage === 'EXISTING').map((item) => item.test_file))].sort();
 }
 
+function requiredImplementationSha() {
+  const implementationSha = process.env.SOLARPUNK_IMPLEMENTATION_SHA?.trim();
+  if (!implementationSha || !/^[0-9a-f]{40}$/i.test(implementationSha)) {
+    throw new Error('SOLARPUNK_IMPLEMENTATION_SHA must contain the exact 40-character tested commit SHA');
+  }
+  return implementationSha.toLowerCase();
+}
+
 function runNodeTests(files) {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ['--test', ...files], {
@@ -71,12 +79,18 @@ if (args.list) {
   process.exit(0);
 }
 
+const implementationSha = requiredImplementationSha();
 const startedAt = new Date().toISOString();
 const result = await runNodeTests(testFiles);
 const finishedAt = new Date().toISOString();
+const { schema: planSchema, ...planFields } = plan;
 const report = {
   schema: 'solarpunk.conformance_benchmark_report.v1',
-  ...plan,
+  plan_schema: planSchema,
+  ...planFields,
+  implementation_provenance: {
+    commit_sha: implementationSha,
+  },
   started_at: startedAt,
   finished_at: finishedAt,
   runtime: {
@@ -89,6 +103,11 @@ const report = {
   signal: result.signal,
   stdout: result.stdout,
   stderr: result.stderr,
+  test_evidence: {
+    test_files: testFiles,
+    stdout: result.stdout,
+    stderr: result.stderr,
+  },
   non_claims: [
     'A PASS evaluates only the selected reference-implementation test files.',
     'A PASS does not certify source truth, legal validity, regulatory compliance, production security, commercial readiness, neutral-standard status, or completion of a research boundary.',
