@@ -34,9 +34,13 @@ function uniqueTestFiles(cases) {
 }
 
 function requiredImplementationSha() {
-  const implementationSha = process.env.SOLARPUNK_IMPLEMENTATION_SHA?.trim();
-  if (!implementationSha || !/^[0-9a-f]{40}$/i.test(implementationSha)) {
-    throw new Error('SOLARPUNK_IMPLEMENTATION_SHA must contain the exact 40-character tested commit SHA');
+  const implementationSha = (
+    process.env.SOLARPUNK_IMPLEMENTATION_SHA
+    || process.env.GITHUB_SHA
+    || ''
+  ).trim();
+  if (!/^[0-9a-f]{40}$/i.test(implementationSha)) {
+    throw new Error('Set SOLARPUNK_IMPLEMENTATION_SHA (or GITHUB_SHA in CI) to the exact 40-character tested commit SHA');
   }
   return implementationSha.toLowerCase();
 }
