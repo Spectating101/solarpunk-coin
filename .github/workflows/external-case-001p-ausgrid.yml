@@ -1,0 +1,103 @@
+name: External Case 001P - Ausgrid public source
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - case/public-external-001p-ausgrid
+    paths:
+      - scripts/external_case_001p_ausgrid.mjs
+      - .github/workflows/external-case-001p-ausgrid.yml
+      - packages/constraint-core/**
+      - frontend/src/lib/researchCapsule.js
+      - frontend/src/lib/caseWorkbenchRuntime.js
+      - protocol/policies-v2/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/external_case_001p_ausgrid.mjs
+      - .github/workflows/external-case-001p-ausgrid.yml
+      - packages/constraint-core/**
+      - frontend/src/lib/researchCapsule.js
+      - frontend/src/lib/caseWorkbenchRuntime.js
+      - protocol/policies-v2/**
+
+permissions:
+  contents: read
+
+jobs:
+  execute-public-case:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: frontend
+
+      - name: Download pinned Ausgrid mirror archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ausgrid/unpacked"
+          URL='https://huggingface.co/SolarSys2026/EnergyTrading/resolve/ddb96f511059a410bfb3ea61c32e7def0d9c88f0/Dataset/Data/Ausgrid_raw_data/Solar%20home%20half-hour%20data%20-%201%20July%202012%20to%2030%20June%202013%20(1).zip?download=true'
+          curl --fail --location --retry 3 --retry-delay 2 "$URL" -o "$RUNNER_TEMP/ausgrid/source.zip"
+          echo '6949ffee7ef8e2260f229f8a7e3b992390187facaaf023bb933b811a11cd1a11  '"$RUNNER_TEMP/ausgrid/source.zip" | sha256sum --check --strict
+          test "$(stat -c '%s' "$RUNNER_TEMP/ausgrid/source.zip")" = '14973763'
+          unzip -q "$RUNNER_TEMP/ausgrid/source.zip" -d "$RUNNER_TEMP/ausgrid/unpacked"
+          CSV_PATH="$(find "$RUNNER_TEMP/ausgrid/unpacked" -type f -iname '*.csv' -printf '%s %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)"
+          test -n "$CSV_PATH"
+          echo "AUSGRID_CSV=$CSV_PATH" >> "$GITHUB_ENV"
+          echo "AUSGRID_ARCHIVE=$RUNNER_TEMP/ausgrid/source.zip" >> "$GITHUB_ENV"
+
+      - name: Execute bounded L0 public-source case
+        shell: bash
+        env:
+          VITE_SOURCE_REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          cd frontend
+          npx vite-node ../scripts/external_case_001p_ausgrid.mjs \
+            --csv="$AUSGRID_CSV" \
+            --archive="$AUSGRID_ARCHIVE" \
+            --customer=1 \
+            --days=7 \
+            --out=../state/external/public-001p-ausgrid
+
+      - name: Preserve exact public mirror bytes with the case artifact
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$AUSGRID_ARCHIVE" ] && [ -d state/external/public-001p-ausgrid ]; then
+            cp "$AUSGRID_ARCHIVE" state/external/public-001p-ausgrid/source-mirror.zip
+          fi
+
+      - name: Display machine-readable closure summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f state/external/public-001p-ausgrid/report.json ]; then
+            node -e 'const r=require("./state/external/public-001p-ausgrid/report.json"); console.log(JSON.stringify({status:r.status, source:r.source, evidence:r.evidence, decisions:r.decisions, settlement:r.settlement, capsule:r.capsule}, null, 2));'
+          fi
+
+      - name: Upload public-case evidence bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-external-case-001p-ausgrid-${{ github.sha }}
+          path: state/external/public-001p-ausgrid/
+          if-no-files-found: warn
+          retention-days: 90
