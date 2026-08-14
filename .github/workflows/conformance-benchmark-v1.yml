@@ -1,0 +1,49 @@
+name: Conformance Benchmark v1
+
+on:
+  pull_request:
+    paths:
+      - 'benchmark/**'
+      - 'scripts/run_conformance_benchmark_v1.mjs'
+      - 'packages/constraint-core/**'
+      - '.github/workflows/conformance-benchmark-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  c0-c2:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            node: '22'
+            report: conformance-v1-ubuntu-node22.json
+          - os: macos-latest
+            node: '22'
+            report: conformance-v1-macos-node22.json
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install dependencies
+        run: npm install
+      - name: Validate frozen benchmark contract
+        run: npm --prefix packages/constraint-core run conformance:v1:test
+      - name: Record execution plan
+        run: npm --prefix packages/constraint-core run conformance:v1:list > benchmark/reports/conformance-v1-plan.json
+      - name: Run C0-C2 benchmark
+        run: npm --prefix packages/constraint-core run conformance:v1 -- --out=benchmark/reports/${{ matrix.report }}
+      - name: Upload benchmark evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-v1-${{ matrix.os }}-node${{ matrix.node }}
+          path: |
+            benchmark/reports/conformance-v1-plan.json
+            benchmark/reports/${{ matrix.report }}
+          retention-days: 90

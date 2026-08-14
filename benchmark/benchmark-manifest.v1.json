@@ -1,0 +1,239 @@
+{
+  "schema": "solarpunk.conformance_benchmark_manifest.v1",
+  "benchmark_id": "SOLARPUNK-CONFORMANCE-V1",
+  "version": "0.1.0",
+  "status": "REFERENCE_IMPLEMENTATION_BASELINE",
+  "claim_boundary": "This benchmark evaluates declared software behavior only. It does not certify physical source truth, legal validity, regulatory compliance, production security, commercial readiness, neutral-standard status, or research-boundary completion.",
+  "namespace": {
+    "research_boundaries": "R1-R4",
+    "conformance_families": "CF1-CF9",
+    "conformance_levels": "C0-C4",
+    "source_assurance": "L0-L4"
+  },
+  "conformance_levels": {
+    "C0": {
+      "title": "Parse and integrity",
+      "requires": ["CF1", "CF2"]
+    },
+    "C1": {
+      "title": "Deterministic decision",
+      "requires": ["C0", "CF3", "CF4", "CF5"]
+    },
+    "C2": {
+      "title": "Reproducible receipt",
+      "requires": ["C1", "CF8"]
+    }
+  },
+  "cases": [
+    {
+      "id": "C0-CF1-001",
+      "level": "C0",
+      "family": "CF1",
+      "title": "Operator receipt binds file identity and custody without raw rows",
+      "test_file": "packages/constraint-core/test/operator-source-intake.test.mjs",
+      "test_name": "operator source receipt binds file identity and custody metadata without raw rows",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C0-CF1-002",
+      "level": "C0",
+      "family": "CF1",
+      "title": "Source tampering fails receipt verification",
+      "test_file": "packages/constraint-core/test/operator-source-intake.test.mjs",
+      "test_name": "source tampering fails receipt verification",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C0-CF1-003",
+      "level": "C0",
+      "family": "CF1",
+      "title": "Manifest tampering fails receipt verification",
+      "test_file": "packages/constraint-core/test/operator-source-intake.test.mjs",
+      "test_name": "manifest tampering fails receipt verification",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C0-CF1-004",
+      "level": "C0",
+      "family": "CF1",
+      "title": "Published source schemas match canonical runtime shapes",
+      "test_file": "packages/constraint-core/test/operator-source-schema.test.mjs",
+      "test_name": "published operator source schemas match canonical manifest and receipt shapes",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C0-CF1-005",
+      "level": "C0",
+      "family": "CF1",
+      "title": "Private workspace excludes source rows and fixes L0",
+      "test_file": "packages/constraint-core/test/external-case-001-scaffold.test.mjs",
+      "test_name": "external case scaffold creates a private L0 intake workspace without source rows",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C0-CF1-006",
+      "level": "C0",
+      "family": "CF1",
+      "title": "Private workspace refuses unsafe overwrite",
+      "test_file": "packages/constraint-core/test/external-case-001-scaffold.test.mjs",
+      "test_name": "external case scaffold refuses to overwrite a non-empty workspace without force",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C0-CF2-001",
+      "level": "C0",
+      "family": "CF2",
+      "title": "Custody and measurement windows are mandatory and ordered",
+      "test_file": "packages/constraint-core/test/operator-source-intake.test.mjs",
+      "test_name": "non-synthetic sources require declared custody and valid measurement windows",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C0-CF2-002",
+      "level": "C0",
+      "family": "CF2",
+      "title": "Permission scopes produce explicit publication controls",
+      "test_file": "packages/constraint-core/test/operator-source-intake.test.mjs",
+      "test_name": "permission scopes produce explicit publication controls",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C1-CF3-001",
+      "level": "C1",
+      "family": "CF3",
+      "title": "Self-authored high-assurance assertions cannot promote source state",
+      "test_file": "packages/constraint-core/test/operator-source-intake.test.mjs",
+      "test_name": "self-authored high-assurance assertions never promote the default V2 scenario",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C1-CF4-001",
+      "level": "C1",
+      "family": "CF4",
+      "title": "Pilot policy blocks honest L0 operator-shaped evidence",
+      "test_file": "packages/constraint-core/test/operator-evidence-gate1.test.mjs",
+      "test_name": "Gate 1A: OPS-001 is BLOCKED under pilot policy at honest L0",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C1-CF4-002",
+      "level": "C1",
+      "family": "CF4",
+      "title": "Open policy admits the same evidence with an explicit limit",
+      "test_file": "packages/constraint-core/test/operator-evidence-gate1.test.mjs",
+      "test_name": "Gate 1A: open policy admits; settlement stress works; receipt excludes raw rows",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C1-CF5-001",
+      "level": "C1",
+      "family": "CF5",
+      "title": "Binding evidence-backed ceiling determines authorized quantity",
+      "test_file": "packages/constraint-core/test/operator-evidence-gate1.test.mjs",
+      "test_name": "Gate 1A: open policy admits; settlement stress works; receipt excludes raw rows",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-001",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Closed-world capsule integrity and replay pass",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier passes closed-world integrity and committed-pack replay",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-002",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Tampered declared file is rejected",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier fails when a declared file is tampered without updating the manifest",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-003",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Required file omitted from manifest is rejected",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier rejects a required file omitted from the manifest digest list",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-004",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Undeclared extra file and raw evidence leakage are rejected",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier rejects undeclared extra files even when required files are intact",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-005",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Malformed manifest copy is rejected",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier rejects a malformed capsule.json copy",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-006",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Cross-object identity disagreement is rejected",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier rejects cross-object identity disagreement after hashes are refreshed",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-007",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Malformed required schemas are rejected",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier rejects malformed required schemas after hashes are refreshed",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-008",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Missing required bundle files are rejected",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier rejects missing required files",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    },
+    {
+      "id": "C2-CF8-009",
+      "level": "C2",
+      "family": "CF8",
+      "title": "Missing bundle returns explicit failure summaries",
+      "test_file": "packages/constraint-core/test/capsule-verify.test.mjs",
+      "test_name": "capsule verifier reports FAIL summaries for a missing bundle",
+      "expected": "PASS",
+      "coverage": "EXISTING"
+    }
+  ]
+}
