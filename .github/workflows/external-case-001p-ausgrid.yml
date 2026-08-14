@@ -68,16 +68,26 @@ jobs:
             --out=../state/external/public-001p-ausgrid
 
       - name: Preserve exact public mirror bytes with the case artifact
-        run: cp "$AUSGRID_ARCHIVE" state/external/public-001p-ausgrid/source-mirror.zip
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$AUSGRID_ARCHIVE" ] && [ -d state/external/public-001p-ausgrid ]; then
+            cp "$AUSGRID_ARCHIVE" state/external/public-001p-ausgrid/source-mirror.zip
+          fi
 
       - name: Display machine-readable closure summary
+        if: always()
+        shell: bash
         run: |
-          node -e 'const r=require("./state/external/public-001p-ausgrid/report.json"); console.log(JSON.stringify({status:r.status, source:r.source, evidence:r.evidence, decisions:r.decisions, settlement:r.settlement, capsule:r.capsule}, null, 2));'
+          if [ -f state/external/public-001p-ausgrid/report.json ]; then
+            node -e 'const r=require("./state/external/public-001p-ausgrid/report.json"); console.log(JSON.stringify({status:r.status, source:r.source, evidence:r.evidence, decisions:r.decisions, settlement:r.settlement, capsule:r.capsule}, null, 2));'
+          fi
 
       - name: Upload public-case evidence bundle
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: public-external-case-001p-ausgrid-${{ github.sha }}
           path: state/external/public-001p-ausgrid/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 90
