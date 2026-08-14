@@ -12,6 +12,16 @@ on:
       - frontend/src/lib/researchCapsule.js
       - frontend/src/lib/caseWorkbenchRuntime.js
       - protocol/policies-v2/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/external_case_001p_ausgrid.mjs
+      - .github/workflows/external-case-001p-ausgrid.yml
+      - packages/constraint-core/**
+      - frontend/src/lib/researchCapsule.js
+      - frontend/src/lib/caseWorkbenchRuntime.js
+      - protocol/policies-v2/**
 
 permissions:
   contents: read
