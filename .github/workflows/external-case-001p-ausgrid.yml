@@ -7,6 +7,7 @@ on:
       - case/public-external-001p-ausgrid
     paths:
       - scripts/external_case_001p_ausgrid.mjs
+      - scripts/build_constrained_claim_assessment.mjs
       - .github/workflows/external-case-001p-ausgrid.yml
       - packages/constraint-core/**
       - frontend/src/lib/researchCapsule.js
@@ -17,6 +18,7 @@ on:
       - main
     paths:
       - scripts/external_case_001p_ausgrid.mjs
+      - scripts/build_constrained_claim_assessment.mjs
       - .github/workflows/external-case-001p-ausgrid.yml
       - packages/constraint-core/**
       - frontend/src/lib/researchCapsule.js
@@ -77,6 +79,13 @@ jobs:
             --days=7 \
             --out=../state/external/public-001p-ausgrid
 
+      - name: Build derived four-boundary assessment
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/build_constrained_claim_assessment.mjs \
+            --case-dir=state/external/public-001p-ausgrid
+
       - name: Preserve exact public mirror bytes with the case artifact
         if: always()
         shell: bash
@@ -90,7 +99,7 @@ jobs:
         shell: bash
         run: |
           if [ -f state/external/public-001p-ausgrid/report.json ]; then
-            node -e 'const r=require("./state/external/public-001p-ausgrid/report.json"); console.log(JSON.stringify({status:r.status, source:r.source, evidence:r.evidence, decisions:r.decisions, settlement:r.settlement, capsule:r.capsule}, null, 2));'
+            node -e 'const fs=require("fs"); const r=require("./state/external/public-001p-ausgrid/report.json"); const a=fs.existsSync("state/external/public-001p-ausgrid/constrained-claim-assessment.json") ? require("./state/external/public-001p-ausgrid/constrained-claim-assessment.json") : null; console.log(JSON.stringify({status:r.status, source:r.source, evidence:r.evidence, decisions:r.decisions, settlement:r.settlement, capsule:r.capsule, assessment:a ? {assessment_id:a.assessment_id, boundaries:Object.fromEntries(Object.entries(a.research_boundaries).map(([k,v])=>[k,v.status])), r3_components:Object.fromEntries(Object.entries(a.research_boundaries.R3.components||{}).map(([k,v])=>[k,v.status]))} : null}, null, 2));'
           fi
 
       - name: Upload public-case evidence bundle
