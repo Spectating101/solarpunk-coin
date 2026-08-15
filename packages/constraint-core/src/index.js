@@ -20,4 +20,5 @@ export * from './receipt.js';
 export * from './claim.js';
 export * from './decisionClaim.js';
 export * from './settlementConstraint.js';
+export * from './assessment.js';
 export * from './operatorIntake.js';
