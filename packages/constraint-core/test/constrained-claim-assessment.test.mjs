@@ -72,7 +72,7 @@ test('public L0 case derives the frozen four-boundary interpretation without pro
   assert.ok(assessment.explicit_non_claims.some((value) => value.includes('not money')));
 });
 
-test('assessment identity is deterministic for the same frozen artifacts', async () => {
+test('assessment identity ignores run-specific receipt and capsule packaging identity', async () => {
   const input = {
     caseManifest: CASE,
     evidence: EVIDENCE,
@@ -80,9 +80,21 @@ test('assessment identity is deterministic for the same frozen artifacts', async
     decisions: { pilot: PILOT, open: OPEN },
     settlement: SETTLEMENT,
   };
-  const first = await buildConstrainedClaimAssessment(input);
-  const second = await buildConstrainedClaimAssessment({ ...input, decisions: { open: OPEN, pilot: PILOT } });
+  const first = await buildConstrainedClaimAssessment({
+    ...input,
+    receipt: { decision_id: OPEN.decision_id, evaluated_at: '2026-08-15T00:00:00Z' },
+    capsule: { manifest: { capsule_id: 'd'.repeat(64) } },
+    capsuleVerification: { ok: true },
+  });
+  const second = await buildConstrainedClaimAssessment({
+    ...input,
+    decisions: { open: OPEN, pilot: PILOT },
+    receipt: { decision_id: OPEN.decision_id, evaluated_at: '2026-08-16T00:00:00Z' },
+    capsule: { manifest: { capsule_id: 'e'.repeat(64) } },
+    capsuleVerification: { ok: true },
+  });
   assert.equal(first.assessment_id, second.assessment_id);
+  assert.notDeepEqual(first.basis_refs.capsule, second.basis_refs.capsule);
 });
 
 test('blocking evidence fails Boundary 2 closed', async () => {
@@ -123,4 +135,21 @@ test('non-default positive research overrides require explicit basis references'
   });
   assert.equal(assessment.research_boundaries.R1.status, 'SUPPORTED');
   assert.deepEqual(assessment.research_boundaries.R1.basis_refs, ['research:ECI:defined-purpose-result']);
+});
+
+test('assessment v1 refuses Boundary-4 promotion without a dedicated monetary-evidence validator', async () => {
+  await assert.rejects(
+    buildConstrainedClaimAssessment({
+      caseManifest: CASE,
+      evidence: EVIDENCE,
+      provenance: PROVENANCE,
+      research_overrides: {
+        r4: {
+          status: 'SUPPORTED',
+          basis_refs: ['self-declared:money'],
+        },
+      },
+    }),
+    /R4 advancement is intentionally unsupported/,
+  );
 });
