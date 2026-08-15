@@ -22,6 +22,34 @@ function jsonText(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
+function assertCrossObjectAgreement({ caseManifest, evidence, decisions, receipt, capsule, capsuleVerification }) {
+  const caseId = String(caseManifest?.case_id || '').trim();
+  const evidenceHash = String(evidence?.evidence_hash || '').trim();
+  if (!caseId) throw new Error('case manifest has no case_id');
+  if (!evidenceHash) throw new Error('evidence envelope has no evidence_hash');
+  if (!Array.isArray(caseManifest.evidence_refs) || !caseManifest.evidence_refs.includes(evidenceHash)) {
+    throw new Error('case/evidence identity mismatch');
+  }
+
+  const decisionValues = Object.entries(decisions);
+  for (const [name, decision] of decisionValues) {
+    if (decision.case_id !== caseId) throw new Error(`${name} decision case_id mismatch`);
+    if (!Array.isArray(decision.evidence_hashes) || !decision.evidence_hashes.includes(evidenceHash)) {
+      throw new Error(`${name} decision does not reference the bounded evidence hash`);
+    }
+  }
+
+  if (receipt) {
+    const decisionIds = decisionValues.map(([, decision]) => decision.decision_id);
+    if (!decisionIds.includes(receipt.decision_id)) {
+      throw new Error('decision receipt does not reference one of the supplied decisions');
+    }
+  }
+  if (capsule && capsuleVerification?.ok !== true) {
+    throw new Error('research capsule is present but closed-world verification is not PASS');
+  }
+}
+
 async function main() {
   const caseDir = path.resolve(arg('case-dir', 'state/external/public-001p-ausgrid'));
   const outputPath = path.resolve(arg('out', path.join(caseDir, 'constrained-claim-assessment.json')));
@@ -51,6 +79,15 @@ async function main() {
   const decisions = {};
   if (pilotDecision) decisions.pilot = pilotDecision;
   if (openDecision) decisions.open = openDecision;
+
+  assertCrossObjectAgreement({
+    caseManifest,
+    evidence,
+    decisions,
+    receipt,
+    capsule,
+    capsuleVerification,
+  });
 
   const assessment = await buildConstrainedClaimAssessment({
     caseManifest,
