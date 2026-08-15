@@ -179,6 +179,22 @@ function bindingConstraintStatus(decisions, settlement, overrides = {}) {
   };
 }
 
+function identityBody(body) {
+  return {
+    schema: body.schema,
+    subject: body.subject,
+    research_boundaries: body.research_boundaries,
+    basis_refs: {
+      case: body.basis_refs.case,
+      evidence: body.basis_refs.evidence,
+      decisions: body.basis_refs.decisions,
+      settlement: body.basis_refs.settlement,
+    },
+    explicit_non_claims: body.explicit_non_claims,
+    next_evidence_required: body.next_evidence_required,
+  };
+}
+
 export async function buildConstrainedClaimAssessment({
   caseManifest,
   evidence = null,
@@ -204,13 +220,17 @@ export async function buildConstrainedClaimAssessment({
   };
   const r2 = evidenceStatus(evidence, provenance);
   const r3 = bindingConstraintStatus(decisions, settlement, research_overrides.r3 || {});
-  const r4 = explicitBoundaryOverride(research_overrides.r4, 'research_overrides.r4') || {
+
+  if (research_overrides.r4 && status(research_overrides.r4.status, 'research_overrides.r4.status') !== 'UNTESTED') {
+    throw new Error('R4 advancement is intentionally unsupported by constrained-claim assessment v1; add a dedicated monetary-performance evidence validator before changing R4 from UNTESTED');
+  }
+  const r4 = {
     status: 'UNTESTED',
     rationale: [
       'No circulation, liquidity, general acceptability, medium-of-exchange, or unit-of-account evidence is evaluated by this case runtime.',
     ],
     basis_refs: [],
-    next_evidence_required: ['Provide real monetary-performance evidence before advancing Boundary 4.'],
+    next_evidence_required: ['Provide real monetary-performance evidence through a separately validated future assessment path before advancing Boundary 4.'],
   };
 
   const settlementHashRef = await settlementRef(settlement);
@@ -259,6 +279,6 @@ export async function buildConstrainedClaimAssessment({
 
   return {
     ...body,
-    assessment_id: await sha256Hex(body),
+    assessment_id: await sha256Hex(identityBody(body)),
   };
 }
