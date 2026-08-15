@@ -27,6 +27,8 @@ decision receipt / lineage / reproduction
 ```
 
 **Public demo:** https://spectating101.github.io/solarpunk-coin/demo/  
+**G4 evaluator brief:** [`docs/research/POLICY_LAB_G4_EVALUATOR_BRIEF.md`](./docs/research/POLICY_LAB_G4_EVALUATOR_BRIEF.md)  
+**Final research / Policy Lab reconciliation:** [`docs/research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md`](./docs/research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md)  
 **Project recovery / source hierarchy:** [`PROJECT_RECOVERY.md`](./PROJECT_RECOVERY.md)  
 **Platform blueprint:** [`docs/project/PLATFORM_BLUEPRINT.md`](./docs/project/PLATFORM_BLUEPRINT.md)  
 **Implementation handoff:** [`docs/project/V2_IMPLEMENTATION_HANDOFF.md`](./docs/project/V2_IMPLEMENTATION_HANDOFF.md)
@@ -37,7 +39,7 @@ decision receipt / lineage / reproduction
 
 ## Five-minute investigation
 
-The controlled energy case pack is deliberately small. It exists to demonstrate the decision structure, not to claim empirical geographic superiority.
+The controlled energy case pack is deliberately small. It exists to demonstrate the decision structure, not to claim empirical geographic superiority. For the landed outside-data case, use the G4 evaluator brief and `PUB-AUSGRID-001P` artifacts.
 
 ### 1. Open `TYN-001` under the pilot policy
 
@@ -119,6 +121,35 @@ The lab is designed so a reviewer can ask:
 - what changed in a counterfactual?
 - what failed under stress?
 - which exact policy and inputs produced the result?
+- which research boundary remains open after the runtime decision?
+
+---
+
+## Research boundary model
+
+The post-paper research model is not the same thing as the runtime pipeline.
+
+```text
+energy-adjacent observation
+  ↓
+R1 — economic information / admissibility
+  ↓
+R2 — claim-level evidence
+  ↓
+R3 — binding constraint
+  ↓
+constrained financial claim
+  ↓
+R4 — monetary performance
+```
+
+The runtime stages remain:
+
+```text
+Evidence → Assurance → Admission → Quantity → Settlement → Receipt
+```
+
+They are implementation stages, not aliases for R1–R4. The derived `ConstrainedClaimAssessment` maps frozen runtime artifacts to the research boundaries without changing the deterministic engine. A positive status at one boundary never cascades automatically to the next, and R4 remains untested unless real monetary-performance evidence is separately supplied.
 
 ---
 
@@ -237,11 +268,14 @@ DecisionResult
 ClaimManifest v2
 SettlementResult
 DecisionReceipt
+ConstrainedClaimAssessment
 ```
 
 A V2 claim is bound to a verified `DecisionResult`. Claim creation recomputes the canonical decision body and rejects a stale or tampered `decision_id`.
 
 Decision identity excludes evaluation time. Equivalent declared case, evidence, context, policy, calculator versions, and rule results should produce the same decision identity. Timestamp belongs in the receipt.
+
+The `ConstrainedClaimAssessment` is a derived research object. It does not modify source data, promote assurance, rewrite policy decisions, or turn runtime stages into R1–R4.
 
 Public JSON Schemas live under [`protocol/schema/`](./protocol/schema/).
 
@@ -260,9 +294,10 @@ DERIVED RESULT
 
 The initial three-site case pack uses **controlled signed-capability fixtures** and modeled PVWatts / TMY resource contexts.
 
-It does **not** claim:
+A separate landed case, `PUB-AUSGRID-001P`, exercises the pipeline against a bounded outside public dataset at actual **L0** assurance. It freezes the exact executed mirror bytes by SHA-256, preserves source and transformation warnings, produces deterministic open/pilot divergence, and verifies receipt/capsule replay. It does **not** claim that a source holder supplied or confirmed the file, and it does not close the original human owner/operator Gate 1B.
 
-- real operator validation;
+The project does **not** claim:
+
 - verified physical meter truth;
 - environmental-attribute ownership;
 - legal redemption rights;
@@ -270,13 +305,14 @@ It does **not** claim:
 - empirical geospatial policy superiority;
 - production collateral-control adequacy;
 - production governance;
-- mainnet readiness.
+- mainnet readiness;
+- monetary performance.
 
 A signature establishes cryptographic consistency with a declared key/registry context. It does not establish physical truth, device custody, calibration, legal title, or settlement enforceability.
 
 A modeled PVWatts / TMY resource value is analytical context. It is not observed meter evidence or mint authority.
 
-The next field-value gate is one real L2 operator / inverter / gateway evidence source.
+A human owner/operator case, authenticated L1 path, or signed live-source L2 path would be stronger future validation. They are not silently inferred from the public-source L0 case.
 
 ---
 
@@ -314,19 +350,19 @@ No licensed CRSP or Refinitiv row-level observations are redistributed. The publ
 
 The original project is SolarPunk Public Lab / the Energy Standard project.
 
-The thesis asks a bounded question:
+The retained research asks a bounded question:
 
-> Can energy act as a credible constraint for digital money through energy-linked financial contracts, and what conditions are needed for that constraint to work?
+> Under what empirical and institutional conditions can energy evidence impose a credible constraint on a digital financial claim?
 
-Its five-constraint architecture is:
+The Constrained Ledger institutional conditions are:
 
-1. reliable energy data;
+1. reliable evidence;
 2. rule-bound issuance;
-3. explicit pricing and risk controls;
-4. protected settlement and redemption accounting;
+3. uncertainty priced with a model appropriate to the resource;
+4. defined settlement and shortfall consequence;
 5. limited governance.
 
-The workbench operationalizes those concerns as explicit research stages. It does not replace the thesis with a generic policy-engine claim.
+The workbench operationalizes only the parts software can represent honestly. It does not turn a controlled mechanism into a claim that all institutional conditions are satisfied.
 
 SPK remains a testnet reference application.
 
@@ -370,6 +406,8 @@ node scripts/capture_case_workbench_v2.mjs _review_case_workbench_v2
 
 The current V2 review workflow covers 15 desktop/mobile investigation states including blocked admission, an explicit L2 assurance fork, binding-ceiling inspection, 3 × 3 comparison, partial settlement stress, lineage, receipt/capsule inspection, the market-capacity study, SolarPunk reference, and mobile states.
 
+The bounded Ausgrid public-source workflow is `.github/workflows/external-case-001p-ausgrid.yml`. Its uploaded artifact includes the source mirror, case/evidence/decision/settlement/receipt/capsule objects, verifier output, and the derived `constrained-claim-assessment.json`.
+
 ---
 
 ## Project map
@@ -383,8 +421,9 @@ The current V2 review workflow covers 15 desktop/mobile investigation states inc
 | Case workbench frontend | `frontend/src/cases/`, `frontend/src/compare/`, `frontend/src/receipts/` |
 | Market-capacity empirical study | `frontend/public/empirical/`, `docs/protocol/EMPIRICAL_RUNS_V1.md` |
 | SolarPunk reference application | `docs/product/`, `state/runtime/`, `spk_v1/` |
+| Final research / Policy Lab semantics | `docs/research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md` |
+| G4 evaluator path | `docs/research/POLICY_LAB_G4_EVALUATOR_BRIEF.md` |
 | Thesis support material | `thesis_package/` |
-| Product / thesis direction | `docs/project/CASE_WORKBENCH_PRODUCT_AND_THESIS_DIRECTION.md` |
 
 ---
 
@@ -392,13 +431,14 @@ The current V2 review workflow covers 15 desktop/mobile investigation states inc
 
 This repository is a public research-software artifact and experimental workbench.
 
-The current high-value next steps are deliberately external:
+The current evidence posture is:
 
-1. publish the validated static workbench;
-2. integrate the implemented decision architecture into the thesis surgically;
-3. obtain one real operator / inverter / gateway evidence case;
-4. only then consider arbitrary evidence → local V2 case creation or a domain-specific risk calculator.
+1. the CF-based C0–C2 conformance archive is frozen;
+2. public outside-data operability is landed through `PUB-AUSGRID-001P` at actual L0;
+3. the four-boundary assessment is derived from frozen runtime artifacts rather than a new decision engine;
+4. the next value step is hostile evaluator review and external verdicts, not broader product construction;
+5. human owner/operator Gate 1B and stronger L1/L2 authentication remain optional future validation layers and must stay visibly separate from the public-source case.
 
-The project stop rule is intentional. More locations, AI assistants, new policy families, GIS infrastructure, backends, or contracts are not added merely to make the repository look larger.
+The project stop rule is intentional. More locations, AI assistants, new policy families, GIS infrastructure, backends, contracts, or token work are not added merely to make the repository look larger.
 
 Cite via [`CITATION.cff`](./CITATION.cff). GitHub release / archival guidance is recorded in [`docs/project/PUBLIC_CONVERSION_PLAYBOOK.md`](./docs/project/PUBLIC_CONVERSION_PLAYBOOK.md).

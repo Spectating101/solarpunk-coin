@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SolarPunk Constrained Claim Assessment v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "subject",
+    "research_boundaries",
+    "basis_refs",
+    "explicit_non_claims",
+    "next_evidence_required",
+    "assessment_id"
+  ],
+  "$defs": {
+    "status": {
+      "enum": ["NOT_ASSESSED", "OPEN", "SUPPORTED", "BLOCKED", "PARTIAL", "UNTESTED"]
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "boundary": {
+      "type": "object",
+      "required": ["id", "name", "status", "rationale", "basis_refs", "next_evidence_required"],
+      "properties": {
+        "id": { "enum": ["R1", "R2", "R3", "R4"] },
+        "name": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/status" },
+        "rationale": { "$ref": "#/$defs/stringArray" },
+        "basis_refs": { "$ref": "#/$defs/stringArray" },
+        "next_evidence_required": { "$ref": "#/$defs/stringArray" },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "issuance": { "$ref": "#/$defs/component" },
+            "pricing": { "$ref": "#/$defs/component" },
+            "settlement": { "$ref": "#/$defs/component" },
+            "governance": { "$ref": "#/$defs/component" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "basis_refs", "rationale"],
+      "properties": {
+        "status": { "$ref": "#/$defs/status" },
+        "basis_refs": { "$ref": "#/$defs/stringArray" },
+        "rationale": { "$ref": "#/$defs/stringArray" },
+        "next_evidence_required": { "$ref": "#/$defs/stringArray" }
+      }
+    }
+  },
+  "properties": {
+    "schema": { "const": "solarpunk.constraint.constrained_claim_assessment.v1" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "label"],
+      "properties": {
+        "case_id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 }
+      }
+    },
+    "research_boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["R1", "R2", "R3", "R4"],
+      "properties": {
+        "R1": { "$ref": "#/$defs/boundary" },
+        "R2": { "$ref": "#/$defs/boundary" },
+        "R3": { "$ref": "#/$defs/boundary" },
+        "R4": { "$ref": "#/$defs/boundary" }
+      }
+    },
+    "basis_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case", "evidence", "decisions", "settlement", "receipt", "capsule", "verification"],
+      "properties": {
+        "case": { "$ref": "#/$defs/stringArray" },
+        "evidence": { "$ref": "#/$defs/stringArray" },
+        "decisions": { "$ref": "#/$defs/stringArray" },
+        "settlement": { "$ref": "#/$defs/stringArray" },
+        "receipt": { "$ref": "#/$defs/stringArray" },
+        "capsule": { "$ref": "#/$defs/stringArray" },
+        "verification": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "explicit_non_claims": { "$ref": "#/$defs/stringArray" },
+    "next_evidence_required": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["R1", "R2", "R3", "R4"],
+      "properties": {
+        "R1": { "$ref": "#/$defs/stringArray" },
+        "R2": { "$ref": "#/$defs/stringArray" },
+        "R3": { "$ref": "#/$defs/stringArray" },
+        "R4": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "assessment_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}
