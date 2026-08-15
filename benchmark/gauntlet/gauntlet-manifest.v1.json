@@ -1,0 +1,220 @@
+{
+  "schema": "solarpunk.gauntlet_simulation_manifest.v1",
+  "version": "0.1.0",
+  "seed": 20260816,
+  "claim_boundary": [
+    "This is a synthetic evaluator stress test, not a forecast of actual award probability.",
+    "Competitor profiles are archetypes, not claims about named teams or real entrants.",
+    "Policy Lab scores are uncertainty ranges used to probe robustness; they are not official judge scores.",
+    "A high simulated rank does not close R1, R4, owner/operator Gate 1B, or any legal, commercial, or production-readiness gap."
+  ],
+  "dimensions": [
+    "innovation",
+    "technical_execution",
+    "evidence_reproducibility",
+    "problem_value",
+    "demo_clarity",
+    "external_validation",
+    "market_adoption",
+    "business_viability"
+  ],
+  "policy_lab": {
+    "id": "POLICY-LAB-G4-PUBLIC-EVIDENCE",
+    "label": "Policy Lab G4 public-evidence profile",
+    "basis": [
+      "G4 hostile audit",
+      "PUB-AUSGRID-001P bounded public-source replay",
+      "ConstrainedClaimAssessment v1",
+      "C0-C2 conformance archive"
+    ],
+    "scores": {
+      "innovation": { "mean": 8.6, "sd": 0.45, "min": 7.2, "max": 9.6 },
+      "technical_execution": { "mean": 9.1, "sd": 0.35, "min": 8.0, "max": 9.8 },
+      "evidence_reproducibility": { "mean": 9.5, "sd": 0.25, "min": 8.6, "max": 10.0 },
+      "problem_value": { "mean": 7.8, "sd": 0.55, "min": 6.2, "max": 9.2 },
+      "demo_clarity": { "mean": 7.8, "sd": 0.55, "min": 6.0, "max": 9.2 },
+      "external_validation": { "mean": 4.2, "sd": 0.75, "min": 2.0, "max": 6.5 },
+      "market_adoption": { "mean": 3.0, "sd": 0.75, "min": 1.0, "max": 5.5 },
+      "business_viability": { "mean": 4.7, "sd": 0.85, "min": 2.0, "max": 7.0 }
+    }
+  },
+  "judge_profiles": {
+    "research_technical": {
+      "label": "Research / technical evaluator",
+      "weights": {
+        "innovation": 0.15,
+        "technical_execution": 0.20,
+        "evidence_reproducibility": 0.25,
+        "problem_value": 0.15,
+        "demo_clarity": 0.10,
+        "external_validation": 0.10,
+        "market_adoption": 0.025,
+        "business_viability": 0.025
+      }
+    },
+    "fintech_innovation": {
+      "label": "Fintech innovation evaluator",
+      "weights": {
+        "innovation": 0.20,
+        "technical_execution": 0.15,
+        "evidence_reproducibility": 0.10,
+        "problem_value": 0.15,
+        "demo_clarity": 0.10,
+        "external_validation": 0.10,
+        "market_adoption": 0.10,
+        "business_viability": 0.10
+      }
+    },
+    "commercial_fintech": {
+      "label": "Commercial / deployment-heavy evaluator",
+      "weights": {
+        "innovation": 0.10,
+        "technical_execution": 0.10,
+        "evidence_reproducibility": 0.10,
+        "problem_value": 0.15,
+        "demo_clarity": 0.10,
+        "external_validation": 0.10,
+        "market_adoption": 0.20,
+        "business_viability": 0.15
+      }
+    },
+    "regulated_skeptic": {
+      "label": "Regulated-domain skeptical evaluator",
+      "weights": {
+        "innovation": 0.10,
+        "technical_execution": 0.15,
+        "evidence_reproducibility": 0.20,
+        "problem_value": 0.10,
+        "demo_clarity": 0.05,
+        "external_validation": 0.20,
+        "market_adoption": 0.05,
+        "business_viability": 0.15
+      }
+    }
+  },
+  "competitor_archetypes": {
+    "polished_ai_saas": {
+      "weight": 0.18,
+      "label": "Polished AI SaaS demo",
+      "scores": {
+        "innovation": 7.4,
+        "technical_execution": 7.4,
+        "evidence_reproducibility": 4.6,
+        "problem_value": 7.8,
+        "demo_clarity": 9.0,
+        "external_validation": 5.2,
+        "market_adoption": 6.3,
+        "business_viability": 7.4
+      },
+      "sd": 0.85
+    },
+    "deployed_fintech": {
+      "weight": 0.16,
+      "label": "Deployed fintech product",
+      "scores": {
+        "innovation": 7.0,
+        "technical_execution": 7.6,
+        "evidence_reproducibility": 6.5,
+        "problem_value": 8.2,
+        "demo_clarity": 8.0,
+        "external_validation": 8.2,
+        "market_adoption": 8.4,
+        "business_viability": 8.5
+      },
+      "sd": 0.65
+    },
+    "deeptech_prototype": {
+      "weight": 0.14,
+      "label": "Deep-tech prototype",
+      "scores": {
+        "innovation": 9.0,
+        "technical_execution": 9.0,
+        "evidence_reproducibility": 7.0,
+        "problem_value": 7.5,
+        "demo_clarity": 6.5,
+        "external_validation": 5.5,
+        "market_adoption": 4.3,
+        "business_viability": 5.0
+      },
+      "sd": 0.75
+    },
+    "research_system": {
+      "weight": 0.12,
+      "label": "Research-heavy software system",
+      "scores": {
+        "innovation": 8.4,
+        "technical_execution": 8.5,
+        "evidence_reproducibility": 8.8,
+        "problem_value": 7.1,
+        "demo_clarity": 6.5,
+        "external_validation": 6.0,
+        "market_adoption": 3.4,
+        "business_viability": 4.1
+      },
+      "sd": 0.70
+    },
+    "sustainability_dashboard": {
+      "weight": 0.13,
+      "label": "Sustainability analytics dashboard",
+      "scores": {
+        "innovation": 6.5,
+        "technical_execution": 6.6,
+        "evidence_reproducibility": 5.6,
+        "problem_value": 8.0,
+        "demo_clarity": 8.5,
+        "external_validation": 6.4,
+        "market_adoption": 6.0,
+        "business_viability": 6.4
+      },
+      "sd": 0.80
+    },
+    "enterprise_pilot": {
+      "weight": 0.15,
+      "label": "Enterprise workflow with pilot",
+      "scores": {
+        "innovation": 7.3,
+        "technical_execution": 8.0,
+        "evidence_reproducibility": 7.3,
+        "problem_value": 8.4,
+        "demo_clarity": 7.5,
+        "external_validation": 8.5,
+        "market_adoption": 7.5,
+        "business_viability": 8.0
+      },
+      "sd": 0.65
+    },
+    "hardware_field_demo": {
+      "weight": 0.12,
+      "label": "Hardware / field demonstration",
+      "scores": {
+        "innovation": 8.2,
+        "technical_execution": 8.8,
+        "evidence_reproducibility": 7.4,
+        "problem_value": 8.0,
+        "demo_clarity": 7.8,
+        "external_validation": 7.5,
+        "market_adoption": 5.5,
+        "business_viability": 6.0
+      },
+      "sd": 0.75
+    }
+  },
+  "pool_sizes": [10, 25, 50, 100, 250],
+  "default_trials": 3000,
+  "sensitivity_scenarios": {
+    "current": {},
+    "one_external_case_uplift": {
+      "external_validation": 1.2,
+      "business_viability": 0.3
+    },
+    "pilot_and_adoption_uplift": {
+      "external_validation": 2.0,
+      "market_adoption": 2.0,
+      "business_viability": 1.5
+    },
+    "demo_packaging_uplift": {
+      "demo_clarity": 1.0,
+      "problem_value": 0.4
+    }
+  }
+}
