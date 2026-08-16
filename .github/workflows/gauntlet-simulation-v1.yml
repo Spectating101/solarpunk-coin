@@ -1,4 +1,4 @@
-name: Gauntlet Simulation v1
+name: Gauntlet Simulation v1.1
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ permissions:
 jobs:
   simulate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout exact revision
         uses: actions/checkout@v4
@@ -26,10 +26,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: Run scaled synthetic entry-pool simulation
+      - name: Run venue-aware scaled simulation
         run: |
           set -euo pipefail
           node scripts/run_gauntlet_simulation_v1.mjs \
+            --manifest=benchmark/gauntlet/gauntlet-manifest.v1.json \
+            --opportunities=benchmark/gauntlet/opportunity-models.v1.json \
             --trials=3000 \
             --out="$RUNNER_TEMP/gauntlet-a"
 
@@ -37,17 +39,19 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/run_gauntlet_simulation_v1.mjs \
+            --manifest=benchmark/gauntlet/gauntlet-manifest.v1.json \
+            --opportunities=benchmark/gauntlet/opportunity-models.v1.json \
             --trials=3000 \
             --out="$RUNNER_TEMP/gauntlet-b" >/dev/null
           cmp "$RUNNER_TEMP/gauntlet-a/gauntlet-simulation-v1.json" "$RUNNER_TEMP/gauntlet-b/gauntlet-simulation-v1.json"
           cmp "$RUNNER_TEMP/gauntlet-a/gauntlet-simulation-v1.md" "$RUNNER_TEMP/gauntlet-b/gauntlet-simulation-v1.md"
 
-      - name: Show evaluator summary
+      - name: Show opportunity-aware summary
         run: cat "$RUNNER_TEMP/gauntlet-a/gauntlet-simulation-v1.md"
 
       - name: Upload simulation report
         uses: actions/upload-artifact@v4
         with:
-          name: gauntlet-simulation-v1-${{ github.sha }}
+          name: gauntlet-simulation-v1_1-${{ github.sha }}
           path: ${{ runner.temp }}/gauntlet-a/
           retention-days: 90
