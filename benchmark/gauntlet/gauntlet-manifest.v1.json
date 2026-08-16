@@ -1,6 +1,6 @@
 {
   "schema": "solarpunk.gauntlet_simulation_manifest.v1",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "seed": 20260816,
   "claim_boundary": [
     "This is a synthetic evaluator stress test, not a forecast of actual award probability.",
