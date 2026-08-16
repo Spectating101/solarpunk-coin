@@ -1,0 +1,388 @@
+{
+  "schema": "solarpunk.gauntlet_opportunity_models.v1",
+  "version": "0.1.0",
+  "source_basis": {
+    "kind": "gauntlet_agent_handoff",
+    "date": "2026-08-16",
+    "boundary": "Opportunity definitions, official-criteria summaries, semantic-fit findings, and field descriptions are taken from the gauntlet-agent handoff. Numerical translations into the simulator dimensions are explicitly model assumptions, not official scoring rules unless marked OFFICIAL_WEIGHTED."
+  },
+  "status_vocabulary": {
+    "eligibility": ["PASS", "CONDITIONAL", "UNKNOWN", "FAIL"],
+    "semantic_fit": ["PASS", "CONDITIONAL", "FAIL_CURRENT"],
+    "current_fit": [
+      "COMPETITIVE",
+      "POSSIBLE_WITH_PACKAGING",
+      "NEEDS_VALIDATION",
+      "NEEDS_VALIDATION_HOLD",
+      "STRONG_RESEARCH_POSSIBILITY",
+      "POSSIBLE_BUT_NON_NATIVE",
+      "LOW_PRIORITY_BAD_FIT_CURRENT"
+    ]
+  },
+  "populations": {
+    "student_applied_innovation": {
+      "label": "Student / campus applied innovation",
+      "archetype_weights": {
+        "polished_ai_saas": 0.34,
+        "deployed_fintech": 0.02,
+        "deeptech_prototype": 0.20,
+        "research_system": 0.10,
+        "sustainability_dashboard": 0.14,
+        "enterprise_pilot": 0.08,
+        "hardware_field_demo": 0.12
+      },
+      "score_shift": {
+        "demo_clarity": 0.2,
+        "external_validation": -0.7,
+        "market_adoption": -1.0,
+        "business_viability": -0.5
+      },
+      "sd_scale": 1.05,
+      "maturity_expectation": "A real pilot is differentiating rather than normal; presentation and practical user value matter substantially."
+    },
+    "student_ai_industry": {
+      "label": "Student AI / industry application",
+      "archetype_weights": {
+        "polished_ai_saas": 0.44,
+        "deployed_fintech": 0.01,
+        "deeptech_prototype": 0.21,
+        "research_system": 0.08,
+        "sustainability_dashboard": 0.10,
+        "enterprise_pilot": 0.07,
+        "hardware_field_demo": 0.09
+      },
+      "score_shift": {
+        "innovation": 0.2,
+        "demo_clarity": 0.3,
+        "external_validation": -0.8,
+        "market_adoption": -1.0,
+        "business_viability": -0.5
+      },
+      "sd_scale": 1.05,
+      "maturity_expectation": "Student teams dominate; genuine AI contribution and industry fit are prior semantic requirements, while pilots are uncommon but valuable."
+    },
+    "mixed_fintech_ecosystem": {
+      "label": "Mixed fintech ecosystem",
+      "archetype_weights": {
+        "polished_ai_saas": 0.14,
+        "deployed_fintech": 0.25,
+        "deeptech_prototype": 0.09,
+        "research_system": 0.09,
+        "sustainability_dashboard": 0.08,
+        "enterprise_pilot": 0.28,
+        "hardware_field_demo": 0.07
+      },
+      "score_shift": {
+        "problem_value": 0.2,
+        "external_validation": 0.3,
+        "market_adoption": 0.3,
+        "business_viability": 0.3
+      },
+      "sd_scale": 0.9,
+      "maturity_expectation": "The field mixes campus teams with startups, vendors, institutions, and deployed products; an enterprise pilot is no longer extraordinary."
+    },
+    "research_commercialization": {
+      "label": "Research commercialization / entrepreneurship",
+      "archetype_weights": {
+        "polished_ai_saas": 0.05,
+        "deployed_fintech": 0.12,
+        "deeptech_prototype": 0.29,
+        "research_system": 0.20,
+        "sustainability_dashboard": 0.04,
+        "enterprise_pilot": 0.20,
+        "hardware_field_demo": 0.10
+      },
+      "score_shift": {
+        "innovation": 0.3,
+        "technical_execution": 0.2,
+        "evidence_reproducibility": 0.2,
+        "external_validation": 0.5,
+        "market_adoption": 0.4,
+        "business_viability": 0.5,
+        "demo_clarity": -0.3
+      },
+      "sd_scale": 0.8,
+      "maturity_expectation": "Differentiated R&D is expected, but commercialization path, institutional carrier, team depth, milestones, and market evidence are normal score-bearing concerns."
+    },
+    "elite_financial_security_research": {
+      "label": "Elite financial-security research",
+      "archetype_weights": {
+        "polished_ai_saas": 0.01,
+        "deployed_fintech": 0.04,
+        "deeptech_prototype": 0.39,
+        "research_system": 0.42,
+        "sustainability_dashboard": 0.01,
+        "enterprise_pilot": 0.08,
+        "hardware_field_demo": 0.05
+      },
+      "score_shift": {
+        "innovation": 0.5,
+        "technical_execution": 0.6,
+        "evidence_reproducibility": 0.7,
+        "problem_value": 0.1,
+        "demo_clarity": -0.8,
+        "external_validation": 0.0,
+        "market_adoption": -1.3,
+        "business_viability": -1.2
+      },
+      "sd_scale": 0.68,
+      "maturity_expectation": "Scientific novelty, rigorous evaluation, and mechanism/system depth have a very high floor; customer traction and conventional demo polish are weak signals."
+    },
+    "sociotechnical_accountability_research": {
+      "label": "Sociotechnical accountability research",
+      "archetype_weights": {
+        "polished_ai_saas": 0.02,
+        "deployed_fintech": 0.03,
+        "deeptech_prototype": 0.18,
+        "research_system": 0.43,
+        "sustainability_dashboard": 0.19,
+        "enterprise_pilot": 0.10,
+        "hardware_field_demo": 0.05
+      },
+      "score_shift": {
+        "innovation": 0.2,
+        "technical_execution": 0.1,
+        "evidence_reproducibility": 0.5,
+        "problem_value": 0.4,
+        "demo_clarity": -0.5,
+        "external_validation": 0.2,
+        "market_adoption": -1.0,
+        "business_viability": -1.2
+      },
+      "sd_scale": 0.75,
+      "maturity_expectation": "Sociotechnical and institutional grounding is a core requirement that the eight-dimensional numerical model does not fully represent."
+    },
+    "academic_ai_research": {
+      "label": "Academic AI research",
+      "archetype_weights": {
+        "polished_ai_saas": 0.10,
+        "deployed_fintech": 0.02,
+        "deeptech_prototype": 0.37,
+        "research_system": 0.37,
+        "sustainability_dashboard": 0.03,
+        "enterprise_pilot": 0.05,
+        "hardware_field_demo": 0.06
+      },
+      "score_shift": {
+        "innovation": 0.4,
+        "technical_execution": 0.5,
+        "evidence_reproducibility": 0.4,
+        "demo_clarity": -0.4,
+        "external_validation": -0.2,
+        "market_adoption": -1.0,
+        "business_viability": -1.0
+      },
+      "sd_scale": 0.75,
+      "maturity_expectation": "Actual AI research contribution is prerequisite; sophistication of non-AI software does not satisfy the category."
+    },
+    "oss_research_software": {
+      "label": "Open-source research software",
+      "archetype_weights": {
+        "polished_ai_saas": 0.03,
+        "deployed_fintech": 0.02,
+        "deeptech_prototype": 0.18,
+        "research_system": 0.55,
+        "sustainability_dashboard": 0.07,
+        "enterprise_pilot": 0.05,
+        "hardware_field_demo": 0.10
+      },
+      "score_shift": {
+        "technical_execution": 0.4,
+        "evidence_reproducibility": 0.7,
+        "demo_clarity": -0.3,
+        "market_adoption": -0.7,
+        "business_viability": -1.0
+      },
+      "sd_scale": 0.72,
+      "maturity_expectation": "Software quality, documentation, reproducibility, maintenance, and research utility dominate conventional startup traction."
+    }
+  },
+  "opportunities": {
+    "innoserve_adiai_2026": {
+      "label": "InnoServe ADIAI 2026",
+      "population": "student_applied_innovation",
+      "eligibility": "PASS",
+      "semantic_fit": "PASS",
+      "current_fit": "COMPETITIVE",
+      "simulation_stage": "final",
+      "rubric_provenance": "OFFICIAL_WEIGHTED_TRANSLATED",
+      "official_criteria": {
+        "preliminary": "innovation 40%; practicality 30%; technical quality 30%",
+        "final": "innovation 30%; practicality 30%; technical quality 20%; presentation 20%"
+      },
+      "simulator_weights": {
+        "innovation": 0.30,
+        "technical_execution": 0.14,
+        "evidence_reproducibility": 0.06,
+        "problem_value": 0.15,
+        "demo_clarity": 0.20,
+        "external_validation": 0.06,
+        "market_adoption": 0.045,
+        "business_viability": 0.045
+      },
+      "rubric_coverage": 1.0,
+      "mapping_note": "The official final-stage practicality criterion is translated across problem value, validation, adoption, and viability. This translation is a simulator assumption, not official sub-weighting.",
+      "dangerous_competitors": ["polished_ai_saas", "enterprise_pilot", "hardware_field_demo"],
+      "cheapest_high_leverage_improvement": "Packaging: make the evidence-to-open-policy-to-pilot-block stopping point visually obvious and tie it to a concrete user/practicality story.",
+      "gauntlet_agent_note": "Commercial weakness is score-material but not dominant; a small real pilot is differentiating rather than baseline."
+    },
+    "iii_ai_innovation_2026": {
+      "label": "III AI Innovation Challenge 2026",
+      "population": "student_ai_industry",
+      "eligibility": "PASS",
+      "semantic_fit": "CONDITIONAL",
+      "semantic_condition": "A genuine AI contribution must be score-bearing. Do not add an LLM merely to enter.",
+      "current_fit": "POSSIBLE_WITH_PACKAGING",
+      "rubric_provenance": "OFFICIAL_WEIGHTED_TRANSLATED",
+      "official_criteria": "AI technology & innovation 35%; industry/domain fit 25%; commercial feasibility/potential 25%; presentation/team 15%",
+      "simulator_weights": {
+        "innovation": 0.20,
+        "technical_execution": 0.15,
+        "evidence_reproducibility": 0.05,
+        "problem_value": 0.20,
+        "demo_clarity": 0.12,
+        "external_validation": 0.04,
+        "market_adoption": 0.06,
+        "business_viability": 0.15
+      },
+      "rubric_coverage": 0.97,
+      "unmodeled_criteria": ["team quality component inside presentation/team"],
+      "mapping_note": "The 35% AI criterion is represented by innovation + technical execution only after the semantic AI gate is independently satisfied.",
+      "dangerous_competitors": ["polished_ai_saas", "deeptech_prototype", "enterprise_pilot"],
+      "cheapest_high_leverage_improvement": "First resolve semantic fit. If genuine AI contribution already exists, package the industry-finance problem and demo; otherwise treat as bad fit rather than modifying Policy Lab for the venue.",
+      "gauntlet_agent_note": "Numerical scoring is conditional and must not manufacture AI fit."
+    },
+    "fintech_taipei_2026": {
+      "label": "FinTech Taipei Awards 2026",
+      "population": "mixed_fintech_ecosystem",
+      "eligibility": "PASS",
+      "semantic_fit": "PASS",
+      "current_fit": "NEEDS_VALIDATION",
+      "rubric_provenance": "INFERRED_FROM_AWARD_DESCRIPTION",
+      "official_criteria": "Financial-innovation framing emphasizes market feasibility, innovative business model, and solving financial-industry problems; exact official sub-weights were not provided in the gauntlet handoff.",
+      "simulator_weights": {
+        "innovation": 0.15,
+        "technical_execution": 0.10,
+        "evidence_reproducibility": 0.10,
+        "problem_value": 0.20,
+        "demo_clarity": 0.10,
+        "external_validation": 0.15,
+        "market_adoption": 0.10,
+        "business_viability": 0.10
+      },
+      "rubric_coverage": 1.0,
+      "mapping_note": "All numerical weights are inferred stress weights, not official FinTech Taipei scoring percentages.",
+      "dangerous_competitors": ["enterprise_pilot", "deployed_fintech"],
+      "cheapest_high_leverage_improvement": "Improve problem-value/demo communication. The expensive high-leverage improvement is real financial validation or a pilot, not another subsystem.",
+      "gauntlet_agent_note": "Mixed-maturity field: institutional pilots and deployed fintech make current validation weakness genuinely score-material."
+    },
+    "nstc_research_entrepreneurship": {
+      "label": "NSTC Research Entrepreneurship",
+      "population": "research_commercialization",
+      "eligibility": "CONDITIONAL",
+      "eligibility_condition": "Institutional routing through an eligible research-commercialization platform is required.",
+      "semantic_fit": "PASS",
+      "current_fit": "NEEDS_VALIDATION_HOLD",
+      "rubric_provenance": "OFFICIAL_CRITERIA_UNWEIGHTED_TRANSLATED",
+      "official_criteria": [
+        "originality of core technology",
+        "market analysis and commercialization plan",
+        "expected benefits",
+        "professionalism/completeness of the team",
+        "budget reasonableness and milestones"
+      ],
+      "simulator_weights": {
+        "innovation": 0.22,
+        "technical_execution": 0.13,
+        "evidence_reproducibility": 0.08,
+        "problem_value": 0.12,
+        "demo_clarity": 0.03,
+        "external_validation": 0.10,
+        "market_adoption": 0.10,
+        "business_viability": 0.12
+      },
+      "rubric_coverage": 0.90,
+      "unmodeled_criteria": ["team professionalism/completeness", "budget reasonableness", "milestone quality"],
+      "mapping_note": "The call provides criteria but not weights in the gauntlet handoff. Simulator weights are inferred and intentionally leave part of the review unmodeled.",
+      "dangerous_competitors": ["deeptech_prototype", "enterprise_pilot", "research_system"],
+      "cheapest_high_leverage_improvement": "No cosmetic fix closes the current maturity gap. Market validation, commercialization path, institutional carrier, and team depth are substantive requirements.",
+      "gauntlet_agent_note": "Commercial weakness can block rather than merely hurt."
+    },
+    "financial_cryptography_2027": {
+      "label": "Financial Cryptography 2027",
+      "population": "elite_financial_security_research",
+      "eligibility": "PASS",
+      "semantic_fit": "CONDITIONAL",
+      "semantic_condition": "The submitted research contribution must be sufficiently novel/deep; the strongest identity is evidence-governed financial-claim admission/constraint enforcement rather than an energy coin.",
+      "current_fit": "STRONG_RESEARCH_POSSIBILITY",
+      "rubric_provenance": "INFERRED_RESEARCH_VENUE_STRESS",
+      "official_criteria": "The venue welcomes fundamental and applied financial-security research, systems, deployments, economics/policy intersections, and rigorous financial-transaction contexts; no numerical judging rubric was provided in the gauntlet handoff.",
+      "simulator_weights": {
+        "innovation": 0.25,
+        "technical_execution": 0.25,
+        "evidence_reproducibility": 0.30,
+        "problem_value": 0.10,
+        "demo_clarity": 0.02,
+        "external_validation": 0.05,
+        "market_adoption": 0.01,
+        "business_viability": 0.02
+      },
+      "rubric_coverage": 1.0,
+      "mapping_note": "Weights are a hostile research-venue approximation, not official FC review weights.",
+      "dangerous_competitors": ["research_system", "deeptech_prototype"],
+      "cheapest_high_leverage_improvement": "Sharpen the research contribution and evaluation. Customer traction is not the primary deficit here.",
+      "gauntlet_agent_note": "The vulnerability shifts from lack of customers to whether the scientific contribution is novel and deep enough."
+    },
+    "facct_2027": {
+      "label": "ACM FAccT 2027",
+      "population": "sociotechnical_accountability_research",
+      "eligibility": "PASS",
+      "semantic_fit": "CONDITIONAL",
+      "semantic_condition": "A deep sociotechnical/social/institutional contribution is required; technical epistemic discipline alone is insufficient.",
+      "current_fit": "POSSIBLE_BUT_NON_NATIVE",
+      "rubric_provenance": "PARTIALLY_MODELED_RESEARCH_SCOPE",
+      "official_criteria": "The venue includes assurance testing, audits/evaluations, accountability/transparency, governance, system development, responsible-data practices, and risk/harm evaluation, while requiring deep engagement with the social component of sociotechnical systems.",
+      "simulator_weights": {
+        "innovation": 0.12,
+        "technical_execution": 0.08,
+        "evidence_reproducibility": 0.18,
+        "problem_value": 0.10,
+        "demo_clarity": 0.03,
+        "external_validation": 0.09,
+        "market_adoption": 0.00,
+        "business_viability": 0.00
+      },
+      "rubric_coverage": 0.60,
+      "unmodeled_criteria": ["sociotechnical grounding", "institutional/social analysis", "normative depth", "stakeholder/interest conflict analysis", "harms and human-use consequences"],
+      "mapping_note": "Only 60% is numerically modeled because the current eight dimensions cannot faithfully encode FAccT's central sociotechnical requirements.",
+      "dangerous_competitors": ["research_system", "sustainability_dashboard"],
+      "cheapest_high_leverage_improvement": "No cheap packaging fix. A real sociotechnical research contribution would be required; reserve the route rather than distort Policy Lab.",
+      "gauntlet_agent_note": "Keyword overlap must not be mistaken for venue fit."
+    },
+    "taai_2026": {
+      "label": "TAAI 2026",
+      "population": "academic_ai_research",
+      "eligibility": "PASS",
+      "semantic_fit": "FAIL_CURRENT",
+      "semantic_condition": "Actual AI research contribution is required. Sophisticated deterministic software is not enough.",
+      "current_fit": "LOW_PRIORITY_BAD_FIT_CURRENT",
+      "rubric_provenance": "SEMANTIC_GATE_ONLY",
+      "official_criteria": "Theme: Agentic AI & Physical AI for Sustainable Innovation. The gauntlet handoff did not provide a numerical rubric.",
+      "simulator_weights": {
+        "innovation": 0.30,
+        "technical_execution": 0.30,
+        "evidence_reproducibility": 0.20,
+        "problem_value": 0.10,
+        "demo_clarity": 0.03,
+        "external_validation": 0.03,
+        "market_adoption": 0.02,
+        "business_viability": 0.02
+      },
+      "rubric_coverage": 1.0,
+      "mapping_note": "The numerical model is retained only for a future case where genuine AI fit is independently established; current Policy Lab is not scored.",
+      "dangerous_competitors": ["deeptech_prototype", "research_system", "polished_ai_saas"],
+      "cheapest_high_leverage_improvement": "None consistent with the stop rule. Do not bolt on AI for category fit.",
+      "gauntlet_agent_note": "Current semantic gate fails, so ranking simulation must stop before weighted scoring."
+    }
+  }
+}
