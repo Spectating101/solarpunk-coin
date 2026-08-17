@@ -1,6 +1,6 @@
 # Policy Lab — Packaging Decision
 
-**Status:** design decision under live P0 test  
+**Status:** P0.1 package semantics validated; external-recipient portability remains untested  
 **Scope:** external packaging only; no runtime or research-claim change
 
 ---
@@ -78,98 +78,218 @@ This reduces duplication and prevents each audience from receiving a different s
 
 ---
 
-## P0 implementation experiment
+## P0 result — portable-object architecture
 
-The design is now being tested against the existing `PUB-AUSGRID-001P` public-source case without changing the frozen core.
+The first live package test against `PUB-AUSGRID-001P` established that the closed case artifacts can be converted into a deterministic machine-readable package and a human rendering without changing the Policy Lab core.
 
-P0 adds only an external packaging layer:
+P0 established:
 
-```text
-existing closed case artifacts
-        ↓
-existing ConstrainedClaimAssessment
-        ↓
-claim-assessment-package.v0
-        ├── machine-readable JSON package
-        └── human-readable Markdown rendered only from that package
-        ↓
-closed-artifact verifier
-        ↓
-byte-identical rebuild check
-```
+- package derivation from the existing case/evidence/policy/decision/settlement artifacts;
+- human report rendered only from the package;
+- package-to-closed-artifact verification;
+- byte-identical package/report rebuild;
+- closed-world decision reproduction preserved.
 
-The P0 package deliberately preserves two distinct quantity semantics:
-
-- source evidence remains measured/derived in **kWh**;
-- admitted quantity remains the policy-defined **ENERGY_CLAIM_UNIT** used by the existing policies.
-
-The package does not silently relabel the internal claim unit as physical metered export. The case statement records the declared evidence-backed rate and preserves that the underlying surplus is derived rather than directly metered grid export.
-
-P0 is successful only if the package can represent the unchanged open-policy and pilot-policy consequences, reproduce its own identity and human rendering, agree with the closed case artifacts, and retain the existing closed-world decision-reproduction PASS.
-
-P0 success would validate the packaging object, **not** product-market fit, legal authority, certification, customer demand, or a neutral standard.
+The P0 hostile audit then rejected the first external contract as too research-shaped and too easy to overread.
 
 ---
 
-## Recommended sequence
+## P0.1 result — corrected external semantics
 
-### Phase P0 — package semantics
+P0.1 implements only the audit corrections.
 
-**Current experiment:**
+The current package is:
 
 ```text
-Claim Definition
-Evidence reference
-Policy reference
-Evaluation result
-Settlement/fulfilment result where applicable
-Verification
-Next evidence required
-Explicit non-claims
-Research projection
+policylab.claim_assessment_package.v0.1
+        +
+profile: policylab.energy_linked_claim.v0
 ```
 
-Exit test:
+The explicit domain profile prevents one Ausgrid/energy case from masquerading as a universal claim schema.
 
-> One package can represent `PUB-AUSGRID-001P` under the existing open and pilot policies without changing any underlying decision, and a verifier can prove package/artifact agreement plus deterministic report reproduction.
+P0.1 now preserves:
 
-### Phase P1 — human report
+```text
+source evidence quantity
+33.066 kWh derived surplus
 
-Generate a concise assessment report entirely from the canonical package.
+policy-defined claim quantity
+33.066 ENERGY_CLAIM_UNIT under LAB-CASE-OPEN-004
 
-The P0 experiment already generates this rendering mechanically so that report semantics cannot drift from the package. A future P1 should change presentation only if external readers demonstrate a real comprehension problem.
+stricter policy consequence
+ENERGY-CASE-PILOT-005 → BLOCKED
+SIGNED_EVIDENCE + MIN_PROVENANCE
+```
 
-Exit test:
+The human-facing consequence is no longer described as generic `SUPPORTED_WITH_LIMIT`. The package preserves the canonical `ADMIT_WITH_LIMIT` decision and translates it only as:
 
-> A reader unfamiliar with the repo can answer what was assessed, what is supportable, why, and what is missing.
+```text
+ADMITTED_WITH_LIMIT_UNDER_POLICY
+```
 
-### Phase P2 — independent verification
+The policy name, description, and governance scope travel with the result, so the research-only status of `LAB-CASE-OPEN-004` remains visible.
 
-Provide one verification/reproduction command or workflow.
+### Structured rule meaning
 
-P0 begins this with a closed-artifact package verifier. A later external distribution test must determine how much of the current repository/artifact set a recipient actually needs.
+Hand-written remediation is no longer the canonical source of policy meaning.
 
-Exit test:
+The package carries the existing structured constraint evaluations, including:
 
-> A second person can receive the package and validate identities / replay supported decisions without the authoring session.
+```text
+evaluation_id
+calculator_id
+policy_rule_id
+status
+observed_inputs
+parameters
+explanation
+boundary
+```
 
-### Phase P3 — research kit
+The human report explains a block from those existing rule evaluations.
 
-Extract the package, policies, evidence references, expected results, schemas, and reproduction instructions into a benchmark/research bundle.
+### Optional research extension
 
-Exit test:
+The R1–R4 `ConstrainedClaimAssessment` is now an optional package extension rather than a required part of the operational contract.
 
-> An external researcher can reproduce a published case without navigating the historical repository.
+The current research distribution includes it and continues to reference the unchanged research assessment:
 
-### Phase P4 — assisted external assessment
+`088067800c192a0d6854cc4a70f068f3590d4fc658df3622370bfcc7974e56dc`
 
-Do not automate further. Try one real outside case when available.
+An operational package schema is not required to pretend that every consumer needs the academic boundary projection.
 
-Exit test:
+### Local time and unit semantics
 
-> An outside party supplies evidence/rules or actively uses the returned assessment package.
+P0.1 carries both:
 
-### Phase P5 — choose product surface from observed demand
+- local case dates and timezone basis;
+- canonical UTC instants.
+
+It also explicitly separates:
+
+```text
+source unit: kWh
+claim unit: ENERGY_CLAIM_UNIT
+declared evidence-backed rate: 1
+calculator: EVIDENCE_BACKED_CAPACITY
+```
+
+The package states that this mapping does not turn the claim unit into physical kWh, directly metered export, legal title, a certificate, or money.
+
+---
+
+## Identity model after P0.1
+
+P0.1 separates two identities.
+
+### Semantic assessment identity
+
+`assessment_id` hashes only the operational assessment semantics:
+
+```text
+profile identity
+claim/case identity
+canonical period
+evidence hash + assurance
+policy IDs + versions
+canonical decision IDs/results
+supported quantity
+binding/blocking calculators
+rule evaluation IDs
+settlement result if present
+```
+
+It deliberately excludes explanatory prose, policy descriptions, warning prose, non-claims, the research extension, and run-specific delivery verification.
+
+### Package content identity
+
+`package_content_id` identifies the complete package content except its own ID field.
+
+This means a delivery capsule or explanation can change without pretending the underlying assessment changed.
+
+That distinction was tested two ways:
+
+1. the verifier perturbs delivery/prose-only fields and requires `assessment_id` to remain stable while `package_content_id` changes;
+2. two separate P0.1 executions produced different delivery capsules/package-content IDs while retaining the same semantic assessment ID.
+
+Observed semantic assessment ID across both executions:
+
+`04a4f79431f2bf774ec2a3df69836461752998829ae76a89e946971c42d756a9`
+
+This is the intended identity behavior.
+
+---
+
+## P0.1 validation gate
+
+On exact functional head `6301ef1ba77afec91a239afd14abee8d8b05880b`, External Case workflow run `32058965834` completed successfully.
+
+The workflow passed:
+
+- existing bounded public-source case execution;
+- existing four-boundary assessment build and verification;
+- P0.1 package build;
+- P0.1 package-to-artifact verification;
+- semantic/content identity-scope probe;
+- byte-identical package/report rebuild;
+- source mirror preservation;
+- artifact upload.
+
+This validates the P0.1 package mechanics and semantics against the current case.
+
+It does **not** validate product-market fit, legal authority, certification, customer demand, neutral-standard status, or cross-domain generality.
+
+---
+
+## Recommended sequence from here
+
+### P1 — human recipient test
+
+Do **not** redesign the report in the abstract.
+
+Give the existing P0.1 human rendering to someone who does not know the repository and test whether they can answer:
+
+```text
+what was assessed?
+what happened under each policy?
+why was one route blocked?
+what quantity is physical evidence versus policy-defined claim quantity?
+what is still not proven?
+```
+
+Only presentation failures observed here justify further report work.
+
+### P2 — transferable verification bundle
+
+The current verifier still assumes the closed repository artifact set.
+
+The next engineering question is therefore not “build an API.” It is:
+
+> What is the smallest bundle a second party actually needs to verify the package independently?
+
+Candidate contents may include:
+
+```text
+claim assessment package
+policy manifests
+bounded evidence envelope/reference
+required context manifests
+verifier version/code identity
+source bytes only where redistribution is appropriate
+```
+
+Do not decide the minimum by imagination. Determine it through a real second-party reproduction exercise.
+
+### P3 — research kit
+
+If a research recipient is the first real user, add the optional research projection, evidence/policy bundle, and reproduction instructions around the same P0.1 object.
+
+### P4 — assisted external assessment
+
+If an operator/institution is the first real user, process one bounded outside case manually and return the same package.
+
+### P5 — choose product surface from observed use
 
 Only after repeated use:
 
@@ -194,78 +314,23 @@ A polished report is immediately understandable, but if the report itself become
 - independent verification is harder;
 - every new UI needs its own translation layer.
 
-Therefore the report should be a **rendering** of the package.
+Therefore the report should remain a **rendering** of the package.
 
 ---
 
-## Why SDK/API-first is premature
+## Why SDK/API-first remains premature
 
-The current core already has substantial deterministic machinery, but an API contract freezes external semantics early.
+P0.1 stabilizes one real external object profile. It does not tell us which transport or service boundary outside users need.
 
-Before outside users exist, we do not know:
+Before external use, we still do not know:
 
-- which claim fields they naturally possess;
-- whether they provide raw evidence, normalized evidence, or references;
-- how they describe policy requirements;
-- whether one assessment normally contains one policy or comparative policies;
-- whether settlement belongs in the same transaction;
-- what errors/remediation information they actually need.
+- whether users provide raw evidence, normalized evidence, or references;
+- whether one or multiple policies are normal;
+- which extensions they need;
+- what verification bundle they can realistically consume;
+- whether human-assisted assessment is preferable to automation.
 
-The package experiment can answer these questions more cheaply than committing to service endpoints.
-
----
-
-## Why protocol/schema-first alone is insufficient
-
-A schema can create long-term interoperability, but a schema without a compelling completed artifact is difficult to evaluate.
-
-Therefore:
-
-> first make one real assessment package useful; then stabilize the schema around demonstrated use.
-
-Do not attempt to declare a neutral standard now.
-
----
-
-## Why assisted service is commercially useful but should not be canonical
-
-Assisted assessment is the fastest route to learning whether an external actor values the outcome.
-
-However, the service should produce the same portable package as every other surface. Otherwise value remains trapped in consulting labor.
-
-Correct relationship:
-
-```text
-Assisted Service
-      ↓ produces
-Claim Assessment Package
-      ↓ reusable by
-customer / researcher / verifier / future API
-```
-
----
-
-## Research conversion
-
-The research package should treat the assessment package as a reproducible experimental artifact.
-
-The strongest research form is:
-
-```text
-paper / research question
-        +
-bounded external case
-        +
-evidence package
-        +
-versioned policy pack
-        +
-expected claim assessment package
-        +
-independent verifier
-```
-
-This makes the research contribution executable without turning the main product interface into a paper browser.
+An API before those answers would freeze transport before workflow.
 
 ---
 
@@ -273,26 +338,15 @@ This makes the research contribution executable without turning the main product
 
 The current asset should not be sold as “software for creating an energy-backed currency.”
 
-The first commercially testable transaction is narrower:
+The first commercially testable transaction remains narrower:
 
-> An outside actor gives us a bounded evidence-backed claim and the relevant declared requirements. We return a reproducible package showing what is supportable, what is blocked, and what would be needed next.
+> An outside actor gives us a bounded evidence-backed claim and the relevant declared requirements. We return a reproducible package showing what happens under those requirements, what quantity is admitted if any, what blocks the stricter route, and what is still unproven.
 
 If that transaction repeats, automation has a factual basis.
 
-Potential later value capture:
+Potential later value capture can include assisted assessment, private evidence ingestion, policy implementation/maintenance, hosted execution, private connectors, organization workflows, support/deployment, or institutional research contracts.
 
-```text
-assisted assessment fees
-managed private evidence ingestion
-policy implementation / maintenance
-hosted execution
-private connectors
-organization workflows
-support / deployment
-institutional research contracts
-```
-
-Do not treat any of these as validated revenue today.
+None are validated revenue today.
 
 ---
 
@@ -300,41 +354,30 @@ Do not treat any of these as validated revenue today.
 
 The existing repository is public/MIT. Commercial strategy must not rely on pretending public code is proprietary scarcity.
 
-A plausible later separation is:
+A plausible later separation remains:
 
-**Open / inspectable:**
+**Open / inspectable:** deterministic semantics, public schemas, verifier, public benchmark cases, public policy examples, research reproduction kit.
 
-- core deterministic semantics;
-- public schemas;
-- verifier;
-- public benchmark cases;
-- public policy examples;
-- research reproduction kit.
+**Potential paid layers, only after demand:** hosted execution, private evidence connectors, organization-specific policy implementation and maintenance, access/approval workflows, private deployment, support, institutional research engagements.
 
-**Potential paid layers, only after demand:**
-
-- hosted execution;
-- private evidence connectors;
-- organization-specific policy implementation and maintenance;
-- access / approval workflows;
-- private deployment;
-- support;
-- institutional research engagements.
-
-The defensible asset would be accumulated integration, policy, workflow, evidence-handling, and external-use knowledge—not merely hiding the existing code.
+The defensible asset would be accumulated integration, policy, workflow, evidence-handling, and external-use knowledge—not merely hiding existing code.
 
 ---
 
 ## Stop rule
 
-Do not proceed from package semantics directly to SaaS, API, marketplace, certification, or a general-purpose claim platform.
+P0.1 has answered the internal packaging question far enough.
 
-Proceed only when one of these happens:
+Do not proceed directly to SaaS, API, marketplace, certification, or a general-purpose claim platform.
 
-1. a real external assessment needs another package field;
-2. a recipient cannot verify or understand the current package;
-3. repeated human assessment creates obvious automation work;
-4. a researcher needs a reproducible distribution form;
-5. an integration partner explicitly needs a machine interface.
+The next evidence should come from a **recipient**, not another speculative architecture layer.
 
-Otherwise preserve the finished core and use the package rather than enlarging it.
+Proceed only when:
+
+1. a recipient cannot understand the current report;
+2. a recipient cannot verify the current package with the supplied bundle;
+3. a real external case needs another field/profile;
+4. repeated human assessment creates obvious automation work;
+5. an integration partner explicitly asks for a machine interface.
+
+Otherwise preserve the finished core and the now-validated P0.1 package semantics.
