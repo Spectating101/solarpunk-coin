@@ -1,418 +1,386 @@
-# Policy Lab — P0 Portable Assessment Packaging Audit
+# Policy Lab — P0 / P0.1 Portable Assessment Packaging Audit
 
-**Status:** hostile packaging audit after first successful P0 execution  
+**Status:** P0 findings corrected and mechanically validated in P0.1  
 **Scope:** external package semantics and recipient usability only  
-**Runtime boundary:** no Policy Lab core, policy value, evidence value, settlement rule, or research result is reopened by this audit
+**Runtime boundary:** no Policy Lab core, policy value, evidence value, settlement rule, or research result was reopened
 
 ---
 
-## Verdict
+## Final audit verdict
 
 > **P0 ENGINE / DERIVATION: PASS**  
-> **P0 EXTERNAL PACKAGE: NOT YET FROZEN**
+> **P0 EXTERNAL CONTRACT: REJECTED FOR CORRECTION**  
+> **P0.1 PACKAGE SEMANTICS: PASS**  
+> **EXTERNAL RECIPIENT / TRANSFERABILITY: NOT YET TESTED**
 
-The first live package proves that a portable assessment object can be deterministically derived from the existing closed `PUB-AUSGRID-001P` artifact set without rewriting the Policy Lab core.
+The first P0 package proved that a portable assessment object could be deterministically derived from the existing closed `PUB-AUSGRID-001P` artifact set.
 
-The package also survives closed-artifact verification and byte-identical rebuilding.
+The hostile audit then found eight packaging problems. P0.1 corrected the package boundary without changing the core.
 
-That validates the **portable-object architecture**.
-
-It does **not** yet validate the current v0 object as the final external contract. The first generated package exposed several packaging defects that would matter to a recipient who does not already understand the repository.
-
----
-
-## What survived contact with a real package
-
-### P0-P1 — one canonical object can feed human and machine use
-
-PASS.
-
-The human Markdown is rendered from the same machine-readable package that is independently verified. This prevents a presentation layer from silently inventing a different result.
-
-### P0-P2 — policy divergence is a compelling package-level object
-
-PASS.
-
-The same evidence object produces:
-
-```text
-LAB-CASE-OPEN-004
-→ ADMIT_WITH_LIMIT
-→ 33.066 ENERGY_CLAIM_UNIT
-→ EVIDENCE_BACKED_CAPACITY binds
-
-ENERGY-CASE-PILOT-005
-→ BLOCKED
-→ SIGNED_EVIDENCE
-→ MIN_PROVENANCE
-```
-
-That comparison is more useful externally than exposing the repository's internal execution graph first.
-
-### P0-P3 — evidence quantity and policy claim quantity can remain typed separately
-
-PASS.
-
-The package preserves:
-
-```text
-source evidence quantity: 33.066 kWh
-policy-defined admitted quantity: 33.066 ENERGY_CLAIM_UNIT
-```
-
-The equality in this case comes from the declared evidence-backed rate of 1. It is not silently described as a physical-unit identity, legal title, certificate, or directly metered export.
-
-### P0-P4 — delivery/run identities can be separated from semantic package identity
-
-PASS as a design direction.
-
-Receipt/capsule identities remain available for delivery verification but are excluded from the package's semantic identity body because those run-specific artifacts can change while the underlying assessment does not.
-
-### P0-P5 — packaging did not require core enlargement
-
-PASS.
-
-The experiment is a derived layer over frozen case, evidence, policy, decision, settlement, receipt, capsule, and research-assessment artifacts.
+The remaining evidence gap is no longer internal package design. It is whether an outside recipient can understand and independently verify the package with a minimal transferable bundle.
 
 ---
 
-# Findings requiring correction before freeze
+## P0 findings and P0.1 disposition
 
-## H1 — `SUPPORTED_WITH_LIMIT` overstates the authority of the open research policy
+### H1 — research-policy result was overtranslated as `SUPPORTED_WITH_LIMIT`
 
-**Severity:** HIGH
+**P0 severity:** HIGH  
+**P0.1 disposition:** **FIXED**
 
-The canonical runtime result is correctly preserved as:
+P0.1 preserves the canonical runtime value:
 
 ```text
 ADMIT_WITH_LIMIT
 ```
 
-But the human-facing translation currently renders this as:
+and uses only the scoped external reading:
 
 ```text
-SUPPORTED_WITH_LIMIT
+ADMITTED_WITH_LIMIT_UNDER_POLICY
 ```
 
-That wording is too strong when the policy itself is explicitly a research-only demonstration policy.
+The package also carries the policy's own name, description, version, governance authority/mutability metadata, manifest hash, and decision ID.
 
-A result can be admitted **under a declared research policy** without the real-world claim being substantively supported for external assertion.
+For `LAB-CASE-OPEN-004`, the policy description explicitly remains research-only.
 
-### Correction
-
-The package needs an explicit policy scope / authority class, for example:
-
-```text
-RESEARCH_DEMONSTRATION
-PILOT_INTERNAL
-EXTERNAL_STANDARD
-REGULATORY
-ORGANIZATION_POLICY
-```
-
-Only classes actually evidenced should be used.
-
-For the current case, the human rendering should say something closer to:
-
-```text
-ADMITTED WITH LIMIT UNDER RESEARCH POLICY
-```
-
-while retaining the canonical `ADMIT_WITH_LIMIT` value.
-
-Do not promote a research policy consequence into an externally supported claim.
+No generic statement that the real-world claim is “supported” is made.
 
 ---
 
-## H2 — the v0 schema is energy/Ausgrid-shaped but is named as a generic claim-assessment package
+### H2 — generic schema name hid energy/Ausgrid domain assumptions
 
-**Severity:** HIGH
+**P0 severity:** HIGH  
+**P0.1 disposition:** **FIXED FOR CURRENT SCOPE**
 
-The package currently requires fields such as:
-
-```text
-interval_count
-archive_sha256
-archive_bytes
-eligible_quantity
-assurance L0-L4
-settlement
-```
-
-Those are appropriate for the first energy-linked case profile, but they are not a neutral model of every evidence-backed claim.
-
-### Correction
-
-Do not generalize from one case.
-
-The next version should explicitly distinguish:
+P0.1 explicitly declares:
 
 ```text
-Claim Assessment Envelope
-        +
-Domain Profile: energy-linked claim v0
+schema: policylab.claim_assessment_package.v0.1
+profile: policylab.energy_linked_claim.v0
 ```
 
-or equivalently add an explicit profile identifier.
+The profile carries the energy-domain unit semantics.
 
-The first public profile may remain energy-specific. A generic cross-domain schema should not be declared until another genuinely different domain forces the abstraction.
+The project does **not** claim that one energy case has established a universal claim schema.
+
+No second domain profile should be invented until a genuinely different external case requires it.
 
 ---
 
-## H3 — research projection is currently mandatory in the external package
+### H3 — R1–R4 research projection was mandatory
 
-**Severity:** HIGH
+**P0 severity:** HIGH  
+**P0.1 disposition:** **FIXED**
 
-`R1–R4` is valuable for the research package but is not a natural requirement for every operator, integrator, reviewer, or buyer.
+The `ConstrainedClaimAssessment` is now an optional extension.
 
-Making `research_projection` mandatory couples the external object to the current academic framework.
+The current research distribution includes it and still anchors to:
 
-### Correction
+`088067800c192a0d6854cc4a70f068f3590d4fc658df3622370bfcc7974e56dc`
 
-Keep the exact `ConstrainedClaimAssessment` as an optional, typed extension/reference.
-
-A valid operational package should remain valid when no research projection is requested.
-
-Research distributions can require the extension; operational integrations should not have to.
+But the package model no longer requires every future operational consumer to treat R1–R4 as the primary external contract.
 
 ---
 
-## H4 — remediation is partly hand-written from calculator IDs
+### H4 — remediation prose was a second source of policy meaning
 
-**Severity:** HIGH
+**P0 severity:** HIGH  
+**P0.1 disposition:** **FIXED**
 
-The current package maps blockers such as `SIGNED_EVIDENCE` and `MIN_PROVENANCE` to hand-written remediation strings.
-
-This is understandable for P0, but it creates a second source of policy meaning outside the policy/evaluation artifacts.
-
-The underlying `DecisionResult` already provides structured rule evaluation, including:
+P0.1 carries the existing structured rule evaluations directly:
 
 ```text
+evaluation_id
 calculator_id
+calculator_version
+constraint_class
 policy_rule_id
 status
 observed_inputs
 parameters
+capacity
 explanation
 boundary
-evaluation_id
 ```
 
-### Correction
+The human report explains blocking/binding results from these objects.
 
-Canonical package meaning should come from the structured rule evaluation.
+For the pilot block, the package preserves:
 
-A future human remediation sentence may be generated from that structure, but it must be explicitly presentation/advisory text rather than a second policy authority.
+```text
+SIGNED_EVIDENCE
+observed signed = false
 
-At minimum expose the failed rule evaluation and required/observed values directly.
+MIN_PROVENANCE
+observed L0
+required L2
+```
+
+No hand-maintained remediation map is canonical anymore.
 
 ---
 
-## H5 — one package ID currently mixes decision semantics with explanatory prose
+### H5 — one package identity mixed decisions with prose/run packaging
 
-**Severity:** MEDIUM-HIGH
+**P0 severity:** MEDIUM-HIGH  
+**P0.1 disposition:** **FIXED AND TESTED**
 
-The current package identity includes fields such as:
-
-```text
-claim.statement
-artifact_contract
-next_evidence_required
-explicit_non_claims
-```
-
-Changing explanatory wording can therefore change the package ID even when claim inputs, evidence, policy, decision, and settlement are identical.
-
-That is valid for a content hash, but weak as the only external assessment identity.
-
-### Correction
-
-Separate two identities if external use requires stable referents:
+P0.1 separates:
 
 ```text
 assessment_id
-= semantic decision identity
+= semantic assessment identity
 
 package_content_id
-= exact serialized package/content identity
+= complete package-content identity
 ```
 
-Do not solve this by removing explanatory boundaries. Split the identities instead.
+The verifier deliberately perturbs prose/delivery-only fields and requires:
 
-The existing research assessment already demonstrates the value of identity that is independent of run-specific packaging.
+```text
+assessment_id unchanged
+package_content_id changed
+```
+
+PASS.
+
+Two separate P0.1 executions additionally produced different delivery capsule/package-content identities while retaining the same semantic assessment ID:
+
+`04a4f79431f2bf774ec2a3df69836461752998829ae76a89e946971c42d756a9`
+
+This is the intended identity behavior.
 
 ---
 
-## H6 — the human report still assumes repository literacy
+### H6 — human report assumed repository literacy
 
-**Severity:** MEDIUM-HIGH
+**P0 severity:** MEDIUM-HIGH  
+**P0.1 disposition:** **SUBSTANTIALLY FIXED INTERNALLY; RECIPIENT TEST STILL REQUIRED**
 
-The first report exposes:
-
-- `ENERGY_CLAIM_UNIT` prominently;
-- raw policy IDs before policy purpose;
-- R1–R4 in the primary report;
-- eleven explicit non-claims;
-- UTC timestamps that make the local 1 July window begin on 30 June when read naively.
-
-Technically correct is not the same as externally legible.
-
-### Correction
-
-The human rendering should use a layered structure:
+The primary report now presents:
 
 ```text
-1. requested claim / question
-2. decision under each named policy and policy scope
-3. evidence actually available
-4. why blocked / what bound quantity
-5. what is required next
-6. technical verification appendix
-7. research projection appendix when requested
+question
+local assessment period
+named policy + policy scope
+result under each policy
+quantity admitted if any
+what bound / blocked the result
+evidence actually available
+unit definition
+settlement result
+verification identities
 ```
 
-The full boundaries must remain available but do not all belong in the first visual layer.
+Internal policy IDs, manifest hashes, UTC instants, R1–R4 projection, delivery capsule identity, and the full non-claim list are moved to the technical appendix.
 
-Preserve both local period semantics and canonical UTC instants rather than showing UTC alone.
+The remaining test is empirical: give the report to someone who does not know the repository and see whether they understand it.
+
+Do not polish further before that evidence.
 
 ---
 
-## H7 — the internal claim unit is truthful but not yet externally interpretable
+### H7 — `ENERGY_CLAIM_UNIT` lacked an external definition
 
-**Severity:** MEDIUM
+**P0 severity:** MEDIUM  
+**P0.1 disposition:** **FIXED**
 
-`ENERGY_CLAIM_UNIT` is correctly preserved from the frozen policy. It must not be silently renamed to kWh.
-
-However, an outside recipient cannot know what the unit means merely from the label.
-
-### Correction
-
-The domain profile should carry the declared unit definition and conversion basis, for example:
+P0.1 explicitly carries:
 
 ```text
+source unit: kWh
 claim unit: ENERGY_CLAIM_UNIT
-source quantity: kWh derived surplus
-declared evidence-backed rate: 1 claim unit / eligible kWh
-policy source: LAB-CASE-OPEN-004 v1.0.0
+evidence-backed rate: 1
+calculator: EVIDENCE_BACKED_CAPACITY
 ```
 
-The package must continue distinguishing physical evidence quantity from policy-defined claim quantity.
+The package states that the declared mapping does **not** make the policy-defined claim unit physical kWh, directly metered grid export, legal title, a renewable-energy certificate, or money.
 
 ---
 
-## H8 — independent verification still assumes repository-local supporting artifacts
+### H8 — verifier required repository-local closed artifacts
 
-**Severity:** MEDIUM
+**P0 severity:** MEDIUM  
+**P0.1 disposition:** **NOT FIXED BY DESIGN; PROMOTED TO NEXT EXTERNAL EVIDENCE GATE**
 
-The current verifier proves package agreement against the full closed case directory and policy files. That is a strong internal test, but it is not yet the minimum portable verification contract.
+The current verifier is now strong for internal closed-artifact verification.
 
-A recipient of only `claim-assessment-package.json` cannot independently replay the result.
+It checks package/schema/profile identity, case/evidence/policy agreement, structured rule evaluations, quantities, settlement, optional research projection, optional delivery verification, report reproduction, and identity scope.
 
-### Correction
+But it still expects the closed repository artifact set.
 
-P2 must determine the smallest transferable verification bundle, likely some combination of:
+This is no longer a reason to enlarge P0.1.
+
+The next question is:
+
+> What is the smallest transferable bundle a second party actually needs to verify the package independently?
+
+Answer that through a real second-party reproduction exercise, not speculative architecture.
+
+---
+
+## Lower-severity P0 observations
+
+### M1 — duplicated evidence warnings
+
+**P0.1:** fixed.
+
+The package now carries structured warning code/detail pairs directly from evidence diagnostics instead of merging overlapping free-text warnings from multiple report surfaces.
+
+### M2 — comparative policies should not be mandatory
+
+**P0.1:** preserved.
+
+The schema requires a non-empty evaluation array, not exactly two policies.
+
+The Ausgrid case still uses two because policy divergence is the central demonstration.
+
+### M3 — settlement should remain optional
+
+**P0.1:** preserved.
+
+Settlement remains nullable and separate from admission.
+
+---
+
+## P0.1 validated package
+
+For the current public-source case, P0.1 preserves:
 
 ```text
-claim assessment package
-policy manifest(s)
-referenced evidence envelope or bounded evidence reference
-required context manifests
-verifier version / code identity
-optional source bytes where distributable
+Evidence
+33.066 kWh derived surplus
+L0
+source-holder confirmation NOT_CONFIRMED
+
+Open Case Demonstration
+ADMIT_WITH_LIMIT
+33.066 ENERGY_CLAIM_UNIT
+binding calculator: EVIDENCE_BACKED_CAPACITY
+
+Energy Case Pilot Policy
+BLOCKED
+blocking calculators:
+SIGNED_EVIDENCE
+MIN_PROVENANCE
+
+Settlement scenario
+PARTIAL
+13.2264 covered
+19.8396 shortfall
 ```
 
-Do not bundle everything by default. Determine the minimum from an actual second-party reproduction exercise.
+The research extension remains:
+
+```text
+R1 NOT_ASSESSED
+R2 PARTIAL
+R3 PARTIAL
+R4 UNTESTED
+```
+
+No result was promoted by packaging.
 
 ---
 
-# Lower-severity observations
+## Validation record
 
-## M1 — duplicated evidence warnings
+P0.1 functional head:
 
-The current human report repeats some limitations in both short and expanded forms.
+`6301ef1ba77afec91a239afd14abee8d8b05880b`
 
-This is harmless mechanically but weakens comprehension.
+External Case workflow run:
 
-Deduplicate by semantic code rather than raw string equality if the human report is retained.
+`32058965834`
 
-## M2 — comparative-policy packages are useful but should not become mandatory
+The run passed:
 
-P0 benefits from two policies because divergence is the central demonstration.
+- source archive hash/byte check;
+- existing bounded case execution;
+- existing four-boundary assessment build;
+- existing assessment verification;
+- P0.1 package build;
+- P0.1 package-to-artifact verification;
+- identity-scope probe;
+- exact human-report reproduction;
+- byte-identical package/report rebuild;
+- artifact upload.
 
-A future external case may require only one authoritative policy.
-
-The schema should permit one or more evaluations; it should not assume that comparison itself is always the job.
-
-The current array model is compatible with this direction.
-
-## M3 — settlement is correctly nullable
-
-Keep it optional.
-
-Many claim-assessment workflows may end at admission/quantity and have no meaningful settlement stage.
+A prior independent P0.1 execution also passed, permitting the cross-run identity comparison recorded above.
 
 ---
 
-# Revised packaging hierarchy after P0
-
-The P0 result strengthens the package-first thesis but narrows what should be frozen:
+## Revised architecture after audit
 
 ```text
 DETERMINISTIC POLICY LAB CORE
         ↓
-CLAIM ASSESSMENT ENVELOPE
+CLAIM ASSESSMENT PACKAGE
         ↓
 DOMAIN PROFILE
-energy-linked claim v0
+policylab.energy_linked_claim.v0
         ↓
 POLICY EVALUATION(S)
+structured rule traces
         ↓
 OPTIONAL EXTENSIONS
 research projection
-settlement / fulfilment
 delivery verification
+settlement when applicable
         ↓
 RENDERINGS
-human report / research kit / later machine API
+human assessment / research kit / later integration surface
 ```
 
-The word **optional** matters. The canonical external object should not require every downstream use case to carry the whole research programme.
+The next meaningful layer is not another architecture abstraction.
+
+It is a recipient.
 
 ---
 
-# P0.1 change boundary
+## Next gate
 
-If P0.1 is implemented, it should fix packaging semantics only:
+### P1 — comprehension
 
-1. preserve policy authority/scope and remove the misleading `SUPPORTED_WITH_LIMIT` translation for research-only policy;
-2. identify the current package as an energy-domain profile rather than a universal schema;
-3. make research projection an optional extension in the package model;
-4. expose structured rule-evaluation evidence instead of treating hand-written remediation as canonical;
-5. separate semantic assessment identity from exact package-content identity if both are needed;
-6. add local-time period semantics and a declared claim-unit definition;
-7. simplify the primary human rendering while retaining technical detail in appendices.
+Give the generated human report to a person unfamiliar with the repository.
 
-Do **not** add:
+Success criterion:
 
-- new policies;
-- new evidence sources;
-- API endpoints;
-- accounts;
-- SaaS infrastructure;
-- marketplace/plugin machinery;
-- AI;
-- new Policy Lab core behavior.
+They can correctly explain:
+
+1. what question was assessed;
+2. why the open research policy admitted a bounded quantity;
+3. why the stricter pilot policy blocked;
+4. the difference between 33.066 kWh evidence and 33.066 `ENERGY_CLAIM_UNIT`;
+5. the source/assurance limitations;
+6. what the package does not establish.
+
+### P2 — transferability
+
+Give a second party the smallest plausible verification bundle.
+
+Success criterion:
+
+They can independently verify the package without relying on hidden authoring state.
+
+The outcome of that exercise determines whether another bundle field, verifier mode, CLI, or integration surface is actually necessary.
 
 ---
 
 ## Stop rule
 
-P0 already proves enough to reject one failure mode:
+P0.1 has answered the internal packaging problem far enough.
 
-> The packaging idea is **not** blocked by inability to derive a portable, deterministic object from the frozen system.
+Do **not** add:
 
-The remaining question is whether the external contract is clean enough for another person to consume.
+- new policies;
+- new evidence sources merely to exercise packaging;
+- cross-domain generalization;
+- API/SaaS infrastructure;
+- marketplace/plugin machinery;
+- certification language;
+- AI features;
+- new Policy Lab core behavior.
 
-Therefore do not enlarge the system.
-
-Fix only the package boundary, then test it with a real recipient / route when available.
+The next useful evidence must come from an external recipient or genuinely new outside case.
