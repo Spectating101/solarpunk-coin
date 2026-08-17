@@ -1,6 +1,6 @@
 # Policy Lab — Packaging Decision
 
-**Status:** design decision candidate  
+**Status:** design decision under live P0 test  
 **Scope:** external packaging only; no runtime or research-claim change
 
 ---
@@ -78,11 +78,44 @@ This reduces duplication and prevents each audience from receiving a different s
 
 ---
 
+## P0 implementation experiment
+
+The design is now being tested against the existing `PUB-AUSGRID-001P` public-source case without changing the frozen core.
+
+P0 adds only an external packaging layer:
+
+```text
+existing closed case artifacts
+        ↓
+existing ConstrainedClaimAssessment
+        ↓
+claim-assessment-package.v0
+        ├── machine-readable JSON package
+        └── human-readable Markdown rendered only from that package
+        ↓
+closed-artifact verifier
+        ↓
+byte-identical rebuild check
+```
+
+The P0 package deliberately preserves two distinct quantity semantics:
+
+- source evidence remains measured/derived in **kWh**;
+- admitted quantity remains the policy-defined **ENERGY_CLAIM_UNIT** used by the existing policies.
+
+The package does not silently relabel the internal claim unit as physical metered export. The case statement records the declared evidence-backed rate and preserves that the underlying surplus is derived rather than directly metered grid export.
+
+P0 is successful only if the package can represent the unchanged open-policy and pilot-policy consequences, reproduce its own identity and human rendering, agree with the closed case artifacts, and retain the existing closed-world decision-reproduction PASS.
+
+P0 success would validate the packaging object, **not** product-market fit, legal authority, certification, customer demand, or a neutral standard.
+
+---
+
 ## Recommended sequence
 
 ### Phase P0 — package semantics
 
-**Build/design only:**
+**Current experiment:**
 
 ```text
 Claim Definition
@@ -93,16 +126,18 @@ Settlement/fulfilment result where applicable
 Verification
 Next evidence required
 Explicit non-claims
-Optional research projection
+Research projection
 ```
 
 Exit test:
 
-> One package can represent `PUB-AUSGRID-001P` under the existing open and pilot policies without changing any underlying decision.
+> One package can represent `PUB-AUSGRID-001P` under the existing open and pilot policies without changing any underlying decision, and a verifier can prove package/artifact agreement plus deterministic report reproduction.
 
 ### Phase P1 — human report
 
 Generate a concise assessment report entirely from the canonical package.
+
+The P0 experiment already generates this rendering mechanically so that report semantics cannot drift from the package. A future P1 should change presentation only if external readers demonstrate a real comprehension problem.
 
 Exit test:
 
@@ -111,6 +146,8 @@ Exit test:
 ### Phase P2 — independent verification
 
 Provide one verification/reproduction command or workflow.
+
+P0 begins this with a closed-artifact package verifier. A later external distribution test must determine how much of the current repository/artifact set a recipient actually needs.
 
 Exit test:
 
@@ -259,33 +296,45 @@ Do not treat any of these as validated revenue today.
 
 ---
 
-## Packaging doctrine
+## Open-core boundary
 
-1. **Package the outcome, not the architecture.**
-2. **One canonical machine object; many audience-specific renderings.**
-3. **Research projection remains available but does not dominate ordinary use.**
-4. **Evidence and policy identities must remain explicit.**
-5. **Blocking is a successful assessment result, not an error state.**
-6. **Next-evidence requirements are a first-class output.**
-7. **Verification must travel with the package.**
-8. **Domain vocabulary lives in Domain Packs, not in the generic core.**
-9. **Do not claim multi-domain generality before a second real domain exists.**
-10. **Choose hosted/API/enterprise product form from observed external behavior, not internal imagination.**
+The existing repository is public/MIT. Commercial strategy must not rely on pretending public code is proprietary scarcity.
+
+A plausible later separation is:
+
+**Open / inspectable:**
+
+- core deterministic semantics;
+- public schemas;
+- verifier;
+- public benchmark cases;
+- public policy examples;
+- research reproduction kit.
+
+**Potential paid layers, only after demand:**
+
+- hosted execution;
+- private evidence connectors;
+- organization-specific policy implementation and maintenance;
+- access / approval workflows;
+- private deployment;
+- support;
+- institutional research engagements.
+
+The defensible asset would be accumulated integration, policy, workflow, evidence-handling, and external-use knowledge—not merely hiding the existing code.
 
 ---
 
-## Current verdict
+## Stop rule
 
-**Recommended package architecture:**
+Do not proceed from package semantics directly to SaaS, API, marketplace, certification, or a general-purpose claim platform.
 
-```text
-CANONICAL: Claim Assessment Package
+Proceed only when one of these happens:
 
-FIRST HUMAN RENDERING: Assessment Report
-FIRST RESEARCH RENDERING: Benchmark / reproduction kit
-FIRST COMMERCIAL TEST: Assisted assessment
-FIRST MACHINE INTERFACE: CLI / verifier
-LATER ONLY IF DEMANDED: SDK / API / hosted workbench / institutional deployment
-```
+1. a real external assessment needs another package field;
+2. a recipient cannot verify or understand the current package;
+3. repeated human assessment creates obvious automation work;
+4. a researcher needs a reproducible distribution form;
+5. an integration partner explicitly needs a machine interface.
 
-This architecture preserves the current Policy Lab stop rule: packaging should make the existing truth usable, not create pressure to enlarge the core.
+Otherwise preserve the finished core and use the package rather than enlarging it.
