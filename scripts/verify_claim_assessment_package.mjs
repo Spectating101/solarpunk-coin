@@ -63,6 +63,13 @@ async function main() {
   if (pkg.assessment_id !== reproducedAssessmentId) throw new Error(`assessment identity mismatch: expected ${pkg.assessment_id}, reproduced ${reproducedAssessmentId}`);
   const reproducedContentId = await computePackageContentId(pkg);
   if (pkg.package_content_id !== reproducedContentId) throw new Error(`package content identity mismatch: expected ${pkg.package_content_id}, reproduced ${reproducedContentId}`);
+
+  const identityProbe = structuredClone(pkg);
+  identityProbe.verification.artifact_contract = `${identityProbe.verification.artifact_contract} [identity-scope-probe]`;
+  if (identityProbe.extensions?.delivery_verification) identityProbe.extensions.delivery_verification.capsule_id = '0'.repeat(64);
+  if (await computeAssessmentId(identityProbe) !== pkg.assessment_id) throw new Error('assessment identity changed after delivery/prose-only perturbation');
+  if (await computePackageContentId(identityProbe) === pkg.package_content_id) throw new Error('package content identity did not change after delivery/prose-only perturbation');
+
   if (humanReport !== renderClaimAssessmentMarkdown(pkg)) throw new Error('human assessment report is not an exact rendering of the machine-readable package');
 
   const caseId = String(caseManifest.case_id || '');
@@ -139,6 +146,7 @@ async function main() {
     profile_id: pkg.profile.id,
     assessment_id: pkg.assessment_id,
     package_content_id: pkg.package_content_id,
+    identity_scope_probe: 'PASS',
     case_id: pkg.claim.case_id,
     assurance: pkg.evidence.assurance,
     evaluations: pkg.evaluations.map((item) => ({ policy_id: item.policy.id, policy_name: item.policy.name, decision: item.decision, external_reading: item.external_reading, supported_quantity: item.supported_quantity, blocking_calculators: item.blocking_calculators, binding_calculators: item.binding_calculators })),
