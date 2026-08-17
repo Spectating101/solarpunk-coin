@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Policy Lab Claim Assessment Package v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "package_id",
+    "claim",
+    "evidence",
+    "evaluations",
+    "settlement",
+    "verification",
+    "next_evidence_required",
+    "explicit_non_claims",
+    "research_projection",
+    "delivery"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "status": {
+      "enum": ["NOT_ASSESSED", "OPEN", "SUPPORTED", "BLOCKED", "PARTIAL", "UNTESTED"]
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit"],
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "type": "string", "minLength": 1 }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": {
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "decision",
+        "display_status",
+        "decision_id",
+        "supported_quantity",
+        "binding_rules",
+        "blocking_rules",
+        "remediation"
+      ],
+      "properties": {
+        "policy": { "$ref": "#/$defs/policy" },
+        "decision": { "type": "string", "minLength": 1 },
+        "display_status": { "type": "string", "minLength": 1 },
+        "decision_id": { "$ref": "#/$defs/sha256" },
+        "supported_quantity": {
+          "oneOf": [
+            { "$ref": "#/$defs/quantity" },
+            { "type": "null" }
+          ]
+        },
+        "binding_rules": { "$ref": "#/$defs/stringArray" },
+        "blocking_rules": { "$ref": "#/$defs/stringArray" },
+        "remediation": { "$ref": "#/$defs/stringArray" }
+      }
+    }
+  },
+  "properties": {
+    "schema": { "const": "policylab.claim_assessment_package.v0" },
+    "package_id": { "$ref": "#/$defs/sha256" },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "case_id",
+        "claim_type",
+        "subject",
+        "statement",
+        "request_mode",
+        "requested_quantity",
+        "unit",
+        "period"
+      ],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+        "case_id": { "type": "string", "minLength": 1 },
+        "claim_type": { "type": "string", "minLength": 1 },
+        "subject": { "type": "string", "minLength": 1 },
+        "statement": { "type": "string", "minLength": 1 },
+        "request_mode": { "enum": ["MAXIMUM_SUPPORTABLE", "FIXED_QUANTITY"] },
+        "requested_quantity": {
+          "oneOf": [
+            { "type": "number" },
+            { "type": "null" }
+          ]
+        },
+        "unit": { "type": "string", "minLength": 1 },
+        "period": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["start", "end"],
+          "properties": {
+            "start": { "type": "string", "minLength": 1 },
+            "end": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_hash",
+        "assurance",
+        "source_holder_confirmation",
+        "interval_count",
+        "source",
+        "eligible_quantity",
+        "warnings"
+      ],
+      "properties": {
+        "evidence_hash": { "$ref": "#/$defs/sha256" },
+        "assurance": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+        "source_holder_confirmation": { "enum": ["CONFIRMED", "NOT_CONFIRMED", "UNKNOWN"] },
+        "interval_count": { "type": "integer", "minimum": 0 },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "publisher",
+            "dataset",
+            "archive_sha256",
+            "archive_bytes",
+            "selected_subject",
+            "timezone_basis"
+          ],
+          "properties": {
+            "publisher": { "type": "string", "minLength": 1 },
+            "dataset": { "type": "string", "minLength": 1 },
+            "archive_sha256": { "$ref": "#/$defs/sha256" },
+            "archive_bytes": { "type": "integer", "minimum": 1 },
+            "selected_subject": { "type": "string", "minLength": 1 },
+            "timezone_basis": { "type": "string", "minLength": 1 }
+          }
+        },
+        "eligible_quantity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "unit", "semantics"],
+          "properties": {
+            "value": { "type": "number" },
+            "unit": { "type": "string", "minLength": 1 },
+            "semantics": { "type": "string", "minLength": 1 }
+          }
+        },
+        "warnings": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "evaluations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evaluation" }
+    },
+    "settlement": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result", "covered_quantity", "shortfall_quantity", "unit", "scenario_only"],
+          "properties": {
+            "result": { "type": "string", "minLength": 1 },
+            "covered_quantity": { "type": "number" },
+            "shortfall_quantity": { "type": "number" },
+            "unit": { "type": "string", "minLength": 1 },
+            "scenario_only": { "type": "boolean" }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package_identity", "artifact_contract"],
+      "properties": {
+        "package_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "canonicalization", "delivery_excluded_from_identity"],
+          "properties": {
+            "algorithm": { "const": "SHA-256" },
+            "canonicalization": { "const": "stable-json-key-order-v1" },
+            "delivery_excluded_from_identity": { "const": true }
+          }
+        },
+        "artifact_contract": { "type": "string", "minLength": 1 }
+      }
+    },
+    "next_evidence_required": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operational", "research"],
+      "properties": {
+        "operational": { "$ref": "#/$defs/stringArray" },
+        "research": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["R1", "R2", "R3", "R4"],
+          "properties": {
+            "R1": { "$ref": "#/$defs/stringArray" },
+            "R2": { "$ref": "#/$defs/stringArray" },
+            "R3": { "$ref": "#/$defs/stringArray" },
+            "R4": { "$ref": "#/$defs/stringArray" }
+          }
+        }
+      }
+    },
+    "explicit_non_claims": { "$ref": "#/$defs/stringArray" },
+    "research_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "assessment_id", "boundaries", "r3_components"],
+      "properties": {
+        "schema": { "type": "string", "minLength": 1 },
+        "assessment_id": { "$ref": "#/$defs/sha256" },
+        "boundaries": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["R1", "R2", "R3", "R4"],
+          "properties": {
+            "R1": { "$ref": "#/$defs/status" },
+            "R2": { "$ref": "#/$defs/status" },
+            "R3": { "$ref": "#/$defs/status" },
+            "R4": { "$ref": "#/$defs/status" }
+          }
+        },
+        "r3_components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["issuance", "pricing", "settlement", "governance"],
+          "properties": {
+            "issuance": { "$ref": "#/$defs/status" },
+            "pricing": { "$ref": "#/$defs/status" },
+            "settlement": { "$ref": "#/$defs/status" },
+            "governance": { "$ref": "#/$defs/status" }
+          }
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_decision_id", "capsule_id", "capsule_verification"],
+      "properties": {
+        "receipt_decision_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "capsule_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "capsule_verification": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["ok", "integrity", "schema_validation", "decision_reproduction"],
+              "properties": {
+                "ok": { "type": "boolean" },
+                "integrity": { "type": "string", "minLength": 1 },
+                "schema_validation": { "type": "string", "minLength": 1 },
+                "decision_reproduction": { "type": "string", "minLength": 1 }
+              }
+            },
+            { "type": "null" }
+          ]
+        }
+      }
+    }
+  }
+}
