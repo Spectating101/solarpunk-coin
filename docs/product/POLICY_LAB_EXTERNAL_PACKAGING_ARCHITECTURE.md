@@ -1,728 +1,488 @@
-# Policy Lab — External Packaging Architecture
+# Policy Lab External Packaging Architecture
 
-**Status:** design exploration; no core-engine change  
-**Branch:** `design/policy-lab-external-packaging`  
-**Purpose:** determine how the frozen G4 Policy Lab can become externally consumable without distorting the research object.
-
----
-
-## 1. Packaging thesis
-
-Policy Lab should not be packaged externally as one large research application.
-
-The frozen core already performs the difficult internal work:
-
-```text
-Evidence
-  ↓
-Assurance
-  ↓
-Admission
-  ↓
-Quantity
-  ↓
-Settlement
-  ↓
-Receipt / lineage
-```
-
-The external packaging problem is different:
-
-> What stable object can another person receive, understand, verify, integrate, cite, or pay to produce without first learning the repository architecture?
-
-The answer proposed here is:
-
-> **The canonical external unit is a Claim Assessment Package.**
-
-Policy Lab is the machinery that produces and verifies that package.
-
-The current `ConstrainedClaimAssessment` remains a research projection over runtime artifacts. It should **not** be promoted unchanged into the universal external product object because it is intentionally organized around research boundaries R1–R4 rather than an external user's immediate claim, policy, evidence, decision, and remediation needs.
+**Status:** design authority after P0/P0.1 implementation experiments  
+**Scope:** packaging and external-consumption architecture only
 
 ---
 
-## 2. Product hierarchy
+## Purpose
+
+Policy Lab already has a deterministic research core. The packaging problem is different:
+
+> How should a bounded claim assessment leave the repository so an external reader, researcher, operator, or later software integration can consume the same underlying result without reinterpretation?
+
+The answer after P0/P0.1 is:
 
 ```text
-LEVEL 0 — DETERMINISTIC CORE
-Evidence → Assurance → Admission → Quantity → Settlement → Receipt
-internal implementation authority
-
-LEVEL 1 — PORTABLE EXTERNAL OBJECT
-Claim Assessment Package
-portable / inspectable / verifiable
-
-LEVEL 2 — DOMAIN PACK
-claim templates + evidence profile + policy profile + vocabulary
-initial domain: energy-linked claims
-
-LEVEL 3 — HUMAN PACKAGES
-Assessment Report
-Assessment Viewer
-Assisted Assessment Service
-
-LEVEL 4 — MACHINE PACKAGES
-SDK / CLI / API
-embedded evaluation
-
-LEVEL 5 — RESEARCH PACKAGE
-benchmark cases + policies + expected outputs + reproduction path
-
-LEVEL 6 — INSTITUTIONAL PACKAGE
-private connectors + policy registry + access/approval controls + deployment support
-only after external demand proves this layer is needed
+DETERMINISTIC POLICY LAB CORE
+        ↓
+CLAIM ASSESSMENT PACKAGE
+        ↓
+EXPLICIT DOMAIN PROFILE
+        ↓
+POLICY EVALUATION(S)
+        ↓
+OPTIONAL EXTENSIONS
+        ↓
+RENDERINGS / SERVICES
 ```
 
-The layers share the same underlying artifacts. They are not separate engines.
+For the first implemented profile:
+
+```text
+schema: policylab.claim_assessment_package.v0.1
+profile: policylab.energy_linked_claim.v0
+```
+
+This is intentionally **not** declared as a universal claim standard.
 
 ---
 
-## 3. The canonical external object
+## Core separation
 
-### 3.1 Claim Assessment Package
+The repository must preserve four layers that have different authority.
 
-The package should answer, in order:
+### Layer 1 — deterministic Policy Lab core
 
-1. **What claim was assessed?**
-2. **Against which evidence?**
-3. **Under which declared policy?**
-4. **What was the decision?**
-5. **If bounded, what quantity/scope is supportable?**
-6. **What blocked or bound the result?**
-7. **What evidence would change the result?**
-8. **What happened at settlement/fulfilment, if assessed?**
-9. **Can another party verify or reproduce it?**
-10. **What does the assessment explicitly not establish?**
+Existing evidence normalization, provenance classification, policy evaluation, quantity ceilings, settlement replay, receipts, capsules, and research-boundary projection.
 
-The package is therefore different from a generic report. It is both:
+This layer owns canonical decisions.
 
-- a machine-readable decision object; and
-- the source from which human reports, viewers, research projections, and integrations are rendered.
+### Layer 2 — portable claim assessment package
 
-### 3.2 Do not collapse distinct semantics
+A derived external object that carries the result without changing it.
 
-The external package must keep these distinct:
+The package must preserve:
+
+- claim/case identity;
+- evidence identity and assurance;
+- domain-specific quantity semantics;
+- policy identity/version/scope;
+- canonical decision IDs/results;
+- structured rule evaluations;
+- admitted quantity if any;
+- binding/blocking calculators;
+- settlement result when included;
+- explicit non-claims;
+- verification identities.
+
+### Layer 3 — optional extensions
+
+Not every recipient needs every research/runtime artifact.
+
+Extensions may include:
 
 ```text
-claim requested
-≠ evidence assurance
-≠ policy admission
-≠ supported quantity
-≠ settlement result
-≠ research-boundary status
-≠ legal / regulatory authority
+research projection
+closed-world delivery verification
+future domain-specific attachments
 ```
 
-A convenient UI may summarize them, but the package must preserve the typed distinctions.
+The current R1–R4 `ConstrainedClaimAssessment` belongs here, not in the minimum operational contract.
+
+### Layer 4 — renderings and services
+
+Human report, research bundle, hosted workbench, assisted assessment, future CLI/SDK/API.
+
+These are views or delivery mechanisms over the package. They must not become independent sources of policy meaning.
 
 ---
 
-## 4. Proposed package family
+## Package-first rule
 
-The external architecture should use a small family of composable objects rather than one giant document.
+The human report is a rendering of the machine-readable package.
 
-### A. Evidence Package
-
-Purpose: preserve the exact evidence object and what is known about it.
-
-Minimum responsibilities:
+Correct direction:
 
 ```text
-source identity
-measurement / source semantics
-scope / window
-transformations
-content or evidence hash
-assurance level
-warnings / blockers
-source-holder or operator confirmation state
+closed case artifacts
+        ↓
+canonical Policy Lab decisions
+        ↓
+claim assessment package
+        ↓
+report / verifier / research kit / future API
 ```
 
-The existing `EvidenceEnvelope` remains the likely implementation basis.
-
-### B. Policy Pack
-
-Purpose: make the adjudication rule set portable and versioned.
-
-Minimum responsibilities:
+Incorrect direction:
 
 ```text
-policy ID
-policy version / content identity
-admission gates
-quantity ceilings
-settlement requirements where applicable
-required assurance / provenance
-human-readable rule explanations
+report prose
+        ↓
+reverse-engineered machine result
 ```
 
-A Policy Pack is not a statement that the policy is legally authoritative, economically optimal, or externally endorsed.
-
-### C. Claim Definition
-
-Purpose: state precisely what the requester is trying to assert.
-
-Minimum responsibilities:
-
-```text
-claim ID
-claim type
-subject
-requested scope / quantity
-unit
-period
-jurisdiction / location only where relevant
-claim-specific parameters
-```
-
-This object is currently underrepresented in the public assessment schema and is necessary for external use.
-
-### D. Evaluation Result
-
-Purpose: preserve the deterministic consequence of one Claim Definition + Evidence Package + Policy Pack.
-
-Minimum responsibilities:
-
-```text
-decision
-blocking rules
-binding ceiling
-supported quantity / scope
-rule-by-rule trace
-policy identity
-evidence identity
-decision identity
-```
-
-### E. Settlement / Fulfilment Result
-
-Purpose: preserve what happened after admission when settlement or delivery is actually part of the assessed workflow.
-
-It must remain optional because not every external claim requires settlement.
-
-### F. Claim Assessment Package
-
-Purpose: bind A–E together and add:
-
-```text
-assessment identity
-verification status
-next evidence required
-explicit non-claims
-references to underlying artifacts
-optional research projection
-```
-
-This is the object external consumers exchange.
+The package must remain the external semantic object.
 
 ---
 
-## 5. Draft package shape
+## Domain-profile rule
 
-The first experimental package should look conceptually like this:
-
-```json
-{
-  "schema": "policylab.claim_assessment_package.v0",
-  "assessment_id": "sha256:...",
-  "claim": {
-    "claim_id": "...",
-    "type": "energy_surplus_backed_quantity",
-    "subject": "...",
-    "requested_quantity": null,
-    "unit": "kWh",
-    "period": { "start": "...", "end": "..." }
-  },
-  "evidence": {
-    "evidence_id": "...",
-    "hash": "...",
-    "assurance": "L0",
-    "source_confirmation": "NOT_CONFIRMED",
-    "warnings": []
-  },
-  "evaluations": [
-    {
-      "policy": {
-        "id": "LAB-CASE-OPEN-004",
-        "version": "..."
-      },
-      "decision": "ADMIT_WITH_LIMIT",
-      "supported_quantity": 33.066,
-      "unit": "kWh",
-      "binding_rule": "EVIDENCE_BACKED_CAPACITY",
-      "blocking_rules": [],
-      "decision_id": "..."
-    },
-    {
-      "policy": {
-        "id": "ENERGY-CASE-PILOT-005",
-        "version": "..."
-      },
-      "decision": "BLOCKED",
-      "supported_quantity": 0,
-      "unit": "kWh",
-      "binding_rule": null,
-      "blocking_rules": ["SIGNED_EVIDENCE", "MIN_PROVENANCE"],
-      "decision_id": "..."
-    }
-  ],
-  "settlement": {
-    "status": "PARTIAL",
-    "covered_quantity": 13.2264,
-    "shortfall_quantity": 19.8396,
-    "unit": "kWh",
-    "basis": "DECLARED_SCENARIO"
-  },
-  "next_evidence_required": [
-    "authenticated source-holder/operator evidence",
-    "provenance meeting the stricter policy requirement"
-  ],
-  "verification": {
-    "replayable": true,
-    "artifact_integrity": "PASS",
-    "verifier_profile": "..."
-  },
-  "research_projection": {
-    "schema": "solarpunk.constraint.constrained_claim_assessment.v1",
-    "assessment_ref": "088067800c192a0d6854cc4a70f068f3590d4fc658df3622370bfcc7974e56dc"
-  },
-  "explicit_non_claims": []
-}
-```
-
-This is only a package-design sketch. It does not replace the frozen runtime schemas.
-
----
-
-## 6. Why the existing `ConstrainedClaimAssessment` should remain separate
-
-The existing schema is strong for research because it explicitly records:
-
-```text
-R1 economic information
-R2 claim-level evidence
-R3 binding constraint
-R4 monetary performance
-```
-
-and preserves basis references, non-claims, next evidence, and stable assessment identity.
-
-That is valuable, but a professional or developer consumer should not have to interpret R1–R4 in order to answer:
-
-> Was this claim admitted, what quantity is supportable, what blocked it, and what would change the decision?
+P0 showed that a package built from one energy case naturally accumulates energy-shaped fields.
 
 Therefore:
 
+> A domain-specific package profile must identify which assumptions and quantity semantics are in force.
+
+Current profile:
+
 ```text
-runtime artifacts
-      ├──→ Claim Assessment Package      [external operational projection]
-      └──→ ConstrainedClaimAssessment    [research projection]
+policylab.energy_linked_claim.v0
 ```
 
-Neither projection rewrites the underlying engine.
+It carries:
+
+```text
+source quantity unit: kWh
+source quantity semantics: bounded derived surplus
+claim unit: ENERGY_CLAIM_UNIT
+evidence-backed rate: policy-declared
+calculator: EVIDENCE_BACKED_CAPACITY
+```
+
+This prevents the implementation from silently pretending that `ENERGY_CLAIM_UNIT` is physical kWh or that an energy-shaped schema is neutral across domains.
+
+Do not introduce a second domain profile until a genuinely different outside case requires it.
 
 ---
 
-## 7. Human-facing packages
+## Policy authority and human wording
 
-### 7.1 Assessment Report
+A deterministic policy consequence is only a consequence **under that declared policy**.
 
-The report should be generated from the package, not authored independently.
+The external package must therefore carry the policy's own:
 
-Page/order logic:
+- name;
+- description;
+- version;
+- governance authority/mutability metadata;
+- manifest hash;
+- canonical decision ID.
+
+Human-facing status must not erase this scope.
+
+For example:
 
 ```text
-1. RESULT
-2. CLAIM ASSESSED
-3. SUPPORTABLE SCOPE / QUANTITY
-4. WHY
-5. WHAT IS MISSING
-6. EVIDENCE + ASSURANCE
-7. POLICY + RULE TRACE
-8. SETTLEMENT / FULFILMENT if applicable
-9. VERIFICATION + IDENTITIES
-10. LIMITATIONS / NON-CLAIMS
+canonical decision: ADMIT_WITH_LIMIT
+external reading: ADMITTED_WITH_LIMIT_UNDER_POLICY
 ```
 
-The report should not lead with architecture, R1–R4, or repository terminology.
+Do not translate a research-policy result into generic language such as `SUPPORTED_WITH_LIMIT`.
 
-### 7.2 Assessment Viewer
+---
 
-Purpose:
+## Structured-rule rule
 
-> Open a package received from someone else and inspect/verify it without requiring the original authoring interface.
+Policy meaning must come from the existing structured evaluations, not from a second prose ruleset invented by packaging.
 
-Minimum functions:
+The package should preserve rule objects containing fields such as:
 
 ```text
-open package
-validate schema
-check package identity
-show claim and decision
-show blocking/binding rules
-show evidence/policy identities
-show next evidence required
-show explicit limitations
-run local/remote verifier if underlying artifacts are present
+evaluation_id
+calculator_id
+calculator_version
+constraint_class
+policy_rule_id
+status
+observed_inputs
+parameters
+capacity
+explanation
+boundary
 ```
 
-The Viewer is strategically useful because it lets the assessment artifact travel independently of the workbench.
+A human rendering may explain these fields, but cannot replace them.
 
-### 7.3 Assisted Assessment Service
-
-This should be the first commercial packaging experiment if external interest appears.
-
-The service is not initially “SaaS.”
-
-The transaction is:
+For a block, the useful external question is:
 
 ```text
-customer / collaborator provides case + evidence + relevant rules
+what did the policy require?
+what was observed?
+which rule blocked?
+what boundary limits the meaning of that rule?
+```
+
+---
+
+## Identity architecture
+
+One identity is not enough because an assessment decision and its delivery package have different stability requirements.
+
+### `assessment_id`
+
+Semantic identity of the operational assessment.
+
+It should remain stable when only:
+
+- explanatory prose changes;
+- policy descriptions are re-rendered without changing policy identity;
+- warning wording changes;
+- optional research projection changes presentation;
+- delivery capsule/run identity changes.
+
+It must change when the underlying claim/evidence/policy decision semantics change.
+
+P0.1 computes it from the bounded claim/case, canonical time window, evidence hash/assurance, policy/decision identities, rule-evaluation identities, quantities, blockers/binders, and settlement result.
+
+### `package_content_id`
+
+Identity of the complete package content except the content-ID field itself.
+
+It is allowed to change if delivery verification or explanatory package content changes.
+
+P0.1 explicitly tests this split.
+
+---
+
+## Time semantics
+
+External readers should not have to infer local dates from UTC instants.
+
+The package should carry both:
+
+```text
+period.local
+period.canonical_utc
+```
+
+The local representation is for interpretation.
+
+The UTC representation remains the deterministic canonical time boundary used by the case artifacts.
+
+---
+
+## Evidence semantics
+
+Do not collapse evidence quality into a binary “verified” label.
+
+The package must preserve:
+
+```text
+evidence hash
+assurance level
+source-holder confirmation state
+source identity
+bounded quantity
+quantity semantics
+structured warning codes/details
+```
+
+For `PUB-AUSGRID-001P`, the package must continue to expose that:
+
+- assurance is L0;
+- source-holder confirmation is absent;
+- exact mirror bytes are frozen but historical-source byte equivalence is not independently proven;
+- derived surplus is not directly metered grid export.
+
+Packaging cannot promote any of these facts.
+
+---
+
+## Settlement semantics
+
+Settlement is optional.
+
+When present, it must remain a separate result rather than being folded into admission.
+
+A scenario replay does not establish:
+
+- enforceable delivery;
+- reserve custody;
+- legal redemption;
+- legal claim authority.
+
+The human rendering must say so when settlement is scenario-only.
+
+---
+
+## Research extension
+
+The research framework remains valuable but must not be forced onto every external consumer.
+
+Correct relationship:
+
+```text
+operational assessment package
+        ↓ optional extension
+ConstrainedClaimAssessment
         ↓
-we normalize the case without changing source meaning
-        ↓
-Policy Lab executes declared policies
-        ↓
-we return Claim Assessment Package + human report + reproduction path
+R1 / R2 / R3 / R4 projection
 ```
 
-Why start here:
+This preserves research traceability while allowing a non-academic recipient to consume the package without first learning the whole framework.
 
-- learns which inputs external users actually have;
-- learns which missing evidence matters in practice;
-- reveals which report fields they care about;
-- avoids automating a workflow before the workflow is known;
-- can generate the first payment or repeat-use evidence without enlarging the core.
+The current research extension remains anchored to its own stable assessment identity.
 
 ---
 
-## 8. Machine-facing packages
+## Verification architecture
 
-### 8.1 CLI
+There are two distinct verification stages.
 
-First machine interface should likely be CLI because it matches the current reproducibility culture.
+### Internal closed-artifact verification — implemented in P0.1
 
-Conceptual use:
+The verifier checks:
 
-```text
-policy-lab assess \
-  --claim claim.json \
-  --evidence evidence.json \
-  --policy policy.json \
-  --out assessment/
+- package schema/profile identity;
+- semantic `assessment_id` reproduction;
+- `package_content_id` reproduction;
+- case/evidence agreement;
+- local + UTC period agreement;
+- source/archive identity;
+- policy metadata/manifest-hash agreement;
+- canonical decision agreement;
+- structured rule-evaluation agreement;
+- quantity/binding/blocking agreement;
+- settlement agreement;
+- optional research-extension agreement;
+- optional delivery/capsule agreement;
+- exact human-report reproduction.
 
-policy-lab verify assessment/claim-assessment-package.json
-```
+It also perturbs prose/delivery-only fields to ensure semantic assessment identity remains stable while package-content identity changes.
 
-### 8.2 SDK
+### External transferable verification — not yet established
 
-Only after the package schema stabilizes.
+The current verifier still expects the closed repository case artifact set.
 
-Conceptual use:
+The next verification question is therefore:
 
-```js
-const result = await policyLab.assess({ claim, evidence, policy });
-```
+> What minimum bundle can a second party receive and independently verify without the authoring repository state?
 
-The SDK should return the same canonical package structure used by CLI/API.
-
-### 8.3 API
-
-The API should expose package production, not invent a separate SaaS object model.
-
-Conceptual endpoints:
-
-```text
-POST /v1/assessments
-GET  /v1/assessments/{id}
-POST /v1/assessments/{id}/verify
-GET  /v1/policies/{id}
-```
-
-No API is justified until an external integration or repeated internal workflow requires it.
+That is a P2 evidence problem, not justification for speculative API development.
 
 ---
 
-## 9. Domain Packs
+## Human rendering architecture
 
-A Domain Pack prevents the generic engine from becoming abstraction-heavy to users.
-
-A Domain Pack should contain:
+The primary human layer should answer, in order:
 
 ```text
-domain vocabulary
-claim templates
-evidence profile / adapter expectations
-policy profiles
-human explanations
-unit conventions
-example cases
-explicit domain non-claims
+1. What question was assessed?
+2. What happened under each named policy?
+3. What quantity was admitted, if any?
+4. What bound or blocked the result?
+5. What evidence actually existed?
+6. What are the source and unit limitations?
+7. What settlement result exists, if any?
+8. How can the assessment be verified?
 ```
 
-### First legitimate Domain Pack
+Internal IDs, UTC instants, R1–R4 projection, delivery capsule IDs, and the full non-claim wall belong in a technical appendix.
 
-**Energy Claim Pack**
-
-Possible claim templates, limited to what current evidence/rules can honestly support:
-
-```text
-surplus-backed quantity
-energy-evidence-backed quantity
-policy-constrained admitted quantity
-settlement/shortfall scenario
-```
-
-Do not claim support for unrelated carbon, RWA, subsidy, procurement, or compliance domains merely because the core is abstract enough to imagine them.
-
-A second Domain Pack is justified only when real external evidence + real rules + a real use case demonstrate it.
+The report must remain reproducible from the package.
 
 ---
 
-## 10. Research packaging
+## Research packaging route
 
-The research package should be a **benchmark/reproduction kit**, not a repackaged SaaS UI.
-
-Suggested structure:
+A research distribution can wrap the same package with:
 
 ```text
-Policy Lab Benchmark / Research Kit
-│
-├── METHOD.md
-├── CASES/
-│   ├── controlled cases
-│   └── PUB-AUSGRID-001P
-├── EVIDENCE/
-├── POLICIES/
-├── EXPECTED-ASSESSMENTS/
-├── SCHEMAS/
-├── VERIFY/
-└── CITATION.cff
+research question / paper
+claim assessment package
+optional R1–R4 research projection
+policy manifests
+evidence references / distributable evidence
+expected results
+verifier
+reproduction instructions
 ```
 
-External research job:
-
-> Clone/download the kit, execute a case under a declared policy, reproduce the expected decision and assessment identity, then change one declared condition and report the resulting boundary/decision difference.
-
-This gives researchers something they can cite and extend without understanding the entire historical SolarPunk repository.
+Do not create a separate research-only decision semantics.
 
 ---
 
-## 11. Institutional package — later only
+## Commercial packaging route
 
-Do not build this now.
-
-If repeated external use proves demand, an institutional package could add:
+The first commercially testable interaction remains narrow:
 
 ```text
-private evidence connectors
-policy registry
-version/change approval
-role-based access
-case history
-review / sign-off workflow
-private deployment
-retention controls
-organization-specific report templates
-support / SLA
+external actor
+   ↓
+bounded claim + evidence + declared requirements
+   ↓
+Policy Lab / assisted operator
+   ↓
+Claim Assessment Package
+   ↓
+what happened under the declared policy?
+what quantity is admitted?
+what blocks the stricter route?
+what remains unproven?
 ```
 
-These are commercial/institutional wrappers around the same assessment core.
+This can later be delivered through a service, hosted workbench, SDK, or API **only after the interaction repeats**.
 
-They are not current evidence of product-market fit.
+Do not sell the current object as certification, legal approval, or “energy-backed money.”
 
 ---
 
-## 12. Commercial architecture
+## Future surface selection
 
-Because the repository core is public/MIT, commercialization should not depend on artificial exclusivity over the existing code.
-
-Potential value capture should come from the costly things around the open core:
+Select the delivery surface from observed external use:
 
 ```text
-assisted assessment work
-hosted execution
-private evidence connectors
-organization-specific policy integration
-policy maintenance / change management
-deployment / support
-team workflow / access controls
-verification infrastructure
-custom domain packs where rights permit
-institutional research contracts
+repeated human assessment
+→ assisted service / hosted workbench
+
+machine-to-machine demand
+→ CLI / SDK / API
+
+institutional governance demand
+→ organization/private deployment
+
+researcher demand
+→ benchmark/reproduction tooling
 ```
 
-The portable package and verifier should remain sufficiently open that trust does not depend on an opaque service.
-
-### Recommended conversion ladder
-
-```text
-OPEN RESEARCH CORE
-        ↓
-PORTABLE CLAIM ASSESSMENT PACKAGE
-        ↓
-ASSISTED EXTERNAL ASSESSMENT
-        ↓
-REPEAT USE OF SAME WORKFLOW?
-        ├── no → keep service/research form
-        └── yes
-             ↓
-HOSTED WORKBENCH / API
-             ↓
-REPEATED ORGANIZATIONAL INTEGRATION?
-        ├── no → stop
-        └── yes
-             ↓
-ENTERPRISE / SELF-HOST / POLICY MANAGEMENT
-```
-
-Do not skip directly to subscriptions, accounts, billing, marketplace, or enterprise controls.
+Do not pick the product surface before the workflow exists.
 
 ---
 
-## 13. What is open vs potentially monetizable
+## Open-core strategy
 
-### Keep open / verifiable by default
+The repository is public/MIT.
 
-```text
-canonical package schema
-core deterministic semantics
-public verifier
-public benchmark cases
-public example policy packs
-research projection
-reproduction tooling necessary to verify public claims
-```
+Open assets can include:
 
-### Potentially monetizable if external demand exists
+- deterministic core semantics;
+- public package/profile schemas;
+- verifier;
+- public benchmark cases;
+- example policies;
+- research reproduction kit.
 
-```text
-hosted execution
-private evidence ingestion/connectors
-customer policy implementation
-organization-specific workflows
-private case storage
-review/approval workflows
-premium support / deployment
-managed policy/version operations
-commercial domain packs built from lawfully usable inputs
-```
+Potential later paid layers, only after external demand, can include:
 
-This separation preserves credibility while leaving commercial room.
+- hosted execution;
+- private evidence connectors;
+- organization-specific policy implementation/maintenance;
+- approval/access workflows;
+- private deployment;
+- support;
+- institutional research engagements.
+
+The defensible asset is accumulated policy, workflow, evidence-handling, integration, and external-use knowledge—not artificial secrecy around already-public code.
 
 ---
 
-## 14. Packaging tests
+## Current stop rule
 
-A package should fail the packaging experiment if an external user must read CL, ECI, SPK history, or the repository architecture before using it.
+P0.1 has validated internal package semantics far enough.
 
-### Test A — 30-second comprehension
+Do not add:
 
-Can a new user answer:
+- new policies;
+- new evidence sources merely for packaging;
+- generalized cross-domain abstractions;
+- API endpoints;
+- SaaS/account infrastructure;
+- marketplace/plugin layers;
+- certification language;
+- AI features;
+- new token/runtime behavior.
 
-```text
-What claim was tested?
-What happened?
-Why?
-What would change it?
-```
+The next useful evidence must come from a recipient or a genuinely new outside case.
 
-without reading research documentation?
-
-### Test B — independent transfer
-
-Can person A produce a package and person B inspect/verify it without person A's UI session?
-
-### Test C — typed non-promotion
-
-Can the package remain useful while clearly preserving:
-
-```text
-L0 evidence ≠ trusted source truth
-admission ≠ legal authority
-settlement scenario ≠ enforceable redemption
-R3 mechanism ≠ R4 monetary performance
-```
-
-### Test D — machine reuse
-
-Can CLI, SDK, API, viewer, and report all consume the same canonical package rather than translating among competing internal formats?
-
-### Test E — commercial learning
-
-Can an assisted external assessment teach us something about willingness to use/pay without requiring new core functionality?
-
----
-
-## 15. What not to build now
-
-Do not build:
-
-- generic multi-domain claims;
-- marketplace;
-- accounts / billing;
-- AI assistant;
-- enterprise RBAC;
-- legal/compliance certification claims;
-- new token/settlement functionality;
-- arbitrary policy-authoring GUI;
-- API gateway;
-- plugin marketplace;
-- certification programme;
-- standards-body branding.
-
-None of these are required to test whether the packaging works.
-
----
-
-## 16. First external packaging experiment
-
-Use only the existing `PUB-AUSGRID-001P` evidence and frozen policies.
-
-Produce three artifacts from the unchanged core:
-
-```text
-1. claim-assessment-package.json
-2. claim-assessment-report.md (or later PDF)
-3. verify command / reproduction instructions
-```
-
-The experiment should demonstrate both existing policy consequences:
-
-```text
-same outside evidence
-→ open research policy
-→ ADMIT_WITH_LIMIT
-→ 33.066 kWh
-
-same outside evidence
-→ stricter pilot policy
-→ BLOCKED
-→ SIGNED_EVIDENCE + MIN_PROVENANCE
-```
-
-The point is not to create a better demo page.
-
-The point is to determine whether an external person can receive the package and understand:
-
-> what is supportable, what is not, why, and what evidence would be needed next.
-
----
-
-## 17. Stop rule
-
-The packaging work is successful when one current case can be converted into a portable, independently inspectable external assessment without changing the core truth.
-
-After that, **stop internal packaging expansion and seek external use**.
-
-A new package layer is justified only by:
-
-- a real researcher trying to reproduce or extend a case;
-- a real evaluator asking for a different artifact;
-- a real operator providing evidence;
-- a real integrator needing machine access;
-- a real buyer/workflow revealing repeated use;
-- a demonstrated packaging or verification defect.
-
-Otherwise:
-
-> **Do not build more packaging. Use the package.**
+Continue only when a real recipient exposes a comprehension, verification, profile, or workflow requirement that the current package cannot satisfy.
