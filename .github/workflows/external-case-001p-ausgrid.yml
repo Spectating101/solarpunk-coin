@@ -11,8 +11,8 @@ on:
       - scripts/verify_constrained_claim_assessment.mjs
       - scripts/build_claim_assessment_package.mjs
       - scripts/verify_claim_assessment_package.mjs
-      - scripts/lib/claim_assessment_package_v0.mjs
-      - protocol/schema/claim-assessment-package.v0.schema.json
+      - scripts/lib/claim_assessment_package_v0_1.mjs
+      - protocol/schema/claim-assessment-package.v0.1.schema.json
       - .github/workflows/external-case-001p-ausgrid.yml
       - packages/constraint-core/**
       - frontend/src/lib/researchCapsule.js
@@ -27,8 +27,8 @@ on:
       - scripts/verify_constrained_claim_assessment.mjs
       - scripts/build_claim_assessment_package.mjs
       - scripts/verify_claim_assessment_package.mjs
-      - scripts/lib/claim_assessment_package_v0.mjs
-      - protocol/schema/claim-assessment-package.v0.schema.json
+      - scripts/lib/claim_assessment_package_v0_1.mjs
+      - protocol/schema/claim-assessment-package.v0.1.schema.json
       - .github/workflows/external-case-001p-ausgrid.yml
       - packages/constraint-core/**
       - frontend/src/lib/researchCapsule.js
@@ -103,21 +103,21 @@ jobs:
           node scripts/verify_constrained_claim_assessment.mjs \
             --case-dir=state/external/public-001p-ausgrid
 
-      - name: Build portable claim assessment package
+      - name: Build P0.1 energy-profile assessment package
         shell: bash
         run: |
           set -euo pipefail
           node scripts/build_claim_assessment_package.mjs \
             --case-dir=state/external/public-001p-ausgrid
 
-      - name: Verify portable package against closed case artifacts
+      - name: Verify P0.1 package against closed case artifacts
         shell: bash
         run: |
           set -euo pipefail
           node scripts/verify_claim_assessment_package.mjs \
             --case-dir=state/external/public-001p-ausgrid
 
-      - name: Rebuild package byte-identically
+      - name: Rebuild P0.1 package byte-identically
         shell: bash
         run: |
           set -euo pipefail
@@ -141,7 +141,7 @@ jobs:
         shell: bash
         run: |
           if [ -f state/external/public-001p-ausgrid/report.json ]; then
-            node -e 'const fs=require("fs"); const r=require("./state/external/public-001p-ausgrid/report.json"); const a=fs.existsSync("state/external/public-001p-ausgrid/constrained-claim-assessment.json") ? require("./state/external/public-001p-ausgrid/constrained-claim-assessment.json") : null; const p=fs.existsSync("state/external/public-001p-ausgrid/claim-assessment-package.json") ? require("./state/external/public-001p-ausgrid/claim-assessment-package.json") : null; console.log(JSON.stringify({status:r.status, source:r.source, evidence:r.evidence, decisions:r.decisions, settlement:r.settlement, capsule:r.capsule, assessment:a ? {assessment_id:a.assessment_id, boundaries:Object.fromEntries(Object.entries(a.research_boundaries).map(([k,v])=>[k,v.status])), r3_components:Object.fromEntries(Object.entries(a.research_boundaries.R3.components||{}).map(([k,v])=>[k,v.status]))} : null, package:p ? {package_id:p.package_id, claim:p.claim, evidence:{assurance:p.evidence.assurance, eligible_quantity:p.evidence.eligible_quantity}, evaluations:p.evaluations, research_projection:p.research_projection} : null}, null, 2));'
+            node -e 'const fs=require("fs"); const r=require("./state/external/public-001p-ausgrid/report.json"); const a=fs.existsSync("state/external/public-001p-ausgrid/constrained-claim-assessment.json") ? require("./state/external/public-001p-ausgrid/constrained-claim-assessment.json") : null; const p=fs.existsSync("state/external/public-001p-ausgrid/claim-assessment-package.json") ? require("./state/external/public-001p-ausgrid/claim-assessment-package.json") : null; console.log(JSON.stringify({status:r.status, source:r.source, evidence:r.evidence, decisions:r.decisions, settlement:r.settlement, capsule:r.capsule, assessment:a ? {assessment_id:a.assessment_id, boundaries:Object.fromEntries(Object.entries(a.research_boundaries).map(([k,v])=>[k,v.status])), r3_components:Object.fromEntries(Object.entries(a.research_boundaries.R3.components||{}).map(([k,v])=>[k,v.status]))} : null, package:p ? {schema:p.schema, profile_id:p.profile.id, assessment_id:p.assessment_id, package_content_id:p.package_content_id, local_period:p.claim.period.local, evidence:{assurance:p.evidence.assurance, eligible_quantity:p.evidence.eligible_quantity, warning_codes:p.evidence.warnings.map(w=>w.code)}, evaluations:p.evaluations.map(e=>({policy_id:e.policy.id, policy_name:e.policy.name, decision:e.decision, external_reading:e.external_reading, supported_quantity:e.supported_quantity, blocking_calculators:e.blocking_calculators, binding_calculators:e.binding_calculators})), research_extension:p.extensions?.research_projection?.assessment_id||null} : null}, null, 2));'
           fi
 
       - name: Upload public-case evidence bundle
