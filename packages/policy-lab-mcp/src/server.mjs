@@ -230,19 +230,23 @@ function registerTools(server) {
     idempotentHint: true,
     openWorldHint: false,
   };
+  const policyVocabulary = catalogSnapshot().policies
+    .map((policy) => `${policy.name} = ${policy.id}`)
+    .join('; ');
+  const policyIdDescription = `Exact registered policy ID. Registered vocabulary: ${policyVocabulary}. case_manifest.default_policy_ref is metadata only and must not replace a differently requested policy.`;
 
   server.registerTool(
     'assess_case',
     {
       title: 'Assess case',
-      description: 'Evaluate one supported energy case under one registered Policy Lab policy ID. If the task names/describes a policy without its exact ID, resolve it from policylab://policies first; do not silently use case_manifest.default_policy_ref when a different policy was requested. Caller-authored provenance is not accepted. With no assurance_scenario_id, assurance is evidence-only; a scenario ID must name a registered controlled counterfactual.',
+      description: `Evaluate one supported energy case under one registered Policy Lab policy ID. ${policyIdDescription} Caller-authored provenance is not accepted. With no assurance_scenario_id, assurance is evidence-only; a scenario ID must name a registered controlled counterfactual.`,
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
         assurance_scenario_id: z.string().optional(),
-        policy_id: z.string().describe('Exact registered policy ID. Resolve human-readable policy names/roles from policylab://policies; do not substitute case_manifest.default_policy_ref for a differently requested policy.'),
+        policy_id: z.string().describe(policyIdDescription),
       }),
     },
     async (input) => guarded(() => assessCase({
@@ -258,14 +262,14 @@ function registerTools(server) {
     'compare_policies',
     {
       title: 'Compare policies',
-      description: 'Run the same supported energy case/evidence state through multiple registered policy IDs. Resolve named/described policies from policylab://policies rather than inferring them from case defaults. Caller-authored provenance is not accepted by this decision tool.',
+      description: `Run the same supported energy case/evidence state through multiple registered policy IDs. ${policyIdDescription} Caller-authored provenance is not accepted by this decision tool.`,
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
         assurance_scenario_id: z.string().optional(),
-        policy_ids: z.array(z.string()).min(1).describe('Exact registered policy IDs, resolved from policylab://policies when the task gives human-readable names/roles.'),
+        policy_ids: z.array(z.string()).min(1).describe(`Exact registered policy IDs. ${policyIdDescription}`),
       }),
     },
     async (input) => guarded(() => comparePolicies({
