@@ -104,6 +104,10 @@ function registerResources(server) {
 
   const examples = {
     principle: 'Decision tools never accept caller-authored provenance level or arbitrary policy objects.',
+    policy_resolution: {
+      rule: 'If a task names/describes a policy but does not supply its exact registered ID, read policylab://policies and resolve that requested policy before calling a decision tool.',
+      warning: 'case_manifest.default_policy_ref is case metadata; do not silently substitute it for a differently requested policy.',
+    },
     assess_evidence_only: {
       tool: 'assess_case',
       arguments: ['case_manifest', 'evidence', 'contexts', 'policy_id'],
@@ -175,7 +179,7 @@ function registerResources(server) {
       boundaries,
     },
   );
-  staticJson('policies', 'policylab://policies', 'Built-in policies', 'Versioned registered case policies accepted by the v0 MCP.', catalog.policies);
+  staticJson('policies', 'policylab://policies', 'Built-in policies', 'Versioned registered case policies accepted by the v0 MCP. Read this resource whenever a requested policy is given by name/role instead of an exact policy ID.', catalog.policies);
   staticJson('calculators', 'policylab://calculators', 'Constraint calculators', 'Built-in calculator metadata without executable functions.', catalog.calculators);
   staticJson('provenance-levels', 'policylab://provenance-levels', 'Provenance levels', 'Declared L0-L4 assurance levels.', catalog.provenance_levels);
   staticJson('errors', 'policylab://errors', 'MCP error codes', 'Stable wrapper-level error codes intended for autonomous recovery.', errors);
@@ -231,14 +235,14 @@ function registerTools(server) {
     'assess_case',
     {
       title: 'Assess case',
-      description: 'Evaluate one supported energy case under one registered Policy Lab policy ID. Caller-authored provenance is not accepted. With no assurance_scenario_id, assurance is evidence-only; a scenario ID must name a registered controlled counterfactual.',
+      description: 'Evaluate one supported energy case under one registered Policy Lab policy ID. If the task names/describes a policy without its exact ID, resolve it from policylab://policies first; do not silently use case_manifest.default_policy_ref when a different policy was requested. Caller-authored provenance is not accepted. With no assurance_scenario_id, assurance is evidence-only; a scenario ID must name a registered controlled counterfactual.',
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
         assurance_scenario_id: z.string().optional(),
-        policy_id: z.string(),
+        policy_id: z.string().describe('Exact registered policy ID. Resolve human-readable policy names/roles from policylab://policies; do not substitute case_manifest.default_policy_ref for a differently requested policy.'),
       }),
     },
     async (input) => guarded(() => assessCase({
@@ -254,14 +258,14 @@ function registerTools(server) {
     'compare_policies',
     {
       title: 'Compare policies',
-      description: 'Run the same supported energy case/evidence state through multiple registered policy IDs. Caller-authored provenance is not accepted by this decision tool.',
+      description: 'Run the same supported energy case/evidence state through multiple registered policy IDs. Resolve named/described policies from policylab://policies rather than inferring them from case defaults. Caller-authored provenance is not accepted by this decision tool.',
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
         assurance_scenario_id: z.string().optional(),
-        policy_ids: z.array(z.string()).min(1),
+        policy_ids: z.array(z.string()).min(1).describe('Exact registered policy IDs, resolved from policylab://policies when the task gives human-readable names/roles.'),
       }),
     },
     async (input) => guarded(() => comparePolicies({
