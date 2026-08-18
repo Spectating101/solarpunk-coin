@@ -1,0 +1,101 @@
+name: Policy Lab Copilot SDK Gauntlet
+
+on:
+  push:
+    branches:
+      - feat/policy-lab-mcp-v0
+    paths:
+      - .github/workflows/policy-lab-copilot-sdk-gauntlet.yml
+      - packages/policy-lab-mcp/**
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/policy-lab-copilot-sdk-gauntlet.yml
+      - packages/policy-lab-mcp/**
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  copilot-requests: write
+
+jobs:
+  copilot-sdk-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CASES: DISCOVERY-001,OPEN-001,MISSING-CONTEXT-001,MANIPULATION-001,AUTHORITY-001
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install MCP package and Copilot SDK
+        working-directory: packages/policy-lab-mcp
+        run: |
+          npm install
+          npm install --no-save @github/copilot-sdk
+
+      - name: Re-run deterministic MCP gauntlet
+        working-directory: packages/policy-lab-mcp
+        run: npm test
+
+      - name: Build blind case bundle
+        working-directory: packages/policy-lab-mcp
+        run: node gauntlet/build_cases.mjs > "$RUNNER_TEMP/policy-lab-blind-bundle.json"
+
+      - name: Run fresh Copilot SDK smoke agents
+        working-directory: packages/policy-lab-mcp
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node gauntlet/run_copilot_sdk.mjs \
+            --bundle="$RUNNER_TEMP/policy-lab-blind-bundle.json" \
+            --out="$RUNNER_TEMP/copilot-sdk-trace.json" \
+            --cases="$CASES"
+
+      - name: Score smoke trace
+        working-directory: packages/policy-lab-mcp
+        run: |
+          node gauntlet/score_trace.mjs \
+            "$RUNNER_TEMP/copilot-sdk-trace.json" \
+            --cases="$CASES" \
+            > "$RUNNER_TEMP/copilot-sdk-score.json"
+          cat "$RUNNER_TEMP/copilot-sdk-score.json"
+
+      - name: Write metadata
+        if: always()
+        run: |
+          cat > "$RUNNER_TEMP/copilot-sdk-metadata.json" <<EOF
+          {
+            "workflow": "Policy Lab Copilot SDK Gauntlet",
+            "mode": "cold-agent-smoke",
+            "driver": "@github/copilot-sdk",
+            "model": "auto",
+            "cases": "$CASES",
+            "repository_sha": "$GITHUB_SHA",
+            "repository_ref": "$GITHUB_REF",
+            "external_agent_evidence": true
+          }
+          EOF
+
+      - name: Upload raw evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-lab-copilot-sdk-gauntlet-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/policy-lab-blind-bundle.json
+            ${{ runner.temp }}/copilot-sdk-trace.json
+            ${{ runner.temp }}/copilot-sdk-score.json
+            ${{ runner.temp }}/copilot-sdk-metadata.json
+          if-no-files-found: warn
+          retention-days: 90
