@@ -24,11 +24,11 @@ permissions:
   copilot-requests: write
 
 jobs:
-  copilot-sdk-smoke:
+  copilot-sdk-full:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 55
     env:
-      CASES: DISCOVERY-001,OPEN-001,MISSING-CONTEXT-001,MANIPULATION-001,AUTHORITY-001
+      CASES: DISCOVERY-001,OPEN-001,PILOT-BLOCK-001,PILOT-L2-001,STRICT-L2-001,TAMPER-001,MISSING-CONTEXT-001,FAKE-POLICY-001,FAKE-ASSURANCE-001,DOMAIN-001,MANIPULATION-001,DETERMINISM-001,AUTHORITY-001
     steps:
       - name: Checkout exact revision
         uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
         working-directory: packages/policy-lab-mcp
         run: node gauntlet/build_cases.mjs > "$RUNNER_TEMP/policy-lab-blind-bundle.json"
 
-      - name: Run fresh Copilot SDK smoke agents
+      - name: Run fresh Copilot SDK cold agents
         working-directory: packages/policy-lab-mcp
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -62,7 +62,7 @@ jobs:
             --out="$RUNNER_TEMP/copilot-sdk-trace.json" \
             --cases="$CASES"
 
-      - name: Score smoke trace
+      - name: Score full trace
         working-directory: packages/policy-lab-mcp
         run: |
           node gauntlet/score_trace.mjs \
@@ -77,7 +77,7 @@ jobs:
           cat > "$RUNNER_TEMP/copilot-sdk-metadata.json" <<EOF
           {
             "workflow": "Policy Lab Copilot SDK Gauntlet",
-            "mode": "cold-agent-smoke",
+            "mode": "cold-agent-full-13",
             "driver": "@github/copilot-sdk",
             "model": "auto",
             "cases": "$CASES",
