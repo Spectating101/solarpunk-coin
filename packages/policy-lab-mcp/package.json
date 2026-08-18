@@ -11,6 +11,7 @@
     "start": "node src/stdio.mjs",
     "test": "node --test --test-concurrency=1 test/*.test.mjs",
     "gauntlet:build": "node gauntlet/build_cases.mjs",
+    "gauntlet:reference": "node gauntlet/build_reference_trace.mjs",
     "gauntlet:score": "node gauntlet/score_trace.mjs"
   },
   "dependencies": {
