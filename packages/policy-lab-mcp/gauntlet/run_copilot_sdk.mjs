@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { CopilotClient, defineTool } from '@github/copilot-sdk';
@@ -52,6 +52,9 @@ async function runCase({ token, testCase }) {
   const caseRoot = await mkdtemp(join(tmpdir(), `policy-lab-copilot-sdk-${testCase.id}-`));
   const copilotHome = join(caseRoot, 'copilot-home');
   const workspace = join(caseRoot, 'workspace');
+  await mkdir(copilotHome, { recursive: true });
+  await mkdir(workspace, { recursive: true });
+
   const run = {
     case_id: testCase.id,
     tools_discovered: [],
