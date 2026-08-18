@@ -49,7 +49,7 @@ jobs:
 
       - name: Build blind case bundle
         working-directory: packages/policy-lab-mcp
-        run: npm run gauntlet:build > "$RUNNER_TEMP/policy-lab-blind-bundle.json"
+        run: node gauntlet/build_cases.mjs > "$RUNNER_TEMP/policy-lab-blind-bundle.json"
 
       - name: Run fresh GitHub Models smoke agents
         working-directory: packages/policy-lab-mcp
@@ -73,6 +73,7 @@ jobs:
           cat "$RUNNER_TEMP/github-models-score.json"
 
       - name: Write run metadata
+        if: always()
         run: |
           cat > "$RUNNER_TEMP/run-metadata.json" <<EOF
           {
@@ -87,6 +88,7 @@ jobs:
           EOF
 
       - name: Upload raw evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: policy-lab-agent-gauntlet-${{ github.sha }}
@@ -95,4 +97,5 @@ jobs:
             ${{ runner.temp }}/github-models-trace.json
             ${{ runner.temp }}/github-models-score.json
             ${{ runner.temp }}/run-metadata.json
+          if-no-files-found: warn
           retention-days: 90
