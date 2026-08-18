@@ -303,6 +303,7 @@ export function catalogSnapshot() {
     policies: BUILTIN_CASE_POLICIES.map((policy) => casePolicyManifestBody(policy)),
     calculators: BUILTIN_CALCULATORS.map(({ evaluate: _evaluate, ...calculator }) => calculator),
     provenance_levels: PROVENANCE_LEVELS,
+    assurance_scenario_ids: Object.keys(REGISTERED_ASSURANCE_SCENARIOS),
     supported_case_types: [...SUPPORTED_CASE_TYPES],
   };
 }
