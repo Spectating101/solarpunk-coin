@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { McpServer } from '@modelcontextprotocol/server';
 import * as z from 'zod/v4';
 import {
@@ -27,6 +28,15 @@ const declaredProvenanceContext = z.object({
   cryptographically_verified: z.boolean().optional(),
 }).strict();
 
+const SCHEMA_RESOURCES = Object.freeze([
+  ['schema-case', 'policylab://schemas/case', 'Case manifest schema', 'case-manifest.v1.schema.json'],
+  ['schema-evidence', 'policylab://schemas/evidence', 'Evidence envelope schema', 'evidence-envelope.v1.schema.json'],
+  ['schema-context', 'policylab://schemas/context', 'Context manifest schema', 'context-manifest.v1.schema.json'],
+  ['schema-decision', 'policylab://schemas/decision', 'Decision result schema', 'decision-result.v1.schema.json'],
+  ['schema-receipt', 'policylab://schemas/receipt', 'Decision receipt schema', 'decision-receipt.v1.schema.json'],
+  ['schema-assurance-scenario', 'policylab://schemas/assurance-scenario', 'Assurance scenario schema', 'provenance-scenario.v1.schema.json'],
+]);
+
 function success(value) {
   return {
     content: [{ type: 'text', text: JSON.stringify(value, null, 2) }],
@@ -54,6 +64,11 @@ async function guarded(operation) {
   }
 }
 
+async function readBundledSchema(filename) {
+  const url = new URL(`../../../protocol/schema/${filename}`, import.meta.url);
+  return JSON.parse(await readFile(url, 'utf8'));
+}
+
 function registerResources(server) {
   const catalog = catalogSnapshot();
   const boundaries = {
@@ -73,6 +88,40 @@ function registerResources(server) {
     boundary: 'Policy Lab decisions are research outputs under declared evidence, modeled context, derived assurance, and registered policy inputs; they are not legal issuance authority, settlement guarantees, or certification of physical source truth.',
   };
 
+  const errors = {
+    INVALID_INPUT: 'Malformed or missing MCP input.',
+    INVALID_CASE: 'Case manifest failed canonical validation.',
+    UNSUPPORTED_DOMAIN: 'The case type is outside the v0 energy-site decision ontology.',
+    MISSING_EVIDENCE: 'A case-referenced evidence envelope was not supplied.',
+    EVIDENCE_INTEGRITY_ERROR: 'An evidence envelope failed deterministic hash verification.',
+    MISSING_CONTEXT: 'A case-referenced modeled context was not supplied.',
+    UNKNOWN_POLICY: 'The requested policy ID is not registered.',
+    UNKNOWN_ASSURANCE_SCENARIO: 'The requested controlled assurance scenario ID is not registered.',
+    INVALID_REGISTERED_SCENARIO: 'A bundled scenario failed its own registration preflight.',
+    AMBIGUOUS_ASSURANCE: 'Decision assurance could not be classified unambiguously.',
+    POLICY_LAB_CORE_ERROR: 'The deterministic core rejected an input outside the wrapper preflight contract.',
+  };
+
+  const examples = {
+    principle: 'Decision tools never accept caller-authored provenance level or arbitrary policy objects.',
+    assess_evidence_only: {
+      tool: 'assess_case',
+      arguments: ['case_manifest', 'evidence', 'contexts', 'policy_id'],
+      assurance: 'Derived with no trusted-operator assertions; typically L0 for fixture/browser-local evidence.',
+    },
+    assess_registered_counterfactual: {
+      tool: 'assess_case',
+      arguments: ['case_manifest', 'evidence', 'contexts', 'policy_id', 'assurance_scenario_id'],
+      assurance: 'assurance_scenario_id must be discovered from policylab://assurance-scenarios.',
+      boundary: 'Registered scenarios are controlled counterfactuals; they do not convert sample evidence into realized operator evidence.',
+    },
+    compare_registered_policies: {
+      tool: 'compare_policies',
+      arguments: ['case_manifest', 'evidence', 'contexts', 'policy_ids'],
+      note: 'Use the same evidence and assurance basis across policies to observe policy divergence.',
+    },
+  };
+
   const staticJson = (name, uri, title, description, value) => {
     server.registerResource(
       name,
@@ -87,6 +136,23 @@ function registerResources(server) {
       }),
     );
   };
+
+  const resourceUris = [
+    'policylab://about',
+    'policylab://policies',
+    'policylab://calculators',
+    'policylab://provenance-levels',
+    'policylab://assurance-scenarios',
+    'policylab://schemas/case',
+    'policylab://schemas/evidence',
+    'policylab://schemas/context',
+    'policylab://schemas/decision',
+    'policylab://schemas/receipt',
+    'policylab://schemas/assurance-scenario',
+    'policylab://errors',
+    'policylab://examples',
+    'policylab://boundaries',
+  ];
 
   staticJson(
     'about',
@@ -105,20 +171,15 @@ function registerResources(server) {
         'build_receipt',
         'verify_capsule',
       ],
-      resources: [
-        'policylab://about',
-        'policylab://policies',
-        'policylab://calculators',
-        'policylab://provenance-levels',
-        'policylab://assurance-scenarios',
-        'policylab://boundaries',
-      ],
+      resources: resourceUris,
       boundaries,
     },
   );
   staticJson('policies', 'policylab://policies', 'Built-in policies', 'Versioned registered case policies accepted by the v0 MCP.', catalog.policies);
   staticJson('calculators', 'policylab://calculators', 'Constraint calculators', 'Built-in calculator metadata without executable functions.', catalog.calculators);
   staticJson('provenance-levels', 'policylab://provenance-levels', 'Provenance levels', 'Declared L0-L4 assurance levels.', catalog.provenance_levels);
+  staticJson('errors', 'policylab://errors', 'MCP error codes', 'Stable wrapper-level error codes intended for autonomous recovery.', errors);
+  staticJson('examples', 'policylab://examples', 'MCP usage recipes', 'Machine-readable operation recipes without repository-specific coaching.', examples);
   staticJson('boundaries', 'policylab://boundaries', 'Policy Lab boundaries', 'Safety, authority, supported-domain, and side-effect boundaries for this MCP.', boundaries);
 
   server.registerResource(
@@ -137,6 +198,25 @@ function registerResources(server) {
       }],
     }),
   );
+
+  for (const [name, uri, title, filename] of SCHEMA_RESOURCES) {
+    server.registerResource(
+      name,
+      uri,
+      {
+        title,
+        description: `Bundled canonical JSON Schema from protocol/schema/${filename}.`,
+        mimeType: 'application/schema+json',
+      },
+      async (requestedUri) => ({
+        contents: [{
+          uri: requestedUri.href,
+          mimeType: 'application/schema+json',
+          text: JSON.stringify(await readBundledSchema(filename), null, 2),
+        }],
+      }),
+    );
+  }
 }
 
 function registerTools(server) {
