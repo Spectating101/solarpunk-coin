@@ -1,7 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/server';
 import * as z from 'zod/v4';
 import {
+  PolicyLabMcpError,
   assessCase,
+  assuranceScenarioCatalog,
   buildReceipt,
   catalogSnapshot,
   classifyAssurance,
@@ -13,6 +15,17 @@ import {
 const jsonObject = z.record(z.string(), z.unknown());
 const evidenceList = z.array(jsonObject).min(1);
 const contextList = z.array(jsonObject).default([]);
+const declaredProvenanceContext = z.object({
+  trusted_operator_context: z.boolean().optional(),
+  real_operator_source: z.boolean().optional(),
+  external_corroboration: z.boolean().optional(),
+  revenue_grade: z.boolean().optional(),
+  gateway_custody: z.boolean().optional(),
+  signed: z.boolean().optional(),
+  live_gateway: z.boolean().optional(),
+  operator_signed: z.boolean().optional(),
+  cryptographically_verified: z.boolean().optional(),
+}).strict();
 
 function success(value) {
   return {
@@ -26,9 +39,17 @@ async function guarded(operation) {
     return success(await operation());
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
+    const payload = {
+      error: {
+        code: error instanceof PolicyLabMcpError ? error.code : 'POLICY_LAB_CORE_ERROR',
+        message,
+        details: error instanceof PolicyLabMcpError ? error.details : {},
+      },
+    };
     return {
       isError: true,
-      content: [{ type: 'text', text: message }],
+      content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }],
+      structuredContent: payload,
     };
   }
 }
@@ -39,13 +60,17 @@ function registerResources(server) {
     mode: 'deterministic_read_only',
     core_surface: '@solarpunk/constraint-core workbench',
     network_required: false,
+    bundled_filesystem_reads: true,
     blockchain_writes: false,
     operator_writes: false,
     filesystem_writes: false,
     arbitrary_policy_objects: false,
+    caller_assurance_authority: false,
+    registered_counterfactuals_only: true,
     ai_logic_inside_server: false,
     legal_authority_claimed: false,
-    boundary: 'Policy Lab decisions are research outputs under declared evidence, context, provenance, and registered policy inputs; they are not legal issuance authority, settlement guarantees, or certification of physical source truth.',
+    supported_case_types: catalog.supported_case_types,
+    boundary: 'Policy Lab decisions are research outputs under declared evidence, modeled context, derived assurance, and registered policy inputs; they are not legal issuance authority, settlement guarantees, or certification of physical source truth.',
   };
 
   const staticJson = (name, uri, title, description, value) => {
@@ -85,6 +110,7 @@ function registerResources(server) {
         'policylab://policies',
         'policylab://calculators',
         'policylab://provenance-levels',
+        'policylab://assurance-scenarios',
         'policylab://boundaries',
       ],
       boundaries,
@@ -93,7 +119,24 @@ function registerResources(server) {
   staticJson('policies', 'policylab://policies', 'Built-in policies', 'Versioned registered case policies accepted by the v0 MCP.', catalog.policies);
   staticJson('calculators', 'policylab://calculators', 'Constraint calculators', 'Built-in calculator metadata without executable functions.', catalog.calculators);
   staticJson('provenance-levels', 'policylab://provenance-levels', 'Provenance levels', 'Declared L0-L4 assurance levels.', catalog.provenance_levels);
-  staticJson('boundaries', 'policylab://boundaries', 'Policy Lab boundaries', 'Safety, authority, and side-effect boundaries for this MCP.', boundaries);
+  staticJson('boundaries', 'policylab://boundaries', 'Policy Lab boundaries', 'Safety, authority, supported-domain, and side-effect boundaries for this MCP.', boundaries);
+
+  server.registerResource(
+    'assurance-scenarios',
+    'policylab://assurance-scenarios',
+    {
+      title: 'Registered assurance scenarios',
+      description: 'Controlled counterfactual assurance scenarios that decision tools may reference by ID. They do not alter observed evidence identity.',
+      mimeType: 'application/json',
+    },
+    async (requestedUri) => ({
+      contents: [{
+        uri: requestedUri.href,
+        mimeType: 'application/json',
+        text: JSON.stringify(await assuranceScenarioCatalog(), null, 2),
+      }],
+    }),
+  );
 }
 
 function registerTools(server) {
@@ -108,14 +151,13 @@ function registerTools(server) {
     'assess_case',
     {
       title: 'Assess case',
-      description: 'Evaluate one case under one registered Policy Lab policy ID. Evidence hashes and required contexts are verified by constraint-core before a decision is returned.',
+      description: 'Evaluate one supported energy case under one registered Policy Lab policy ID. Caller-authored provenance is not accepted. With no assurance_scenario_id, assurance is evidence-only; a scenario ID must name a registered controlled counterfactual.',
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
-        provenance: jsonObject.optional(),
-        provenance_context: jsonObject.optional(),
+        assurance_scenario_id: z.string().optional(),
         policy_id: z.string(),
       }),
     },
@@ -123,8 +165,7 @@ function registerTools(server) {
       caseManifest: input.case_manifest,
       evidence: input.evidence,
       contexts: input.contexts,
-      provenance: input.provenance,
-      provenanceContext: input.provenance_context,
+      assuranceScenarioId: input.assurance_scenario_id,
       policyId: input.policy_id,
     })),
   );
@@ -133,14 +174,13 @@ function registerTools(server) {
     'compare_policies',
     {
       title: 'Compare policies',
-      description: 'Run the same case/evidence/provenance state through multiple registered policy IDs in declared order.',
+      description: 'Run the same supported energy case/evidence state through multiple registered policy IDs. Caller-authored provenance is not accepted by this decision tool.',
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
-        provenance: jsonObject.optional(),
-        provenance_context: jsonObject.optional(),
+        assurance_scenario_id: z.string().optional(),
         policy_ids: z.array(z.string()).min(1),
       }),
     },
@@ -148,8 +188,7 @@ function registerTools(server) {
       caseManifest: input.case_manifest,
       evidence: input.evidence,
       contexts: input.contexts,
-      provenance: input.provenance,
-      provenanceContext: input.provenance_context,
+      assuranceScenarioId: input.assurance_scenario_id,
       policyIds: input.policy_ids,
     })),
   );
@@ -168,12 +207,12 @@ function registerTools(server) {
   server.registerTool(
     'classify_assurance',
     {
-      title: 'Classify assurance',
-      description: 'Classify an evidence envelope into Policy Lab provenance level L0-L4 using explicitly declared provenance context.',
+      title: 'Classify declared assurance',
+      description: 'Explain how an explicitly declared assurance context maps to L0-L4. This classifier is informational only; assess_case and compare_policies do not accept its caller-authored result as decision authority.',
       annotations: readOnly,
       inputSchema: z.object({
         evidence: jsonObject,
-        provenance_context: jsonObject,
+        provenance_context: declaredProvenanceContext,
       }),
     },
     async (input) => guarded(() => classifyAssurance({
