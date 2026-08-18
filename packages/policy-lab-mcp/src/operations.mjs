@@ -45,21 +45,17 @@ function mapContexts(contexts = []) {
   }));
 }
 
-function resolvePolicy({ policyId = null, policy = null }) {
-  if (policy) return requiredObject(policy, 'policy');
+function resolvePolicy(policyId) {
   const id = String(policyId || '').trim();
-  if (!id) throw new Error('policy_id or policy is required');
+  if (!id) throw new Error('policy_id is required');
   const builtin = casePolicyById(id);
-  if (!builtin) throw new Error(`unknown built-in policy: ${id}`);
+  if (!builtin) throw new Error(`unknown registered policy: ${id}`);
   return builtin;
 }
 
-function resolvePolicies({ policyIds = null, policies = null }) {
-  if (policies != null) {
-    return requiredArray(policies, 'policies').map((policy, index) => requiredObject(policy, `policies[${index}]`));
-  }
+function resolvePolicies(policyIds) {
   const ids = requiredArray(policyIds, 'policy_ids').map((id) => String(id || '').trim());
-  return ids.map((id) => resolvePolicy({ policyId: id }));
+  return ids.map(resolvePolicy);
 }
 
 function resolveProvenance({ evidence, provenance = null, provenanceContext = null }) {
@@ -78,8 +74,7 @@ export async function assessCase({
   contexts = [],
   provenance = null,
   provenanceContext = null,
-  policyId = null,
-  policy = null,
+  policyId,
 }) {
   requiredObject(caseManifest, 'case_manifest');
   const resolvedProvenance = resolveProvenance({ evidence, provenance, provenanceContext });
@@ -88,7 +83,7 @@ export async function assessCase({
     evidenceByHash: mapEvidence(evidence),
     contextsById: mapContexts(contexts),
     provenance: resolvedProvenance,
-    policy: resolvePolicy({ policyId, policy }),
+    policy: resolvePolicy(policyId),
   });
 }
 
@@ -98,14 +93,13 @@ export async function comparePolicies({
   contexts = [],
   provenance = null,
   provenanceContext = null,
-  policyIds = null,
-  policies = null,
+  policyIds,
 }) {
   requiredObject(caseManifest, 'case_manifest');
   const resolvedProvenance = resolveProvenance({ evidence, provenance, provenanceContext });
   const evidenceByHash = mapEvidence(evidence);
   const contextsById = mapContexts(contexts);
-  const resolvedPolicies = resolvePolicies({ policyIds, policies });
+  const resolvedPolicies = resolvePolicies(policyIds);
   const results = [];
   for (const policy of resolvedPolicies) {
     results.push(await evaluateCaseDecision({
