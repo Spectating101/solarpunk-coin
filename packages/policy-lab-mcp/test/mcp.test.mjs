@@ -186,7 +186,7 @@ test('assessment remains offline even for registered assurance scenarios', async
   }
 });
 
-test('MCP discovery exposes only the curated read-only decision surface', async () => {
+test('MCP discovery exposes a self-describing read-only decision surface', async () => {
   const server = createPolicyLabMcpServer();
   const client = new Client({ name: 'policy-lab-test', version: '1.0.0' });
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -226,14 +226,31 @@ test('MCP discovery exposes only the curated read-only decision surface', async 
     'policylab://assurance-scenarios',
     'policylab://boundaries',
     'policylab://calculators',
+    'policylab://errors',
+    'policylab://examples',
     'policylab://policies',
     'policylab://provenance-levels',
+    'policylab://schemas/assurance-scenario',
+    'policylab://schemas/case',
+    'policylab://schemas/context',
+    'policylab://schemas/decision',
+    'policylab://schemas/evidence',
+    'policylab://schemas/receipt',
   ]);
 
   const scenarioResource = await client.readResource({ uri: 'policylab://assurance-scenarios' });
   const scenarios = JSON.parse(scenarioResource.contents[0].text);
   assert.ok(scenarios.some((item) => item.scenario_id === 'PROVENANCE-L2-COUNTERFACTUAL'));
   assert.ok(scenarios.every((item) => item.observed_evidence_changed === false));
+
+  const caseSchemaResource = await client.readResource({ uri: 'policylab://schemas/case' });
+  const caseSchema = JSON.parse(caseSchemaResource.contents[0].text);
+  assert.equal(caseSchema.properties.schema.const, 'solarpunk.constraint.case_manifest.v1');
+
+  const errorResource = await client.readResource({ uri: 'policylab://errors' });
+  const errorCatalog = JSON.parse(errorResource.contents[0].text);
+  assert.ok(errorCatalog.MISSING_CONTEXT);
+  assert.ok(errorCatalog.UNSUPPORTED_DOMAIN);
 
   const loaded = await loadPack();
   const base = argsFor(loaded, 'TYN-001');
@@ -277,6 +294,6 @@ test('stdio server completes a real MCP discovery handshake', async () => {
   const { resources } = await client.listResources();
   assert.ok(tools.some((item) => item.name === 'assess_case'));
   assert.ok(resources.some((item) => item.uri === 'policylab://boundaries'));
-  assert.ok(resources.some((item) => item.uri === 'policylab://assurance-scenarios'));
+  assert.ok(resources.some((item) => item.uri === 'policylab://schemas/evidence'));
   await client.close();
 });
