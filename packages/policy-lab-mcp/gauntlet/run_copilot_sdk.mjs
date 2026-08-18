@@ -135,7 +135,7 @@ async function runCase({ token, testCase }) {
       onPermissionRequest: approveAll,
     });
 
-    const response = await session.sendAndWait({ prompt: promptFor(testCase) });
+    const response = await session.sendAndWait({ prompt: promptFor(testCase) }, 180000);
     run.final_answer = response?.data?.content ?? null;
     run.response_event_type = response?.type ?? null;
     await session.disconnect().catch(() => {});
@@ -191,6 +191,7 @@ const trace = {
     client_mode: 'empty',
     exposed_tools: 'custom Policy Lab MCP proxies only',
     permission_handler: 'approveAll over custom:* only',
+    model_turn_timeout_ms: 180000,
     repository_access_exposed_to_model: false,
     web_access_exposed_to_model: false,
     filesystem_access_exposed_to_model: false,
