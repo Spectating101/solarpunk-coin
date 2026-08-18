@@ -1,22 +1,6 @@
 name: Policy Lab Copilot SDK Gauntlet
 
 on:
-  push:
-    branches:
-      - feat/policy-lab-mcp-v0
-    paths:
-      - .github/workflows/policy-lab-copilot-sdk-gauntlet.yml
-      - packages/policy-lab-mcp/**
-      - packages/constraint-core/src/**
-      - protocol/cases/energy-v1/**
-  pull_request:
-    branches:
-      - main
-    paths:
-      - .github/workflows/policy-lab-copilot-sdk-gauntlet.yml
-      - packages/policy-lab-mcp/**
-      - packages/constraint-core/src/**
-      - protocol/cases/energy-v1/**
   workflow_dispatch:
 
 permissions:
