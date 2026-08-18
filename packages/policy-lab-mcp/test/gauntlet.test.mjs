@@ -87,3 +87,23 @@ test('cold-agent scorer awards discovery invariants only when MCP discovery is r
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+test('deterministic reference driver calibrates every gauntlet invariant at 100 percent', async () => {
+  const directory = await mkdtemp(`${tmpdir()}/policy-lab-gauntlet-`);
+  const tracePath = `${directory}/reference-trace.json`;
+  try {
+    const { stdout: traceStdout } = await runNode(['gauntlet/build_reference_trace.mjs']);
+    const trace = JSON.parse(traceStdout);
+    assert.equal(trace.agent.validation_only, true);
+    assert.equal(trace.agent.external_agent_evidence, false);
+    await writeFile(tracePath, traceStdout);
+
+    const { stdout: scoreStdout } = await runNode(['gauntlet/score_trace.mjs', tracePath]);
+    const score = JSON.parse(scoreStdout);
+    assert.equal(score.machine_score.earned, score.machine_score.possible);
+    assert.equal(score.machine_score.ratio, 1);
+    assert.ok(score.cases.every((item) => item.earned === item.possible));
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
