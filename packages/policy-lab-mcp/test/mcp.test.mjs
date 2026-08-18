@@ -91,6 +91,15 @@ test('tampered evidence is rejected rather than reinterpreted', async () => {
   await assert.rejects(() => verifyEvidence({ evidence: tampered }), /hash/i);
 });
 
+test('unregistered policy substitution is rejected', async () => {
+  const loaded = await loadPack();
+  const base = argsFor(loaded, 'TYN-001', 'PROVENANCE-L0-BASE');
+  await assert.rejects(
+    () => assessCase({ ...base, policyId: 'MAKE-THIS-PASS-999' }),
+    /unknown registered policy/i,
+  );
+});
+
 test('MCP discovery exposes only the curated read-only surface', async () => {
   const server = createPolicyLabMcpServer();
   const client = new Client({ name: 'policy-lab-test', version: '1.0.0' });
@@ -111,6 +120,12 @@ test('MCP discovery exposes only the curated read-only surface', async () => {
     assert.equal(tool.annotations?.readOnlyHint, true);
     assert.equal(tool.annotations?.destructiveHint, false);
   }
+  const assessTool = tools.find((item) => item.name === 'assess_case');
+  assert.ok(assessTool.inputSchema.required.includes('policy_id'));
+  assert.equal(Object.hasOwn(assessTool.inputSchema.properties, 'policy'), false);
+  const compareTool = tools.find((item) => item.name === 'compare_policies');
+  assert.ok(compareTool.inputSchema.required.includes('policy_ids'));
+  assert.equal(Object.hasOwn(compareTool.inputSchema.properties, 'policies'), false);
 
   const { resources } = await client.listResources();
   assert.deepEqual(resources.map((item) => item.uri).sort(), [
