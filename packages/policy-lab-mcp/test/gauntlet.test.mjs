@@ -56,7 +56,39 @@ test('cold-agent scorer fails closed when benchmark runs are missing', async () 
     assert.equal(score.machine_score.earned, 0);
     assert.ok(score.machine_score.possible > 0);
     assert.equal(score.machine_score.ratio, 0);
+    assert.equal(score.coverage.infrastructure_error_cases, 0);
     assert.ok(score.cases.every((item) => item.checks.some((entry) => entry.label === 'run present' && entry.ok === false)));
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('cold-agent scorer excludes explicit provider/runtime failures from agent score', async () => {
+  const directory = await mkdtemp(`${tmpdir()}/policy-lab-gauntlet-`);
+  const tracePath = `${directory}/trace.json`;
+  try {
+    await writeFile(tracePath, JSON.stringify({
+      schema: 'solarpunk.policy_lab.agent_gauntlet_trace.v1',
+      agent: { name: 'quota-test-agent' },
+      runs: [{
+        case_id: 'OPEN-001',
+        tools_discovered: [],
+        resources_read: [],
+        tool_calls: [],
+        runner_error: {
+          code: 'RUNNER_ERROR',
+          message: 'provider quota exceeded',
+        },
+      }],
+    }));
+    const { stdout } = await runNode(['gauntlet/score_trace.mjs', tracePath, '--cases=OPEN-001']);
+    const score = JSON.parse(stdout);
+    assert.equal(score.coverage.requested_cases, 1);
+    assert.equal(score.coverage.scored_cases, 0);
+    assert.equal(score.coverage.infrastructure_error_cases, 1);
+    assert.equal(score.machine_score.earned, 0);
+    assert.equal(score.machine_score.possible, 0);
+    assert.equal(score.cases[0].status, 'INFRASTRUCTURE_ERROR');
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -102,6 +134,7 @@ test('deterministic reference driver calibrates every gauntlet invariant at 100 
     const score = JSON.parse(scoreStdout);
     assert.equal(score.machine_score.earned, score.machine_score.possible);
     assert.equal(score.machine_score.ratio, 1);
+    assert.equal(score.coverage.infrastructure_error_cases, 0);
     assert.ok(score.cases.every((item) => item.earned === item.possible));
   } finally {
     await rm(directory, { recursive: true, force: true });
