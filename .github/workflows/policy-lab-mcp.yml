@@ -1,0 +1,39 @@
+name: Policy Lab MCP
+
+on:
+  pull_request:
+    paths:
+      - 'packages/policy-lab-mcp/**'
+      - 'packages/constraint-core/src/**'
+      - 'protocol/cases/energy-v1/**'
+      - '.github/workflows/policy-lab-mcp.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/policy-lab-mcp/**'
+      - 'packages/constraint-core/src/**'
+      - 'protocol/cases/energy-v1/**'
+      - '.github/workflows/policy-lab-mcp.yml'
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: packages/policy-lab-mcp/package-lock.json
+      - name: Install MCP package
+        working-directory: packages/policy-lab-mcp
+        run: npm install --package-lock-only && npm ci
+      - name: Run MCP gauntlet
+        working-directory: packages/policy-lab-mcp
+        run: npm test
