@@ -1,7 +1,7 @@
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { CopilotClient, defineTool } from '@github/copilot-sdk';
+import { CopilotClient, approveAll, defineTool } from '@github/copilot-sdk';
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 
@@ -132,6 +132,7 @@ async function runCase({ token, testCase }) {
       model: 'auto',
       tools: customTools,
       availableTools: ['custom:*'],
+      onPermissionRequest: approveAll,
     });
 
     const response = await session.sendAndWait({ prompt: promptFor(testCase) });
@@ -189,6 +190,7 @@ const trace = {
     driver: '@github/copilot-sdk',
     client_mode: 'empty',
     exposed_tools: 'custom Policy Lab MCP proxies only',
+    permission_handler: 'approveAll over custom:* only',
     repository_access_exposed_to_model: false,
     web_access_exposed_to_model: false,
     filesystem_access_exposed_to_model: false,
