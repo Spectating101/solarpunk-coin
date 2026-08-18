@@ -8,7 +8,9 @@ The goal is not to create another Policy Lab backend. The goal is to test whethe
 
 This server has no blockchain write tools, operator actions, shell execution, filesystem mutation, network fetches, or AI logic. It does not import the privileged SPK/operator surfaces.
 
-Policy Lab outputs remain research decisions under declared evidence, context, provenance, and policy inputs. They are not legal issuance authority, proof of physical source truth, settlement guarantees, or regulatory approval.
+The v0 MCP also accepts only registered Policy Lab policy IDs. It does not accept caller-authored policy objects, so an agent cannot satisfy a prompt such as “make this pass” by silently inventing a weaker policy through the MCP surface.
+
+Policy Lab outputs remain research decisions under declared evidence, context, provenance, and registered policy inputs. They are not legal issuance authority, proof of physical source truth, settlement guarantees, or regulatory approval.
 
 ## MCP surface
 
@@ -60,7 +62,8 @@ The package tests currently cover:
 2. deterministic decision IDs for identical inputs,
 3. policy-divergence behavior,
 4. evidence tamper rejection,
-5. MCP tool/resource discovery over an in-memory transport,
-6. a real stdio MCP discovery handshake.
+5. rejection of unregistered policy substitution,
+6. MCP tool/resource discovery over an in-memory transport,
+7. a real stdio MCP discovery handshake.
 
 This is intentionally not the full fresh-agent gauntlet yet. Missing later-stage tests include manipulation resistance at the model layer, unsupported-domain behavior, cross-client cold-agent trials, privacy/logging inspection, and operator-boundary adversarial tests.
