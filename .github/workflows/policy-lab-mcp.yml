@@ -29,11 +29,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: npm
-          cache-dependency-path: packages/policy-lab-mcp/package-lock.json
       - name: Install MCP package
         working-directory: packages/policy-lab-mcp
-        run: npm install --package-lock-only && npm ci
+        run: npm install
       - name: Run MCP gauntlet
         working-directory: packages/policy-lab-mcp
         run: npm test
