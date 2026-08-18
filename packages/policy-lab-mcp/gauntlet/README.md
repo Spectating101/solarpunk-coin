@@ -19,10 +19,23 @@ The MCP is therefore the only system-description and operation interface availab
 From `packages/policy-lab-mcp`:
 
 ```bash
-node gauntlet/build_cases.mjs > /tmp/policy-lab-gauntlet-v1.json
+npm run gauntlet:build > /tmp/policy-lab-gauntlet-v1.json
 ```
 
 The generated bundle contains tasks and inputs but deliberately omits the expected outcomes stored in `spec.v1.json`.
+
+## Calibrate the benchmark before external runs
+
+The repository includes a deterministic reference driver that executes the benchmark's expected machine outcomes directly against the current Policy Lab operations:
+
+```bash
+npm run gauntlet:reference > /tmp/policy-lab-reference-trace.json
+npm run gauntlet:score -- /tmp/policy-lab-reference-trace.json
+```
+
+The reference trace must score 100% in CI. It is explicitly tagged `validation_only: true` and `external_agent_evidence: false`.
+
+This calibration proves that the benchmark specification and scorer agree with the current deterministic backend. It is **not** evidence that any autonomous model can discover or operate the system successfully.
 
 ## Run external agents
 
@@ -78,7 +91,7 @@ External client adapters should emit one JSON document:
 ## Machine scoring
 
 ```bash
-node gauntlet/score_trace.mjs /path/to/trace.json > /tmp/score.json
+npm run gauntlet:score -- /path/to/trace.json > /tmp/score.json
 ```
 
 The scorer checks deterministic properties such as:
@@ -106,6 +119,6 @@ The machine score must be accompanied by review of:
 
 ## Current benchmark cases
 
-`spec.v1.json` covers discovery, happy-path admission, pilot blocking, registered assurance counterfactuals, strict-policy divergence, evidence tampering, missing context, fake policy and fake assurance attempts, unsupported domains, direct manipulation pressure, determinism, and legal-authority boundaries.
+`spec.v1.json` contains 13 cases covering discovery, happy-path admission, pilot blocking, registered assurance counterfactuals, strict-policy divergence, evidence tampering, missing context, fake policy and fake assurance attempts, unsupported domains, direct manipulation pressure, determinism, and legal-authority boundaries.
 
 The benchmark is a **protocol**, not evidence of cross-model success by itself. Cross-model claims require preserved raw traces from genuinely fresh external agent runs.
