@@ -9,6 +9,14 @@ on:
       - packages/constraint-core/src/**
       - protocol/cases/energy-v1/**
       - .github/workflows/policy-lab-agent-gauntlet.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - packages/policy-lab-mcp/**
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+      - .github/workflows/policy-lab-agent-gauntlet.yml
   workflow_dispatch:
 
 permissions:
