@@ -42,9 +42,10 @@ function registerResources(server) {
     blockchain_writes: false,
     operator_writes: false,
     filesystem_writes: false,
+    arbitrary_policy_objects: false,
     ai_logic_inside_server: false,
     legal_authority_claimed: false,
-    boundary: 'Policy Lab decisions are research outputs under declared evidence, context, provenance, and policy inputs; they are not legal issuance authority, settlement guarantees, or certification of physical source truth.',
+    boundary: 'Policy Lab decisions are research outputs under declared evidence, context, provenance, and registered policy inputs; they are not legal issuance authority, settlement guarantees, or certification of physical source truth.',
   };
 
   const staticJson = (name, uri, title, description, value) => {
@@ -89,7 +90,7 @@ function registerResources(server) {
       boundaries,
     },
   );
-  staticJson('policies', 'policylab://policies', 'Built-in policies', 'Versioned built-in case policies.', catalog.policies);
+  staticJson('policies', 'policylab://policies', 'Built-in policies', 'Versioned registered case policies accepted by the v0 MCP.', catalog.policies);
   staticJson('calculators', 'policylab://calculators', 'Constraint calculators', 'Built-in calculator metadata without executable functions.', catalog.calculators);
   staticJson('provenance-levels', 'policylab://provenance-levels', 'Provenance levels', 'Declared L0-L4 assurance levels.', catalog.provenance_levels);
   staticJson('boundaries', 'policylab://boundaries', 'Policy Lab boundaries', 'Safety, authority, and side-effect boundaries for this MCP.', boundaries);
@@ -107,7 +108,7 @@ function registerTools(server) {
     'assess_case',
     {
       title: 'Assess case',
-      description: 'Evaluate one case under one declared Policy Lab policy. Evidence hashes and required contexts are verified by constraint-core before a decision is returned.',
+      description: 'Evaluate one case under one registered Policy Lab policy ID. Evidence hashes and required contexts are verified by constraint-core before a decision is returned.',
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
@@ -115,8 +116,7 @@ function registerTools(server) {
         contexts: contextList,
         provenance: jsonObject.optional(),
         provenance_context: jsonObject.optional(),
-        policy_id: z.string().optional(),
-        policy: jsonObject.optional(),
+        policy_id: z.string(),
       }),
     },
     async (input) => guarded(() => assessCase({
@@ -126,7 +126,6 @@ function registerTools(server) {
       provenance: input.provenance,
       provenanceContext: input.provenance_context,
       policyId: input.policy_id,
-      policy: input.policy,
     })),
   );
 
@@ -134,7 +133,7 @@ function registerTools(server) {
     'compare_policies',
     {
       title: 'Compare policies',
-      description: 'Run the same case/evidence/provenance state through multiple policies in declared order.',
+      description: 'Run the same case/evidence/provenance state through multiple registered policy IDs in declared order.',
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
@@ -142,8 +141,7 @@ function registerTools(server) {
         contexts: contextList,
         provenance: jsonObject.optional(),
         provenance_context: jsonObject.optional(),
-        policy_ids: z.array(z.string()).min(1).optional(),
-        policies: z.array(jsonObject).min(1).optional(),
+        policy_ids: z.array(z.string()).min(1),
       }),
     },
     async (input) => guarded(() => comparePolicies({
@@ -153,7 +151,6 @@ function registerTools(server) {
       provenance: input.provenance,
       provenanceContext: input.provenance_context,
       policyIds: input.policy_ids,
-      policies: input.policies,
     })),
   );
 
