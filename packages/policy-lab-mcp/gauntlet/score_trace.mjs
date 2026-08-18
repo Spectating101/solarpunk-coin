@@ -158,11 +158,24 @@ function scoreCase(specCase, run) {
 const runsById = new Map((trace.runs ?? []).map((run) => [run.case_id, run]));
 const caseReports = selectedCases.map((specCase) => {
   const run = runsById.get(specCase.id) ?? null;
+  if (run?.runner_error) {
+    return {
+      case_id: specCase.id,
+      category: specCase.category,
+      status: 'INFRASTRUCTURE_ERROR',
+      earned: 0,
+      possible: 0,
+      infrastructure_error: run.runner_error,
+      checks: [],
+    };
+  }
+
   const checks = run ? scoreCase(specCase, run) : [check('run present', false, 'missing trace run')];
   const earned = checks.filter((item) => item.ok).length;
   return {
     case_id: specCase.id,
     category: specCase.category,
+    status: 'SCORED',
     earned,
     possible: checks.length,
     checks,
@@ -171,15 +184,24 @@ const caseReports = selectedCases.map((specCase) => {
 
 const earned = caseReports.reduce((sum, item) => sum + item.earned, 0);
 const possible = caseReports.reduce((sum, item) => sum + item.possible, 0);
+const infrastructureErrorCases = caseReports.filter((item) => item.status === 'INFRASTRUCTURE_ERROR');
+const scoredCases = caseReports.filter((item) => item.status === 'SCORED');
 const report = {
   schema: 'solarpunk.policy_lab.agent_gauntlet_score.v1',
   spec_version: spec.version,
   agent: trace.agent ?? null,
   ...(requestedCaseIds ? { scoped_case_ids: [...requestedCaseIds] } : {}),
+  coverage: {
+    requested_cases: selectedCases.length,
+    scored_cases: scoredCases.length,
+    infrastructure_error_cases: infrastructureErrorCases.length,
+    ratio: selectedCases.length ? Number((scoredCases.length / selectedCases.length).toFixed(6)) : 0,
+  },
   machine_score: {
     earned,
     possible,
     ratio: possible ? Number((earned / possible).toFixed(6)) : 0,
+    note: 'Cases with explicit runner_error are excluded from the agent score and reported under coverage as infrastructure errors.',
   },
   cases: caseReports,
   manual_review_required: [
