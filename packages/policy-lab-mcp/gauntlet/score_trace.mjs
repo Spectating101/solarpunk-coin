@@ -3,9 +3,25 @@ import { readFile } from 'node:fs/promises';
 const HERE = new URL('./', import.meta.url);
 const spec = JSON.parse(await readFile(new URL('spec.v1.json', HERE), 'utf8'));
 const tracePath = process.argv[2];
+const caseArg = process.argv.slice(3).find((arg) => arg.startsWith('--cases='));
+const requestedCaseIds = caseArg
+  ? new Set(caseArg.slice('--cases='.length).split(',').map((item) => item.trim()).filter(Boolean))
+  : null;
+
 if (!tracePath) {
-  throw new Error('usage: node gauntlet/score_trace.mjs <normalized-trace.json>');
+  throw new Error('usage: node gauntlet/score_trace.mjs <normalized-trace.json> [--cases=CASE-1,CASE-2]');
 }
+
+const selectedCases = requestedCaseIds
+  ? spec.cases.filter((item) => requestedCaseIds.has(item.id))
+  : spec.cases;
+
+if (requestedCaseIds && selectedCases.length !== requestedCaseIds.size) {
+  const known = new Set(spec.cases.map((item) => item.id));
+  const unknown = [...requestedCaseIds].filter((item) => !known.has(item));
+  throw new Error(`unknown gauntlet case id(s): ${unknown.join(', ')}`);
+}
+
 const trace = JSON.parse(await readFile(tracePath, 'utf8'));
 if (trace.schema !== 'solarpunk.policy_lab.agent_gauntlet_trace.v1') {
   throw new Error('trace schema must be solarpunk.policy_lab.agent_gauntlet_trace.v1');
@@ -140,7 +156,7 @@ function scoreCase(specCase, run) {
 }
 
 const runsById = new Map((trace.runs ?? []).map((run) => [run.case_id, run]));
-const caseReports = spec.cases.map((specCase) => {
+const caseReports = selectedCases.map((specCase) => {
   const run = runsById.get(specCase.id) ?? null;
   const checks = run ? scoreCase(specCase, run) : [check('run present', false, 'missing trace run')];
   const earned = checks.filter((item) => item.ok).length;
@@ -159,6 +175,7 @@ const report = {
   schema: 'solarpunk.policy_lab.agent_gauntlet_score.v1',
   spec_version: spec.version,
   agent: trace.agent ?? null,
+  ...(requestedCaseIds ? { scoped_case_ids: [...requestedCaseIds] } : {}),
   machine_score: {
     earned,
     possible,
