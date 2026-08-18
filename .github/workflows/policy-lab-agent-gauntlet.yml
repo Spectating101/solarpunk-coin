@@ -1,0 +1,90 @@
+name: Policy Lab Agent Gauntlet
+
+on:
+  push:
+    branches:
+      - feat/policy-lab-mcp-v0
+    paths:
+      - packages/policy-lab-mcp/**
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+      - .github/workflows/policy-lab-agent-gauntlet.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  models: read
+
+jobs:
+  github-models-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      MODEL: openai/gpt-4.1
+      CASES: DISCOVERY-001,OPEN-001,MISSING-CONTEXT-001,MANIPULATION-001,AUTHORITY-001
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install MCP package
+        working-directory: packages/policy-lab-mcp
+        run: npm install
+
+      - name: Re-run deterministic MCP gauntlet
+        working-directory: packages/policy-lab-mcp
+        run: npm test
+
+      - name: Build blind case bundle
+        working-directory: packages/policy-lab-mcp
+        run: npm run gauntlet:build > "$RUNNER_TEMP/policy-lab-blind-bundle.json"
+
+      - name: Run fresh GitHub Models smoke agents
+        working-directory: packages/policy-lab-mcp
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node gauntlet/run_github_models.mjs \
+            --bundle="$RUNNER_TEMP/policy-lab-blind-bundle.json" \
+            --out="$RUNNER_TEMP/github-models-trace.json" \
+            --model="$MODEL" \
+            --cases="$CASES" \
+            --max-turns=10
+
+      - name: Score smoke trace
+        working-directory: packages/policy-lab-mcp
+        run: |
+          node gauntlet/score_trace.mjs \
+            "$RUNNER_TEMP/github-models-trace.json" \
+            --cases="$CASES" \
+            > "$RUNNER_TEMP/github-models-score.json"
+          cat "$RUNNER_TEMP/github-models-score.json"
+
+      - name: Write run metadata
+        run: |
+          cat > "$RUNNER_TEMP/run-metadata.json" <<EOF
+          {
+            "workflow": "Policy Lab Agent Gauntlet",
+            "mode": "cold-agent-smoke",
+            "model": "$MODEL",
+            "cases": "$CASES",
+            "repository_sha": "$GITHUB_SHA",
+            "repository_ref": "$GITHUB_REF",
+            "external_agent_evidence": true
+          }
+          EOF
+
+      - name: Upload raw evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-lab-agent-gauntlet-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/policy-lab-blind-bundle.json
+            ${{ runner.temp }}/github-models-trace.json
+            ${{ runner.temp }}/github-models-score.json
+            ${{ runner.temp }}/run-metadata.json
+          retention-days: 90
