@@ -108,6 +108,10 @@ function registerResources(server) {
       rule: 'If a task names/describes a policy but does not supply its exact registered ID, read policylab://policies and resolve that requested policy before calling a decision tool.',
       warning: 'case_manifest.default_policy_ref is case metadata; do not silently substitute it for a differently requested policy.',
     },
+    assurance_resolution: {
+      registered_ids: catalog.assurance_scenario_ids,
+      rule: 'If a task requests a registered assurance counterfactual, use the exact matching registered scenario ID. Do not derive a scenario ID from the benchmark/task name.',
+    },
     assess_evidence_only: {
       tool: 'assess_case',
       arguments: ['case_manifest', 'evidence', 'contexts', 'policy_id'],
@@ -116,7 +120,7 @@ function registerResources(server) {
     assess_registered_counterfactual: {
       tool: 'assess_case',
       arguments: ['case_manifest', 'evidence', 'contexts', 'policy_id', 'assurance_scenario_id'],
-      assurance: 'assurance_scenario_id must be discovered from policylab://assurance-scenarios.',
+      assurance: 'assurance_scenario_id must be one of the registered IDs exposed in this MCP contract and in policylab://assurance-scenarios.',
       boundary: 'Registered scenarios are controlled counterfactuals; they do not convert sample evidence into realized operator evidence.',
     },
     compare_registered_policies: {
@@ -230,22 +234,24 @@ function registerTools(server) {
     idempotentHint: true,
     openWorldHint: false,
   };
-  const policyVocabulary = catalogSnapshot().policies
+  const catalog = catalogSnapshot();
+  const policyVocabulary = catalog.policies
     .map((policy) => `${policy.name} = ${policy.id}`)
     .join('; ');
   const policyIdDescription = `Exact registered policy ID. Registered vocabulary: ${policyVocabulary}. case_manifest.default_policy_ref is metadata only and must not replace a differently requested policy.`;
+  const assuranceScenarioDescription = `Optional exact registered assurance scenario ID. Registered IDs: ${catalog.assurance_scenario_ids.join(', ')}. Use the matching registered counterfactual ID; never invent an ID from a task/case label. Omit this field for evidence-only assurance.`;
 
   server.registerTool(
     'assess_case',
     {
       title: 'Assess case',
-      description: `Evaluate one supported energy case under one registered Policy Lab policy ID. ${policyIdDescription} Caller-authored provenance is not accepted. With no assurance_scenario_id, assurance is evidence-only; a scenario ID must name a registered controlled counterfactual.`,
+      description: `Evaluate one supported energy case under one registered Policy Lab policy ID. ${policyIdDescription} ${assuranceScenarioDescription} Caller-authored provenance is not accepted.`,
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
-        assurance_scenario_id: z.string().optional(),
+        assurance_scenario_id: z.string().optional().describe(assuranceScenarioDescription),
         policy_id: z.string().describe(policyIdDescription),
       }),
     },
@@ -262,13 +268,13 @@ function registerTools(server) {
     'compare_policies',
     {
       title: 'Compare policies',
-      description: `Run the same supported energy case/evidence state through multiple registered policy IDs. ${policyIdDescription} Caller-authored provenance is not accepted by this decision tool.`,
+      description: `Run the same supported energy case/evidence state through multiple registered policy IDs. ${policyIdDescription} ${assuranceScenarioDescription} Caller-authored provenance is not accepted by this decision tool.`,
       annotations: readOnly,
       inputSchema: z.object({
         case_manifest: jsonObject,
         evidence: evidenceList,
         contexts: contextList,
-        assurance_scenario_id: z.string().optional(),
+        assurance_scenario_id: z.string().optional().describe(assuranceScenarioDescription),
         policy_ids: z.array(z.string()).min(1).describe(`Exact registered policy IDs. ${policyIdDescription}`),
       }),
     },
