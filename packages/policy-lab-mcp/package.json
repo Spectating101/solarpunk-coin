@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node src/stdio.mjs",
-    "test": "node --test --test-concurrency=1 test/*.test.mjs"
+    "test": "node --test --test-concurrency=1 test/*.test.mjs",
+    "gauntlet:build": "node gauntlet/build_cases.mjs",
+    "gauntlet:score": "node gauntlet/score_trace.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.0.0",
