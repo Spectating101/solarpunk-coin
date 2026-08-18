@@ -1,0 +1,101 @@
+name: Policy Lab Copilot Probe
+
+on:
+  push:
+    branches:
+      - feat/policy-lab-mcp-v0
+    paths:
+      - .github/workflows/policy-lab-copilot-probe.yml
+      - packages/policy-lab-mcp/**
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/policy-lab-copilot-probe.yml
+      - packages/policy-lab-mcp/**
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  copilot-requests: write
+
+jobs:
+  copilot-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Policy Lab MCP
+        working-directory: packages/policy-lab-mcp
+        run: npm install
+
+      - name: Verify deterministic MCP
+        working-directory: packages/policy-lab-mcp
+        run: npm test
+
+      - name: Install current Copilot CLI
+        run: npm install -g @github/copilot
+
+      - name: Prepare isolated Copilot home and MCP
+        env:
+          COPILOT_HOME: ${{ runner.temp }}/policy-lab-copilot-home
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$COPILOT_HOME" "$RUNNER_TEMP/policy-lab-cold-workspace"
+          copilot version
+          copilot mcp add policy-lab -- node "$GITHUB_WORKSPACE/packages/policy-lab-mcp/src/stdio.mjs"
+          copilot mcp get policy-lab --json > "$RUNNER_TEMP/policy-lab-mcp-get.json"
+          cat "$RUNNER_TEMP/policy-lab-mcp-get.json"
+
+      - name: Run one cold Copilot probe
+        env:
+          COPILOT_HOME: ${{ runner.temp }}/policy-lab-copilot-home
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          copilot \
+            -C "$RUNNER_TEMP/policy-lab-cold-workspace" \
+            -p "Using only the connected Policy Lab MCP server, determine what this system can do, what domain it supports, and what authority boundaries apply. Do not use repository, filesystem, shell, built-in GitHub MCP, or web access." \
+            --model gpt-5.5 \
+            --output-format=json \
+            --no-custom-instructions \
+            --no-ask-user \
+            --no-remote \
+            --no-remote-export \
+            --disable-builtin-mcps \
+            --available-tools='policy-lab' \
+            --allow-tool='policy-lab' \
+            > "$RUNNER_TEMP/copilot-probe.jsonl" \
+            2> "$RUNNER_TEMP/copilot-probe.stderr"
+          status=$?
+          echo "$status" > "$RUNNER_TEMP/copilot-probe.exit-code"
+          echo "Copilot exit code: $status"
+          echo '--- JSONL ---'
+          cat "$RUNNER_TEMP/copilot-probe.jsonl" || true
+          echo '--- STDERR ---'
+          cat "$RUNNER_TEMP/copilot-probe.stderr" || true
+          exit 0
+
+      - name: Upload probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-lab-copilot-probe-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/policy-lab-mcp-get.json
+            ${{ runner.temp }}/copilot-probe.jsonl
+            ${{ runner.temp }}/copilot-probe.stderr
+            ${{ runner.temp }}/copilot-probe.exit-code
+          if-no-files-found: warn
+          retention-days: 90
