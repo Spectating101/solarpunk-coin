@@ -17,6 +17,10 @@
     "policies": "protocol/policies-v2",
     "public_case_script": "scripts/external_case_001p_ausgrid.mjs",
     "public_case_workflow": ".github/workflows/external-case-001p-ausgrid.yml",
+    "claim_assessment_package_schema": "protocol/schema/claim-assessment-package.v0.1.schema.json",
+    "claim_assessment_package_library": "scripts/lib/claim_assessment_package_v0_1.mjs",
+    "claim_assessment_package_builder": "scripts/build_claim_assessment_package.mjs",
+    "claim_assessment_package_verifier": "scripts/verify_claim_assessment_package.mjs",
     "deployment_preflight": "scripts/policy_lab_preflight.mjs",
     "pages_publish_script": "scripts/publish_demo_to_docs.sh",
     "pages_publish_workflow": ".github/workflows/deploy.yml",
@@ -35,6 +39,12 @@
     "workflow_run_id": 31899863661,
     "artifact_id": 9250779743,
     "classification": "outside public-data operability checkpoint at actual L0; not owner/operator validation"
+  },
+  "portable_assessment_package": {
+    "schema": "policylab.claim_assessment_package.v0.1",
+    "profile": "policylab.energy_linked_claim.v0",
+    "source_case": "PUB-AUSGRID-001P",
+    "role": "Portable machine-readable rendering of closed Policy Lab case artifacts; it does not alter decision authority or promote evidence status."
   },
   "historical_reference": {
     "active_but_secondary_routes": ["reference", "legacy-protocol", "evidence", "currency"],
