@@ -10,6 +10,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
+import PublicEvidenceCheckpoint from './PublicEvidenceCheckpoint';
 import {
   EmptyState,
   LinkButton,
@@ -96,9 +97,11 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
           <LinkButton onClick={() => onViewModeChange('overview')}>Return to interpreted overview</LinkButton>
         </PlatformPageIntro>
 
+        <PublicEvidenceCheckpoint />
+
         <section className="platform-active-state">
           <div>
-            <span>Active programme state</span>
+            <span>Interactive controlled-case state</span>
             <strong>{activeCaseId} · {activeScenarioId} · {activePolicyId}</strong>
             <code>settlement {Math.round(settlementMultiplier * 100)}% · evidence {shortHash(evidence?.evidence_hash)}</code>
           </div>
@@ -139,7 +142,7 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
           </article>
 
           <article className="platform-panel">
-            <header><span>Live result</span><h2>Same engine, complete context.</h2></header>
+            <header><span>Interactive result</span><h2>Same engine, complete context.</h2></header>
             {loading ? <EmptyState>Evaluating the active programme state…</EmptyState> : null}
             {error ? <div className="workbench-error" role="alert">{error}</div> : null}
             {decision ? (
@@ -165,12 +168,13 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
         </section>
 
         <section className="overview-inventory-strip">
-          <div><strong>{pack.cases.length}</strong><span>Cases</span></div>
+          <div><strong>{pack.cases.length}</strong><span>Interactive cases</span></div>
+          <div><strong>1</strong><span>Outside-data checkpoint</span></div>
           <div><strong>{pack.policies.length}</strong><span>Policies</span></div>
-          <div><strong>{pack.cases.length * pack.policies.length}</strong><span>Case-policy decisions</span></div>
+          <div><strong>{pack.cases.length * pack.policies.length}</strong><span>Interactive case-policy decisions</span></div>
           <div><strong>{pack.scenarios.length}</strong><span>Assurance scenarios</span></div>
           <div><strong>1</strong><span>Historical study</span></div>
-          <div><strong>1</strong><span>Open real-source gate</span></div>
+          <div><strong>1</strong><span>Owner-source gate open</span></div>
         </section>
 
         <section className="platform-three-column overview-programme-grid">
@@ -178,7 +182,8 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
             <header><span>Validation state</span><h2>What is already testable?</h2></header>
             <div className="research-evidence-matrix">
               <div><span>Decision core</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
-              <div><span>Case-pack comparison</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
+              <div><span>Controlled case-pack comparison</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
+              <div><span>Outside public-data case</span><StatusBadge tone="pass">REPRODUCED</StatusBadge></div>
               <div><span>Receipt generation</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
               <div><span>Capsule generation</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
               <div><span>Operator-format path</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
@@ -223,15 +228,17 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
       <PlatformPageIntro
         kicker="Overview · executable programme synopsis"
         title="Can real-world evidence justify a financial claim?"
-        description="Change the assurance condition, policy, or settlement stress and watch qualification, justified quantity, binding attribution, and coverage update through the actual decision runtime."
+        description="The outside-data checkpoint shows what happened with a pinned public Ausgrid source. The interactive controlled cases below let you change assurance, policy, and settlement conditions through the same deterministic decision machinery."
         viewMode="overview"
       >
         <LinkButton primary onClick={() => onViewModeChange('full')}>Open full analysis</LinkButton>
       </PlatformPageIntro>
 
+      <PublicEvidenceCheckpoint compact />
+
       <section className="platform-three-column overview-console">
         <article className="platform-panel">
-          <header><span>Action</span><h2>Change one condition</h2></header>
+          <header><span>Interactive controlled cases</span><h2>Change one condition</h2></header>
           <label>
             Case
             <select value={activeCaseId} onChange={(event) => selectCase(event.target.value)}>
@@ -296,11 +303,12 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
       </section>
 
       <section className="overview-inventory-strip compact">
-        <div><strong>{pack.cases.length}</strong><span>Cases</span></div>
+        <div><strong>{pack.cases.length}</strong><span>Interactive cases</span></div>
+        <div><strong>1</strong><span>Outside-data checkpoint</span></div>
         <div><strong>{pack.policies.length}</strong><span>Policies</span></div>
-        <div><strong>{pack.cases.length * pack.policies.length}</strong><span>Case-policy decisions</span></div>
+        <div><strong>{pack.cases.length * pack.policies.length}</strong><span>Interactive case-policy decisions</span></div>
         <div><strong>1</strong><span>Historical study</span></div>
-        <div><strong>1</strong><span>Real-source gate open</span></div>
+        <div><strong>1</strong><span>Owner-source gate open</span></div>
       </section>
     </main>
   );
