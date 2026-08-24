@@ -3,6 +3,8 @@ name: Current Surface Integrity
 on:
   pull_request:
     paths:
+      - 'README.md'
+      - 'package.json'
       - 'CURRENT_SURFACE.json'
       - 'frontend/src/App.jsx'
       - 'frontend/src/app/routes.js'
@@ -30,6 +32,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'README.md'
+      - 'package.json'
       - 'CURRENT_SURFACE.json'
       - 'frontend/src/App.jsx'
       - 'frontend/src/app/routes.js'
