@@ -9,15 +9,18 @@ on:
       - 'frontend/src/app/CaseWorkbenchProvider.jsx'
       - 'frontend/src/lib/energyCasePack.js'
       - 'frontend/src/data/publicEvidenceCheckpoint.js'
+      - 'frontend/src/data/publicEvidenceCheckpoint.test.js'
       - 'frontend/src/components/PublicEvidenceCheckpoint.jsx'
+      - 'frontend/src/components/LabOverview.jsx'
       - 'protocol/cases/energy-v1/**'
       - 'protocol/policies-v2/**'
       - 'scripts/external_case_001p_ausgrid.mjs'
       - 'scripts/check_current_surface.mjs'
       - '.github/workflows/external-case-001p-ausgrid.yml'
       - '.github/workflows/policy-lab-live-smoke.yml'
-      - '.github/workflows/publish.yml'
+      - '.github/workflows/deploy.yml'
       - '.github/workflows/current-surface.yml'
+      - 'archive/github-workflows/**'
   push:
     branches: [main]
     paths:
@@ -27,15 +30,18 @@ on:
       - 'frontend/src/app/CaseWorkbenchProvider.jsx'
       - 'frontend/src/lib/energyCasePack.js'
       - 'frontend/src/data/publicEvidenceCheckpoint.js'
+      - 'frontend/src/data/publicEvidenceCheckpoint.test.js'
       - 'frontend/src/components/PublicEvidenceCheckpoint.jsx'
+      - 'frontend/src/components/LabOverview.jsx'
       - 'protocol/cases/energy-v1/**'
       - 'protocol/policies-v2/**'
       - 'scripts/external_case_001p_ausgrid.mjs'
       - 'scripts/check_current_surface.mjs'
       - '.github/workflows/external-case-001p-ausgrid.yml'
       - '.github/workflows/policy-lab-live-smoke.yml'
-      - '.github/workflows/publish.yml'
+      - '.github/workflows/deploy.yml'
       - '.github/workflows/current-surface.yml'
+      - 'archive/github-workflows/**'
   workflow_dispatch:
 
 permissions:
