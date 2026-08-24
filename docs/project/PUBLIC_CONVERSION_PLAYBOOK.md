@@ -1,461 +1,386 @@
-# Public Conversion Playbook
+# Policy Lab Public Conversion Playbook
 
-**Purpose:** convert the implemented case workbench from a strong repository into a public, citable, externally reviewable research-software artifact.
+**Updated:** 2026-08-24  
+**Purpose:** convert the already-live Policy Lab workbench into a coherent, citable, externally reviewable research-software artifact without reopening broad product construction.
 
-This document is about **conversion**, not new product features.
-
----
-
-## 1. Conversion objective
-
-The public artifact should make three things obvious within five minutes:
-
-1. the project has a coherent research question;
-2. the decision engine is deterministic and inspectable;
-3. the current field boundary is one real external evidence case.
-
-The public description is:
-
-> A case-based research workbench for investigating what blocks admission, what bounds financial quantity, and what fails at settlement.
-
-The system should be demonstrated through a case, not through a list of repository modules.
+This document is about **packaging, release, review, and conversion**, not new feature development.
 
 ---
 
-## 2. Primary public demonstration
+## 1. Current state
 
-Use one fixed five-minute walkthrough.
+The project has already crossed the original static-publication gate.
 
-### Step 1 — blocked admission
+Landed:
 
-Open:
+- deterministic case/policy decision core;
+- typed admission, quantity, and settlement semantics;
+- receipts, capsules, lineage, and deterministic replay;
+- controlled energy case pack;
+- one bounded outside public-data case (`PUB-AUSGRID-001P`) at actual L0 assurance;
+- derived and independently verified `ConstrainedClaimAssessment` v1;
+- G4 hostile audit with public-evidence external-evaluation readiness;
+- live GitHub Pages deployment;
+- post-deploy/scheduled live browser smoke path;
+- structured evaluation, replication, pilot/external-case intake;
+- external-validation ledger and live-validation runbook.
+
+Therefore the immediate problem is **not whether Policy Lab can be published**. It is whether the public package is coherent enough that an outsider can understand, inspect, reproduce, critique, and cite the current artifact without reconstructing its historical layers.
+
+---
+
+## 2. Conversion objective
+
+Within five minutes, a reviewer should understand:
+
+1. the research question;
+2. what evidence is actually being evaluated;
+3. why one policy blocks while another admits a bounded quantity;
+4. which constraint binds that quantity;
+5. why settlement is a separate failure stage;
+6. how the result can be reproduced;
+7. which R1–R4 boundaries remain open.
+
+Current public description:
+
+> **Policy Lab shows where an energy-linked financial claim stops being justified, why, and what evidence would be needed next.**
+
+Long-form role:
+
+> Policy Lab is an executable research environment for testing how far a proposed energy-linked financial claim can be justified under declared evidence, policy, quantity, risk, settlement, and governance assumptions while preserving exactly which research boundaries remain open.
+
+---
+
+## 3. Canonical public demonstration
+
+Start with the outside-data case, not the historical token stack.
+
+### Step 1 — bounded outside evidence
+
+Open `PUB-AUSGRID-001P`.
+
+Show:
 
 ```text
-TYN-001
-L0 assurance scenario
+336 half-hour intervals
+actual assurance L0
+33.066 kWh eligible derived surplus
+```
+
+Explain:
+
+> Public availability and hash custody do not upgrade the evidence into trusted operator provenance.
+
+### Step 2 — same evidence, different policy
+
+Open research policy:
+
+```text
+LAB-CASE-OPEN-004
+→ ADMIT_WITH_LIMIT
+→ 33.066 kWh
+→ EVIDENCE_BACKED_CAPACITY binds
+```
+
+Strict pilot policy:
+
+```text
 ENERGY-CASE-PILOT-005
-```
-
-Show:
-
-```text
-BLOCKED
-MIN_PROVENANCE
-required L2
-current L0
-quantity evaluation NOT EXECUTED
+→ BLOCKED
+→ SIGNED_EVIDENCE + MIN_PROVENANCE
 ```
 
 Narrative:
 
-> The first question is not how many tokens or claims can be issued. The first question is whether quantity evaluation is allowed to run at all.
+> The system keeps the outside evidence fixed and makes the consequence of the declared policy inspectable.
 
-### Step 2 — explicit counterfactual
+### Step 3 — settlement stress
 
-Change only the declared assurance scenario:
-
-```text
-L0 → L2
-```
-
-Show that:
+Apply 40% declared settlement capacity:
 
 ```text
-evidence hash unchanged
-decision ID changed
-```
-
-Then show:
-
-```text
-ADMIT WITH LIMIT
-126 ENERGY_CLAIM_UNIT
-PROVENANCE_POLICY_CAPACITY binds
-```
-
-Narrative:
-
-> The workbench does not silently rewrite evidence. It creates a new declared decision context and a new deterministic decision identity.
-
-### Step 3 — heterogeneous binding rules
-
-Compare:
-
-```text
-TYN-001 / L2 / pilot
-126
-PROVENANCE_POLICY_CAPACITY
-
-AUS-001 / L2 / pilot
-283.09811
-RESOURCE_CONTEXT_CAPACITY
-
-PHX-001 / open
-320
-EVIDENCE_BACKED_CAPACITY
-```
-
-Narrative:
-
-> A policy result is more useful when the system can explain which rule actually determined the quantity.
-
-### Step 4 — settlement failure
-
-Run the Taoyuan 40% settlement replay.
-
-Show:
-
-```text
-outstanding 126
-covered 50.4
-shortfall 75.6
 PARTIAL
+13.2264 kWh covered
+19.8396 kWh shortfall
 ```
 
 Narrative:
 
-> Admission and bounded quantity do not prove the obligation can settle. Settlement remains a separate stage.
+> Admission and bounded quantity do not prove that an obligation can settle.
 
-### Step 5 — receipt
+### Step 4 — receipt / capsule / replay
 
-Open the decision receipt and lineage.
+Show the durable case, evidence, policy, decision, settlement, and runtime identities and the portable artifacts used for reproduction.
+
+### Step 5 — R1–R4 assessment
 
 Show:
 
 ```text
-case ID
-evidence hash
-context identity
-policy ID/version/hash
-calculator identities
-decision ID
-blocking / binding attribution
-runtime/source revision
+R1  NOT_ASSESSED
+R2  PARTIAL
+R3  PARTIAL
+R4  UNTESTED
 ```
 
-Narrative:
+The demonstration should end on **what remains unresolved**, not on token issuance.
 
-> The shareable artifact is the decision receipt, not a screenshot of a dashboard.
+Optional second demonstration: controlled `TYN-001` L0 → declared L2 assurance counterfactual to explain evidence identity versus assurance scenario and deterministic decision identity.
 
 ---
 
-## 3. Public README rule
+## 4. Public-package rule
 
-The README should lead with:
-
-```text
-research question
-five-minute investigation
-actual decision semantics
-trust boundary
-```
-
-Do not lead with:
+The public artifact should have one consistent hierarchy:
 
 ```text
-smart contracts
-package list
-architecture inventory
-token language
-historical development chronology
+README
+  ↓
+POLICY_LAB_PUBLIC_PACKAGE
+  ↓
+DEMO_WALKTHROUGH / G4 EVALUATOR BRIEF
+  ↓
+FINAL RESEARCH RECONCILIATION
+  ↓
+PROJECT_RECOVERY / deeper implementation docs
 ```
 
-Those remain available after the research method is understood.
+Historical SolarPunk/SPK material stays available but must not become a competing front door.
+
+Do not make a reviewer decide whether the project is:
+
+- a token demo;
+- a Sepolia settlement lab;
+- an energy-backed currency;
+- a generic rules engine;
+- a policy research workbench.
+
+The current top-level answer is **Policy Lab / case-based constraint research workbench**.
 
 ---
 
-## 4. Static publication sequence
+## 5. Packaging checklist before broader outreach
 
-The workbench is static-host compatible.
+### Documentation
 
-Publication sequence:
+- [ ] README reflects current public identity and claim boundary.
+- [ ] `DOCS.md` reflects current authority hierarchy.
+- [ ] `CURRENT_STATUS.md` reflects the August live/validation state.
+- [ ] `DEMO_WALKTHROUGH.md` starts with the public Ausgrid case.
+- [ ] `CONTRIBUTING.md` points to current Policy Lab surfaces.
+- [ ] GitHub issue/contact links point to Policy Lab material.
+- [ ] Historical docs are clearly subordinate where they conflict with current authority.
 
-```text
-merge V1 baseline
-      ↓
-retarget / rebase V2 onto main
-      ↓
-run exact-head CI
-      ↓
-run 15-state Chromium walkthrough
-      ↓
-merge V2
-      ↓
-publish static site
-      ↓
-verify live routes and deterministic signature outcomes
-```
+### Public review path
 
-Live routes to smoke-test:
+- [ ] Live URL loads reliably.
+- [ ] Post-deploy smoke verifies production after publication.
+- [ ] The reviewer can reach policy divergence, settlement stress, receipts, and R1–R4 state without coaching.
+- [ ] No UI copy implies L0 evidence is stronger than it is.
+- [ ] No UI copy implies R4 monetary performance is established.
 
-```text
-#cases
-#case/TYN-001
-#compare
-#receipts
-#runs
-#overview
-#sepolia
-```
+### Release package
 
-Do not deploy new contracts as part of static publication.
+- [ ] Choose exact source commit.
+- [ ] Create release notes from the frozen claim boundary.
+- [ ] Capture representative screenshots/review artifact.
+- [ ] Include or link the G4 evaluator brief.
+- [ ] Include or link the public-case artifacts / reproduction path.
+- [ ] Synchronize version/date in `CITATION.cff` only when the tagged release is created.
+- [ ] Archive through Zenodo only when the GitHub Release is intentional and final enough to cite.
 
 ---
 
-## 5. Release artifact
+## 6. Release posture
 
-After the public static site is verified, create a GitHub release.
+The existing `CITATION.cff` currently carries `0.2.0-alpha` release metadata.
 
-Recommended release label:
+Do **not** change the citation version/date merely because `main` advanced.
 
-```text
-v0.2.0-alpha
-```
-
-Recommended release title:
+For the next citable release, synchronize together:
 
 ```text
-Case Workbench V2 — Initial Public Research Release
+exact source commit
+      ↓
+Git tag
+      ↓
+GitHub Release
+      ↓
+release notes
+      ↓
+CITATION.cff version/date
+      ↓
+visual/review artifacts
+      ↓
+Zenodo DOI/archive (if used)
+      ↓
+README citation text
 ```
 
-Release notes should contain:
+Recommended release wording should describe a **public research release / live validation release**, not production or stable deployment.
 
-```text
-WHAT THE RELEASE TESTS
-WHAT THE THREE CANONICAL CASES ARE
-DETERMINISTIC SIGNATURE OUTCOMES
-PUBLIC / PRIVATE DATA BOUNDARY
-NOT CLAIMED
-VALIDATION SUMMARY
-NEXT FIELD GATE
-```
-
-Attach or link:
-
-```text
-static site build artifact
-15-screen visual review artifact
-research capsule example
-```
-
-Do not call the release `production` or `stable`.
+Do not imply that a DOI is peer review.
 
 ---
 
-## 6. Citation and archival path
+## 7. Release-note structure
 
-The repository contains a root `CITATION.cff`.
+A future release should answer:
 
-Once that file is on the default branch, GitHub can expose a repository citation action.
+### What this release tests
 
-After the V2 release:
+Whether bounded outside evidence can retain its assurance limits while explicit versioned policy produces reproducible blocking, quantity, settlement, and assessment consequences.
 
-1. connect the GitHub repository to Zenodo;
-2. enable the repository in Zenodo's GitHub integration;
-3. create the GitHub release;
-4. verify the release is ingested and archived;
-5. record the resulting DOI in `CITATION.cff`;
-6. update the release notes and README citation section;
-7. tag the archived software version consistently.
+### Canonical outside-data case
 
-A DOI should identify the released software artifact. It does not convert the workbench into a peer-reviewed paper.
+`PUB-AUSGRID-001P` with open versus strict pilot policy divergence.
+
+### Reproducibility
+
+State the deterministic receipt/capsule/assessment reproduction path and stable assessment identity.
+
+### Research-boundary result
+
+```text
+R1 NOT_ASSESSED
+R2 PARTIAL
+R3 PARTIAL
+R4 UNTESTED
+```
+
+### Explicit non-claims
+
+Repeat the public claim boundary: no operator confirmation, physical meter truth, legal issuance, enforceable redemption, optimal pricing, bounded production governance, production readiness, adoption, or money.
+
+### Next evidence gate
+
+A stronger attributable owner/operator or authenticated source path is a possible next evidence gate, not a mandatory precondition for the current release to exist.
 
 ---
 
-## 7. Research positioning
+## 8. External validation when ready
 
-The workbench should not be marketed as a generic rules engine.
+External outreach is **not** required before packaging is coherent.
 
-Current defensible research position:
+When initiated, start with a small heterogeneous cohort rather than broad promotion.
 
-> A research instrument for testing how explicit evidence and versioned policy rules produce blocked, capacity-limited, and settlement-constrained financial decisions, with blocking/binding attribution and deterministic decision receipts.
+Useful evidence classes include:
 
-Energy-linked digital finance is the first serious reference domain because it exposes four different semantics:
+- independent comprehension;
+- substantive criticism;
+- independent reproduction;
+- reuse or fork;
+- attributable outside evidence;
+- institutional evaluation;
+- repeat use.
 
-```text
-modeled resource context
-observed / controlled evidence
-evidence assurance
-settlement capacity
-```
+Traffic, page views, stars, internal dry-runs, or self-authored praise are not independent validation.
 
-The market-capacity study is a separate empirical demonstration of capacity-versus-failure trade-offs and binding attribution.
+Use:
 
-### Adjacent research themes
+- [`EXTERNAL_VALIDATION_LEDGER.md`](../research/EXTERNAL_VALIDATION_LEDGER.md)
+- [`POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md`](./POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md)
 
-The system is relevant to work on:
-
-```text
-auditability
-research provenance
-policy-as-code
-stress replay
-high-stakes decision traceability
-trustworthy financial AI infrastructure
-```
-
-Do not claim the current system is itself an AI decision engine.
-
-A future AI assistant may use the deterministic case / decision / receipt layer as a governed substrate, but that is outside the initial release.
+Do not change the frozen Gauntlet profile merely because the project was deployed. Only real new evidence can justify updating evidence-sensitive dimensions.
 
 ---
 
-## 8. External validation target
+## 9. Stronger outside evidence / pilot path
 
-The next field-value target is exactly one real evidence case.
+The current public case already proves one bounded outside-data path. A stronger future evidence step would add **attribution/authentication**, not merely another random dataset.
 
-Preferred target:
-
-```text
-real inverter / gateway export
-trusted named operator context
-signed or attributable source path
-explicit measurement window
-```
-
-Success means:
+Preferred targets:
 
 ```text
-real external source
-      ↓
-existing adapter / bounded new adapter
-      ↓
-EvidenceEnvelope
-      ↓
-real provenance classification
-      ↓
-CaseManifest
-      ↓
-V2 policy decision
-      ↓
-DecisionReceipt
+named/cooperative source holder
+or
+trusted operator / facility context
+or
+authenticated historical export
 ```
 
-The external case does not need to be a commercial launch.
+The goal is to learn whether the evidence architecture survives a stronger real-source relationship while preserving privacy and claim boundaries.
 
-One cooperative operator, university facility, rooftop owner, inverter administrator, or research partner is enough to test whether the evidence architecture survives contact with a real source.
-
-### Outreach ask
-
-Do not ask:
-
-> Will you pilot my energy-backed cryptocurrency?
-
-Ask:
-
-> I built a public research workbench that tests how evidence quality and explicit policy rules bound an energy-linked financial claim. The current public cases use controlled evidence fixtures. I am looking for one historical inverter or gateway export to run as an external research case. Raw data can remain local/private; the public artifact can retain only source metadata, hashes, aggregate decision inputs, and the resulting receipt.
+Success may be as small as one cooperative research case. It does not require a commercial launch.
 
 ---
 
-## 9. Portfolio conversion
-
-The project should not appear on a CV as:
-
-> Built an energy-backed cryptocurrency.
+## 10. Portfolio conversion
 
 Preferred project title:
 
 ```text
-Policy Lab / Energy Standard Case Workbench
+Policy Lab — Case-Based Constraint Research Workbench
 ```
-
-This is a descriptive CV label, not a permanent product rename.
 
 Preferred one-line description:
 
-> Built a deterministic research workbench that normalizes evidence, versions policy rules, separates admission from quantity and settlement constraints, attributes binding limits, replays stress scenarios, and emits reproducible decision receipts.
+> Built a deterministic research workbench that preserves evidence assurance, applies versioned admission/quantity/settlement constraints, attributes blocking and binding rules, and emits reproducible receipts and constrained-claim assessments.
 
-Preferred technical bullet:
+Useful technical framing:
 
-> Designed portable JSON-schema objects and a shared Node/browser decision engine for case, context, typed constraint evaluation, deterministic decision identity, bounded claim creation, and explicit settlement shortfall.
+> Designed portable JSON-schema objects and a shared Node/browser decision engine for evidence, policy, typed constraint evaluation, deterministic decision identity, bounded claims, settlement shortfall, receipts, capsules, and R1–R4 assessment derivation.
 
-Preferred empirical bullet:
+Useful public-evidence framing:
 
-> Published an aggregate market-capacity policy study over a 777,764-security-day licensed CRSP/Refinitiv source package; compared common-sample capacity policies, attributed binding volatility/liquidity constraints, and kept severe stress failure visible without redistributing licensed rows.
+> Landed and audited a bounded Ausgrid public-source case at actual L0 assurance, producing deterministic open/pilot policy divergence, settlement stress, closed-world assessment verification, and explicit non-claims around operator provenance and monetary performance.
 
-Preferred product bullet:
-
-> Built a React case workbench with linked case exploration, case × policy comparison, counterfactual assurance forks, stress replay, lineage, and decision/capsule export; validated with deterministic core tests, frontend tests, production build, and scripted desktop/mobile Chromium review.
+Do not summarize the current artifact as “built an energy-backed cryptocurrency.”
 
 ---
 
-## 10. Interview demonstration
+## 11. Interview / evaluator opening
 
-Use the five-minute case walkthrough.
+Use:
 
-Do not begin with the thesis history.
+> I was working on energy-linked finance and found that the hard problem was not token issuance. It was deciding what evidence and constraints had to bind before a financial quantity was allowed to exist. I turned that into a deterministic case workbench that makes the stopping point and remaining evidence gap explicit.
 
-Opening:
+Then demonstrate the public Ausgrid case.
 
-> I was working on an energy-linked finance thesis and found that the hard problem was not token issuance. It was deciding what evidence and constraints had to bind before a financial quantity was allowed to exist. I turned that into an executable case workbench.
-
-Then demonstrate:
-
-```text
-blocked TYN
-      ↓
-L2 counterfactual
-      ↓
-126 provenance-bound
-      ↓
-compare AUS / PHX binding differences
-      ↓
-40% settlement shock
-      ↓
-receipt
-```
-
-Close with:
-
-> The current limitation is deliberate: the energy case pack uses controlled fixtures and modeled resource context. The next field gate is one real operator evidence source. I preferred to expose that missing evidence rather than hide it behind a token or an AI explanation layer.
+Only show historical SPK/Sepolia implementation if the reviewer asks about the originating reference architecture.
 
 ---
 
-## 11. Conversion stop rule
+## 12. Stop rule
 
-Do not delay public release for:
+Do not delay packaging/release for:
+
+- AI assistant;
+- more locations;
+- new policy families;
+- GIS infrastructure;
+- new blockchain contracts;
+- accounts/billing;
+- cloud evidence storage;
+- marketplace features;
+- token redesign.
+
+A new implementation tranche should be justified by one of:
 
 ```text
-AI assistant
-more locations
-H3 / GIS infrastructure
-new blockchain contracts
-team accounts
-billing
-cloud evidence storage
-new policy families
+packaging failure
+live-operability failure
+reproduction failure
+external-evidence requirement
+observed user/evaluator need
 ```
-
-After publication, the only pre-external-validation product feature with clear value is:
-
-```text
-IMPORT EVIDENCE
-      ↓
-NORMALIZE
-      ↓
-CREATE LOCAL CASE
-      ↓
-RUN V2 DECISION
-```
-
-Even that should follow the public release rather than block it.
 
 ---
 
-## 12. Conversion sequence
+## 13. Current conversion sequence
 
 ```text
-PUBLIC V2
+LIVE POLICY LAB
       ↓
-CITABLE RELEASE
+COHERENT PUBLIC PACKAGE
       ↓
-THESIS INTEGRATION
+TAGGED / CITABLE RELEASE
       ↓
-JOB / RESEARCH DEMO
+CONTROLLED EXTERNAL REVIEW WHEN READY
       ↓
-ONE EXTERNAL EVIDENCE CASE
+STRONGER ATTRIBUTABLE EVIDENCE OR PILOT IF JUSTIFIED
       ↓
-REASSESS
+REASSESS PRODUCT / RESEARCH / FUNDING ROUTES
 ```
 
-The project should now encounter external review before another major architecture phase begins.
+The point of the current phase is to make the already-built asset legible, durable, and citable before asking outsiders to judge it.
