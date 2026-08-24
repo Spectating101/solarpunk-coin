@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - 'README.md'
+      - 'AGENTS.md'
+      - 'HANDOFF.md'
+      - 'DOCS.md'
+      - '.claude/HANDOFF.md'
       - 'package.json'
       - 'CURRENT_SURFACE.json'
       - 'frontend/src/App.jsx'
@@ -34,6 +38,10 @@ on:
     branches: [main]
     paths:
       - 'README.md'
+      - 'AGENTS.md'
+      - 'HANDOFF.md'
+      - 'DOCS.md'
+      - '.claude/HANDOFF.md'
       - 'package.json'
       - 'CURRENT_SURFACE.json'
       - 'frontend/src/App.jsx'
