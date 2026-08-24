@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Public Lab v1.0 doc
-    url: https://github.com/Spectating101/solarpunk-coin/blob/main/docs/product/PUBLIC_LAB_V1.md
-    about: What the lab is and is not
-  - name: Open lab workflows
-    url: https://github.com/Spectating101/solarpunk-coin/blob/main/docs/project/OPEN_LAB_WORKFLOWS.md
-    about: Run, replicate, and extend the lab
+  - name: Policy Lab public package
+    url: https://github.com/Spectating101/solarpunk-coin/blob/main/docs/project/POLICY_LAB_PUBLIC_PACKAGE.md
+    about: Current identity, public evidence, claim boundaries, and review path
+  - name: G4 evaluator brief
+    url: https://github.com/Spectating101/solarpunk-coin/blob/main/docs/research/POLICY_LAB_G4_EVALUATOR_BRIEF.md
+    about: Canonical public-source case and bounded evaluation question
+  - name: Documentation map
+    url: https://github.com/Spectating101/solarpunk-coin/blob/main/DOCS.md
+    about: Current authority hierarchy and implementation map
