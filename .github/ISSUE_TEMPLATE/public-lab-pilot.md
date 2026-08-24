@@ -1,42 +1,61 @@
 ---
-name: SolarPunk Public Lab pilot inquiry
-about: Share a real meter/inverter export, research collaboration, or pilot integration question
-title: "[Public Lab] "
+name: Policy Lab external case / pilot inquiry
+about: Propose an attributable evidence source, research collaboration, or bounded Policy Lab pilot
+title: "[Policy Lab pilot] "
 labels: public-lab,pilot
 assignees: ""
 ---
 
-## Inquiry Type
+## Inquiry type
 
-- [ ] Solar / renewable operator
-- [ ] Meter or inverter data export
+- [ ] Energy / renewable operator
+- [ ] Meter, inverter, registry, or institutional data source
 - [ ] Research collaboration
-- [ ] Wallet / contract integration
-- [ ] Security / oracle review
+- [ ] Policy / financial-constraint evaluation
+- [ ] Institutional pilot
+- [ ] Security / reproducibility review
 - [ ] Other
 
 ## Context
 
-Who are you, what site/system are you working with, and what are you trying to verify?
+Who are you, what system or institution are you working with, and what decision or claim are you trying to evaluate?
 
-## Data Available
+## Evidence available
 
-If this involves a meter or inverter export, describe the format without posting secrets or private customer data.
+Describe the evidence format without posting secrets, confidential material, or private customer data.
 
-- Device/inverter type:
-- Export format: CSV / API / other
-- Time resolution:
-- Available fields:
-- Can data be anonymized publicly? yes / no / unsure
+- Source-holder / operator relationship:
+- Evidence format: CSV / API / registry export / document / other
+- Measurement or observation period:
+- Time resolution if applicable:
+- Available fields or attributes:
+- Attribution available: yes / no / partial / unsure
+- Can any bounded artifact be published or independently reviewed? yes / no / unsure
 
-## Desired Outcome
+Do not infer an assurance level here. Policy Lab preserves source limitations and determines assurance separately from public availability.
 
-What would count as a useful SolarPunk Public Lab result?
+## Desired outcome
+
+What would count as a useful Policy Lab result?
+
+Examples include a reproducible block, a bounded admitted quantity, a policy comparison, a verified receipt/assessment, or evidence that a proposed workflow is not currently supportable.
+
+## Pilot boundary
+
+If this is a potential pilot, describe the smallest useful evaluation rather than a production deployment.
+
+- Decision or workflow to test:
+- Who would review the result:
+- What evidence can be supplied:
+- What must remain private:
+- What result could be shared publicly, if any:
+
+An inquiry or demonstration request is not recorded as a pilot until a bounded evaluation scope is actually agreed.
 
 ## Constraints
 
-List any privacy, legal, commercial, interconnection, or data-sharing constraints.
+List any privacy, legal, commercial, interconnection, data-sharing, publication, or institutional constraints.
 
-## No Secrets
+## Safety / privacy
 
-Do not post private keys, seed phrases, production API tokens, customer-identifying data, or signed commercial contracts.
+Do not post private keys, seed phrases, production API tokens, customer-identifying energy data, confidential contracts, or data you do not have permission to share.
