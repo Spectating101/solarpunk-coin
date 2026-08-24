@@ -9,6 +9,10 @@
   },
   "executable_truth": {
     "public_entrypoint": "README.md",
+    "agent_instructions": "AGENTS.md",
+    "handoff_redirect": "HANDOFF.md",
+    "claude_handoff_redirect": ".claude/HANDOFF.md",
+    "documentation_index": "DOCS.md",
     "root_package": "package.json",
     "frontend_entry": "frontend/src/App.jsx",
     "frontend_routes": "frontend/src/app/routes.js",
