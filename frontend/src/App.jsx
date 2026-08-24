@@ -272,14 +272,14 @@ function App() {
     <div className={`app-minimal paired-platform-app ${viewMode === 'full' ? 'full-analysis-active' : ''}`}>
       <header className="app-minimal-top workbench-app-top paired-platform-top">
         <div className="brand-block">
-          <div className="brand-mark">S</div>
+          <div className="brand-mark">P</div>
           <div>
-            <div className="brand-name">Solarpunk</div>
-            <div className="brand-sub">Policy Lab · evidence-bounded financial claims</div>
+            <div className="brand-name">Policy Lab</div>
+            <div className="brand-sub">case-based constraint research workbench</div>
           </div>
         </div>
         <div className="app-minimal-actions">
-          <nav className="app-tab-nav desktop-primary-nav" aria-label="Solarpunk platform sections">
+          <nav className="app-tab-nav desktop-primary-nav" aria-label="Policy Lab sections">
             {PRIMARY_NAV.map((item) => (
               <button
                 key={item.section}
