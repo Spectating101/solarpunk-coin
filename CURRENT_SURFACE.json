@@ -3,10 +3,13 @@
   "identity": {
     "primary_name": "Policy Lab",
     "description": "Case-based constraint research workbench",
+    "root_package_name": "policy-lab-research-workbench",
     "historical_programme": "SolarPunk / Energy Standard",
     "public_url": "https://spectating101.github.io/solarpunk-coin/demo/"
   },
   "executable_truth": {
+    "public_entrypoint": "README.md",
+    "root_package": "package.json",
     "frontend_entry": "frontend/src/App.jsx",
     "frontend_routes": "frontend/src/app/routes.js",
     "frontend_state": "frontend/src/app/CaseWorkbenchProvider.jsx",
