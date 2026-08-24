@@ -17,6 +17,10 @@ async function readJson(relativePath) {
   return JSON.parse(await readFile(path.join(ROOT, relativePath), 'utf8'));
 }
 
+async function readText(relativePath) {
+  return readFile(path.join(ROOT, relativePath), 'utf8');
+}
+
 async function requirePath(relativePath) {
   const full = path.join(ROOT, relativePath);
   await access(full);
@@ -54,10 +58,31 @@ async function main() {
     if (!rootPackage.scripts?.[scriptName]) fail(`missing canonical root command: ${scriptName}`);
   }
 
-  const publicEntrypoint = await readFile(path.join(ROOT, surface.executable_truth.public_entrypoint), 'utf8');
+  const publicEntrypoint = await readText(surface.executable_truth.public_entrypoint);
   if (!publicEntrypoint.startsWith('# Policy Lab')) fail('public README must identify Policy Lab first');
   if (!publicEntrypoint.includes('CURRENT_SURFACE.json')) fail('public README must point readers to machine current-surface truth');
   if (!publicEntrypoint.includes('Historical SolarPunk / SPK material')) fail('public README must label historical SolarPunk/SPK material explicitly');
+
+  const agentInstructions = await readText(surface.executable_truth.agent_instructions);
+  if (!agentInstructions.startsWith('# Policy Lab')) fail('AGENTS.md must identify Policy Lab first');
+  if (!agentInstructions.includes('Do **not** reconstruct current project state from historical Markdown')) fail('AGENTS.md must reject historical Markdown as current authority');
+  if (!agentInstructions.includes('npm run policy-lab:surface')) fail('AGENTS.md must require current-surface verification');
+  if (agentInstructions.includes('SolarPunk Public Lab v1.0** on Ethereum Sepolia')) fail('obsolete SPK product authority re-entered AGENTS.md');
+
+  const handoff = await readText(surface.executable_truth.handoff_redirect);
+  if (!handoff.startsWith('# Policy Lab')) fail('HANDOFF.md must be a Policy Lab redirect');
+  if (!handoff.includes('There is no authoritative Markdown handoff')) fail('HANDOFF.md must reject handoff authority');
+  if (!handoff.includes('CURRENT_SURFACE.json')) fail('HANDOFF.md must redirect to current surface');
+
+  const claudeHandoff = await readText(surface.executable_truth.claude_handoff_redirect);
+  if (!claudeHandoff.startsWith('# Policy Lab')) fail('.claude/HANDOFF.md must be a Policy Lab redirect');
+  if (!claudeHandoff.includes('no longer a source of current project state')) fail('.claude/HANDOFF.md must retire its historical authority');
+  if (claudeHandoff.includes('SolarPunk Protocol is a DeFi derivatives protocol')) fail('obsolete DeFi identity re-entered .claude/HANDOFF.md');
+
+  const docsIndex = await readText(surface.executable_truth.documentation_index);
+  if (!docsIndex.startsWith('# Policy Lab')) fail('DOCS.md must identify Policy Lab first');
+  if (!docsIndex.includes('navigation aid, not a source of runtime truth')) fail('DOCS.md must remain explicitly non-authoritative');
+  if (!docsIndex.includes('CURRENT_SURFACE.json')) fail('DOCS.md must redirect current-state questions to the machine surface');
 
   const pack = await readJson(surface.executable_truth.interactive_case_pack);
   const expectedCases = surface.interactive_pack.case_ids;
@@ -90,7 +115,7 @@ async function main() {
   if (packageSchema?.properties?.schema?.const !== CLAIM_PACKAGE_SCHEMA) fail('published portable-package schema constant drifted');
   if (packageSchema?.properties?.profile?.properties?.id?.const !== CLAIM_PACKAGE_PROFILE) fail('published portable-package profile constant drifted');
 
-  const externalCaseWorkflow = await readFile(path.join(ROOT, surface.executable_truth.public_case_workflow), 'utf8');
+  const externalCaseWorkflow = await readText(surface.executable_truth.public_case_workflow);
   if (!externalCaseWorkflow.includes('build_claim_assessment_package.mjs')) fail('outside-data workflow no longer builds the portable assessment package');
   if (!externalCaseWorkflow.includes('verify_claim_assessment_package.mjs')) fail('outside-data workflow no longer verifies the portable assessment package');
   if (!externalCaseWorkflow.includes('cmp state/external/public-001p-ausgrid/claim-assessment-package.json')) fail('outside-data workflow no longer proves byte-identical package rebuild');
@@ -102,25 +127,25 @@ async function main() {
     if (await pathExists(forbidden)) fail(`historical operation is active under GitHub Actions: ${forbidden}`);
   }
 
-  const pagesWorkflow = await readFile(path.join(ROOT, surface.executable_truth.pages_publish_workflow), 'utf8');
+  const pagesWorkflow = await readText(surface.executable_truth.pages_publish_workflow);
   if (!pagesWorkflow.includes(`name: ${PAGES_WORKFLOW_NAME}`)) fail('current Pages workflow name drifted');
   if (!pagesWorkflow.includes('docs/demo')) fail('current Pages workflow no longer publishes the Policy Lab demo mirror');
   if (!pagesWorkflow.includes('policy_lab_preflight.mjs')) fail('current Pages workflow is not gated by Policy Lab preflight');
   if (pagesWorkflow.includes('public-lab:preflight')) fail('legacy Public Lab preflight re-entered the current Pages workflow');
 
-  const publishScript = await readFile(path.join(ROOT, surface.executable_truth.pages_publish_script), 'utf8');
+  const publishScript = await readText(surface.executable_truth.pages_publish_script);
   if (!publishScript.includes('policy_lab_preflight.mjs')) fail('Pages publish script is not gated by Policy Lab preflight');
   if (publishScript.includes('state/runtime/spk_v1.json')) fail('Pages publish script still refreshes historical SPK runtime state');
 
-  const smokeWorkflow = await readFile(path.join(ROOT, surface.executable_truth.live_smoke_workflow), 'utf8');
+  const smokeWorkflow = await readText(surface.executable_truth.live_smoke_workflow);
   if (!smokeWorkflow.includes(`workflows: ["${PAGES_WORKFLOW_NAME}"]`)) fail('live smoke no longer follows the current Pages deployment workflow');
 
-  const routes = await readFile(path.join(ROOT, surface.executable_truth.frontend_routes), 'utf8');
+  const routes = await readText(surface.executable_truth.frontend_routes);
   for (const route of surface.historical_reference.active_but_secondary_routes) {
     if (!routes.includes(`'${route}'`)) fail(`declared historical/reference route missing: ${route}`);
   }
 
-  const app = await readFile(path.join(ROOT, surface.executable_truth.frontend_entry), 'utf8');
+  const app = await readText(surface.executable_truth.frontend_entry);
   if (!app.includes('<div className="brand-mark">P</div>')) fail('live frontend brand mark is not Policy Lab first');
   if (!app.includes('<div className="brand-name">Policy Lab</div>')) fail('live frontend brand name is not Policy Lab');
   if (app.includes('<div className="brand-name">Solarpunk</div>')) fail('historical SolarPunk identity re-entered the live primary brand');
@@ -132,6 +157,13 @@ async function main() {
     root_package_name: rootPackage.name,
     root_package_private: rootPackage.private,
     canonical_root_commands: Object.keys(rootPackage.scripts).filter((name) => name.startsWith('policy-lab:')),
+    authoritative_entrypoints: {
+      public: surface.executable_truth.public_entrypoint,
+      agent: surface.executable_truth.agent_instructions,
+      handoff: surface.executable_truth.handoff_redirect,
+      claude: surface.executable_truth.claude_handoff_redirect,
+      docs_index: surface.executable_truth.documentation_index,
+    },
     pages_workflow_name: PAGES_WORKFLOW_NAME,
     pages_publish_workflow: surface.executable_truth.pages_publish_workflow,
     interactive_case_pack: pack.case_pack_id,
