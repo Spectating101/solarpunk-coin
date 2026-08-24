@@ -18,7 +18,8 @@
     "public_case_script": "scripts/external_case_001p_ausgrid.mjs",
     "public_case_workflow": ".github/workflows/external-case-001p-ausgrid.yml",
     "live_smoke_workflow": ".github/workflows/policy-lab-live-smoke.yml",
-    "publish_workflow": ".github/workflows/publish.yml"
+    "pages_publish_workflow": ".github/workflows/deploy.yml",
+    "surface_integrity_workflow": ".github/workflows/current-surface.yml"
   },
   "interactive_pack": {
     "case_pack_id": "energy-reference-cases-v1",
@@ -36,6 +37,22 @@
   "historical_reference": {
     "active_but_secondary_routes": ["reference", "legacy-protocol", "evidence", "currency"],
     "domains": ["SPK", "Sepolia", "SolarPunk Public Lab", "Energy Standard"],
-    "rule": "Historical/reference surfaces remain inspectable but must not define the current Policy Lab identity or validation state."
+    "archived_workflows": [
+      "archive/github-workflows/foundation_autosync.yml",
+      "archive/github-workflows/spk_v1_operator.yml",
+      "archive/github-workflows/publish-pypi.yml",
+      "archive/github-workflows/nasa_keeper.yml",
+      "archive/github-workflows/hardhat-deploy.yml",
+      "archive/github-workflows/deploy_constraint_protocol_alpha_sepolia.yml"
+    ],
+    "forbidden_active_workflows": [
+      ".github/workflows/foundation_autosync.yml",
+      ".github/workflows/spk_v1_operator.yml",
+      ".github/workflows/publish.yml",
+      ".github/workflows/nasa_keeper.yml",
+      ".github/workflows/hardhat-deploy.yml",
+      ".github/workflows/deploy_constraint_protocol_alpha_sepolia.yml"
+    ],
+    "rule": "Historical/reference surfaces remain inspectable but must not define the current Policy Lab identity, mutate current state on a schedule, deploy legacy contracts, or trigger legacy package publication."
   }
 }
