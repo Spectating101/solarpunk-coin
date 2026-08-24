@@ -1,23 +1,45 @@
-# AI assistant instructions
+# Policy Lab — agent instructions
 
-Read [`DOCS.md`](./DOCS.md) before anything else in this repo.
+Do **not** reconstruct current project state from historical Markdown handoffs, filenames such as `CURRENT_STATUS.md`, or SolarPunk/SPK deployment artifacts.
 
-## Current product
+## Authoritative starting point
 
-- **SolarPunk Public Lab v1.0** on Ethereum Sepolia — canonical framing in [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md)
-- Canonical addresses in `state/runtime/spk_v1.json`
-- Default operating mode: **maintenance** — [`docs/project/MAINTENANCE.md`](./docs/project/MAINTENANCE.md)
-- Optional operator cycle: `npm run spk:v1:cycle:sepolia` (not required weekly)
+1. Read [`CURRENT_SURFACE.json`](./CURRENT_SURFACE.json).
+2. Run `npm run policy-lab:surface`.
+3. Inspect the executable path relevant to the task:
+   - frontend entry/routes: `frontend/src/App.jsx`, `frontend/src/app/routes.js`
+   - shared state/runtime: `frontend/src/app/CaseWorkbenchProvider.jsx`, `frontend/src/lib/caseWorkbenchRuntime.js`
+   - deterministic core: `packages/constraint-core/src/workbench.js`
+   - controlled case pack: `protocol/cases/energy-v1/case-pack.json`
+   - policies: `protocol/policies-v2/`
+   - schemas: `protocol/schema/`
+   - outside-data case: `.github/workflows/external-case-001p-ausgrid.yml`
+   - deployment: `.github/workflows/deploy.yml`
+4. Run `npm run policy-lab:preflight` before treating a proposed surface as current/releasable.
 
-## Do not
+## Current identity
 
-- Redeploy Sepolia unless bytecode intentionally changed
-- Frame this as “launch ready” currency, token sale, mainnet, or grant-seeking theater
-- Treat pre-v1 launch-gate / grant / Polygon Amoy docs as current truth
-- Use `docs/product/SOLARPUNK_FULL_CONTEXT_FOR_CLAUDE.md` (retired)
-- Touch `IE-JDE/` (separate project)
+The current project is **Policy Lab — a case-based constraint research workbench**.
 
-## Verify facts
+SolarPunk / Energy Standard / SPK / Sepolia material is historical and reference-domain machinery. It may be inspected or reproduced when a task requires it, but it does not define current project identity, validation state, deployment prerequisites, or research authority.
 
-- `CURRENT_STATUS.md` + `npx hardhat test` (109 tests)
-- Prefer Public Lab v1 + `spk_v1.json` when documents disagree
+## Evidence boundaries
+
+- The interactive four-case pack is controlled and declares `empirical_claim: false`.
+- `PUB-AUSGRID-001P` is a separate outside-public-data checkpoint at actual `L0` assurance.
+- Do not promote controlled fixtures, modeled context, public data, receipts, signatures, packages, contracts, or blockchain state into stronger evidence than their source supports.
+- R1–R4 research boundaries are not aliases for runtime stages.
+- R4 remains `UNTESTED` absent dedicated monetary-performance evidence.
+- A deterministic receipt/package proves lineage/reproduction, not physical truth, legal authority, reserves, certification, adoption, or money.
+
+## Change discipline
+
+When code, generated artifacts, workflows, and prose disagree, investigate the executable objects first.
+
+If the canonical project surface genuinely changes, update `CURRENT_SURFACE.json` and `scripts/check_current_surface.mjs` in the same change.
+
+Preserve historical systems unless removal is independently justified; do not reactivate archived scheduled writers, legacy deployment workflows, or old package publishers.
+
+## Documentation
+
+`README.md` is the human entrypoint. `DOCS.md` is only a documentation index. Other Markdown files are research/history/context and are **not runtime authority unless independently verified against executable state**.
