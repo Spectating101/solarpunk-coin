@@ -17,8 +17,10 @@
     "policies": "protocol/policies-v2",
     "public_case_script": "scripts/external_case_001p_ausgrid.mjs",
     "public_case_workflow": ".github/workflows/external-case-001p-ausgrid.yml",
-    "live_smoke_workflow": ".github/workflows/policy-lab-live-smoke.yml",
+    "deployment_preflight": "scripts/policy_lab_preflight.mjs",
+    "pages_publish_script": "scripts/publish_demo_to_docs.sh",
     "pages_publish_workflow": ".github/workflows/deploy.yml",
+    "live_smoke_workflow": ".github/workflows/policy-lab-live-smoke.yml",
     "surface_integrity_workflow": ".github/workflows/current-surface.yml"
   },
   "interactive_pack": {
