@@ -15,6 +15,8 @@ on:
       - 'protocol/cases/energy-v1/**'
       - 'protocol/policies-v2/**'
       - 'scripts/external_case_001p_ausgrid.mjs'
+      - 'scripts/policy_lab_preflight.mjs'
+      - 'scripts/publish_demo_to_docs.sh'
       - 'scripts/check_current_surface.mjs'
       - '.github/workflows/external-case-001p-ausgrid.yml'
       - '.github/workflows/policy-lab-live-smoke.yml'
@@ -36,6 +38,8 @@ on:
       - 'protocol/cases/energy-v1/**'
       - 'protocol/policies-v2/**'
       - 'scripts/external_case_001p_ausgrid.mjs'
+      - 'scripts/policy_lab_preflight.mjs'
+      - 'scripts/publish_demo_to_docs.sh'
       - 'scripts/check_current_surface.mjs'
       - '.github/workflows/external-case-001p-ausgrid.yml'
       - '.github/workflows/policy-lab-live-smoke.yml'
@@ -57,3 +61,5 @@ jobs:
           node-version: '22'
       - name: Validate current executable surface
         run: node scripts/check_current_surface.mjs
+      - name: Validate deployment preflight
+        run: node scripts/policy_lab_preflight.mjs
