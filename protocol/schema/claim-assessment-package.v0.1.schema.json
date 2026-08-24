@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Policy Lab Claim Assessment Package v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "assessment_id",
+    "package_content_id",
+    "profile",
+    "claim",
+    "evidence",
+    "evaluations",
+    "settlement",
+    "verification",
+    "non_claims",
+    "extensions"
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "stringArray": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit"],
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "type": "string", "minLength": 1 }
+      }
+    },
+    "ruleEvaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evaluation_id",
+        "calculator_id",
+        "calculator_version",
+        "constraint_class",
+        "policy_rule_id",
+        "status",
+        "unit",
+        "quantity_decimals",
+        "capacity",
+        "input_refs",
+        "observed_inputs",
+        "parameters",
+        "assumptions",
+        "warnings",
+        "explanation",
+        "boundary"
+      ],
+      "properties": {
+        "evaluation_id": { "$ref": "#/$defs/sha256" },
+        "calculator_id": { "type": "string", "minLength": 1 },
+        "calculator_version": { "type": "string", "minLength": 1 },
+        "constraint_class": { "type": "string", "minLength": 1 },
+        "policy_rule_id": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 1 },
+        "unit": { "type": ["string", "null"] },
+        "quantity_decimals": { "type": ["integer", "null"] },
+        "capacity": { "type": ["number", "null"] },
+        "input_refs": { "$ref": "#/$defs/stringArray" },
+        "observed_inputs": { "type": "object" },
+        "parameters": { "type": "object" },
+        "assumptions": { "$ref": "#/$defs/stringArray" },
+        "warnings": { "$ref": "#/$defs/stringArray" },
+        "explanation": { "type": "string", "minLength": 1 },
+        "boundary": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "properties": {
+    "schema": { "const": "policylab.claim_assessment_package.v0.1" },
+    "assessment_id": { "$ref": "#/$defs/sha256" },
+    "package_content_id": { "$ref": "#/$defs/sha256" },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "domain", "claim_kind", "unit_mapping"],
+      "properties": {
+        "id": { "const": "policylab.energy_linked_claim.v0" },
+        "domain": { "const": "energy" },
+        "claim_kind": { "type": "string", "minLength": 1 },
+        "unit_mapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_unit", "claim_unit", "evidence_backed_rate", "calculator_id", "interpretation"],
+          "properties": {
+            "source_unit": { "const": "kWh" },
+            "claim_unit": { "type": "string", "minLength": 1 },
+            "evidence_backed_rate": { "type": "number" },
+            "calculator_id": { "const": "EVIDENCE_BACKED_CAPACITY" },
+            "interpretation": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "case_id", "subject", "question", "request_mode", "requested_quantity", "period"],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+        "case_id": { "type": "string", "minLength": 1 },
+        "subject": { "type": "string", "minLength": 1 },
+        "question": { "type": "string", "minLength": 1 },
+        "request_mode": { "enum": ["MAXIMUM_SUPPORTABLE", "FIXED_QUANTITY"] },
+        "requested_quantity": { "type": ["number", "null"] },
+        "period": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["local", "canonical_utc"],
+          "properties": {
+            "local": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["start_date", "end_date", "timezone_basis"],
+              "properties": {
+                "start_date": { "type": "string", "minLength": 1 },
+                "end_date": { "type": "string", "minLength": 1 },
+                "timezone_basis": { "type": "string", "minLength": 1 }
+              }
+            },
+            "canonical_utc": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["start", "end"],
+              "properties": {
+                "start": { "type": "string", "minLength": 1 },
+                "end": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_hash", "assurance", "source_holder_confirmation", "interval_count", "source", "eligible_quantity", "warnings"],
+      "properties": {
+        "evidence_hash": { "$ref": "#/$defs/sha256" },
+        "assurance": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+        "source_holder_confirmation": { "enum": ["CONFIRMED", "NOT_CONFIRMED", "UNKNOWN"] },
+        "interval_count": { "type": "integer", "minimum": 1 },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["publisher", "dataset", "archive_sha256", "archive_bytes", "selected_subject"],
+          "properties": {
+            "publisher": { "type": "string", "minLength": 1 },
+            "dataset": { "type": "string", "minLength": 1 },
+            "archive_sha256": { "$ref": "#/$defs/sha256" },
+            "archive_bytes": { "type": "integer", "minimum": 1 },
+            "selected_subject": { "type": "string", "minLength": 1 }
+          }
+        },
+        "eligible_quantity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "unit", "semantics"],
+          "properties": {
+            "value": { "type": "number" },
+            "unit": { "const": "kWh" },
+            "semantics": { "type": "string", "minLength": 1 }
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "detail"],
+            "properties": {
+              "code": { "type": "string", "minLength": 1 },
+              "detail": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "evaluations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["policy", "policy_manifest_hash", "decision", "external_reading", "decision_id", "supported_quantity", "binding_calculators", "blocking_calculators", "rule_evaluations"],
+        "properties": {
+          "policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "version", "name", "description", "governance"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "version": { "type": ["string", "null"] },
+              "name": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 1 },
+              "governance": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["authority", "mutable_by"],
+                "properties": {
+                  "authority": { "type": "string", "minLength": 1 },
+                  "mutable_by": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          },
+          "policy_manifest_hash": { "$ref": "#/$defs/sha256" },
+          "decision": { "type": "string", "minLength": 1 },
+          "external_reading": { "enum": ["ADMITTED_WITH_LIMIT_UNDER_POLICY", "ADMITTED_UNDER_POLICY", "BLOCKED_UNDER_POLICY"] },
+          "decision_id": { "$ref": "#/$defs/sha256" },
+          "supported_quantity": { "oneOf": [{ "$ref": "#/$defs/quantity" }, { "type": "null" }] },
+          "binding_calculators": { "$ref": "#/$defs/stringArray" },
+          "blocking_calculators": { "$ref": "#/$defs/stringArray" },
+          "rule_evaluations": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ruleEvaluation" } }
+        }
+      }
+    },
+    "settlement": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result", "covered_quantity", "shortfall_quantity", "unit", "scenario_only"],
+          "properties": {
+            "result": { "type": "string", "minLength": 1 },
+            "covered_quantity": { "type": "number" },
+            "shortfall_quantity": { "type": "number" },
+            "unit": { "type": "string", "minLength": 1 },
+            "scenario_only": { "type": "boolean" }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessment_identity", "package_content_identity", "artifact_contract"],
+      "properties": {
+        "assessment_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "canonicalization", "excludes", "meaning"],
+          "properties": {
+            "algorithm": { "const": "SHA-256" },
+            "canonicalization": { "const": "stable-json-key-order-v1" },
+            "excludes": { "$ref": "#/$defs/stringArray" },
+            "meaning": { "type": "string", "minLength": 1 }
+          }
+        },
+        "package_content_identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["algorithm", "canonicalization", "meaning"],
+          "properties": {
+            "algorithm": { "const": "SHA-256" },
+            "canonicalization": { "const": "stable-json-key-order-v1" },
+            "meaning": { "type": "string", "minLength": 1 }
+          }
+        },
+        "artifact_contract": { "type": "string", "minLength": 1 }
+      }
+    },
+    "non_claims": { "$ref": "#/$defs/stringArray" },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "research_projection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schema", "assessment_id", "boundaries", "r3_components", "next_evidence_required"],
+          "properties": {
+            "schema": { "type": "string", "minLength": 1 },
+            "assessment_id": { "$ref": "#/$defs/sha256" },
+            "boundaries": { "type": "object" },
+            "r3_components": { "type": "object" },
+            "next_evidence_required": { "type": "object" }
+          }
+        },
+        "delivery_verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["receipt_decision_id", "capsule_id", "capsule_verification"],
+          "properties": {
+            "receipt_decision_id": { "type": ["string", "null"] },
+            "capsule_id": { "type": ["string", "null"] },
+            "capsule_verification": { "type": ["object", "null"] }
+          }
+        }
+      }
+    }
+  }
+}
