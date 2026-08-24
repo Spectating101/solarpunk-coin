@@ -5,6 +5,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PAGES_WORKFLOW_NAME = 'Deploy Policy Lab to GitHub Pages';
+const CLAIM_PACKAGE_SCHEMA = 'policylab.claim_assessment_package.v0.1';
+const CLAIM_PACKAGE_PROFILE = 'policylab.energy_linked_claim.v0';
 
 function fail(message) {
   throw new Error(`current-surface check failed: ${message}`);
@@ -63,6 +65,21 @@ async function main() {
   if (checkpoint.verification.decision_reproduction !== 'PASS') fail('audited decision reproduction must remain PASS');
   if (checkpoint.boundaries.R4 !== 'UNTESTED') fail('R4 must remain UNTESTED in the current checkpoint');
 
+  const portable = surface.portable_assessment_package;
+  if (!portable) fail('portable assessment package declaration missing');
+  if (portable.schema !== CLAIM_PACKAGE_SCHEMA) fail('portable assessment package schema declaration drifted');
+  if (portable.profile !== CLAIM_PACKAGE_PROFILE) fail('portable assessment package profile declaration drifted');
+  if (portable.source_case !== checkpoint.case_id) fail('portable assessment package must remain bound to the audited outside-data case');
+
+  const packageSchema = await readJson(surface.executable_truth.claim_assessment_package_schema);
+  if (packageSchema?.properties?.schema?.const !== CLAIM_PACKAGE_SCHEMA) fail('published portable-package schema constant drifted');
+  if (packageSchema?.properties?.profile?.properties?.id?.const !== CLAIM_PACKAGE_PROFILE) fail('published portable-package profile constant drifted');
+
+  const externalCaseWorkflow = await readFile(path.join(ROOT, surface.executable_truth.public_case_workflow), 'utf8');
+  if (!externalCaseWorkflow.includes('build_claim_assessment_package.mjs')) fail('outside-data workflow no longer builds the portable assessment package');
+  if (!externalCaseWorkflow.includes('verify_claim_assessment_package.mjs')) fail('outside-data workflow no longer verifies the portable assessment package');
+  if (!externalCaseWorkflow.includes('cmp state/external/public-001p-ausgrid/claim-assessment-package.json')) fail('outside-data workflow no longer proves byte-identical package rebuild');
+
   for (const archived of surface.historical_reference.archived_workflows || []) {
     if (!(await pathExists(archived))) fail(`declared archived workflow missing: ${archived}`);
   }
@@ -101,6 +118,11 @@ async function main() {
     outside_data_checkpoint: checkpoint.case_id,
     outside_data_assurance: checkpoint.evidence.assurance,
     outside_data_reproduction: checkpoint.verification.decision_reproduction,
+    portable_assessment_package: {
+      schema: portable.schema,
+      profile: portable.profile,
+      source_case: portable.source_case,
+    },
     archived_workflow_count: surface.historical_reference.archived_workflows.length,
     forbidden_active_workflow_count: surface.historical_reference.forbidden_active_workflows.length,
     historical_reference_routes: surface.historical_reference.active_but_secondary_routes,
