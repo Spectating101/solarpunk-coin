@@ -1,0 +1,43 @@
+# ARCHIVED 2026-08-24: legacy pre-v1 NASA/Sepolia keeper. Kept for provenance; not executable by GitHub Actions from this path.
+name: NASA Solar Keeper (legacy)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  keeper:
+    name: Push NASA data to Sepolia
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        run: npm install
+      - name: Run NASA keeper
+        env:
+          PRIVATE_KEY: ${{ secrets.KEEPER_PRIVATE_KEY }}
+          SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
+        run: npx hardhat run scripts/nasa_keeper.js --network sepolia
+      - name: Build rolling experiment summary
+        run: python3 scripts/build_keeper_experiment_status.py
+      - name: Commit keeper log
+        run: |
+          git config user.name "NASA Keeper Bot"
+          git config user.email "keeper@solarpunk-protocol.local"
+          git add state/keeper_logs/ docs/project/DAILY_EXPERIMENT_STATUS.md
+          if git diff --cached --quiet; then
+            echo "No new log to commit"
+          else
+            DATE=$(date -u +%Y-%m-%d)
+            COMMIT_MSG="keeper: NASA solar data push ${DATE} [skip ci]"
+            git commit -m "$COMMIT_MSG"
+            git push
+          fi
