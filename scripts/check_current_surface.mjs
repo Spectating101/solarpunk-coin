@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PAGES_WORKFLOW_NAME = 'Deploy Policy Lab to GitHub Pages';
+const ROOT_PACKAGE_NAME = 'policy-lab-research-workbench';
 const CLAIM_PACKAGE_SCHEMA = 'policylab.claim_assessment_package.v0.1';
 const CLAIM_PACKAGE_PROFILE = 'policylab.energy_linked_claim.v0';
 
@@ -35,6 +36,7 @@ async function main() {
   const surface = await readJson('CURRENT_SURFACE.json');
   if (surface.schema !== 'solarpunk.policy_lab.current_surface.v1') fail('unexpected manifest schema');
   if (surface.identity?.primary_name !== 'Policy Lab') fail('Policy Lab must be the primary current identity');
+  if (surface.identity?.root_package_name !== ROOT_PACKAGE_NAME) fail('root package identity drifted from Policy Lab');
 
   for (const [key, relativePath] of Object.entries(surface.executable_truth || {})) {
     try {
@@ -43,6 +45,19 @@ async function main() {
       fail(`missing executable-truth path ${key}: ${relativePath}`);
     }
   }
+
+  const rootPackage = await readJson(surface.executable_truth.root_package);
+  if (rootPackage.name !== ROOT_PACKAGE_NAME) fail(`root package name must be ${ROOT_PACKAGE_NAME}`);
+  if (rootPackage.private !== true) fail('root package must remain private');
+  if (!String(rootPackage.description || '').startsWith('Policy Lab:')) fail('root package description must identify Policy Lab first');
+  for (const scriptName of ['policy-lab:surface', 'policy-lab:preflight', 'policy-lab:test-core', 'policy-lab:test-frontend', 'policy-lab:build']) {
+    if (!rootPackage.scripts?.[scriptName]) fail(`missing canonical root command: ${scriptName}`);
+  }
+
+  const publicEntrypoint = await readFile(path.join(ROOT, surface.executable_truth.public_entrypoint), 'utf8');
+  if (!publicEntrypoint.startsWith('# Policy Lab')) fail('public README must identify Policy Lab first');
+  if (!publicEntrypoint.includes('CURRENT_SURFACE.json')) fail('public README must point readers to machine current-surface truth');
+  if (!publicEntrypoint.includes('Historical SolarPunk / SPK material')) fail('public README must label historical SolarPunk/SPK material explicitly');
 
   const pack = await readJson(surface.executable_truth.interactive_case_pack);
   const expectedCases = surface.interactive_pack.case_ids;
@@ -106,11 +121,17 @@ async function main() {
   }
 
   const app = await readFile(path.join(ROOT, surface.executable_truth.frontend_entry), 'utf8');
-  if (!app.includes('Policy Lab')) fail('frontend entry no longer exposes Policy Lab identity');
+  if (!app.includes('<div className="brand-mark">P</div>')) fail('live frontend brand mark is not Policy Lab first');
+  if (!app.includes('<div className="brand-name">Policy Lab</div>')) fail('live frontend brand name is not Policy Lab');
+  if (app.includes('<div className="brand-name">Solarpunk</div>')) fail('historical SolarPunk identity re-entered the live primary brand');
+  if (!app.includes('aria-label="Policy Lab sections"')) fail('primary navigation accessibility label is not Policy Lab first');
 
   console.log(JSON.stringify({
     ok: true,
     primary_identity: surface.identity.primary_name,
+    root_package_name: rootPackage.name,
+    root_package_private: rootPackage.private,
+    canonical_root_commands: Object.keys(rootPackage.scripts).filter((name) => name.startsWith('policy-lab:')),
     pages_workflow_name: PAGES_WORKFLOW_NAME,
     pages_publish_workflow: surface.executable_truth.pages_publish_workflow,
     interactive_case_pack: pack.case_pack_id,
