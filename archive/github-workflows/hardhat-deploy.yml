@@ -1,8 +1,5 @@
+# ARCHIVED 2026-08-24: legacy pre-SPK-v1 deployment workflow. Kept for provenance; not executable by GitHub Actions from this path.
 name: hardhat-deploy (legacy)
-
-# DEPRECATED — deploys pre-SP-v1 stack via scripts/deploy.js.
-# Canonical Public Lab v1.0 is already on Sepolia (see state/runtime/spk_v1.json).
-# Requires workflow input confirm_legacy=true to run.
 
 on:
   workflow_dispatch:
@@ -18,22 +15,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
       - name: Install
         run: npm install
-
       - name: Block accidental legacy deploy
         run: |
           if [ "${{ github.event.inputs.confirm_legacy }}" != "true" ]; then
             echo "Refusing legacy deploy. Set confirm_legacy=true if you really intend scripts/deploy.js."
             exit 1
           fi
-
       - name: Check deployment secrets
         env:
           RPC_URL: ${{ secrets.RPC_URL }}
@@ -41,7 +34,6 @@ jobs:
         run: |
           test -n "$RPC_URL" || (echo "Missing RPC_URL secret" && exit 1)
           test -n "$PRIVATE_KEY" || (echo "Missing PRIVATE_KEY secret" && exit 1)
-
       - name: Deploy to sepolia
         env:
           RPC_URL: ${{ secrets.RPC_URL }}

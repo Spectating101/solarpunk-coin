@@ -1,0 +1,58 @@
+{
+  "schema": "solarpunk.policy_lab.current_surface.v1",
+  "identity": {
+    "primary_name": "Policy Lab",
+    "description": "Case-based constraint research workbench",
+    "historical_programme": "SolarPunk / Energy Standard",
+    "public_url": "https://spectating101.github.io/solarpunk-coin/demo/"
+  },
+  "executable_truth": {
+    "frontend_entry": "frontend/src/App.jsx",
+    "frontend_routes": "frontend/src/app/routes.js",
+    "frontend_state": "frontend/src/app/CaseWorkbenchProvider.jsx",
+    "interactive_case_pack": "protocol/cases/energy-v1/case-pack.json",
+    "interactive_runtime": "frontend/src/lib/caseWorkbenchRuntime.js",
+    "constraint_core": "packages/constraint-core/src/workbench.js",
+    "schemas": "protocol/schema",
+    "policies": "protocol/policies-v2",
+    "public_case_script": "scripts/external_case_001p_ausgrid.mjs",
+    "public_case_workflow": ".github/workflows/external-case-001p-ausgrid.yml",
+    "live_smoke_workflow": ".github/workflows/policy-lab-live-smoke.yml",
+    "pages_publish_workflow": ".github/workflows/deploy.yml",
+    "surface_integrity_workflow": ".github/workflows/current-surface.yml"
+  },
+  "interactive_pack": {
+    "case_pack_id": "energy-reference-cases-v1",
+    "case_ids": ["TYN-001", "AUS-001", "PHX-001", "OPS-001"],
+    "policy_ids": ["LAB-CASE-OPEN-004", "ENERGY-CASE-PILOT-005", "ENERGY-CASE-STRICT-006"],
+    "classification": "controlled mechanism / decision-structure cases"
+  },
+  "outside_data_checkpoint": {
+    "case_id": "PUB-AUSGRID-001P",
+    "machine_surface": "frontend/src/data/publicEvidenceCheckpoint.js",
+    "workflow_run_id": 31899863661,
+    "artifact_id": 9250779743,
+    "classification": "outside public-data operability checkpoint at actual L0; not owner/operator validation"
+  },
+  "historical_reference": {
+    "active_but_secondary_routes": ["reference", "legacy-protocol", "evidence", "currency"],
+    "domains": ["SPK", "Sepolia", "SolarPunk Public Lab", "Energy Standard"],
+    "archived_workflows": [
+      "archive/github-workflows/foundation_autosync.yml",
+      "archive/github-workflows/spk_v1_operator.yml",
+      "archive/github-workflows/publish-pypi.yml",
+      "archive/github-workflows/nasa_keeper.yml",
+      "archive/github-workflows/hardhat-deploy.yml",
+      "archive/github-workflows/deploy_constraint_protocol_alpha_sepolia.yml"
+    ],
+    "forbidden_active_workflows": [
+      ".github/workflows/foundation_autosync.yml",
+      ".github/workflows/spk_v1_operator.yml",
+      ".github/workflows/publish.yml",
+      ".github/workflows/nasa_keeper.yml",
+      ".github/workflows/hardhat-deploy.yml",
+      ".github/workflows/deploy_constraint_protocol_alpha_sepolia.yml"
+    ],
+    "rule": "Historical/reference surfaces remain inspectable but must not define the current Policy Lab identity, mutate current state on a schedule, deploy legacy contracts, or trigger legacy package publication."
+  }
+}

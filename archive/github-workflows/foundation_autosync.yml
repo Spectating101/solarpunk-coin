@@ -1,34 +1,45 @@
-name: SPK v1 Operator Cycle
+# ARCHIVED 2026-08-24: historical SPK/Foundation operator workflow. Kept for provenance; not executable by GitHub Actions from this path.
+name: Foundation autosync
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * 1'
+    - cron: "0 6 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  cycle:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: npm
-      - run: npm ci
-      - run: npm run compile
+          node-version: "20"
+
       - name: Install spk-v1
         run: npm run spk:v1:py:install
-      - name: Weekly foundation rhythm
+
+      - name: Sync runtime from Sepolia
         env:
-          PRIVATE_KEY: ${{ secrets.SPK_V1_OPERATOR_PRIVATE_KEY }}
           SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
-          CYCLE_MINT_KWH: '50'
-          CYCLE_REDEEM_SPK: '5'
-        run: bash scripts/foundation_weekly.sh
+        run: npm run foundation:sync
         continue-on-error: true
+
+      - name: Operator health
+        env:
+          SEPOLIA_RPC: ${{ secrets.SEPOLIA_RPC }}
+        run: npm run foundation:health || true
+
+      - name: Peg simulation summary
+        run: npm run foundation:peg-check
+        continue-on-error: true
+
+      - name: Publish demo to docs/demo
+        run: npm run foundation:publish-docs
+
       - name: Commit foundation state
         run: |
           git config user.name "github-actions[bot]"
@@ -38,11 +49,11 @@ jobs:
             state/foundation/ \
             frontend/public/spk_v1.json \
             docs/foundation/FOUNDATION_STATUS.md \
-            docs/demo/ \
+            docs/demo/spk_v1.json \
             || true
           if git diff --staged --quiet; then
             echo "no foundation changes"
             exit 0
           fi
-          git commit -m "chore: weekly foundation cycle [skip ci]"
+          git commit -m "chore: foundation autosync [skip ci]"
           git push

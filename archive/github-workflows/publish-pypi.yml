@@ -1,3 +1,4 @@
+# ARCHIVED 2026-08-24: historical spk-derivatives release publisher. Kept for provenance; must not trigger from Policy Lab releases.
 name: Publish to PyPI
 
 on:
@@ -8,26 +9,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-
     - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build
-
     - name: Build distribution
-      run: |
-        python -m build
-
+      run: python -m build
     - name: Check build artifacts
       run: |
         ls -lh dist/
@@ -40,40 +35,27 @@ jobs:
     permissions:
       contents: read
       id-token: write
-
     steps:
     - uses: actions/checkout@v4
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-
     - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build
-
     - name: Build distribution
-      run: |
-        python -m build
-
+      run: python -m build
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
-
     - name: Verify publication
       run: |
-        echo "✅ Package published to PyPI!"
+        echo "Package published to PyPI"
         echo "View at: https://pypi.org/project/spk-derivatives/"
-
     - name: Create release summary
       if: success()
       run: |
-        echo "## 🎉 Release Published" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Release Published" >> $GITHUB_STEP_SUMMARY
         echo "Package: **spk-derivatives**" >> $GITHUB_STEP_SUMMARY
         echo "Version: **${{ github.ref_name }}**" >> $GITHUB_STEP_SUMMARY
-        echo "Status: ✅ Published to PyPI" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "📦 [View on PyPI](https://pypi.org/project/spk-derivatives/)" >> $GITHUB_STEP_SUMMARY
-        echo "🚀 Install: \`pip install spk-derivatives\`" >> $GITHUB_STEP_SUMMARY

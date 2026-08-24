@@ -2,6 +2,7 @@ import { chromium } from 'playwright';
 
 const target = process.env.POLICY_LAB_URL || 'https://spectating101.github.io/solarpunk-coin/demo/';
 const expectedTitle = /Policy Lab/i;
+const OUTSIDE_CASE_ID = 'PUB-AUSGRID-001P';
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -17,6 +18,9 @@ try {
   }
 
   await page.getByRole('heading', { name: 'Can real-world evidence justify a financial claim?' }).waitFor({ timeout: 20_000 });
+  await page.getByRole('heading', { name: `${OUTSIDE_CASE_ID} · Ausgrid public evidence` }).waitFor({ timeout: 20_000 });
+  await page.getByText('Outside-data checkpoint · machine-observed').waitFor({ timeout: 20_000 });
+  await page.getByText('33.066 kWh', { exact: true }).waitFor({ timeout: 20_000 });
   await page.getByRole('heading', { name: 'Live claim journey' }).waitFor({ timeout: 20_000 });
   await page.getByRole('heading', { name: 'Current explanation' }).waitFor({ timeout: 20_000 });
 
@@ -35,21 +39,22 @@ try {
   }
 
   const policyValues = await policySelect.locator('option').evaluateAll((options) => options.map((option) => option.value));
-  if (policyValues.includes('LAB-CASE-OPEN-004')) {
-    await policySelect.selectOption('LAB-CASE-OPEN-004');
+  if (!policyValues.includes('LAB-CASE-OPEN-004')) {
+    throw new Error('Current open research policy is missing from the live selector');
   }
+  await policySelect.selectOption('LAB-CASE-OPEN-004');
 
   const caseValues = await caseSelect.locator('option').evaluateAll((options) => options.map((option) => option.value));
-  if (caseValues.includes('PUB-AUSGRID-001P')) {
-    await caseSelect.selectOption('PUB-AUSGRID-001P');
+  if (caseValues.includes(OUTSIDE_CASE_ID)) {
+    throw new Error(`${OUTSIDE_CASE_ID} was silently promoted into the controlled interactive case pack`);
   }
 
   await page.waitForTimeout(500);
 
-  const consequence = page.locator('.platform-decision-mark strong');
+  const consequence = page.locator('.platform-decision-mark strong').last();
   await consequence.waitFor({ timeout: 15_000 });
   const decisionText = (await consequence.textContent())?.trim();
-  if (!decisionText) throw new Error('Live decision surface rendered without a decision');
+  if (!decisionText) throw new Error('Live interactive decision surface rendered without a decision');
 
   const assuranceOptions = await assuranceSelect.locator('option').evaluateAll((options) => options.map((option) => option.value));
   if (assuranceOptions.length > 1) {
@@ -70,8 +75,11 @@ try {
     status: 'PASS',
     target,
     title: await page.title(),
-    decision: decisionText,
-    cases: caseValues.length,
+    outsideDataCheckpoint: OUTSIDE_CASE_ID,
+    outsideDataCheckpointVisible: true,
+    outsideDataSeparatedFromControlledPack: true,
+    interactiveDecision: decisionText,
+    interactiveCases: caseValues.length,
     policies: policyValues.length,
     assuranceScenarios: assuranceOptions.length,
     checkedAt: new Date().toISOString(),
