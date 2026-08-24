@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const PAGES_WORKFLOW_NAME = 'Deploy Policy Lab to GitHub Pages';
 
 function fail(message) {
   throw new Error(`current-surface check failed: ${message}`);
@@ -70,8 +71,17 @@ async function main() {
   }
 
   const pagesWorkflow = await readFile(path.join(ROOT, surface.executable_truth.pages_publish_workflow), 'utf8');
+  if (!pagesWorkflow.includes(`name: ${PAGES_WORKFLOW_NAME}`)) fail('current Pages workflow name drifted');
   if (!pagesWorkflow.includes('docs/demo')) fail('current Pages workflow no longer publishes the Policy Lab demo mirror');
-  if (!pagesWorkflow.includes('Policy Lab')) fail('current Pages workflow no longer asserts the Policy Lab surface');
+  if (!pagesWorkflow.includes('policy_lab_preflight.mjs')) fail('current Pages workflow is not gated by Policy Lab preflight');
+  if (pagesWorkflow.includes('public-lab:preflight')) fail('legacy Public Lab preflight re-entered the current Pages workflow');
+
+  const publishScript = await readFile(path.join(ROOT, surface.executable_truth.pages_publish_script), 'utf8');
+  if (!publishScript.includes('policy_lab_preflight.mjs')) fail('Pages publish script is not gated by Policy Lab preflight');
+  if (publishScript.includes('state/runtime/spk_v1.json')) fail('Pages publish script still refreshes historical SPK runtime state');
+
+  const smokeWorkflow = await readFile(path.join(ROOT, surface.executable_truth.live_smoke_workflow), 'utf8');
+  if (!smokeWorkflow.includes(`workflows: ["${PAGES_WORKFLOW_NAME}"]`)) fail('live smoke no longer follows the current Pages deployment workflow');
 
   const routes = await readFile(path.join(ROOT, surface.executable_truth.frontend_routes), 'utf8');
   for (const route of surface.historical_reference.active_but_secondary_routes) {
@@ -84,6 +94,7 @@ async function main() {
   console.log(JSON.stringify({
     ok: true,
     primary_identity: surface.identity.primary_name,
+    pages_workflow_name: PAGES_WORKFLOW_NAME,
     pages_publish_workflow: surface.executable_truth.pages_publish_workflow,
     interactive_case_pack: pack.case_pack_id,
     interactive_case_count: pack.case_ids.length,

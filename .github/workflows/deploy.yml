@@ -1,13 +1,13 @@
-# Build and publish the Constraint / SolarPunk lab to the repository's legacy
+# Build and publish the current Policy Lab research surface to the repository's
 # GitHub Pages source: /docs on main.
 #
 # Live path: https://spectating101.github.io/solarpunk-coin/demo/
 #
-# The workflow mirrors the current Vite build into docs/demo and commits only
-# generated demo changes back to main. GitHub's GITHUB_TOKEN push does not
-# recursively trigger another workflow run.
+# Historical SolarPunk/SPK reference assets remain available in the built site,
+# but they are not deployment prerequisites and this workflow does not refresh
+# historical Sepolia runtime state.
 
-name: Deploy to GitHub Pages
+name: Deploy Policy Lab to GitHub Pages
 
 on:
   push:
@@ -39,10 +39,11 @@ jobs:
             package-lock.json
             frontend/package-lock.json
 
-      - name: Preflight Public Lab
-        run: |
-          npm install
-          npm run public-lab:preflight
+      - name: Policy Lab preflight
+        run: node scripts/policy_lab_preflight.mjs
+
+      - name: Install root dependencies
+        run: npm install
 
       - name: Test deterministic case workbench core
         run: node --test packages/constraint-core/test/*.test.mjs
@@ -53,7 +54,7 @@ jobs:
           npm install
           npm run test:run
 
-      - name: Build and mirror demo to docs/demo
+      - name: Build and mirror Policy Lab to docs/demo
         env:
           VITE_SOURCE_REVISION: ${{ github.sha }}
         run: bash scripts/publish_demo_to_docs.sh
@@ -61,15 +62,14 @@ jobs:
       - name: Verify default bundle boundaries
         run: node scripts/check_frontend_bundle.mjs docs/demo
 
-      - name: Confirm flagship research surfaces
+      - name: Confirm current research surfaces
         run: |
           test -f docs/demo/index.html
-          test -f docs/demo/spk_v1.json
           test -f docs/demo/empirical/market-capacity-v1/market-capacity-summary.json
           test -f docs/demo/empirical/market-capacity-v1/methods-manifest.json
-          node -e 'const j=require("./docs/demo/spk_v1.json"); if(!j.contracts?.solar_punk_coin) process.exit(1); console.log(j.product, j.contracts.solar_punk_coin);'
           node -e 'const j=require("./docs/demo/empirical/market-capacity-v1/market-capacity-summary.json"); if(!j.policy_metrics?.length) process.exit(1); console.log(j.study_id, j.policy_metrics.length);'
           grep -q 'Policy Lab | Case Workbench' docs/demo/index.html
+          grep -R -q 'PUB-AUSGRID-001P' docs/demo/assets
 
       - name: Commit deployable Pages mirror
         run: |
@@ -80,5 +80,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/demo
-          git commit -m "Publish Constraint empirical lab [skip ci]"
+          git commit -m "Publish Policy Lab research surface [skip ci]"
           git push origin HEAD:main
