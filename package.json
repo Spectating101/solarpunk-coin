@@ -1,9 +1,15 @@
 {
-  "name": "solarpunkcoin-contracts",
+  "name": "policy-lab-research-workbench",
   "version": "1.0.0",
-  "description": "SolarPunk Public Lab: energy-standard settlement contracts on Sepolia (testnet research lab)",
+  "private": true,
+  "description": "Policy Lab: case-based constraint research workbench with historical SolarPunk/SPK reference systems preserved for reproduction.",
   "main": "index.js",
   "scripts": {
+    "policy-lab:surface": "node scripts/check_current_surface.mjs",
+    "policy-lab:preflight": "node scripts/policy_lab_preflight.mjs",
+    "policy-lab:test-core": "node --test packages/constraint-core/test/*.test.mjs",
+    "policy-lab:test-frontend": "cd frontend && npm run test:run",
+    "policy-lab:build": "npm run policy-lab:preflight && cd frontend && npm run build",
     "test": "hardhat test",
     "test:verbose": "hardhat test --verbose",
     "compile": "hardhat compile",
@@ -147,16 +153,17 @@
     "health:check": "node scripts/health_check.js"
   },
   "keywords": [
+    "policy-lab",
+    "constraint-research",
+    "reproducibility",
+    "evidence",
+    "energy-linked-finance",
     "solidity",
     "ethereum",
     "sepolia",
-    "energy-standard",
-    "settlement",
-    "testnet-lab",
-    "energy",
-    "public-lab"
+    "energy-standard"
   ],
-  "author": "SolarPunkCoin Team",
+  "author": "Spectating101",
   "license": "MIT",
   "engines": {
     "node": ">=20 <23"
