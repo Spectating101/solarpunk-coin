@@ -17,6 +17,16 @@ try {
     throw new Error(`Unexpected page title: ${await page.title()}`);
   }
 
+  const brandName = page.locator('.brand-name');
+  await brandName.waitFor({ timeout: 20_000 });
+  if ((await brandName.textContent())?.trim() !== 'Policy Lab') {
+    throw new Error(`Unexpected live brand: ${(await brandName.textContent())?.trim() || 'missing'}`);
+  }
+  const brandMark = page.locator('.brand-mark');
+  if ((await brandMark.textContent())?.trim() !== 'P') {
+    throw new Error(`Unexpected live brand mark: ${(await brandMark.textContent())?.trim() || 'missing'}`);
+  }
+
   await page.getByRole('heading', { name: 'Can real-world evidence justify a financial claim?' }).waitFor({ timeout: 20_000 });
   await page.getByRole('heading', { name: `${OUTSIDE_CASE_ID} · Ausgrid public evidence` }).waitFor({ timeout: 20_000 });
   await page.getByText('Outside-data checkpoint · machine-observed').waitFor({ timeout: 20_000 });
@@ -75,6 +85,7 @@ try {
     status: 'PASS',
     target,
     title: await page.title(),
+    liveBrand: (await brandName.textContent())?.trim(),
     outsideDataCheckpoint: OUTSIDE_CASE_ID,
     outsideDataCheckpointVisible: true,
     outsideDataSeparatedFromControlledPack: true,

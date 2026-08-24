@@ -1,11 +1,14 @@
-# Handoff — Redirect
+# Policy Lab — handoff redirect
 
-**Read [`DOCS.md`](./DOCS.md) first.**
+There is no authoritative Markdown handoff for current runtime state.
 
-Then:
+Start with:
 
-1. [`CURRENT_STATUS.md`](./CURRENT_STATUS.md) — live facts  
-2. [`docs/product/SPK_V1_OPERATOR.md`](./docs/product/SPK_V1_OPERATOR.md) — how to run the product  
-3. [`thesis_package/THESIS_SOURCE_OF_TRUTH.md`](./thesis_package/THESIS_SOURCE_OF_TRUTH.md) — thesis framing  
+1. [`CURRENT_SURFACE.json`](./CURRENT_SURFACE.json) — machine-declared current surface.
+2. `npm run policy-lab:surface` — verify that declaration against the repository.
+3. [`README.md`](./README.md) — human-facing orientation.
+4. The executable code/schema/workflow relevant to the task.
 
-[`MASTER_HANDOFF.md`](./MASTER_HANDOFF.md) is long history only — not the entry point.
+Historical handoffs, status files, roadmaps, thesis notes, SolarPunk/SPK operator documents, and research narratives remain useful as provenance or context, but they must be checked against executable state before reuse.
+
+If the current surface changes, change `CURRENT_SURFACE.json` and its integrity tests rather than creating another competing handoff document.
