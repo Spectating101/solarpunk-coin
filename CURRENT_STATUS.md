@@ -1,88 +1,255 @@
 # Current status
 
-**Updated:** 2026-07-10  
-**Public Lab v1.0 freeze:** SolarPunk is packaged as a **public testnet laboratory for energy-standard settlement**. Public Lab is the current endpoint. Closed pilot and paid/mainnet are **future gated work**, not active v1 obligations.
+**Updated:** 2026-08-24  
+**Current public identity:** **Policy Lab — Case-Based Constraint Research Workbench**  
+**Operating posture:** live deployed research artifact; packaging/review hardening; controlled external evaluation when ready.
 
-**Operating mode:** [Maintenance](./docs/project/MAINTENANCE.md) — feature-complete Public Lab; quarterly checks; wake path in [`docs/project/WAKE_PATH.md`](./docs/project/WAKE_PATH.md).
+Live workbench: https://spectating101.github.io/solarpunk-coin/demo/
 
-**Open lab mode:** Replicate, fork, and extend via [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`docs/project/OPEN_LAB_WORKFLOWS.md`](./docs/project/OPEN_LAB_WORKFLOWS.md). Not a token sale, mainnet launch, or investment product.
+Start with:
 
-**Entry point:** [`docs/product/PUBLIC_LAB_V1.md`](./docs/product/PUBLIC_LAB_V1.md) · [`docs/product/PUBLIC_LAB_DEPLOYMENT.md`](./docs/product/PUBLIC_LAB_DEPLOYMENT.md) · [`DOCS.md`](./DOCS.md)
+- [`README.md`](./README.md)
+- [`docs/project/POLICY_LAB_PUBLIC_PACKAGE.md`](./docs/project/POLICY_LAB_PUBLIC_PACKAGE.md)
+- [`docs/research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md`](./docs/research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md)
+- [`PROJECT_RECOVERY.md`](./PROJECT_RECOVERY.md)
 
----
-
-## What this is
-
-**Public Lab v1.0:** Renewable-energy issuance standard for programmable settlement on Sepolia — verified surplus kWh → bounded SPK mint → network payments. USD/kWh reference for expression only (peg **off**).
-
-**Horizon:** Operating laboratory (structure), not stablecoin war (scale).
-
-**Thesis:** Final package ready (`energy_constraint_thesis_final_submission_v10.pdf`) — pending user submission.
+Historical SolarPunk Public Lab / Energy Standard / SPK material remains in the repository but is no longer the top-level semantic authority.
 
 ---
 
-## Live now
+## What Policy Lab is
 
-| | |
+Policy Lab is an executable research environment for testing how far a proposed energy-linked financial claim can be justified under declared evidence, policy, quantity, risk, settlement, and governance assumptions while keeping unresolved research boundaries visible.
+
+Short public version:
+
+> **Policy Lab shows where an energy-linked financial claim stops being justified, why, and what evidence would be needed next.**
+
+Current runtime path:
+
+```text
+Case
+  ↓
+Evidence + Context
+  ↓
+Versioned Policy
+  ↓
+Admission Gates
+  ↓
+Quantity Ceilings
+  ↓
+DecisionResult
+  ↓
+Bounded Claim
+  ↓
+Settlement Result
+  ↓
+Receipt / Lineage / Reproduction
+```
+
+Current research model:
+
+```text
+R1 — economic information / admissibility
+R2 — claim-level evidence
+R3 — binding constraint
+R4 — monetary performance
+```
+
+The runtime stages are implementation stages, not aliases for R1–R4.
+
+---
+
+## What is live now
+
+| Surface | Status |
 |---|---|
-| Demo | https://spectating101.github.io/solarpunk-coin/demo/ |
-| SPK (lab unit) | `0x8e189002228Fd4C6fA7611bA49FBe1d9C3412128` |
-| Payments contract | `0x520162252F9B94824417678525FFd69145014970` |
-| Foundation status | [`docs/foundation/FOUNDATION_STATUS.md`](./docs/foundation/FOUNDATION_STATUS.md) |
-| Runtime | `state/runtime/spk_v1.json` |
-| Evidence | [`thesis_package/SPK_V1_EVIDENCE.md`](./thesis_package/SPK_V1_EVIDENCE.md) |
-
-**On-chain (last indexed sync 2026-06-10):** ~5,499 SPK supply · 442 SPK settled · **21** network payments · ~96.7% circulation · peg off · $0.05/kWh reference.
-
-> **Ops note:** Refresh with `npm run foundation:sync` when `SEPOLIA_RPC` in `.env` is working. Public RPC (`publicnode`) may return 403 — use Alchemy/Infura URL in `.env`.
-
-**Legacy automation (2026-07-06):** NASA daily keeper and `hardhat-deploy` workflow disabled for Public Lab v1 — they targeted pre-v1 contracts. See `frontend/src/components/archive/`.
-
----
-
-## Launch gates
-
-| Endpoint | Status |
-|----------|--------|
-| Public Lab v1.0 | **Shipped** |
-| Closed pilot | Blocked — real operator data, governed deploy, economics |
-| Paid / mainnet | Blocked — audit, legal, reserves |
+| Public Policy Lab workbench | **LIVE** |
+| Deterministic core | **TESTED** |
+| Case/policy comparison | **TESTED** |
+| Receipt/capsule generation | **TESTED** |
+| Constrained Claim Assessment v1 | **LANDED + VERIFIED** |
+| Public outside-data case `PUB-AUSGRID-001P` | **LANDED** |
+| G4 hostile audit | **READY FOR EXTERNAL EVALUATION — PUBLIC-EVIDENCE PROFILE** |
+| GitHub Pages deployment | **AUTOMATED** |
+| Post-deploy / scheduled live smoke | **LANDED** |
+| External-validation ledger and evaluator intake | **LANDED** |
+| Independent external evaluator verdict | **NOT YET** |
+| Owner/operator attributable evidence case | **OPEN** |
+| L1/L2 authenticated public case | **OPEN** |
+| R4 monetary-performance evidence | **UNTESTED** |
 
 ---
 
-## Operator (quarterly maintenance)
+## Canonical public-source result
 
-Default cadence is **quarterly** — see [`docs/project/MAINTENANCE.md`](./docs/project/MAINTENANCE.md). Weekly cycles are optional, not required.
+Case: `PUB-AUSGRID-001P`
 
-| Check | Command |
-|-------|---------|
-| Gas + sync health | `npm run foundation:health` |
-| Sync ledger | `npm run foundation:sync` |
-| Optional weekly rhythm | `npm run foundation:weekly` |
-| Full cycle | `npm run foundation:cycle` |
-| Refresh public demo | `npm run foundation:refresh` |
-| **Preflight + publish demo** | `npm run public-lab:preflight` · `npm run public-lab:publish` |
-| **Hardware validate (sample)** | `npm run hardware:validate` |
+The case uses a bounded public Ausgrid Solar Home Electricity Data object at actual **L0** assurance.
 
-**Deployer:** `0x0b90e3a05D794643e1CB0d37Ff6FD9245Bf09f54` — Sepolia ETH for cycles. See [`docs/foundation/AUTONOMOUS_OPS.md`](./docs/foundation/AUTONOMOUS_OPS.md).
+Same normalized evidence under two declared policies:
+
+```text
+LAB-CASE-OPEN-004
+→ ADMIT_WITH_LIMIT
+→ 33.066 kWh maximum
+→ EVIDENCE_BACKED_CAPACITY binds
+
+ENERGY-CASE-PILOT-005
+→ BLOCKED
+→ SIGNED_EVIDENCE + MIN_PROVENANCE
+```
+
+Declared 40% settlement-capacity stress:
+
+```text
+PARTIAL
+13.2264 kWh covered
+19.8396 kWh shortfall
+```
+
+Derived `ConstrainedClaimAssessment`:
+
+```text
+R1 economic information       NOT_ASSESSED
+R2 claim-level evidence       PARTIAL
+R3 binding constraint         PARTIAL
+R4 monetary performance       UNTESTED
+```
+
+The audited stable assessment identity is:
+
+`088067800c192a0d6854cc4a70f068f3590d4fc658df3622370bfcc7974e56dc`
 
 ---
 
-## Tests
+## Current claim boundary
 
-| Command | What |
-|---------|------|
-| `npx hardhat test` | 109 contract tests |
-| `npm run spk:v1:backend:check` | Python sync + API |
-| `npm run foundation:health` | Operator readiness |
+The current package supports claims about:
+
+- one bounded outside-data workflow;
+- exact byte/hash custody of the executed mirror object;
+- explicit source semantics and declared transformation;
+- preservation of actual L0 assurance;
+- deterministic policy divergence;
+- blocking and binding-rule attribution;
+- quantity ceilings;
+- declared settlement-shortfall mechanics;
+- receipt/capsule integrity and deterministic replay;
+- deterministic derivation and verification of the R1–R4 assessment.
+
+It does **not** establish:
+
+- source-holder/operator confirmation;
+- physical meter truth;
+- L1/L2 authentication for the public case;
+- legal issuance authority;
+- enforceable settlement/redemption;
+- economically optimal policy/pricing;
+- bounded production governance;
+- production security;
+- commercial readiness;
+- adoption or market demand;
+- circulation, liquidity, acceptability, unit-of-account use, or money.
 
 ---
 
-## Future work (inactive until external hook)
+## Deployment state
 
-1. Closed pilot — real meter/inverter data ([`PILOT_DATA_ASK.md`](./docs/product/PILOT_DATA_ASK.md))
-2. Governed multisig when ops are boring (`docs/foundation/GOVERNANCE.md`)
-3. Meter mint in operator cycle (`npm run foundation:cycle:meter`)
-4. Peg experiment only after `foundation:peg-check` discipline
+The public interface is statically deployed through `.github/workflows/deploy.yml`.
 
-Institutional path: [`docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md`](./docs/project/INSTITUTIONAL_MATERIALIZATION_PATH.md)
+The deployment pipeline:
+
+```text
+main push
+  ↓
+public-lab preflight
+  ↓
+deterministic core tests
+  ↓
+frontend tests
+  ↓
+Vite build
+  ↓
+bundle/public-surface checks
+  ↓
+docs/demo mirror
+  ↓
+GitHub Pages
+```
+
+A separate `Policy Lab Live Smoke` workflow is configured for scheduled/manual checks and post-deployment production verification.
+
+This is a deployment/operability check, not external validation.
+
+---
+
+## Validation state
+
+Internal process dry-run issue `#47` was intentionally classified as:
+
+```text
+INTERNAL_DRY_RUN_ONLY
+```
+
+It must not be cited as independent validation, adoption, pilot evidence, or Gauntlet uplift evidence.
+
+External evidence is governed by:
+
+- [`docs/research/EXTERNAL_VALIDATION_LEDGER.md`](./docs/research/EXTERNAL_VALIDATION_LEDGER.md)
+- [`docs/project/POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md`](./docs/project/POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md)
+- Policy Lab evaluation / pilot / replication issue templates.
+
+Traffic alone does not count as validation.
+
+---
+
+## Packaging state
+
+Current work is to make the public artifact coherent before broader outreach.
+
+Priority packaging tasks:
+
+1. remove contradictory stale front-door documentation;
+2. keep one canonical five-minute reviewer path;
+3. make public claim boundaries and R1–R4 state easy to understand;
+4. keep historical SolarPunk/SPK material available without letting it override current semantics;
+5. prepare a synchronized future citable release package rather than silently changing release metadata;
+6. preserve the deterministic core unless observed evidence justifies a change.
+
+---
+
+## Current stop rule
+
+Do **not** reopen broad construction merely because the artifact is public.
+
+No default expansion into:
+
+- AI decision authority;
+- generic chatbot;
+- more policy families;
+- broad GIS infrastructure;
+- marketplace features;
+- accounts/billing;
+- cloud evidence storage;
+- token redesign;
+- new blockchain deployment;
+- production/mainnet claims.
+
+The next implementation should be justified by a packaging failure, live-operability failure, replication failure, or genuine outside evidence/use case.
+
+---
+
+## Historical SolarPunk / SPK status
+
+SPK and the Sepolia reference contracts remain inspectable historical/reference implementation material. They do not convert the current Policy Lab into a token launch, stablecoin, legal claim, or monetary system.
+
+For historical contract/state details, use the relevant `docs/product/`, `state/runtime/`, `spk_v1/`, and contract files only after the current Policy Lab framing is understood.
+
+---
+
+## Release / citation posture
+
+`CITATION.cff` currently retains the existing `0.2.0-alpha` release metadata.
+
+Do not change the version/date merely because `main` has advanced. A future packaging release should synchronize the Git tag, GitHub Release, citation metadata, release notes, screenshot/review artifacts, and DOI/archive if used.
