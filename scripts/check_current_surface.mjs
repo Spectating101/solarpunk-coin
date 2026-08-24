@@ -19,6 +19,15 @@ async function requirePath(relativePath) {
   return stat(full);
 }
 
+async function pathExists(relativePath) {
+  try {
+    await access(path.join(ROOT, relativePath));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function main() {
   const surface = await readJson('CURRENT_SURFACE.json');
   if (surface.schema !== 'solarpunk.policy_lab.current_surface.v1') fail('unexpected manifest schema');
@@ -53,6 +62,17 @@ async function main() {
   if (checkpoint.verification.decision_reproduction !== 'PASS') fail('audited decision reproduction must remain PASS');
   if (checkpoint.boundaries.R4 !== 'UNTESTED') fail('R4 must remain UNTESTED in the current checkpoint');
 
+  for (const archived of surface.historical_reference.archived_workflows || []) {
+    if (!(await pathExists(archived))) fail(`declared archived workflow missing: ${archived}`);
+  }
+  for (const forbidden of surface.historical_reference.forbidden_active_workflows || []) {
+    if (await pathExists(forbidden)) fail(`historical operation is active under GitHub Actions: ${forbidden}`);
+  }
+
+  const pagesWorkflow = await readFile(path.join(ROOT, surface.executable_truth.pages_publish_workflow), 'utf8');
+  if (!pagesWorkflow.includes('docs/demo')) fail('current Pages workflow no longer publishes the Policy Lab demo mirror');
+  if (!pagesWorkflow.includes('Policy Lab')) fail('current Pages workflow no longer asserts the Policy Lab surface');
+
   const routes = await readFile(path.join(ROOT, surface.executable_truth.frontend_routes), 'utf8');
   for (const route of surface.historical_reference.active_but_secondary_routes) {
     if (!routes.includes(`'${route}'`)) fail(`declared historical/reference route missing: ${route}`);
@@ -64,11 +84,14 @@ async function main() {
   console.log(JSON.stringify({
     ok: true,
     primary_identity: surface.identity.primary_name,
+    pages_publish_workflow: surface.executable_truth.pages_publish_workflow,
     interactive_case_pack: pack.case_pack_id,
     interactive_case_count: pack.case_ids.length,
     outside_data_checkpoint: checkpoint.case_id,
     outside_data_assurance: checkpoint.evidence.assurance,
     outside_data_reproduction: checkpoint.verification.decision_reproduction,
+    archived_workflow_count: surface.historical_reference.archived_workflows.length,
+    forbidden_active_workflow_count: surface.historical_reference.forbidden_active_workflows.length,
     historical_reference_routes: surface.historical_reference.active_but_secondary_routes,
   }, null, 2));
 }
