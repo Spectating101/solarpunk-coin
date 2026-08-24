@@ -46,6 +46,10 @@ async function main() {
     'packages/constraint-core/src/workbench.js',
     'protocol/schema',
     'protocol/policies-v2',
+    'protocol/schema/claim-assessment-package.v0.1.schema.json',
+    'scripts/lib/claim_assessment_package_v0_1.mjs',
+    'scripts/build_claim_assessment_package.mjs',
+    'scripts/verify_claim_assessment_package.mjs',
     'frontend/public/empirical/market-capacity-v1/market-capacity-summary.json',
     'frontend/public/empirical/market-capacity-v1/methods-manifest.json',
   ];
@@ -62,6 +66,23 @@ async function main() {
   checks.push(check('outside_checkpoint_present', checkpointText.includes("case_id: 'PUB-AUSGRID-001P'"), 'PUB-AUSGRID-001P'));
   checks.push(check('outside_checkpoint_l0', checkpointText.includes("assurance: 'L0'"), 'actual assurance L0'));
   checks.push(check('outside_checkpoint_r4_untested', checkpointText.includes("R4: 'UNTESTED'"), 'R4 UNTESTED'));
+
+  const packageSchema = JSON.parse(await readFile(path.join(ROOT, 'protocol/schema/claim-assessment-package.v0.1.schema.json'), 'utf8'));
+  checks.push(check(
+    'portable_package_schema',
+    packageSchema?.properties?.schema?.const === 'policylab.claim_assessment_package.v0.1',
+    packageSchema?.properties?.schema?.const || 'missing',
+  ));
+  checks.push(check(
+    'portable_package_profile',
+    packageSchema?.properties?.profile?.properties?.id?.const === 'policylab.energy_linked_claim.v0',
+    packageSchema?.properties?.profile?.properties?.id?.const || 'missing',
+  ));
+
+  const externalWorkflow = await readFile(path.join(ROOT, '.github/workflows/external-case-001p-ausgrid.yml'), 'utf8');
+  checks.push(check('portable_package_built_in_external_case', externalWorkflow.includes('build_claim_assessment_package.mjs'), 'builder in outside-data workflow'));
+  checks.push(check('portable_package_verified_in_external_case', externalWorkflow.includes('verify_claim_assessment_package.mjs'), 'verifier in outside-data workflow'));
+  checks.push(check('portable_package_rebuild_checked', externalWorkflow.includes('cmp state/external/public-001p-ausgrid/claim-assessment-package.json'), 'byte-identical rebuild check'));
 
   const appText = await readFile(path.join(ROOT, 'frontend/src/App.jsx'), 'utf8');
   checks.push(check('policy_lab_identity', appText.includes('Policy Lab'), 'frontend identifies Policy Lab'));
