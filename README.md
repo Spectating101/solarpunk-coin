@@ -159,6 +159,20 @@ live production smoke
 
 Publishing no longer depends on historical SPK contract state, peg state, network-payment history, Foundation cycles, or legacy product-launch gates.
 
+## Governance, privacy, security, and public interest
+
+The current Policy Lab public-governance surface is explicit and machine-declared:
+
+- [`GOVERNANCE.md`](./GOVERNANCE.md) — ownership, maintainership, contribution and release authority;
+- [`PRIVACY.md`](./PRIVACY.md) — browser-local evidence handling, PII boundaries, hosting, and legal scope;
+- [`SECURITY.md`](./SECURITY.md) — supported security surface and sensitive reporting path;
+- [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md) — contributor/community safety and moderation;
+- [`PUBLIC_INTEREST.md`](./PUBLIC_INTEREST.md) — SDG relevance, do-no-harm controls, and impact non-claims.
+
+These documents describe the **current research-software surface**. They do not turn historical reference code into production infrastructure and do not claim that Policy Lab has already been recognized by an external public-good registry.
+
+A separate integrity check, `scripts/check_public_governance.mjs`, tests material privacy/ownership/safety statements against the current runtime and citation metadata.
+
 ## Historical SolarPunk / SPK material
 
 SolarPunk, SPK v1, Sepolia contracts, currency experiments, Foundation/operator machinery, thesis tooling, and older product experiments remain in the repository because they are part of the research lineage and may still be useful for reproduction.

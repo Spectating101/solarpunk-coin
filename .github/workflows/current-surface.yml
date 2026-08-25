@@ -10,6 +10,11 @@ on:
       - '.claude/HANDOFF.md'
       - 'package.json'
       - 'CURRENT_SURFACE.json'
+      - 'PRIVACY.md'
+      - 'SECURITY.md'
+      - 'GOVERNANCE.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'PUBLIC_INTEREST.md'
       - 'frontend/src/App.jsx'
       - 'frontend/src/app/routes.js'
       - 'frontend/src/app/CaseWorkbenchProvider.jsx'
@@ -21,6 +26,7 @@ on:
       - 'protocol/cases/energy-v1/**'
       - 'protocol/policies-v2/**'
       - 'protocol/schema/claim-assessment-package.v0.1.schema.json'
+      - 'docs/submission/opportunities-2026/dpg-registry/**'
       - 'scripts/lib/claim_assessment_package_v0_1.mjs'
       - 'scripts/build_claim_assessment_package.mjs'
       - 'scripts/verify_claim_assessment_package.mjs'
@@ -29,6 +35,7 @@ on:
       - 'scripts/publish_demo_to_docs.sh'
       - 'scripts/smoke_live_policy_lab.mjs'
       - 'scripts/check_current_surface.mjs'
+      - 'scripts/check_public_governance.mjs'
       - '.github/workflows/external-case-001p-ausgrid.yml'
       - '.github/workflows/policy-lab-live-smoke.yml'
       - '.github/workflows/deploy.yml'
@@ -44,6 +51,11 @@ on:
       - '.claude/HANDOFF.md'
       - 'package.json'
       - 'CURRENT_SURFACE.json'
+      - 'PRIVACY.md'
+      - 'SECURITY.md'
+      - 'GOVERNANCE.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'PUBLIC_INTEREST.md'
       - 'frontend/src/App.jsx'
       - 'frontend/src/app/routes.js'
       - 'frontend/src/app/CaseWorkbenchProvider.jsx'
@@ -55,6 +67,7 @@ on:
       - 'protocol/cases/energy-v1/**'
       - 'protocol/policies-v2/**'
       - 'protocol/schema/claim-assessment-package.v0.1.schema.json'
+      - 'docs/submission/opportunities-2026/dpg-registry/**'
       - 'scripts/lib/claim_assessment_package_v0_1.mjs'
       - 'scripts/build_claim_assessment_package.mjs'
       - 'scripts/verify_claim_assessment_package.mjs'
@@ -63,6 +76,7 @@ on:
       - 'scripts/publish_demo_to_docs.sh'
       - 'scripts/smoke_live_policy_lab.mjs'
       - 'scripts/check_current_surface.mjs'
+      - 'scripts/check_public_governance.mjs'
       - '.github/workflows/external-case-001p-ausgrid.yml'
       - '.github/workflows/policy-lab-live-smoke.yml'
       - '.github/workflows/deploy.yml'
@@ -83,5 +97,7 @@ jobs:
           node-version: '22'
       - name: Validate current executable surface
         run: node scripts/check_current_surface.mjs
+      - name: Validate public governance surface
+        run: node scripts/check_public_governance.mjs
       - name: Validate deployment preflight
         run: node scripts/policy_lab_preflight.mjs
