@@ -1,165 +1,157 @@
 # Policy Lab Opportunity Decision — 2026-08-25
 
-This document records **verified current opportunities** for Policy Lab. It is intentionally stricter than the earlier synthetic Gauntlet route table: current official rules override stale route assumptions.
+This file records the current hard decisions after a second-pass opportunity scan. Current official rules override stale internal Gauntlet scoring. See [`EXPANDED_MARKET_MAP.md`](./EXPANDED_MARKET_MAP.md) for the full scan and explicit kills.
 
-## Decision summary
+## Current decisions
 
-| Route | Status | Deadline | Why |
+| Route | Decision | Deadline / gate | Role |
 |---|---|---:|---|
-| Global AI Finance Research Conference 2026 — Poster | **FIRE NOW** | 2026-08-31 | Work-in-progress poster route; all FinTech topics; Taiwan; accepted posters enter conference program; no advisor requirement stated. |
-| Financial Cryptography and Data Security 2027 — Short Paper | **FIRE** | 2026-09-17 23:59 AoE | 8-page short-paper track explicitly welcomes work in progress and novel applications; Policy Lab fits authorization/trust, certification/audits, financial instruments, stablecoins/tokenized assets, empirical studies, and sustainability. |
-| Software Sustainability Institute Fellowship 2027 | **FIRE** | 2026-10-05 | Up to three international Fellows; £4,000 activity budget; six-minute screencast; strong fit with reproducible research-software advocacy. |
-| Journal of Open Source Software | **PREPARE — DO NOT SUBMIT YET** | Rolling | Public-development/open-source gates are plausible; research-impact/community-significance gate is not yet strong enough for low-risk submission. |
-| NLnet Restack | **HOLD TO 2026-09-03 CALL** | First new deadline 2026-11-03 | Program is real and individuals outside Europe can be eligible, but Taiwan proposals need exceptional quality + a clear European dimension and call-specific hard criteria are not yet published. |
+| Global AI Finance Research Conference 2026 — WIP Poster | **FIRE NOW** | 2026-08-31 | non-exclusive external academic exposure |
+| Financial Cryptography 2027 — Short Paper | **FIRE — PRIMARY MANUSCRIPT** | 2026-09-17 23:59 AoE | highest-value Policy Lab paper route |
+| Asia University FTSID 2026 | **BACKUP MANUSCRIPT FIRE** | 2026-09-30 | local FinTech/sustainability full-paper fallback; do not overlap FC |
+| Shih Hsin 2026 Finance International Conference | **LOW-COST BACKUP** | abstract 2026-09-17 | Taipei presentation fallback; do not duplicate FC |
+| SSI Fellowship 2027 | **FIRE** | 2026-10-05 | fellowship/network/£4k activity budget |
+| Digital Public Goods Registry | **REMEDIATE → FIRE** | rolling | independent standards-based public-good review |
+| JOSS | **PREPARE — DO NOT SUBMIT YET** | rolling | submit after external-impact/community-significance gate |
+| NLnet Restack | **CALL-GATED** | call 2026-09-03; deadline 2026-11-03 | hard FIRE/KILL after exact call + European-dimension test |
+| Bank of Cyprus FinTech Hackathon 7.0 | **KILL ON ECONOMICS** | Nov 27–29 | topic/eligibility pass; mandatory Cyprus travel fails current expected value |
 
-## 1. Global AI Finance Research Conference 2026 — FIRE NOW
+## Manuscript exclusivity
+
+Do not confuse `more eligible venues` with `more simultaneous submissions`.
+
+The Policy Lab mechanism/Ausgrid/non-promotion paper has one primary live manuscript lane:
+
+> **FC'27 short paper → primary.**
+
+Asia University FTSID and Shih Hsin are backups unless a genuinely distinct research question, dataset, results section and contribution exist. FC explicitly prohibits substantially overlapping concurrent submissions.
+
+The Global AI Finance poster, SSI Fellowship, DPG review, JOSS preparation and funding applications are separate conversion channels and can compound without creating a duplicate-paper strategy.
+
+## FIRE NOW — Global AI Finance poster
 
 Official sources:
 - https://www.efmaefm.org/announcements/events.php
 - https://www.conftool.net/aifinconf2026/
 
-Verified facts:
-- Conference: 2026-12-14 to 2026-12-15, Taiwan, in person.
-- Submission deadline: 2026-08-31.
-- Poster route explicitly welcomes work-in-progress on all conference topics.
-- Poster submission is an extended abstract through ConfTool.
-- Accepted posters are included in the conference program.
-- Topics explicitly include blockchain/cryptocurrencies, DeFi, FinTech regulation, and Green FinTech; the event does **not** require every submission to be AI research.
+Verified position:
+- Taiwan, Dec 14–15, 2026;
+- Aug 31 submission deadline;
+- WIP poster route via extended abstract;
+- broad FinTech scope includes blockchain/crypto, DeFi, regulation and Green FinTech;
+- no requirement to invent an AI contribution for every submission.
 
-Submission title:
+Package: [`global-ai-finance-2026/`](./global-ai-finance-2026/)
 
-> **From Evidence to Financial Authority: A Reproducible Constraint Workbench for Evidence-Backed Financial Claims**
+## PRIMARY MANUSCRIPT — FC'27
 
-Submission claim:
+Official source: https://www.ifca.ai/fc27/cfp.html
 
-> Policy Lab is an executable research workbench that makes the conversion from external evidence to financial authority explicit. It separates evidence assurance, policy admission, quantity ceilings, settlement, and reproducible decision lineage, and demonstrates those boundaries on a pinned outside Ausgrid dataset.
+The contribution is **not** generic policy-as-code, credential verification, proof-of-reserve gating, or machine-readable financial contracts. Those already exist in OPA/Cedar, W3C VC, Chainlink PoR and ACTUS.
 
-Do not pitch this as a stablecoin or as validated operator evidence.
+The paper-worthy contribution is a compositional **non-promotion semantics** across:
 
-Package: `global-ai-finance-2026/`.
+```text
+evidence assurance → policy admission → quantity bound → settlement
+```
 
-## 2. Financial Cryptography 2027 short paper — FIRE
+with explicit invariants, binding-constraint attribution, stable policy/evidence/decision identities, cross-object verification and deterministic reproduction.
 
-Official source:
-- https://www.ifca.ai/fc27/cfp.html
+Named executable FC tests now directly cover:
+- attempted assurance-capability promotion under a stale evidence identity → rejected;
+- caller-supplied oversized quantity → cannot override the decision-bound maximum.
 
-Verified facts:
-- Deadline: 2026-09-17, firm, 23:59 AoE UTC-12.
-- Short paper: 8 pages + references, no appendices.
-- Title must begin `Short Paper:`.
-- Anonymous submission required.
-- Short papers explicitly target work in progress, novel applications, and future research avenues.
-- Accepted short papers appear in Springer LNCS proceedings.
+Existing tests/verifiers also cover tampering, policy/evidence identity changes, settlement separation, closed-world replay, exact machine/human report agreement and byte-identical package rebuild.
 
-### Prior-art result
+Package: [`fc27-short-paper/`](./fc27-short-paper/)
 
-The paper **must not** claim novelty for the following ideas alone:
+## BACKUP MANUSCRIPT — Asia University FTSID
 
-1. `evidence != authority`: W3C Verifiable Credentials explicitly states that credential verifiability does not imply truth and that verifiers apply their own business rules.
-2. `policy as code`: Open Policy Agent and Cedar already separate policy evaluation from application logic and provide determining-policy diagnostics/auditability.
-3. `reserve evidence gates issuance`: Chainlink Proof of Reserve already connects reserve data to minting restrictions, circuit breakers and reserve thresholds.
-4. `financial obligations as machine-readable objects`: ACTUS already standardizes financial-contract logic and separates contract terms from external risk scenarios.
+Official source: https://ftimc.asia.edu.tw/international-academic-conference/submission/
 
-### Narrow contribution worth submitting
+This survives the scan because it is genuinely local and natively relevant:
+- FinTech, Sustainability/ESG, Blockchain & Digital Finance and interdisciplinary topics are explicit;
+- full paper by Sep 30;
+- double-blind CMT submission;
+- no advisor gate stated;
+- three Best Paper awards with prize money;
+- outstanding papers may be recommended to a special issue, subject to journal review.
 
-The defensible FC contribution is the **composition and safety semantics**, not any one primitive:
+Use only as the Policy Lab manuscript target if FC is not live or a genuinely distinct paper exists.
 
-> A deterministic evidence-to-claim pipeline in which evidence assurance cannot be silently promoted by downstream processing; admission and quantity are separate decisions; comparable quantity ceilings identify the binding constraint; settlement is evaluated as a distinct failure layer; and the complete cross-object decision state is reproducible from stable identities.
+Package: [`asia-university-ftsid-2026/`](./asia-university-ftsid-2026/)
 
-Required paper contribution package before submission:
-- formalize at least three non-promotion/safety invariants;
-- compare Policy Lab directly against OPA/Cedar, W3C VC, Chainlink PoR, and ACTUS;
-- add adversarial tests for evidence promotion, policy substitution, quantity overreach, and settlement failure;
-- report controlled cases + the outside Ausgrid checkpoint as evaluation, not as proof of universal validity.
+## LOW-COST BACKUP — Shih Hsin
 
-Package: `fc27-short-paper/`.
+Official source: https://fin.wp.shu.edu.tw/?page_id=262
 
-## 3. SSI Fellowship 2027 — FIRE
+- abstract Sep 17;
+- full paper Oct 31 after acceptance;
+- conference Nov 7 in Taipei;
+- `other finance-related topics` explicitly accepted;
+- no advisor gate stated.
+
+Useful as a cheap external-presentation fallback, not as a duplicate manuscript.
+
+Package: [`shih-hsin-finance-2026/`](./shih-hsin-finance-2026/)
+
+## FIRE — SSI Fellowship
 
 Official sources:
 - https://www.software.ac.uk/programmes/fellowship-programme/apply-fellowship-programme
 - https://www.software.ac.uk/guide/fellowship-programme-application-video-guide
 
-Verified facts:
-- Applications close 2026-10-05.
-- Around 20 Fellows are selected; up to three can be international Fellows.
-- Each Fellow gets a £4,000 activity budget over the Fellowship period.
-- Main application: six-minute voice-over slide screencast + application form.
-- Suggested screencast: 1 min who you are, 1 min what you do, 4 min Fellowship plan.
-- Shortlisting weighting: Ambassadorship 30%, Fellowship Plan 70%.
-- International applicants must show concrete benefit to UK research culture/capability or international collaboration, and address logistics/time-zone/travel issues.
+Up to three international Fellows; £4,000 activity budget; application + six-minute voice-over screencast. Policy Lab is the worked reference implementation for a broader plan around evidence-bounded, reproducible research software.
 
-Application theme:
+Package: [`ssi-fellowship-2027/`](./ssi-fellowship-2027/)
 
-> **Evidence-Bounded Research Software: Making Computational Decisions Reproducible and Challengeable**
-
-Policy Lab is the worked reference implementation, not the entire Fellowship plan.
-
-Package: `ssi-fellowship-2027/`.
-
-## 4. JOSS — PREPARE, DO NOT SUBMIT YET
+## REMEDIATE → FIRE — Digital Public Goods Registry
 
 Official sources:
-- https://joss.readthedocs.io/en/latest/submitting.html
-- https://joss.readthedocs.io/en/latest/review_criteria.html
-- https://joss.readthedocs.io/en/latest/paper.html
+- https://www.digitalpublicgoods.net/
+- https://github.com/DPGAlliance/dpg-standard
 
-The software is close on engineering quality but JOSS 2026 has hard pre-review gates for sustained public development **and demonstrated research impact**. A public repo alone is insufficient.
+Current repo audit finds the software/open-license/documentation/open-format side strong. Before nomination, close four small public-governance gaps:
+- dedicated `SECURITY.md`;
+- dedicated `PRIVACY.md`;
+- clear current ownership/governance statement around the historical SolarPunk copyright line;
+- DPG-facing public-interest/safety/SDG statement.
 
-Current strong signals:
-- >6 months public history;
-- iterative PR/issue history;
-- OSI license;
-- CI/tests/reproducibility;
-- contribution/support paths;
-- reusable deterministic research artifacts;
-- outside-data checkpoint.
+Then run the official DPGA eligibility questionnaire and submit the exact scoped components that pass.
 
-Current weak signal:
-- external research use/adoption/community influence.
+Package: [`digital-public-goods-registry/`](./digital-public-goods-registry/)
 
-Submission gate:
+## PREPARE — JOSS
 
-> Do not submit JOSS until at least one concrete community-readiness signal exists: accepted relevant presentation, documented independent reproduction/use, external research request/integration, or another equally inspectable impact signal.
+The software engineering/reproducibility side is strong, but JOSS 2026's external research-impact/community-significance hard screen remains the gating issue. Do not submit until an inspectable outside signal exists (accepted presentation, independent reproduction/use, external research integration/request, or equivalent).
 
-The Global AI Finance poster is therefore strategically useful beyond its own CV line.
+Package: [`joss/`](./joss/)
 
-Package: `joss/`.
+## CALL-GATED — NLnet Restack
 
-## 5. NLnet Restack — HOLD TO CALL OPEN
+The successor calls open Sep 3. Taiwan/non-European proposals need exceptional quality and a clear European dimension, so no proposal is called FIRE until the **actual Sep-3 call text** passes the prewritten gate. This is a real future condition, not missing research.
 
-Official sources:
-- https://nlnet.nl/restack/
-- https://nlnet.nl/restack/eligibility/
-- https://nlnet.nl/restack/guideforapplicants/
-- https://nlnet.nl/propose/
+Package: [`nlnet-restack/`](./nlnet-restack/)
 
-Verified facts:
-- Calls reopen 2026-09-03; first new deadline 2026-11-03 12:00 CEST.
-- First proposal size: €5,000–€50,000.
-- Individuals can receive grants; no categorical exclusion of applicants.
-- Applicants outside the EU/Horizon-associated geography can be eligible only for exceptional quality + unique expertise + a clear European dimension.
-- Eligible activities include scientific research, FOSS development, validation, software quality, testing/CI, documentation, usability, deployability and packaging.
-- Proposals are scored on technical excellence/feasibility (30%), relevance/impact/strategic potential (40%), and cost effectiveness (30%).
+## Explicit kills / parks
 
-Decision:
-
-> **Do not submit or invest heavily before 2026-09-03.** The call-specific hard criteria are not yet published. On September 3, evaluate the exact call against a prewritten European-dimension thesis; FIRE only if that thesis is native to the call rather than bolted on.
-
-Package: `nlnet-restack/`.
-
-## Explicit kills / deprioritized routes
-
-- **ACTUS Use Case Competition:** stale website messaging; 2025 competition already concluded and winners were announced in June 2026.
-- **InnoServe / advisor-dependent Taiwan student competitions:** package preserved, but not primary while no genuinely aligned faculty advisor exists.
-- **WPI FinTech 2026 / Morgan State FinTech 2026 / ICFT 2026:** submission deadlines already passed.
-- **USENIX Security 2027 Cycle 1:** mandatory registration deadline already passed on 2026-08-18; not a live option for this cycle.
-- **OTF Information Controls Research Program:** strong funding but wrong native problem; it targets censorship/surveillance and internet freedom rather than Policy Lab’s evidence-to-financial-authority problem.
+- Bank of Cyprus FinTech Hackathon: technically good fit, economically killed while mandatory Cyprus travel is self-funded.
+- GitHub Secure Open Source Fund Session 5: current deadline passed Aug 24; future session also needs community traction/governance evidence.
+- Sloan Open Source in Science: Sloan explicitly does not grant directly to individuals outside its Books program; current independent route killed.
+- IEEE S&P / ACNS / PETS: do not manufacture a stronger security/privacy story or duplicate the FC manuscript.
+- OTF Internet Freedom / ICRP: wrong native problem (censorship/surveillance).
+- NSF PESOSE/POSE and several UK/NL open-science funds: proposer/geography gate fails.
+- ACTUS use-case competition: concluded.
+- InnoServe/NTUB advisor-dependent contests: park without a genuinely aligned faculty advisor.
+- AI-first competitions: no cosmetic LLM/agent layer merely for eligibility.
+- opaque conference-alert/pay-to-publish venues: reject on signal quality.
 
 ## Execution order
 
-1. Submit Global AI Finance poster by Aug 31.
-2. Run FC short-paper writing/evaluation sprint to Sep 17.
-3. Prepare SSI Fellowship application to Oct 5.
-4. Re-evaluate Restack on Sep 3 against published call-specific criteria.
-5. Use poster/FC/independent reproductions as impact evidence, then submit JOSS when the hard impact gate is defensible.
+1. **Aug 31:** Global AI Finance poster.
+2. **Sep 17:** FC'27 short paper.
+3. **After the immediate paper package:** DPG documentation remediation + official eligibility questionnaire.
+4. **Sep 3:** Restack hard FIRE/KILL from published call.
+5. **Oct 5:** SSI Fellowship.
+6. **After external impact exists:** JOSS.
+7. Activate FTSID/Shih Hsin only as manuscript failover or for genuinely non-overlapping work.
