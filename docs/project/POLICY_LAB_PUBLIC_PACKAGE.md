@@ -1,27 +1,40 @@
 # Policy Lab Public Package
 
 **Status:** current packaging and review entry point  
-**Updated:** 2026-08-24  
+**Updated:** 2026-08-25  
 **Purpose:** give a human evaluator, collaborator, reviewer, or future agent one bounded path through the current Policy Lab artifact without reconstructing the historical SolarPunk stack.
 
-## One-sentence identity
+## Public identity
 
-> **Policy Lab is an executable research environment for testing how far a proposed energy-linked financial claim can be justified under declared evidence, policy, quantity, risk, settlement, and governance assumptions, while preserving which research boundaries remain open.**
+Judge-facing hook:
 
-Short public version:
+> **If a financial claim says real-world evidence backs it, Policy Lab makes it prove exactly how much that evidence can justify.**
 
-> **Policy Lab shows where an energy-linked financial claim stops being justified, why, and what evidence would be needed next.**
+Problem frame:
+
+> **Real-world data is increasingly used to authorize financial value, but the rule that turns evidence into financial authority is often hidden. Policy Lab makes that conversion explicit, bounded, and reproducible.**
+
+Short public explanation:
+
+> **Policy Lab shows what evidence actually allows a system to claim, why a rule blocks or limits it, and what still is not proven.**
+
+Precise technical description:
+
+> Policy Lab is an executable verification and constraint workbench for testing how far a proposed energy-linked financial claim can be justified under declared evidence, policy, quantity, risk, settlement, and governance assumptions while preserving which research boundaries remain open.
+
+The technical description is a scope boundary, not the preferred opening pitch.
 
 ## Start here
 
 1. Live workbench: https://spectating101.github.io/solarpunk-coin/demo/
 2. Repository overview: [`README.md`](../../README.md)
-3. Five-minute walkthrough: [`DEMO_WALKTHROUGH.md`](../../DEMO_WALKTHROUGH.md)
-4. G4 public-evidence evaluator brief: [`docs/research/POLICY_LAB_G4_EVALUATOR_BRIEF.md`](../research/POLICY_LAB_G4_EVALUATOR_BRIEF.md)
-5. Current research/software semantic authority: [`docs/research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md`](../research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md)
-6. Recovery and authority hierarchy: [`PROJECT_RECOVERY.md`](../../PROJECT_RECOVERY.md)
-7. External-validation rules: [`docs/research/EXTERNAL_VALIDATION_LEDGER.md`](../research/EXTERNAL_VALIDATION_LEDGER.md)
-8. Live-validation runbook: [`docs/project/POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md`](./POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md)
+3. Submission / Gauntlet package: [`docs/submission/README.md`](../submission/README.md)
+4. Five-minute walkthrough: [`DEMO_WALKTHROUGH.md`](../../DEMO_WALKTHROUGH.md)
+5. G4 public-evidence evaluator brief: [`docs/research/POLICY_LAB_G4_EVALUATOR_BRIEF.md`](../research/POLICY_LAB_G4_EVALUATOR_BRIEF.md)
+6. Current research/software semantic authority: [`docs/research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md`](../research/FINAL_RESEARCH_POLICY_LAB_RECONCILIATION.md)
+7. Recovery and authority hierarchy: [`PROJECT_RECOVERY.md`](../../PROJECT_RECOVERY.md)
+8. External-validation rules: [`docs/research/EXTERNAL_VALIDATION_LEDGER.md`](../research/EXTERNAL_VALIDATION_LEDGER.md)
+9. Live-validation runbook: [`docs/project/POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md`](./POLICY_LAB_LIVE_VALIDATION_RUNBOOK.md)
 
 ## What the current public artifact demonstrates
 
@@ -147,12 +160,22 @@ public outside-data case
         ↓
 live deployed artifact
         ↓
-packaging / review hardening
+submission / review hardening
         ↓
 controlled external evaluation when ready
 ```
 
 Do not reopen AI assistants, new policy families, token work, broad backend infrastructure, marketplace features, or unrelated UI expansion merely to make the artifact look larger.
+
+## Submission packaging boundary
+
+The judge-facing submission package is downstream of machine evidence. It may improve clarity, practical framing, route-specific emphasis, and presentation, but it must not manufacture eligibility, semantic fit, external validation, adoption, or commercial maturity.
+
+The machine-bound submission facts are validated with:
+
+```bash
+node scripts/validate_gauntlet_submission_package.mjs
+```
 
 ## Release and citation posture
 

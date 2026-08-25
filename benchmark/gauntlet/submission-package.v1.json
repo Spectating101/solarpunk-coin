@@ -1,0 +1,131 @@
+{
+  "schema": "policylab.gauntlet_submission_package.v1",
+  "version": "1.0.0",
+  "status": "INTERNAL_SUBMISSION_PACKAGE_READY",
+  "source_revision": "5f54966cae3361fdc901b7776a6571cd0eced29f",
+  "identity": {
+    "name": "Policy Lab",
+    "category": "verification and constraint layer for evidence-backed financial claims",
+    "hook": "If a financial claim says real-world evidence backs it, Policy Lab makes it prove exactly how much that evidence can justify.",
+    "judge_question": "What can the evidence actually authorize?",
+    "one_sentence": "Policy Lab turns evidence and explicit policy into an auditable decision: whether a financial claim is admissible, how much can be justified, which constraint binds, what fails at settlement, and how to reproduce the result."
+  },
+  "problem": {
+    "statement": "Real-world data is increasingly used to justify financial value, but the step from evidence to financial authority is usually hidden inside models, rules, contracts, or institutions.",
+    "failure_modes": [
+      "data existence is mistaken for trustworthy evidence",
+      "evidence is mistaken for authority to issue a claim",
+      "admission is mistaken for unlimited quantity",
+      "valid quantity is mistaken for guaranteed settlement",
+      "a constrained financial claim is mistaken for money"
+    ]
+  },
+  "current_public_proof": {
+    "case_id": "PUB-AUSGRID-001P",
+    "source_publisher": "Ausgrid",
+    "assurance": "L0",
+    "interval_count": 336,
+    "open_policy": {
+      "policy_id": "LAB-CASE-OPEN-004",
+      "result": "ADMIT_WITH_LIMIT",
+      "admitted_maximum_kwh": 33.066,
+      "binding_constraint": "EVIDENCE_BACKED_CAPACITY"
+    },
+    "pilot_policy": {
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "result": "BLOCKED",
+      "blocking_rules": ["SIGNED_EVIDENCE", "MIN_PROVENANCE"]
+    },
+    "settlement_stress": {
+      "declared_capacity_fraction": 0.4,
+      "result": "PARTIAL",
+      "covered_kwh": 13.2264,
+      "shortfall_kwh": 19.8396
+    },
+    "verification": {
+      "integrity": "PASS",
+      "schema_validation": "PASS",
+      "decision_reproduction": "PASS"
+    },
+    "research_boundaries": {
+      "R1": "NOT_ASSESSED",
+      "R2": "PARTIAL",
+      "R3": "PARTIAL",
+      "R4": "UNTESTED"
+    }
+  },
+  "novelty": [
+    "separates evidence, authority, quantity, settlement, and monetary performance instead of collapsing them into one pass/fail claim",
+    "uses explicit versioned policies to attribute exactly which rule blocks or bounds a claim",
+    "produces deterministic identities, receipts, capsules, and a portable claim-assessment package for replay and challenge",
+    "treats unresolved boundaries as first-class output rather than silently promoting weak evidence into stronger claims"
+  ],
+  "judge_demo": {
+    "target_seconds": 30,
+    "sequence": [
+      "show the same pinned Ausgrid evidence at actual L0 assurance",
+      "show open policy -> ADMIT_WITH_LIMIT -> 33.066 kWh",
+      "switch to pilot policy -> BLOCKED -> signed evidence / provenance requirements",
+      "stress the admitted claim at 40% settlement -> PARTIAL -> 19.8396 kWh shortfall",
+      "open receipt / assessment identity and state what remains untested"
+    ],
+    "memory_line": "Same evidence. Different policy. Different financial consequence. Every step is inspectable."
+  },
+  "non_claims": [
+    "owner/operator validation",
+    "physical meter certification",
+    "L1/L2 authenticated evidence for the public case",
+    "legal issuance authority",
+    "enforceable delivery or redemption",
+    "production security",
+    "commercial demand or product-market fit",
+    "R4 monetary performance",
+    "currency, stablecoin, or legal-money status"
+  ],
+  "route_posture": {
+    "innoserve_adiai_2026": {
+      "action": "FIRE_PACKAGING",
+      "primary_story": "practical accountability layer for evidence-backed financial decisions",
+      "emphasize": ["innovation", "practicality", "live demo clarity", "outside-data proof", "reproducibility"],
+      "do_not_fake": ["pilot traction", "hardware requirement"]
+    },
+    "iii_ai_innovation_2026": {
+      "action": "CONDITIONAL",
+      "condition": "Only submit if a genuine score-bearing AI contribution already exists.",
+      "do_not_fake": ["AI fit by adding an LLM wrapper"]
+    },
+    "fintech_taipei_2026": {
+      "action": "CHEAP_SUBMISSION_ONLY_UNLESS_VALIDATION_CHANGES",
+      "primary_story": "audit and policy infrastructure for evidence-backed finance",
+      "structural_gap": "real financial/institutional validation or pilot"
+    },
+    "nstc_research_entrepreneurship": {
+      "action": "HOLD",
+      "structural_gap": "commercialization carrier, market validation, team/institutional route, milestones"
+    },
+    "financial_cryptography_2027": {
+      "action": "PRESERVE_RESEARCH_ROUTE",
+      "primary_story": "executable methodology and deterministic system for bounding evidence-backed financial claims",
+      "emphasize": ["mechanism novelty", "formal object boundaries", "reproducibility", "failure cases"]
+    },
+    "acm_facct_2027": {
+      "action": "CONDITIONAL",
+      "condition": "Proceed only with a genuinely sociotechnical accountability contribution, not software reframing alone."
+    },
+    "taai_2026": {
+      "action": "DO_NOT_PURSUE_CURRENT"
+    }
+  },
+  "submission_gates": {
+    "narrative": "READY_INTERNAL",
+    "machine_evidence": "PASS",
+    "deterministic_reproduction": "PASS",
+    "public_demo": "LIVE",
+    "route_specific_copy": "READY_INTERNAL",
+    "visual_submission_assets": "OPEN",
+    "citable_release_archive": "OPEN",
+    "independent_external_validation": "OPEN",
+    "owner_operator_case": "OPEN"
+  },
+  "authorization_boundary": "This package is a judge-facing source of truth for preparing applications. It does not override opportunity eligibility, semantic-fit gates, official rubrics, or the frozen Gauntlet simulator's no-auto-submission rule."
+}
