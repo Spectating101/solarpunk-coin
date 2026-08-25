@@ -101,6 +101,24 @@ CI requires:
 
 The package is a portable rendering of Policy Lab results. Packaging does not create new evidence authority.
 
+## Submission / Gauntlet package
+
+Policy Lab now has a separate judge-facing package for suitable competitions and research-software routes. It is downstream of executable truth and cannot override eligibility, semantic-fit, or evidence boundaries.
+
+Start at [`docs/submission/README.md`](./docs/submission/README.md).
+
+Central submission hook:
+
+> **If a financial claim says real-world evidence backs it, Policy Lab makes it prove exactly how much that evidence can justify.**
+
+The machine-bound submission facts live in [`benchmark/gauntlet/submission-package.v1.json`](./benchmark/gauntlet/submission-package.v1.json) and are checked against the current outside-data checkpoint by:
+
+```bash
+node scripts/validate_gauntlet_submission_package.mjs
+```
+
+The package includes the master judge narrative, 30/90-second demo scripts, Q&A, route-specific adapters, and a submission-readiness checklist. It does not promote the current outside-data checkpoint into a pilot or commercial validation claim.
+
 ## Canonical commands
 
 The root Node package is intentionally private. Current entry commands are:
