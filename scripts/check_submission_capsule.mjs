@@ -43,7 +43,6 @@ assert.equal(frozen.settlement.covered_quantity, cp.settlement.covered_quantity)
 assert.equal(frozen.settlement.shortfall_quantity, cp.settlement.shortfall_quantity);
 assert.deepEqual(frozen.research_boundaries, { ...cp.boundaries });
 
-// RC4 is a research-positioned abstract, not a generic project description.
 const requiredAbstractPatterns = [
   new RegExp(manifest.external_submission.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
   /oracle literature/i,
@@ -53,14 +52,15 @@ const requiredAbstractPatterns = [
   /proof-of-reserve/i,
   /Ratnam/i,
   /336 half-hour intervals/i,
-  /lowest assurance tier\s*\(\*\*L0\*\*\)|lowest assurance tier.*L0/i,
+  /lowest assurance tier.*L0/i,
   /max\(PV generation.*general load.*controlled load.*0\)/i,
   /derived surplus measure, not a directly metered export channel/i,
   /33\.066 kWh/i,
   /not a monetary valuation/i,
   /No monetary price is implied/i,
   /researcher-declared comparison policies/i,
-  /not empirically calibrated or institutionally endorsed/i,
+  /empirically calibrated/i,
+  /institutionally endorsed/i,
   /same evidence object is blocked/i,
   /evidence identity is held fixed/i,
   /40% of the declared quantity/i,
@@ -71,6 +71,11 @@ const requiredAbstractPatterns = [
 for (const pattern of requiredAbstractPatterns) {
   assert.match(abstract, pattern, `RC4 abstract missing required research statement: ${pattern}`);
 }
+assert.match(
+  abstract,
+  /researcher-declared comparison policies rather than empirically calibrated or institutionally endorsed decision rules/i,
+  'RC4 must explicitly disclaim calibration and institutional endorsement of the comparison policies',
+);
 
 const antiSlopPatterns = [
   /rapidly evolving (?:fintech|financial|technology) landscape/i,
@@ -87,7 +92,6 @@ const antiSlopPatterns = [
 ];
 for (const pattern of antiSlopPatterns) assert.doesNotMatch(abstract, pattern, `anti-slop violation: ${pattern}`);
 
-// Internal implementation tokens stay in the ledger, not reviewer-facing prose.
 const implementationLeakPatterns = [
   /ADMIT_WITH_LIMIT/,
   /EVIDENCE_BACKED_CAPACITY/,
