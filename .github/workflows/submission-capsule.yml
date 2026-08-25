@@ -1,0 +1,37 @@
+name: Policy Lab Submission Capsule
+
+on:
+  pull_request:
+    paths:
+      - 'docs/submission/SUBMISSION_CAPSULE_STANDARD.md'
+      - 'docs/submission/opportunities-2026/global-ai-finance-2026/**'
+      - 'frontend/src/data/publicEvidenceCheckpoint.js'
+      - 'scripts/check_submission_capsule.mjs'
+      - '.github/workflows/submission-capsule.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/submission/SUBMISSION_CAPSULE_STANDARD.md'
+      - 'docs/submission/opportunities-2026/global-ai-finance-2026/**'
+      - 'frontend/src/data/publicEvidenceCheckpoint.js'
+      - 'scripts/check_submission_capsule.mjs'
+      - '.github/workflows/submission-capsule.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  global-ai-finance-capsule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify submission capsule
+        run: node scripts/check_submission_capsule.mjs
