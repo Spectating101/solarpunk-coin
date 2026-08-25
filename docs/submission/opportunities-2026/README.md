@@ -5,7 +5,7 @@ This directory contains current opportunity decisions and submission material de
 Start with:
 
 1. [`EXPANDED_MARKET_MAP.md`](./EXPANDED_MARKET_MAP.md) — full second-pass market scan, route interactions, explicit kills, and execution order.
-2. [`OPPORTUNITY_DECISION.md`](./OPPORTUNITY_DECISION.md) — first tranche of detailed route decisions.
+2. [`OPPORTUNITY_DECISION.md`](./OPPORTUNITY_DECISION.md) — detailed route decisions and current gates.
 
 ## Active non-exclusive routes
 
@@ -25,11 +25,11 @@ Deadline: **2026-10-05**.
 
 Goal: convert Policy Lab lessons into a broader open research-software practice and international research-software network.
 
-### REMEDIATE → FIRE — Digital Public Goods Registry
+### READY TO SUBMIT — Digital Public Goods Registry
 
-[`digital-public-goods-registry/READINESS_AUDIT.md`](./digital-public-goods-registry/READINESS_AUDIT.md)
+[`dpg-registry/DPG_APPLICATION_DRAFT.md`](./dpg-registry/DPG_APPLICATION_DRAFT.md)
 
-Rolling. Current gaps are governance/privacy/security documentation, not core functionality.
+Rolling. The internal governance/privacy/security/public-interest remediation is merged and machine-checked. Remaining gate: re-check the live DPGA eligibility questionnaire and submit for external review. **Do not call Policy Lab a Digital Public Good before DPGA approval.**
 
 ## Exclusive manuscript lane
 
@@ -84,5 +84,6 @@ Thematic and participant eligibility pass; mandatory Cyprus travel does not curr
 - No project is distorted merely because a grant or competition exists.
 - A `FIRE` route must have a concrete submission package and deadline.
 - A `HOLD` must name the exact unresolved gate that prevents submission.
+- `READY TO SUBMIT` means internal evidence/packaging gates are clear; it does **not** mean external acceptance or recognition.
 - Substantially overlapping peer-reviewed manuscripts are **not** submitted concurrently.
 - Non-exclusive routes should compound external validation rather than merely multiply application count.
