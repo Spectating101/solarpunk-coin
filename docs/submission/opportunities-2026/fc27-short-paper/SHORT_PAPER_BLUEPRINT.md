@@ -88,15 +88,30 @@ R4: UNTESTED
 
 Do not promote this into source/operator verification.
 
-### E3 — adversarial invariant tests
+### E3 — adversarial/integrity evidence
 
-Before submission, add or document executable tests for:
+A source audit on 2026-08-25 found that several candidate experiments already exist in executable form.
 
-1. **Evidence-promotion attempt:** mutate declared assurance without an authorized transition; verifier must refuse to treat the public case as authenticated evidence.
-2. **Policy substitution:** evaluate identical evidence under two policy identities; evidence identity remains stable, decision identity changes, and rule attribution matches the selected policy.
-3. **Quantity overreach:** request more than the binding ceiling; output remains bounded to the minimum valid ceiling.
-4. **Settlement failure:** vary settlement capacity without rewriting the prior admission/quantity result; settlement becomes `SETTLED`, `PARTIAL`, or `SHORTFALL` independently.
-5. **Artifact tampering:** alter a receipt/assessment reference or content; integrity/cross-object verifier rejects it.
+#### Already implemented / directly evidenced
+
+1. **Policy divergence / policy identity:** the same Ausgrid evidence is evaluated under open and pilot policy identities with different rule-level consequences.
+2. **Settlement separation:** the public case preserves the upstream decision while settlement is separately represented as `PARTIAL` at 40% capacity.
+3. **Semantic-vs-delivery identity scope:** `verify_claim_assessment_package.mjs` perturbs delivery/prose-only content and requires the semantic assessment identity to stay fixed while package-content identity changes.
+4. **Cross-object substitution/tamper checks:** the verifier hard-fails disagreement across case identity, evidence hash, policy metadata/hash, decision outputs, settlement, research projection, receipt and capsule identities.
+5. **Closed-world reproduction:** capsule verification must report decision reproduction `PASS`.
+6. **Exact human/machine agreement:** the human assessment report must be an exact deterministic rendering of the machine package.
+7. **Byte-identical rebuild:** the external-case workflow rebuilds both machine package and human report and compares them byte-for-byte with the first build.
+
+These should be reported as existing evaluation rather than reimplemented for the paper.
+
+#### Two focused additions still needed
+
+1. **Unauthorized assurance-promotion test:** explicitly attempt to upgrade the public L0 source to stronger assurance without an authorized/new evidence transition and demonstrate that the public-case verification path refuses to treat the upgraded declaration as source truth.
+2. **Requested-quantity-overreach test:** explicitly request more than the minimum applicable ceiling and report that the decision remains bounded to the binding ceiling rather than inheriting the request.
+
+Optional third addition if cheap:
+
+3. **Direct policy-artifact substitution test:** mutate the policy manifest while retaining stale decision/package references and demonstrate verifier rejection. Existing cross-object checks strongly cover this already; add a dedicated named test only if it improves paper clarity.
 
 ### E4 — related-system comparison
 
@@ -126,7 +141,7 @@ Target body allocation (references excluded):
 
 ## Draft abstract
 
-External evidence increasingly determines whether financial systems mint assets, accept collateral, recognize reserves, or trigger obligations. Yet the transitions from evidence to authorization, from authorization to quantity, and from quantity to settlement are often implemented by different mechanisms with different trust assumptions. We present Policy Lab, a deterministic constraint architecture for studying these seams. The system enforces non-promotion invariants: downstream operations cannot silently strengthen source assurance; admission does not imply unlimited quantity; settlement cannot rewrite the admission decision; and every decision commits to explicit evidence and policy identities. We evaluate the architecture using controlled cases and a pinned public Ausgrid dataset. The same L0 evidence is admitted with a 33.066 kWh ceiling under an open policy but blocked under a stricter policy requiring signed evidence and provenance; a 40% settlement stress then produces a 19.8396 kWh shortfall without changing the upstream evidence or decision identity. We position the contribution as a compositional safety layer between credential/attestation systems, policy engines, and financial-contract infrastructure rather than a replacement for those systems. The results show how explicit non-promotion semantics expose overclaim and policy-substitution failures that are otherwise easy to conflate across system boundaries.
+External evidence increasingly determines whether financial systems mint assets, accept collateral, recognize reserves, or trigger obligations. Yet the transitions from evidence to authorization, from authorization to quantity, and from quantity to settlement are often implemented by different mechanisms with different trust assumptions. We present Policy Lab, a deterministic constraint architecture for studying these seams. The system enforces non-promotion invariants: downstream operations cannot silently strengthen source assurance; admission does not imply unlimited quantity; settlement cannot rewrite the admission decision; and every decision commits to explicit evidence and policy identities. We evaluate the architecture using controlled cases and a pinned public Ausgrid dataset. The same L0 evidence is admitted with a 33.066 kWh ceiling under an open policy but blocked under a stricter policy requiring signed evidence and provenance; a 40% settlement stress then produces a 19.8396 kWh shortfall without changing the upstream evidence or admission decision. Package verification independently recomputes semantic and content identities, checks cross-object agreement, reproduces the human report exactly, requires closed-world decision reproduction, and rebuilds the package byte-identically. We position the contribution as a compositional safety layer between credential/attestation systems, policy engines, and financial-contract infrastructure rather than a replacement for those systems.
 
 ## Threats / non-claims
 
@@ -145,8 +160,14 @@ The paper must state:
 - [ ] use official Springer LNCS format
 - [ ] title begins `Short Paper:`
 - [ ] body <= 8 pages; references separate; no appendix
-- [ ] all safety invariants stated formally enough to test
-- [ ] adversarial tests completed and reported
+- [ ] safety invariants stated precisely enough to test
+- [ ] unauthorized assurance-promotion test completed
+- [ ] requested-quantity-overreach test completed
+- [x] semantic/content identity-scope probe exists
+- [x] cross-object agreement verifier exists
+- [x] exact human-report reproduction exists
+- [x] closed-world decision reproduction exists
+- [x] byte-identical package/report rebuild exists
 - [ ] related-work comparison cites primary sources
 - [ ] no substantial overlap with another simultaneously peer-reviewed proceedings/journal submission
 - [ ] artifact/repository disclosure follows FC rules without breaking anonymity
