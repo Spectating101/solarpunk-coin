@@ -7,7 +7,11 @@ on:
       - main
     paths:
       - benchmark/gauntlet/**
+      - docs/submission/**
+      - frontend/src/data/publicEvidenceCheckpoint.js
+      - CURRENT_SURFACE.json
       - scripts/run_gauntlet_simulation_v1.mjs
+      - scripts/validate_gauntlet_submission_package.mjs
       - .github/workflows/gauntlet-simulation-v1.yml
 
 permissions:
@@ -25,6 +29,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Validate judge-facing submission claims
+        run: node scripts/validate_gauntlet_submission_package.mjs
 
       - name: Run venue-aware scaled simulation
         run: |
