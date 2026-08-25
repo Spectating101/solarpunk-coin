@@ -10,7 +10,7 @@ These can be pursued without creating a substantially overlapping manuscript con
 |---|---|---|---|
 | Global AI Finance Research Conference 2026 — WIP Poster | **FIRE NOW** | extended abstract by 2026-08-31 | academic program entry + external feedback + JOSS impact signal |
 | SSI Fellowship 2027 | **FIRE** | 2026-10-05 | £4,000 activity budget + RSE network + personal credential |
-| Digital Public Goods Registry | **REMEDIATE → FIRE** | rolling | standards-based external review + discoverability + public-good validation |
+| Digital Public Goods Registry | **READY TO SUBMIT — EXTERNAL REVIEW PENDING** | rolling | standards-based external review + discoverability + public-good validation |
 | NLnet Restack | **CALL-GATED** | call opens 2026-09-03; deadline 2026-11-03 | €5k–€50k potential open-source funding if exact call + European dimension pass |
 | JOSS | **PREPARE; DO NOT SUBMIT YET** | rolling | peer-reviewed research software + DOI after impact gate clears |
 
@@ -101,26 +101,26 @@ Policy Lab's deterministic constraint engine should not acquire a cosmetic LLM/a
 
 Do not trade time/money for low-signal publication lines when stronger official academic routes are open.
 
-## D. Digital Public Goods route — specific current gap
+## D. Digital Public Goods route — internal remediation complete
 
-Repo audit on 2026-08-25:
+The DPG governance/documentation tranche is now merged into the current Policy Lab surface.
 
-**Already strong:**
-- public source;
-- MIT license;
+**Current evidence:**
+- public source + MIT license;
 - reproducibility and contribution instructions;
 - versioned schemas/open formats;
 - deterministic tests and public evidence checkpoint;
-- explicit prohibition on exposing confidential/private evidence.
+- `PRIVACY.md` grounded in browser-local/no-upload behavior;
+- `SECURITY.md` with sensitive-reporting boundaries;
+- `GOVERNANCE.md` with explicit current ownership and institutional non-ownership;
+- `CODE_OF_CONDUCT.md` with harassment/moderation controls;
+- `PUBLIC_INTEREST.md` with bounded SDG 16 / do-no-harm thesis;
+- `CURRENT_SURFACE.json` declares the public governance artifacts;
+- `scripts/check_public_governance.mjs` machine-checks material statements against runtime and citation truth;
+- Current Surface Integrity passes with the governance check enabled;
+- a prefilled `dpg-registry/DPG_APPLICATION_DRAFT.md` covers all nine current DPG Standard indicators without claiming recognition.
 
-**Before nomination:**
-- add a dedicated `SECURITY.md`;
-- add a dedicated `PRIVACY.md`;
-- clarify current project ownership/governance because the root MIT license still carries the historical `Solarpunk Bitcoin Project` copyright line;
-- add a public-interest/safety/SDG statement, with SDG 16 as the primary evidence-bounded thesis;
-- run the official DPGA eligibility questionnaire on the exact remediation revision.
-
-This is a governance/documentation tranche, not a software-feature tranche.
+**Remaining gate is external, not internal:** re-run the live DPGA eligibility questionnaire on the exact nominated commit, submit through DPGA's application portal, answer any clarification requests, and wait for the binary external decision. Until approval, use `DPG application / review pending`, not `Digital Public Good`.
 
 ## E. Conversion architecture
 
@@ -131,7 +131,7 @@ Global AI Finance poster
         ↓ external academic contact / feedback
 FC'27 short paper ────────────────┐
         ↓                         │
-DPG review / independent replay   │
+DPG external review               │
         ↓                         │
 JOSS impact gate clears           │
         ↓                         │
@@ -148,7 +148,7 @@ Backup manuscript venues (Asia University FTSID, Shih Hsin) are retained as fail
 
 1. **Aug 31:** submit Global AI Finance WIP poster.
 2. **Sep 17:** submit FC'27 short paper if final manuscript clears anonymity/related-work/evaluation checks.
-3. **Immediately after poster/FC packaging:** close the small DPG governance gaps and run the official eligibility tool.
+3. **Rolling / now:** re-check the live DPGA eligibility tool and submit Policy Lab from the merged evidence ledger.
 4. **Sep 3:** hard FIRE/KILL NLnet against the published Restack call.
 5. **Oct 5:** submit SSI Fellowship.
 6. **After one concrete outside use/reproduction/presentation signal:** run JOSS pre-review checklist and submit when impact is evidence-backed.
