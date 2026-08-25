@@ -2,6 +2,7 @@
   "schema": "policy_lab.submission_capsule.v1",
   "capsule_id": "global-ai-finance-2026-poster",
   "status": "SURPRISE_PROOFED",
+  "research_positioning_version": "RC4",
   "venue": {
     "name": "Global AI Finance Research Conference 2026",
     "submission_type": "work-in-progress poster",
@@ -12,17 +13,41 @@
     "submission_system": "ConfTool"
   },
   "external_submission": {
-    "title": "When Does Evidence Support a Financial Claim?",
+    "title": "Evidence, Policy, and Settlement in Energy-Linked Financial Claims",
     "artifact": "POSTER_EXTENDED_ABSTRACT.md",
     "keywords": [
       "FinTech",
-      "evidence-backed finance",
-      "financial claims",
+      "energy-linked claims",
+      "external evidence",
+      "tokenisation",
+      "policy",
       "auditability",
       "settlement",
       "Green FinTech"
     ]
   },
+  "research_question": "Once external evidence is available, how should a financial decision distinguish what the evidence supports, whether a policy accepts it, how much underlying physical quantity it can justify before valuation, and whether the resulting obligation can settle?",
+  "research_positioning": {
+    "prior_art_not_claimed_novel": [
+      "oracle delivery of external data and oracle trust models",
+      "verifiable credentials and cryptographic verification",
+      "general policy-as-code evaluation",
+      "machine-readable financial-contract semantics",
+      "proof-of-reserve feeds and reserve-gated mint controls"
+    ],
+    "bounded_contribution": "An executable methodological composition that keeps source assurance, policy admission, supported physical quantity, and settlement as separately inspectable states under a fixed evidence object.",
+    "policy_status": "researcher-declared comparison policies; not empirically calibrated, institutionally endorsed, or economically optimal",
+    "quantity_interpretation": "33.066 energy-claim units map one-for-one to the derived physical kWh surplus for this experiment; they are not a monetary price, market value, or legal entitlement",
+    "surplus_derivation": "per interval max(PV generation - general load - controlled load, 0); derived surplus, not directly metered export"
+  },
+  "references": [
+    "Eskandari et al. 2021, SoK: Oracles from the Ground Truth to Market Manipulation",
+    "W3C Verifiable Credentials Data Model v2.0, 2025",
+    "Open Policy Agent documentation",
+    "ACTUS Financial Research Foundation fundamentals",
+    "Chainlink Proof of Reserve documentation",
+    "Ratnam et al. 2017, Residential load and rooftop PV generation: an Australian distribution network dataset"
+  ],
   "evidence_checkpoint": {
     "case_id": "PUB-AUSGRID-001P",
     "archive_sha256": "6949ffee7ef8e2260f229f8a7e3b992390187facaaf023bb933b811a11cd1a11",
@@ -58,6 +83,7 @@
   },
   "capsule_artifacts": [
     "POSTER_EXTENDED_ABSTRACT.md",
+    "RELATED_WORK_POSITIONING.md",
     "CLAIM_EVIDENCE_LEDGER.md",
     "AUTHOR_SURPRISE_PROOFING_BRIEF.md",
     "REVIEWER_QA.md",
@@ -88,6 +114,7 @@
   "non_claims": [
     "Ausgrid or source-holder validation of Policy Lab",
     "authenticated operator custody",
+    "directly metered export for the 33.066 kWh derived surplus",
     "certified physical meter truth",
     "legal issuance authority",
     "enforceable settlement or redemption",
@@ -95,6 +122,7 @@
     "customer or institutional pilot",
     "market adoption",
     "optimal policy thresholds or economic pricing",
+    "monetary valuation of the 33.066 claim units",
     "currency or stablecoin validation",
     "monetary performance"
   ],
