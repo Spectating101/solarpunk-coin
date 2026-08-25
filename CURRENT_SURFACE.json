@@ -53,6 +53,16 @@
     "source_case": "PUB-AUSGRID-001P",
     "role": "Portable machine-readable rendering of closed Policy Lab case artifacts; it does not alter decision authority or promote evidence status."
   },
+  "public_governance": {
+    "owner": "Christopher Ongko",
+    "governance": "GOVERNANCE.md",
+    "privacy": "PRIVACY.md",
+    "security": "SECURITY.md",
+    "code_of_conduct": "CODE_OF_CONDUCT.md",
+    "public_interest": "PUBLIC_INTEREST.md",
+    "dpg_application_draft": "docs/submission/opportunities-2026/dpg-registry/DPG_APPLICATION_DRAFT.md",
+    "boundary": "These artifacts describe the current Policy Lab research-software surface. They do not promote historical SolarPunk/SPK reference code into current production authority or claim Digital Public Good recognition before external review."
+  },
   "historical_reference": {
     "active_but_secondary_routes": ["reference", "legacy-protocol", "evidence", "currency"],
     "domains": ["SPK", "Sepolia", "SolarPunk Public Lab", "Energy Standard"],
