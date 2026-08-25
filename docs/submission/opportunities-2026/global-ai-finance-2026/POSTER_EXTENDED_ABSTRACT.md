@@ -1,36 +1,29 @@
 # Global AI Finance Research Conference 2026 — Poster Extended Abstract
 
-**Submission type:** Poster / work in progress  
+**Submission type:** Work-in-progress poster  
 **Deadline:** 2026-08-31  
 **Conference:** 2026-12-14 to 2026-12-15, Taiwan  
-**Submission system:** https://www.conftool.net/aifinconf2026/
 
 ## Title
 
-**From Evidence to Financial Authority: A Reproducible Constraint Workbench for Evidence-Backed Financial Claims**
+**When Does Evidence Justify a Financial Claim? An Auditable Constraint Workbench for Admission, Quantity, and Settlement**
 
 ## Extended abstract
 
-Financial systems increasingly depend on facts measured outside the financial system itself: reserve balances, collateral states, energy production, environmental certificates, asset valuations, insurance events, and other externally observed conditions. The existence of such data, however, does not by itself determine whether the data is sufficiently trustworthy for a particular financial use, whether a claim should be admitted, how large that claim may be, or whether it can ultimately settle. These decisions are often embedded in models, contracts, oracle arrangements, governance processes, or institutional rules, making the conversion from evidence to financial authority difficult to inspect and reproduce.
+Financial systems increasingly rely on facts measured outside the financial system itself: reserve balances, collateral states, energy production, environmental certificates, asset valuations, insurance events, and other externally observed conditions. But establishing that a data object exists—or even that it is cryptographically intact—does not answer three further questions: whether the evidence is sufficient for a particular financial use, how much financial quantity it can justify, and whether the resulting obligation can actually settle.
 
-This work presents **Policy Lab**, an executable research workbench for making that conversion explicit. Policy Lab represents a proposed evidence-backed financial claim as a sequence of independently inspectable stages: evidence and source assurance, versioned policy admission, comparable quantity ceilings, settlement stress, and a deterministic decision receipt. The design deliberately prevents downstream technical operations—such as hashing, packaging, receipts, or policy execution—from silently upgrading the assurance of the underlying evidence.
+We present **Policy Lab**, an executable research workbench for studying those transitions separately. A case enters the workbench with an evidence object and an explicit assurance state. A versioned policy then determines admission. If admission succeeds, quantity is bounded independently by comparable ceilings and the binding constraint is reported. Settlement is evaluated as a later stage rather than being inferred from admission. The resulting decision retains stable identities for the case, evidence, policy, calculation, decision, and assessment so that the reasoning chain can be reproduced and challenged.
 
-The system’s central research object is therefore not a token or a single approval score, but a bounded decision explaining: (1) whether the available evidence is admissible under a declared policy; (2) which rule blocks the claim when admission fails; (3) the maximum quantity that can be justified when admission succeeds; (4) which comparable ceiling binds that maximum; (5) what happens when settlement capacity is insufficient; and (6) which stronger claims remain untested.
+The design is intentionally conservative about evidence. Hashing, packaging, receipts, or downstream policy execution cannot silently strengthen what the source evidence itself supports. Likewise, passing an admission rule does not authorize an arbitrary requested amount, and a valid bounded claim does not imply successful settlement. The workbench therefore treats evidence assurance, authorization, quantity, and settlement as related but non-interchangeable objects.
 
-A public outside-data checkpoint demonstrates the method using a pinned Ausgrid dataset containing 336 half-hour intervals. The source is intentionally retained at its actual low assurance level (L0) rather than being promoted because it is public or reproducibly hashed. Under an open research policy, the evidence produces `ADMIT_WITH_LIMIT`, with a maximum supported quantity of **33.066 kWh** and evidence-backed capacity as the binding ceiling. The same evidence evaluated under a stricter pilot policy produces `BLOCKED` because signed evidence and stronger provenance are required. When the admitted quantity is stressed at 40% declared settlement capacity, the result becomes `PARTIAL`: **13.2264 kWh** is covered and **19.8396 kWh** remains short.
+We demonstrate the method on a pinned public Ausgrid dataset containing 336 half-hour intervals from 1–7 July 2012. The source is retained at its observed **L0** assurance level. Under an open research policy, the evidence produces **ADMIT WITH LIMIT**, with a maximum supported quantity of **33.066 kWh**; evidence-backed capacity is the binding ceiling. The identical evidence evaluated under a stricter pilot policy is **BLOCKED** because the policy requires signed evidence and stronger provenance. No change to the underlying evidence is needed to produce the different policy consequence.
 
-The demonstration therefore makes a simple but consequential point visible: **the same evidence can lead to different financial consequences under different explicit policies, while neither policy is allowed to rewrite what the evidence itself proves.** Admission is also kept separate from quantity, and quantity from settlement. Each result retains stable case, evidence, policy, calculator, decision, and assessment identities so that the reasoning chain can be reconstructed and challenged.
+We then stress the admitted quantity with settlement capacity fixed at 40%. Settlement becomes **PARTIAL**: **13.2264 kWh** is covered and **19.8396 kWh** remains short. The upstream evidence and admission decision are not rewritten by this failure. This separation makes visible a class of overclaim that is easy to miss when evidence verification, authorization, quantity, and settlement are collapsed into a single success state.
 
-Policy Lab is positioned as a research and verification environment rather than a claim that the current energy evidence establishes a currency, stablecoin, legal issuance right, verified physical delivery, or market adoption. The outside-data case remains deliberately bounded: source/operator attribution, stronger authenticated evidence, legal enforceability, governance, and monetary performance remain open research questions.
+The public case is deliberately limited. It does not establish authenticated operator custody, certified physical meter truth, legal issuance authority, enforceable redemption, production readiness, or monetary adoption. Nor does the experiment show that the chosen policy thresholds are economically optimal. Its contribution is methodological: it provides an executable way to inspect where a proposed evidence-backed financial claim is admitted, bounded, or stopped, and to preserve the identities needed to reproduce that result.
 
-The contribution is relevant to FinTech settings in which external evidence is expected to authorize financial consequences, including tokenized real-world assets, reserve or collateral claims, energy and environmental certificates, insurance triggers, and institutional policy engines. The current work focuses on the methodological and software question: **how can evidence, policy authority, quantity, and settlement be made independently inspectable without allowing one layer to silently promote another?**
-
-The poster will present the outside-data checkpoint, the open-versus-strict policy divergence, the settlement shortfall, and the deterministic decision lineage. The goal is to obtain external criticism on the framework’s boundaries and identify which additional evidence or institutional cases are required before stronger claims can be justified.
+The poster will present the outside-data case, the open-versus-strict policy divergence, the binding quantity ceiling, the settlement shortfall, and the deterministic decision lineage. More broadly, the work is relevant to FinTech settings in which external evidence is expected to authorize financial consequences, including tokenized real-world assets, reserve and collateral claims, energy or environmental certificates, insurance triggers, and institutional policy engines. The work-in-progress question is not whether one universal policy can decide such claims, but whether the seams between **evidence → authorization → quantity → settlement** can be made explicit enough to inspect, vary, and challenge.
 
 ## Keywords
 
-FinTech; evidence-backed finance; tokenized assets; policy-as-code; auditability; reproducibility; settlement; financial infrastructure; Green FinTech
-
-## Claim boundary for submission
-
-Do not describe the Ausgrid checkpoint as an operator pilot, authenticated physical meter truth, legal issuance authority, or monetary validation.
+FinTech; evidence-backed finance; financial infrastructure; policy-as-code; auditability; reproducibility; settlement; tokenized assets; Green FinTech
