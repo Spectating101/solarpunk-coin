@@ -60,20 +60,22 @@ assert.equal(frozen.settlement.covered_quantity, cp.settlement.covered_quantity)
 assert.equal(frozen.settlement.shortfall_quantity, cp.settlement.shortfall_quantity);
 assert.deepEqual(frozen.research_boundaries, { ...cp.boundaries });
 
-const requiredAbstractFacts = [
-  manifest.external_submission.title,
-  '336 half-hour intervals',
-  'L0',
-  '33.066 kWh',
-  '13.2264 kWh',
-  '19.8396 kWh',
-  'ADMIT WITH LIMIT',
-  'BLOCKED',
-  'PARTIAL',
-  'evidence → authorization → quantity → settlement',
+// The public abstract must preserve the evidence, but it should not be forced to
+// reproduce internal enum names or implementation jargon. Check human-readable
+// statements rather than leaking machine vocabulary into the prose.
+const requiredAbstractPatterns = [
+  new RegExp(manifest.external_submission.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+  /336 half-hour intervals/i,
+  /L0/i,
+  /33\.066 kWh/i,
+  /13\.2264 kWh/i,
+  /19\.8396 kWh/i,
+  /open research policy/i,
+  /same evidence is blocked/i,
+  /settlement capacity at 40%/i,
 ];
-for (const fact of requiredAbstractFacts) {
-  assert.ok(abstract.includes(fact), `external abstract missing required fact: ${fact}`);
+for (const pattern of requiredAbstractPatterns) {
+  assert.match(abstract, pattern, `external abstract missing required human-readable fact: ${pattern}`);
 }
 
 const antiSlopPatterns = [
@@ -86,9 +88,25 @@ const antiSlopPatterns = [
   /paradigm shift/i,
   /unprecedented/i,
   /transformative platform/i,
+  /unlock(?:s|ing) (?:new|the) potential/i,
+  /seamless(?:ly)?/i,
 ];
 for (const pattern of antiSlopPatterns) {
   assert.doesNotMatch(abstract, pattern, `anti-slop violation: ${pattern}`);
+}
+
+// Internal enum tokens belong in the evidence ledger, not the outward prose.
+const implementationLeakPatterns = [
+  /ADMIT_WITH_LIMIT/,
+  /EVIDENCE_BACKED_CAPACITY/,
+  /SIGNED_EVIDENCE/,
+  /MIN_PROVENANCE/,
+  /DecisionResult/,
+  /cross-object lineage/i,
+  /non-promotion semantics/i,
+];
+for (const pattern of implementationLeakPatterns) {
+  assert.doesNotMatch(abstract, pattern, `implementation jargon leaked into outward abstract: ${pattern}`);
 }
 
 const dangerousClaimPatterns = [
@@ -115,10 +133,10 @@ const wordCount = abstract
   .trim()
   .split(/\s+/)
   .filter(Boolean).length;
-assert.ok(wordCount >= 450, `extended abstract unexpectedly short: ${wordCount} words`);
-assert.ok(wordCount <= 1100, `extended abstract unexpectedly long: ${wordCount} words`);
+assert.ok(wordCount >= 300, `extended abstract unexpectedly short: ${wordCount} words`);
+assert.ok(wordCount <= 700, `extended abstract too long for a focused poster submission: ${wordCount} words`);
 
-console.log('Global AI Finance submission capsule: PASS');
+console.log('Global AI Finance submission pack: PASS');
 console.log(`status=${manifest.status}`);
 console.log(`title=${manifest.external_submission.title}`);
 console.log(`case=${frozen.case_id} assurance=${frozen.assurance}`);

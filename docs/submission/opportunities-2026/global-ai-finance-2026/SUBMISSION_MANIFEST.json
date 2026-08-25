@@ -12,17 +12,14 @@
     "submission_system": "ConfTool"
   },
   "external_submission": {
-    "title": "When Does Evidence Justify a Financial Claim? An Auditable Constraint Workbench for Admission, Quantity, and Settlement",
+    "title": "When Does Evidence Support a Financial Claim?",
     "artifact": "POSTER_EXTENDED_ABSTRACT.md",
     "keywords": [
       "FinTech",
       "evidence-backed finance",
-      "financial infrastructure",
-      "policy-as-code",
+      "financial claims",
       "auditability",
-      "reproducibility",
       "settlement",
-      "tokenized assets",
       "Green FinTech"
     ]
   },
