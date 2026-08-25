@@ -29,9 +29,14 @@ async function taoyuanL2Decision() {
 }
 
 test('FC invariant: source assurance capabilities cannot be promoted under a stale evidence identity', async () => {
-  const evidence = await readJson('evidence/tyn-sample-evidence.json');
+  // OPS-001 is the committed operator-shaped fixture whose source capabilities are
+  // explicitly unsigned/unverified. Promoting those source semantics without
+  // rebuilding the evidence envelope must invalidate its existing identity.
+  const evidence = await readJson('evidence/ops-sample-evidence.json');
   assert.equal(await verifyEvidenceEnvelopeHash(evidence), true);
   assert.equal(evidence.capabilities.signed, false);
+  assert.equal(evidence.capabilities.operator_signed, false);
+  assert.equal(evidence.capabilities.cryptographically_verified, false);
 
   const promoted = structuredClone(evidence);
   promoted.capabilities.signed = true;
