@@ -1,0 +1,94 @@
+{
+  "schema": "policylab.innoserve_submission_manifest.v1",
+  "status": "CONTENT_AND_SYSTEM_READY",
+  "frozen_at": "2026-08-25",
+  "candidate_deployed_revision": "506aacaadf988d5de14cd8a0761f35a5dc11fdd8",
+  "application_source_merge": "ad7ff80aaadf0b6d4505ad2811e69a73cf2c0aee",
+  "routes": {
+    "IP": {
+      "track": "Information Application",
+      "posture": "FIRE_PRIMARY",
+      "system_overview": {
+        "filename": "Policy_Lab_InnoServe_2026_IP_System_Overview.docx",
+        "pages": 4,
+        "sha256": "868347c88956e75c65af997141901c6b03962b9e0d39d11c239c0b46231b5836"
+      }
+    },
+    "IC": {
+      "track": "International Exchange - English",
+      "posture": "FIRE_SECONDARY",
+      "system_overview": {
+        "filename": "Policy_Lab_InnoServe_2026_IC_System_Overview.docx",
+        "pages": 4,
+        "sha256": "33249ea18aab1c6f33f81c15ff1d270c5fe8822e4f5cd34e81e6d01814c6655f"
+      }
+    },
+    "ADIAI": {
+      "track": "Industry AI Innovation",
+      "posture": "DO_NOT_PURSUE_CURRENT",
+      "reason": "Current Policy Lab has no native score-bearing AI contribution; do not manufacture fit with an LLM wrapper."
+    }
+  },
+  "presentation": {
+    "storyboard_filename": "Policy_Lab_InnoServe_2026_Video_Storyboard.docx",
+    "storyboard_sha256": "45792163159641771d1d21fa19d71dbc1bc52e1ccc1fb8b339db08a9471570ec",
+    "target_runtime": "02:45-02:58",
+    "youtube_visibility": "UNLISTED",
+    "ic_voice_requirement": "spoken English by a team member"
+  },
+  "advisor": {
+    "brief_filename": "Policy_Lab_InnoServe_2026_Advisor_Brief.docx",
+    "required_faculty_advisors": "1-2",
+    "status": "HUMAN_ACTION_REQUIRED"
+  },
+  "canonical_public_proof": {
+    "case_id": "PUB-AUSGRID-001P",
+    "assurance": "L0",
+    "interval_count": 336,
+    "open_policy_result": "ADMIT_WITH_LIMIT",
+    "admitted_maximum_kwh": 33.066,
+    "strict_policy_result": "BLOCKED",
+    "settlement_fraction": 0.4,
+    "settlement_result": "PARTIAL",
+    "covered_kwh": 13.2264,
+    "shortfall_kwh": 19.8396,
+    "decision_reproduction": "PASS"
+  },
+  "remaining_required_human_assets": [
+    "faculty advisor identity",
+    "final team member list",
+    "student ID or enrollment proof",
+    "consent / personal-data / portrait form",
+    "16:9 horizontal team photo at least 1280x720",
+    "recorded three-minute project video",
+    "verified unlisted YouTube URL",
+    "online registration"
+  ],
+  "internal_target_dates": {
+    "advisor_team_lock": "2026-09-10",
+    "first_complete_video": "2026-09-18",
+    "documents_assembled": "2026-09-25",
+    "registration_dry_run": "2026-09-30",
+    "final_verification": "2026-10-02",
+    "official_deadline": "2026-10-05T16:00:00+08:00"
+  },
+  "change_control": {
+    "core_feature_freeze": true,
+    "allowed_core_changes": [
+      "reproducibility or security defect",
+      "live-demo failure affecting submission path",
+      "machine-bound factual claim mismatch",
+      "official rule change requiring packaging adjustment"
+    ]
+  },
+  "evidence_non_claims": [
+    "owner/operator validation",
+    "authenticated L1/L2 source evidence",
+    "physical meter certification",
+    "legal issuance or redemption authority",
+    "institutional pilot or commercial customer",
+    "stablecoin or currency status",
+    "product-market fit",
+    "R4 monetary performance"
+  ]
+}
