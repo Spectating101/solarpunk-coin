@@ -1,8 +1,8 @@
 {
   "schema": "policylab.gauntlet_submission_package.v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "INTERNAL_SUBMISSION_PACKAGE_READY",
-  "source_revision": "5f54966cae3361fdc901b7776a6571cd0eced29f",
+  "source_revision": "c60e26b8c6d2104d95350f346096cb77f4161a7b",
   "identity": {
     "name": "Policy Lab",
     "category": "verification and constraint layer for evidence-backed financial claims",
@@ -82,12 +82,64 @@
     "R4 monetary performance",
     "currency, stablecoin, or legal-money status"
   ],
+  "verified_opportunities": {
+    "innoserve_2026": {
+      "verified_date": "2026-08-25",
+      "official_rules_url": "https://innoserve.tca.org.tw/Rules/Detail?category=College",
+      "official_download_url": "https://innoserve.tca.org.tw/Download",
+      "registration_open": "2026-08-03T09:00:00+08:00",
+      "registration_deadline": "2026-10-05T16:00:00+08:00",
+      "final_date": "2026-11-07",
+      "eligibility": "current university students including master's and doctoral students; maximum eight students plus one or two faculty advisors",
+      "max_categories_per_team": 2,
+      "required_submission_assets": [
+        "system overview Word document, maximum five A4 pages and four MB",
+        "student ID or enrollment proof",
+        "three-minute YouTube project-introduction video",
+        "16:9 horizontal team photo at least 1280x720",
+        "competition consent/privacy/portrait form"
+      ]
+    }
+  },
   "route_posture": {
+    "innoserve_ip_2026": {
+      "action": "FIRE_PRIMARY",
+      "track": "Information Application (IP)",
+      "why_fit": "Broad ICT/application track explicitly includes blockchain and applications in finance and energy; no artificial AI requirement.",
+      "preliminary_rubric": {
+        "innovation": 0.5,
+        "extensibility": 0.5
+      },
+      "final_rubric": {
+        "innovation": 0.3,
+        "practicality": 0.15,
+        "stability": 0.15,
+        "extensibility": 0.15,
+        "documentation": 0.15,
+        "presentation": 0.1
+      },
+      "primary_story": "auditable accountability infrastructure for evidence-backed financial decisions",
+      "emphasize": ["innovation", "generalizable architecture", "live deterministic proof", "outside-data case", "reproducibility"],
+      "structural_gap": "independent users or operator validation would strengthen practicality but are not an eligibility requirement"
+    },
+    "innoserve_ic_2026": {
+      "action": "FIRE_SECONDARY",
+      "track": "International Exchange - English (IC)",
+      "why_fit": "Broad ICT/application scope with English documentation and presentation; no AI requirement and strong fit with an English-first judge narrative.",
+      "rubric": {
+        "innovation": 0.3,
+        "practicality": 0.45,
+        "english_presentation": 0.15,
+        "documentation": 0.1
+      },
+      "primary_story": "an auditable verification layer that makes the hidden conversion from external evidence to financial authority inspectable",
+      "emphasize": ["problem clarity", "practical use cases", "English presentation", "outside-data proof", "reproducibility"],
+      "structural_gap": "current external validation is weak, so the 45% practicality criterion must be answered with concrete workflows and bounded application scenarios rather than fabricated adoption"
+    },
     "innoserve_adiai_2026": {
-      "action": "FIRE_PACKAGING",
-      "primary_story": "practical accountability layer for evidence-backed financial decisions",
-      "emphasize": ["innovation", "practicality", "live demo clarity", "outside-data proof", "reproducibility"],
-      "do_not_fake": ["pilot traction", "hardware requirement"]
+      "action": "DO_NOT_PURSUE_CURRENT",
+      "reason": "The official 2026 ADIAI track is for AI application solutions and explicitly asks teams to describe AI techniques. Current Policy Lab is a deterministic constraint system without a native score-bearing AI contribution.",
+      "do_not_fake": ["AI fit by adding an LLM wrapper", "AI authority that weakens deterministic decision boundaries"]
     },
     "iii_ai_innovation_2026": {
       "action": "CONDITIONAL",
@@ -122,10 +174,10 @@
     "deterministic_reproduction": "PASS",
     "public_demo": "LIVE",
     "route_specific_copy": "READY_INTERNAL",
-    "visual_submission_assets": "OPEN",
+    "visual_submission_assets": "READY_INTERNAL",
     "citable_release_archive": "OPEN",
     "independent_external_validation": "OPEN",
     "owner_operator_case": "OPEN"
   },
-  "authorization_boundary": "This package is a judge-facing source of truth for preparing applications. It does not override opportunity eligibility, semantic-fit gates, official rubrics, or the frozen Gauntlet simulator's no-auto-submission rule."
+  "authorization_boundary": "This package is a judge-facing source of truth for preparing applications. Official current rules override stale route assumptions in the frozen simulator. The package does not override eligibility, semantic-fit gates, official rubrics, or the simulator's no-auto-submission rule."
 }

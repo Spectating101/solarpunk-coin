@@ -2,6 +2,14 @@ name: Policy Lab Submission Assets
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - 'docs/submission/**'
+      - 'benchmark/gauntlet/submission-package.v1.json'
+      - 'scripts/capture_policy_lab_submission_assets.mjs'
+      - '.github/workflows/policy-lab-submission-assets.yml'
   pull_request:
     branches: [main]
     paths:

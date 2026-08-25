@@ -62,8 +62,18 @@ if (!submission.non_claims.some((claim) => claim.includes('R4'))) fail('R4 non-c
 if (!submission.non_claims.some((claim) => claim.includes('owner/operator'))) fail('owner/operator non-claim missing');
 if (!submission.non_claims.some((claim) => claim.includes('currency'))) fail('currency/stablecoin non-claim missing');
 
-// Frozen route doctrine: packaging may help some routes but must not manufacture fit.
-eq(submission.route_posture.innoserve_adiai_2026.action, 'FIRE_PACKAGING', 'InnoServe action');
+// Current official-rule overrides take precedence over stale synthetic route assumptions.
+eq(submission.verified_opportunities.innoserve_2026.verified_date, '2026-08-25', 'InnoServe verification date');
+eq(submission.verified_opportunities.innoserve_2026.registration_deadline, '2026-10-05T16:00:00+08:00', 'InnoServe deadline');
+eq(submission.verified_opportunities.innoserve_2026.max_categories_per_team, 2, 'InnoServe maximum categories');
+eq(submission.route_posture.innoserve_ip_2026.action, 'FIRE_PRIMARY', 'InnoServe IP action');
+eq(submission.route_posture.innoserve_ic_2026.action, 'FIRE_SECONDARY', 'InnoServe IC action');
+eq(submission.route_posture.innoserve_adiai_2026.action, 'DO_NOT_PURSUE_CURRENT', 'InnoServe ADIAI action');
+if (!submission.route_posture.innoserve_adiai_2026.reason.includes('AI application')) {
+  fail('InnoServe ADIAI refusal must preserve the official AI-application fit reason');
+}
+
+// Broader frozen route doctrine: packaging may help some routes but must not manufacture fit.
 eq(submission.route_posture.iii_ai_innovation_2026.action, 'CONDITIONAL', 'III AI action');
 eq(submission.route_posture.nstc_research_entrepreneurship.action, 'HOLD', 'NSTC action');
 eq(submission.route_posture.taai_2026.action, 'DO_NOT_PURSUE_CURRENT', 'TAAI action');
@@ -75,3 +85,4 @@ console.log(`  open policy: ${checkpoint.decisions.open.result} / ${checkpoint.d
 console.log(`  pilot policy: ${checkpoint.decisions.pilot.result}`);
 console.log(`  settlement: ${checkpoint.settlement.result} / ${checkpoint.settlement.shortfall_quantity} kWh shortfall`);
 console.log(`  boundaries: ${checkpoint.boundaries.R1} / ${checkpoint.boundaries.R2} / ${checkpoint.boundaries.R3} / ${checkpoint.boundaries.R4}`);
+console.log(`  InnoServe: IP=${submission.route_posture.innoserve_ip_2026.action}, IC=${submission.route_posture.innoserve_ic_2026.action}, ADIAI=${submission.route_posture.innoserve_adiai_2026.action}`);
