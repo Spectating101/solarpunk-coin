@@ -75,9 +75,10 @@ async function main() {
     }
   }
 
+  const securityLower = docs.security.toLowerCase();
   if (!docs.security.includes('Do **not** publish exploit details')) fail('security policy lacks sensitive-reporting warning');
   if (!docs.security.includes('CURRENT_SURFACE.json')) fail('security policy is not scoped to current machine surface');
-  if (!docs.security.includes('no fixed response-time SLA')) fail('security policy must not imply an unsupported SLA');
+  if (!securityLower.includes('no fixed response-time sla')) fail('security policy must not imply an unsupported SLA');
 
   if (!docs.code_of_conduct.includes('harassment')) fail('code of conduct lacks harassment protection');
   if (!docs.code_of_conduct.includes('not designed as a service for children')) fail('code of conduct lacks child-safety scope statement');
