@@ -1,113 +1,132 @@
-# Global AI Finance 2026 — Reviewer / Poster Q&A
+# Global AI Finance 2026 — Reviewer Q&A (RC4)
 
-Answers here are intentionally short enough to use in a poster session. Longer discussion should point back to the claim ledger and public artifacts rather than improvising stronger claims.
+These are short research answers for discussion, not marketing scripts.
 
-## 1. What problem are you solving?
+## What is the research question?
 
-Financial systems often depend on external evidence, but evidence verification, policy authorization, quantity, and settlement are different questions. Policy Lab makes those transitions explicit and reproducible so a downstream financial decision cannot quietly claim more than the upstream evidence supports.
+Once external evidence is available, how should a financial decision distinguish four things: what the source evidence supports, whether a policy accepts it, how much underlying quantity it can justify before valuation, and whether the resulting obligation settles?
 
-## 2. Is this just a rules engine?
+## Why is this a finance question rather than ordinary data governance?
 
-Not exactly. General policy engines already exist and are relevant prior art. Policy Lab’s research object is the **composition** of evidence assurance, policy admission, quantity ceilings, settlement, and cross-object lineage. A rule engine can decide allow/deny; Policy Lab additionally preserves what evidence was used, how much quantity was supported, which ceiling bound, and what later settlement did.
+Because the downstream consequences are financial: admission of a claim, the quantity the claim is allowed to carry, and settlement of the obligation. The evidence layer constrains those consequences but does not by itself determine them.
 
-## 3. What is actually novel?
+## What exactly is 33.066?
 
-The bounded claim is a non-promotion architecture rather than any one primitive. Downstream operations cannot silently strengthen source assurance; admission does not imply arbitrary quantity; settlement does not rewrite admission; material evidence/policy changes change decision identity; receipts and assessments must agree with the objects they summarize.
+It is a **derived physical surplus quantity** in kWh for the selected seven-day case. It is not a price or market valuation.
 
-Do not claim that policy-as-code, credentials, hashing, reserve attestations, or machine-readable contracts are individually novel.
+For each half-hour:
 
-## 4. Why is this a finance problem rather than just data governance?
+`surplus = max(PV generation - general load - controlled load, 0)`
 
-Because the downstream decision is financial: whether evidence can authorize a claim, how much quantity that claim may carry, and whether its obligation can settle. The same discipline is relevant to collateral, reserves, tokenized real-world assets, energy/environmental certificates, and insurance triggers.
+The accepted interval surplus is summed across 336 intervals to 33.066 kWh.
 
-## 5. Why use an energy case?
+## Is 33.066 directly metered export?
 
-Energy-linked claims give the workbench a concrete setting in which source assurance, measured quantity, modeled context, policy limits, and settlement can be kept distinct. Energy is the worked domain, not a claim that Policy Lab is only an energy product.
+No. The Ausgrid dataset provides gross PV generation and consumption channels. The workbench derives surplus conservatively as generation minus general and controlled load, floored at zero. We explicitly do not call it a metered export channel.
 
-## 6. Why should I trust 33.066 kWh?
+## Why turn kWh into “claim units” at all?
 
-Trust it only as the deterministic output of the pinned evidence object and declared open policy. The archive and evidence identities are pinned, and the case can be reproduced. We do not ask the reviewer to treat 33.066 as authenticated operator truth, legal entitlement, or market value.
+Only to exercise the decision architecture. In the open research policy, one experimental energy-claim unit maps one-for-one to one kWh of supported physical quantity. This happens **before monetary valuation**. The experiment does not set a price, exchange rate, legal entitlement, or fair value.
 
-## 7. Why call the evidence L0 if the dataset is public?
+## Why is the evidence L0 if Ausgrid published the underlying dataset?
 
-Because public availability and hashing establish availability/integrity properties, not authenticated custody or source-holder confirmation for this specific research case. The workbench deliberately refuses that promotion.
+Because the research copy is public and reproducibly pinned, but this specific Policy Lab case does not have source-holder-confirmed custody, an operator cryptographic signature, or external corroboration. Public availability and hashing are useful integrity properties; they are not the same thing as authenticated custody.
 
-## 8. Why does the same evidence produce two different outcomes?
+## Are the two policies arbitrary?
 
-Because policy is explicit rather than hidden. The open research policy accepts L0 evidence and becomes evidence-capacity-bound. The stricter pilot policy requires signed evidence and stronger provenance, so the same evidence is blocked. The evidence hash itself does not change.
+They are deliberately researcher-declared comparison policies. That is part of the experiment, not something hidden. The open configuration asks whether low-assurance evidence can pass basic gates; the stricter configuration adds signed evidence and L2 provenance. Neither is claimed to be economically optimal, legally correct, or institutionally adopted.
 
-## 9. Does that mean policy is arbitrary?
+## Then what does the policy comparison prove?
 
-Policy choices are normative/institutional inputs. Policy Lab does not prove a chosen policy is optimal. It makes the policy version, rules, binding consequence, and decision identity explicit so those choices can be compared and challenged.
+Only a bounded sensitivity result: with the evidence object held fixed, changing the admissibility requirements changes the financial consequence. Under the open policy the evidence-supported quantity binds at 33.066. Under the stricter policy the same unsigned L0 evidence is blocked before quantity is authorised.
 
-## 10. Why is admission separate from quantity?
+## Why not just call this a policy engine?
 
-Passing a gate answers “may this case proceed?” It does not answer “how much?” Policy Lab evaluates quantity ceilings separately so an admitted case cannot inherit an arbitrary requested amount.
+Policy engines already exist. Policy Lab uses explicit policies but studies the surrounding composition: source assurance before the policy decision, physical quantity after admission, and settlement after quantity. The research question is at those handoffs, not the existence of if/then rules.
 
-## 11. Why is settlement separate?
+## How is this different from an oracle?
 
-A claim can be valid under its evidence and policy yet still encounter insufficient settlement capacity. Keeping settlement separate prevents a later operational failure from rewriting what evidence or policy originally justified.
+Oracle research studies how external information gets into a smart-contract system and the trust/manipulation problem at that boundary. This experiment starts from an available evidence object and asks what happens **afterward**: assurance, admissibility, supported quantity, and settlement.
 
-## 12. Is the 40% settlement result empirical?
+## How is this different from verifiable credentials?
 
-No. It is a declared stress scenario used to demonstrate the separation. It is not an estimated probability of default, observed redemption event, or legally enforceable delivery test.
+W3C VC already makes an important distinction: technical verifiability does not itself establish that the underlying claims are true or should be relied upon. Policy Lab treats a resulting assurance state as an input to a separate financial-policy and quantity decision.
 
-## 13. Is this a stablecoin or cryptocurrency?
+## How is this different from Open Policy Agent?
 
-No current submission claim is that Policy Lab is a stablecoin, currency, or monetary system. Historical blockchain components exist in the repository, but the current research workbench studies evidence-backed financial claims and their constraints. Monetary performance remains untested.
+OPA is general policy-as-code infrastructure and already decouples policy decisions from application logic. Policy Lab is not claiming to invent that. The work studies how evidence assurance, a policy decision, a separately calculated supported quantity, and later settlement fit together in a financial-claim workflow.
 
-## 14. Is this using AI?
+## How is this different from ACTUS?
 
-The present mechanism is deterministic and does not delegate financial authority to an LLM. The conference accepts FinTech topics beyond AI. We intentionally do not add an AI wrapper merely to fit the event title.
+ACTUS provides algorithmic financial-contract semantics and separates known contract terms/current risk factors from uncertain future conditions. Policy Lab sits further upstream in this case: it asks how an external evidence object becomes admissible and how much underlying physical quantity is allowed to enter a claim before valuation/contract settlement.
 
-## 15. Could AI be used later?
+## How is this different from Proof of Reserve?
 
-Potentially for evidence discovery, explanation, or assistance, but any AI-generated interpretation would need to remain downstream of explicit evidence and authorization controls. That is future work, not part of the current result.
+Proof-of-reserve infrastructure already shows that external reserve evidence can gate minting or trigger circuit breakers. That is relevant prior art, not something we claim to invent. RC4 asks whether a more general evidence → admission → physical quantity → settlement composition can be made explicit and reproducible.
 
-## 16. How is this different from an oracle?
+## What is actually novel?
 
-An oracle can supply data to a financial system. Policy Lab focuses on what happens **after data is available**: what assurance is assigned, which policy admits it, how much it supports, how settlement behaves, and whether the resulting objects remain reproducible and non-promoting.
+The narrow claim is the executable **composition and experiment**, not any primitive. The fixed-evidence case represents source assurance, policy admission, supported physical quantity and settlement as different states, then varies policy and settlement while keeping the evidence object fixed.
 
-## 17. How is this different from verifiable credentials?
+If equivalent prior work already provides the same composition and semantics, the novelty claim should be narrowed.
 
-Credentials can make provenance/signature relationships verifiable. They do not by themselves determine whether a verifier’s financial policy should accept the claim or how much quantity to authorize. Policy Lab treats credential/evidence assurance as an upstream input rather than the full decision.
+## Why use the Ausgrid dataset?
 
-## 18. How is this different from Proof of Reserve?
+It gives a public outside-data case with half-hour PV generation and consumption channels, so the quantity calculation can be inspected rather than fabricated as a synthetic fixture. The associated Ratnam et al. dataset paper provides the empirical source context.
 
-Proof-of-reserve systems can expose reserve data and sometimes gate minting. Policy Lab’s narrower research claim is a general compositional discipline across evidence assurance, policy admission, quantity ceilings, settlement, and reproducible identities. It is not a replacement for reserve attestation.
+## Why should I trust the 33.066 calculation?
 
-## 19. Is one Ausgrid case enough validation?
+Trust it as a reproducible calculation on the pinned research case, not as certified operator truth. The source archive and evidence object are cryptographically pinned, the derivation is explicit, and the case is rebuilt by CI. Source assurance nevertheless remains L0.
 
-No. It is one outside-data checkpoint used to move beyond purely controlled fixtures. It demonstrates the mechanism on pinned external public data but does not establish field-wide validity, operator adoption, or universal policy suitability.
+## Why is admission separate from quantity?
 
-## 20. What would count as the next meaningful validation?
+Passing an admissibility rule answers “can this evidence support this kind of claim under this policy?” It does not logically answer “how much?” Quantity is therefore evaluated separately against the applicable ceilings.
 
-Examples include:
-- attributable source/operator evidence with stronger assurance;
-- independent reproduction by another researcher;
-- application to a second domain with genuinely different constraint semantics;
-- institutional review of policy choices;
-- empirical evidence on uncertainty pricing or settlement behavior.
+## Why is settlement separate?
 
-## 21. What can fail closed?
+A claim can be admissible and bounded but still fail operationally at settlement. The 40% stress demonstrates that later failure without rewriting the earlier evidence or policy decision.
 
-The current verifier rejects stale/tampered identities and cross-object disagreement. Evidence capability changes alter/violate evidence identity; decision-bound claim quantity comes from the admitted maximum rather than a caller-supplied override; assessment/package checks preserve agreement across evidence, policy, decision, and settlement objects.
+## Is the 40% settlement result empirical?
 
-## 22. What are your biggest limitations?
+No. It is a declared sensitivity/stress scenario. It is not an estimated default probability, observed redemption event, or proof of enforceable delivery.
 
-- public case remains L0;
-- no owner/operator confirmation;
-- derived eligible surplus is not direct proof of certified export;
-- policy thresholds are not economically optimized;
-- settlement is modeled stress, not legal redemption;
-- governance and legal authority are not established by the current case;
-- R4 monetary performance is untested;
-- one outside-data case is not general validation.
+## Why 40%?
 
-## 23. What would falsify your own framing?
+It is a deliberately simple stress point chosen to make the separation visible. RC4 makes no inference from the specific 40% value about real settlement probabilities.
 
-If existing systems already provide the same explicit non-promotion composition with equivalent evidence/authorization/quantity/settlement separation and reproducible cross-object semantics, the novelty claim should be narrowed. If reviewers cannot distinguish the contribution from ordinary policy-as-code after seeing the architecture, that is evidence the research framing needs work.
+## Does the work value an energy asset?
 
-## 24. What do you want from this poster session?
+No. Pricing is downstream of the current experiment. The work only bounds the physical quantity that the evidence/policy configuration supports. Valuation would require additional assumptions about price, uncertainty, legal rights and market structure.
 
-Criticism on whether the separation is useful, which existing systems already solve parts of it, and which outside evidence/institutional cases would most strongly test the architecture. The poster is explicitly work in progress rather than a claim of completed market validation.
+## Is this a stablecoin or cryptocurrency paper?
+
+No. Historical blockchain components exist in the broader repository, but this submission does not claim a currency, stablecoin, legal tender, monetary adoption, or validated token system.
+
+## Is it an AI paper?
+
+No AI authority is needed for the mechanism. The conference accepts broader FinTech work. We do not add an LLM merely to match the conference title.
+
+## Is one public case enough validation?
+
+No. It is enough for a work-in-progress methodological demonstration, not enough for general field validity, institutional validation, or economic calibration.
+
+## What would be the strongest next test?
+
+Any of the following would materially strengthen the work:
+- independent reproduction;
+- authenticated source/operator evidence at a higher assurance tier;
+- institutional review/calibration of admission and quantity policy;
+- a second domain whose evidence and settlement logic differ from energy;
+- observed settlement obligations;
+- empirical valuation/uncertainty work downstream of the physical-quantity stage.
+
+## What would falsify or weaken the paper's framing?
+
+- finding prior systems with the same explicit evidence/admission/quantity/settlement composition and equivalent reproducibility;
+- discovering that the 33.066 derivation is not reproducible from the pinned case;
+- inability to distinguish the result from ordinary allow/deny policy evaluation;
+- evidence that the proposed separation has no useful consequence in real institutional decisions.
+
+## What is the current strongest limitation?
+
+External validity. The mechanism is highly inspectable, but the outside-data case remains L0, the policies are researcher-declared, and settlement is a stress scenario. That is why the submission is a work-in-progress poster rather than a claim of deployed financial validation.

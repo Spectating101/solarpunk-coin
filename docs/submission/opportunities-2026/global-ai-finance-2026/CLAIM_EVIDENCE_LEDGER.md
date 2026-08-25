@@ -1,225 +1,202 @@
-# Global AI Finance 2026 — Claim / Evidence Ledger
+# Global AI Finance 2026 — RC4 Claim / Evidence Ledger
 
-**Purpose:** bind every material outward claim to inspectable evidence and explicitly prohibit stronger inferences.
+This ledger is internal. It exists so the outward abstract can read like a normal research submission without losing claim discipline.
 
-Canonical machine checkpoint: `frontend/src/data/publicEvidenceCheckpoint.js`.
+Canonical machine checkpoint: `frontend/src/data/publicEvidenceCheckpoint.js`  
+Canonical external-case builder: `scripts/external_case_001p_ausgrid.mjs`  
+Canonical case policies: `packages/constraint-core/src/casePolicies.js`
 
-## Frozen evidence identity
+## Frozen case
 
 - case: `PUB-AUSGRID-001P`
-- publisher label: Ausgrid
-- dataset label: Solar Home Electricity Data
-- frozen mirror commit: `ddb96f511059a410bfb3ea61c32e7def0d9c88f0`
+- dataset label: Ausgrid, *Solar Home Electricity Data*
+- selected window: 2012-07-01 through 2012-07-07
+- selected intervals: 336 half-hour intervals
 - archive SHA-256: `6949ffee7ef8e2260f229f8a7e3b992390187facaaf023bb933b811a11cd1a11`
-- archive bytes: `14973763`
-- selected intervals: `336`
-- selected window: `2012-07-01` through `2012-07-07`
 - evidence hash: `ac0bc483f3da8d90c4b9281b46abdbc81177a9338525039bd0e346be12a1d93b`
-- actual assurance: `L0`
-- eligible surplus: `33.066 kWh`
+- assurance: L0
+- derived eligible surplus: 33.066 kWh
 
-## Claim ledger
+## RC4-01 — the research problem is the handoff between existing mechanisms
 
-### GAF-01 — external facts do not automatically determine financial authority
+**Safe outward claim**
 
-**Outward wording**
+Oracle, credential, policy-engine, financial-contract, and proof-of-reserve systems already address important parts of data-dependent finance. The research question is what happens at the handoff from external evidence to admissibility, supported quantity, and settlement.
 
-> Establishing that a data object exists—or even that it is cryptographically intact—does not by itself determine whether it is sufficient for a financial use, how much quantity it can justify, or whether the resulting obligation can settle.
+**Prior-art basis**
 
-**Evidence / basis**
+- Eskandari et al. (2021): oracle trust models and manipulation risks;
+- W3C VC 2.0: technical verifiability does not itself make claims true; verifier policy governs reliance;
+- Open Policy Agent: general policy-as-code evaluation;
+- ACTUS: algorithmic financial-contract terms/events with separate risk factors;
+- Chainlink Proof of Reserve: reserve feeds can gate minting/circuit-breaker behavior.
 
-- Policy Lab architecture implements separate evidence, admission, quantity, and settlement stages.
-- Controlled and public cases demonstrate different outcomes across those stages.
+**Do not claim**
 
-**Allowed inference**
+- Policy Lab invented oracles, credentials, policy-as-code, proof of reserve, deterministic rules, or machine-readable contracts;
+- no prior system has ever separated these concepts;
+- the literature proves Policy Lab is novel.
 
-- the research problem is separation of logically distinct decisions.
+## RC4-02 — Policy Lab is the method, not the research question
 
-**Prohibited inference**
+**Safe outward claim**
 
-- all real financial systems currently collapse these stages;
-- Policy Lab is the first system ever to separate them.
+Policy Lab is used as an executable method for representing source assurance, policy admission, supported quantity, and settlement as separate states under pinned inputs.
 
----
+**Evidence**
 
-### GAF-02 — Policy Lab is executable and deterministic
+- case-policy engine and deterministic tests;
+- public checkpoint with separate open/pilot decisions and settlement object;
+- stable evidence and decision identities;
+- closed-world reproduction and package checks.
 
-**Outward wording**
+**Do not claim**
 
-> Policy Lab is an executable research workbench whose case, evidence, policy, calculations, decisions, assessments, and reproduction artifacts have stable identities.
+- deterministic execution proves economic correctness;
+- stable hashes prove physical source truth;
+- the implementation itself is sufficient validation.
 
-**Evidence / basis**
+## RC4-03 — 33.066 kWh is a derived physical quantity, not a price
 
-- deterministic constraint core and tests;
-- public checkpoint decision IDs;
-- capsule verification;
-- assessment ID;
-- byte-identical package/report rebuild in the public-case workflow.
+**Exact derivation**
 
-**Allowed inference**
+For each half-hour interval in the selected case:
 
-- a declared case can be replayed and compared under pinned inputs.
+`derived_surplus_kwh = max(GG - (GC + CL), 0)`
 
-**Prohibited inference**
+where:
+- `GG` = observed gross solar generation channel;
+- `GC` = observed general-consumption channel;
+- `CL` = observed controlled-load channel when present.
 
-- determinism proves the policy is economically correct;
-- stable identity proves the source data is physically true.
+The external-case builder performs this calculation per interval and sums the accepted interval surplus. The selected seven-day case totals **33.066 kWh**.
 
----
+**Safe outward wording**
 
-### GAF-03 — public case remains L0
+> The worked case derives a conservative 33.066 kWh surplus from gross PV generation minus general and controlled load, floored at zero per half-hour interval.
 
-**Outward wording**
+**Important interpretation**
 
-> The pinned public Ausgrid case is retained at L0 assurance.
+- it is a **physical evidence-supported quantity**;
+- under the open research policy, one experimental `ENERGY_CLAIM_UNIT` maps one-for-one to one kWh of that underlying quantity;
+- it is **not** a monetary price, market value, discount-adjusted valuation, legal entitlement, or direct metered export channel.
 
-**Evidence / basis**
+**Do not claim**
 
-- checkpoint `evidence.assurance = L0`.
+- `33.066 kWh` is observed exported energy;
+- `33.066` is an asset price or fair value;
+- the one-for-one research mapping is an economically justified exchange rate.
 
-**Allowed inference**
+## RC4-04 — public availability does not upgrade source assurance
 
-- public availability and hashing do not promote source assurance.
+**Safe outward claim**
 
-**Prohibited inference**
+The case remains at the workbench's lowest assurance tier, L0, because the research copy lacks source-holder-confirmed custody, a cryptographic operator signature, and external corroboration.
+
+**Evidence**
+
+- `evidence.assurance = L0`;
+- external-case builder explicitly sets `signed=false`, `operator_signed=false`, `cryptographically_verified=false`, `external_corroboration=false`;
+- builder warning: frozen mirror bytes do not prove source-holder custody.
+
+**Do not claim**
 
 - Ausgrid authenticated this Policy Lab case;
-- the source holder confirmed custody;
-- meter measurements were independently certified.
+- hashing or public availability upgrades the source to operator-verified evidence;
+- the half-hour readings were independently certified for this research use.
 
----
+## RC4-05 — the policy comparison is a sensitivity experiment, not normative validation
 
-### GAF-04 — open policy admits 33.066 kWh
+**Open research policy** — `LAB-CASE-OPEN-004`
+- admission: positive surplus + zero blockers;
+- quantity ceilings: evidence-backed capacity, resource-context capacity, absolute cap;
+- result on fixed public evidence: admitted up to 33.066;
+- evidence-backed capacity binds.
 
-**Outward wording**
+**Pilot research policy** — `ENERGY-CASE-PILOT-005`
+- adds signed-evidence requirement;
+- adds minimum provenance L2;
+- result on the same L0 evidence: blocked;
+- blocking rules: signed evidence + minimum provenance.
 
-> Under the open research policy, the case is `ADMIT_WITH_LIMIT` at 33.066 kWh, with evidence-backed capacity binding.
+**Safe outward wording**
 
-**Evidence / basis**
+> The policies are researcher-declared comparison policies used to test how evidence requirements change the result while the evidence object is held fixed.
 
-- policy: `LAB-CASE-OPEN-004`
-- decision ID: `913bde9848571e905873510ae2e11bd7b8ed4489d828e2605dca038dc3002a1a`
-- admitted maximum: `33.066`
-- binding constraint: `EVIDENCE_BACKED_CAPACITY`
+**Do not claim**
 
-**Allowed inference**
+- either policy is empirically calibrated, institutionally endorsed, legally correct, economically optimal, or production-ready;
+- the stricter policy is necessarily better;
+- the open policy is a recommendation for live issuance.
 
-- under that exact policy and evidence object, the deterministic maximum is 33.066 kWh.
+## RC4-06 — the policy result changes while evidence identity is fixed
 
-**Prohibited inference**
+**Evidence**
 
-- 33.066 kWh is a market valuation;
-- 33.066 kWh is legally issuable;
-- the open policy is normatively or economically optimal.
+- open decision ID: `913bde9848571e905873510ae2e11bd7b8ed4489d828e2605dca038dc3002a1a`
+- pilot decision ID: `96bc8edae69b3f27e6261ffcfb6f5a347b3b0a1a750abc81ec414e66b5a6e7d2`
+- evidence hash is unchanged across both evaluations.
 
----
+**Safe inference**
 
-### GAF-05 — same evidence is blocked by the pilot policy
+The financial consequence in the executable model can change because the explicit admissibility rule changes, without claiming that the evidence itself has become stronger or weaker.
 
-**Outward wording**
+## RC4-07 — settlement is a separate stress stage
 
-> The identical evidence is blocked under the stricter pilot policy because signed evidence and stronger provenance are required.
+**Frozen stress**
+- admitted quantity: 33.066
+- declared settlement capacity fraction: 0.4
+- covered: 13.2264
+- shortfall: 19.8396
+- result: partial
 
-**Evidence / basis**
+**Safe outward wording**
 
-- policy: `ENERGY-CASE-PILOT-005`
-- decision ID: `96bc8edae69b3f27e6261ffcfb6f5a347b3b0a1a750abc81ec414e66b5a6e7d2`
-- result: `BLOCKED`
-- blocking rules: `SIGNED_EVIDENCE`, `MIN_PROVENANCE`
-- evidence hash unchanged.
+> Holding the admitted claim fixed and declaring settlement capacity at 40% produces 13.2264 covered and 19.8396 short.
 
-**Allowed inference**
+**Do not claim**
 
-- changing explicit policy can change financial consequence without rewriting evidence identity.
+- 40% is an estimated default probability;
+- this is observed redemption or physical delivery;
+- settlement stress proves legal enforceability.
 
-**Prohibited inference**
+## RC4-08 — methodological contribution and current limit
 
-- pilot policy has been adopted by an institution;
-- the pilot policy is validated by Ausgrid;
-- the stricter policy is necessarily better.
+**Safe contribution statement**
 
----
+The current contribution is a reproducible methodological demonstration that source assurance, admissibility, supported physical quantity, and settlement can be represented and tested as different states under a fixed external evidence object.
 
-### GAF-06 — settlement stress is partial
+**Current limits**
 
-**Outward wording**
+- one public outside-data case;
+- L0 assurance;
+- derived surplus, not directly metered export;
+- comparison policies are researcher-declared rather than externally calibrated;
+- settlement is hypothetical stress;
+- no legal issuance/redemption result;
+- no monetary valuation/adoption result;
+- no proof of general field validity.
 
-> At 40% declared settlement capacity, settlement is partial: 13.2264 kWh is covered and 19.8396 kWh remains short.
+## Reference boundary
 
-**Evidence / basis**
+The outward submission may cite the following as context, not as endorsement:
 
-- declared capacity fraction: `0.4`
-- result: `PARTIAL`
-- covered: `13.2264`
-- shortfall: `19.8396`
+1. Eskandari et al. (2021), oracle SoK;
+2. W3C Verifiable Credentials Data Model v2.0;
+3. Open Policy Agent documentation;
+4. ACTUS fundamentals;
+5. Chainlink Proof of Reserve documentation;
+6. Ratnam et al. (2017), Ausgrid residential load/PV dataset paper.
 
-**Allowed inference**
+## Language guard
 
-- settlement can fail independently of an upstream admitted decision.
-
-**Prohibited inference**
-
-- this is an observed legal redemption event;
-- 40% is an empirically estimated default probability;
-- the system has demonstrated enforceable physical delivery.
-
----
-
-### GAF-07 — verification and reproduction pass
-
-**Outward wording**
-
-> The public case has passing integrity, schema-validation, and closed-world decision-reproduction checks.
-
-**Evidence / basis**
-
-- capsule ID: `79b0b87b7c1af8cb3ea243f19740bb6ef47694f97618e2fc5451d0e30c5c4256`
-- assessment ID: `088067800c192a0d6854cc4a70f068f3590d4fc658df3622370bfcc7974e56dc`
-- integrity: `PASS`
-- schema validation: `PASS`
-- decision reproduction: `PASS`
-
-**Allowed inference**
-
-- the packaged research case is internally reproducible under its declared artifacts.
-
-**Prohibited inference**
-
-- reproduction proves external source truth;
-- reproduction constitutes independent institutional validation.
-
----
-
-### GAF-08 — research boundaries remain open
-
-**Outward wording**
-
-> The case does not establish authenticated operator custody, certified meter truth, legal issuance authority, enforceable redemption, production readiness, or monetary adoption.
-
-**Evidence / basis**
-
-- checkpoint non-claims;
-- R1 `NOT_ASSESSED`;
-- R2 `PARTIAL`;
-- R3 `PARTIAL`;
-- R4 `UNTESTED`.
-
-**Allowed inference**
-
-- the work is a bounded mechanism/research demonstration.
-
-**Prohibited inference**
-
-- currency, stablecoin, adoption, reserves, legal tender, production system, or validated monetary system.
-
-## Mandatory language substitutions
-
-| Never say | Use instead |
+| Avoid | Use instead |
 |---|---|
-| "Ausgrid validated Policy Lab" | "Policy Lab evaluates a pinned public Ausgrid-derived dataset" |
-| "verified energy production" | "bounded evidence object retained at L0 assurance" |
-| "the system determines the correct value" | "the system computes the maximum permitted by the declared evidence and policy" |
-| "settlement proves redemption" | "settlement is a declared stress stage in the current research case" |
-| "energy-backed currency" | "evidence-backed financial claim" |
-| "real-world pilot" | "outside-data research checkpoint" |
-| "independent validation" | "reproducible public case" unless a genuinely independent evaluator exists |
+| “Ausgrid validated Policy Lab” | “the experiment uses a pinned public copy of Ausgrid data” |
+| “verified energy production” | “public research evidence retained at L0” |
+| “metered export of 33.066 kWh” | “derived surplus of 33.066 kWh” |
+| “33.066 is the financial value” | “33.066 is the evidence-supported physical quantity before valuation” |
+| “validated pilot policy” | “researcher-declared comparison policy” |
+| “settlement proves redemption” | “40% declared settlement stress” |
+| “real-world pilot” | “outside-data research case” |
+| “independent validation” | “reproducible public case,” unless a genuinely independent evaluator exists |

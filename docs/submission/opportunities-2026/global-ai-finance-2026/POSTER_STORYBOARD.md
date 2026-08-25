@@ -1,171 +1,123 @@
-# Global AI Finance 2026 — Poster Storyboard
+# Global AI Finance 2026 — Poster Storyboard (RC4)
 
-This is the information architecture for the poster if accepted. It is deliberately visual and claim-bounded; it is not the extended abstract pasted onto a board.
+The poster should read as one research experiment, not a product surface.
 
-## Core poster sentence
+## Title
 
-> **Same evidence. Different explicit policy. Bounded quantity. Settlement can still fail.**
+**Evidence, Policy, and Settlement in Energy-Linked Financial Claims**
 
-## Recommended poster title
+## Research question
 
-**When Does Evidence Justify a Financial Claim?**  
-*An Auditable Constraint Workbench for Admission, Quantity, and Settlement*
+> Once external evidence is available, what does it support, will a policy admit it, how much underlying physical quantity can it justify before valuation, and what happens at settlement?
 
 ## Layout
 
-### Top strip — research question
+### Top-left — prior work and the missing handoff
 
-Large text:
+Keep this small. Five short rows, no literature wall.
 
-> **You have external evidence behind a financial claim. What, exactly, does that evidence justify?**
+| Existing mechanism | Already handles |
+|---|---|
+| Oracles | external data delivery / trust boundary |
+| Verifiable credentials | cryptographic verifiability / provenance relationships |
+| Policy engines | explicit rule evaluation |
+| ACTUS | financial-contract terms / event logic |
+| Proof of Reserve | reserve evidence linked to financial controls |
 
-Small supporting line:
+One line underneath:
 
-> Policy Lab separates evidence assurance, policy admission, quantity ceilings, and settlement so one stage cannot silently stand in for another.
+> **This experiment isolates the handoff: evidence assurance → policy admission → supported physical quantity → settlement.**
 
-### Left column — the missing seams
+### Center — the experiment
 
-One diagram only:
+This is the dominant visual.
 
 ```text
-EXTERNAL EVIDENCE
-       ↓
-   ASSURANCE
-       ↓
-VERSIONED POLICY
-       ↓
-    ADMISSION
-       ↓
-QUANTITY CEILINGS
-       ↓
-   SETTLEMENT
-       ↓
-RECEIPT / LINEAGE
+                 EVIDENCE HELD FIXED
+        Ausgrid public research case, 1–7 July 2012
+                 336 half-hour intervals
+                         L0
+                          │
+      per interval: max(PV - general load - controlled load, 0)
+                          │
+               DERIVED SURPLUS = 33.066 kWh
+              not price; not metered export
+                          │
+           ┌──────────────┴──────────────┐
+           │                             │
+   RESEARCH POLICY A              RESEARCH POLICY B
+      basic evidence gates          + signature + L2
+           │                             │
+   admit up to 33.066                  BLOCK
+           │
+    quantity stage only
+    1 unit = 1 kWh here
+    no monetary valuation
 ```
 
-Beside the arrows, four invariants:
+Small caption:
 
-- public / hashed ≠ stronger assurance;
-- admitted ≠ arbitrary quantity;
-- bounded claim ≠ settled claim;
-- receipt ≠ source truth.
+> Policies are researcher-declared sensitivity configurations, not calibrated or institutionally endorsed rules.
 
-### Center column — dominant experiment
-
-Header:
-
-> **One pinned evidence object, two policies**
-
-Evidence card:
+### Right — settlement sensitivity
 
 ```text
-PUB-AUSGRID-001P
-336 half-hour intervals
-1–7 July 2012
-actual assurance: L0
-eligible surplus: 33.066 kWh
-```
+ADMITTED PHYSICAL CLAIM: 33.066
+DECLARED SETTLEMENT CAPACITY: 40%
 
-Split into two branches:
-
-```text
-                 SAME EVIDENCE
-                      │
-          ┌───────────┴───────────┐
-          │                       │
-    OPEN POLICY              PILOT POLICY
- LAB-CASE-OPEN-004       ENERGY-CASE-PILOT-005
-          │                       │
- ADMIT WITH LIMIT              BLOCKED
-      33.066 kWh       SIGNED_EVIDENCE +
-          │             MIN_PROVENANCE
- EVIDENCE_BACKED_
-     CAPACITY binds
-```
-
-The evidence hash should appear once beneath the split, not repeated as decoration.
-
-Primary interpretive sentence:
-
-> **Policy changes the financial consequence without changing what the evidence itself proves.**
-
-### Right column — settlement and reproduction
-
-Settlement visual:
-
-```text
-ADMITTED: 33.066 kWh
-SETTLEMENT CAPACITY: 40%
-
-covered     13.2264
-shortfall   19.8396
-result      PARTIAL
+covered      13.2264 kWh
+shortfall    19.8396 kWh
 ```
 
 One sentence:
 
-> Settlement is a later failure layer; it does not rewrite the evidence or admission decision.
+> A later settlement shortfall does not rewrite the earlier evidence object or admission result.
 
-Then a compact reproduction block:
+### Bottom-left — what the case actually demonstrates
 
-- integrity: PASS
-- schema validation: PASS
-- decision reproduction: PASS
-- stable assessment identity
-- QR code → public reproduction/evaluator brief
+Use four bullets:
 
-### Bottom strip — limits / discussion
+- public + hashed evidence can remain low assurance;
+- the same evidence can pass one declared policy and fail another;
+- admission and supported quantity are different decisions;
+- an admitted bounded claim can still fail at settlement.
 
-Header:
+### Bottom-right — limitations / next test
 
-> **What this poster does not establish**
+**Not established**
+- authenticated Ausgrid custody for this research copy;
+- directly metered export;
+- legal issuance or redemption;
+- optimal policy thresholds;
+- monetary price/value;
+- market adoption/general validity.
 
-Use six short items, not prose:
+**Next useful evidence**
+- independent reproduction;
+- higher-assurance source evidence;
+- institutional policy review;
+- observed settlement.
 
-- authenticated operator custody;
-- certified meter truth;
-- legal issuance authority;
-- enforceable redemption;
-- optimal pricing/policy;
-- monetary adoption/performance.
+## 60-second walkthrough
 
-Then one discussion prompt:
+> This poster asks what happens after external evidence reaches a financial system. Existing work covers oracles, credentials, policy engines and contract semantics; I focus on the handoff between evidence, admission, supported quantity and settlement. The worked case uses 336 public Ausgrid half-hour intervals. Surplus is derived as PV generation minus general and controlled load, floored at zero, giving 33.066 kWh. That is a physical quantity, not a price or directly metered export. With the evidence held fixed, a basic research policy admits up to 33.066, while a stricter policy requiring signatures and L2 provenance blocks it. Then a separate 40% settlement stress leaves 19.8396 kWh short. The point is that those are different decisions, and the system can show exactly which one changes the outcome.
 
-> **Which evidence transition should be tested next: stronger source assurance, institutional policy review, uncertainty pricing, or real settlement obligations?**
+## Three-minute discussion path
 
-## 60-second poster walkthrough
+1. **Research gap (30 sec):** prior mechanisms already solve individual pieces; identify the handoff under study.
+2. **Data and derivation (40 sec):** 336 intervals; explain `max(PV - GC - CL, 0)`; state that 33.066 is derived physical surplus, not export or price.
+3. **Policy sensitivity (50 sec):** evidence held fixed; research A admits; research B blocks; policies are comparison configurations.
+4. **Settlement (30 sec):** 40% declared stress; show covered/shortfall.
+5. **Limits and next evidence (30 sec):** L0, no operator collaboration, no optimal policy/valuation/redemption claim.
 
-> The question is how external evidence becomes authority for a financial claim. Policy Lab keeps four stages separate: evidence assurance, policy admission, quantity, and settlement. Here is one pinned public Ausgrid-derived case with 336 intervals. We deliberately keep it at L0. Under an open policy it is admitted up to 33.066 kWh, with evidence-backed capacity binding. Under a stricter pilot policy, the exact same evidence is blocked because signed evidence and stronger provenance are required. Then, even for the admitted case, a 40% settlement stress produces a separate shortfall. So the contribution is not an energy currency; it is making those seams explicit and reproducible so one layer cannot silently promote another.
+## Presentation rules
 
-## Three-minute walkthrough
-
-1. **20 sec — problem:** external facts do not automatically answer authorization, quantity, or settlement.
-2. **30 sec — architecture:** point to the vertical evidence→settlement diagram.
-3. **60 sec — central case:** explain L0, open 33.066, pilot blocked.
-4. **30 sec — settlement:** show 13.2264 covered / 19.8396 short.
-5. **20 sec — reproducibility:** identities and PASS checks.
-6. **20 sec — limits:** explicitly state no operator/legal/money claim.
-
-## Live-demo policy
-
-A live website can be shown if convenient, but the poster must stand alone.
-
-Never make acceptance/presentation depend on:
-- network access;
-- GitHub availability;
-- a live API;
-- an LLM;
-- a fresh external data download.
-
-Static poster evidence is primary. The public workbench is supplementary.
-
-## Visual anti-slop rules
-
-- no generic fintech stock imagery;
-- no decorative blockchain network graphic;
-- no glowing AI brain;
-- no wall of feature cards;
-- no more than one architecture diagram;
-- make `33.066`, `BLOCKED`, and `19.8396 shortfall` the dominant visual facts;
-- limitations must be visible without opening a QR code;
-- use exact language from the claim ledger.
+- no product screenshots as the main visual;
+- no generic blockchain/AI imagery;
+- no internal enum names in large type;
+- do not headline “Policy Lab” above the research question;
+- make `33.066 kWh`, `BLOCK`, and `19.8396 kWh short` visually dominant;
+- place “derived surplus; not price; not directly metered export” immediately beside 33.066;
+- label policies as **research policy A/B** in the poster, with technical IDs available only in small reproduction notes;
+- references should be visible in a compact footer;
+- public site / QR code is supplementary, not required to understand or reproduce the argument.

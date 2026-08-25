@@ -5,78 +5,77 @@ import path from 'node:path';
 import { PUBLIC_EVIDENCE_CHECKPOINT } from '../frontend/src/data/publicEvidenceCheckpoint.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CAPSULE_DIR = path.join(
-  ROOT,
-  'docs/submission/opportunities-2026/global-ai-finance-2026',
-);
+const CAPSULE_DIR = path.join(ROOT, 'docs/submission/opportunities-2026/global-ai-finance-2026');
 
-const manifest = JSON.parse(
-  await readFile(path.join(CAPSULE_DIR, 'SUBMISSION_MANIFEST.json'), 'utf8'),
-);
-const abstract = await readFile(
-  path.join(CAPSULE_DIR, manifest.external_submission.artifact),
-  'utf8',
-);
+const manifest = JSON.parse(await readFile(path.join(CAPSULE_DIR, 'SUBMISSION_MANIFEST.json'), 'utf8'));
+const abstract = await readFile(path.join(CAPSULE_DIR, manifest.external_submission.artifact), 'utf8');
 
 assert.equal(manifest.schema, 'policy_lab.submission_capsule.v1');
 assert.equal(manifest.capsule_id, 'global-ai-finance-2026-poster');
+assert.equal(manifest.research_positioning_version, 'RC4');
 assert.ok(
-  ['SURPRISE_PROOFED', 'PORTAL_READY', 'SUBMITTED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN']
-    .includes(manifest.status),
+  ['SURPRISE_PROOFED', 'PORTAL_READY', 'SUBMITTED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'].includes(manifest.status),
   `unsupported capsule status ${manifest.status}`,
 );
 
-for (const artifact of manifest.capsule_artifacts) {
-  await access(path.join(CAPSULE_DIR, artifact));
-}
+for (const artifact of manifest.capsule_artifacts) await access(path.join(CAPSULE_DIR, artifact));
 
 const cp = PUBLIC_EVIDENCE_CHECKPOINT;
 const frozen = manifest.evidence_checkpoint;
-
 assert.equal(frozen.case_id, cp.case_id);
 assert.equal(frozen.archive_sha256, cp.source.archive_sha256);
 assert.equal(frozen.evidence_hash, cp.evidence.evidence_hash);
 assert.equal(frozen.assurance, cp.evidence.assurance);
 assert.equal(frozen.interval_count, cp.source.interval_count);
 assert.equal(frozen.eligible_surplus_kwh, cp.evidence.total_eligible_surplus_kwh);
-
 assert.equal(frozen.open_policy.policy_id, cp.decisions.open.policy_id);
 assert.equal(frozen.open_policy.decision_id, cp.decisions.open.decision_id);
 assert.equal(frozen.open_policy.result, cp.decisions.open.result);
 assert.equal(frozen.open_policy.admitted_maximum, cp.decisions.open.admitted_maximum);
-assert.equal(
-  frozen.open_policy.binding_constraint,
-  cp.decisions.open.binding_constraints[0],
-);
-
+assert.equal(frozen.open_policy.binding_constraint, cp.decisions.open.binding_constraints[0]);
 assert.equal(frozen.pilot_policy.policy_id, cp.decisions.pilot.policy_id);
 assert.equal(frozen.pilot_policy.decision_id, cp.decisions.pilot.decision_id);
 assert.equal(frozen.pilot_policy.result, cp.decisions.pilot.result);
 assert.deepEqual(frozen.pilot_policy.blocking_rules, [...cp.decisions.pilot.blocking_rules]);
-
 assert.equal(frozen.settlement.capacity_fraction, cp.settlement.declared_capacity_fraction);
 assert.equal(frozen.settlement.result, cp.settlement.result);
 assert.equal(frozen.settlement.covered_quantity, cp.settlement.covered_quantity);
 assert.equal(frozen.settlement.shortfall_quantity, cp.settlement.shortfall_quantity);
 assert.deepEqual(frozen.research_boundaries, { ...cp.boundaries });
 
-// The public abstract must preserve the evidence, but it should not be forced to
-// reproduce internal enum names or implementation jargon. Check human-readable
-// statements rather than leaking machine vocabulary into the prose.
 const requiredAbstractPatterns = [
   new RegExp(manifest.external_submission.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+  /oracle literature/i,
+  /Verifiable Credentials/i,
+  /policy-as-code/i,
+  /ACTUS/i,
+  /proof-of-reserve/i,
+  /Ratnam/i,
   /336 half-hour intervals/i,
-  /L0/i,
+  /lowest assurance tier.*L0/i,
+  /max\(PV generation.*general load.*controlled load.*0\)/i,
+  /derived surplus measure, not a directly metered export channel/i,
   /33\.066 kWh/i,
+  /not a monetary valuation/i,
+  /No monetary price is implied/i,
+  /researcher-declared comparison policies/i,
+  /empirically calibrated/i,
+  /institutionally endorsed/i,
+  /same evidence object is blocked/i,
+  /evidence identity is held fixed/i,
+  /40% of the declared quantity/i,
   /13\.2264 kWh/i,
   /19\.8396 kWh/i,
-  /open research policy/i,
-  /same evidence is blocked/i,
-  /settlement capacity at 40%/i,
+  /One public case is also not evidence of general field validity/i,
 ];
 for (const pattern of requiredAbstractPatterns) {
-  assert.match(abstract, pattern, `external abstract missing required human-readable fact: ${pattern}`);
+  assert.match(abstract, pattern, `RC4 abstract missing required research statement: ${pattern}`);
 }
+assert.match(
+  abstract,
+  /researcher-declared comparison policies rather than empirically calibrated or institutionally endorsed decision rules/i,
+  'RC4 must explicitly disclaim calibration and institutional endorsement of the comparison policies',
+);
 
 const antiSlopPatterns = [
   /rapidly evolving (?:fintech|financial|technology) landscape/i,
@@ -91,11 +90,8 @@ const antiSlopPatterns = [
   /unlock(?:s|ing) (?:new|the) potential/i,
   /seamless(?:ly)?/i,
 ];
-for (const pattern of antiSlopPatterns) {
-  assert.doesNotMatch(abstract, pattern, `anti-slop violation: ${pattern}`);
-}
+for (const pattern of antiSlopPatterns) assert.doesNotMatch(abstract, pattern, `anti-slop violation: ${pattern}`);
 
-// Internal enum tokens belong in the evidence ledger, not the outward prose.
 const implementationLeakPatterns = [
   /ADMIT_WITH_LIMIT/,
   /EVIDENCE_BACKED_CAPACITY/,
@@ -104,10 +100,10 @@ const implementationLeakPatterns = [
   /DecisionResult/,
   /cross-object lineage/i,
   /non-promotion semantics/i,
+  /LAB-CASE-OPEN-004/,
+  /ENERGY-CASE-PILOT-005/,
 ];
-for (const pattern of implementationLeakPatterns) {
-  assert.doesNotMatch(abstract, pattern, `implementation jargon leaked into outward abstract: ${pattern}`);
-}
+for (const pattern of implementationLeakPatterns) assert.doesNotMatch(abstract, pattern, `implementation jargon leaked into outward abstract: ${pattern}`);
 
 const dangerousClaimPatterns = [
   /Ausgrid (?:validated|verified|approved|endorsed) (?:Policy Lab|the system|this work)/i,
@@ -118,14 +114,20 @@ const dangerousClaimPatterns = [
   /(?:is|constitutes) (?:a )?(?:currency|stablecoin|legal tender)/i,
   /proves? (?:legal issuance|enforceable redemption|market adoption)/i,
   /production[- ]ready/i,
+  /33\.066(?:\s*kWh|\s*energy-claim units)?\s+(?:is|equals|represents)\s+(?:the\s+)?(?:market value|fair value|price)/i,
+  /33\.066(?:\s*kWh)?\s+(?:of\s+)?(?:metered|measured)\s+export/i,
+  /(?:validated|correct|optimal) (?:open|pilot|research) policy/i,
+  /institutionally endorsed (?:open|pilot|research) policy/i,
 ];
-for (const pattern of dangerousClaimPatterns) {
-  assert.doesNotMatch(abstract, pattern, `dangerous outward claim: ${pattern}`);
-}
+for (const pattern of dangerousClaimPatterns) assert.doesNotMatch(abstract, pattern, `dangerous outward claim: ${pattern}`);
 
+assert.match(manifest.research_positioning.quantity_interpretation, /not a monetary price|not a monetary/i);
+assert.match(manifest.research_positioning.surplus_derivation, /not directly metered export/i);
+assert.match(manifest.research_positioning.policy_status, /not empirically calibrated/i);
+assert.ok(Array.isArray(manifest.references) && manifest.references.length >= 6);
 assert.ok(Array.isArray(manifest.owner_only_fields) && manifest.owner_only_fields.length >= 5);
 assert.ok(Array.isArray(manifest.known_obligations) && manifest.known_obligations.length >= 3);
-assert.ok(Array.isArray(manifest.non_claims) && manifest.non_claims.length >= 8);
+assert.ok(Array.isArray(manifest.non_claims) && manifest.non_claims.length >= 10);
 assert.match(manifest.parallel_route_guard.rule, /Financial Cryptography|FC|simultaneous|overlap/i);
 
 const wordCount = abstract
@@ -133,13 +135,14 @@ const wordCount = abstract
   .trim()
   .split(/\s+/)
   .filter(Boolean).length;
-assert.ok(wordCount >= 300, `extended abstract unexpectedly short: ${wordCount} words`);
-assert.ok(wordCount <= 700, `extended abstract too long for a focused poster submission: ${wordCount} words`);
+assert.ok(wordCount >= 650, `RC4 extended abstract unexpectedly thin: ${wordCount} words`);
+assert.ok(wordCount <= 1300, `RC4 extended abstract too long for a focused poster submission: ${wordCount} words`);
 
-console.log('Global AI Finance submission pack: PASS');
+console.log('Global AI Finance RC4 submission pack: PASS');
 console.log(`status=${manifest.status}`);
 console.log(`title=${manifest.external_submission.title}`);
 console.log(`case=${frozen.case_id} assurance=${frozen.assurance}`);
+console.log(`derived_surplus=${frozen.eligible_surplus_kwh} kWh`);
 console.log(`open=${frozen.open_policy.result}/${frozen.open_policy.admitted_maximum}`);
 console.log(`pilot=${frozen.pilot_policy.result}`);
 console.log(`settlement=${frozen.settlement.result}/${frozen.settlement.shortfall_quantity} shortfall`);
