@@ -114,8 +114,8 @@ const dangerousClaimPatterns = [
   /(?:is|constitutes) (?:a )?(?:currency|stablecoin|legal tender)/i,
   /proves? (?:legal issuance|enforceable redemption|market adoption)/i,
   /production[- ]ready/i,
-  /33\.066[^\n.]{0,80}(?:market value|fair value|price)/i,
-  /(?:metered|measured) export[^\n.]{0,40}33\.066/i,
+  /33\.066(?:\s*kWh|\s*energy-claim units)?\s+(?:is|equals|represents)\s+(?:the\s+)?(?:market value|fair value|price)/i,
+  /33\.066(?:\s*kWh)?\s+(?:of\s+)?(?:metered|measured)\s+export/i,
   /(?:validated|correct|optimal) (?:open|pilot|research) policy/i,
   /institutionally endorsed (?:open|pilot|research) policy/i,
 ];
