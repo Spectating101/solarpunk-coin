@@ -9,6 +9,19 @@
 Official rules: https://innoserve.tca.org.tw/Rules/Detail?category=College  
 Official downloads: https://innoserve.tca.org.tw/Download
 
+## Packaging authority
+
+For the current submission state, read these first:
+
+1. [`PACKAGING_FREEZE.md`](./PACKAGING_FREEZE.md) — frozen route, candidate revision, Word/video packaging state, remaining human actions, and change control.
+2. [`SUBMISSION_MANIFEST.json`](./SUBMISSION_MANIFEST.json) — machine-readable package state and candidate hashes.
+3. [`ADVISOR_BRIEF.md`](./ADVISOR_BRIEF.md) — bounded one-page faculty-advisor handoff.
+4. [`IP_SYSTEM_OVERVIEW_DRAFT.md`](./IP_SYSTEM_OVERVIEW_DRAFT.md) — Chinese content master.
+5. [`IC_SYSTEM_OVERVIEW_DRAFT.md`](./IC_SYSTEM_OVERVIEW_DRAFT.md) — English content master.
+6. [`VIDEO_SCRIPT_EN.md`](./VIDEO_SCRIPT_EN.md) — three-minute English narration master.
+
+The Word candidates are generated artifacts rather than repository semantic authority. Rebuild them from the content masters if technical facts change.
+
 ## Route decision
 
 ### 1. Information Application (IP) — PRIMARY / FIRE
@@ -35,15 +48,11 @@ Final rubric:
 | System-document completeness | 15% |
 | Explanation / demonstration | 10% |
 
-Primary system-overview draft: [`IP_SYSTEM_OVERVIEW_DRAFT.md`](./IP_SYSTEM_OVERVIEW_DRAFT.md)
-
 ### 2. International Exchange — English (IC) — SECONDARY / FIRE
 
 A team may enter up to two competition categories, so IP + IC is permitted under the current rules.
 
 IC has broad ICT scope and no AI requirement. Application materials and live presentation are in English.
-
-Rubric:
 
 | Criterion | Weight |
 |---|---:|
@@ -54,15 +63,13 @@ Rubric:
 
 The current weakness is the 45% practicality criterion: Policy Lab has an outside-data checkpoint and complete workflow, but no owner/operator pilot or independent adoption evidence. The submission must answer practicality through clear workflows, feasible deployment and extensibility — not fabricated users.
 
-English system-overview draft: [`IC_SYSTEM_OVERVIEW_DRAFT.md`](./IC_SYSTEM_OVERVIEW_DRAFT.md)
-
 ### 3. Industry AI Innovation (ADIAI) — DO NOT PURSUE CURRENT
 
 The official 2026 ADIAI description asks teams to build AI application solutions and describe their AI techniques. Policy Lab's current contribution is deterministic constraint/verification machinery, not a native AI application.
 
 Do not bolt on an LLM merely to enter this track.
 
-## Proposed project titles
+## Project titles
 
 **Chinese:**
 
@@ -72,7 +79,7 @@ Do not bolt on an LLM merely to enter this track.
 
 > Policy Lab: Auditable Decisions for Evidence-Backed Financial Claims
 
-These should remain identical across the online registration form and the official system-overview templates.
+Keep these identical across the registration form, system-overview documents, video, and presentation.
 
 ## Official submission assets
 
@@ -90,6 +97,8 @@ Current rules require:
 
 For IP, the overview follows the Chinese Attachment 1-1 structure.  
 For IC, the overview follows English Attachment 1-2 and the project video must use **spoken English by a team member**, not AI/software-generated narration.
+
+Both overview candidates have now been formatted and rendered at **4 A4 pages**, leaving one page of safety margin under the official cap.
 
 ## Required overview sections
 
@@ -112,29 +121,33 @@ Both official templates use the same eight-section structure:
 | IP route fit | VERIFIED |
 | IC route fit | VERIFIED |
 | ADIAI refusal | VERIFIED |
-| Chinese IP overview content | DRAFT READY |
-| English IC overview content | DRAFT READY |
-| 3-minute English video script | DRAFT READY |
+| Chinese IP content master | READY |
+| English IC content master | READY |
+| official-format IP Word candidate | READY / 4 PAGES |
+| official-format IC Word candidate | READY / 4 PAGES |
+| 3-minute English narration | READY |
+| recording storyboard | READY |
+| advisor handoff brief | READY |
 | judge screenshots | CI-GENERATED |
 | live demo | PASS |
-| faculty advisor | REQUIRED / NOT YET RECORDED HERE |
-| consent form | REQUIRED |
-| student ID / enrollment proof | REQUIRED |
-| team photo | REQUIRED |
-| final Word formatting | OPEN |
-| final video recording/upload | OPEN |
-| online registration | OPEN |
+| faculty advisor | HUMAN ACTION REQUIRED |
+| final team identity | HUMAN ACTION REQUIRED |
+| consent form | HUMAN ACTION REQUIRED |
+| student ID / enrollment proof | HUMAN ACTION REQUIRED |
+| team photo | HUMAN ACTION REQUIRED |
+| final video recording/upload | HUMAN ACTION REQUIRED |
+| online registration | HUMAN ACTION REQUIRED |
 
-## Internal construction order
+## Remaining execution order
 
-1. Lock faculty advisor and team identity.
-2. Review the IP Chinese overview for school/advisor wording.
-3. Review the IC English overview and decide whether the second-category entry is worth the small extra effort.
-4. Convert approved text into the official Word templates without exceeding five pages.
-5. Record the three-minute video in English; use the live workbench and four CI-generated screenshots as visual support.
-6. Prepare consent, enrollment proof and 16:9 team photo.
-7. Upload video unlisted to YouTube.
-8. Complete online registration well before the official 2026-10-05 16:00 deadline.
+1. Send the advisor brief and lock one or two faculty advisors.
+2. Lock the final student team list.
+3. Decide whether to use the already-prepared IC second entry; current recommendation is **yes** unless the extra administration becomes material.
+4. Record the three-minute English video from the frozen storyboard and live demo.
+5. Prepare consent, enrollment proof and 16:9 team photo.
+6. Make only requested administrative/title wording edits to the Word candidates; do not change machine-bound technical facts casually.
+7. Upload the video as Unlisted and test it from a logged-out browser.
+8. Complete both registration entries by the internal 2026-09-30 target rather than using the official deadline as the working date.
 
 ## Submission boundary
 
@@ -147,4 +160,4 @@ Do not describe:
 - the receipt as physical delivery proof;
 - the system as a stablecoin or legal money;
 - current architecture directions as existing customers;
-- generated screenshots or competition entry as external validation.
+- generated screenshots, competition entry, or advisor support as external validation.
