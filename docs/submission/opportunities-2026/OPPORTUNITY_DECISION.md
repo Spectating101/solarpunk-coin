@@ -11,7 +11,7 @@ This file records the current hard decisions after a second-pass opportunity sca
 | Asia University FTSID 2026 | **BACKUP MANUSCRIPT FIRE** | 2026-09-30 | local FinTech/sustainability full-paper fallback; do not overlap FC |
 | Shih Hsin 2026 Finance International Conference | **LOW-COST BACKUP** | abstract 2026-09-17 | Taipei presentation fallback; do not duplicate FC |
 | SSI Fellowship 2027 | **FIRE** | 2026-10-05 | fellowship/network/£4k activity budget |
-| Digital Public Goods Registry | **REMEDIATE → FIRE** | rolling | independent standards-based public-good review |
+| Digital Public Goods Registry | **READY TO SUBMIT — EXTERNAL REVIEW PENDING** | rolling | independent standards-based public-good review |
 | JOSS | **PREPARE — DO NOT SUBMIT YET** | rolling | submit after external-impact/community-significance gate |
 | NLnet Restack | **CALL-GATED** | call 2026-09-03; deadline 2026-11-03 | hard FIRE/KILL after exact call + European-dimension test |
 | Bank of Cyprus FinTech Hackathon 7.0 | **KILL ON ECONOMICS** | Nov 27–29 | topic/eligibility pass; mandatory Cyprus travel fails current expected value |
@@ -105,21 +105,26 @@ Up to three international Fellows; £4,000 activity budget; application + six-mi
 
 Package: [`ssi-fellowship-2027/`](./ssi-fellowship-2027/)
 
-## REMEDIATE → FIRE — Digital Public Goods Registry
+## READY TO SUBMIT — Digital Public Goods Registry
 
 Official sources:
 - https://www.digitalpublicgoods.net/
 - https://github.com/DPGAlliance/dpg-standard
+- https://github.com/DPGAlliance/dpg-resources/blob/main/docs/dpg-review-policy.md
 
-Current repo audit finds the software/open-license/documentation/open-format side strong. Before nomination, close four small public-governance gaps:
-- dedicated `SECURITY.md`;
-- dedicated `PRIVACY.md`;
-- clear current ownership/governance statement around the historical SolarPunk copyright line;
-- DPG-facing public-interest/safety/SDG statement.
+The internal remediation tranche is complete on `main`:
+- `PRIVACY.md` is grounded in the browser-local/no-upload Evidence Lab;
+- `SECURITY.md` defines supported scope and sensitive reporting;
+- `GOVERNANCE.md` names current ownership and separates Yuan Ze affiliation from ownership/endorsement;
+- `CODE_OF_CONDUCT.md` covers contributor safety and moderation;
+- `PUBLIC_INTEREST.md` maps the bounded public-interest thesis primarily to SDG 16 without claiming measured institutional impact;
+- `CURRENT_SURFACE.json` machine-declares these governance artifacts;
+- `scripts/check_public_governance.mjs` tests material statements against current runtime/citation truth;
+- Current Surface Integrity passes with the governance checker enabled.
 
-Then run the official DPGA eligibility questionnaire and submit the exact scoped components that pass.
+The route is now **submission-ready internally**, but still **externally unrecognized**. Before pressing submit, re-check the live DPGA eligibility tool/questionnaire and ensure every answer points to evidence on the nominated public commit. DPGA then performs its own binary external review; do not call Policy Lab a Digital Public Good before that review succeeds.
 
-Package: [`digital-public-goods-registry/`](./digital-public-goods-registry/)
+Package: [`dpg-registry/DPG_APPLICATION_DRAFT.md`](./dpg-registry/DPG_APPLICATION_DRAFT.md)
 
 ## PREPARE — JOSS
 
@@ -150,7 +155,7 @@ Package: [`nlnet-restack/`](./nlnet-restack/)
 
 1. **Aug 31:** Global AI Finance poster.
 2. **Sep 17:** FC'27 short paper.
-3. **After the immediate paper package:** DPG documentation remediation + official eligibility questionnaire.
+3. **Rolling / now:** run the live DPGA eligibility questionnaire and submit the DPG application from the merged evidence ledger.
 4. **Sep 3:** Restack hard FIRE/KILL from published call.
 5. **Oct 5:** SSI Fellowship.
 6. **After external impact exists:** JOSS.
