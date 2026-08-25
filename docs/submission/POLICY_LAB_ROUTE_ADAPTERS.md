@@ -2,7 +2,7 @@
 
 **Purpose:** adapt one truthful project to different evaluation environments without changing the project to chase a score.
 
-Source basis: frozen Gauntlet Simulator v1.1 + current Policy Lab machine evidence.
+Source basis: frozen Gauntlet Simulator v1.1 + current Policy Lab machine evidence + current official opportunity rules where verified.
 
 ## Core rule
 
@@ -18,23 +18,57 @@ Packaging can improve clarity. It cannot create:
 - legal authority;
 - market adoption.
 
-## InnoServe ADIAI 2026
+Current official rules override stale synthetic route assumptions.
 
-### Current posture
+## InnoServe 2026 — verified 2026-08-25
 
-**FIRE — packaging is high leverage.**
+Official registration window: **2026-08-03 09:00 to 2026-10-05 16:00 (Taiwan time).** Master's and doctoral students are eligible. Each team may enter at most two competition categories, one group per category, and needs one or two faculty advisors.
 
-The frozen Gauntlet model rates the route `COMPETITIVE` and identifies packaging/demo clarity as unusually valuable relative to another core subsystem.
+### Primary route: Information Application (IP)
 
-### Lead pitch
+**FIRE — strongest current InnoServe fit.**
 
-> **Policy Lab is a practical accountability layer for evidence-backed financial decisions: it shows what external evidence can actually authorize, how much it can justify, and exactly why a stricter rule can block the same evidence.**
+Why:
 
-### 15-second problem
+- broad ICT innovation scope;
+- official examples explicitly include blockchain applications in finance and energy;
+- no artificial requirement to turn Policy Lab into an AI project;
+- preliminary scoring is **50% innovation / 50% extensibility**, which aligns well with Policy Lab's strongest current evidence;
+- final scoring broadens to innovation 30%, practicality 15%, stability 15%, extensibility 15%, documentation 15%, presentation 10%.
 
-> “Automated finance increasingly depends on external data, but the rule that converts data into financial authority is often hidden. That makes it easy to confuse available data with trustworthy evidence, admission with unlimited quantity, or a valid claim with guaranteed settlement.”
+Lead pitch:
 
-### Demo emphasis
+> **Policy Lab is an auditable accountability layer for evidence-backed financial decisions: it shows what external evidence can actually authorize, how much it can justify, which rule limits it, and what fails at settlement.**
+
+15-second problem:
+
+> “Financial systems increasingly depend on external data, but the rule that converts data into financial authority is often hidden. Policy Lab makes that conversion explicit, quantity-bounded and reproducible.”
+
+Preliminary-round strategy:
+
+**Innovation — 50%**
+
+- evidence ≠ authority ≠ quantity ≠ settlement;
+- blocking/binding rule attribution rather than opaque score;
+- deterministic receipts and portable assessment;
+- failure/non-promotion treated as first-class output.
+
+**Extensibility — 50%**
+
+- explicit schemas and versioned policies;
+- reusable constraint core rather than one hard-coded Ausgrid demo;
+- controlled case pack + outside-data checkpoint;
+- architecture can be applied where external evidence authorizes financial consequences without claiming those domains are already validated.
+
+Final-round additions if selected:
+
+- live demo clarity;
+- stable deterministic replay;
+- concrete user workflow;
+- documentation quality;
+- bounded practicality story without inventing adoption.
+
+Demo emphasis:
 
 1. outside Ausgrid checkpoint;
 2. L0 preserved;
@@ -43,22 +77,57 @@ The frozen Gauntlet model rates the route `COMPETITIVE` and identifies packaging
 5. 40% settlement shortfall;
 6. receipt/reproduction.
 
-### Map to likely final-stage criteria
-
-**Innovation:** explicit evidence → authority → quantity → settlement separation; deterministic binding attribution.
-
-**Practicality:** shows a concrete way to audit evidence-backed automated decisions; architecture can apply where external facts authorize financial consequences.
-
-**Technical quality:** deterministic core, typed schemas, versioned policies, outside-data CI, portable assessment, replay.
-
-**Presentation:** visually teach “same evidence / different policy / different consequence” before explaining internal ontology.
-
-### Avoid
+Avoid:
 
 - leading with R1–R4;
-- spending presentation time on historical SPK;
-- pretending there is an operator pilot;
-- manufacturing a hardware story because hardware demos are competitive.
+- presenting historical SPK as the product;
+- claiming a pilot;
+- adding AI solely for competition fit.
+
+### Secondary route: International Exchange — English (IC)
+
+**FIRE SECONDARY — attractive second-category entry.**
+
+The official scope is broad ICT innovation and does not require AI. All application materials and live presentation are in English.
+
+Scoring is:
+
+- practicality 45%;
+- innovation 30%;
+- English explanation/presentation 15%;
+- documentation completeness 10%.
+
+Lead pitch:
+
+> **Policy Lab makes the hidden conversion from external evidence to financial authority visible, testable and reproducible.**
+
+Why it is attractive:
+
+- the project already has a strong English-first technical/research narrative;
+- the same outside-data demo can be explained cleanly to an international panel;
+- entering IP + IC is permitted because they are different competition categories;
+- the English overview can be derived from the same machine-bound submission facts rather than maintained as a separate ontology.
+
+Main weakness:
+
+**Practicality is 45%.** Current owner/operator validation and adoption remain open. Answer this with concrete workflows, extensibility and the current outside-data case—not fabricated users.
+
+For IC, the three-minute project video must use team-member spoken English; software or AI-generated spoken narration is not allowed by the official rules.
+
+### InnoServe ADIAI
+
+**DO NOT PURSUE CURRENT.**
+
+The official 2026 track asks teams to develop AI application solutions and describe the AI techniques used. Current Policy Lab is a deterministic constraint and verification system; its strongest contribution does not depend on AI.
+
+Do not repair this semantic mismatch with:
+
+- a chatbot;
+- an LLM wrapper;
+- AI-generated policy authority;
+- a nominal model call that does not carry a real technical contribution.
+
+The old Gauntlet ADIAI simulation remains useful as historical synthetic analysis, but it is superseded for actual 2026 submission selection by the verified official rules.
 
 ## III AI Innovation Challenge 2026
 
@@ -225,7 +294,9 @@ No packaging work should be allocated here.
 
 | Route | Current action | Packaging value | Structural missing evidence |
 |---|---|---:|---|
-| InnoServe ADIAI | FIRE | High | external/field use helps but is not baseline |
+| InnoServe IP | FIRE PRIMARY | High | external/field use improves practicality later |
+| InnoServe IC | FIRE SECONDARY | High | 45% practicality exposes weak external validation |
+| InnoServe ADIAI | DO NOT PURSUE | None | native AI application fit |
 | III AI Challenge | CONDITIONAL | High only after AI gate | genuine AI contribution |
 | FinTech Taipei | CHEAP ONLY | Moderate | institutional/financial validation |
 | NSTC Entrepreneurship | HOLD | Low | commercialization carrier + validation + team path |
