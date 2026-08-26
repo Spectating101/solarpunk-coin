@@ -1,8 +1,8 @@
 {
   "schema": "policy_lab.submission_capsule.v1",
   "capsule_id": "global-ai-finance-2026-poster",
-  "status": "SURPRISE_PROOFED",
-  "research_positioning_version": "RC4",
+  "status": "PORTAL_READY",
+  "research_positioning_version": "RC5",
   "venue": {
     "name": "Global AI Finance Research Conference 2026",
     "submission_type": "work-in-progress poster",
@@ -15,6 +15,11 @@
   "external_submission": {
     "title": "Evidence, Policy, and Settlement in Energy-Linked Financial Claims",
     "artifact": "POSTER_EXTENDED_ABSTRACT.md",
+    "author": "Christopher Ongko",
+    "affiliation": "MS Program in Finance, College of Management, Yuan Ze University, Taoyuan, Taiwan",
+    "presenter": "Christopher Ongko",
+    "primary_topic": "Green FinTech",
+    "secondary_topic_if_allowed": "Blockchain and Cryptocurrencies",
     "keywords": [
       "FinTech",
       "energy-linked claims",
@@ -24,28 +29,27 @@
       "auditability",
       "settlement",
       "Green FinTech"
-    ]
+    ],
+    "reproducibility_url": "https://github.com/Spectating101/solarpunk-coin"
   },
-  "research_question": "Once external evidence is available, how should a financial decision distinguish what the evidence supports, whether a policy accepts it, how much underlying physical quantity it can justify before valuation, and whether the resulting obligation can settle?",
+  "research_question": "Once external evidence is available, how should a financial decision distinguish source assurance, policy admission, supported physical quantity before valuation, and later settlement?",
   "research_positioning": {
     "prior_art_not_claimed_novel": [
       "oracle delivery of external data and oracle trust models",
       "verifiable credentials and cryptographic verification",
       "general policy-as-code evaluation",
-      "machine-readable financial-contract semantics",
-      "proof-of-reserve feeds and reserve-gated mint controls"
+      "proof-of-solvency and reserve sufficiency proofs"
     ],
-    "bounded_contribution": "An executable methodological composition that keeps source assurance, policy admission, supported physical quantity, and settlement as separately inspectable states under a fixed evidence object.",
-    "policy_status": "researcher-declared comparison policies; not empirically calibrated, institutionally endorsed, or economically optimal",
-    "quantity_interpretation": "33.066 energy-claim units map one-for-one to the derived physical kWh surplus for this experiment; they are not a monetary price, market value, or legal entitlement",
+    "bounded_contribution": "A reproducible fixed-evidence experiment that keeps source assurance, policy admission, supported physical quantity, and settlement as separate decision stages.",
+    "policy_status": "research configurations used for sensitivity analysis; not calibrated, institutionally endorsed, or economically optimal",
+    "quantity_interpretation": "33.066 kWh is a derived physical surplus quantity used before valuation; it is not a monetary price, market value, or legal entitlement",
     "surplus_derivation": "per interval max(PV generation - general load - controlled load, 0); derived surplus, not directly metered export"
   },
   "references": [
     "Eskandari et al. 2021, SoK: Oracles from the Ground Truth to Market Manipulation",
     "W3C Verifiable Credentials Data Model v2.0, 2025",
     "Open Policy Agent documentation",
-    "ACTUS Financial Research Foundation fundamentals",
-    "Chainlink Proof of Reserve documentation",
+    "Dagher et al. 2015, Provisions: Privacy-preserving Proofs of Solvency for Bitcoin Exchanges",
     "Ratnam et al. 2017, Residential load and rooftop PV generation: an Australian distribution network dataset"
   ],
   "evidence_checkpoint": {
@@ -90,26 +94,25 @@
     "ACCEPTANCE_AND_OBLIGATIONS.md",
     "POSTER_STORYBOARD.md",
     "PORTAL_AND_OWNER_ACTIONS.md",
+    "CONFTOOL_COPY_PASTE.md",
     "OVERLAP_AND_ETHICS.md",
     "SUBMISSION_MANIFEST.json"
   ],
   "owner_only_fields": [
-    "author display name",
     "submission email",
-    "affiliation wording",
-    "contact/address fields requested by ConfTool",
-    "coauthor/presenter identity if applicable",
+    "ConfTool username/password",
+    "postal/contact address choice",
     "personal privacy/account consent",
-    "originality/authorship declaration",
-    "copyright/publication agreement",
-    "registration payment",
-    "attendance commitment beyond known poster intent"
+    "originality/authorship declaration if presented",
+    "copyright/publication agreement if presented",
+    "registration payment if required",
+    "attendance commitment beyond the known poster intent"
   ],
   "known_obligations": [
     "treat acceptance as likely in-person poster presentation in Taiwan",
     "verify registration fee and presenter instructions immediately upon acceptance",
     "prepare final poster from the bounded storyboard if accepted",
-    "preserve the exact submitted abstract/version"
+    "preserve the exact submitted abstract/version and submission ID"
   ],
   "non_claims": [
     "Ausgrid or source-holder validation of Policy Lab",
@@ -122,9 +125,10 @@
     "customer or institutional pilot",
     "market adoption",
     "optimal policy thresholds or economic pricing",
-    "monetary valuation of the 33.066 claim units",
+    "monetary valuation of the 33.066 kWh physical quantity",
     "currency or stablecoin validation",
-    "monetary performance"
+    "monetary performance",
+    "general external validity from one public case"
   ],
   "parallel_route_guard": {
     "primary_manuscript": "Financial Cryptography 2027 short paper",

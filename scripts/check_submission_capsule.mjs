@@ -12,7 +12,7 @@ const abstract = await readFile(path.join(CAPSULE_DIR, manifest.external_submiss
 
 assert.equal(manifest.schema, 'policy_lab.submission_capsule.v1');
 assert.equal(manifest.capsule_id, 'global-ai-finance-2026-poster');
-assert.equal(manifest.research_positioning_version, 'RC4');
+assert.equal(manifest.research_positioning_version, 'RC5');
 assert.ok(
   ['SURPRISE_PROOFED', 'PORTAL_READY', 'SUBMITTED', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'].includes(manifest.status),
   `unsupported capsule status ${manifest.status}`,
@@ -45,37 +45,31 @@ assert.deepEqual(frozen.research_boundaries, { ...cp.boundaries });
 
 const requiredAbstractPatterns = [
   new RegExp(manifest.external_submission.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
-  /oracle literature/i,
-  /Verifiable Credentials/i,
-  /policy-as-code/i,
-  /ACTUS/i,
-  /proof-of-reserve/i,
-  /Ratnam/i,
+  /Oracle systems/i,
+  /verifiable credentials/i,
+  /proof-of-solvency/i,
+  /policy engines/i,
   /336 half-hour intervals/i,
   /lowest assurance tier.*L0/i,
-  /max\(PV generation.*general load.*controlled load.*0\)/i,
-  /derived surplus measure, not a directly metered export channel/i,
+  /max\(PV generation - general load - controlled load, 0\)/i,
+  /derived surplus quantity, not a directly metered export channel/i,
   /33\.066 kWh/i,
-  /not a monetary valuation/i,
-  /No monetary price is implied/i,
-  /researcher-declared comparison policies/i,
-  /empirically calibrated/i,
-  /institutionally endorsed/i,
-  /same evidence object is blocked/i,
-  /evidence identity is held fixed/i,
-  /40% of the declared quantity/i,
+  /no monetary price or legal entitlement is implied/i,
+  /research configurations used for sensitivity analysis/i,
+  /not calibrated, institutionally endorsed, or claimed to be optimal/i,
+  /same evidence is blocked/i,
+  /evidence itself is unchanged/i,
+  /40%/i,
   /13\.2264 kWh/i,
   /19\.8396 kWh/i,
-  /One public case is also not evidence of general field validity/i,
+  /one public case establish general external validity/i,
+  /github\.com\/Spectating101\/solarpunk-coin/i,
+  /Dagher/i,
+  /Ratnam/i,
 ];
 for (const pattern of requiredAbstractPatterns) {
-  assert.match(abstract, pattern, `RC4 abstract missing required research statement: ${pattern}`);
+  assert.match(abstract, pattern, `RC5 abstract missing required research statement: ${pattern}`);
 }
-assert.match(
-  abstract,
-  /researcher-declared comparison policies rather than empirically calibrated or institutionally endorsed decision rules/i,
-  'RC4 must explicitly disclaim calibration and institutional endorsement of the comparison policies',
-);
 
 const antiSlopPatterns = [
   /rapidly evolving (?:fintech|financial|technology) landscape/i,
@@ -114,17 +108,22 @@ const dangerousClaimPatterns = [
   /(?:is|constitutes) (?:a )?(?:currency|stablecoin|legal tender)/i,
   /proves? (?:legal issuance|enforceable redemption|market adoption)/i,
   /production[- ]ready/i,
-  /33\.066(?:\s*kWh|\s*energy-claim units)?\s+(?:is|equals|represents)\s+(?:the\s+)?(?:market value|fair value|price)/i,
+  /33\.066(?:\s*kWh)?\s+(?:is|equals|represents)\s+(?:the\s+)?(?:market value|fair value|price)/i,
   /33\.066(?:\s*kWh)?\s+(?:of\s+)?(?:metered|measured)\s+export/i,
   /(?:validated|correct|optimal) (?:open|pilot|research) policy/i,
   /institutionally endorsed (?:open|pilot|research) policy/i,
 ];
 for (const pattern of dangerousClaimPatterns) assert.doesNotMatch(abstract, pattern, `dangerous outward claim: ${pattern}`);
 
+assert.equal(manifest.status, 'PORTAL_READY');
+assert.equal(manifest.external_submission.author, 'Christopher Ongko');
+assert.match(manifest.external_submission.affiliation, /MS Program in Finance.*Yuan Ze University/i);
+assert.equal(manifest.external_submission.primary_topic, 'Green FinTech');
+assert.match(manifest.external_submission.reproducibility_url, /github\.com\/Spectating101\/solarpunk-coin/);
 assert.match(manifest.research_positioning.quantity_interpretation, /not a monetary price|not a monetary/i);
 assert.match(manifest.research_positioning.surplus_derivation, /not directly metered export/i);
-assert.match(manifest.research_positioning.policy_status, /not empirically calibrated/i);
-assert.ok(Array.isArray(manifest.references) && manifest.references.length >= 6);
+assert.match(manifest.research_positioning.policy_status, /not calibrated/i);
+assert.ok(Array.isArray(manifest.references) && manifest.references.length >= 5);
 assert.ok(Array.isArray(manifest.owner_only_fields) && manifest.owner_only_fields.length >= 5);
 assert.ok(Array.isArray(manifest.known_obligations) && manifest.known_obligations.length >= 3);
 assert.ok(Array.isArray(manifest.non_claims) && manifest.non_claims.length >= 10);
@@ -135,12 +134,13 @@ const wordCount = abstract
   .trim()
   .split(/\s+/)
   .filter(Boolean).length;
-assert.ok(wordCount >= 650, `RC4 extended abstract unexpectedly thin: ${wordCount} words`);
-assert.ok(wordCount <= 1300, `RC4 extended abstract too long for a focused poster submission: ${wordCount} words`);
+assert.ok(wordCount >= 550, `RC5 extended abstract unexpectedly thin: ${wordCount} words`);
+assert.ok(wordCount <= 1000, `RC5 extended abstract too long for a focused poster submission: ${wordCount} words`);
 
-console.log('Global AI Finance RC4 submission pack: PASS');
+console.log('Global AI Finance RC5 submission pack: PASS');
 console.log(`status=${manifest.status}`);
 console.log(`title=${manifest.external_submission.title}`);
+console.log(`author=${manifest.external_submission.author}`);
 console.log(`case=${frozen.case_id} assurance=${frozen.assurance}`);
 console.log(`derived_surplus=${frozen.eligible_surplus_kwh} kWh`);
 console.log(`open=${frozen.open_policy.result}/${frozen.open_policy.admitted_maximum}`);
