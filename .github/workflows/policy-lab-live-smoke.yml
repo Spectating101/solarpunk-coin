@@ -2,6 +2,12 @@ name: Policy Lab Live Smoke
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/policy-lab-live-smoke.yml
+      - scripts/smoke_live_policy_lab.mjs
   schedule:
     - cron: '17 1 * * *'
   workflow_run:
@@ -17,24 +23,35 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout
+      - name: Checkout tested revision
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Prepare isolated smoke runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          SMOKE_DIR="$RUNNER_TEMP/policy-lab-live-smoke"
+          mkdir -p "$SMOKE_DIR"
+          cp scripts/smoke_live_policy_lab.mjs "$SMOKE_DIR/smoke_live_policy_lab.mjs"
+          npm install \
+            --prefix "$SMOKE_DIR" \
+            --no-save \
+            --no-package-lock \
+            --no-audit \
+            --no-fund \
+            playwright@1.61.1
+          echo "POLICY_LAB_SMOKE_DIR=$SMOKE_DIR" >> "$GITHUB_ENV"
 
       - name: Install Chromium
+        working-directory: ${{ env.POLICY_LAB_SMOKE_DIR }}
         run: npx playwright install --with-deps chromium
 
       - name: Test live Policy Lab
         env:
           POLICY_LAB_URL: https://spectating101.github.io/solarpunk-coin/demo/
-        run: node scripts/smoke_live_policy_lab.mjs
+        run: node "$POLICY_LAB_SMOKE_DIR/smoke_live_policy_lab.mjs"

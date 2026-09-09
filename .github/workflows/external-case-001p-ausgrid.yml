@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - case/public-external-001p-ausgrid
     paths:
       - scripts/external_case_001p_ausgrid.mjs

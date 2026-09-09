@@ -34,9 +34,9 @@ try {
   await page.getByRole('heading', { name: 'Live claim journey' }).waitFor({ timeout: 20_000 });
   await page.getByRole('heading', { name: 'Current explanation' }).waitFor({ timeout: 20_000 });
 
-  const caseSelect = page.getByLabel('Case');
-  const assuranceSelect = page.getByLabel('Proof / assurance');
-  const policySelect = page.getByLabel('Policy');
+  const caseSelect = page.locator('select:has(option[value="TYN-001"])');
+  const assuranceSelect = page.locator('select:has(option[value="PROVENANCE-L0-BASE"])');
+  const policySelect = page.locator('select:has(option[value="LAB-CASE-OPEN-004"])');
 
   for (const [name, select] of [
     ['case', caseSelect],
