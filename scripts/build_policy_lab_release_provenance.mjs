@@ -32,6 +32,7 @@ const closureRoots = [
   'benchmark/gauntlet/policy-assumptions.v1.json',
   'benchmark/gauntlet/policy-lab-c3-c4-map.v1.json',
   'benchmark/gauntlet/policy-lab-external-validation-protocol.v1.json',
+  'docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md',
   'docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md',
   'frontend/src/data/publicEvidenceCheckpoint.js',
   'frontend/src/lib/caseWorkbenchRuntime.js',
@@ -43,7 +44,9 @@ const closureRoots = [
   'scripts/verify_claim_assessment_package.mjs',
   'scripts/external_case_001p_ausgrid.mjs',
   'scripts/run_policy_lab_specialized_gauntlet.mjs',
+  'scripts/check_policy_lab_external_gauntlet_protocols.mjs',
   'scripts/build_policy_lab_release_provenance.mjs',
+  '.github/workflows/policy-lab-specialized-gauntlet.yml',
 ];
 
 const ignoredNames = new Set(['.DS_Store']);
@@ -83,7 +86,7 @@ for (const relative of files) {
 
 const body = {
   schema: 'policylab.release_provenance_manifest.v1',
-  version: '0.1.0',
+  version: '0.1.1',
   project: 'Policy Lab',
   source_revision: sourceRevision,
   source_revision_bound: sourceRevision !== 'UNBOUND_LOCAL_RUN',
