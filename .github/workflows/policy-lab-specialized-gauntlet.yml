@@ -9,12 +9,17 @@ on:
       - benchmark/gauntlet/policy-lab-specialized.v1.json
       - benchmark/gauntlet/policy-assumptions.v1.json
       - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
+      - benchmark/gauntlet/policy-lab-external-validation-protocol.v1.json
       - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - scripts/check_policy_lab_external_gauntlet_protocols.mjs
+      - scripts/build_policy_lab_release_provenance.mjs
       - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
       - packages/constraint-core/src/**
       - packages/constraint-core/test/fc-non-promotion-invariants.test.mjs
       - packages/constraint-core/test/conformance-benchmark-v1.test.mjs
       - protocol/cases/energy-v1/**
+      - protocol/policies-v2/**
+      - protocol/schema/**
       - frontend/src/data/publicEvidenceCheckpoint.js
       - .github/workflows/policy-lab-specialized-gauntlet.yml
   push:
@@ -24,10 +29,15 @@ on:
       - benchmark/gauntlet/policy-lab-specialized.v1.json
       - benchmark/gauntlet/policy-assumptions.v1.json
       - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
+      - benchmark/gauntlet/policy-lab-external-validation-protocol.v1.json
       - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - scripts/check_policy_lab_external_gauntlet_protocols.mjs
+      - scripts/build_policy_lab_release_provenance.mjs
       - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
       - packages/constraint-core/src/**
       - protocol/cases/energy-v1/**
+      - protocol/policies-v2/**
+      - protocol/schema/**
       - frontend/src/data/publicEvidenceCheckpoint.js
       - .github/workflows/policy-lab-specialized-gauntlet.yml
 
@@ -55,6 +65,25 @@ jobs:
           set -euo pipefail
           node scripts/run_policy_lab_specialized_gauntlet.mjs \
             --out="$RUNNER_TEMP/policy-lab-specialized-gauntlet"
+
+      - name: Verify external gate closure protocols
+        run: |
+          set -euo pipefail
+          node scripts/check_policy_lab_external_gauntlet_protocols.mjs \
+            | tee "$RUNNER_TEMP/policy-lab-specialized-gauntlet/external-gate-protocol-check.json"
+
+      - name: Build release provenance closure
+        env:
+          POLICY_LAB_SOURCE_REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          node scripts/build_policy_lab_release_provenance.mjs \
+            --out="$RUNNER_TEMP/policy-lab-specialized-gauntlet/policy-lab-release-provenance.v1.json"
+          node scripts/build_policy_lab_release_provenance.mjs \
+            --out="$RUNNER_TEMP/policy-lab-release-provenance-repeat.json"
+          cmp \
+            "$RUNNER_TEMP/policy-lab-specialized-gauntlet/policy-lab-release-provenance.v1.json" \
+            "$RUNNER_TEMP/policy-lab-release-provenance-repeat.json"
 
       - name: Re-run critical non-promotion invariants
         run: node --test packages/constraint-core/test/fc-non-promotion-invariants.test.mjs
