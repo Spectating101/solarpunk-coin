@@ -1,6 +1,6 @@
 {
   "schema": "policylab.c3_c4_readiness_map.v1",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "status": "PARTIAL",
   "claim_boundary": "This is a coverage map, not a conformance certificate. C3 or C4 may be called PASS only after every required item is executable and passes on the selected release revision.",
   "levels": {
@@ -91,18 +91,21 @@
         },
         {
           "id": "C4-release-provenance",
-          "state": "OPEN_RELEASE",
-          "note": "Frozen candidate still needs synchronized tag/release digest and build provenance/attestation where available."
+          "state": "PARTIAL_INTERNAL",
+          "evidence": "scripts/build_policy_lab_release_provenance.mjs",
+          "note": "Specialized Gauntlet CI now builds a byte-identical SHA-256 inventory over the declared Policy Lab source closure and binds it to the tested revision. Signed release tag, SBOM, and GitHub artifact attestation remain OPEN_RELEASE."
         },
         {
           "id": "C4-locale-clock-determinism",
-          "state": "OPEN",
-          "note": "Dedicated cross-locale/cross-timezone adversarial vector is still required."
+          "state": "PASS_INTERNAL_CI",
+          "evidence": ".github/workflows/policy-lab-specialized-gauntlet.yml",
+          "note": "Specialized Gauntlet JSON and Markdown outputs reproduce byte-identically under TZ=UTC and TZ=Asia/Taipei with LANG=C. This is internal environment-determinism proof, not independent reproduction."
         },
         {
           "id": "C4-partial-workflow-retry",
-          "state": "OPEN",
-          "note": "Dedicated idempotent retry/failure-recovery vector is still required."
+          "state": "PARTIAL_INTERNAL",
+          "evidence": ".github/workflows/policy-lab-specialized-gauntlet.yml",
+          "note": "A deliberately truncated specialized-Gauntlet output is replaced by a deterministic clean rebuild matching a fresh run byte-for-byte. This proves retry behavior for the specialized report builder only, not every Policy Lab workflow."
         },
         {
           "id": "C4-independent-reproduction",
