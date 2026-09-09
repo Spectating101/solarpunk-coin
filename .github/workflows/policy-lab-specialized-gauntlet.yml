@@ -47,6 +47,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install baseline test dependencies
+        run: npm install
+
       - name: Run Policy Lab specialized Gauntlet
         run: |
           set -euo pipefail
