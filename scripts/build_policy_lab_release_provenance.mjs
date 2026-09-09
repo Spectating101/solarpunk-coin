@@ -47,6 +47,7 @@ const closureRoots = [
   'scripts/check_policy_lab_external_gauntlet_protocols.mjs',
   'scripts/build_policy_lab_release_provenance.mjs',
   '.github/workflows/policy-lab-specialized-gauntlet.yml',
+  '.github/workflows/policy-lab-release-attestation.yml',
 ];
 
 const ignoredNames = new Set(['.DS_Store']);
@@ -86,7 +87,7 @@ for (const relative of files) {
 
 const body = {
   schema: 'policylab.release_provenance_manifest.v1',
-  version: '0.1.1',
+  version: '0.1.2',
   project: 'Policy Lab',
   source_revision: sourceRevision,
   source_revision_bound: sourceRevision !== 'UNBOUND_LOCAL_RUN',
