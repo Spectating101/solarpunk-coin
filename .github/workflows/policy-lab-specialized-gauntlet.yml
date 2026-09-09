@@ -66,6 +66,41 @@ jobs:
           node scripts/run_policy_lab_specialized_gauntlet.mjs \
             --out="$RUNNER_TEMP/policy-lab-specialized-gauntlet"
 
+      - name: Attack timezone and locale determinism
+        run: |
+          set -euo pipefail
+          TZ=UTC LANG=C node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-env-utc" >/dev/null
+          TZ=Asia/Taipei LANG=C node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-env-taipei" >/dev/null
+          cmp \
+            "$RUNNER_TEMP/gauntlet-env-utc/policy-lab-specialized-gauntlet.v1.json" \
+            "$RUNNER_TEMP/gauntlet-env-taipei/policy-lab-specialized-gauntlet.v1.json"
+          cmp \
+            "$RUNNER_TEMP/gauntlet-env-utc/policy-lab-specialized-gauntlet.v1.md" \
+            "$RUNNER_TEMP/gauntlet-env-taipei/policy-lab-specialized-gauntlet.v1.md"
+          printf '%s\n' '{"schema":"policylab.environment_determinism_check.v1","status":"PASS","environments":["TZ=UTC LANG=C","TZ=Asia/Taipei LANG=C"],"boundary":"Internal CI determinism proof; not independent reproduction."}' \
+            > "$RUNNER_TEMP/policy-lab-specialized-gauntlet/environment-determinism-check.json"
+
+      - name: Attack partial-output retry determinism
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/gauntlet-retry"
+          printf '%s\n' '{"truncated":true}' > "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.json"
+          printf '%s\n' 'partial output' > "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.md"
+          node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-retry" >/dev/null
+          node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-clean-repeat" >/dev/null
+          cmp \
+            "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.json" \
+            "$RUNNER_TEMP/gauntlet-clean-repeat/policy-lab-specialized-gauntlet.v1.json"
+          cmp \
+            "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.md" \
+            "$RUNNER_TEMP/gauntlet-clean-repeat/policy-lab-specialized-gauntlet.v1.md"
+          printf '%s\n' '{"schema":"policylab.retry_determinism_check.v1","status":"PASS","attack":"pre-existing truncated output replaced by deterministic clean rebuild","boundary":"Tests the specialized Gauntlet report build/retry path, not every Policy Lab workflow."}' \
+            > "$RUNNER_TEMP/policy-lab-specialized-gauntlet/retry-determinism-check.json"
+
       - name: Verify external gate closure protocols
         run: |
           set -euo pipefail
