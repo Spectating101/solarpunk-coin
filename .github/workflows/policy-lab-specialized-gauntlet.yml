@@ -13,6 +13,7 @@ on:
       - scripts/run_policy_lab_specialized_gauntlet.mjs
       - scripts/check_policy_lab_external_gauntlet_protocols.mjs
       - scripts/build_policy_lab_release_provenance.mjs
+      - docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md
       - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
       - packages/constraint-core/src/**
       - packages/constraint-core/test/fc-non-promotion-invariants.test.mjs
@@ -33,6 +34,7 @@ on:
       - scripts/run_policy_lab_specialized_gauntlet.mjs
       - scripts/check_policy_lab_external_gauntlet_protocols.mjs
       - scripts/build_policy_lab_release_provenance.mjs
+      - docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md
       - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
       - packages/constraint-core/src/**
       - protocol/cases/energy-v1/**
