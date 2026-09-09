@@ -23,6 +23,7 @@ on:
       - protocol/schema/**
       - frontend/src/data/publicEvidenceCheckpoint.js
       - .github/workflows/policy-lab-specialized-gauntlet.yml
+      - .github/workflows/policy-lab-release-attestation.yml
   push:
     branches:
       - main
@@ -42,6 +43,7 @@ on:
       - protocol/schema/**
       - frontend/src/data/publicEvidenceCheckpoint.js
       - .github/workflows/policy-lab-specialized-gauntlet.yml
+      - .github/workflows/policy-lab-release-attestation.yml
 
 permissions:
   contents: read
