@@ -1,0 +1,70 @@
+name: Policy Lab Specialized Gauntlet
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - benchmark/gauntlet/policy-lab-specialized.v1.json
+      - benchmark/gauntlet/policy-assumptions.v1.json
+      - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
+      - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
+      - packages/constraint-core/src/**
+      - packages/constraint-core/test/fc-non-promotion-invariants.test.mjs
+      - packages/constraint-core/test/conformance-benchmark-v1.test.mjs
+      - protocol/cases/energy-v1/**
+      - frontend/src/data/publicEvidenceCheckpoint.js
+      - .github/workflows/policy-lab-specialized-gauntlet.yml
+  push:
+    branches:
+      - main
+    paths:
+      - benchmark/gauntlet/policy-lab-specialized.v1.json
+      - benchmark/gauntlet/policy-assumptions.v1.json
+      - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
+      - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+      - frontend/src/data/publicEvidenceCheckpoint.js
+      - .github/workflows/policy-lab-specialized-gauntlet.yml
+
+permissions:
+  contents: read
+
+jobs:
+  specialized-gauntlet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run Policy Lab specialized Gauntlet
+        run: |
+          set -euo pipefail
+          node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/policy-lab-specialized-gauntlet"
+
+      - name: Re-run critical non-promotion invariants
+        run: node --test packages/constraint-core/test/fc-non-promotion-invariants.test.mjs
+
+      - name: Verify frozen C0-C2 conformance baseline
+        run: node --test packages/constraint-core/test/conformance-benchmark-v1.test.mjs
+
+      - name: Show machine report
+        run: cat "$RUNNER_TEMP/policy-lab-specialized-gauntlet/policy-lab-specialized-gauntlet.v1.md"
+
+      - name: Upload specialized Gauntlet report
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-lab-specialized-gauntlet-${{ github.sha }}
+          path: ${{ runner.temp }}/policy-lab-specialized-gauntlet/
+          retention-days: 90
