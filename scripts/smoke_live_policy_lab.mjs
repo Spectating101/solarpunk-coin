@@ -34,9 +34,9 @@ try {
   await page.getByRole('heading', { name: 'Live claim journey' }).waitFor({ timeout: 20_000 });
   await page.getByRole('heading', { name: 'Current explanation' }).waitFor({ timeout: 20_000 });
 
-  const caseSelect = page.getByLabel('Case');
-  const assuranceSelect = page.getByLabel('Proof / assurance');
-  const policySelect = page.getByLabel('Policy');
+  const caseSelect = page.getByLabel('Case', { exact: true });
+  const assuranceSelect = page.getByLabel('Proof / assurance', { exact: true });
+  const policySelect = page.getByLabel('Policy', { exact: true });
 
   for (const [name, select] of [
     ['case', caseSelect],
