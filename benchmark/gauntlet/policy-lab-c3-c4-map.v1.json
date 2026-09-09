@@ -1,0 +1,115 @@
+{
+  "schema": "policylab.c3_c4_readiness_map.v1",
+  "version": "0.1.0",
+  "status": "PARTIAL",
+  "claim_boundary": "This is a coverage map, not a conformance certificate. C3 or C4 may be called PASS only after every required item is executable and passes on the selected release revision.",
+  "levels": {
+    "C3": {
+      "title": "Lifecycle and settlement",
+      "state": "PARTIAL",
+      "requirements": [
+        {
+          "id": "C3-settlement-admitted",
+          "state": "PASS_EXISTING",
+          "evidence": "packages/constraint-core/test/operator-evidence-gate1.test.mjs",
+          "note": "Admitted bounded claims enter declared settlement stress and expose partial shortfall."
+        },
+        {
+          "id": "C3-settlement-state-model",
+          "state": "PASS_EXISTING",
+          "evidence": "packages/constraint-core/src/claim.js",
+          "note": "Claim states and settlement transitions are explicit and bounded."
+        },
+        {
+          "id": "C3-quantity-before-settlement",
+          "state": "PASS_EXISTING",
+          "evidence": "packages/constraint-core/test/fc-non-promotion-invariants.test.mjs",
+          "note": "Caller-supplied quantity cannot exceed the decision-bound maximum."
+        },
+        {
+          "id": "C3-exact-duplicate-use",
+          "state": "OPEN",
+          "note": "End-to-end duplicate-claim refusal is not yet a completed current-surface proof."
+        },
+        {
+          "id": "C3-overlapping-window-use",
+          "state": "OPEN",
+          "note": "Overlapping measurement-window anti-reuse is not yet a completed current-surface proof."
+        },
+        {
+          "id": "C3-cancellation-prevents-reuse",
+          "state": "PARTIAL_MODEL_ONLY",
+          "evidence": "packages/constraint-core/src/claim.js",
+          "note": "REVOKED state exists, but cross-claim cancellation/anti-reuse semantics are not yet certified end-to-end."
+        },
+        {
+          "id": "C3-evidence-correction-lineage",
+          "state": "OPEN",
+          "note": "Correction must create a new evidence/decision version and link lineage rather than overwrite history."
+        },
+        {
+          "id": "C3-policy-change-redecision-before-settlement",
+          "state": "OPEN",
+          "note": "Current architecture separates identities, but a dedicated lifecycle test is still required."
+        }
+      ]
+    },
+    "C4": {
+      "title": "Hardened reference implementation",
+      "state": "PARTIAL",
+      "requirements": [
+        {
+          "id": "C4-evidence-tamper",
+          "state": "PASS_EXISTING",
+          "evidence": "packages/constraint-core/test/fc-non-promotion-invariants.test.mjs"
+        },
+        {
+          "id": "C4-capsule-tamper",
+          "state": "PASS_EXISTING",
+          "evidence": "packages/constraint-core/test/capsule-verify.test.mjs"
+        },
+        {
+          "id": "C4-cross-object-identity",
+          "state": "PASS_EXISTING",
+          "evidence": "packages/constraint-core/test/capsule-verify.test.mjs"
+        },
+        {
+          "id": "C4-private-public-boundary",
+          "state": "PASS_EXISTING",
+          "evidence": "packages/constraint-core/test/operator-source-intake.test.mjs"
+        },
+        {
+          "id": "C4-current-surface-integrity",
+          "state": "PASS_INTERNAL_CI",
+          "evidence": ".github/workflows/current-surface.yml",
+          "note": "Internal CI proof only; not independent reproduction."
+        },
+        {
+          "id": "C4-clean-environment-reproduction",
+          "state": "PARTIAL_INTERNAL",
+          "note": "CI and closed-world reproduction exist, but an independent clean-room evaluator is still OPEN."
+        },
+        {
+          "id": "C4-release-provenance",
+          "state": "OPEN_RELEASE",
+          "note": "Frozen candidate still needs synchronized tag/release digest and build provenance/attestation where available."
+        },
+        {
+          "id": "C4-locale-clock-determinism",
+          "state": "OPEN",
+          "note": "Dedicated cross-locale/cross-timezone adversarial vector is still required."
+        },
+        {
+          "id": "C4-partial-workflow-retry",
+          "state": "OPEN",
+          "note": "Dedicated idempotent retry/failure-recovery vector is still required."
+        },
+        {
+          "id": "C4-independent-reproduction",
+          "state": "OPEN_EXTERNAL",
+          "note": "A non-author must reproduce the selected release and record the attempt."
+        }
+      ]
+    }
+  }
+}
