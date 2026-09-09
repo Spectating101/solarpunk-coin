@@ -1,0 +1,157 @@
+{
+  "schema": "policylab.policy_assumption_register.v1",
+  "version": "0.1.0",
+  "status": "ACTIVE",
+  "purpose": "Prevent research-policy choices from being presented as empirical, legal, or calibrated finance parameters.",
+  "allowed_classes": [
+    "EVIDENCE_DERIVED_TRANSFORM",
+    "RESEARCH_POLICY_REQUIREMENT",
+    "ILLUSTRATIVE_RESEARCH_ASSUMPTION",
+    "ILLUSTRATIVE_RESEARCH_POLICY",
+    "STRESS_SCENARIO"
+  ],
+  "assumptions": [
+    {
+      "id": "open.evidence_rate",
+      "policy_id": "LAB-CASE-OPEN-004",
+      "calculator_id": "EVIDENCE_BACKED_CAPACITY",
+      "parameter_path": "rate",
+      "expected_current_value": 1,
+      "class": "EVIDENCE_DERIVED_TRANSFORM",
+      "interpretation": "One eligible energy unit maps to one ENERGY_CLAIM_UNIT in the research workbench.",
+      "boundary": "This is a declared transform, not an observed exchange rate, price, or monetary conversion factor."
+    },
+    {
+      "id": "open.absolute_cap",
+      "policy_id": "LAB-CASE-OPEN-004",
+      "calculator_id": "ABSOLUTE_POLICY_CAP",
+      "parameter_path": "maximum",
+      "expected_current_value": 10000,
+      "class": "ILLUSTRATIVE_RESEARCH_POLICY",
+      "interpretation": "Research-only upper ceiling used to exercise comparable quantity rules.",
+      "boundary": "Not calibrated to law, market liquidity, reserves, or institutional risk appetite."
+    },
+    {
+      "id": "pilot.signed_evidence_gate",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "SIGNED_EVIDENCE",
+      "parameter_path": null,
+      "expected_current_value": true,
+      "class": "RESEARCH_POLICY_REQUIREMENT",
+      "interpretation": "The pilot policy requires signed evidence before admission.",
+      "boundary": "A research-policy gate, not a claim that signatures establish physical truth or legal authority."
+    },
+    {
+      "id": "pilot.minimum_provenance",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "MIN_PROVENANCE",
+      "parameter_path": "minimum",
+      "expected_current_value": "L2",
+      "class": "ILLUSTRATIVE_RESEARCH_POLICY",
+      "interpretation": "The pilot policy requires at least L2 assurance.",
+      "boundary": "The L2 threshold is a declared research-policy choice, not an externally calibrated regulatory threshold."
+    },
+    {
+      "id": "pilot.provenance_multiplier.L0",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "PROVENANCE_POLICY_CAPACITY",
+      "parameter_path": "capacity_multiplier_by_level.L0",
+      "expected_current_value": 0,
+      "class": "ILLUSTRATIVE_RESEARCH_ASSUMPTION",
+      "interpretation": "Policy-owned quantity multiplier for L0 assurance.",
+      "boundary": "Illustrative research haircut; not empirical calibration."
+    },
+    {
+      "id": "pilot.provenance_multiplier.L1",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "PROVENANCE_POLICY_CAPACITY",
+      "parameter_path": "capacity_multiplier_by_level.L1",
+      "expected_current_value": 0.4,
+      "class": "ILLUSTRATIVE_RESEARCH_ASSUMPTION",
+      "interpretation": "Policy-owned quantity multiplier for L1 assurance.",
+      "boundary": "Illustrative research haircut; not empirical calibration."
+    },
+    {
+      "id": "pilot.provenance_multiplier.L2",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "PROVENANCE_POLICY_CAPACITY",
+      "parameter_path": "capacity_multiplier_by_level.L2",
+      "expected_current_value": 0.7,
+      "class": "ILLUSTRATIVE_RESEARCH_ASSUMPTION",
+      "interpretation": "Policy-owned quantity multiplier for L2 assurance.",
+      "sensitivity_values": [0.5, 0.7, 0.9],
+      "boundary": "Illustrative research haircut; the specialized Gauntlet must disclose how quantity changes across the sensitivity range."
+    },
+    {
+      "id": "pilot.provenance_multiplier.L3",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "PROVENANCE_POLICY_CAPACITY",
+      "parameter_path": "capacity_multiplier_by_level.L3",
+      "expected_current_value": 0.88,
+      "class": "ILLUSTRATIVE_RESEARCH_ASSUMPTION",
+      "interpretation": "Policy-owned quantity multiplier for L3 assurance.",
+      "boundary": "Illustrative research haircut; not empirical calibration."
+    },
+    {
+      "id": "pilot.provenance_multiplier.L4",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "PROVENANCE_POLICY_CAPACITY",
+      "parameter_path": "capacity_multiplier_by_level.L4",
+      "expected_current_value": 0.95,
+      "class": "ILLUSTRATIVE_RESEARCH_ASSUMPTION",
+      "interpretation": "Policy-owned quantity multiplier for L4 assurance.",
+      "boundary": "Illustrative research haircut; not empirical calibration."
+    },
+    {
+      "id": "pilot.absolute_cap",
+      "policy_id": "ENERGY-CASE-PILOT-005",
+      "calculator_id": "ABSOLUTE_POLICY_CAP",
+      "parameter_path": "maximum",
+      "expected_current_value": 2500,
+      "class": "ILLUSTRATIVE_RESEARCH_POLICY",
+      "interpretation": "Research pilot absolute quantity ceiling.",
+      "boundary": "Not calibrated to regulation, customer demand, market depth, or reserve capacity."
+    },
+    {
+      "id": "strict.minimum_provenance",
+      "policy_id": "ENERGY-CASE-STRICT-006",
+      "calculator_id": "MIN_PROVENANCE",
+      "parameter_path": "minimum",
+      "expected_current_value": "L4",
+      "class": "ILLUSTRATIVE_RESEARCH_POLICY",
+      "interpretation": "Strict research policy requires L4 assurance.",
+      "boundary": "Declared research-policy threshold, not a production or regulatory certification threshold."
+    },
+    {
+      "id": "strict.external_corroboration_gate",
+      "policy_id": "ENERGY-CASE-STRICT-006",
+      "calculator_id": "EXTERNAL_CORROBORATION",
+      "parameter_path": null,
+      "expected_current_value": true,
+      "class": "RESEARCH_POLICY_REQUIREMENT",
+      "interpretation": "Strict research policy requires external corroboration.",
+      "boundary": "Passing the gate would not itself prove legal ownership, redemption rights, or production audit completion."
+    },
+    {
+      "id": "strict.absolute_cap",
+      "policy_id": "ENERGY-CASE-STRICT-006",
+      "calculator_id": "ABSOLUTE_POLICY_CAP",
+      "parameter_path": "maximum",
+      "expected_current_value": 50000,
+      "class": "ILLUSTRATIVE_RESEARCH_POLICY",
+      "interpretation": "Strict research absolute quantity ceiling.",
+      "boundary": "Not calibrated to regulation, liquidity, or production capacity."
+    },
+    {
+      "id": "demo.settlement_fraction",
+      "policy_id": null,
+      "calculator_id": "SETTLEMENT_STRESS",
+      "parameter_path": "declared_capacity_fraction",
+      "expected_current_value": 0.4,
+      "class": "STRESS_SCENARIO",
+      "interpretation": "Judge/demo stress case deliberately supplies settlement capacity equal to 40% of the admitted claim.",
+      "sensitivity_values": [0, 0.4, 1],
+      "boundary": "A declared stress input, not measured reserve, redemption, liquidity, or delivery capacity."
+    }
+  ]
+}
