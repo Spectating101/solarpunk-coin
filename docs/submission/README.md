@@ -12,9 +12,11 @@ Do not use these documents to override `CURRENT_SURFACE.json`, the machine-obser
 2. [`POLICY_LAB_JUDGE_DEMO_AND_QA.md`](./POLICY_LAB_JUDGE_DEMO_AND_QA.md) — 10-second hook, 30/90-second demos, technical Q&A and prohibited claims.
 3. [`POLICY_LAB_ROUTE_ADAPTERS.md`](./POLICY_LAB_ROUTE_ADAPTERS.md) — route-specific framing and FIRE/HOLD/CONDITIONAL doctrine.
 4. [`POLICY_LAB_SUBMISSION_READINESS.md`](./POLICY_LAB_SUBMISSION_READINESS.md) — required assets and remaining submission gaps.
-5. [`innoserve-2026/README.md`](./innoserve-2026/README.md) — first live 2026 application package, official-rule verified.
-6. [`benchmark/gauntlet/submission-package.v1.json`](../../benchmark/gauntlet/submission-package.v1.json) — machine-bound judge facts and verified-opportunity overrides.
-7. [`scripts/validate_gauntlet_submission_package.mjs`](../../scripts/validate_gauntlet_submission_package.mjs) — anti-inflation validation against current machine evidence.
+5. [`POLICY_LAB_GAUNTLET_EXPANSION.md`](./POLICY_LAB_GAUNTLET_EXPANSION.md) — executable Policy Lab-specific adversarial suite, causal matrix, sensitivity analysis, C3/C4 readiness and frozen external gates.
+6. [`POLICY_LAB_STANDARDS_DIFFERENTIATION.md`](./POLICY_LAB_STANDARDS_DIFFERENTIATION.md) — source-backed differentiation from OPA, Cedar, W3C Verifiable Credentials, Chainlink Proof of Reserve and ACTUS.
+7. [`innoserve-2026/README.md`](./innoserve-2026/README.md) — first live 2026 application package, official-rule verified.
+8. [`benchmark/gauntlet/submission-package.v1.json`](../../benchmark/gauntlet/submission-package.v1.json) — machine-bound judge facts and verified-opportunity overrides.
+9. [`scripts/validate_gauntlet_submission_package.mjs`](../../scripts/validate_gauntlet_submission_package.mjs) — anti-inflation validation against current machine evidence.
 
 ## Current central pitch
 
@@ -73,13 +75,22 @@ Do not promote this into operator validation, physical meter certification, lega
 
 ## Validation
 
-Run:
+Judge-facing factual claims remain checked with:
 
 ```bash
 node scripts/validate_gauntlet_submission_package.mjs
 ```
 
-The Gauntlet CI workflow also runs this validator before the frozen route simulator. Current verified official-rule overrides are allowed to supersede stale opportunity assumptions in the frozen simulator for actual submission selection; the historical simulation outputs remain unchanged for reproducibility.
+The Policy Lab-specific adversarial layer can be run with:
+
+```bash
+node scripts/run_policy_lab_specialized_gauntlet.mjs
+node scripts/check_policy_lab_external_gauntlet_protocols.mjs
+```
+
+The specialized suite does not replace the generic Gauntlet or change its scoring weights. It attacks Policy Lab's own evidence-to-authority invariants and deliberately returns `PASS_WITH_OPEN_EXTERNAL_GATES` while independent reproduction, external-source heterogeneity, blind evaluator comprehension and practical workflow validation remain unresolved.
+
+The generic Gauntlet CI workflow also runs the submission validator before the frozen route simulator. Current verified official-rule overrides are allowed to supersede stale opportunity assumptions in the frozen simulator for actual submission selection; the historical simulation outputs remain unchanged for reproducibility.
 
 ## Visual assets
 

@@ -1,0 +1,100 @@
+name: Policy Lab Release Attestation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - benchmark/gauntlet/policy-lab-specialized.v1.json
+      - benchmark/gauntlet/policy-assumptions.v1.json
+      - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
+      - benchmark/gauntlet/policy-lab-external-validation-protocol.v1.json
+      - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - scripts/check_policy_lab_external_gauntlet_protocols.mjs
+      - scripts/build_policy_lab_release_provenance.mjs
+      - docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md
+      - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+      - protocol/policies-v2/**
+      - protocol/schema/**
+      - frontend/src/data/publicEvidenceCheckpoint.js
+      - .github/workflows/policy-lab-release-attestation.yml
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+  artifact-metadata: write
+
+jobs:
+  attest-release-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout trusted main revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build specialized Gauntlet proof
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/policy-lab-release-proof"
+          node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/policy-lab-release-proof"
+          node scripts/check_policy_lab_external_gauntlet_protocols.mjs \
+            > "$RUNNER_TEMP/policy-lab-release-proof/external-gate-protocol-check.json"
+
+      - name: Build source-closure provenance
+        env:
+          POLICY_LAB_SOURCE_REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          node scripts/build_policy_lab_release_provenance.mjs \
+            --out="$RUNNER_TEMP/policy-lab-release-proof/policy-lab-release-provenance.v1.json"
+
+      - name: Pack deterministic release proof
+        run: |
+          set -euo pipefail
+          tar \
+            --sort=name \
+            --mtime='UTC 1970-01-01' \
+            --owner=0 \
+            --group=0 \
+            --numeric-owner \
+            -C "$RUNNER_TEMP/policy-lab-release-proof" \
+            -czf "$RUNNER_TEMP/policy-lab-release-proof.tgz" .
+          sha256sum "$RUNNER_TEMP/policy-lab-release-proof.tgz" \
+            | tee "$RUNNER_TEMP/policy-lab-release-proof.tgz.sha256"
+
+      - name: Attest release proof provenance
+        id: attest
+        uses: actions/attest@v4
+        with:
+          subject-path: ${{ runner.temp }}/policy-lab-release-proof.tgz
+
+      - name: Upload attested release proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-lab-attested-release-proof-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/policy-lab-release-proof.tgz
+            ${{ runner.temp }}/policy-lab-release-proof.tgz.sha256
+          retention-days: 90
+
+      - name: Record attestation summary
+        run: |
+          {
+            echo '## Policy Lab release attestation'
+            echo
+            echo "Source revision: \`${GITHUB_SHA}\`"
+            echo
+            echo "Attestation: ${{ steps.attest.outputs.attestation-url }}"
+            echo
+            echo 'This attestation proves build provenance for the packaged Policy Lab release proof. It does not certify physical evidence truth, legal authority, production security, external validation, or adoption.'
+          } >> "$GITHUB_STEP_SUMMARY"
