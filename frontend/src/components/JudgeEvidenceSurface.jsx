@@ -220,7 +220,10 @@ export default function JudgeEvidenceSurface({ onNavigate }) {
               return (
                 <div key={item.multiplier} className={current ? 'current' : ''}>
                   <div className="pl5-sensitivity-bar"><i style={{ height: `${pct}%` }} /></div>
-                  <small>{item.multiplier.toFixed(1)}×{current ? ' · current' : ''} · {formatQuantity(item.quantity)}</small>
+                  <div className="pl5-sensitivity-caption">
+                    <small>{item.multiplier.toFixed(1)}×{current ? ' · current' : ''}</small>
+                    <b>{formatQuantity(item.quantity)}</b>
+                  </div>
                 </div>
               );
             })}
