@@ -71,11 +71,11 @@ afterEach(() => {
 });
 
 describe('LabOverview paired platform surface', () => {
-  it('renders a complete interpreted overview from shared workbench state', () => {
+  it('renders the compact live overview from shared workbench state', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByRole('heading', { name: /can real-world evidence justify a financial claim/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /evidence → policy → quantity → settlement/i })).toBeInTheDocument();
     expect(screen.getByText('180')).toBeInTheDocument();
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('50.4')).toBeInTheDocument();
@@ -88,7 +88,7 @@ describe('LabOverview paired platform surface', () => {
     const onViewModeChange = vi.fn();
     render(<LabOverview viewMode="overview" onViewModeChange={onViewModeChange} onNavigate={vi.fn()} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /open full analysis/i }));
+    fireEvent.click(screen.getByRole('button', { name: /full analysis/i }));
     expect(onViewModeChange).toHaveBeenCalledWith('full');
   });
 
