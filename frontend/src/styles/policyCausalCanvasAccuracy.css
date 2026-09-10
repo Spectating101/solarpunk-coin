@@ -1,0 +1,16 @@
+.pl5-mini-flow {
+  grid-template-columns: repeat(10, minmax(4px, 1fr));
+}
+
+.pl5-sensitivity-caption {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+}
+
+.pl5-sensitivity-caption b {
+  color: var(--pl5-muted);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 550;
+}
