@@ -552,10 +552,23 @@
 }
 
 .judge-overview .overview-console .platform-value-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border: 0;
   border-bottom: 1px solid var(--record-rule);
   border-radius: 0;
   background: transparent;
+}
+
+.judge-overview .overview-console .platform-value-flow > svg {
+  display: none;
+}
+
+.judge-overview .overview-console .platform-value-flow > div {
+  min-width: 0;
+}
+
+.judge-overview .overview-console .platform-value-flow > div + div {
+  border-left: 1px solid var(--record-rule);
 }
 
 .judge-overview .overview-console .platform-value-flow span,
@@ -680,6 +693,48 @@
   .sensitivity-table thead th:first-child,
   .sensitivity-table tbody th {
     width: auto;
+  }
+
+  /* Undo the legacy public-comparison mobile card transform for this audit record. */
+  .judge-overview .record-table.comparison-table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .judge-overview .record-table.comparison-table thead {
+    display: table-header-group;
+  }
+
+  .judge-overview .record-table.comparison-table tbody {
+    display: table-row-group;
+  }
+
+  .judge-overview .record-table.comparison-table tr {
+    display: table-row;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .judge-overview .record-table.comparison-table th,
+  .judge-overview .record-table.comparison-table td {
+    display: table-cell;
+    padding: 7px 6px;
+    border-radius: 0;
+    background: transparent;
+    color: var(--record-ink);
+  }
+
+  .judge-overview .record-table.comparison-table td::before {
+    content: none;
+    display: none;
+  }
+
+  .comparison-table td strong {
+    font-size: 15px;
   }
 
   .record-trace-grid > div {
