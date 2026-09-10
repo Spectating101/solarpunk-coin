@@ -17,17 +17,20 @@ async function open(url, expected) {
   if (expected) await page.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-// Asset 1: judge-facing visual mechanics. The public evidence quantity branches
-// through two policies, settlement is rendered as a split, and the controlled
-// assurance/policy matrix remains visibly separate from the observed checkpoint.
+// Asset 1: judge-facing causal apparatus. The public evidence mass branches
+// through a visibly open and closed policy gate, settlement shows covered vs
+// uncovered cells, and the controlled assurance/policy experiment stays separate.
 await open(`${baseUrl}#lab`, 'Evidence → Policy → Quantity → Settlement');
 await page.getByText('PUB-AUSGRID-001P', { exact: false }).first().waitFor({ state: 'visible' });
-await page.locator('.pl-settlement-bar').waitFor({ state: 'visible' });
-const causalMatrix = page.locator('.pl-causal-matrix');
-await causalMatrix.getByText('126', { exact: true }).waitFor({ state: 'visible' });
-await causalMatrix.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
-await page.locator('.pl-same-evidence[data-locked="true"]').waitFor({ state: 'visible' });
-await page.locator('.judge-evidence-surface').first().screenshot({
+await page.locator('.pl5-apparatus').waitFor({ state: 'visible' });
+await page.locator('.pl5-gate[data-state="open"]').waitFor({ state: 'visible' });
+await page.locator('.pl5-gate[data-state="closed"]').waitFor({ state: 'visible' });
+await page.locator('.pl5-settlement-cells').waitFor({ state: 'visible' });
+const causalExperiment = page.locator('.pl5-mini-table');
+await causalExperiment.getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await causalExperiment.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
+await page.locator('.pl5-lock[data-locked="true"]').waitFor({ state: 'visible' });
+await page.locator('.pl5-surface').first().screenshot({
   path: path.join(outputDir, '01-outside-data-checkpoint.png'),
 });
 
