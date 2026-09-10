@@ -10,6 +10,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
+import JudgeEvidenceSurface from './JudgeEvidenceSurface';
 import PublicEvidenceCheckpoint from './PublicEvidenceCheckpoint';
 import {
   EmptyState,
@@ -23,6 +24,7 @@ import {
 } from './platform/PlatformSurface';
 import '../styles/flagshipHardening.css';
 import '../styles/pairedPlatform.css';
+import '../styles/judgeSurface.css';
 
 const PIPELINE = [
   ['evidence', 'Evidence', 'Source identity, measurement window, capabilities, diagnostics, and evidence hash remain explicit.'],
@@ -224,21 +226,27 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
   }
 
   return (
-    <main className="platform-page overview-surface" aria-labelledby="overview-title">
+    <main className="platform-page overview-surface judge-overview" aria-labelledby="overview-title">
       <PlatformPageIntro
-        kicker="Overview · executable programme synopsis"
+        kicker="Overview · evidence to authority"
         title="Can real-world evidence justify a financial claim?"
-        description="The outside-data checkpoint shows what happened with a pinned public Ausgrid source. The interactive controlled cases below let you change assurance, policy, and settlement conditions through the same deterministic decision machinery."
+        description="Policy Lab separates the question into inspectable steps: what the evidence actually establishes, which policy admits it, what quantity that policy permits, and whether the resulting claim can settle."
         viewMode="overview"
       >
         <LinkButton primary onClick={() => onViewModeChange('full')}>Open full analysis</LinkButton>
       </PlatformPageIntro>
 
-      <PublicEvidenceCheckpoint compact />
+      <JudgeEvidenceSurface onNavigate={onNavigate} />
 
-      <section className="platform-three-column overview-console">
-        <article className="platform-panel">
-          <header><span>Interactive controlled cases</span><h2>Change one condition</h2></header>
+      <section className="overview-console-intro" aria-labelledby="interactive-workbench-title">
+        <span className="wb-kicker">Interactive workbench · controlled cases</span>
+        <h2 id="interactive-workbench-title">Interrogate another state.</h2>
+        <p>Change the case, declared assurance, policy, or settlement capacity. The current result below comes from the same deterministic decision path used by the deeper investigation surfaces.</p>
+      </section>
+
+      <section className="platform-two-column overview-console judge-console">
+        <article className="platform-panel overview-console-controls">
+          <header><span>Inputs</span><h2>Change one condition</h2></header>
           <label>
             Case
             <select value={activeCaseId} onChange={(event) => selectCase(event.target.value)}>
@@ -263,32 +271,26 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
           </label>
         </article>
 
-        <article className="platform-panel">
-          <header><span>Consequence</span><h2>Live claim journey</h2></header>
+        <article className="platform-panel overview-console-result">
+          <header><span>Result</span><h2>Decision, consequence, and reason</h2></header>
           {loading ? <EmptyState>Evaluating the active state…</EmptyState> : null}
-          {decision ? (
-            <>
-              <ValueFlow requested={requested} justified={justified} covered={covered} blocked={blocked} />
-              <div className="overview-stage-summary">
-                <div><span>01</span><strong>Evidence</strong><StatusBadge tone="pass">AVAILABLE</StatusBadge></div>
-                <div><span>02</span><strong>Qualification</strong><StatusBadge tone={blocked ? 'fail' : 'pass'}>{blocked ? 'BLOCKED' : 'PASS'}</StatusBadge></div>
-                <div><span>03</span><strong>Quantity</strong><StatusBadge tone={blocked ? 'neutral' : 'pass'}>{blocked ? 'NOT RUN' : 'BOUNDED'}</StatusBadge></div>
-                <div><span>04</span><strong>Settlement</strong><StatusBadge tone={settlement?.result === 'SETTLED' ? 'pass' : settlement ? 'warn' : 'neutral'}>{blocked ? 'UNAVAILABLE' : settlement?.result || 'RUNNING'}</StatusBadge></div>
-              </div>
-            </>
-          ) : null}
-        </article>
-
-        <article className="platform-panel">
-          <header><span>Why / proof</span><h2>Current explanation</h2></header>
+          {error ? <div className="workbench-error" role="alert">{error}</div> : null}
           {decision ? (
             <>
               <div className={`platform-decision-mark ${blocked ? 'blocked' : 'admitted'}`}>
                 {blocked ? <Ban size={25} /> : <Gauge size={25} />}
                 <strong>{decision.decision.replaceAll('_', ' ')}</strong>
               </div>
+              <ValueFlow requested={requested} justified={justified} covered={covered} blocked={blocked} />
+              <div className="overview-stage-summary">
+                <div><span>01</span><strong>Evidence</strong><StatusBadge tone="pass">AVAILABLE</StatusBadge></div>
+                <div><span>02</span><strong>Admission</strong><StatusBadge tone={blocked ? 'fail' : 'pass'}>{blocked ? 'BLOCKED' : 'PASS'}</StatusBadge></div>
+                <div><span>03</span><strong>Quantity</strong><StatusBadge tone={blocked ? 'neutral' : 'pass'}>{blocked ? 'NOT RUN' : 'BOUNDED'}</StatusBadge></div>
+                <div><span>04</span><strong>Settlement</strong><StatusBadge tone={settlement?.result === 'SETTLED' ? 'pass' : settlement ? 'warn' : 'neutral'}>{blocked ? 'UNAVAILABLE' : settlement?.result || 'RUNNING'}</StatusBadge></div>
+              </div>
               <dl className="platform-fact-list">
                 <div><dt>Main reason</dt><dd>{humanize(mainRule)}</dd></div>
+                <div><dt>Shortfall</dt><dd>{blocked ? '—' : formatQuantity(shortfall)}</dd></div>
                 <div><dt>Evidence identity</dt><dd><code>{shortHash(evidence.evidence_hash)}</code></dd></div>
                 <div><dt>Decision identity</dt><dd><code>{shortHash(decision.decision_id)}</code></dd></div>
                 <div><dt>Boundary</dt><dd>{decision.boundary}</dd></div>
@@ -302,14 +304,10 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
         </article>
       </section>
 
-      <section className="overview-inventory-strip compact">
-        <div><strong>{pack.cases.length}</strong><span>Interactive cases</span></div>
-        <div><strong>1</strong><span>Outside-data checkpoint</span></div>
-        <div><strong>{pack.policies.length}</strong><span>Policies</span></div>
-        <div><strong>{pack.cases.length * pack.policies.length}</strong><span>Interactive case-policy decisions</span></div>
-        <div><strong>1</strong><span>Historical study</span></div>
-        <div><strong>1</strong><span>Owner-source gate open</span></div>
-      </section>
+      <div className="judge-overview-boundary">
+        <ShieldCheck size={17} />
+        <span>Controlled cases demonstrate mechanism behavior, not independent empirical validation. The outside-data checkpoint remains separately identified above, and external reproduction, owner/operator evidence, evaluator comprehension, and practical use remain open until outside evidence closes them.</span>
+      </div>
     </main>
   );
 }
