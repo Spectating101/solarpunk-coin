@@ -4,6 +4,7 @@ import { PUBLIC_EVIDENCE_CHECKPOINT as checkpoint } from '../data/publicEvidence
 import { evaluateCaseRun, WORKBENCH_RUNTIME } from '../lib/caseWorkbenchRuntime';
 import { formatQuantity, humanize, shortHash } from './platform/PlatformSurface';
 import '../styles/policyCausalCanvas.css';
+import '../styles/policyCausalCanvasAccuracy.css';
 
 const REFERENCE_CASE = 'TYN-001';
 const OPEN_POLICY = 'LAB-CASE-OPEN-004';
@@ -49,12 +50,12 @@ function MiniDecision({ run, referenceMaximum }) {
   const ratio = value.state === 'bounded' && referenceMaximum > 0
     ? Math.max(0, Math.min(1, value.quantity / referenceMaximum))
     : 0;
-  const filled = Math.round(ratio * 8);
+  const filled = Math.round(ratio * 10);
 
   return (
     <div className="pl5-mini-cell" data-state={value.state}>
       <div className="pl5-mini-flow" aria-hidden="true">
-        {Array.from({ length: 8 }, (_, index) => (
+        {Array.from({ length: 10 }, (_, index) => (
           <i key={index} className={index < filled ? '' : 'off'} />
         ))}
       </div>
