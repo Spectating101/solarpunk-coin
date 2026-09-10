@@ -8,6 +8,10 @@ vi.mock('../app/CaseWorkbenchProvider', () => ({
   useCaseWorkbench: vi.fn(),
 }));
 
+vi.mock('./JudgeEvidenceSurface', () => ({
+  default: () => <section aria-label="Judge evidence surface" />,
+}));
+
 const selectCase = vi.fn();
 const selectPolicy = vi.fn();
 const selectScenario = vi.fn();
@@ -76,6 +80,7 @@ describe('LabOverview paired platform surface', () => {
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('50.4')).toBeInTheDocument();
     expect(screen.getByText(/provenance policy capacity/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/judge evidence surface/i)).toBeInTheDocument();
   });
 
   it('switches into Full Analysis through the global view callback', () => {
