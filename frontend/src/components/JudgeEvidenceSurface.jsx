@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  AlertTriangle,
   ArrowRight,
   CheckCircle2,
-  CircleAlert,
   GitCompareArrows,
   LockKeyhole,
   ShieldCheck,
@@ -155,7 +155,7 @@ export default function JudgeEvidenceSurface({ onNavigate }) {
         <article className="judge-causal-proof">
           <div className="judge-section-label">Controlled mechanism check · {REFERENCE_CASE}</div>
           {experimentError ? (
-            <div className="judge-experiment-error" role="alert"><CircleAlert size={16} /> {experimentError}</div>
+            <div className="judge-experiment-error" role="alert"><AlertTriangle size={16} /> {experimentError}</div>
           ) : null}
           <div className="judge-causal-table" role="table" aria-label="Same evidence policy and assurance comparison">
             <div className="judge-causal-row header" role="row">
