@@ -1,14 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  AlertTriangle,
-  ArrowRight,
-  CheckCircle2,
-  GitCompareArrows,
-  LockKeyhole,
-  ShieldCheck,
-} from 'lucide-react';
-import gauntlet from '../../../benchmark/gauntlet/policy-lab-specialized.v1.json';
-import c3c4 from '../../../benchmark/gauntlet/policy-lab-c3-c4-map.v1.json';
 import assumptions from '../../../benchmark/gauntlet/policy-assumptions.v1.json';
 import { PUBLIC_EVIDENCE_CHECKPOINT as checkpoint } from '../data/publicEvidenceCheckpoint';
 import { evaluateCaseRun, WORKBENCH_RUNTIME } from '../lib/caseWorkbenchRuntime';
@@ -27,32 +17,27 @@ const EXPERIMENT = Object.freeze([
   ['l2Pilot', PILOT_POLICY, L2],
 ]);
 
-function decisionCell(run) {
-  if (!run?.decision) return { state: 'PENDING', detail: 'evaluating', tone: 'neutral', quantity: null };
+function decisionText(run) {
+  if (!run?.decision) return { primary: 'evaluating', secondary: '' };
   if (run.decision.decision === 'BLOCKED') {
     return {
-      state: 'BLOCKED',
-      detail: humanize(run.decision.admission.blocking_rules[0]),
-      tone: 'blocked',
-      quantity: null,
+      primary: 'BLOCKED',
+      secondary: humanize(run.decision.admission.blocking_rules[0]),
     };
   }
   return {
-    state: 'ADMIT WITH LIMIT',
-    detail: humanize(run.decision.capacity.binding_constraints[0]),
-    tone: 'admitted',
-    quantity: run.decision.capacity.admitted_maximum,
+    primary: formatQuantity(run.decision.capacity.admitted_maximum),
+    secondary: humanize(run.decision.capacity.binding_constraints[0]),
   };
 }
 
-function MatrixCell({ run }) {
-  const cell = decisionCell(run);
+function DecisionCell({ run }) {
+  const value = decisionText(run);
   return (
-    <div className={`judge-matrix-cell ${cell.tone}`}>
-      <strong>{cell.quantity == null ? cell.state : formatQuantity(cell.quantity)}</strong>
-      <span>{cell.quantity == null ? cell.detail : 'maximum claim units'}</span>
-      {cell.quantity != null ? <small>{cell.detail}</small> : null}
-    </div>
+    <td>
+      <strong>{value.primary}</strong>
+      {value.secondary ? <span>{value.secondary}</span> : null}
+    </td>
   );
 }
 
@@ -92,9 +77,6 @@ export default function JudgeEvidenceSurface({ onNavigate }) {
       quantity: Number((openL2Maximum * multiplier).toFixed(6)),
     }));
 
-  const machineChallenges = gauntlet.challenges.filter((item) => item.state === 'MACHINE_REQUIRED').length;
-  const externalGates = gauntlet.challenges.filter((item) => item.state === 'OPEN_EXTERNAL').length;
-
   const openComparison = () => onNavigate?.({
     section: 'compare',
     scenarioId: L0,
@@ -104,130 +86,115 @@ export default function JudgeEvidenceSurface({ onNavigate }) {
 
   return (
     <section className="judge-evidence-surface" aria-labelledby="judge-evidence-title">
-      <header className="judge-evidence-header">
-        <div>
-          <span className="judge-eyebrow">Evidence → authority</span>
-          <h2 id="judge-evidence-title">Same evidence. Different policy. Different authority.</h2>
-          <p>
-            Policy Lab keeps observed evidence, assurance context, admission rules, quantity ceilings, and settlement separate so the reason a financial claim changes remains inspectable.
-          </p>
-        </div>
-        <div className={`judge-evidence-lock ${evidenceLocked ? 'locked' : ''}`}>
-          <LockKeyhole size={18} />
+      <header className="record-header">
+        <div className="record-classification">Policy Lab / claim assessment record</div>
+        <div className="record-heading-row">
           <div>
-            <span>Controlled experiment evidence identity</span>
-            <code>{shortHash(evidenceHash, 14, 10)}</code>
-            <strong>{evidenceLocked ? 'unchanged across all four decisions' : 'checking identity…'}</strong>
+            <h2 id="judge-evidence-title">{checkpoint.case_id}</h2>
+            <p>Ausgrid public evidence checkpoint</p>
           </div>
+          <dl className="record-header-meta">
+            <div><dt>Assurance</dt><dd>{checkpoint.evidence.assurance}</dd></div>
+            <div><dt>Evaluated revision</dt><dd><code>{shortHash(checkpoint.provenance.evaluated_revision, 12, 8)}</code></dd></div>
+          </dl>
         </div>
+        <p className="record-deck">
+          A bounded test of how one evidence record behaves under explicit admission, quantity and settlement rules. The public checkpoint is machine-reproduced; it is not operator validation.
+        </p>
       </header>
 
-      <div className="judge-evidence-grid">
-        <article className="judge-public-proof">
-          <div className="judge-section-label">Outside data · observed checkpoint</div>
-          <div className="judge-public-proof-heading">
+      <section className="record-section" aria-labelledby="record-observed-title">
+        <div className="record-section-number">01</div>
+        <div className="record-section-body">
+          <h3 id="record-observed-title">Observed checkpoint</h3>
+          <table className="record-table observed-table">
+            <tbody>
+              <tr><th>Publisher / dataset</th><td>{checkpoint.source.publisher} / {checkpoint.source.dataset}</td></tr>
+              <tr><th>Selected window</th><td>{checkpoint.source.selected_window.join(' to ')} · {checkpoint.source.interval_count} half-hour intervals</td></tr>
+              <tr><th>Evidence identity</th><td><code>{shortHash(checkpoint.evidence.evidence_hash, 16, 10)}</code></td></tr>
+              <tr><th>Open policy</th><td><strong>ADMIT WITH LIMIT</strong> · ceiling {formatQuantity(checkpoint.decisions.open.admitted_maximum)} kWh</td></tr>
+              <tr><th>Pilot policy</th><td><strong>BLOCKED</strong> · {checkpoint.decisions.pilot.blocking_rules.map(humanize).join(', ')}</td></tr>
+              <tr><th>40% settlement</th><td><strong>{checkpoint.settlement.result}</strong> · {formatQuantity(checkpoint.settlement.covered_quantity)} covered / {formatQuantity(checkpoint.settlement.shortfall_quantity)} shortfall</td></tr>
+              <tr><th>Decision replay</th><td>{checkpoint.verification.decision_reproduction}</td></tr>
+            </tbody>
+          </table>
+          <p className="record-boundary">
+            <strong>Boundary.</strong> This establishes public-data operability and deterministic reproduction only. It does not establish physical meter truth, source-holder custody, legal issuance authority, enforceable redemption or monetary performance.
+          </p>
+        </div>
+      </section>
+
+      <section className="record-section" aria-labelledby="record-comparison-title">
+        <div className="record-section-number">02</div>
+        <div className="record-section-body">
+          <div className="record-section-heading">
             <div>
-              <strong>{checkpoint.case_id}</strong>
-              <span>Ausgrid public archive · {checkpoint.source.interval_count} half-hour intervals · actual {checkpoint.evidence.assurance}</span>
+              <h3 id="record-comparison-title">Controlled comparison</h3>
+              <p>{REFERENCE_CASE}. Same evidence envelope; policy and declared assurance are the manipulated variables.</p>
             </div>
-            <div className="judge-public-quantity">
-              <strong>{formatQuantity(checkpoint.decisions.open.admitted_maximum)}</strong>
-              <span>kWh ceiling</span>
+            <div className="record-hash-check">
+              <span>Evidence identity</span>
+              <code>{shortHash(evidenceHash, 14, 10)}</code>
+              <strong>{evidenceLocked ? 'UNCHANGED' : 'VERIFYING'}</strong>
             </div>
           </div>
-          <dl className="judge-proof-facts">
-            <div><dt>Open policy</dt><dd className="pass">ADMIT WITH LIMIT</dd></div>
-            <div><dt>Pilot policy</dt><dd className="fail">BLOCKED</dd></div>
-            <div><dt>40% settlement</dt><dd className="warn">{checkpoint.settlement.result} · {formatQuantity(checkpoint.settlement.shortfall_quantity)} shortfall</dd></div>
-            <div><dt>Decision replay</dt><dd className="pass">{checkpoint.verification.decision_reproduction}</dd></div>
-          </dl>
-          <div className="judge-proof-boundary">
-            <ShieldCheck size={17} />
-            <span>
-              Public-data operability, not operator validation. The checkpoint does not establish physical meter truth, legal issuance authority, reserve custody, or monetary performance.
-            </span>
-          </div>
-          <div className="judge-proof-meta">
-            <span>evaluated revision</span><code>{shortHash(checkpoint.provenance.evaluated_revision, 12, 8)}</code>
-          </div>
-        </article>
 
-        <article className="judge-causal-proof">
-          <div className="judge-section-label">Controlled mechanism check · {REFERENCE_CASE}</div>
-          {experimentError ? (
-            <div className="judge-experiment-error" role="alert"><AlertTriangle size={16} /> {experimentError}</div>
-          ) : null}
-          <div className="judge-causal-table" role="table" aria-label="Same evidence policy and assurance comparison">
-            <div className="judge-causal-row header" role="row">
-              <span role="columnheader">Assurance context</span>
-              <span role="columnheader">Open policy</span>
-              <span role="columnheader">Pilot policy</span>
-            </div>
-            <div className="judge-causal-row" role="row">
-              <div role="rowheader"><strong>Actual L0</strong><span>observed evidence</span></div>
-              <MatrixCell run={runs?.l0Open} />
-              <MatrixCell run={runs?.l0Pilot} />
-            </div>
-            <div className="judge-causal-row counterfactual" role="row">
-              <div role="rowheader"><strong>Declared L2</strong><span>counterfactual only</span></div>
-              <MatrixCell run={runs?.l2Open} />
-              <MatrixCell run={runs?.l2Pilot} />
-            </div>
-          </div>
-          <div className="judge-causal-logic">
-            <div><CheckCircle2 size={16} /><span><strong>Evidence stays fixed.</strong> Policy and declared assurance are the manipulated variables.</span></div>
-            <div><ArrowRight size={16} /><span>At L0 the pilot blocks on minimum provenance; at declared L2 it admits but caps quantity through provenance policy capacity.</span></div>
-          </div>
-          <button type="button" className="judge-text-action" onClick={openComparison}>
-            <GitCompareArrows size={16} /> Inspect the full policy comparison <ArrowRight size={14} />
-          </button>
-        </article>
-      </div>
+          {experimentError ? <p className="record-error" role="alert">Experiment error: {experimentError}</p> : null}
 
-      <div className="judge-assumption-row">
-        <div className="judge-assumption-copy">
-          <span className="judge-section-label">Assumption sensitivity</span>
-          <strong>L2 provenance multiplier</strong>
-          <p>The multiplier is an illustrative research-policy assumption, not an empirical estimate. The interface shows its consequence instead of hiding it inside the rule.</p>
+          <table className="record-table comparison-table" aria-label="Same evidence policy and assurance comparison">
+            <thead>
+              <tr>
+                <th>Assurance context</th>
+                <th>Open policy</th>
+                <th>Pilot policy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Actual L0 <span>observed</span></th>
+                <DecisionCell run={runs?.l0Open} />
+                <DecisionCell run={runs?.l0Pilot} />
+              </tr>
+              <tr>
+                <th>Declared L2* <span>counterfactual</span></th>
+                <DecisionCell run={runs?.l2Open} />
+                <DecisionCell run={runs?.l2Pilot} />
+              </tr>
+            </tbody>
+          </table>
+          <p className="record-footnote">* Declared L2 is a research counterfactual. It does not upgrade the underlying source evidence.</p>
+          <button type="button" className="record-text-link" onClick={openComparison}>Open full policy comparison →</button>
         </div>
-        <div className="judge-sensitivity-scale" aria-label="L2 multiplier sensitivity">
-          {sensitivity.length ? sensitivity.map((item) => (
-            <div key={item.multiplier} className={item.multiplier === l2Assumption.expected_current_value ? 'current' : ''}>
-              <span>{item.multiplier.toFixed(1)}×</span>
-              <strong>{formatQuantity(item.quantity)}</strong>
-              <small>{item.multiplier === l2Assumption.expected_current_value ? 'current research policy' : 'sensitivity case'}</small>
-            </div>
-          )) : <span className="judge-sensitivity-loading">evaluating sensitivity…</span>}
-        </div>
-      </div>
+      </section>
 
-      <footer className="judge-proof-ledger">
-        <div>
-          <span>Machine challenges</span>
-          <strong>{machineChallenges}</strong>
-          <small>CI-gated invariants</small>
+      <section className="record-section" aria-labelledby="record-assumption-title">
+        <div className="record-section-number">03</div>
+        <div className="record-section-body">
+          <h3 id="record-assumption-title">Assumption sensitivity</h3>
+          <p className="record-intro">The L2 provenance multiplier is an illustrative research-policy assumption, not an empirical estimate.</p>
+          <table className="record-table sensitivity-table" aria-label="L2 multiplier sensitivity">
+            <thead>
+              <tr><th>Multiplier</th>{sensitivity.map((item) => <th key={item.multiplier}>{item.multiplier.toFixed(1)}×{item.multiplier === l2Assumption.expected_current_value ? ' (current)' : ''}</th>)}</tr>
+            </thead>
+            <tbody>
+              <tr><th>Admitted quantity</th>{sensitivity.map((item) => <td key={item.multiplier}>{formatQuantity(item.quantity)}</td>)}</tr>
+            </tbody>
+          </table>
         </div>
-        <div>
-          <span>C3 lifecycle</span>
-          <strong className="partial">{c3c4.levels.C3.state}</strong>
-          <small>open lifecycle work remains</small>
+      </section>
+
+      <section className="record-section record-section-last" aria-labelledby="record-trace-title">
+        <div className="record-section-number">04</div>
+        <div className="record-section-body">
+          <h3 id="record-trace-title">Trace</h3>
+          <div className="record-trace-grid">
+            <div><span>Source archive SHA-256</span><code>{shortHash(checkpoint.source.archive_sha256, 18, 12)}</code></div>
+            <div><span>Assessment ID</span><code>{shortHash(checkpoint.verification.assessment_id, 18, 12)}</code></div>
+            <div><span>Runtime revision</span><code>{shortHash(WORKBENCH_RUNTIME.source_revision, 18, 12)}</code></div>
+            <div><span>Research boundaries R1 / R2 / R3 / R4</span><code>{Object.values(checkpoint.boundaries).join(' / ')}</code></div>
+          </div>
         </div>
-        <div>
-          <span>C4 hardening</span>
-          <strong className="partial">{c3c4.levels.C4.state}</strong>
-          <small>not certified</small>
-        </div>
-        <div>
-          <span>External gates</span>
-          <strong className="open">{externalGates} OPEN</strong>
-          <small>cannot be closed by internal CI</small>
-        </div>
-        <div className="judge-proof-revision">
-          <span>Runtime revision</span>
-          <code>{shortHash(WORKBENCH_RUNTIME.source_revision, 12, 8)}</code>
-          <small>build identity, not source truth</small>
-        </div>
-      </footer>
+      </section>
     </section>
   );
 }
