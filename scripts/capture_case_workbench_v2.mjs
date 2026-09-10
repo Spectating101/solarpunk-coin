@@ -30,17 +30,17 @@ async function selectAssurance(target, scenarioId) {
 }
 
 await open('#lab', 'Evidence → Policy → Quantity → Settlement');
-await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
+await page.locator('.pl-live-decision').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
 await page.getByLabel(/Proof \/ assurance/i).waitFor({ state: 'visible' });
 await shot('00-lab-overview-blocked.png');
 
 await selectAssurance(page, 'PROVENANCE-L2-COUNTERFACTUAL');
-await page.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ state: 'visible' });
-await page.getByText('126', { exact: true }).first().waitFor({ state: 'visible' });
+await page.locator('.pl-live-decision').getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
+await page.locator('.pl-live-quantities').getByText('126', { exact: true }).waitFor({ state: 'visible' });
 await shot('00a-lab-overview-admitted.png');
 
 await selectAssurance(page, 'PROVENANCE-L0-BASE');
-await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
+await page.locator('.pl-live-decision').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
 
 await open('#cases', 'Investigate the rule that blocks or bounds the case.');
 await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
@@ -134,17 +134,17 @@ for (const label of ['Overview', 'Investigate', 'Research', 'Field Use', 'Progra
 }
 await shot('11-mobile-primary-navigation.png', mobilePage);
 await mobilePage.getByRole('button', { name: /close primary navigation/i }).click();
-await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
+await mobilePage.locator('.pl-live-decision').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
 await mobilePage.getByLabel(/Proof \/ assurance/i).waitFor({ state: 'visible' });
 await shot('12-mobile-lab-overview-blocked.png', mobilePage);
 
 await selectAssurance(mobilePage, 'PROVENANCE-L2-COUNTERFACTUAL');
-await mobilePage.getByText('ADMIT WITH LIMIT', { exact: true }).first().waitFor({ state: 'visible' });
-await mobilePage.getByText('126', { exact: true }).first().waitFor({ state: 'visible' });
+await mobilePage.locator('.pl-live-decision').getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
+await mobilePage.locator('.pl-live-quantities').getByText('126', { exact: true }).waitFor({ state: 'visible' });
 await shot('12a-mobile-lab-overview-admitted.png', mobilePage);
 
 await selectAssurance(mobilePage, 'PROVENANCE-L0-BASE');
-await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
+await mobilePage.locator('.pl-live-decision').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
 
 await openMobile('#cases', 'Investigate the rule that blocks or bounds the case.');
 await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
