@@ -36,7 +36,7 @@ await shot('00-lab-overview-blocked.png');
 
 await selectAssurance(page, 'PROVENANCE-L2-COUNTERFACTUAL');
 await page.locator('.pl-live-decision').getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
-await page.locator('.pl-live-quantities').getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await page.locator('.pl-live-quantities > div:nth-child(3) > strong').filter({ hasText: '126' }).waitFor({ state: 'visible' });
 await shot('00a-lab-overview-admitted.png');
 
 await selectAssurance(page, 'PROVENANCE-L0-BASE');
@@ -140,7 +140,7 @@ await shot('12-mobile-lab-overview-blocked.png', mobilePage);
 
 await selectAssurance(mobilePage, 'PROVENANCE-L2-COUNTERFACTUAL');
 await mobilePage.locator('.pl-live-decision').getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
-await mobilePage.locator('.pl-live-quantities').getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await mobilePage.locator('.pl-live-quantities > div:nth-child(3) > strong').filter({ hasText: '126' }).waitFor({ state: 'visible' });
 await shot('12a-mobile-lab-overview-admitted.png', mobilePage);
 
 await selectAssurance(mobilePage, 'PROVENANCE-L0-BASE');
