@@ -13,7 +13,7 @@ describe('JudgeEvidenceSurface', () => {
     expect(within(table).getAllByText('180')).toHaveLength(2);
     expect(within(table).getByText('126')).toBeInTheDocument();
     expect(within(table).getByText('BLOCKED')).toBeInTheDocument();
-    expect(within(table).getByText(/minimum provenance/i)).toBeInTheDocument();
+    expect(within(table).getByText(/min provenance/i)).toBeInTheDocument();
     expect(within(table).getByText(/provenance policy capacity/i)).toBeInTheDocument();
 
     expect(screen.getByText('0.5×')).toBeInTheDocument();
