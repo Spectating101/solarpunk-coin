@@ -227,87 +227,58 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
 
   return (
     <main className="platform-page overview-surface judge-overview" aria-labelledby="overview-title">
-      <PlatformPageIntro
-        kicker="Overview · evidence to authority"
-        title="Can real-world evidence justify a financial claim?"
-        description="Policy Lab separates the question into inspectable steps: what the evidence actually establishes, which policy admits it, what quantity that policy permits, and whether the resulting claim can settle."
-        viewMode="overview"
-      >
-        <LinkButton primary onClick={() => onViewModeChange('full')}>Open full analysis</LinkButton>
-      </PlatformPageIntro>
+      <header className="pl-overview-head">
+        <div>
+          <span>POLICY LAB</span>
+          <h1 id="overview-title">Evidence → Policy → Quantity → Settlement</h1>
+        </div>
+        <button type="button" onClick={() => onViewModeChange('full')}>Full analysis ↗</button>
+      </header>
 
       <JudgeEvidenceSurface onNavigate={onNavigate} />
 
-      <section className="overview-console-intro" aria-labelledby="interactive-workbench-title">
-        <span className="wb-kicker">Interactive workbench · controlled cases</span>
-        <h2 id="interactive-workbench-title">Interrogate another state.</h2>
-        <p>Change the case, declared assurance, policy, or settlement capacity. The current result below comes from the same deterministic decision path used by the deeper investigation surfaces.</p>
+      <section className="pl-live-workbench" aria-labelledby="interactive-workbench-title">
+        <header>
+          <div className="pl-live-title">
+            <span>CONTROLLED CASE</span>
+            <strong id="interactive-workbench-title">{activeCaseId}</strong>
+          </div>
+          <div className="pl-live-controls">
+            <label><span>case</span><select aria-label="Case" value={activeCaseId} onChange={(event) => selectCase(event.target.value)}>{pack.cases.map((item) => <option key={item.case_id} value={item.case_id}>{item.case_id}</option>)}</select></label>
+            <label><span>assurance</span><select aria-label="Proof / assurance" value={activeScenarioId} onChange={(event) => selectScenario(event.target.value)}>{pack.scenarios.map((item) => <option key={item.scenario_id} value={item.scenario_id}>{item.name}</option>)}</select></label>
+            <label><span>policy</span><select aria-label="Policy" value={activePolicyId} onChange={(event) => selectPolicy(event.target.value)}>{pack.policies.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+            <label className="pl-live-slider"><span>settlement {Math.round(settlementMultiplier * 100)}%</span><input aria-label="Settlement capacity" type="range" min="0" max="1" step="0.1" value={settlementMultiplier} disabled={blocked} onChange={(event) => setSettlementMultiplier(event.target.value)} /></label>
+          </div>
+        </header>
+
+        {loading ? <EmptyState>Evaluating…</EmptyState> : null}
+        {error ? <div className="workbench-error" role="alert">{error}</div> : null}
+        {decision ? (
+          <div className="pl-live-result">
+            <div className="pl-live-decision" data-state={blocked ? 'blocked' : 'admitted'}>
+              <span>decision</span>
+              <strong>{decision.decision.replaceAll('_', ' ')}</strong>
+              <small>{humanize(mainRule)}</small>
+            </div>
+            <div className="pl-live-quantities" aria-label="Requested, justified, and covered quantity">
+              <div><span>requested</span><strong>{formatQuantity(requested)}</strong></div>
+              <i>→</i>
+              <div><span>justified</span><strong>{blocked ? '—' : formatQuantity(justified)}</strong></div>
+              <i>→</i>
+              <div><span>covered</span><strong>{blocked ? '—' : formatQuantity(covered)}</strong></div>
+            </div>
+            <div className="pl-live-trace">
+              <span>evidence <code>{shortHash(evidence?.evidence_hash, 8, 5)}</code></span>
+              <span>decision <code>{shortHash(decision.decision_id, 8, 5)}</code></span>
+              {!blocked ? <span>shortfall <strong>{formatQuantity(shortfall)}</strong></span> : null}
+            </div>
+            <div className="pl-live-actions">
+              <button type="button" onClick={() => openInvestigation(blocked ? 'constraints' : 'stress')}>investigate →</button>
+              <button type="button" onClick={() => onNavigate({ section: 'verify', tool: 'lineage' })}>proof trail →</button>
+            </div>
+          </div>
+        ) : <EmptyState>No result.</EmptyState>}
       </section>
-
-      <section className="platform-two-column overview-console judge-console">
-        <article className="platform-panel overview-console-controls">
-          <header><span>Inputs</span><h2>Change one condition</h2></header>
-          <label>
-            Case
-            <select value={activeCaseId} onChange={(event) => selectCase(event.target.value)}>
-              {pack.cases.map((item) => <option key={item.case_id} value={item.case_id}>{item.case_id} · {item.subject}</option>)}
-            </select>
-          </label>
-          <label>
-            Proof / assurance
-            <select value={activeScenarioId} onChange={(event) => selectScenario(event.target.value)}>
-              {pack.scenarios.map((item) => <option key={item.scenario_id} value={item.scenario_id}>{item.name}</option>)}
-            </select>
-          </label>
-          <label>
-            Policy
-            <select value={activePolicyId} onChange={(event) => selectPolicy(event.target.value)}>
-              {pack.policies.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-            </select>
-          </label>
-          <label>
-            Settlement · {Math.round(settlementMultiplier * 100)}%
-            <input type="range" min="0" max="1" step="0.1" value={settlementMultiplier} disabled={blocked} onChange={(event) => setSettlementMultiplier(event.target.value)} />
-          </label>
-        </article>
-
-        <article className="platform-panel overview-console-result">
-          <header><span>Result</span><h2>Decision, consequence, and reason</h2></header>
-          {loading ? <EmptyState>Evaluating the active state…</EmptyState> : null}
-          {error ? <div className="workbench-error" role="alert">{error}</div> : null}
-          {decision ? (
-            <>
-              <div className={`platform-decision-mark ${blocked ? 'blocked' : 'admitted'}`}>
-                {blocked ? <Ban size={25} /> : <Gauge size={25} />}
-                <strong>{decision.decision.replaceAll('_', ' ')}</strong>
-              </div>
-              <ValueFlow requested={requested} justified={justified} covered={covered} blocked={blocked} />
-              <div className="overview-stage-summary">
-                <div><span>01</span><strong>Evidence</strong><StatusBadge tone="pass">AVAILABLE</StatusBadge></div>
-                <div><span>02</span><strong>Admission</strong><StatusBadge tone={blocked ? 'fail' : 'pass'}>{blocked ? 'BLOCKED' : 'PASS'}</StatusBadge></div>
-                <div><span>03</span><strong>Quantity</strong><StatusBadge tone={blocked ? 'neutral' : 'pass'}>{blocked ? 'NOT RUN' : 'BOUNDED'}</StatusBadge></div>
-                <div><span>04</span><strong>Settlement</strong><StatusBadge tone={settlement?.result === 'SETTLED' ? 'pass' : settlement ? 'warn' : 'neutral'}>{blocked ? 'UNAVAILABLE' : settlement?.result || 'RUNNING'}</StatusBadge></div>
-              </div>
-              <dl className="platform-fact-list">
-                <div><dt>Main reason</dt><dd>{humanize(mainRule)}</dd></div>
-                <div><dt>Shortfall</dt><dd>{blocked ? '—' : formatQuantity(shortfall)}</dd></div>
-                <div><dt>Evidence identity</dt><dd><code>{shortHash(evidence.evidence_hash)}</code></dd></div>
-                <div><dt>Decision identity</dt><dd><code>{shortHash(decision.decision_id)}</code></dd></div>
-                <div><dt>Boundary</dt><dd>{decision.boundary}</dd></div>
-              </dl>
-              <div className="platform-action-stack">
-                <LinkButton primary onClick={() => openInvestigation(blocked ? 'constraints' : 'stress')}>Continue the investigation</LinkButton>
-                <LinkButton onClick={() => onNavigate({ section: 'verify', tool: 'lineage' })}>Inspect the proof trail</LinkButton>
-              </div>
-            </>
-          ) : <EmptyState>No result has resolved yet.</EmptyState>}
-        </article>
-      </section>
-
-      <div className="judge-overview-boundary">
-        <ShieldCheck size={17} />
-        <span>Controlled cases demonstrate mechanism behavior, not independent empirical validation. The outside-data checkpoint remains separately identified above, and external reproduction, owner/operator evidence, evaluator comprehension, and practical use remain open until outside evidence closes them.</span>
-      </div>
     </main>
   );
 }
