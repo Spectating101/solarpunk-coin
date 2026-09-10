@@ -10,6 +10,7 @@ describe('JudgeEvidenceSurface', () => {
     expect(await screen.findByText('UNCHANGED')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'PUB-AUSGRID-001P' })).toBeInTheDocument();
     expect(screen.getByText(/public-data operability and deterministic reproduction only/i)).toBeInTheDocument();
+    expect(screen.getByText(/unchanged across all four decisions/i)).toBeInTheDocument();
 
     const table = screen.getByRole('table', { name: /same evidence policy and assurance comparison/i });
     expect(within(table).getAllByText('180')).toHaveLength(2);
