@@ -22,8 +22,11 @@ async function open(url, expected) {
 // assurance/policy matrix remains visibly separate from the observed checkpoint.
 await open(`${baseUrl}#lab`, 'Evidence → Policy → Quantity → Settlement');
 await page.getByText('PUB-AUSGRID-001P', { exact: false }).first().waitFor({ state: 'visible' });
-await page.getByText('same evidence', { exact: false }).waitFor({ state: 'visible' });
 await page.locator('.pl-settlement-bar').waitFor({ state: 'visible' });
+const causalMatrix = page.locator('.pl-causal-matrix');
+await causalMatrix.getByText('126', { exact: true }).waitFor({ state: 'visible' });
+await causalMatrix.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
+await page.locator('.pl-same-evidence[data-locked="true"]').waitFor({ state: 'visible' });
 await page.locator('.judge-evidence-surface').first().screenshot({
   path: path.join(outputDir, '01-outside-data-checkpoint.png'),
 });
