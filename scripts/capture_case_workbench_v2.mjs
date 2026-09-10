@@ -29,7 +29,7 @@ async function selectAssurance(target, scenarioId) {
   await target.getByLabel(/Proof \/ assurance|Active assurance scenario|Assurance context/i).selectOption(scenarioId);
 }
 
-await open('#lab', 'Can real-world evidence justify a financial claim?');
+await open('#lab', 'Evidence → Policy → Quantity → Settlement');
 await page.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
 await page.getByLabel(/Proof \/ assurance/i).waitFor({ state: 'visible' });
 await shot('00-lab-overview-blocked.png');
@@ -127,7 +127,7 @@ async function openMobile(hash, expected) {
   if (expected) await mobilePage.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-await openMobile('#lab', 'Can real-world evidence justify a financial claim?');
+await openMobile('#lab', 'Evidence → Policy → Quantity → Settlement');
 await mobilePage.getByRole('button', { name: /open primary navigation/i }).click();
 for (const label of ['Overview', 'Investigate', 'Research', 'Field Use', 'Programme']) {
   await mobilePage.getByRole('button', { name: label, exact: true }).waitFor({ state: 'visible' });
