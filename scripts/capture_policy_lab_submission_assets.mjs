@@ -17,10 +17,12 @@ async function open(url, expected) {
   if (expected) await page.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-// Asset 1: immediate judge-facing overview and outside-data proof.
+// Asset 1: immediate judge-facing evidence sheet. It contains the observed
+// outside-data checkpoint and a separately labelled controlled causal check.
 await open(`${baseUrl}#lab`, 'Can real-world evidence justify a financial claim?');
 await page.getByText('PUB-AUSGRID-001P', { exact: false }).first().waitFor({ state: 'visible' });
-await page.locator('.public-evidence-checkpoint').first().screenshot({
+await page.getByText('unchanged across all four decisions', { exact: false }).waitFor({ state: 'visible' });
+await page.locator('.judge-evidence-surface').first().screenshot({
   path: path.join(outputDir, '01-outside-data-checkpoint.png'),
 });
 
