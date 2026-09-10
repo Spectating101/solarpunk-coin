@@ -34,11 +34,15 @@ function decisionText(run) {
 function DecisionCell({ run }) {
   const value = decisionText(run);
   return (
-    <td>
+    <td data-state={value.primary === 'BLOCKED' ? 'blocked' : 'bounded'}>
       <strong>{value.primary}</strong>
       {value.secondary ? <span>{value.secondary}</span> : null}
     </td>
   );
+}
+
+function MetaRow({ label, children }) {
+  return <div className="pl-meta-row"><dt>{label}</dt><dd>{children}</dd></div>;
 }
 
 export default function JudgeEvidenceSurface({ onNavigate }) {
@@ -86,115 +90,124 @@ export default function JudgeEvidenceSurface({ onNavigate }) {
 
   return (
     <section className="judge-evidence-surface" aria-labelledby="judge-evidence-title">
-      <header className="record-header">
-        <div className="record-classification">Policy Lab / claim assessment record</div>
-        <div className="record-heading-row">
-          <div>
-            <h2 id="judge-evidence-title">{checkpoint.case_id}</h2>
-            <p>Ausgrid public evidence checkpoint</p>
-          </div>
-          <dl className="record-header-meta">
-            <div><dt>Assurance</dt><dd>{checkpoint.evidence.assurance}</dd></div>
-            <div><dt>Evaluated revision</dt><dd><code>{shortHash(checkpoint.provenance.evaluated_revision, 12, 8)}</code></dd></div>
-          </dl>
+      <header className="pl-context-bar">
+        <div className="pl-context-title">
+          <span>Public checkpoint</span>
+          <h2 id="judge-evidence-title">{checkpoint.case_id}</h2>
         </div>
-        <p className="record-deck">
-          A bounded test of how one evidence record behaves under explicit admission, quantity and settlement rules. The public checkpoint is machine-reproduced; it is not operator validation.
-        </p>
+        <dl className="pl-context-meta">
+          <MetaRow label="source">{checkpoint.source.publisher}</MetaRow>
+          <MetaRow label="window">{checkpoint.source.selected_window.join(' → ')}</MetaRow>
+          <MetaRow label="assurance">{checkpoint.evidence.assurance}</MetaRow>
+          <MetaRow label="replay">{checkpoint.verification.decision_reproduction}</MetaRow>
+          <MetaRow label="revision"><code>{shortHash(checkpoint.provenance.evaluated_revision, 10, 7)}</code></MetaRow>
+        </dl>
       </header>
 
-      <section className="record-section" aria-labelledby="record-observed-title">
-        <div className="record-section-number">01</div>
-        <div className="record-section-body">
-          <h3 id="record-observed-title">Observed checkpoint</h3>
-          <table className="record-table observed-table">
-            <tbody>
-              <tr><th>Publisher / dataset</th><td>{checkpoint.source.publisher} / {checkpoint.source.dataset}</td></tr>
-              <tr><th>Selected window</th><td>{checkpoint.source.selected_window.join(' to ')} · {checkpoint.source.interval_count} half-hour intervals</td></tr>
-              <tr><th>Evidence identity</th><td><code>{shortHash(checkpoint.evidence.evidence_hash, 16, 10)}</code></td></tr>
-              <tr><th>Open policy</th><td><strong>ADMIT WITH LIMIT</strong> · ceiling {formatQuantity(checkpoint.decisions.open.admitted_maximum)} kWh</td></tr>
-              <tr><th>Pilot policy</th><td><strong>BLOCKED</strong> · {checkpoint.decisions.pilot.blocking_rules.map(humanize).join(', ')}</td></tr>
-              <tr><th>40% settlement</th><td><strong>{checkpoint.settlement.result}</strong> · {formatQuantity(checkpoint.settlement.covered_quantity)} covered / {formatQuantity(checkpoint.settlement.shortfall_quantity)} shortfall</td></tr>
-              <tr><th>Decision replay</th><td>{checkpoint.verification.decision_reproduction}</td></tr>
-            </tbody>
-          </table>
-          <p className="record-boundary">
-            <strong>Boundary.</strong> This establishes public-data operability and deterministic reproduction only. It does not establish physical meter truth, source-holder custody, legal issuance authority, enforceable redemption or monetary performance.
-          </p>
-        </div>
-      </section>
+      <div className="pl-workspace-grid">
+        <aside className="pl-pane pl-source-pane" aria-labelledby="pl-source-title">
+          <header className="pl-pane-header">
+            <span>01</span>
+            <h3 id="pl-source-title">Evidence</h3>
+          </header>
+          <dl className="pl-kv-list">
+            <MetaRow label="dataset">{checkpoint.source.dataset}</MetaRow>
+            <MetaRow label="intervals">{checkpoint.source.interval_count} × 30 min</MetaRow>
+            <MetaRow label="eligible surplus"><strong>{formatQuantity(checkpoint.evidence.total_eligible_surplus_kwh)} kWh</strong></MetaRow>
+            <MetaRow label="evidence id"><code>{shortHash(checkpoint.evidence.evidence_hash, 13, 9)}</code></MetaRow>
+            <MetaRow label="archive sha"><code>{shortHash(checkpoint.source.archive_sha256, 13, 9)}</code></MetaRow>
+          </dl>
+          <div className="pl-boundary-note">
+            <strong>Scope</strong>
+            <p>Public-data operability and deterministic reproduction only. This does not establish physical meter truth, source-holder custody, legal issuance authority, enforceable redemption or monetary performance.</p>
+          </div>
+        </aside>
 
-      <section className="record-section" aria-labelledby="record-comparison-title">
-        <div className="record-section-number">02</div>
-        <div className="record-section-body">
-          <div className="record-section-heading">
-            <div>
-              <h3 id="record-comparison-title">Controlled comparison</h3>
-              <p>{REFERENCE_CASE}. Same evidence envelope; policy and declared assurance are the manipulated variables.</p>
-            </div>
-            <div className="record-hash-check">
-              <span>Evidence identity</span>
-              <code>{shortHash(evidenceHash, 14, 10)}</code>
+        <section className="pl-pane pl-compare-pane" aria-labelledby="pl-compare-title">
+          <header className="pl-pane-header pl-compare-header">
+            <div><span>02</span><h3 id="pl-compare-title">Policy comparison</h3></div>
+            <div className="pl-evidence-lock">
+              <code>{shortHash(evidenceHash, 10, 7)}</code>
               <strong>{evidenceLocked ? 'UNCHANGED' : 'VERIFYING'}</strong>
             </div>
-          </div>
+          </header>
+          <p className="pl-compare-deck">{REFERENCE_CASE} · same evidence envelope; only policy and declared assurance change.</p>
+          <p className="pl-lock-explanation">{evidenceLocked ? 'Evidence identity is unchanged across all four decisions.' : 'Checking evidence identity across all four decisions.'}</p>
 
           {experimentError ? <p className="record-error" role="alert">Experiment error: {experimentError}</p> : null}
 
-          <table className="record-table comparison-table" aria-label="Same evidence policy and assurance comparison">
-            <thead>
-              <tr>
-                <th>Assurance context</th>
-                <th>Open policy</th>
-                <th>Pilot policy</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Actual L0 <span>observed</span></th>
-                <DecisionCell run={runs?.l0Open} />
-                <DecisionCell run={runs?.l0Pilot} />
-              </tr>
-              <tr>
-                <th>Declared L2* <span>counterfactual</span></th>
-                <DecisionCell run={runs?.l2Open} />
-                <DecisionCell run={runs?.l2Pilot} />
-              </tr>
-            </tbody>
-          </table>
-          <p className="record-footnote">* Declared L2 is a research counterfactual. It does not upgrade the underlying source evidence.</p>
-          <button type="button" className="record-text-link" onClick={openComparison}>Open full policy comparison →</button>
-        </div>
-      </section>
-
-      <section className="record-section" aria-labelledby="record-assumption-title">
-        <div className="record-section-number">03</div>
-        <div className="record-section-body">
-          <h3 id="record-assumption-title">Assumption sensitivity</h3>
-          <p className="record-intro">The L2 provenance multiplier is an illustrative research-policy assumption, not an empirical estimate.</p>
-          <table className="record-table sensitivity-table" aria-label="L2 multiplier sensitivity">
-            <thead>
-              <tr><th>Multiplier</th>{sensitivity.map((item) => <th key={item.multiplier}>{item.multiplier.toFixed(1)}×{item.multiplier === l2Assumption.expected_current_value ? ' (current)' : ''}</th>)}</tr>
-            </thead>
-            <tbody>
-              <tr><th>Admitted quantity</th>{sensitivity.map((item) => <td key={item.multiplier}>{formatQuantity(item.quantity)}</td>)}</tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="record-section record-section-last" aria-labelledby="record-trace-title">
-        <div className="record-section-number">04</div>
-        <div className="record-section-body">
-          <h3 id="record-trace-title">Trace</h3>
-          <div className="record-trace-grid">
-            <div><span>Source archive SHA-256</span><code>{shortHash(checkpoint.source.archive_sha256, 18, 12)}</code></div>
-            <div><span>Assessment ID</span><code>{shortHash(checkpoint.verification.assessment_id, 18, 12)}</code></div>
-            <div><span>Runtime revision</span><code>{shortHash(WORKBENCH_RUNTIME.source_revision, 18, 12)}</code></div>
-            <div><span>Research boundaries R1 / R2 / R3 / R4</span><code>{Object.values(checkpoint.boundaries).join(' / ')}</code></div>
+          <div className="pl-table-wrap">
+            <table className="pl-compare-table" aria-label="Same evidence policy and assurance comparison">
+              <thead>
+                <tr>
+                  <th>Assurance</th>
+                  <th>Open policy</th>
+                  <th>Pilot policy</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Actual L0 <span>observed</span></th>
+                  <DecisionCell run={runs?.l0Open} />
+                  <DecisionCell run={runs?.l0Pilot} />
+                </tr>
+                <tr>
+                  <th>Declared L2* <span>counterfactual</span></th>
+                  <DecisionCell run={runs?.l2Open} />
+                  <DecisionCell run={runs?.l2Pilot} />
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-      </section>
+          <p className="pl-footnote">* L2 is a declared research counterfactual; it does not upgrade the source evidence.</p>
+
+          <div className="pl-sensitivity-block">
+            <div>
+              <span>Assumption test</span>
+              <p>L2 provenance multiplier · illustrative research-policy assumption, not an empirical estimate.</p>
+            </div>
+            <table aria-label="L2 multiplier sensitivity">
+              <thead><tr>{sensitivity.map((item) => <th key={item.multiplier}>{item.multiplier.toFixed(1)}×{item.multiplier === l2Assumption.expected_current_value ? ' (current)' : ''}</th>)}</tr></thead>
+              <tbody><tr>{sensitivity.map((item) => <td key={item.multiplier}>{formatQuantity(item.quantity)}</td>)}</tr></tbody>
+            </table>
+          </div>
+
+          <button type="button" className="pl-text-link" onClick={openComparison}>Open full policy comparison →</button>
+        </section>
+
+        <aside className="pl-pane pl-result-pane" aria-labelledby="pl-result-title">
+          <header className="pl-pane-header">
+            <span>03</span>
+            <h3 id="pl-result-title">Observed outcome</h3>
+          </header>
+          <div className="pl-outcome-list">
+            <div>
+              <span>Open policy</span>
+              <strong>ADMIT WITH LIMIT</strong>
+              <small>{formatQuantity(checkpoint.decisions.open.admitted_maximum)} kWh · {humanize(checkpoint.decisions.open.binding_constraints[0])}</small>
+            </div>
+            <div>
+              <span>Pilot policy</span>
+              <strong>BLOCKED</strong>
+              <small>{checkpoint.decisions.pilot.blocking_rules.map(humanize).join(' + ')}</small>
+            </div>
+            <div>
+              <span>40% settlement</span>
+              <strong>{checkpoint.settlement.result}</strong>
+              <small>{formatQuantity(checkpoint.settlement.covered_quantity)} covered · {formatQuantity(checkpoint.settlement.shortfall_quantity)} shortfall</small>
+            </div>
+          </div>
+
+          <div className="pl-trace-block">
+            <span className="pl-subhead">Trace</span>
+            <dl className="pl-kv-list compact">
+              <MetaRow label="assessment"><code>{shortHash(checkpoint.verification.assessment_id, 12, 8)}</code></MetaRow>
+              <MetaRow label="runtime"><code>{shortHash(WORKBENCH_RUNTIME.source_revision, 12, 8)}</code></MetaRow>
+              <MetaRow label="R1 / R2 / R3 / R4"><code>{Object.values(checkpoint.boundaries).join(' / ')}</code></MetaRow>
+            </dl>
+          </div>
+        </aside>
+      </div>
     </section>
   );
 }
