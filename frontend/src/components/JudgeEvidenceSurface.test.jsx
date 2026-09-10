@@ -7,17 +7,17 @@ describe('JudgeEvidenceSurface', () => {
   it('derives the visual causal comparison from the real runtime without promoting evidence', async () => {
     render(<JudgeEvidenceSurface onNavigate={vi.fn()} />);
 
-    expect(await screen.findByText(/same evidence/i)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'PUB-AUSGRID-001P' })).toBeInTheDocument();
     expect(screen.getByLabelText(/settlement coverage and shortfall/i)).toBeInTheDocument();
 
     const matrix = screen.getByRole('table', { name: /same evidence policy and assurance comparison/i });
+    expect(await within(matrix).findByText('126')).toBeInTheDocument();
     expect(within(matrix).getAllByText('180')).toHaveLength(2);
-    expect(within(matrix).getByText('126')).toBeInTheDocument();
     expect(within(matrix).getByText('BLOCKED')).toBeInTheDocument();
     expect(within(matrix).getByText(/min provenance/i)).toBeInTheDocument();
     expect(within(matrix).getByText(/provenance policy capacity/i)).toBeInTheDocument();
 
+    expect(screen.getByText(/same evidence/i)).toBeInTheDocument();
     expect(screen.getByText('0.5×')).toBeInTheDocument();
     expect(screen.getByText(/0.7× · current/)).toBeInTheDocument();
     expect(screen.getByText('0.9×')).toBeInTheDocument();
@@ -28,7 +28,8 @@ describe('JudgeEvidenceSurface', () => {
   it('routes into the full controlled policy comparison', async () => {
     const onNavigate = vi.fn();
     render(<JudgeEvidenceSurface onNavigate={onNavigate} />);
-    await screen.findByText(/same evidence/i);
+    const matrix = screen.getByRole('table', { name: /same evidence policy and assurance comparison/i });
+    await within(matrix).findByText('126');
 
     fireEvent.click(screen.getByRole('button', { name: /compare policies/i }));
     expect(onNavigate).toHaveBeenCalledWith({
