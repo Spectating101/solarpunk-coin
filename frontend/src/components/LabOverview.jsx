@@ -64,6 +64,7 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
     loading,
     error,
   } = useCaseWorkbench();
+  const activePipeline = useMemo(() => PIPELINE.find(([id]) => id === activeStage) || PIPELINE[0], [activeStage]);
 
   if (viewMode !== 'full') {
     return (
@@ -85,7 +86,6 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
   const mainRule = blocked
     ? decision?.admission?.blocking_rules?.[0]
     : decision?.capacity?.binding_constraints?.[0];
-  const activePipeline = useMemo(() => PIPELINE.find(([id]) => id === activeStage) || PIPELINE[0], [activeStage]);
 
   const openInvestigation = (lens = 'constraints') => onNavigate({
     section: 'case',
