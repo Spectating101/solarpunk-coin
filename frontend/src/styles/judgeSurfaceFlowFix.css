@@ -1,0 +1,7 @@
+.pl-live-quantities {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.pl-live-quantities > i:last-of-type {
+  display: inline;
+}

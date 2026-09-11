@@ -17,10 +17,15 @@ async function open(url, expected) {
   if (expected) await page.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-// Asset 1: immediate judge-facing overview and outside-data proof.
-await open(`${baseUrl}#lab`, 'Can real-world evidence justify a financial claim?');
+// Asset 1: practical research workspace with the outside-data checkpoint
+// inspected as a data/evidence object rather than presented as a standalone poster.
+await open(`${baseUrl}#lab`, 'Explore how evidence becomes');
+await page.getByRole('button', { name: /^Workbench$/i }).click();
+await page.getByLabel(/Research workspace browser/i).waitFor({ state: 'visible' });
+await page.getByLabel(/Research object inspector/i).waitFor({ state: 'visible' });
+await page.getByRole('button', { name: /^Data$/i }).click();
 await page.getByText('PUB-AUSGRID-001P', { exact: false }).first().waitFor({ state: 'visible' });
-await page.locator('.public-evidence-checkpoint').first().screenshot({
+await page.locator('.rwb-shell').first().screenshot({
   path: path.join(outputDir, '01-outside-data-checkpoint.png'),
 });
 
