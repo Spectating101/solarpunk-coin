@@ -1,14 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import {
+  BookOpen,
   Database,
   FileText,
   FlaskConical,
   GitCompareArrows,
   History,
-  NotebookTabs,
-  Rows3,
   ShieldCheck,
-  Table2,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import { PUBLIC_EVIDENCE_CHECKPOINT } from '../data/publicEvidenceCheckpoint';
@@ -20,17 +18,17 @@ import {
 import '../styles/researchWorkbenchOverview.css';
 
 const DOCUMENTS = [
-  ['analysis', 'Analysis', NotebookTabs],
-  ['runs', 'Runs', Rows3],
+  ['analysis', 'Analysis', BookOpen],
+  ['runs', 'Runs', FileText],
   ['methods', 'Methods', FlaskConical],
   ['data', 'Data', Database],
 ];
 
-function decisionSummary(run) {
-  if (!run?.decision) return { decision: '—', quantity: null, rule: '—', blocked: false };
+function decisionText(run) {
+  if (!run?.decision) return { primary: '—', quantity: null, rule: '—', blocked: false };
   const blocked = run.decision.decision === 'BLOCKED';
   return {
-    decision: run.decision.decision.replaceAll('_', ' '),
+    primary: run.decision.decision.replaceAll('_', ' '),
     quantity: blocked ? null : run.decision.capacity?.admitted_maximum,
     rule: blocked
       ? run.decision.admission?.blocking_rules?.[0]
@@ -104,7 +102,7 @@ export default function ResearchWorkbenchOverview({ onNavigate, onOpenFullAnalys
 
   const runRows = pack.cases.map((item) => {
     const run = visibleRunsByCaseId[item.case_id] || (item.case_id === activeCaseId ? activeRun : null);
-    const summary = decisionSummary(run);
+    const summary = decisionText(run);
     return { caseManifest: item, run, ...summary };
   });
 
@@ -260,7 +258,7 @@ export default function ResearchWorkbenchOverview({ onNavigate, onOpenFullAnalys
             {runRows.map((row) => (
               <tr key={row.caseManifest.case_id} className={row.caseManifest.case_id === activeCaseId ? 'active' : ''} onClick={() => selectCase(row.caseManifest.case_id)}>
                 <td><strong>{row.caseManifest.case_id}</strong><small>{row.caseManifest.subject}</small></td>
-                <td data-state={row.blocked ? 'blocked' : 'admitted'}>{row.decision}</td>
+                <td data-state={row.blocked ? 'blocked' : 'admitted'}>{row.primary}</td>
                 <td>{formatQuantity(row.run?.evidence?.summary?.total_eligible_surplus_kwh)}</td>
                 <td>{row.quantity == null ? '—' : formatQuantity(row.quantity)}</td>
                 <td>{humanize(row.rule)}</td>
@@ -327,7 +325,7 @@ export default function ResearchWorkbenchOverview({ onNavigate, onOpenFullAnalys
 
       <section className="rwb-shell">
         <aside className="rwb-browser" aria-label="Research workspace browser">
-          <div className="rwb-browser-title"><Table2 size={15} /><strong>Workspace</strong></div>
+          <div className="rwb-browser-title"><FileText size={15} /><strong>Workspace</strong></div>
           <WorkspaceSection title="Cases">
             {pack.cases.map((item) => (
               <button key={item.case_id} type="button" className={item.case_id === activeCaseId ? 'active' : ''} onClick={() => selectCase(item.case_id)}>
