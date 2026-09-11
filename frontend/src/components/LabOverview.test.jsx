@@ -8,10 +8,6 @@ vi.mock('../app/CaseWorkbenchProvider', () => ({
   useCaseWorkbench: vi.fn(),
 }));
 
-vi.mock('./JudgeEvidenceSurface', () => ({
-  default: () => <section aria-label="Judge evidence surface" />,
-}));
-
 const selectCase = vi.fn();
 const selectPolicy = vi.fn();
 const selectScenario = vi.fn();
@@ -20,8 +16,23 @@ const setSettlementMultiplier = vi.fn();
 function workbenchValue() {
   return {
     pack: {
-      cases: [{ case_id: 'TYN-001', subject: 'Taoyuan controlled energy case' }],
-      policies: [{ id: 'ENERGY-CASE-PILOT-005', name: 'Pilot policy' }],
+      manifest: { id: 'energy-v1' },
+      cases: [{
+        case_id: 'TYN-001',
+        subject: 'Taoyuan controlled energy case',
+        case_type: 'energy_site',
+        measurement_window: { start: '2026-05-01T00:00:00Z', end: '2026-05-08T00:00:00Z' },
+        context_refs: ['resource:tyn-001:pvwatts-v1'],
+        boundaries: ['Controlled scenario demonstration.'],
+      }],
+      policies: [{
+        id: 'ENERGY-CASE-PILOT-005',
+        name: 'Pilot policy',
+        version: '1.0.0',
+        description: 'Controlled pilot research policy.',
+        admission_rules: [{ rule_id: 'minimum-provenance', calculator_id: 'MIN_PROVENANCE', parameters: { minimum: 'L2' } }],
+        quantity_rules: [{ rule_id: 'provenance-capacity', calculator_id: 'PROVENANCE_POLICY_CAPACITY', parameters: { L2: 0.7 } }],
+      }],
       scenarios: [{ scenario_id: 'PROVENANCE-L2-COUNTERFACTUAL', name: 'L2 counterfactual' }],
     },
     activeCaseId: 'TYN-001',
@@ -48,6 +59,7 @@ function workbenchValue() {
         },
       },
     },
+    visibleRunsByCaseId: {},
     activeStress: {
       available: true,
       settlement: {
@@ -71,24 +83,38 @@ afterEach(() => {
 });
 
 describe('LabOverview paired platform surface', () => {
-  it('renders the compact live overview from shared workbench state', () => {
+  it('renders a practical research workspace from shared workbench state', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByRole('heading', { name: /evidence → policy → quantity → settlement/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /evidence-constrained policy analysis/i })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /research documents/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/research workspace browser/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/research object inspector/i)).toBeInTheDocument();
     expect(screen.getByText('180')).toBeInTheDocument();
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('50.4')).toBeInTheDocument();
     expect(screen.getByText(/provenance policy capacity/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/judge evidence surface/i)).toBeInTheDocument();
   });
 
-  it('switches into Full Analysis through the global view callback', () => {
+  it('switches documents and preserves real parameter controls', () => {
+    useCaseWorkbench.mockReturnValue(workbenchValue());
+    render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Methods$/i }));
+    expect(screen.getByRole('heading', { name: /pilot policy/i })).toBeInTheDocument();
+    expect(screen.getByText('MIN_PROVENANCE')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/proof \/ assurance/i), { target: { value: 'PROVENANCE-L2-COUNTERFACTUAL' } });
+    expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
+  });
+
+  it('switches into Full Analysis through the workspace action', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     const onViewModeChange = vi.fn();
     render(<LabOverview viewMode="overview" onViewModeChange={onViewModeChange} onNavigate={vi.fn()} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /full analysis/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^Full analysis$/i }));
     expect(onViewModeChange).toHaveBeenCalledWith('full');
   });
 
