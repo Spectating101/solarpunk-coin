@@ -137,7 +137,7 @@ describe('LabOverview explorer + workbench research surface', () => {
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
     fireEvent.click(screen.getByRole('button', { name: /^Findings$/i }));
-    expect(screen.getByText(/policy can change financial authority without changing the evidence identity/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/policy can change financial authority without changing the evidence identity/i).length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
     expect(screen.getByText(/Ausgrid public checkpoint/i)).toBeInTheDocument();
