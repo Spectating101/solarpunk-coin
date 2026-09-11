@@ -10,8 +10,8 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
-import JudgeEvidenceSurface from './JudgeEvidenceSurface';
 import PublicEvidenceCheckpoint from './PublicEvidenceCheckpoint';
+import ResearchWorkbenchOverview from './ResearchWorkbenchOverview';
 import {
   EmptyState,
   LinkButton,
@@ -61,10 +61,18 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
     selectCase,
     selectPolicy,
     selectScenario,
-    setSettlementMultiplier,
     loading,
     error,
   } = useCaseWorkbench();
+
+  if (viewMode !== 'full') {
+    return (
+      <ResearchWorkbenchOverview
+        onNavigate={onNavigate}
+        onOpenFullAnalysis={() => onViewModeChange('full')}
+      />
+    );
+  }
 
   const decision = activeRun?.decision || null;
   const evidence = activeRun?.evidence || null;
@@ -87,197 +95,138 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
     lens,
   });
 
-  if (viewMode === 'full') {
-    return (
-      <main className="platform-page overview-surface full" aria-labelledby="full-overview-title">
-        <PlatformPageIntro
-          kicker="Overview · complete platform analysis"
-          title="See the whole programme behind the active decision."
-          description="The same case state now exposes the object model, source-to-receipt pipeline, platform inventory, live result, validation boundary, research layers, and external value gate."
-          viewMode="full"
-        >
-          <LinkButton onClick={() => onViewModeChange('overview')}>Return to interpreted overview</LinkButton>
-        </PlatformPageIntro>
-
-        <PublicEvidenceCheckpoint />
-
-        <section className="platform-active-state">
-          <div>
-            <span>Interactive controlled-case state</span>
-            <strong>{activeCaseId} · {activeScenarioId} · {activePolicyId}</strong>
-            <code>settlement {Math.round(settlementMultiplier * 100)}% · evidence {shortHash(evidence?.evidence_hash)}</code>
-          </div>
-          <div className="platform-state-controls">
-            <select aria-label="Active case" value={activeCaseId} onChange={(event) => selectCase(event.target.value)}>
-              {pack.cases.map((item) => <option key={item.case_id} value={item.case_id}>{item.case_id}</option>)}
-            </select>
-            <select aria-label="Active policy" value={activePolicyId} onChange={(event) => selectPolicy(event.target.value)}>
-              {pack.policies.map((item) => <option key={item.id} value={item.id}>{item.id}</option>)}
-            </select>
-            <select aria-label="Active assurance scenario" value={activeScenarioId} onChange={(event) => selectScenario(event.target.value)}>
-              {pack.scenarios.map((item) => <option key={item.scenario_id} value={item.scenario_id}>{item.name}</option>)}
-            </select>
-          </div>
-        </section>
-
-        <section className="platform-three-column overview-full-grid">
-          <article className="platform-panel">
-            <header><span>Research objects</span><h2>What constitutes the platform?</h2></header>
-            <div className="overview-object-list">
-              {OBJECTS.map((object) => <button key={object} type="button" onClick={() => onNavigate({ section: 'verify', tool: 'objects' })}>{object}</button>)}
-            </div>
-          </article>
-
-          <article className="platform-panel">
-            <header><span>Decision pipeline</span><h2>Follow the claim from source to replay.</h2></header>
-            <div className="overview-pipeline-list">
-              {PIPELINE.map(([id, label], index) => (
-                <button key={id} type="button" className={activeStage === id ? 'active' : ''} onClick={() => setActiveStage(id)}>
-                  <span>{String(index + 1).padStart(2, '0')}</span><strong>{label}</strong>
-                </button>
-              ))}
-            </div>
-            <div className="platform-inline-proof">
-              <GitBranch size={18} />
-              <span><strong>{activePipeline[1]}</strong> · {activePipeline[2]}</span>
-            </div>
-          </article>
-
-          <article className="platform-panel">
-            <header><span>Interactive result</span><h2>Same engine, complete context.</h2></header>
-            {loading ? <EmptyState>Evaluating the active programme state…</EmptyState> : null}
-            {error ? <div className="workbench-error" role="alert">{error}</div> : null}
-            {decision ? (
-              <>
-                <div className={`platform-decision-mark ${blocked ? 'blocked' : 'admitted'}`}>
-                  {blocked ? <Ban size={25} /> : <Gauge size={25} />}
-                  <strong>{decision.decision.replaceAll('_', ' ')}</strong>
-                </div>
-                <ValueFlow requested={requested} justified={justified} covered={covered} blocked={blocked} />
-                <dl className="platform-fact-list">
-                  <div><dt>Main rule</dt><dd>{humanize(mainRule)}</dd></div>
-                  <div><dt>Shortfall</dt><dd>{blocked ? '—' : formatQuantity(shortfall)}</dd></div>
-                  <div><dt>Decision ID</dt><dd><code>{shortHash(decision.decision_id, 14, 10)}</code></dd></div>
-                </dl>
-                <div className="platform-action-stack">
-                  <LinkButton primary onClick={() => openInvestigation('constraints')}>Open complete investigation</LinkButton>
-                  <LinkButton onClick={() => onNavigate({ section: 'analysis', tool: 'compare' })}>Open Analysis Lab</LinkButton>
-                  <LinkButton onClick={() => onNavigate({ section: 'verify', tool: 'lineage' })}>Verify active result</LinkButton>
-                </div>
-              </>
-            ) : null}
-          </article>
-        </section>
-
-        <section className="overview-inventory-strip">
-          <div><strong>{pack.cases.length}</strong><span>Interactive cases</span></div>
-          <div><strong>1</strong><span>Outside-data checkpoint</span></div>
-          <div><strong>{pack.policies.length}</strong><span>Policies</span></div>
-          <div><strong>{pack.cases.length * pack.policies.length}</strong><span>Interactive case-policy decisions</span></div>
-          <div><strong>{pack.scenarios.length}</strong><span>Assurance scenarios</span></div>
-          <div><strong>1</strong><span>Historical study</span></div>
-          <div><strong>1</strong><span>Owner-source gate open</span></div>
-        </section>
-
-        <section className="platform-three-column overview-programme-grid">
-          <article className="platform-panel">
-            <header><span>Validation state</span><h2>What is already testable?</h2></header>
-            <div className="research-evidence-matrix">
-              <div><span>Decision core</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
-              <div><span>Controlled case-pack comparison</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
-              <div><span>Outside public-data case</span><StatusBadge tone="pass">REPRODUCED</StatusBadge></div>
-              <div><span>Receipt generation</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
-              <div><span>Capsule generation</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
-              <div><span>Operator-format path</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
-              <div><span>Owner-supplied source</span><StatusBadge tone="warn">OPEN</StatusBadge></div>
-            </div>
-          </article>
-
-          <article className="platform-panel">
-            <header><span>Programme layers</span><h2>One question, several research instruments.</h2></header>
-            <div className="overview-layer-list">
-              <button type="button" onClick={() => onNavigate({ section: 'research' })}><Database size={17} /><span><strong>ECI</strong>Evidence fitness and assurance</span></button>
-              <button type="button" onClick={() => onNavigate({ section: 'research' })}><Boxes size={17} /><span><strong>Constrained Ledger</strong>Authority, quantity, identity, settlement</span></button>
-              <button type="button" onClick={() => onNavigate({ section: 'investigate' })}><ShieldCheck size={17} /><span><strong>Policy Lab</strong>Executable cases and comparisons</span></button>
-              <button type="button" onClick={() => onNavigate({ section: 'research' })}><Landmark size={17} /><span><strong>Institutional evidence</strong>Source-linked process mapping</span></button>
-              <button type="button" onClick={() => onNavigate({ section: 'studies' })}><FileCheck2 size={17} /><span><strong>Empirical studies</strong>Policy-performance evaluation</span></button>
-            </div>
-          </article>
-
-          <article className="platform-panel">
-            <header><span>Research boundary</span><h2>What is not claimed.</h2></header>
-            <div className="research-evidence-matrix">
-              <div><span>Real operator validation</span><StatusBadge tone="warn">NOT YET</StatusBadge></div>
-              <div><span>Physical meter truth</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
-              <div><span>Legal issuance authority</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
-              <div><span>Reserve custody</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
-              <div><span>Production governance</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
-            </div>
-          </article>
-        </section>
-
-        <section className="platform-mission-strip overview-next-gate">
-          <div><ShieldCheck size={17} /><strong>Next external value gate</strong></div>
-          <span>One attributable owner/operator evidence source</span>
-          <button type="button" onClick={() => onNavigate({ section: 'field' })}>Open field-use workflow</button>
-        </section>
-      </main>
-    );
-  }
-
   return (
-    <main className="platform-page overview-surface judge-overview" aria-labelledby="overview-title">
-      <header className="pl-overview-head">
+    <main className="platform-page overview-surface full" aria-labelledby="full-overview-title">
+      <PlatformPageIntro
+        kicker="Overview · complete platform analysis"
+        title="See the whole programme behind the active decision."
+        description="The same case state now exposes the object model, source-to-receipt pipeline, platform inventory, live result, validation boundary, research layers, and external value gate."
+        viewMode="full"
+      >
+        <LinkButton onClick={() => onViewModeChange('overview')}>Return to research workspace</LinkButton>
+      </PlatformPageIntro>
+
+      <PublicEvidenceCheckpoint />
+
+      <section className="platform-active-state">
         <div>
-          <span>POLICY LAB</span>
-          <h1 id="overview-title">Evidence → Policy → Quantity → Settlement</h1>
+          <span>Interactive controlled-case state</span>
+          <strong>{activeCaseId} · {activeScenarioId} · {activePolicyId}</strong>
+          <code>settlement {Math.round(settlementMultiplier * 100)}% · evidence {shortHash(evidence?.evidence_hash)}</code>
         </div>
-        <button type="button" onClick={() => onViewModeChange('full')}>Full analysis ↗</button>
-      </header>
+        <div className="platform-state-controls">
+          <select aria-label="Active case" value={activeCaseId} onChange={(event) => selectCase(event.target.value)}>
+            {pack.cases.map((item) => <option key={item.case_id} value={item.case_id}>{item.case_id}</option>)}
+          </select>
+          <select aria-label="Active policy" value={activePolicyId} onChange={(event) => selectPolicy(event.target.value)}>
+            {pack.policies.map((item) => <option key={item.id} value={item.id}>{item.id}</option>)}
+          </select>
+          <select aria-label="Active assurance scenario" value={activeScenarioId} onChange={(event) => selectScenario(event.target.value)}>
+            {pack.scenarios.map((item) => <option key={item.scenario_id} value={item.scenario_id}>{item.name}</option>)}
+          </select>
+        </div>
+      </section>
 
-      <JudgeEvidenceSurface onNavigate={onNavigate} />
+      <section className="platform-three-column overview-full-grid">
+        <article className="platform-panel">
+          <header><span>Research objects</span><h2>What constitutes the platform?</h2></header>
+          <div className="overview-object-list">
+            {OBJECTS.map((object) => <button key={object} type="button" onClick={() => onNavigate({ section: 'verify', tool: 'objects' })}>{object}</button>)}
+          </div>
+        </article>
 
-      <section className="pl-live-workbench" aria-labelledby="interactive-workbench-title">
-        <header>
-          <div className="pl-live-title">
-            <span>CONTROLLED CASE</span>
-            <strong id="interactive-workbench-title">{activeCaseId}</strong>
+        <article className="platform-panel">
+          <header><span>Decision pipeline</span><h2>Follow the claim from source to replay.</h2></header>
+          <div className="overview-pipeline-list">
+            {PIPELINE.map(([id, label], index) => (
+              <button key={id} type="button" className={activeStage === id ? 'active' : ''} onClick={() => setActiveStage(id)}>
+                <span>{String(index + 1).padStart(2, '0')}</span><strong>{label}</strong>
+              </button>
+            ))}
           </div>
-          <div className="pl-live-controls">
-            <label><span>case</span><select aria-label="Case" value={activeCaseId} onChange={(event) => selectCase(event.target.value)}>{pack.cases.map((item) => <option key={item.case_id} value={item.case_id}>{item.case_id}</option>)}</select></label>
-            <label><span>assurance</span><select aria-label="Proof / assurance" value={activeScenarioId} onChange={(event) => selectScenario(event.target.value)}>{pack.scenarios.map((item) => <option key={item.scenario_id} value={item.scenario_id}>{item.name}</option>)}</select></label>
-            <label><span>policy</span><select aria-label="Policy" value={activePolicyId} onChange={(event) => selectPolicy(event.target.value)}>{pack.policies.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-            <label className="pl-live-slider"><span>settlement {Math.round(settlementMultiplier * 100)}%</span><input aria-label="Settlement capacity" type="range" min="0" max="1" step="0.1" value={settlementMultiplier} disabled={blocked} onChange={(event) => setSettlementMultiplier(event.target.value)} /></label>
+          <div className="platform-inline-proof">
+            <GitBranch size={18} />
+            <span><strong>{activePipeline[1]}</strong> · {activePipeline[2]}</span>
           </div>
-        </header>
+        </article>
 
-        {loading ? <EmptyState>Evaluating…</EmptyState> : null}
-        {error ? <div className="workbench-error" role="alert">{error}</div> : null}
-        {decision ? (
-          <div className="pl-live-result">
-            <div className="pl-live-decision" data-state={blocked ? 'blocked' : 'admitted'}>
-              <span>decision</span>
-              <strong>{decision.decision.replaceAll('_', ' ')}</strong>
-              <small>{humanize(mainRule)}</small>
-            </div>
-            <div className="pl-live-quantities" aria-label="Requested, justified, and covered quantity">
-              <div><span>requested</span><strong>{formatQuantity(requested)}</strong></div>
-              <i>→</i>
-              <div><span>justified</span><strong>{blocked ? '—' : formatQuantity(justified)}</strong></div>
-              <i>→</i>
-              <div><span>covered</span><strong>{blocked ? '—' : formatQuantity(covered)}</strong></div>
-            </div>
-            <div className="pl-live-trace">
-              <span>evidence <code>{shortHash(evidence?.evidence_hash, 8, 5)}</code></span>
-              <span>decision <code>{shortHash(decision.decision_id, 8, 5)}</code></span>
-              {!blocked ? <span>shortfall <strong>{formatQuantity(shortfall)}</strong></span> : null}
-            </div>
-            <div className="pl-live-actions">
-              <button type="button" onClick={() => openInvestigation(blocked ? 'constraints' : 'stress')}>investigate →</button>
-              <button type="button" onClick={() => onNavigate({ section: 'verify', tool: 'lineage' })}>proof trail →</button>
-            </div>
+        <article className="platform-panel">
+          <header><span>Interactive result</span><h2>Same engine, complete context.</h2></header>
+          {loading ? <EmptyState>Evaluating the active programme state…</EmptyState> : null}
+          {error ? <div className="workbench-error" role="alert">{error}</div> : null}
+          {decision ? (
+            <>
+              <div className={`platform-decision-mark ${blocked ? 'blocked' : 'admitted'}`}>
+                {blocked ? <Ban size={25} /> : <Gauge size={25} />}
+                <strong>{decision.decision.replaceAll('_', ' ')}</strong>
+              </div>
+              <ValueFlow requested={requested} justified={justified} covered={covered} blocked={blocked} />
+              <dl className="platform-fact-list">
+                <div><dt>Main rule</dt><dd>{humanize(mainRule)}</dd></div>
+                <div><dt>Shortfall</dt><dd>{blocked ? '—' : formatQuantity(shortfall)}</dd></div>
+                <div><dt>Decision ID</dt><dd><code>{shortHash(decision.decision_id, 14, 10)}</code></dd></div>
+              </dl>
+              <div className="platform-action-stack">
+                <LinkButton primary onClick={() => openInvestigation('constraints')}>Open complete investigation</LinkButton>
+                <LinkButton onClick={() => onNavigate({ section: 'analysis', tool: 'compare' })}>Open Analysis Lab</LinkButton>
+                <LinkButton onClick={() => onNavigate({ section: 'verify', tool: 'lineage' })}>Verify active result</LinkButton>
+              </div>
+            </>
+          ) : null}
+        </article>
+      </section>
+
+      <section className="overview-inventory-strip">
+        <div><strong>{pack.cases.length}</strong><span>Interactive cases</span></div>
+        <div><strong>1</strong><span>Outside-data checkpoint</span></div>
+        <div><strong>{pack.policies.length}</strong><span>Policies</span></div>
+        <div><strong>{pack.cases.length * pack.policies.length}</strong><span>Interactive case-policy decisions</span></div>
+        <div><strong>{pack.scenarios.length}</strong><span>Assurance scenarios</span></div>
+        <div><strong>1</strong><span>Historical study</span></div>
+        <div><strong>1</strong><span>Owner-source gate open</span></div>
+      </section>
+
+      <section className="platform-three-column overview-programme-grid">
+        <article className="platform-panel">
+          <header><span>Validation state</span><h2>What is already testable?</h2></header>
+          <div className="research-evidence-matrix">
+            <div><span>Decision core</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
+            <div><span>Controlled case-pack comparison</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
+            <div><span>Outside public-data case</span><StatusBadge tone="pass">REPRODUCED</StatusBadge></div>
+            <div><span>Receipt generation</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
+            <div><span>Capsule generation</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
+            <div><span>Operator-format path</span><StatusBadge tone="pass">TESTED</StatusBadge></div>
+            <div><span>Owner-supplied source</span><StatusBadge tone="warn">OPEN</StatusBadge></div>
           </div>
-        ) : <EmptyState>No result.</EmptyState>}
+        </article>
+
+        <article className="platform-panel">
+          <header><span>Programme layers</span><h2>One question, several research instruments.</h2></header>
+          <div className="overview-layer-list">
+            <button type="button" onClick={() => onNavigate({ section: 'research' })}><Database size={17} /><span><strong>ECI</strong>Evidence fitness and assurance</span></button>
+            <button type="button" onClick={() => onNavigate({ section: 'research' })}><Boxes size={17} /><span><strong>Constrained Ledger</strong>Authority, quantity, identity, settlement</span></button>
+            <button type="button" onClick={() => onNavigate({ section: 'investigate' })}><ShieldCheck size={17} /><span><strong>Policy Lab</strong>Executable cases and comparisons</span></button>
+            <button type="button" onClick={() => onNavigate({ section: 'research' })}><Landmark size={17} /><span><strong>Institutional evidence</strong>Source-linked process mapping</span></button>
+            <button type="button" onClick={() => onNavigate({ section: 'studies' })}><FileCheck2 size={17} /><span><strong>Empirical studies</strong>Policy-performance evaluation</span></button>
+          </div>
+        </article>
+
+        <article className="platform-panel">
+          <header><span>Research boundary</span><h2>What is not claimed.</h2></header>
+          <div className="research-evidence-matrix">
+            <div><span>Real operator validation</span><StatusBadge tone="warn">NOT YET</StatusBadge></div>
+            <div><span>Physical meter truth</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
+            <div><span>Legal issuance authority</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
+            <div><span>Reserve custody</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
+            <div><span>Production governance</span><StatusBadge tone="warn">NOT CLAIMED</StatusBadge></div>
+          </div>
+        </article>
+      </section>
+
+      <section className="platform-mission-strip overview-next-gate">
+        <div><ShieldCheck size={17} /><strong>Next external value gate</strong></div>
+        <span>One attributable owner/operator evidence source</span>
+        <button type="button" onClick={() => onNavigate({ section: 'field' })}>Open field-use workflow</button>
       </section>
     </main>
   );
