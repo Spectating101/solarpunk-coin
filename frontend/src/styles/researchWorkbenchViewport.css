@@ -1,0 +1,72 @@
+/* Viewport-level corrections for the practical Policy Lab research workspace.
+   This intentionally overrides the legacy 920px SPK demo wrapper only while the
+   research workspace is mounted. Other public/reference surfaces keep their
+   historical container behavior. */
+
+@media (min-width: 761px) {
+  .app-minimal.paired-platform-app:has(.rwb-page) {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 20px clamp(18px, 2.2vw, 36px) 52px;
+  }
+
+  .paired-platform-app:has(.rwb-page) > .app-minimal-top {
+    width: min(1480px, 100%);
+    margin: 0 auto 22px;
+  }
+
+  .rwb-page {
+    width: min(1480px, 100%);
+    margin: 18px auto 64px;
+  }
+}
+
+@media (min-width: 1101px) {
+  .rwb-shell {
+    grid-template-columns: 220px minmax(540px, 1fr) 270px;
+    min-height: 760px;
+  }
+
+  .rwb-notebook,
+  .rwb-table-document {
+    padding: 24px 28px 30px;
+  }
+
+  .rwb-document-head h1 {
+    font-size: 24px;
+  }
+
+  .rwb-question-cell h2 {
+    max-width: 940px;
+    font-size: 18px;
+  }
+
+  .rwb-cell p {
+    max-width: 940px;
+  }
+}
+
+@media (min-width: 1320px) {
+  .rwb-shell {
+    grid-template-columns: 225px minmax(720px, 1fr) 275px;
+  }
+
+  .rwb-document-area {
+    max-height: 860px;
+  }
+}
+
+@media (max-width: 760px) {
+  .rwb-method-chain > i {
+    min-height: 24px;
+    transform: none;
+    font-size: 0;
+  }
+
+  .rwb-method-chain > i::before {
+    content: '↓';
+    font-size: 12px;
+    line-height: 1;
+  }
+}
