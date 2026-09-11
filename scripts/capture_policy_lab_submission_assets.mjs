@@ -19,7 +19,8 @@ async function open(url, expected) {
 
 // Asset 1: practical research workspace with the outside-data checkpoint
 // inspected as a data/evidence object rather than presented as a standalone poster.
-await open(`${baseUrl}#lab`, 'Evidence-constrained policy analysis');
+await open(`${baseUrl}#lab`, 'Explore the evidence, cases, findings, and unresolved boundaries');
+await page.getByRole('button', { name: /^Workbench$/i }).click();
 await page.getByLabel(/Research workspace browser/i).waitFor({ state: 'visible' });
 await page.getByLabel(/Research object inspector/i).waitFor({ state: 'visible' });
 await page.getByRole('button', { name: /^Data$/i }).click();
