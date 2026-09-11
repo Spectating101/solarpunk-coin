@@ -3,19 +3,16 @@ import {
   ArrowRight,
   BookOpen,
   Database,
-  FileText,
   GitBranch,
   History,
   Landmark,
-  MapPinned,
   ShieldCheck,
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import { PUBLIC_EVIDENCE_CHECKPOINT } from '../data/publicEvidenceCheckpoint';
 import { formatQuantity, humanize, shortHash } from './platform/PlatformSurface';
 import '../styles/researchAtlas.css';
-
-const MAP_BASE_URL = 'https://upload.wikimedia.org/wikipedia/commons/9/9f/BlankMap-World-Equirectangular.svg';
+import '../styles/researchExplorer.css';
 
 const NORWAY_REFERENCE = Object.freeze({
   id: 'NORWAY-INSTITUTIONAL',
@@ -24,23 +21,30 @@ const NORWAY_REFERENCE = Object.freeze({
   kind: 'institutional',
   assurance: 'comparative institutional evidence',
   status: 'REFERENCE',
-  display_anchor: { latitude: 62, longitude: 10 },
-  anchor_note: 'Country-level display anchor; not a measured site.',
   demonstrates: 'Evidence quality, actor authority, quantity mapping, registry identity, anti-reuse, settlement and correction are distinct institutional layers.',
   boundary: 'Comparative institutional evidence only. It does not validate Policy Lab at Norwegian national scale or establish an energy-backed monetary system.',
 });
 
 const AUSGRID_REFERENCE = Object.freeze({
   id: PUBLIC_EVIDENCE_CHECKPOINT.case_id,
-  title: 'Australia public-data checkpoint',
-  subtitle: 'Ausgrid · Solar Home Electricity Data',
+  title: 'Ausgrid public-data checkpoint',
+  subtitle: 'Solar Home Electricity Data',
   kind: 'public',
   assurance: PUBLIC_EVIDENCE_CHECKPOINT.evidence.assurance,
   status: 'REPRODUCED',
-  display_anchor: { latitude: -25, longitude: 134 },
-  anchor_note: 'Country-level display anchor; not a household or meter location.',
-  demonstrates: 'A real outside dataset can pass the evidence-normalization and deterministic decision path without being promoted into operator-certified truth.',
+  demonstrates: 'A real outside dataset can pass evidence normalization and deterministic decision reproduction without being promoted into operator-certified truth.',
   boundary: 'Public-data operability checkpoint. No source-holder confirmation, physical meter certification, legal issuance authority, or monetary-performance claim.',
+});
+
+const OWNER_OPERATOR_FRONTIER = Object.freeze({
+  id: 'OWNER-OPERATOR-SOURCE',
+  title: 'Owner / operator evidence',
+  subtitle: 'Attributable higher-assurance source',
+  kind: 'frontier',
+  assurance: 'OPEN',
+  status: 'OPEN',
+  demonstrates: 'Would test whether the same machinery survives attributable source-holder evidence and higher-assurance provenance.',
+  boundary: 'This evidence gate is not closed. No operator relationship, source-holder validation, or L2+ external case is implied.',
 });
 
 const FINDINGS = Object.freeze([
@@ -90,18 +94,32 @@ const TIMELINE = Object.freeze([
   ['2026-09-11', 'Specialized Gauntlet + research workspace', 'Non-promotion attacks, policy sensitivity, release provenance and an inspectable research interface converge.'],
 ]);
 
-function atlasPosition(latitude, longitude) {
-  return {
-    left: `${((Number(longitude) + 180) / 360) * 100}%`,
-    top: `${((90 - Number(latitude)) / 180) * 100}%`,
-  };
-}
+const RESEARCH_FRONTIER = Object.freeze([
+  ['Mechanism cases', 'EXECUTABLE', 'pass'],
+  ['Outside data', 'REPRODUCED', 'pass'],
+  ['Institutional comparison', 'REFERENCE', 'neutral'],
+  ['Owner / operator source', 'OPEN', 'open'],
+  ['Independent reproduction', 'OPEN', 'open'],
+  ['Monetary performance', 'UNTESTED', 'open'],
+]);
 
 function AtlasStatus({ children, tone = 'neutral' }) {
   return <span className={`atlas-status ${tone}`}>{children}</span>;
 }
 
-function AtlasDetail({ node, run, onOpenWorkbench, onNavigate }) {
+function scenarioLabel(scenario) {
+  const match = String(scenario?.scenario_id || '').match(/L[0-4]/i);
+  return match?.[0]?.toUpperCase() || scenario?.name || humanize(scenario?.scenario_id);
+}
+
+function policyLabel(policy) {
+  if (/OPEN/i.test(policy?.id || '')) return 'Open';
+  if (/PILOT/i.test(policy?.id || '')) return 'Pilot';
+  if (/STRICT/i.test(policy?.id || '')) return 'Strict';
+  return policy?.name || humanize(policy?.id);
+}
+
+function ResearchDetail({ node, run, activePolicy, activeScenario, onOpenWorkbench, onNavigate }) {
   if (!node) return null;
 
   if (node.kind === 'controlled') {
@@ -111,20 +129,20 @@ function AtlasDetail({ node, run, onOpenWorkbench, onNavigate }) {
       ? decision?.admission?.blocking_rules?.[0]
       : decision?.capacity?.binding_constraints?.[0];
     return (
-      <aside className="atlas-detail" aria-label="Selected research object">
+      <aside className="atlas-detail explorer-detail" aria-label="Selected research object">
         <header>
           <span>CONTROLLED CASE</span>
           <h2>{node.id}</h2>
           <p>{node.title}</p>
         </header>
         <dl>
-          <div><dt>Research role</dt><dd>Controlled mechanism case</dd></div>
-          <div><dt>Spatial identity</dt><dd>{node.latitude.toFixed(2)}, {node.longitude.toFixed(2)} · WGS84</dd></div>
-          <div><dt>Active decision</dt><dd>{decision?.decision?.replaceAll('_', ' ') || 'evaluating'}</dd></div>
-          <div><dt>Binding / blocking</dt><dd>{humanize(mainRule)}</dd></div>
           <div><dt>Evidence</dt><dd><code>{shortHash(run?.evidence?.evidence_hash, 9, 6)}</code></dd></div>
+          <div><dt>Assurance</dt><dd>{scenarioLabel(activeScenario)}</dd></div>
+          <div><dt>Policy</dt><dd>{policyLabel(activePolicy)}</dd></div>
+          <div><dt>Decision</dt><dd>{decision?.decision?.replaceAll('_', ' ') || 'evaluating'}</dd></div>
+          <div><dt>Binding / blocking</dt><dd>{humanize(mainRule)}</dd></div>
         </dl>
-        <p className="atlas-boundary">Controlled scenario demonstration. The spatial identity locates the modeled case; it does not convert the bundled fixture into realized site evidence.</p>
+        <p className="atlas-boundary">Controlled mechanism evidence. Executable does not mean realized operator evidence.</p>
         <div className="atlas-detail-actions">
           <button type="button" onClick={onOpenWorkbench}>Open in workbench <ArrowRight size={14} /></button>
           <button type="button" onClick={() => onNavigate?.({ section: 'case', id: node.id, lens: 'constraints' })}>Inspect case</button>
@@ -135,7 +153,7 @@ function AtlasDetail({ node, run, onOpenWorkbench, onNavigate }) {
 
   if (node.id === AUSGRID_REFERENCE.id) {
     return (
-      <aside className="atlas-detail" aria-label="Selected research object">
+      <aside className="atlas-detail explorer-detail" aria-label="Selected research object">
         <header>
           <span>OUTSIDE-DATA CHECKPOINT</span>
           <h2>{node.id}</h2>
@@ -143,13 +161,12 @@ function AtlasDetail({ node, run, onOpenWorkbench, onNavigate }) {
         </header>
         <dl>
           <div><dt>Evidence state</dt><dd>{PUBLIC_EVIDENCE_CHECKPOINT.evidence.assurance}</dd></div>
-          <div><dt>Intervals</dt><dd>{PUBLIC_EVIDENCE_CHECKPOINT.source.interval_count}</dd></div>
-          <div><dt>Derived eligible surplus</dt><dd>{PUBLIC_EVIDENCE_CHECKPOINT.evidence.total_eligible_surplus_kwh} kWh</dd></div>
+          <div><dt>Source window</dt><dd>{PUBLIC_EVIDENCE_CHECKPOINT.source.interval_count} intervals</dd></div>
+          <div><dt>Derived surplus</dt><dd>{PUBLIC_EVIDENCE_CHECKPOINT.evidence.total_eligible_surplus_kwh} kWh</dd></div>
           <div><dt>Open policy</dt><dd>{PUBLIC_EVIDENCE_CHECKPOINT.decisions.open.result.replaceAll('_', ' ')}</dd></div>
           <div><dt>Pilot policy</dt><dd>{PUBLIC_EVIDENCE_CHECKPOINT.decisions.pilot.result}</dd></div>
-          <div><dt>Settlement stress</dt><dd>{Math.round(PUBLIC_EVIDENCE_CHECKPOINT.settlement.declared_capacity_fraction * 100)}% · {PUBLIC_EVIDENCE_CHECKPOINT.settlement.result}</dd></div>
+          <div><dt>Settlement</dt><dd>{Math.round(PUBLIC_EVIDENCE_CHECKPOINT.settlement.declared_capacity_fraction * 100)}% · {PUBLIC_EVIDENCE_CHECKPOINT.settlement.result}</dd></div>
         </dl>
-        <p className="atlas-anchor-note">{node.anchor_note}</p>
         <p className="atlas-boundary">{node.boundary}</p>
         <div className="atlas-detail-actions">
           <button type="button" onClick={() => onNavigate?.({ section: 'research' })}>Open research layer <ArrowRight size={14} /></button>
@@ -158,19 +175,36 @@ function AtlasDetail({ node, run, onOpenWorkbench, onNavigate }) {
     );
   }
 
+  if (node.id === OWNER_OPERATOR_FRONTIER.id) {
+    return (
+      <aside className="atlas-detail explorer-detail" aria-label="Selected research object">
+        <header>
+          <span>OPEN EXTERNAL GATE</span>
+          <h2>{node.title}</h2>
+          <p>{node.subtitle}</p>
+        </header>
+        <dl>
+          <div><dt>Status</dt><dd>OPEN</dd></div>
+          <div><dt>Would test</dt><dd>source-holder attribution · higher assurance · external workflow</dd></div>
+          <div><dt>Current authority</dt><dd>none</dd></div>
+        </dl>
+        <p className="atlas-boundary">{node.boundary}</p>
+      </aside>
+    );
+  }
+
   return (
-    <aside className="atlas-detail" aria-label="Selected research object">
+    <aside className="atlas-detail explorer-detail" aria-label="Selected research object">
       <header>
-        <span>INSTITUTIONAL EVIDENCE</span>
+        <span>INSTITUTIONAL REFERENCE</span>
         <h2>Norway</h2>
         <p>{node.subtitle}</p>
       </header>
       <dl>
         <div><dt>Status</dt><dd>{node.status}</dd></div>
         <div><dt>Research role</dt><dd>{node.assurance}</dd></div>
-        <div><dt>Core observation</dt><dd>Institutional layers remain distinct before downstream financial or market action.</dd></div>
+        <div><dt>Observation</dt><dd>evidence, authority, quantity, identity, settlement and correction remain separate layers</dd></div>
       </dl>
-      <p className="atlas-anchor-note">{node.anchor_note}</p>
       <p className="atlas-boundary">{node.boundary}</p>
       <div className="atlas-detail-actions">
         <button type="button" onClick={() => onNavigate?.({ section: 'research' })}>Open research layer <ArrowRight size={14} /></button>
@@ -180,47 +214,45 @@ function AtlasDetail({ node, run, onOpenWorkbench, onNavigate }) {
 }
 
 export default function ResearchAtlas({ onOpenWorkbench, onNavigate }) {
-  const [view, setView] = useState('map');
-  const [filter, setFilter] = useState('all');
+  const [view, setView] = useState('landscape');
   const [selectedId, setSelectedId] = useState(AUSGRID_REFERENCE.id);
   const {
     pack,
     visibleRunsByCaseId = {},
+    activePolicyId,
+    activeScenarioId,
     selectCase,
+    selectPolicy,
+    selectScenario,
   } = useCaseWorkbench();
 
-  const controlledNodes = useMemo(() => pack.cases
-    .filter((item) => item.spatial_identity)
-    .map((item) => ({
-      id: item.case_id,
-      title: item.subject,
-      kind: 'controlled',
-      status: 'EXECUTABLE',
-      assurance: 'scenario-dependent',
-      latitude: item.spatial_identity.latitude,
-      longitude: item.spatial_identity.longitude,
-    })), [pack.cases]);
+  const controlledNodes = useMemo(() => pack.cases.map((item) => ({
+    id: item.case_id,
+    title: item.subject,
+    kind: 'controlled',
+    status: 'EXECUTABLE',
+    assurance: 'scenario-dependent',
+    caseType: item.case_type,
+  })), [pack.cases]);
 
-  const mapNodes = useMemo(() => [
+  const researchObjects = useMemo(() => [
     ...controlledNodes,
-    {
-      ...AUSGRID_REFERENCE,
-      latitude: AUSGRID_REFERENCE.display_anchor.latitude,
-      longitude: AUSGRID_REFERENCE.display_anchor.longitude,
-    },
-    {
-      ...NORWAY_REFERENCE,
-      latitude: NORWAY_REFERENCE.display_anchor.latitude,
-      longitude: NORWAY_REFERENCE.display_anchor.longitude,
-    },
+    AUSGRID_REFERENCE,
+    NORWAY_REFERENCE,
+    OWNER_OPERATOR_FRONTIER,
   ], [controlledNodes]);
 
-  const visibleNodes = mapNodes.filter((node) => filter === 'all' || node.kind === filter);
-  const selectedNode = mapNodes.find((node) => node.id === selectedId) || mapNodes[0];
+  const selectedNode = researchObjects.find((node) => node.id === selectedId) || researchObjects[0];
   const selectedRun = selectedNode?.kind === 'controlled' ? visibleRunsByCaseId[selectedNode.id] : null;
-  const nonSpatialCase = pack.cases.find((item) => !item.spatial_identity);
+  const activePolicy = pack.policies.find((policy) => policy.id === activePolicyId) || pack.policies[0];
+  const activeScenario = pack.scenarios.find((scenario) => scenario.scenario_id === activeScenarioId) || pack.scenarios[0];
+  const activeDecision = selectedRun?.decision;
+  const activeBlocked = activeDecision?.decision === 'BLOCKED';
+  const activeRule = activeBlocked
+    ? activeDecision?.admission?.blocking_rules?.[0]
+    : activeDecision?.capacity?.binding_constraints?.[0];
 
-  const chooseNode = (node) => {
+  const chooseObject = (node) => {
     setSelectedId(node.id);
     if (node.kind === 'controlled') selectCase(node.id);
   };
@@ -229,18 +261,18 @@ export default function ResearchAtlas({ onOpenWorkbench, onNavigate }) {
     <section className="research-atlas" aria-labelledby="research-atlas-title">
       <header className="atlas-head">
         <div>
-          <span>POLICY LAB / RESEARCH ATLAS</span>
-          <h1 id="research-atlas-title">Explore the evidence, cases, findings, and unresolved boundaries.</h1>
+          <span>POLICY LAB / RESEARCH EXPLORER</span>
+          <h1 id="research-atlas-title">Explore how evidence becomes — or fails to become — financial authority.</h1>
         </div>
         <div className="atlas-head-summary">
-          <strong>{pack.cases.length + 2}</strong><span>indexed research objects</span>
-          <strong>{FINDINGS.length}</strong><span>current findings / open propositions</span>
+          <strong>{researchObjects.length}</strong><span>research objects</span>
+          <strong>{FINDINGS.length}</strong><span>findings / open propositions</span>
         </div>
       </header>
 
       <nav className="atlas-view-tabs" aria-label="Research atlas views">
         {[
-          ['map', 'Map', MapPinned],
+          ['landscape', 'Landscape', Landmark],
           ['findings', 'Findings', BookOpen],
           ['evidence', 'Evidence', Database],
           ['timeline', 'Timeline', History],
@@ -252,44 +284,105 @@ export default function ResearchAtlas({ onOpenWorkbench, onNavigate }) {
         <button type="button" className="atlas-workbench-link" onClick={onOpenWorkbench}><GitBranch size={14} />Workbench</button>
       </nav>
 
-      {view === 'map' ? (
-        <div className="atlas-map-layout">
-          <div className="atlas-map-column">
-            <div className="atlas-filter-row" role="group" aria-label="Research layer filter">
-              {[
-                ['all', 'All'],
-                ['controlled', 'Controlled'],
-                ['public', 'Public evidence'],
-                ['institutional', 'Institutional'],
-              ].map(([id, label]) => <button key={id} type="button" className={filter === id ? 'active' : ''} onClick={() => setFilter(id)}>{label}</button>)}
+      {view === 'landscape' ? (
+        <div className="explorer-layout">
+          <div className="research-landscape" role="region" aria-label="Research landscape explorer">
+            <div className="explorer-stage evidence-stage">
+              <header><span>01</span><strong>Evidence objects</strong><small>select what is being investigated</small></header>
+              <div className="explorer-object-list">
+                {researchObjects.map((node) => (
+                  <button
+                    key={node.id}
+                    type="button"
+                    className={`explorer-object ${node.kind} ${selectedId === node.id ? 'selected' : ''}`}
+                    onClick={() => chooseObject(node)}
+                    aria-label={`${node.title}. ${node.kind} research object.`}
+                  >
+                    <span className="explorer-object-mark" aria-hidden="true" />
+                    <span><strong>{node.id}</strong><small>{node.title}</small></span>
+                    <em>{node.status}</em>
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="atlas-map" role="img" aria-label="World research atlas with controlled cases, public evidence, and institutional references" style={{ '--atlas-map-base': `url("${MAP_BASE_URL}")` }}>
-              <div className="atlas-graticule" />
-              {visibleNodes.map((node) => (
-                <button
-                  key={node.id}
-                  type="button"
-                  className={`atlas-point ${node.kind} ${selectedId === node.id ? 'selected' : ''}`}
-                  style={atlasPosition(node.latitude, node.longitude)}
-                  onClick={() => chooseNode(node)}
-                  aria-label={`${node.title}. ${node.kind} research object.`}
-                >
-                  <span />
-                  <small>{node.id === AUSGRID_REFERENCE.id ? 'AUSGRID' : node.id === NORWAY_REFERENCE.id ? 'NORWAY' : node.id}</small>
-                </button>
-              ))}
+
+            <div className="explorer-stage assurance-stage">
+              <header><span>02</span><strong>Assurance</strong><small>change the declared evidence context</small></header>
+              <div className="explorer-choice-stack" role="group" aria-label="Research assurance states">
+                {pack.scenarios.map((scenario) => (
+                  <button
+                    key={scenario.scenario_id}
+                    type="button"
+                    className={activeScenarioId === scenario.scenario_id ? 'active' : ''}
+                    onClick={() => selectScenario(scenario.scenario_id)}
+                    aria-pressed={activeScenarioId === scenario.scenario_id}
+                  >
+                    <strong>{scenarioLabel(scenario)}</strong>
+                    <small>{scenario.name || humanize(scenario.scenario_id)}</small>
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="atlas-map-foot">
-              <span>Spatial case points use committed WGS84 case identities. Public/institutional markers use labeled country-level display anchors.</span>
-              <span>Map base: Wikimedia Commons equirectangular blank map · CC0/public domain.</span>
+
+            <div className="explorer-stage policy-stage">
+              <header><span>03</span><strong>Policy</strong><small>change the rule set, not the evidence</small></header>
+              <div className="explorer-choice-stack" role="group" aria-label="Research policy states">
+                {pack.policies.map((policy) => (
+                  <button
+                    key={policy.id}
+                    type="button"
+                    className={activePolicyId === policy.id ? 'active' : ''}
+                    onClick={() => selectPolicy(policy.id)}
+                    aria-pressed={activePolicyId === policy.id}
+                  >
+                    <strong>{policyLabel(policy)}</strong>
+                    <small>{policy.id}</small>
+                  </button>
+                ))}
+              </div>
             </div>
-            {nonSpatialCase ? (
-              <button type="button" className="atlas-nonspatial" onClick={() => { setSelectedId(nonSpatialCase.case_id); selectCase(nonSpatialCase.case_id); onOpenWorkbench?.(); }}>
-                <FileText size={14} /><span><strong>{nonSpatialCase.case_id}</strong><small>Non-spatial operator-format synthetic intake · open in workbench</small></span><ArrowRight size={14} />
-              </button>
-            ) : null}
+
+            <div className="explorer-stage outcome-stage">
+              <header><span>04</span><strong>Interpretation</strong><small>see what survives the chain</small></header>
+              {selectedNode.kind === 'controlled' ? (
+                <div className="explorer-outcome">
+                  <div className={`explorer-decision ${activeBlocked ? 'blocked' : 'admitted'}`}>
+                    <span>{activeBlocked ? 'BLOCKED' : 'ADMITTED / LIMITED'}</span>
+                    <strong>{activeBlocked ? '×' : formatQuantity(activeDecision?.capacity?.admitted_maximum)}</strong>
+                  </div>
+                  <dl>
+                    <div><dt>Case</dt><dd>{selectedNode.id}</dd></div>
+                    <div><dt>Assurance</dt><dd>{scenarioLabel(activeScenario)}</dd></div>
+                    <div><dt>Rule</dt><dd>{humanize(activeRule)}</dd></div>
+                  </dl>
+                </div>
+              ) : (
+                <div className={`explorer-research-state ${selectedNode.kind}`}>
+                  <span>{selectedNode.status}</span>
+                  <strong>{selectedNode.kind === 'public' ? 'outside data' : selectedNode.kind === 'institutional' ? 'institutional reference' : 'open evidence gate'}</strong>
+                  <p>{selectedNode.demonstrates}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="explorer-frontier" aria-label="Research frontier">
+              <span>RESEARCH FRONTIER</span>
+              <div>
+                {RESEARCH_FRONTIER.map(([label, status, tone]) => (
+                  <div key={label} className={`frontier-step ${tone}`}><i aria-hidden="true" /><span><strong>{label}</strong><small>{status}</small></span></div>
+                ))}
+              </div>
+            </div>
           </div>
-          <AtlasDetail node={selectedNode} run={selectedRun} onOpenWorkbench={onOpenWorkbench} onNavigate={onNavigate} />
+
+          <ResearchDetail
+            node={selectedNode}
+            run={selectedRun}
+            activePolicy={activePolicy}
+            activeScenario={activeScenario}
+            onOpenWorkbench={onOpenWorkbench}
+            onNavigate={onNavigate}
+          />
         </div>
       ) : null}
 
@@ -305,7 +398,7 @@ export default function ResearchAtlas({ onOpenWorkbench, onNavigate }) {
 
       {view === 'evidence' ? (
         <div className="atlas-table-view">
-          <header><span>EVIDENCE LANDSCAPE</span><h2>What kind of evidence exists, what it can support, and what remains outside its scope.</h2></header>
+          <header><span>EVIDENCE LANDSCAPE</span><h2>What evidence exists, what it can support, and what remains outside its scope.</h2></header>
           <table>
             <thead><tr><th>Layer</th><th>Current state</th><th>Useful for</th><th>Boundary</th></tr></thead>
             <tbody>{EVIDENCE_LAYERS.map(([layer, state, useful, boundary]) => <tr key={layer}><td>{layer}</td><td><AtlasStatus tone={state === 'OPEN' ? 'open' : 'neutral'}>{state}</AtlasStatus></td><td>{useful}</td><td>{boundary}</td></tr>)}</tbody>
@@ -322,7 +415,7 @@ export default function ResearchAtlas({ onOpenWorkbench, onNavigate }) {
 
       <footer className="atlas-footer">
         <div><ShieldCheck size={14} /><span>Research boundary</span><strong>Mechanism evidence ≠ operator validation ≠ legal authority ≠ monetary performance.</strong></div>
-        <button type="button" onClick={onOpenWorkbench}>Interrogate the controlled cases <ArrowRight size={14} /></button>
+        <button type="button" onClick={onOpenWorkbench}>Open controlled workbench <ArrowRight size={14} /></button>
       </footer>
     </section>
   );
