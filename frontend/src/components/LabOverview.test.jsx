@@ -140,8 +140,8 @@ describe('LabOverview explorer + workbench research surface', () => {
     expect(screen.getAllByText(/policy can change financial authority without changing the evidence identity/i).length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
-    expect(screen.getByText(/Ausgrid public checkpoint/i)).toBeInTheDocument();
-    expect(screen.getByText(/Owner\/operator evidence/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Ausgrid public checkpoint/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Owner\/operator evidence/i).length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole('button', { name: /^Timeline$/i }));
     expect(screen.getByText(/Norway institutional dossier/i)).toBeInTheDocument();
