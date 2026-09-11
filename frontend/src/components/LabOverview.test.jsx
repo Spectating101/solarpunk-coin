@@ -118,7 +118,7 @@ describe('LabOverview explorer + workbench research surface', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Taoyuan controlled energy case/i }));
     expect(selectCase).toHaveBeenCalledWith('TYN-001');
-    expect(screen.getByText('126')).toBeInTheDocument();
+    expect(screen.getByText(/126 maximum/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /L2 counterfactual/i }));
     expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
@@ -137,7 +137,7 @@ describe('LabOverview explorer + workbench research surface', () => {
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
     fireEvent.click(screen.getByRole('button', { name: /^Findings$/i }));
-    expect(screen.getByText(/policy changes can alter financial authority without changing the evidence identity/i)).toBeInTheDocument();
+    expect(screen.getByText(/policy can change financial authority without changing the evidence identity/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
     expect(screen.getByText(/Ausgrid public checkpoint/i)).toBeInTheDocument();
