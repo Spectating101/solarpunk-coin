@@ -17,20 +17,14 @@ async function open(url, expected) {
   if (expected) await page.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-// Asset 1: judge-facing causal apparatus. The public evidence mass branches
-// through a visibly open and closed policy gate, settlement shows covered vs
-// uncovered cells, and the controlled assurance/policy experiment stays separate.
-await open(`${baseUrl}#lab`, 'Evidence → Policy → Quantity → Settlement');
+// Asset 1: practical research workspace with the outside-data checkpoint
+// inspected as a data/evidence object rather than presented as a standalone poster.
+await open(`${baseUrl}#lab`, 'Evidence-constrained policy analysis');
+await page.getByLabel(/Research workspace browser/i).waitFor({ state: 'visible' });
+await page.getByLabel(/Research object inspector/i).waitFor({ state: 'visible' });
+await page.getByRole('button', { name: /^Data$/i }).click();
 await page.getByText('PUB-AUSGRID-001P', { exact: false }).first().waitFor({ state: 'visible' });
-await page.locator('.pl5-apparatus').waitFor({ state: 'visible' });
-await page.locator('.pl5-gate[data-state="open"]').waitFor({ state: 'visible' });
-await page.locator('.pl5-gate[data-state="closed"]').waitFor({ state: 'visible' });
-await page.locator('.pl5-settlement-cells').waitFor({ state: 'visible' });
-const causalExperiment = page.locator('.pl5-mini-table');
-await causalExperiment.getByText('126', { exact: true }).waitFor({ state: 'visible' });
-await causalExperiment.getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
-await page.locator('.pl5-lock[data-locked="true"]').waitFor({ state: 'visible' });
-await page.locator('.pl5-surface').first().screenshot({
+await page.locator('.rwb-shell').first().screenshot({
   path: path.join(outputDir, '01-outside-data-checkpoint.png'),
 });
 
