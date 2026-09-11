@@ -101,23 +101,30 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('LabOverview atlas + workbench research surface', () => {
-  it('opens on an interactive research atlas rather than an engine dashboard', () => {
+describe('LabOverview explorer + workbench research surface', () => {
+  it('opens on an interactive research landscape rather than an engine dashboard', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByRole('heading', { name: /explore the evidence, cases, findings, and unresolved boundaries/i })).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /world research atlas/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /explore how evidence becomes/i })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /research landscape explorer/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /PUB-AUSGRID-001P/i })).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: /research atlas views/i })).toBeInTheDocument();
   });
 
-  it('uses map selection to activate a real controlled case and can descend into the workbench', () => {
+  it('uses landscape selection to activate real case, assurance, and policy state before descending into the workbench', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
     fireEvent.click(screen.getByRole('button', { name: /Taoyuan controlled energy case/i }));
     expect(selectCase).toHaveBeenCalledWith('TYN-001');
+    expect(screen.getByText('126')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /L2 counterfactual/i }));
+    expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
+
+    fireEvent.click(screen.getByRole('button', { name: /ENERGY-CASE-PILOT-005/i }));
+    expect(selectPolicy).toHaveBeenCalledWith('ENERGY-CASE-PILOT-005');
 
     fireEvent.click(screen.getByRole('button', { name: /^Workbench$/i }));
     expect(screen.getByRole('heading', { name: /evidence-constrained policy analysis/i })).toBeInTheDocument();
@@ -125,7 +132,7 @@ describe('LabOverview atlas + workbench research surface', () => {
     expect(screen.getByLabelText(/research object inspector/i)).toBeInTheDocument();
   });
 
-  it('lets a visitor traverse findings, evidence landscape, and research development from the same atlas', () => {
+  it('lets a visitor traverse findings, evidence landscape, and research development from the same explorer', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
