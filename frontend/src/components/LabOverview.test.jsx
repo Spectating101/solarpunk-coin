@@ -130,7 +130,7 @@ describe('LabOverview atlas + workbench research surface', () => {
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
     fireEvent.click(screen.getByRole('button', { name: /^Findings$/i }));
-    expect(screen.getByText(/same declared evidence can be admitted, blocked, or quantity-limited/i)).toBeInTheDocument();
+    expect(screen.getByText(/policy changes can alter financial authority without changing the evidence identity/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
     expect(screen.getByText(/Ausgrid public checkpoint/i)).toBeInTheDocument();
