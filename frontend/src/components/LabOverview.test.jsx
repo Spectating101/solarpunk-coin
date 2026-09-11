@@ -91,22 +91,22 @@ describe('LabOverview paired platform surface', () => {
     expect(screen.getByRole('navigation', { name: /research documents/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/research workspace browser/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/research object inspector/i)).toBeInTheDocument();
-    expect(screen.getByText('180')).toBeInTheDocument();
+    expect(screen.getAllByText('180').length).toBeGreaterThan(0);
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('50.4')).toBeInTheDocument();
     expect(screen.getByText(/provenance policy capacity/i)).toBeInTheDocument();
   });
 
-  it('switches documents and preserves real parameter controls', () => {
+  it('keeps live parameters in Analysis and exposes the policy method as a document', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
+
+    fireEvent.change(screen.getByLabelText(/proof \/ assurance/i), { target: { value: 'PROVENANCE-L2-COUNTERFACTUAL' } });
+    expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
 
     fireEvent.click(screen.getByRole('button', { name: /^Methods$/i }));
     expect(screen.getByRole('heading', { name: /pilot policy/i })).toBeInTheDocument();
     expect(screen.getByText('MIN_PROVENANCE')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByLabelText(/proof \/ assurance/i), { target: { value: 'PROVENANCE-L2-COUNTERFACTUAL' } });
-    expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
   });
 
   it('switches into Full Analysis through the workspace action', () => {
