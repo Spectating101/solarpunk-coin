@@ -14,6 +14,7 @@ import './styles/receiptPolish.css';
 import './styles/caseInvestigationPolish.css';
 import './styles/caseInvestigationLayoutTuning.css';
 import './styles/judgeSurfaceFlowFix.css';
+import './styles/researchWorkbenchViewport.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
