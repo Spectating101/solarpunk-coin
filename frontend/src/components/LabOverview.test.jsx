@@ -94,7 +94,7 @@ describe('LabOverview paired platform surface', () => {
     expect(screen.getAllByText('180').length).toBeGreaterThan(0);
     expect(screen.getByText('126')).toBeInTheDocument();
     expect(screen.getByText('50.4')).toBeInTheDocument();
-    expect(screen.getByText(/provenance policy capacity/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/provenance policy capacity/i).length).toBeGreaterThan(0);
   });
 
   it('keeps live parameters in Analysis and exposes the policy method as a document', () => {
