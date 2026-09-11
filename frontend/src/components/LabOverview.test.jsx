@@ -21,9 +21,18 @@ function workbenchValue() {
         case_id: 'TYN-001',
         subject: 'Taoyuan controlled energy case',
         case_type: 'energy_site',
+        spatial_identity: { latitude: 24.99, longitude: 121.3, spatial_reference: 'WGS84' },
         measurement_window: { start: '2026-05-01T00:00:00Z', end: '2026-05-08T00:00:00Z' },
         context_refs: ['resource:tyn-001:pvwatts-v1'],
         boundaries: ['Controlled scenario demonstration.'],
+      }, {
+        case_id: 'OPS-001',
+        subject: 'Operator-format CSV pipeline pilot',
+        case_type: 'energy_site',
+        spatial_identity: null,
+        measurement_window: { start: '2026-05-01T00:00:00Z', end: '2026-05-08T00:00:00Z' },
+        context_refs: ['resource:tyn-001:pvwatts-v1'],
+        boundaries: ['Synthetic operator-format fixture.'],
       }],
       policies: [{
         id: 'ENERGY-CASE-PILOT-005',
@@ -59,7 +68,17 @@ function workbenchValue() {
         },
       },
     },
-    visibleRunsByCaseId: {},
+    visibleRunsByCaseId: {
+      'TYN-001': {
+        evidence: { evidence_hash: 'evidence-0123456789abcdef', summary: { total_eligible_surplus_kwh: 180 } },
+        decision: {
+          decision: 'ADMIT_WITH_LIMIT',
+          decision_id: 'decision-l2-fedcba9876543210',
+          admission: { blocking_rules: [] },
+          capacity: { admitted_maximum: 126, binding_constraints: ['PROVENANCE_POLICY_CAPACITY'] },
+        },
+      },
+    },
     activeStress: {
       available: true,
       settlement: {
@@ -82,25 +101,51 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('LabOverview paired platform surface', () => {
-  it('renders a practical research workspace from shared workbench state', () => {
+describe('LabOverview atlas + workbench research surface', () => {
+  it('opens on an interactive research atlas rather than an engine dashboard', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByRole('heading', { name: /evidence-constrained policy analysis/i })).toBeInTheDocument();
-    expect(screen.getByRole('navigation', { name: /research documents/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/research workspace browser/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/research object inspector/i)).toBeInTheDocument();
-    expect(screen.getAllByText('180').length).toBeGreaterThan(0);
-    expect(screen.getByText('126')).toBeInTheDocument();
-    expect(screen.getByText('50.4')).toBeInTheDocument();
-    expect(screen.getAllByText(/provenance policy capacity/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { name: /explore the evidence, cases, findings, and unresolved boundaries/i })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /world research atlas/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /PUB-AUSGRID-001P/i })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /research atlas views/i })).toBeInTheDocument();
   });
 
-  it('keeps live parameters in Analysis and exposes the policy method as a document', () => {
+  it('uses map selection to activate a real controlled case and can descend into the workbench', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
+    fireEvent.click(screen.getByRole('button', { name: /Taoyuan controlled energy case/i }));
+    expect(selectCase).toHaveBeenCalledWith('TYN-001');
+
+    fireEvent.click(screen.getByRole('button', { name: /^Workbench$/i }));
+    expect(screen.getByRole('heading', { name: /evidence-constrained policy analysis/i })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /research documents/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/research object inspector/i)).toBeInTheDocument();
+  });
+
+  it('lets a visitor traverse findings, evidence landscape, and research development from the same atlas', () => {
+    useCaseWorkbench.mockReturnValue(workbenchValue());
+    render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Findings$/i }));
+    expect(screen.getByText(/same declared evidence can be admitted, blocked, or quantity-limited/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
+    expect(screen.getByText(/Ausgrid public checkpoint/i)).toBeInTheDocument();
+    expect(screen.getByText(/Owner\/operator evidence/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /^Timeline$/i }));
+    expect(screen.getByText(/Norway institutional dossier/i)).toBeInTheDocument();
+    expect(screen.getByText(/Ausgrid public-data checkpoint/i)).toBeInTheDocument();
+  });
+
+  it('keeps live parameters and method inspection in the deeper workbench', () => {
+    useCaseWorkbench.mockReturnValue(workbenchValue());
+    render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Workbench$/i }));
     fireEvent.change(screen.getByLabelText(/proof \/ assurance/i), { target: { value: 'PROVENANCE-L2-COUNTERFACTUAL' } });
     expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
 
@@ -109,11 +154,12 @@ describe('LabOverview paired platform surface', () => {
     expect(screen.getByText('MIN_PROVENANCE')).toBeInTheDocument();
   });
 
-  it('switches into Full Analysis through the workspace action', () => {
+  it('switches into Full Analysis through the deeper workbench action', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     const onViewModeChange = vi.fn();
     render(<LabOverview viewMode="overview" onViewModeChange={onViewModeChange} onNavigate={vi.fn()} />);
 
+    fireEvent.click(screen.getByRole('button', { name: /^Workbench$/i }));
     fireEvent.click(screen.getByRole('button', { name: /^Full analysis$/i }));
     expect(onViewModeChange).toHaveBeenCalledWith('full');
   });
