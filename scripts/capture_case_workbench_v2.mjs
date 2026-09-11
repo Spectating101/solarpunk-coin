@@ -131,8 +131,10 @@ async function openMobile(hash, expected) {
 
 await openMobile('#lab', 'Evidence-constrained policy analysis');
 await mobilePage.getByRole('button', { name: /open primary navigation/i }).click();
+const mobilePrimaryMenu = mobilePage.locator('#mobile-primary-menu');
+await mobilePrimaryMenu.waitFor({ state: 'visible' });
 for (const label of ['Overview', 'Investigate', 'Research', 'Field Use', 'Programme']) {
-  await mobilePage.getByRole('button', { name: label, exact: true }).waitFor({ state: 'visible' });
+  await mobilePrimaryMenu.getByRole('button', { name: label, exact: true }).waitFor({ state: 'visible' });
 }
 await shot('11-mobile-primary-navigation.png', mobilePage);
 await mobilePage.getByRole('button', { name: /close primary navigation/i }).click();
