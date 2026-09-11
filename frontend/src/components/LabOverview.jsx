@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import PublicEvidenceCheckpoint from './PublicEvidenceCheckpoint';
+import ResearchAtlas from './ResearchAtlas';
 import ResearchWorkbenchOverview from './ResearchWorkbenchOverview';
 import {
   EmptyState,
@@ -50,6 +51,7 @@ const OBJECTS = [
 
 export default function LabOverview({ viewMode = 'overview', onViewModeChange, onNavigate }) {
   const [activeStage, setActiveStage] = useState('evidence');
+  const [overviewSurface, setOverviewSurface] = useState('atlas');
   const {
     pack,
     activeCaseId,
@@ -67,11 +69,22 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
   const activePipeline = useMemo(() => PIPELINE.find(([id]) => id === activeStage) || PIPELINE[0], [activeStage]);
 
   if (viewMode !== 'full') {
-    return (
-      <ResearchWorkbenchOverview
+    return overviewSurface === 'atlas' ? (
+      <ResearchAtlas
         onNavigate={onNavigate}
-        onOpenFullAnalysis={() => onViewModeChange('full')}
+        onOpenWorkbench={() => setOverviewSurface('workbench')}
       />
+    ) : (
+      <div className="research-workbench-mode">
+        <div className="research-workbench-modebar">
+          <button type="button" onClick={() => setOverviewSurface('atlas')}>← Research atlas</button>
+          <span>Controlled cases · methods · runs · provenance</span>
+        </div>
+        <ResearchWorkbenchOverview
+          onNavigate={onNavigate}
+          onOpenFullAnalysis={() => onViewModeChange('full')}
+        />
+      </div>
     );
   }
 
