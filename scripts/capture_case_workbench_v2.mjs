@@ -29,8 +29,8 @@ async function selectAssurance(target, scenarioId) {
   await target.getByLabel(/Proof \/ assurance|Active assurance scenario|Assurance context/i).selectOption(scenarioId);
 }
 
-await open('#lab', 'Explore the evidence, cases, findings, and unresolved boundaries');
-await page.getByRole('img', { name: /world research atlas/i }).waitFor({ state: 'visible' });
+await open('#lab', 'Explore how evidence becomes');
+await page.getByRole('region', { name: /research landscape explorer/i }).waitFor({ state: 'visible' });
 await page.getByRole('heading', { name: /PUB-AUSGRID-001P/i }).waitFor({ state: 'visible' });
 await shot('00-research-atlas.png');
 
@@ -134,7 +134,7 @@ async function openMobile(hash, expected) {
   if (expected) await mobilePage.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-await openMobile('#lab', 'Explore the evidence, cases, findings, and unresolved boundaries');
+await openMobile('#lab', 'Explore how evidence becomes');
 await mobilePage.getByRole('button', { name: /open primary navigation/i }).click();
 const mobilePrimaryMenu = mobilePage.locator('#mobile-primary-menu');
 await mobilePrimaryMenu.waitFor({ state: 'visible' });
@@ -143,7 +143,7 @@ for (const label of ['Overview', 'Investigate', 'Research', 'Field Use', 'Progra
 }
 await shot('11-mobile-primary-navigation.png', mobilePage);
 await mobilePage.getByRole('button', { name: /close primary navigation/i }).click();
-await mobilePage.getByRole('img', { name: /world research atlas/i }).waitFor({ state: 'visible' });
+await mobilePage.getByRole('region', { name: /research landscape explorer/i }).waitFor({ state: 'visible' });
 await shot('12-mobile-research-atlas.png', mobilePage);
 
 await mobilePage.getByRole('button', { name: /^Workbench$/i }).click();
