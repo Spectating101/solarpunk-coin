@@ -3,6 +3,32 @@
    research workspace is mounted. Other public/reference surfaces keep their
    historical container behavior. */
 
+.research-workbench-modebar {
+  width: min(1480px, 100%);
+  margin: 0 auto -8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #8fa199;
+  font-size: 10px;
+}
+
+.research-workbench-modebar button {
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid #44544a;
+  background: transparent;
+  color: #c9d5ce;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.research-workbench-modebar button:hover {
+  border-color: #71877a;
+  color: #ffffff;
+}
+
 @media (min-width: 761px) {
   .app-minimal.paired-platform-app:has(.rwb-page) {
     width: 100%;
@@ -58,6 +84,16 @@
 }
 
 @media (max-width: 760px) {
+  .research-workbench-modebar {
+    width: 100%;
+    margin: 6px auto -2px;
+    padding: 0 4px;
+  }
+
+  .research-workbench-modebar span {
+    display: none;
+  }
+
   .rwb-method-chain > i {
     min-height: 24px;
     transform: none;
