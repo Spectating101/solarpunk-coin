@@ -29,17 +29,22 @@ async function selectAssurance(target, scenarioId) {
   await target.getByLabel(/Proof \/ assurance|Active assurance scenario|Assurance context/i).selectOption(scenarioId);
 }
 
-await open('#lab', 'Evidence-constrained policy analysis');
+await open('#lab', 'Explore the evidence, cases, findings, and unresolved boundaries');
+await page.getByRole('img', { name: /world research atlas/i }).waitFor({ state: 'visible' });
+await page.getByRole('heading', { name: /PUB-AUSGRID-001P/i }).waitFor({ state: 'visible' });
+await shot('00-research-atlas.png');
+
+await page.getByRole('button', { name: /^Workbench$/i }).click();
 await page.locator('.rwb-result-head').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
 await page.getByLabel(/Proof \/ assurance/i).waitFor({ state: 'visible' });
 await page.getByLabel(/Research workspace browser/i).waitFor({ state: 'visible' });
 await page.getByLabel(/Research object inspector/i).waitFor({ state: 'visible' });
-await shot('00-lab-overview-blocked.png');
+await shot('00a-research-workbench-blocked.png');
 
 await selectAssurance(page, 'PROVENANCE-L2-COUNTERFACTUAL');
 await page.locator('.rwb-result-head').getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
 await page.locator('.rwb-result-grid > div:nth-child(2) > strong').filter({ hasText: '126' }).waitFor({ state: 'visible' });
-await shot('00a-lab-overview-admitted.png');
+await shot('00b-research-workbench-admitted.png');
 
 await selectAssurance(page, 'PROVENANCE-L0-BASE');
 await page.locator('.rwb-result-head').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
@@ -129,7 +134,7 @@ async function openMobile(hash, expected) {
   if (expected) await mobilePage.getByText(expected, { exact: false }).first().waitFor({ state: 'visible' });
 }
 
-await openMobile('#lab', 'Evidence-constrained policy analysis');
+await openMobile('#lab', 'Explore the evidence, cases, findings, and unresolved boundaries');
 await mobilePage.getByRole('button', { name: /open primary navigation/i }).click();
 const mobilePrimaryMenu = mobilePage.locator('#mobile-primary-menu');
 await mobilePrimaryMenu.waitFor({ state: 'visible' });
@@ -138,15 +143,19 @@ for (const label of ['Overview', 'Investigate', 'Research', 'Field Use', 'Progra
 }
 await shot('11-mobile-primary-navigation.png', mobilePage);
 await mobilePage.getByRole('button', { name: /close primary navigation/i }).click();
+await mobilePage.getByRole('img', { name: /world research atlas/i }).waitFor({ state: 'visible' });
+await shot('12-mobile-research-atlas.png', mobilePage);
+
+await mobilePage.getByRole('button', { name: /^Workbench$/i }).click();
 await mobilePage.locator('.rwb-result-head').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
 await mobilePage.getByLabel(/Proof \/ assurance/i).waitFor({ state: 'visible' });
 await mobilePage.getByLabel(/Research workspace browser/i).waitFor({ state: 'visible' });
-await shot('12-mobile-lab-overview-blocked.png', mobilePage);
+await shot('12a-mobile-research-workbench-blocked.png', mobilePage);
 
 await selectAssurance(mobilePage, 'PROVENANCE-L2-COUNTERFACTUAL');
 await mobilePage.locator('.rwb-result-head').getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ state: 'visible' });
 await mobilePage.locator('.rwb-result-grid > div:nth-child(2) > strong').filter({ hasText: '126' }).waitFor({ state: 'visible' });
-await shot('12a-mobile-lab-overview-admitted.png', mobilePage);
+await shot('12b-mobile-research-workbench-admitted.png', mobilePage);
 
 await selectAssurance(mobilePage, 'PROVENANCE-L0-BASE');
 await mobilePage.locator('.rwb-result-head').getByText('BLOCKED', { exact: true }).waitFor({ state: 'visible' });
@@ -222,7 +231,7 @@ await mobile.close();
 await browser.close();
 
 const files = await fs.readdir(outputDir);
-if (files.length !== 30) {
-  throw new Error(`Expected 30 flagship workbench review screenshots; received ${files.length}`);
+if (files.length !== 32) {
+  throw new Error(`Expected 32 flagship atlas/workbench review screenshots; received ${files.length}`);
 }
-console.log(`Captured ${files.length} flagship workbench screenshots in ${outputDir}`);
+console.log(`Captured ${files.length} flagship atlas/workbench screenshots in ${outputDir}`);
