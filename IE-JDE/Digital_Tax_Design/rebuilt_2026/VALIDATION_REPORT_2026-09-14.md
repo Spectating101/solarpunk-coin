@@ -2,42 +2,51 @@
 
 **Date:** 2026-09-14  
 **Workflow:** `Digital Tax package validation`  
-**GitHub Actions run:** `34819639467`  
-**Validated head:** `39d6e087ed68df2cc8edd883ab423a9a55580d1f`  
+**GitHub Actions run:** `34838129214`  
+**Validated head:** `163435a53819bbc21d55988758d5c2d633f37b87`  
 **Result:** `PASS`
 
-## Validator output
+## Validation suite
 
-```text
-sources=26 claims=34 countries=5
-WARNING: Malaysia: architecture status is PARTIAL_COMPLETE
-WARNING: Indonesia: architecture status is PARTIAL_COMPLETE
-WARNING: Vietnam: architecture status is PARTIAL_COMPLETE
-WARNING: Thailand: architecture status is PARTIAL_COMPLETE
-WARNING: Philippines: architecture status is PARTIAL_COMPLETE
-PASS: Digital Tax package is structurally consistent
-NOTE: non-strict validation passed with open research-status warnings
-```
+The exact branch tree passed four Digital Tax-specific controls:
+
+1. `validate_package.py` — source/claim/country/path/chronology/reconciliation/manuscript structural consistency.
+2. `derive_comparative_findings.py --check` — deterministic comparative summary reproduces from canonical path codings.
+3. `validate_boundary_layer.py` — node-selection conditions and boundary/countercases remain path- and source-controlled.
+4. `validate_operational_capacity.py` — Stage-B filing/correction/refund/audit/appeal/enforcement evidence remains source-controlled and outcome/performance claims remain bounded.
+
+## Current controlled package
+
+The validated tree includes:
+
+- the five-country / seven-path transaction-node architecture;
+- source and claim registers;
+- chronology and reconciliation evidence;
+- node-selection conditions and negative/boundary cases;
+- Stage-B `OPERATIONAL_CAPACITY_MATRIX.csv`;
+- bounded Stage-B claims for Malaysia, Vietnam, Thailand and the Philippines;
+- explicit unresolved/harmonization gaps for matching, audit yields, refund performance, disputes, compliance cost and causal outcomes;
+- the expanded package manifest and four-gate workflow.
 
 ## Interpretation
 
-The package passed the non-strict structural gate. The warnings are intentional research-status warnings rather than structural failures.
+A PASS verifies package consistency under the programmed controls. It does **not** independently establish:
 
-All five country rows remain `PARTIAL_COMPLETE` because comparable evidence for reconciliation/audit, error correction, and compliance cost is not yet strong enough to support cross-country performance ranking. The manuscript treats that incompleteness as an explicit limitation.
+- correctness of every legal interpretation beyond the frozen-source audit;
+- administrative effectiveness;
+- causal revenue/compliance effects;
+- cross-country superiority;
+- external reproduction, novelty acceptance or publication readiness.
 
-The passing run verifies package structure, source/claim ID consistency, country coverage, required manuscript architecture and boundary phrases, absence of prohibited stale Digital Tax claims, and preservation of historical claims as `SUPERSEDED`.
-
-It does **not** independently verify the truth of legal or empirical sources. Source truth remains controlled by the primary-source audit and final currentness checks.
-
-## Artifact
-
-The workflow uploaded `digital-tax-validation-log` as a durable GitHub Actions artifact for the run.
+The `PARTIAL_COMPLETE` country architecture states and `UNRESOLVED` Stage-B outcomes are deliberate research boundaries, not validation failures.
 
 ## Promotion effect
 
-This closes the package’s **executed structural validation** gate. It does not close:
+The structural, boundary-case and operational-capacity control layers are executable and green on the recorded exact head.
 
-- independent novelty review;
+Still external/unclosed:
+
+- independent novelty challenge;
 - independent re-coding of node locus/event coupling;
-- final just-before-submission legal currentness review;
-- any requirement for comparable performance evidence if a future manuscript version attempts to rank architectures.
+- comparable downstream administrative outcomes;
+- final legal-source currentness check immediately before any submission freeze.
