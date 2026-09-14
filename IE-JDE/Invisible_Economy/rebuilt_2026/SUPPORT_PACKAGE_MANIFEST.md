@@ -1,208 +1,202 @@
-# Invisible Ledger V2 — Support Package Manifest
+# Invisible Ledger V2 — Publication Support Manifest
 
-**Status:** `ACTIVE FULL-CAPACITY SUPPORT BUILD / MIXED FROZEN + PROVISIONAL EVIDENCE`  
+**Status:** `PUBLICATION CANDIDATE / CORE ARTICLE CRYSTALLIZED / THESIS PROPOSAL REMAINS SEPARATELY CONTROLLED`  
 **Branch:** `invisible-ledger/full-capacity-2026`  
-**Authority boundary:** the active September 2026 proposal/research-preview still governs the research question, scope, and inferential boundaries. This branch does **not** edit or replace that proposal.
+**Canonical article:** `INVISIBLE_LEDGER_PUBLICATION_CANDIDATE_2026.md`
 
-## 1. Research function
+## 1. Authority boundary
 
-Build the empirical, definition, provenance, currentness, exclusion, and reproduction machinery underneath Invisible Ledger V2 so the eventual manuscript can be written from controlled evidence rather than remembered numbers.
+The active September 2026 thesis proposal/research-preview still controls the thesis's final sample/perimeter decisions. This branch does **not** edit or override that proposal.
 
-Legacy `Invisible_Economy` material on `main` remains historical unless independently re-admitted. Residual-centric language does not govern V2.
+The publication candidate is a narrower standalone article built only from evidence that does not require resolving the current Blibli/Bukalapak advisor gates.
 
-## 2. Current V2 sequence
+Legacy residual-centric `Invisible_Economy` material on `main` is historical unless explicitly re-admitted. Earlier `$185B/$192B`, 12.x multiplier, ASEAN calibration, and Malaysia validation claims are not findings of the current article.
 
-1. **Issuer growth translation** — test whether transaction activity and recognized revenue provide the same longitudinal growth signal inside a documented perimeter.
-2. **Mechanism reconciliation** — explain material divergence using source-native accounting/operating components where evidence permits.
-3. **Broader digital-growth anatomy** — locate growth across BPS business/channel measures and Bank Indonesia payment traces without forcing level equivalence.
-4. **Institutional visibility** — separate record existence, legal reportability, transmission, matching, verified use, and observed outcome.
-5. **External corroboration** — retain broader issuer/ASEAN evidence only as recurrence/heterogeneity evidence, not pooled causal proof.
+## 2. Canonical publication read order
 
-## 3. Authority order
-
-### A. Source and exclusion control
+### Source / claim authority
 
 1. `SOURCE_REGISTER.csv`
 2. `EXCLUSION_LEDGER.csv`
+3. `NOVELTY_AND_PRIOR_ART_AUDIT.md`
+4. `OVERLAP_CONTROL_WITH_DIGITAL_TAX.md`
 
-### B. Issuer evidence
+### Empirical authority
 
-3. `ISSUER_DEFINITION_LEDGER.csv`
-4. `ISSUER_TRANSITION_LEDGER.csv`
-5. `TOKOPEDIA_RECONCILIATION.csv`
+5. `ISSUER_DEFINITION_LEDGER.csv`
+6. `ISSUER_TRANSITION_LEDGER.csv`
+7. `TOKOPEDIA_RECONCILIATION.csv`
+8. `BPS_GROWTH_ANATOMY.csv`
+9. `BPS_BUSINESS_CHARACTERISTICS.csv`
+10. `BI_DEFINITION_LEDGER.csv`
+11. `INSTITUTIONAL_VISIBILITY_MATRIX.csv`
+12. `RESULT_REPRODUCTION_MAP.csv`
 
-### C. Broader-economy evidence
+### Publication surfaces
 
-6. `BPS_GROWTH_ANATOMY.csv`
-7. `BPS_BUSINESS_CHARACTERISTICS.csv`
-8. `BI_DEFINITION_LEDGER.csv`
+13. `INVISIBLE_LEDGER_PUBLICATION_CANDIDATE_2026.md`
+14. `FIGURES_TABLES_SPEC.md`
+15. `SUBMISSION_MATERIALS.md`
+16. `SSRN_SUPERSESSION_NOTE.md`
 
-### D. Institutional evidence
+### Validation
 
-9. `INSTITUTIONAL_VISIBILITY_MATRIX.csv`
+17. `validate_support_package.py`
+18. `validate_reproduction_map.py`
+19. `validate_publication_candidate.py`
+20. `.github/workflows/invisible-ledger-support-validation.yml`
 
-### E. Result authority
+Narrative prose cannot override the source, exclusion, definition, currentness, or result-status layers.
 
-10. `RESULT_REPRODUCTION_MAP.csv`
+## 3. Current article contribution
 
-### F. Design/support documents
+The publication candidate is an **Indonesia cross-record reconciliation study**.
 
-11. `EVIDENCE_FREEZE_PREVIEW.md`
-12. `DATA_PRODUCT_SCHEMAS.md`
+It does not claim originality for:
 
-### G. Validation
+- `GTV != platform revenue`;
+- the distinction between intermediation fees and underlying transactions;
+- the generic use of company reports/payment data/surveys as partial digital-economy sources;
+- third-party information as an administrative tool.
 
-13. `validate_support_package.py`
-14. `validate_reproduction_map.py`
-15. `.github/workflows/invisible-ledger-support-validation.yml`
+Its contribution is the source-auditable empirical sequence:
 
-Narrative proposal/manuscript prose may interpret controlled results, but it cannot silently override the source, definition, exclusion, currentness, or result-status layers.
+`audited issuer mechanism -> BPS national/channel anatomy -> Bank Indonesia payment trace -> institutional visibility`.
 
-## 4. Evidence-status rule
+See `NOVELTY_AND_PRIOR_ART_AUDIT.md`.
 
-The package deliberately allows mixed states.
+## 4. Frozen article results
 
-- `FROZEN_*` — source-native input and permitted inference are sufficiently pinned for V2 use.
-- `PREVIEW_*` / `*_PENDING_LOCATOR` — arithmetic may be reproduced but primary table/cell definition freeze remains incomplete.
-- `BLOCKED` / `ADVISOR_GATE` — no headline result may be produced.
-- `CURRENTNESS_FROZEN_<date>` — valid only at stated currentness date and must be refreshed after the scheduled event/new official notice.
-- `UNKNOWN` — absence of evidenced downstream stage; never silently converted to zero, failure, or success.
+### Tokopedia / GoTo mechanism
 
-A green CI run means these state boundaries are structurally consistent. It does not promote provisional evidence.
+- e-commerce GTV: Rp273.146tn -> Rp248.836tn (`-8.90%`);
+- third-party net segment revenue: Rp4.031tn -> Rp6.175tn (`+53.20%`);
+- third-party gross segment revenue increase: Rp0.846tn;
+- customer-incentive reduction: Rp1.299tn;
+- net third-party revenue increase: Rp2.144tn;
+- incentive reduction = `60.56%` of the **arithmetic** net-revenue increase.
 
-## 5. Frozen nonclaims
+The audited identity is exact. The 60.56% statement is accounting reconciliation, not causal attribution.
 
-Do not promote any of the following without a new evidentiary design:
-
-- `transaction value - platform revenue = hidden economy`;
-- platform-mediated transaction value = GDP, value added, participant income, taxable income, or unpaid tax;
-- the old ASEAN-wide `$185B` calibration as a V2 result;
-- the old `12.3x fiscal multiplier` as a V2 result;
-- Malaysia LVG as causal validation of the old residual construct;
-- calibrated ASEAN platform take rates as population parameters;
-- payment-system values as one-for-one e-commerce sales;
-- marketplace participation as causal formalization;
-- legal reportability as proof of transmission, matching, verified use, compliance, or revenue effects;
-- the July 2026 marketplace appointment announcement as evidence that PMK 37 marketplace withholding is currently operating in September 2026.
-
-## 6. Current frozen issuer result — Tokopedia FY2022→FY2023
-
-The strongest V2 mechanism case is now source-audited rather than merely carried from proposal prose.
-
-`ISSUER_TRANSITION_LEDGER.csv` and `TOKOPEDIA_RECONCILIATION.csv` freeze:
-
-- E-commerce/Tokopedia GTV: Rp273,146bn → Rp248,836bn (`-8.90000220%`);
-- third-party gross segment revenue: Rp8,143,239m → Rp8,988,909m;
-- customer incentives: Rp4,112,320m → Rp2,813,719m;
-- third-party net segment revenue: Rp4,030,919m → Rp6,175,190m (`+53.19558642%`);
-- gross-revenue increase: Rp845,670m;
-- incentive reduction: Rp1,298,601m;
-- net-revenue increase: Rp2,144,271m;
-- incentive reduction / net-revenue increase: `60.56142157%`.
-
-The accounting identity is exact:
-
-`845,670 + 1,298,601 = 2,144,271`.
-
-This is an **arithmetic accounting reconciliation**, not a causal decomposition of demand, platform welfare, incentives, or firm performance.
-
-`ISSUER_DEFINITION_LEDGER.csv` preserves the distinction between GTV as an operating metric, the Tokopedia reportable segment, management gross-revenue highlights, and audited Note 29 third-party gross/net segment revenue.
-
-## 7. Advisor gates remain untouched
-
-- Blibli's travel-inclusive third-party segment remains `ADVISOR_GATE`.
-- Bukalapak's broader group geography remains `ADVISOR_GATE`.
-- The final common revenue basis beyond the frozen Tokopedia mechanism remains subject to the active proposal/advisor decision.
-
-No support-file update may silently resolve those choices.
-
-## 8. BPS state
-
-### Stronger/frozen component
-
-The revised BPS marketplace publication supports observational differences such as financial-statement ownership (`28.63%` marketplace vs `12.25%` non-marketplace). These are descriptive associations only.
-
-### Arithmetic reproduced but locator-pending
-
-The current BPS growth ledger carries and recomputes the V2 2023→2024 transaction/channel anatomy, including approximately:
+### BPS 2023 -> 2024 growth anatomy
 
 - total e-commerce transaction value: `+17.08%`;
 - marketplace component: `+1.45%`;
 - non-marketplace component: `+20.57%`;
-- non-marketplace share of nominal increase: `~98.46%`.
+- non-marketplace share of nominal total increase: `98.46%`;
+- official BPS reported growth in estimated number of e-commerce businesses: `15.30%`.
 
-The 2024 primary publication is identified, but exact table/cell locators still need to be captured before these rows are promoted from preview to frozen results.
+The 2024 total/channel values are controlled by the BPS publication plus an official Ministry of Trade cross-check based on the BPS survey.
 
-### Explicitly blocked component
+**Still excluded:** exact 2024 national business count and any implied transaction value per business. Those count-level rows remain unresolved.
 
-The 2023/2024 business-count result and implied value/business are **not frozen**. A conflicting rendering of the 2023 count must be resolved against the authoritative source table before the reported `~15.31%` count growth or `~1.54%` implied value/business result may be used as a frozen finding.
+### BPS business characteristics
 
-## 9. Bank Indonesia state
+Frozen observational examples include:
 
-The official SPIP release family is pinned, including December 2024, December 2025, and the current release index. Headline payment-growth values remain supporting traces only until exact workbook series definitions and locators are frozen.
+- financial-statement ownership: `28.63%` marketplace vs `12.25%` non-marketplace;
+- ICT-utilization training: `8.49%` vs `2.83%`.
 
-Payment traces must never be treated as one-for-one e-commerce sales, issuer GTV, output, participant income, GDP, or taxable base.
+No causal formalization claim is permitted.
 
-## 10. Institutional-visibility current state
+### Bank Indonesia payment layer
 
-PMK 37/2025 supplies a legal architecture linking seller identity/turnover to marketplace withholding/reporting responsibilities, but the current operational state must reflect later DJP notices.
+Bank Indonesia's frozen 2024 definition treats the cited digital-payments aggregate as mobile-application + internet transactions.
+
+- total digital-payment volume: `34.4693bn` transactions;
+- growth: `+36.1%`;
+- mobile volume: `32.1826bn`, growth `+39.1%`;
+- internet volume: `2.2867bn`, growth `+4.4%`.
+
+These are payment traces, not e-commerce sales or output.
+
+**QRIS control:** conflicting official 2024 headline growth vintages are preserved as a source-vintage issue and excluded from the article's headline results.
+
+### PMK 37 institutional visibility
 
 As of `2026-09-14`:
 
 - legal architecture: supported;
-- July 2026 initial marketplace appointments: historical implementation event;
-- current activation: postponed through `2026-10-31`;
-- scheduled collection start: `2026-11-01` subject to currentness refresh;
-- earlier appointment decisions: to be cancelled/reissued under the postponement announcement;
-- transmission/matching/verified use/outcomes: not established by this package.
+- July 2026 appointments: historical implementation event;
+- collection activation: postponed through `2026-10-31`;
+- scheduled start: `2026-11-01`, requiring currentness refresh;
+- matching: `UNKNOWN`;
+- verified use: `UNKNOWN`;
+- outcome: `UNKNOWN`.
 
-`INSTITUTIONAL_VISIBILITY_MATRIX.csv` is the authority for this state. `RESULT_REPRODUCTION_MAP.csv` requires a fresh currentness check on or after 1 November 2026.
+The paper may discuss legal visibility versus operational activation. It may not claim a compliance effect.
 
-## 11. Result reproduction contract
+## 5. Thesis-only advisor gates
 
-Every promoted V2 result should map:
+The publication candidate deliberately avoids needing these decisions:
 
-`result ID -> controlled input rows -> transformation -> output status -> source IDs -> allowed manuscript use -> blocker/refresh rule`.
+- Blibli travel-inclusive third-party perimeter;
+- Bukalapak broader group geography;
+- final common revenue basis for a larger thesis issuer panel.
 
-Current examples include:
+Those remain thesis/advisor gates and are not silently resolved by the standalone article.
 
-- `IL-R01` audited Tokopedia opposite-direction growth signal — `FROZEN_RESULT`;
-- `IL-R02` audited Tokopedia incentive arithmetic bridge — `FROZEN_DERIVED`;
-- `IL-R03/R04` BPS growth/channel decomposition — preview pending direct 2024 table locator;
-- `IL-R05` BPS financial-statement group difference — frozen observational;
-- `IL-R06` business-count/implied-value result — `BLOCKED`;
-- `IL-R07` BI payment traces — definition freeze pending;
-- `IL-R08` PMK 37 current operational state — dated currentness freeze;
-- `IL-R09` no matching/outcome evidence — frozen nonclaim.
+## 6. Frozen nonclaims
 
-## 12. Validation contract
+Do not promote:
+
+- transaction value minus platform revenue = hidden economy/GDP/income/tax gap;
+- `$185B/$192B` ASEAN invisible-economy estimates;
+- 12.x ecosystem/fiscal multiplier;
+- Malaysia LVG as causal validation;
+- calibrated ASEAN take rates as population parameters;
+- payment volume = e-commerce sales;
+- marketplace participation causes formalization;
+- exact implied value/business before count-level resolution;
+- a single 2024 QRIS growth rate while official vintages conflict;
+- PMK matching/use/outcomes before instrument-specific evidence exists.
+
+## 7. Public preprint control
+
+The earlier SSRN version under the Invisible Ledger title materially differs from the current paper and contains superseded residual claims.
+
+Before or alongside journal submission:
+
+1. update the SSRN manuscript/version;
+2. replace the prominent abstract/title with the current bounded version where platform controls allow;
+3. add a transparent major-revision/supersession notice;
+4. disclose the preprint according to journal policy.
+
+See `SSRN_SUPERSESSION_NOTE.md`.
+
+## 8. Relationship to Fiscal Choke Points
+
+IL owns measurement/reconciliation evidence. DT owns the ASEAN fiscal-node architecture.
+
+PMK 37 may appear in IL only as the final institutional-visibility layer. Neither paper may use the other as validation or duplicate distinctive tables/results. See `OVERLAP_CONTROL_WITH_DIGITAL_TAX.md`.
+
+## 9. Validation contract
 
 CI must fail if:
 
-- frozen result/source IDs disappear;
-- Tokopedia's audited accounting bridge no longer reconciles;
-- the incentive share changes without changing the audited inputs;
-- Blibli/Bukalapak advisor gates are silently promoted;
-- BPS business-count results are promoted before source resolution;
-- BI measures lose their forbidden-equivalence guardrails;
-- PMK 37 is represented as currently active before the official delayed start/currentness refresh;
-- matching/outcome stages are promoted without evidence;
-- result rows lose their source/blocker/refresh paths.
+- the Tokopedia audited bridge stops reconciling;
+- advisor-gated issuer rows are silently promoted;
+- exact BPS business-count levels are promoted before source resolution;
+- the bounded 15.30% official growth statement is transformed into an unsupported exact denominator result;
+- BI measures lose non-equivalence controls;
+- a single unresolved QRIS growth vintage is promoted;
+- PMK 37 is represented as operational before currentness evidence supports it;
+- matching/use/outcomes are promoted without evidence;
+- the article reintroduces residual/hidden-economy claims as live findings;
+- the result map loses source or refresh/blocker links.
 
-## 13. Relationship to Digital Tax
+A green run establishes internal structural consistency, not peer review or external replication.
 
-Invisible Ledger remains a measurement/reconciliation project. Digital Tax/Fiscal Choke Points starts from a legally defined taxable/reportable object and studies where a bounded fiscal function is assigned in the transaction chain.
+## 10. Current publication gates
 
-The projects may later share an umbrella visibility interface, but neither validates the other by circular inference. Consolidation waits until both individual evidence systems are substantially exhausted.
+Content is crystallized as a venue-neutral publication candidate. Remaining external/process gates are:
 
-## 14. Immediate research frontier
+1. exact-head three-gate CI PASS;
+2. revise the public SSRN working-paper record;
+3. just-before-submission PMK currentness check;
+4. venue selection and current author-instruction formatting;
+5. related-work/preprint disclosure check;
+6. manuscript overlap check against Fiscal Choke Points;
+7. independent human/source spot-check before final submission.
 
-While the proposal remains active:
-
-1. resolve exact BPS 2024 table/cell locators;
-2. resolve the BPS business-count conflict before promoting count-growth/value-per-business results;
-3. extract/freeze BI workbook definitions and series locators;
-4. continue source-native issuer definitions without resolving Blibli/Bukalapak advisor gates;
-5. keep PMK 37 currentness refreshed around the scheduled 1 November 2026 activation;
-6. expand the result reproduction map only from controlled inputs;
-7. do not write the full V2 results chapter ahead of these controls.
+These gates do not require another conceptual redesign of the article.
