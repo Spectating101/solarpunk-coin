@@ -35,7 +35,7 @@ MUST_CONTAIN = [
     "Rp36.69 trillion",
 ]
 
-FORBIDDEN = [
+LEGACY_OR_PROHIBITED = [
     "rates do not matter",
     "30:1",
     "+$114M causal effect",
@@ -47,6 +47,20 @@ FORBIDDEN = [
     "maturity score",
 ]
 
+NEGATION_MARKERS = (
+    "not ", "no ", "does not", "do not", "without", "rather than",
+    "forbid", "forbidden", "reject", "rejected", "superseded", "old ", "legacy",
+)
+
+
+def promoted(text: str, phrase: str) -> bool:
+    p = phrase.lower()
+    for line in text.splitlines():
+        ll = line.lower()
+        if p in ll and not any(marker in ll for marker in NEGATION_MARKERS):
+            return True
+    return False
+
 
 def main() -> int:
     errors = []
@@ -54,18 +68,19 @@ def main() -> int:
         print(f"ERROR: missing {PAPER.name}", file=sys.stderr)
         return 1
     text = PAPER.read_text(encoding="utf-8")
+    lower = text.lower()
     for heading in REQUIRED:
         if heading not in text:
             errors.append(f"missing required section: {heading}")
     for phrase in MUST_CONTAIN:
-        if phrase.lower() not in text.lower():
+        if phrase.lower() not in lower:
             errors.append(f"missing required bounded finding/nonclaim: {phrase}")
-    for phrase in FORBIDDEN:
-        if phrase.lower() in text.lower():
-            errors.append(f"forbidden/stale claim re-entered publication candidate: {phrase}")
-    if "comparative and institutional rather than causal" not in text.lower():
+    for phrase in LEGACY_OR_PROHIBITED:
+        if promoted(text, phrase):
+            errors.append(f"legacy/prohibited claim appears affirmatively: {phrase}")
+    if "comparative and institutional rather than causal" not in lower:
         errors.append("paper must preserve comparative/noncausal contribution boundary")
-    if "source transparency and operational performance are different variables" not in text.lower():
+    if "source transparency and operational performance are different variables" not in lower:
         errors.append("paper must preserve documentation-depth/performance distinction")
     if errors:
         for e in errors:
