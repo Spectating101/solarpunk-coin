@@ -22,10 +22,10 @@ The architecture is descriptive and institutional. It is not a tax-performance s
 3. **Five-component architecture:** taxable object, liable node, destination/nexus evidence, transaction rail, reconciliation power.
 4. **Cross-cutting dimensions:** node locus and event coupling.
 5. **Five-country / seven-path application:** Malaysia, Indonesia, Vietnam, Thailand, and three distinct Philippine paths.
-6. **Architecture/performance separation:** legal duties, operational facts, reconciliation evidence, and causal outcomes remain separate evidence layers.
+6. **Architecture/performance separation:** legal duties, operational facts, reconciliation evidence, procedural capacity, and causal outcomes remain separate evidence layers.
 7. **Falsifiable comparative propositions:** operational-control, coupling, node/timing separation, destination/collection separation, intermediation distance, law/operation boundary, tax-label insufficiency, and within-country reform agenda.
-8. **Within-regime boundary evidence:** payment control, ordering/payment functionality, continuous-process control, designation, and thresholds are used to test when fiscal responsibility does *not* attach to an otherwise visible digital intermediary.
-9. **Operational-capacity extension:** filing, correction, refund, audit, appeal, enforcement, and observed outcomes are separated from legal node assignment rather than collapsed into a single maturity score.
+8. **Within-regime boundary evidence:** payment control, ordering/payment functionality, continuous-process control, designation, and thresholds test when fiscal responsibility does *not* attach to an otherwise visible digital intermediary.
+9. **Operational-capacity extension:** filing, correction, refund, audit, appeal, enforcement, and observed outcomes are coded separately from legal node assignment rather than collapsed into a maturity score.
 
 ## 4. Prior art that must remain conceded
 
@@ -58,33 +58,35 @@ The narrower contribution is the transaction-path/node/event-coupling architectu
 8. `RECONCILIATION_EVIDENCE_MATRIX.csv` — recordkeeping, transaction detail, authority receipt/request, correction, and unresolved matching/outcome evidence.
 9. `NODE_SELECTION_CONDITIONS.csv` — path-level legal activation and operational-control conditions.
 10. `BOUNDARY_CASES.csv` — canonical negative/countercases used to test the framework.
-11. `OPERATIONAL_CAPACITY_LAYER.md` — second-stage filing/correction/refund/audit/appeal/enforcement evidence with explicit non-ranking rule.
-12. `DERIVED_ARCHITECTURE_SUMMARY.md` — deterministic descriptive output from path codings.
-13. `derive_comparative_findings.py` — generator/check for the derived summary.
+11. `OPERATIONAL_CAPACITY_MATRIX.csv` — source-controlled Stage-B procedural status by selected instrument.
+12. `OPERATIONAL_CAPACITY_LAYER.md` — narrative interpretation of filing/correction/refund/audit/appeal/enforcement evidence under a strict non-ranking rule.
+13. `DERIVED_ARCHITECTURE_SUMMARY.md` — deterministic descriptive output from path codings.
+14. `derive_comparative_findings.py` — generator/check for the derived summary.
 
 ### C. Analytical controls
 
-14. `LITERATURE_POSITIONING.md`
-15. `COMPARATIVE_PROPOSITIONS.md`
-16. `ROBUSTNESS_AND_RIVAL_EXPLANATIONS.md`
-17. `FULL_CAPACITY_RESEARCH_PLAN.md`
-18. `REVIEWER_RISK_REGISTER.md`
+15. `LITERATURE_POSITIONING.md`
+16. `COMPARATIVE_PROPOSITIONS.md`
+17. `ROBUSTNESS_AND_RIVAL_EXPLANATIONS.md`
+18. `FULL_CAPACITY_RESEARCH_PLAN.md`
+19. `REVIEWER_RISK_REGISTER.md`
 
 ### D. Narrative and publication surfaces
 
-19. `FISCAL_CHOKEPOINTS_ASEAN_DIGITAL_TAX_PAPER_2026.md`
-20. `FIGURES_TABLES_SPEC.md`
-21. `SUBMISSION_MATERIALS.md`
-22. `QUALITY_GATE.md`
+20. `FISCAL_CHOKEPOINTS_ASEAN_DIGITAL_TAX_PAPER_2026.md`
+21. `FIGURES_TABLES_SPEC.md`
+22. `SUBMISSION_MATERIALS.md`
+23. `QUALITY_GATE.md`
 
 ### E. Validation/audit
 
-23. `validate_package.py`
-24. `validate_boundary_layer.py`
-25. `INTERNAL_AUDIT_2026-09-14.md`
-26. current validation report after the expanded depth layer is executed in CI.
+24. `validate_package.py`
+25. `validate_boundary_layer.py`
+26. `validate_operational_capacity.py`
+27. `INTERNAL_AUDIT_2026-09-14.md`
+28. current CI run for the exact branch tree.
 
-Narrative prose cannot override the source, claim, and coding registers above it.
+Narrative prose cannot override source, claim, coding, boundary, or operational matrices above it.
 
 ## 6. Frozen nonclaims
 
@@ -96,12 +98,13 @@ The package does **not** establish:
 - that base breadth dominates rates by a fixed multiplier;
 - that the Malaysia LVG episode identifies a causal revenue effect;
 - that destination taxation eliminates tax competition;
-- that one of the coded architectures maximizes revenue, compliance, welfare, equity, or administrative efficiency;
+- that one coded architecture maximizes revenue, compliance, welfare, equity, or administrative efficiency;
 - that tighter event coupling is inherently better;
 - that formal platform/intermediary liability creates complete fiscal visibility;
 - that record retention/reporting proves successful taxpayer matching;
+- that procedural-depth evidence proves procedural effectiveness;
 - that administrative collection totals identify the effect of node choice;
-- that operational control is the sole cause of legislative node selection;
+- that operational control is the sole historical cause of legislative node selection;
 - that richer public documentation proves stronger operational performance;
 - that the five cases are representative of all ASEAN digital taxation.
 
@@ -129,41 +132,37 @@ The transaction-path dataset currently contains seven paths across five jurisdic
 - Philippines B2B buyer-withholding path;
 - Philippines qualifying e-marketplace path.
 
-This structure deliberately prevents a single country label from hiding multiple fiscal nodes.
+This prevents a single country label from hiding multiple fiscal nodes.
 
-## 9. Reconciliation and operational evidence state
+## 9. Reconciliation and Stage-B operational evidence
 
-The package now goes beyond `law exists` for several cases:
+The package now goes beyond `law exists` while preserving the boundary between **procedural depth** and **procedural effectiveness**.
 
-- Malaysia: transaction records, seven-year retention, return amendments/refunds, invoice correction, credit/debit-note adjustment, and audit-document production are documented at relevant service-tax layers; digital-FSP-specific operational performance remains unresolved.
-- Indonesia: collection proof, periodic reporting, DGT-requested annual transaction-detail reporting, and identifier fields are documented in the frozen source set; downstream correction/audit/outcome evidence is not yet promoted comparatively.
-- Vietnam: legal withholding documentation includes platform/seller identity and turnover/tax fields, dedicated withholding/declaration schedules, certificates, and refund-request machinery.
-- Thailand: output-tax reports and transaction-detail fields can be requested by the Revenue Department; public VES guidance also documents refunds, supervision/audit, electronic appeals, and civil penalties.
-- Philippines: NRDSP invoice fields and VDS registration/filing/payment rails are documented; BIR guidance also provides an explicit amended-return/carry-forward treatment for a documented overpayment scenario.
+- **Malaysia:** transaction records and retention are documented; official MySST material also exposes invoice cancellation, credit/debit-note adjustment, return adjustment, and production of cancelled invoices for audit. Refund/appeal infrastructure is visible, but digital-FSP-specific downstream performance is unresolved.
+- **Indonesia:** appointment, collection, remittance, periodic reporting, transaction proof, and some transaction-detail reporting are evidenced; downstream correction/refund/audit/outcome evidence is not promoted comparatively. Reported collections remain administrative facts only.
+- **Vietnam:** transaction-level withholding/declaration and identity fields are documented; official procedure also supplies a qualifying e-commerce overpayment/refund rail. Matching, audit yield, and refund performance remain unresolved.
+- **Thailand:** VES materials publicly document registration/filing plus refund, audit supervision, electronic appeal, and sanctions. This unusually visible procedural chain does not establish superior performance.
+- **Philippines:** VDS registration/filing/payment is documented; BIR Form 2550-DS supports amended returns, prior VAT paid, excess-payment carry-over, and stated penalties. Instrument-specific audit/appeal outcomes remain unresolved.
 
-**Still unresolved comparatively:** actual authority-side matching performance, audit yield, coverage, compliance cost, error rates, dispute incidence, refund processing performance, and causal outcomes.
+`OPERATIONAL_CAPACITY_MATRIX.csv` is the coded authority. The manuscript may describe these stages but may not rank country performance from them.
 
-Those remain `UNKNOWN`, not inferred.
+**Still unresolved comparatively:** authority-side matching rates, audit yield, coverage, compliance cost, error rates, dispute incidence, refund-processing performance, and causal outcomes.
 
 ## 10. Boundary-test state
 
-The framework is no longer supported only by positive platform/intermediary cases.
-
-Canonical boundary cases now include:
+The framework is not supported only by positive platform/intermediary cases.
 
 - Thailand: platform liability depends on the continuous offer-payment-delivery process rather than platform presence alone.
-- Philippines: BIR states an e-marketplace is not liable where payment goes directly to the NRDSP and is outside marketplace control.
-- Vietnam: the current framework distinguishes payment/order-capable platforms from platform paths that leave self-declaration/payment with the seller.
+- Philippines: marketplace responsibility is conditional; B2B can place the buyer at the fiscal node and marketplace-control conditions limit platform liability.
+- Vietnam: the framework distinguishes payment/order-capable platforms from non-payment platform paths where sellers retain declaration/payment responsibility.
 - Indonesia: formal DGT appointment activates the selected PMSE collector role.
-- Malaysia: threshold and instrument boundaries prevent universal activation of a single digital-commerce node.
+- Malaysia: thresholds and distinct SToDS/LVG instruments prevent universal activation of one digital-commerce node.
 
-These cases strengthen the operational-control interpretation but do not prove that operational control is the sole historical cause of node choice.
+These strengthen the operational-control/legal-activation interpretation but do not prove operational control is the sole cause of legislative choice.
 
 ## 11. Research-depth layer
 
-`COMPARATIVE_PROPOSITIONS.md` and `ROBUSTNESS_AND_RIVAL_EXPLANATIONS.md` prevent the project from becoming a descriptive list.
-
-The central rival explanations retained are:
+The main rival explanations retained are:
 
 - tax type may mechanically determine node choice;
 - international template diffusion may explain common design;
@@ -173,53 +172,53 @@ The central rival explanations retained are:
 - source availability creates selection bias;
 - delegation can generate privacy, due-process, competition, and compliance costs.
 
-Negative/boundary cases and within-country reforms remain the highest-value route toward stronger identification.
+Negative/boundary cases and within-country reforms remain the strongest route toward identification.
 
 ## 12. Relationship to Invisible Ledger
 
-Invisible Ledger remains a separate measurement/reconciliation project.
+Invisible Ledger remains separate.
 
 - IL asks what different economic records measure and what their divergence reveals.
-- DT begins only after a legal taxable/reportable object is defined and asks which node performs a bounded fiscal function.
+- DT begins after a legally relevant taxable/reportable object is defined and asks which node performs a bounded fiscal function.
 
-Neither paper validates the other by circular inference.
+Neither validates the other by circular inference. The future interface can be represented as:
 
-The future consolidation interface is traceable through record existence -> identification -> legal reportability -> liable node -> transmission -> matching -> verified use -> outcome, but that umbrella model is not yet a joint empirical finding.
+`record exists -> identity -> legal reportability -> liable node -> transmission -> matching -> verified use -> outcome`
 
-While the IL proposal remains under active advisor/user revision, DT must not freeze IL terminology beyond that narrow interface.
+but this is not yet a joint empirical finding. While the IL proposal remains active, DT must not freeze IL terminology beyond this interface.
 
-## 13. Full-capacity research frontier
+## 13. Full-capacity frontier
 
-Before final consolidation, prioritize:
+Before consolidation:
 
-1. finish normalized transaction-path fields;
-2. continue expanding instrument-specific reconciliation/operational evidence rather than generic tax procedure;
-3. extend deliberate negative/boundary cases beyond the now-supported internal contrasts;
-4. gather explanatory evidence on why nodes were selected, not merely the legal condition that activates them;
-5. identify within-country node shifts suitable for stronger empirical designs;
-6. build comparable administrative outcome measures only where definitions can genuinely be harmonized;
-7. add governance/compliance-cost evidence;
-8. use external cases for analytical leverage, not catalogue size.
-
-See `FULL_CAPACITY_RESEARCH_PLAN.md`.
+1. continue instrument-specific reconciliation/operational evidence collection;
+2. gather explanatory evidence on **why** nodes were selected, beyond conditions activating them;
+3. extend deliberate negative/boundary cases;
+4. identify within-country node shifts suitable for stronger empirical designs;
+5. build comparable administrative outcomes only where definitions genuinely harmonize;
+6. add governance/compliance-cost evidence;
+7. use external cases for analytical leverage, not catalogue size.
 
 ## 14. Validation contract
 
-The validator must fail when:
+CI must fail when:
 
-- source IDs referenced by claims, country rows, path rows, or chronology rows are absent;
+- source IDs referenced by claims/data rows disappear;
 - required country/path coverage disappears;
 - chronology dates are malformed;
-- historical superseded claims are promoted;
+- superseded historical claims are promoted;
 - manuscript boundary language regresses;
-- required depth-layer files disappear.
+- derived architecture drifts from path codings;
+- node/boundary rows lose source-controlled coverage;
+- operational Stage-B claims lose source IDs;
+- non-Indonesia `observed_outcome` rows are promoted beyond `UNRESOLVED` without a deliberate evidence/validator change;
+- Indonesia aggregate collection facts are promoted beyond `ADMIN_FACT_COLLECTION_ONLY` without identified evidence;
+- `DT-GAP-002` ceases to preserve the harmonized-outcome evidence gap.
 
-CI must also run `derive_comparative_findings.py --check` and `validate_boundary_layer.py` so derived comparison and node/boundary layers cannot drift from the coded paths.
+The workflow runs `validate_package.py`, `derive_comparative_findings.py --check`, `validate_boundary_layer.py`, and `validate_operational_capacity.py` on the exact branch tree.
 
 ## 15. Current disposition
 
 **Current research status:** `FULL-CAPACITY BUILD`.
 
-The project is already a coherent hostile-reviewable comparative paper, but the current objective is **not** to freeze it for submission. The objective is to exhaust the high-value institutional evidence and boundary tests before consolidation with Invisible Ledger.
-
-The package should be promoted later only on evidence, not because the remaining checklist becomes inconvenient.
+The project is a coherent hostile-reviewable comparative paper plus a bounded operational-capacity extension. The objective is not to freeze for submission yet; it is to exhaust high-value institutional evidence and boundary tests before later consolidation with Invisible Ledger.
