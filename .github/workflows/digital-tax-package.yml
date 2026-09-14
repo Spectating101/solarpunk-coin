@@ -32,7 +32,10 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_package.py 2>&1 | tee /tmp/digital-tax-validation.log
+          {
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_package.py
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/derive_comparative_findings.py --check
+          } 2>&1 | tee /tmp/digital-tax-validation.log
 
       - name: Upload validation log
         if: always()
