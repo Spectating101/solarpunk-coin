@@ -21,6 +21,7 @@ CLAIM_REGISTER = ROOT / "CLAIM_REGISTER.csv"
 COUNTRY_ARCHITECTURE = ROOT / "COUNTRY_ARCHITECTURE.csv"
 COUNTRY_PATH_CODINGS = ROOT / "COUNTRY_PATH_CODINGS.csv"
 CASE_CHRONOLOGY = ROOT / "CASE_CHRONOLOGY.csv"
+RECONCILIATION_MATRIX = ROOT / "RECONCILIATION_EVIDENCE_MATRIX.csv"
 MANUSCRIPT = ROOT / "FISCAL_CHOKEPOINTS_ASEAN_DIGITAL_TAX_PAPER_2026.md"
 
 REQUIRED_FILES = [
@@ -30,8 +31,10 @@ REQUIRED_FILES = [
     "COUNTRY_ARCHITECTURE.csv",
     "COUNTRY_PATH_CODINGS.csv",
     "CASE_CHRONOLOGY.csv",
+    "RECONCILIATION_EVIDENCE_MATRIX.csv",
     "COMPARATIVE_PROPOSITIONS.md",
     "ROBUSTNESS_AND_RIVAL_EXPLANATIONS.md",
+    "FULL_CAPACITY_RESEARCH_PLAN.md",
     "DERIVED_ARCHITECTURE_SUMMARY.md",
     "derive_comparative_findings.py",
     "FIGURES_TABLES_SPEC.md",
@@ -113,6 +116,18 @@ REQUIRED_CHRONOLOGY_COLUMNS = {
     "status",
 }
 
+REQUIRED_RECON_COLUMNS = {
+    "country",
+    "record_retention_or_transaction_record",
+    "identity_or_transaction_fields",
+    "authority_request_or_receipt",
+    "correction_refund_or_adjustment",
+    "verified_matching_or_audit_outcome",
+    "primary_source_ids",
+    "evidence_status",
+    "interpretation",
+}
+
 REQUIRED_MANUSCRIPT_HEADINGS = [
     "## 1. Introduction",
     "## 2. From third-party information to platform fiscal intermediation",
@@ -188,6 +203,7 @@ def main() -> int:
         arch_columns, architecture = read_csv(COUNTRY_ARCHITECTURE)
         path_columns, paths = read_csv(COUNTRY_PATH_CODINGS)
         chronology_columns, chronology = read_csv(CASE_CHRONOLOGY)
+        recon_columns, reconciliation = read_csv(RECONCILIATION_MATRIX)
     except FileNotFoundError as exc:
         print(f"ERROR: missing required file: {exc}", file=sys.stderr)
         return 1
@@ -197,11 +213,13 @@ def main() -> int:
     require_columns("COUNTRY_ARCHITECTURE", arch_columns, REQUIRED_ARCH_COLUMNS, errors)
     require_columns("COUNTRY_PATH_CODINGS", path_columns, REQUIRED_PATH_COLUMNS, errors)
     require_columns("CASE_CHRONOLOGY", chronology_columns, REQUIRED_CHRONOLOGY_COLUMNS, errors)
+    require_columns("RECONCILIATION_EVIDENCE_MATRIX", recon_columns, REQUIRED_RECON_COLUMNS, errors)
 
     check_unique(sources, "source_id", "SOURCE_CATALOG", errors)
     check_unique(claims, "claim_id", "CLAIM_REGISTER", errors)
     check_unique(architecture, "country", "COUNTRY_ARCHITECTURE", errors)
     check_unique(paths, "path_id", "COUNTRY_PATH_CODINGS", errors)
+    check_unique(reconciliation, "country", "RECONCILIATION_EVIDENCE_MATRIX", errors)
 
     source_ids = {(row.get("source_id") or "").strip() for row in sources}
 
@@ -261,6 +279,25 @@ def main() -> int:
         chronology_keys.add(key)
         check_source_refs(f"{country} {raw_date}: chronology", row.get("source_ids") or "", source_ids, errors)
 
+    recon_countries = {(row.get("country") or "").strip() for row in reconciliation}
+    if recon_countries != REQUIRED_COUNTRIES:
+        errors.append(
+            "RECONCILIATION_EVIDENCE_MATRIX: country coverage mismatch: "
+            f"expected={sorted(REQUIRED_COUNTRIES)} actual={sorted(recon_countries)}"
+        )
+    for row in reconciliation:
+        country = (row.get("country") or "<blank>").strip()
+        check_source_refs(f"{country}: reconciliation", row.get("primary_source_ids") or "", source_ids, errors)
+        if not (row.get("evidence_status") or "").strip():
+            errors.append(f"{country}: blank reconciliation evidence_status")
+        outcome = (row.get("verified_matching_or_audit_outcome") or "").strip().lower()
+        if not outcome:
+            errors.append(f"{country}: blank verified_matching_or_audit_outcome")
+        if "not frozen" not in outcome and "not established" not in outcome and "unknown" not in outcome:
+            warnings.append(
+                f"{country}: reconciliation matrix appears to assert a downstream outcome; manually verify evidence class"
+            )
+
     if not MANUSCRIPT.exists():
         errors.append("manuscript file is missing")
         manuscript = ""
@@ -311,7 +348,7 @@ def main() -> int:
 
     print(
         f"sources={len(sources)} claims={len(claims)} countries={len(architecture)} "
-        f"coded_paths={len(paths)} chronology_rows={len(chronology)}"
+        f"coded_paths={len(paths)} chronology_rows={len(chronology)} reconciliation_rows={len(reconciliation)}"
     )
     for warning in warnings:
         print(f"WARNING: {warning}")
