@@ -2,13 +2,14 @@
 """Structural validation for the Digital Tax 2026 research package.
 
 This validator checks package consistency. It does not validate the truth of legal
-or empirical claims; source verification remains a research task.
+or empirical claims; source verification and independent coding remain research tasks.
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
+from datetime import date
 import re
 import sys
 from pathlib import Path
@@ -18,7 +19,30 @@ ROOT = Path(__file__).resolve().parent
 SOURCE_CATALOG = ROOT / "SOURCE_CATALOG.csv"
 CLAIM_REGISTER = ROOT / "CLAIM_REGISTER.csv"
 COUNTRY_ARCHITECTURE = ROOT / "COUNTRY_ARCHITECTURE.csv"
+COUNTRY_PATH_CODINGS = ROOT / "COUNTRY_PATH_CODINGS.csv"
+CASE_CHRONOLOGY = ROOT / "CASE_CHRONOLOGY.csv"
 MANUSCRIPT = ROOT / "FISCAL_CHOKEPOINTS_ASEAN_DIGITAL_TAX_PAPER_2026.md"
+
+REQUIRED_FILES = [
+    "CLAIM_BOUNDARIES.md",
+    "CLAIM_REGISTER.csv",
+    "CODING_RULES.md",
+    "COUNTRY_ARCHITECTURE.csv",
+    "COUNTRY_PATH_CODINGS.csv",
+    "CASE_CHRONOLOGY.csv",
+    "COMPARATIVE_PROPOSITIONS.md",
+    "ROBUSTNESS_AND_RIVAL_EXPLANATIONS.md",
+    "DERIVED_ARCHITECTURE_SUMMARY.md",
+    "derive_comparative_findings.py",
+    "FIGURES_TABLES_SPEC.md",
+    "FISCAL_CHOKEPOINTS_ASEAN_DIGITAL_TAX_PAPER_2026.md",
+    "LITERATURE_POSITIONING.md",
+    "PACKAGE_MANIFEST.md",
+    "QUALITY_GATE.md",
+    "REVIEWER_RISK_REGISTER.md",
+    "SOURCE_CATALOG.csv",
+    "SUBMISSION_MATERIALS.md",
+]
 
 REQUIRED_COUNTRIES = {
     "Malaysia",
@@ -63,6 +87,32 @@ REQUIRED_ARCH_COLUMNS = {
     "open_issue",
 }
 
+REQUIRED_PATH_COLUMNS = {
+    "path_id",
+    "country",
+    "instrument_path",
+    "tax_object_class",
+    "liable_node_class",
+    "platform_role",
+    "control_functions",
+    "event_coupling_class",
+    "destination_or_nexus_class",
+    "primary_source_ids",
+    "coding_status",
+    "notes",
+}
+
+REQUIRED_CHRONOLOGY_COLUMNS = {
+    "country",
+    "event_date",
+    "date_type",
+    "event",
+    "architecture_change",
+    "source_ids",
+    "analytical_role",
+    "status",
+}
+
 REQUIRED_MANUSCRIPT_HEADINGS = [
     "## 1. Introduction",
     "## 2. From third-party information to platform fiscal intermediation",
@@ -77,7 +127,6 @@ REQUIRED_MANUSCRIPT_HEADINGS = [
     "## References",
 ]
 
-# Only references that look like frozen source IDs are checked against the source catalog.
 SOURCE_ID_RE = re.compile(r"(?:[A-Z]{2}-PRI-\d{3}|LIT-\d{3})")
 
 
@@ -107,6 +156,16 @@ def check_unique(rows: list[dict[str, str]], key: str, name: str, errors: list[s
         seen.add(value)
 
 
+def check_source_refs(label: str, raw: str, source_ids: set[str], errors: list[str]) -> None:
+    refs = SOURCE_ID_RE.findall(raw or "")
+    if not refs:
+        errors.append(f"{label}: no frozen source IDs found")
+        return
+    for source_id in refs:
+        if source_id not in source_ids:
+            errors.append(f"{label}: source reference {source_id} not found in SOURCE_CATALOG")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -119,10 +178,16 @@ def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
 
+    for name in REQUIRED_FILES:
+        if not (ROOT / name).is_file():
+            errors.append(f"missing required package file: {name}")
+
     try:
         source_columns, sources = read_csv(SOURCE_CATALOG)
         claim_columns, claims = read_csv(CLAIM_REGISTER)
         arch_columns, architecture = read_csv(COUNTRY_ARCHITECTURE)
+        path_columns, paths = read_csv(COUNTRY_PATH_CODINGS)
+        chronology_columns, chronology = read_csv(CASE_CHRONOLOGY)
     except FileNotFoundError as exc:
         print(f"ERROR: missing required file: {exc}", file=sys.stderr)
         return 1
@@ -130,10 +195,13 @@ def main() -> int:
     require_columns("SOURCE_CATALOG", source_columns, REQUIRED_SOURCE_COLUMNS, errors)
     require_columns("CLAIM_REGISTER", claim_columns, REQUIRED_CLAIM_COLUMNS, errors)
     require_columns("COUNTRY_ARCHITECTURE", arch_columns, REQUIRED_ARCH_COLUMNS, errors)
+    require_columns("COUNTRY_PATH_CODINGS", path_columns, REQUIRED_PATH_COLUMNS, errors)
+    require_columns("CASE_CHRONOLOGY", chronology_columns, REQUIRED_CHRONOLOGY_COLUMNS, errors)
 
     check_unique(sources, "source_id", "SOURCE_CATALOG", errors)
     check_unique(claims, "claim_id", "CLAIM_REGISTER", errors)
     check_unique(architecture, "country", "COUNTRY_ARCHITECTURE", errors)
+    check_unique(paths, "path_id", "COUNTRY_PATH_CODINGS", errors)
 
     source_ids = {(row.get("source_id") or "").strip() for row in sources}
 
@@ -152,9 +220,7 @@ def main() -> int:
 
     for row in architecture:
         country = (row.get("country") or "<blank>").strip()
-        for source_id in SOURCE_ID_RE.findall(row.get("primary_source_ids") or ""):
-            if source_id not in source_ids:
-                errors.append(f"{country}: architecture source {source_id} not found in SOURCE_CATALOG")
+        check_source_refs(f"{country}: architecture", row.get("primary_source_ids") or "", source_ids, errors)
         status = (row.get("status") or "").strip()
         if status != "COMPLETE":
             message = f"{country}: architecture status is {status or '<blank>'}"
@@ -162,6 +228,38 @@ def main() -> int:
                 errors.append(message)
             else:
                 warnings.append(message)
+
+    path_countries = {(row.get("country") or "").strip() for row in paths}
+    if path_countries != REQUIRED_COUNTRIES:
+        errors.append(
+            "COUNTRY_PATH_CODINGS: country coverage mismatch: "
+            f"expected={sorted(REQUIRED_COUNTRIES)} actual={sorted(path_countries)}"
+        )
+    for row in paths:
+        path_id = (row.get("path_id") or "<blank>").strip()
+        check_source_refs(f"{path_id}: path", row.get("primary_source_ids") or "", source_ids, errors)
+        for field in ("liable_node_class", "event_coupling_class", "tax_object_class", "coding_status"):
+            if not (row.get(field) or "").strip():
+                errors.append(f"{path_id}: blank required coding field {field}")
+
+    chronology_countries = {(row.get("country") or "").strip() for row in chronology}
+    missing_chronology = REQUIRED_COUNTRIES - chronology_countries
+    if missing_chronology:
+        errors.append(f"CASE_CHRONOLOGY: missing country coverage: {sorted(missing_chronology)}")
+    chronology_keys: set[tuple[str, str, str]] = set()
+    for row in chronology:
+        country = (row.get("country") or "<blank>").strip()
+        raw_date = (row.get("event_date") or "").strip()
+        date_type = (row.get("date_type") or "").strip()
+        try:
+            date.fromisoformat(raw_date)
+        except ValueError:
+            errors.append(f"CASE_CHRONOLOGY: invalid ISO event_date for {country}: {raw_date!r}")
+        key = (country, raw_date, date_type)
+        if key in chronology_keys:
+            errors.append(f"CASE_CHRONOLOGY: duplicate country/date/type row: {key}")
+        chronology_keys.add(key)
+        check_source_refs(f"{country} {raw_date}: chronology", row.get("source_ids") or "", source_ids, errors)
 
     if not MANUSCRIPT.exists():
         errors.append("manuscript file is missing")
@@ -211,7 +309,10 @@ def main() -> int:
         if literature_boundary_claims.get(required_claim) != "VERIFIED_POSITIONING":
             errors.append(f"{required_claim}: literature boundary must remain VERIFIED_POSITIONING")
 
-    print(f"sources={len(sources)} claims={len(claims)} countries={len(architecture)}")
+    print(
+        f"sources={len(sources)} claims={len(claims)} countries={len(architecture)} "
+        f"coded_paths={len(paths)} chronology_rows={len(chronology)}"
+    )
     for warning in warnings:
         print(f"WARNING: {warning}")
 
