@@ -1,74 +1,100 @@
-# Fiscal Choke Points — Submission Materials
+# Fiscal Choke Points — Publication Submission Materials
 
-These materials are venue-neutral. Do not insert a journal name until the route is selected and its current author instructions are verified.
+**Canonical manuscript:** `FISCAL_CHOKEPOINTS_PUBLICATION_CANDIDATE_2026.md`  
+**Status:** venue-neutral publication candidate; route-specific formatting and final legal-currentness sweep still required.
 
 ## Canonical title
 
-**Fiscal Choke Points: How Southeast Asian States Are Re-entering Platform Commerce**
+**Fiscal Choke Points: Transaction-Node Architecture and Operational Fiscal Capacity in Southeast Asian Digital Tax Administration**
 
-## Alternative titles
+## Short title
 
-1. **Fiscal Choke Points: Platform Intermediation and Digital Tax Administration in Southeast Asia**
-2. **Where the Tax State Meets the Platform: Fiscal Intermediation Across Five ASEAN Regimes**
-3. **From Platform Records to Fiscal Responsibility: Digital Tax Administration in Southeast Asia**
+**Fiscal Choke Points in Southeast Asian Digital Tax Administration**
 
-The canonical title has the strongest narrative identity. Alternative 1 is the safest academic title if a venue dislikes rhetorical framing.
+## Alternative title
 
----
+**From Transaction Nodes to Fiscal Capacity: Digital Tax Administration Across Five Southeast Asian Jurisdictions**
 
-## Short abstract (~150 words)
-
-Digital taxation depends on more than rates and statutory bases. A tax system must also identify a legally taxable event, locate the relevant jurisdiction, assign responsibility to an actor, and connect that responsibility to a workable collection or reporting process. This paper calls the legally activated transaction nodes that perform those functions **fiscal choke points**. Using primary legal and tax-administration sources from Malaysia, Indonesia, Vietnam, Thailand, and the Philippines, it compares five components of digital-tax architecture: taxable object, liable node, destination evidence, transaction rail, and reconciliation power. The cases show that fiscal responsibility repeatedly follows operational control over payment, customer location, invoicing, transaction confirmation, or market access, while differing substantially in how tightly fiscal action is coupled to the transaction event. The contribution is a transaction-node comparative framework, not a causal revenue estimate, a new platform-tax mechanism, or the first ASEAN digital-tax comparison.
+The alternative is available if a venue regards `fiscal choke point` as too rhetorical. The contribution does not depend on the label.
 
 ---
 
-## Standard abstract (~250 words)
+## Standard abstract
 
-Digital-tax debates are commonly organized around rates, bases, and revenue. Yet before a statutory rate can generate administrable revenue, a tax system must identify a legally taxable event, locate the relevant jurisdiction, assign responsibility to an actor, and connect that responsibility to a repeatable collection or reporting process. Digital commerce makes this prior administrative problem especially visible because private platforms and cross-border suppliers often control payment, identity, location, invoicing, and transaction records without conventional physical presence in the taxing jurisdiction.
+Digital-tax debates are commonly organized around rates, bases, nexus, and revenue. Yet those variables become administratively meaningful only after a tax system identifies a legally covered event, connects it to a jurisdiction, assigns a bounded duty to an actor, and embeds that duty in a repeatable collection or reporting process. This paper defines a **fiscal choke point** as a legally activated transaction node at which a state assigns a bounded fiscal function to an actor positioned to observe or control a relevant part of the commercial event.
 
-This paper calls the legally activated connection between those commercial control functions and a bounded fiscal duty a **fiscal choke point**. Using primary legal and tax-administration sources from Malaysia, Indonesia, Vietnam, Thailand, and the Philippines, the paper compares five components of each architecture: taxable object, liable node, destination evidence, transaction rail, and reconciliation power. It also distinguishes **node locus**—where fiscal responsibility sits in the commercial chain—from **event coupling**—how closely fiscal action is tied to the underlying transaction.
+Using primary legal and tax-administration sources from Malaysia, Indonesia, Vietnam, Thailand, and the Philippines, the paper compares seven transaction paths through five components: taxable object, liable node, destination or nexus evidence, transaction rail, and reconciliation power. It codes **node locus** and **event coupling** as separate comparative dimensions and tests the framework against within-regime boundary cases where platform presence alone does not activate platform liability. The paper then separates legal node assignment from downstream operational capacity—filing, correction, refunds, audit, appeal, enforcement, and observed outcomes.
 
-Three cross-case findings emerge. Fiscal responsibility repeatedly follows operational control functions rather than one uniform legal form; regimes vary materially in event coupling; and concentrated intermediation can reduce administrative distance without producing complete visibility or establishing superior revenue performance. The contribution is comparative and institutional rather than causal. Platform VAT/GST liability, third-party fiscal intermediation, and ASEAN digital-tax comparison are established prior art. The paper adds a transaction-node architecture for comparing how heterogeneous regimes activate fiscal responsibility while preserving their legal differences.
+The contribution is comparative and institutional rather than causal. Platform VAT/GST liability, functional/capability criteria, taxing-point design, firms as fiscal intermediaries, supply-chain choke-point taxation, regulatory intermediation, and ASEAN digital-tax comparison are established prior art. The narrower contribution is a source-controlled transaction-path representation that applies those dimensions across heterogeneous instruments, uses countercases to test activation boundaries, and prevents procedural documentation from being converted into unsupported performance rankings.
+
+---
+
+## Short abstract
+
+This paper studies where digital tax administration actually attaches inside a commercial transaction path. Using primary sources from five Southeast Asian jurisdictions, it codes seven legally distinct paths by taxable object, liable node, nexus evidence, transaction rail, reconciliation power, node locus, and event coupling. Within-regime countercases show that platform presence alone is insufficient: payment control, continuous-process control, transaction class, statutory thresholds, and formal appointment can determine whether an intermediary becomes the fiscal node. A second-stage analysis separates legal liability from filing, correction, refund, audit, appeal, enforcement, and measured outcomes. The contribution is a source-controlled cross-instrument comparative framework, not a new theory of platform liability, transaction timing, choke-point taxation, or ASEAN digital taxes, and not a causal ranking of national systems.
 
 ---
 
 ## Highlights
 
-- Introduces **fiscal choke point** as a transaction-node comparative construct, not as a new tax instrument.
-- Compares Malaysia, Indonesia, Vietnam, Thailand, and the Philippines through a common five-component architecture.
-- Separates **node locus** from **event coupling**, revealing materially different ways of assigning fiscal responsibility.
-- Explicitly concedes both platform-intermediation literature and prior ASEAN digital-tax comparisons rather than overstating novelty.
-- Replaces an inherited weak rate-centered panel with a primary-source comparative institutional design.
+- Compares **seven transaction paths**, not five undifferentiated country regimes.
+- Separates **node locus** from **event coupling** across provider, buyer, appointed-collector, payment-capable-platform, and marketplace paths.
+- Uses within-regime countercases to show when intermediary presence is **insufficient** for fiscal-node activation.
+- Distinguishes **Stage A legal architecture** from **Stage B operational/procedural capacity**.
+- Explicitly concedes prior work on platform functions, payment/taxing-point design, fiscal intermediation, supply-chain choke points, and ASEAN comparison.
+- Refuses to rank administrative performance without harmonized outcome evidence.
 
 ---
 
 ## Keywords
 
-Digital taxation; tax administration; digital platforms; fiscal capacity; value-added tax; third-party reporting; fiscal intermediation; ASEAN; e-commerce; platform governance
+Digital taxation; tax administration; digital platforms; VAT; withholding; fiscal capacity; third-party reporting; regulatory intermediaries; ASEAN; e-commerce
 
 ---
 
 ## Contribution statement
 
-This paper contributes a transaction-node framework for identifying where and how heterogeneous digital-tax regimes activate fiscal responsibility inside private transaction infrastructure. It does not claim that platform VAT/GST collection, third-party reporting, fiscal intermediation, or comparative ASEAN digital-tax mapping are new. Its novelty is the five-part architecture—taxable object, liable node, destination evidence, transaction rail, and reconciliation power—combined with the cross-cutting dimensions of node locus and event coupling, applied consistently across five Southeast Asian regimes.
+The paper develops and applies a source-controlled **transaction-path coding framework** for comparing where and when bounded fiscal duties are activated across heterogeneous Southeast Asian digital-tax instruments. The framework separates the actor carrying the duty (`node locus`) from the timing/transaction relationship of that duty (`event coupling`), tests the coding through internal boundary cases, and keeps legal node assignment separate from downstream procedural-capacity evidence.
+
+The paper does **not** claim to invent platform VAT/GST liability, function-based inclusion criteria, payment control as a tax-administration consideration, taxing-point timing, concentrated supply-chain collection, regulatory intermediation, or comparative ASEAN digital taxation. Those are antecedents. The contribution is their controlled cross-instrument representation and the empirical distinctions revealed by that representation.
 
 ---
 
 ## Methods statement
 
-The study uses a purposive comparative institutional design. Country-specific claims are grounded primarily in official laws, decrees, tax/customs guidance, administration portals, and official administrative reports. The unit of analysis is the country-instrument architecture, not total digital-tax revenue. The paper does not pool unlike tax instruments, does not treat administrative collection totals as causal estimates, and does not infer a legal tax base from platform transaction value.
+The study uses a purposive comparative institutional design. The unit of analysis is the **legally distinct transaction path**, not total national digital-tax revenue. Country/path claims are grounded primarily in statutes, regulations, decrees, official tax/customs guidance, administration portals, and official administrative output. Each path is coded by taxable object, liable node, destination/nexus evidence, transaction rail, event coupling, and reconciliation evidence.
+
+The paper does not pool unlike instruments, tax bases, or revenue totals. It does not infer causal effects from administrative collections or use procedural-documentation density as an administrative-quality score. Boundary cases are used to test whether broad platform/intermediary classifications survive within-regime variation.
 
 ---
 
 ## Data and reproducibility statement
 
-The supporting research-control package includes a source catalog, claim register, five-country architecture matrix, claim-boundary document, coding rules, literature-positioning note, and reviewer-risk register. Each central country claim is mapped to a source ID and verification state. The package intentionally does not claim a harmonized country-period revenue dataset or causal replication scripts because those are not part of the present comparative design.
+The controlled package under `IE-JDE/Digital_Tax_Design/rebuilt_2026/` includes:
+
+- source catalog and claim register;
+- country/path codings and chronology;
+- node-selection conditions and boundary cases;
+- reconciliation and operational-capacity matrices;
+- literature/novelty controls;
+- deterministic comparative derivation;
+- executable structural, boundary, operational-capacity, and publication-candidate validators.
+
+Primary-source IDs and permitted inference are recorded separately from narrative prose. The package does not contain taxpayer microdata and does not claim a harmonized causal outcome dataset.
 
 ---
 
-## Ethics / data statement
+## Ethics and data statement
 
-The study relies on public legal, administrative, and institutional sources and does not use individual-level taxpayer data, private platform records, or personal data. The paper distinguishes commercial observability from legal entitlement to information and does not advocate unrestricted state access to private transaction records.
+The study uses public legal, administrative, institutional, and academic sources. It does not use private taxpayer records or individual-level personal data. The framework distinguishes commercial observability from legal entitlement to information and does not assume that information visible to a platform should automatically be available to a state.
+
+---
+
+## Related-work / overlap disclosure
+
+Invisible Ledger is a separate measurement/reconciliation project. It studies what different economic records measure in Indonesia and what selected divergences reveal. Fiscal Choke Points begins after a legally relevant object is defined and studies the placement of fiscal duties across transaction paths.
+
+The two manuscripts do not use one another as validation. See `OVERLAP_CONTROL_WITH_INVISIBLE_LEDGER.md`.
 
 ---
 
@@ -76,32 +102,48 @@ The study relies on public legal, administrative, and institutional sources and 
 
 Dear Editor,
 
-Please consider the manuscript **“Fiscal Choke Points: How Southeast Asian States Are Re-entering Platform Commerce”** for publication.
+Please consider **“Fiscal Choke Points: Transaction-Node Architecture and Operational Fiscal Capacity in Southeast Asian Digital Tax Administration”** for publication.
 
-The manuscript examines a prior question in digital taxation that is often obscured by debates over statutory rates: where, operationally, can fiscal responsibility be attached when commerce is organized through private digital infrastructure? Using primary legal and tax-administration sources from Malaysia, Indonesia, Vietnam, Thailand, and the Philippines, the paper compares the taxable object, liable node, destination evidence, transaction rail, and reconciliation relationship in five distinct digital-tax architectures.
+Digital-tax research frequently compares rates, bases, nexus, and revenue. This manuscript asks a prior institutional question: **where and when does fiscal responsibility enter the transaction path?** Using primary legal and tax-administration sources, it decomposes digital-tax administration in Malaysia, Indonesia, Vietnam, Thailand, and the Philippines into seven legally distinct paths and compares taxable objects, liable nodes, nexus evidence, transaction rails, reconciliation relationships, node locus, and event coupling.
 
-The paper does not claim that platform tax collection or ASEAN digital-tax comparison is itself new. It positions the analysis within established work on firms as fiscal intermediaries, VAT information trails, digital-platform VAT/GST liability, tax administration, and prior regional comparative mapping. The contribution is a narrower transaction-node architecture, together with the concepts of node locus and event coupling, for comparing where and when fiscal duties enter the commercial process without pooling legally different instruments or revenue measures.
+The paper is deliberately conservative about novelty. OECD and other prior work already analyze platform VAT/GST liability, platform functions/capability, payment and taxing-point design, and digital-tax administration; concentrated collection points and regulatory intermediaries are also established ideas. The manuscript's contribution is a source-controlled **cross-instrument transaction-path representation**, strengthened by within-regime countercases and a separate operational-capacity layer. This allows unlike tax instruments to be compared at a narrow administrative level without pooling their tax bases or revenue outcomes.
 
-The manuscript is intentionally bounded. It does not claim that platform transaction value is a tax base, that digital-tax rates are irrelevant, or that one country architecture causally outperforms another. Its purpose is to provide a primary-source, reusable comparative framework for tax administration in platform commerce.
+The manuscript makes no causal claim that one architecture increases revenue or compliance. It also does not rank jurisdictions by procedural documentation. Instead, it establishes a reproducible institutional map and identifies the outcome evidence required for stronger future causal tests.
 
-The manuscript is original, is not under review elsewhere [VERIFY BEFORE USE], and all sources used in the analysis are publicly accessible. I believe it will be of interest to readers working on tax administration, digital platforms, fiscal capacity, e-commerce, and institutional responses to cross-border digitalization.
+The manuscript uses public sources only. It is not under review elsewhere [VERIFY BEFORE USE]. Related work and manuscript overlap should be disclosed according to the selected venue's policy.
 
 Sincerely,
 
-[Author name and affiliation]
+[Author name]
+[Affiliation]
+[Contact details]
 
 ---
 
 ## Plain-language summary
 
-Digital platforms often know more about an online transaction than a tax authority does: who sold, who bought, where payment happened, and when the transaction was completed. Governments do not need to treat all of that activity as one tax base. Instead, they can make particular actors responsible for particular tax functions. This paper compares how five Southeast Asian countries do that. Malaysia emphasizes foreign-provider registration and customer-location evidence. Indonesia appoints digital VAT collectors. Vietnam withholds tax through payment-capable platforms for covered sellers. Thailand can shift VAT responsibility to platforms that control the full service process. The Philippines uses different routes for consumer and business transactions. The paper calls these legally activated points **fiscal choke points** and compares where responsibility sits and how closely tax action is linked to the transaction without pretending that one model is automatically best.
+Online tax rules do more than set a rate. Someone must know that a transaction happened, determine where it belongs, collect or withhold the tax, report it, and correct mistakes. Southeast Asian countries assign those jobs to different actors: foreign providers, appointed digital collectors, payment-capable platforms, domestic buyers, or marketplaces. The paper maps seven such paths. It also studies cases where a platform is present but is **not** the responsible tax node, showing that payment control, transaction type, legal appointment, or other conditions can matter. Finally, it distinguishes having a legal duty from having a functioning system of filing, corrections, refunds, audits, appeals, and enforcement. The paper does not claim one model is best; it provides a clearer institutional map for asking that question later with real outcome data.
 
 ---
 
 ## One-sentence pitch
 
-> Five Southeast Asian tax systems reveal a common institutional problem beneath very different digital-tax rules: deciding which private transaction node can be made responsible for turning a legally taxable event into an administrable fiscal action.
+> Digital tax administration is a transaction-path design problem: this paper maps which actor becomes responsible, under what activation condition, at what point in the transaction, and how far the legal duty extends into operational administration.
 
 ## 30-second pitch
 
-Digital Tax used to be a weak cross-country rate paper. The rebuild asks a stronger question: when digital commerce is organized by platforms and foreign providers, **where does the tax system actually attach?** Across Malaysia, Indonesia, Vietnam, Thailand, and the Philippines, the answer differs—provider, appointed collector, payment-capable platform, conditional platform, or buyer. Prior work already compares ASEAN digital taxes; *Fiscal Choke Points* adds a different lens by comparing the transaction node, operational rail, and event coupling without claiming the taxes themselves are equivalent or that one causally performs better.
+Instead of asking whether a 6%, 10%, or 12% digital tax raises more revenue, *Fiscal Choke Points* asks what has to happen before any rate becomes administrable. Across five Southeast Asian jurisdictions, seven transaction paths place duties on providers, platforms, appointed collectors, or buyers. The paper codes where the duty sits and how tightly it is tied to the transaction, then tests the framework with countercases where platform presence is not enough. It finally separates the legal architecture from the downstream filing/refund/audit system so procedural detail is not mistaken for performance.
+
+---
+
+## Final pre-submission checks
+
+Before using these materials externally:
+
+1. verify the selected venue's current author instructions and word limits;
+2. run the full five-gate CI suite on the exact submitted commit;
+3. perform a just-before-submission legal-currentness sweep;
+4. perform an independent source recode of a sample of path classifications;
+5. check related-work disclosure and overlap rules;
+6. replace all bracketed author/contact declarations;
+7. confirm the manuscript is not simultaneously under review elsewhere.
