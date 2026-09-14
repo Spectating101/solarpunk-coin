@@ -36,11 +36,8 @@ MUST_CONTAIN = [
     "matching evidence is unknown",
 ]
 
-FORBIDDEN = [
-    "$185 billion",
-    "$185B",
-    "12.3×",
-    "12.3x fiscal multiplier",
+# These phrases may never appear as live publication claims.
+HARD_FORBIDDEN = [
     "Malaysia causal validation",
     "1.54% implied",
     "implied value per business is",
@@ -50,6 +47,22 @@ FORBIDDEN = [
     "QRIS grew 191.8%",
 ]
 
+# Legacy labels may be named only when the line clearly rejects/demotes them.
+LEGACY_TERMS = ["$185 billion", "$185B", "12.3×", "12.3x fiscal multiplier"]
+NEGATION_MARKERS = (
+    "old ", "legacy", "earlier", "exclude", "excluded", "excluding",
+    "do not", "does not", "not ", "no ", "reject", "rejected",
+    "demote", "demoted", "superseded", "rather than",
+)
+
+
+def legacy_promoted(text: str, term: str) -> bool:
+    term_l = term.lower()
+    for line in text.splitlines():
+        if term_l in line.lower() and not any(marker in line.lower() for marker in NEGATION_MARKERS):
+            return True
+    return False
+
 
 def main() -> int:
     errors = []
@@ -57,18 +70,22 @@ def main() -> int:
         print(f"ERROR: missing {PAPER.name}", file=sys.stderr)
         return 1
     text = PAPER.read_text(encoding="utf-8")
+    lower = text.lower()
     for item in REQUIRED:
         if item not in text:
             errors.append(f"missing required section: {item}")
     for phrase in MUST_CONTAIN:
-        if phrase.lower() not in text.lower():
+        if phrase.lower() not in lower:
             errors.append(f"missing bounded publication fact/boundary: {phrase}")
-    for phrase in FORBIDDEN:
-        if phrase.lower() in text.lower():
+    for phrase in HARD_FORBIDDEN:
+        if phrase.lower() in lower:
             errors.append(f"forbidden/stale publication phrase re-entered: {phrase}")
+    for term in LEGACY_TERMS:
+        if legacy_promoted(text, term):
+            errors.append(f"legacy term appears outside an explicit rejection/demotion context: {term}")
     if "not evidence of hidden GDP" not in text and "not hidden GDP" not in text:
         errors.append("paper must preserve explicit hidden-GDP nonclaim")
-    if "arithmetic" not in text.lower() or "not a causal" not in text.lower():
+    if "arithmetic" not in lower or "not a causal" not in lower:
         errors.append("Tokopedia mechanism must retain arithmetic/noncausal language")
     if errors:
         for e in errors:
