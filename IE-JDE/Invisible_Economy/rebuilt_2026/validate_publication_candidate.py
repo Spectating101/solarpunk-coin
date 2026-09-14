@@ -6,6 +6,17 @@ import sys
 ROOT = Path(__file__).resolve().parent
 PAPER = ROOT / "INVISIBLE_LEDGER_PUBLICATION_CANDIDATE_2026.md"
 
+REQUIRED_PACKAGE_FILES = [
+    "MANUSCRIPT_SOURCE_MAP.csv",
+    "NOVELTY_AND_PRIOR_ART_AUDIT.md",
+    "OVERLAP_CONTROL_WITH_DIGITAL_TAX.md",
+    "HOSTILE_PUBLICATION_AUDIT.md",
+    "PUBLICATION_READINESS.md",
+    "SUBMISSION_MATERIALS.md",
+    "FIGURES_TABLES_SPEC.md",
+    "SSRN_SUPERSESSION_NOTE.md",
+]
+
 REQUIRED = [
     "## Abstract",
     "## 1. Introduction",
@@ -55,12 +66,6 @@ NEGATION_MARKERS = (
 
 
 def legacy_promoted(text: str, term: str) -> bool:
-    """Flag a legacy term only when it appears outside an explicit rejection context.
-
-    The manuscript is allowed to name rejected historical claims in the exclusion
-    section. Look at the current line plus several preceding lines so bullet items
-    inherit their section/list context instead of being treated as live claims.
-    """
     term_l = term.lower()
     lines = text.splitlines()
     for i, line in enumerate(lines):
@@ -74,8 +79,13 @@ def legacy_promoted(text: str, term: str) -> bool:
 
 def main() -> int:
     errors = []
+    for filename in REQUIRED_PACKAGE_FILES:
+        if not (ROOT / filename).is_file():
+            errors.append(f"missing reviewer-facing publication control: {filename}")
     if not PAPER.exists():
-        print(f"ERROR: missing {PAPER.name}", file=sys.stderr)
+        errors.append(f"missing {PAPER.name}")
+        for e in errors:
+            print(f"ERROR: {e}", file=sys.stderr)
         return 1
     text = PAPER.read_text(encoding="utf-8")
     lower = text.lower()
@@ -100,7 +110,7 @@ def main() -> int:
             print(f"ERROR: {e}", file=sys.stderr)
         print(f"FAIL: {len(errors)} publication-candidate error(s)", file=sys.stderr)
         return 1
-    print("PASS: Invisible Ledger publication candidate preserves bounded claims and required structure")
+    print("PASS: Invisible Ledger publication candidate and reviewer-facing controls are structurally complete")
     return 0
 
 if __name__ == "__main__":
