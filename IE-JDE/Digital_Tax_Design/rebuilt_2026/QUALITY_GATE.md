@@ -1,199 +1,255 @@
-# Fiscal Choke Points — Final Quality Gate
+# Fiscal Choke Points — Research Capacity and Quality Gate
 
-This is the release checklist for moving the Digital Tax rebuild from `HOSTILE-REVIEW READY` to `SUBMISSION CANDIDATE`.
+This gate now serves two purposes:
 
-The standard is not “sounds strong.” The standard is that a skeptical reviewer can reconstruct the paper’s central contribution, country evidence, and inference boundaries from the package.
+1. protect the paper from regression into the old Digital Tax claims; and
+2. define what remains before the research opportunity is considered substantially exhausted enough for consolidation with Invisible Ledger.
+
+The standard is not “sounds strong” or “ready to submit.” The standard is that a skeptical researcher can reconstruct the architecture, challenge the coding, identify missing evidence, and reproduce the bounded findings.
 
 ## Gate A — Research question
 
-- [x] Central question is institutional and answerable by the available evidence.
-- [x] Old rate-regression question is explicitly superseded.
-- [x] Abstract and introduction state the same research object.
+- [x] Central question is institutional and answerable by the current evidence.
+- [x] Old rate-regression question is superseded.
+- [x] Abstract/introduction identify the same research object.
+- [x] Country totals are not the unit of causal inference.
 
-**Pass condition:** a reader can state the question without mentioning the old rate coefficient.
-
----
-
-## Gate B — Originality and literature
-
-- [x] Platform VAT/GST liability is acknowledged as prior art.
-- [x] Firms-as-fiscal-intermediaries literature is engaged.
-- [x] VAT information-trail literature is engaged.
-- [x] Digital-tax administration guidance is engaged.
-- [x] Prior ASEAN digital-tax comparative mapping is acknowledged as prior art.
-- [x] Contribution is narrowed to transaction-node architecture, node locus, and event coupling rather than generic regional comparison.
-- [ ] External literature reviewer confirms the contribution is additive beyond both OECD platform-liability guidance and existing ASEAN comparative work.
-
-**Pass condition:** novelty survives after conceding both the underlying intermediation mechanism and prior regional comparisons.
+**Pass condition:** the question can be stated without mentioning an old rate coefficient or a common ASEAN revenue outcome.
 
 ---
 
-## Gate C — Country evidence
+## Gate B — Originality and prior art
+
+- [x] firms-as-fiscal-intermediaries literature acknowledged;
+- [x] VAT information-trail literature acknowledged;
+- [x] regulatory-intermediary / R–I–T model acknowledged;
+- [x] platform VAT/GST liability acknowledged;
+- [x] digital-services/LVG administration guidance acknowledged;
+- [x] ASEAN digital-tax comparison acknowledged as prior art;
+- [x] platform-governance literature separated as adjacent interpretation rather than primary novelty;
+- [x] contribution narrowed to transaction-path/node/event-coupling architecture plus architecture/performance separation;
+- [ ] independent literature review challenges the contribution against the closest prior work.
+
+**Pass condition:** novelty survives after conceding regulatory intermediation, platform liability, and prior ASEAN comparisons.
+
+---
+
+## Gate C — Primary country evidence
 
 ### Malaysia
 - [x] location indicators frozen;
-- [x] registration threshold frozen;
-- [x] platform/FSP guidance frozen;
-- [x] current MySToDS index confirms that the FSP guide remains officially linked;
-- [x] quarterly taxable period frozen;
-- [ ] comparable reconciliation/audit evidence frozen.
+- [x] threshold/taxable period frozen;
+- [x] FSP/platform guidance frozen;
+- [x] 2020 regime-start law frozen;
+- [x] transaction-record retention and correction/refund architecture mapped;
+- [ ] comparable matching/audit outcome evidence.
 
 ### Indonesia
-- [x] appointment/collection role frozen;
-- [x] commercial proof of collection frozen;
-- [x] active-collector and cumulative collection figures frozen;
-- [x] current DGT page controls monthly remittance and periodic-return cadence;
-- [ ] comparable reconciliation/audit evidence frozen.
+- [x] PMSE appointment/collection role frozen;
+- [x] transaction proof frozen;
+- [x] current remittance/reporting cadence frozen;
+- [x] administrative remitter/collection facts frozen as noncausal;
+- [x] DGT transaction-detail request fields mapped;
+- [ ] comparable matching/audit outcome evidence.
 
 ### Vietnam
-- [x] Decree 117 issue date and 2025-07-01 effective date frozen;
-- [x] payment-capable platform scope frozen;
-- [x] transaction-level withholding trigger frozen;
-- [x] September 2026 currentness check completed through Decree 68/2026 and Decree 141/2026;
-- [x] Decree 68/2026 expressly carries forward the per-transaction platform responsibility under Decree 117;
-- [ ] comparable reconciliation/audit evidence frozen.
+- [x] Decree 117 issue/effective dates frozen;
+- [x] per-transaction withholding mechanism frozen;
+- [x] 2026 currentness checked through Decrees 68 and 141;
+- [x] seller/platform/turnover/withholding fields mapped from official documentation;
+- [ ] comparable matching/audit outcome evidence.
 
 ### Thailand
 - [x] VES threshold and rail frozen;
-- [x] continuous offer/payment/delivery platform guidance frozen;
-- [x] governing-law basis frozen from Revenue Code section 82/13;
-- [ ] comparable reconciliation/audit evidence frozen.
+- [x] continuous-process platform rule frozen;
+- [x] 2021 operative chronology frozen;
+- [x] output-tax report and transaction-detail request architecture mapped;
+- [ ] comparable matching/audit outcome evidence.
 
 ### Philippines
-- [x] digital-services VAT scope frozen;
-- [x] location evidence frozen;
-- [x] B2C provider rail frozen;
-- [x] B2B withholding path frozen;
-- [x] separate transaction paths preserved;
-- [ ] comparable reconciliation/audit evidence frozen.
+- [x] statutory basis and 2025 implementation frozen;
+- [x] destination evidence frozen;
+- [x] B2C/B2B/marketplace paths separated;
+- [x] VDS operative timing and portal rail frozen;
+- [x] NRDSP invoice fields mapped;
+- [ ] comparable matching/audit outcome evidence.
 
-**Pass condition:** no central country paragraph depends on a source marked unresolved. Comparable reconciliation evidence is required only for performance claims that depend on it; the present manuscript preserves it as an explicit evidence gap instead.
+**Pass condition:** architecture claims use frozen primary evidence; missing operational outcomes remain missing rather than inferred.
 
 ---
 
-## Gate D — Comparative logic
+## Gate D — Transaction-path granularity
+
+- [x] canonical path-level dataset exists;
+- [x] all five jurisdictions represented;
+- [x] Philippines is decomposed into B2C, B2B, and marketplace paths;
+- [x] liable-node class stored separately from event-coupling class;
+- [x] tax-object class remains explicit;
+- [x] source IDs attached to every path;
+- [x] deterministic derived summary exists;
+- [x] CI checks derived summary against source coding;
+- [ ] expand remaining fields listed in `FULL_CAPACITY_RESEARCH_PLAN.md` where primary evidence supports them.
+
+**Pass condition:** no core comparative conclusion requires a one-country/one-node simplification when the legal paths differ.
+
+---
+
+## Gate E — Comparative logic
 
 - [x] five components defined;
 - [x] node locus defined;
 - [x] event coupling defined;
-- [x] coding rules frozen in `CODING_RULES.md`;
-- [x] country matrix contains both dimensions;
-- [x] cross-case findings derive from country rows;
-- [x] typology explicitly labeled non-ranking;
-- [ ] event-coupling assignments independently reread for consistency.
+- [x] eight bounded comparative propositions documented;
+- [x] every proposition records a limitation or falsification/extension route;
+- [x] typology is explicitly non-ranking;
+- [ ] independent re-code of node/event variables;
+- [ ] at least one deliberate negative/boundary-case exercise.
 
-**Pass condition:** another researcher can assign the same qualitative category using the documented source facts and definitions.
+**Pass condition:** the framework can be challenged by a case that does not fit rather than being true by definition.
 
 ---
 
-## Gate E — Inference discipline
+## Gate F — Rival explanations and robustness
+
+- [x] tax-type explanation retained;
+- [x] international-template diffusion retained;
+- [x] administrative-capacity explanation retained;
+- [x] market-concentration explanation retained;
+- [x] formal-law/operational-gap explanation retained;
+- [x] sample-selection/observability problem retained;
+- [x] platform-governance/privacy/compliance-cost risks retained;
+- [x] strict-law coding test specified;
+- [x] conservative coupling test specified;
+- [x] split-path test specified;
+- [x] instrument-homogeneous subset test specified;
+- [x] missing-reconciliation stress test specified;
+- [ ] execute and record the full robustness suite after the path dataset stabilizes.
+
+**Pass condition:** a plausible rival explanation changes the research agenda rather than being rhetorically dismissed.
+
+---
+
+## Gate G — Reconciliation / trace-to-use evidence
+
+- [x] separate matrix exists for recordkeeping, transaction detail, authority request/receipt, correction/refund, and downstream evidence;
+- [x] Malaysia record-retention evidence mapped;
+- [x] Indonesia transaction-detail request bridge mapped;
+- [x] Vietnam seller/turnover/withholding identity fields mapped;
+- [x] Thailand output-tax report and customer/transaction detail mapped;
+- [x] Philippines invoice/VDS rail mapped;
+- [x] successful matching is not inferred from identifiers;
+- [x] audit effectiveness is not inferred from authority request power;
+- [ ] comparable matching evidence;
+- [ ] comparable audit/enforcement evidence;
+- [ ] comparable compliance-cost/error/refund/dispute outcomes.
+
+**Pass condition for current architecture paper:** missing outcome fields are explicit.  
+**Pass condition for later performance paper:** common outcome definitions must actually exist.
+
+---
+
+## Gate H — Inference discipline
 
 - [x] no GMV/GTV-to-tax shortcut;
 - [x] no hidden-GDP inference;
 - [x] no rate-irrelevance claim;
 - [x] no 30:1 base-breadth claim;
 - [x] no inherited Malaysia causal estimate;
-- [x] no claim that destination basis eliminates tax competition;
-- [x] administrative collections are labeled non-causal;
-- [x] privacy/legal-authority boundary is explicit;
-- [x] performance ranking is prohibited without comparable evidence.
+- [x] no destination-basis-eliminates-competition claim;
+- [x] collections remain administrative facts, not treatment effects;
+- [x] tighter event coupling is not labeled superior;
+- [x] operational control is not treated as the sole cause of node selection;
+- [x] privacy/legal-authority boundary remains explicit.
 
-**Pass condition:** every strong claim is supported by its evidence class rather than by rhetoric.
-
----
-
-## Gate F — Manuscript architecture
-
-- [x] abstract identifies question, method, findings, contribution, and noncausal boundary;
-- [x] introduction states bounded cross-case findings;
-- [x] literature section precedes novelty claim;
-- [x] manuscript explicitly concedes both mechanism prior art and prior ASEAN comparison;
-- [x] method/source hierarchy is explicit;
-- [x] framework is defined before country cases;
-- [x] country cases use consistent comparative variables;
-- [x] separate cross-case findings section exists;
-- [x] implications do not overclaim sovereignty or welfare;
-- [x] limitations are substantive rather than ceremonial;
-- [x] conclusion matches the claim register.
-
-**Pass condition:** remove any country subsection and the paper still has a visible analytical architecture rather than collapsing into a sequence of anecdotes.
+**Pass condition:** every strong sentence can identify its evidence class and the next inference it is forbidden to make.
 
 ---
 
-## Gate G — Reproducibility package
+## Gate I — Reproducibility and machine checks
 
-- [x] source catalog exists;
-- [x] claim register exists;
-- [x] country architecture exists;
-- [x] claim boundaries exist;
-- [x] literature-positioning map exists;
-- [x] coding rules exist;
-- [x] package manifest exists;
-- [x] figures/tables spec exists;
-- [x] reviewer-risk register exists;
-- [x] submission materials exist;
-- [x] structural validator exists (`validate_package.py`);
-- [x] structural validator executed successfully on the branch package — GitHub Actions run `34819639467`, validated head `39d6e087ed68df2cc8edd883ab423a9a55580d1f`;
-- [x] validation output recorded in `VALIDATION_REPORT_2026-09-14.md`;
-- [ ] final release hash / tag after independent review.
+- [x] source catalog;
+- [x] claim register;
+- [x] country overview;
+- [x] path-level codings;
+- [x] chronology;
+- [x] reconciliation matrix;
+- [x] coding rules;
+- [x] deterministic derivation script/output;
+- [x] structural validator;
+- [x] CI workflow;
+- [x] historical-claim regression checks;
+- [x] source-reference integrity checks;
+- [x] path-country coverage checks;
+- [x] chronology-date checks;
+- [ ] final expanded-depth-layer CI run recorded on the eventual freeze commit;
+- [ ] independent reproduction/re-code.
 
-**Pass condition:** a reviewer can audit the paper without searching historical Digital Tax files. Structural validation is now an executed gate rather than a prospective one.
-
----
-
-## Gate H — Relationship to Invisible Ledger
-
-- [x] IL is treated as a measurement companion rather than tax-liability evidence;
-- [x] platform revenue and transaction value remain distinct;
-- [x] DT begins only after a legal taxable object is defined;
-- [x] conclusion states the measurement/institutional division of labor.
-
-**Pass condition:** the two papers can be submitted separately without one depending on the other’s unsupported inference.
+**Pass condition:** a change to the coded paths either propagates to the derived output or fails CI.
 
 ---
 
-## Gate I — Packaging
+## Gate J — Manuscript integration
 
-- [x] canonical title available;
-- [x] alternative titles available;
-- [x] short abstract available;
-- [x] standard abstract available;
-- [x] keywords available;
-- [x] highlights available;
-- [x] methods statement available;
-- [x] data/reproducibility statement available;
-- [x] ethics/data statement available;
-- [x] cover-letter core available;
-- [x] plain-language summary available;
-- [ ] venue-specific formatting and cover letter after route selection.
+- [x] manuscript already contains bounded question, prior-art concessions, five-component framework, cases, cross-case findings, and substantive limitations;
+- [x] old causal/rate story removed from the canonical manuscript;
+- [x] IL relationship is bounded correctly;
+- [ ] integrate the R–I–T/regulatory-intermediary positioning explicitly into manuscript prose;
+- [ ] integrate transaction-path rather than only country-level comparative table;
+- [ ] integrate the explicit rival-explanations/robustness subsection;
+- [ ] integrate the reconciliation-evidence findings without implying matching performance;
+- [ ] regenerate final figures/tables from frozen data products.
+
+**Pass condition:** the paper is not intellectually weaker than the registers supporting it.
 
 ---
 
-# Current release assessment
+## Gate K — Full-capacity expansion before consolidation
 
-**Current status:** `STRONG RESEARCH PACKAGE / HOSTILE-REVIEW READY, NOT YET SUBMISSION-FROZEN`
+- [ ] finish normalized transaction-path fields where evidence exists;
+- [ ] execute deliberate negative/boundary-case search;
+- [ ] collect evidence on node-selection rationale;
+- [ ] identify at least one within-country node-change design with credible outcome data potential;
+- [ ] map governance/compliance-cost evidence;
+- [ ] decide whether one external case adds analytical leverage;
+- [ ] run final hostile review after those extensions.
 
-### Strongest dimensions
+**Pass condition:** remaining open questions are fundamentally new studies or inaccessible evidence, not obvious uncollected material within the current project scope.
 
-- research-question clarity;
-- claim discipline;
-- comparative architecture;
-- primary-source grounding;
-- novelty boundary against both mechanism prior art and regional-comparison prior art;
-- currentness through the material 2026 Vietnam legal layer;
-- distinction from Invisible Ledger;
-- narrative and policy legibility;
-- package-level auditability;
-- executed CI validation.
+---
 
-### Remaining quality gap versus CL-ECI-level package discipline
+## Gate L — Relationship to Invisible Ledger
 
-1. independent re-code of node locus/event coupling;
-2. independent novelty/hostile review;
-3. preserve reconciliation/audit/compliance-cost limitations unless comparable evidence is actually collected;
-4. final just-before-submission source-currentness check;
-5. route to a venue that values comparative institutional/tax-administration work rather than forcing weak causal econometrics back into the paper.
+- [x] IL is measurement/reconciliation, not tax-liability evidence;
+- [x] transaction value and platform revenue remain distinct objects;
+- [x] DT begins with a legally defined object/node rather than an IL residual;
+- [x] future consolidation boundary is documented;
+- [ ] begin actual consolidation only after IL and DT independently stabilize.
 
-## Promotion rule
+---
 
-Change status to `SUBMISSION CANDIDATE` only when Gate B’s external novelty check and Gate D’s independent coding reread are closed, the hostile reviewer risk register contains no unresolved critical risk, and the final source-currentness check is performed for the selected submission date. Reconciliation evidence need not be manufactured merely to close the package; where it is unavailable, it remains an explicit limitation rather than a hidden inference.
+# Current assessment
+
+**Current status:** `FULL-CAPACITY RESEARCH BUILD / HOSTILE-REVIEW READY`.
+
+### Strong dimensions
+
+- question and inference discipline;
+- source-controlled legal architecture;
+- path-level granularity;
+- explicit prior-art boundary;
+- falsifiable comparative propositions;
+- rival-explanation discipline;
+- trace-to-use evidence separation;
+- deterministic coding/derivation checks;
+- clean conceptual separation from Invisible Ledger.
+
+### Largest remaining research gains
+
+1. manuscript integration of the new depth layer;
+2. negative/boundary cases;
+3. evidence on why particular nodes were selected;
+4. execution of coding robustness tests;
+5. comparable downstream administrative outcomes where genuinely obtainable;
+6. within-country institutional-change designs.
+
+The project should not be promoted by filling checkboxes with weak substitutes. Unknown matching, audit, and performance evidence may remain unknown until suitable sources or data exist.
