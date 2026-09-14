@@ -32,7 +32,10 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          python IE-JDE/Invisible_Economy/rebuilt_2026/validate_support_package.py 2>&1 | tee /tmp/invisible-ledger-support-validation.log
+          {
+            python IE-JDE/Invisible_Economy/rebuilt_2026/validate_support_package.py
+            python IE-JDE/Invisible_Economy/rebuilt_2026/validate_reproduction_map.py
+          } 2>&1 | tee /tmp/invisible-ledger-support-validation.log
 
       - name: Upload validation log
         if: always()
