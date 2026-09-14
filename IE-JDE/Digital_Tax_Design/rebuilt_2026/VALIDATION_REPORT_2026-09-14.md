@@ -1,52 +1,43 @@
-# Digital Tax Package Validation Report
+# Fiscal Choke Points — Exact-Head Publication Validation
 
 **Date:** 2026-09-14  
+**Branch:** `digital-tax/rebuild-2026`  
+**Validated head:** `eb19d689edda3e67f8e54cd817d660f6ab99ad7d`  
 **Workflow:** `Digital Tax package validation`  
-**GitHub Actions run:** `34838129214`  
-**Validated head:** `163435a53819bbc21d55988758d5c2d633f37b87`  
-**Result:** `PASS`
+**Run:** `34841597962`  
+**Conclusion:** `SUCCESS`
 
-## Validation suite
+## Gates executed
 
-The exact branch tree passed four Digital Tax-specific controls:
+1. `validate_package.py`
+   - source/claim/country/path/chronology/reconciliation consistency;
+   - historical causal claims remain superseded;
+   - manuscript boundary controls.
 
-1. `validate_package.py` — source/claim/country/path/chronology/reconciliation/manuscript structural consistency.
-2. `derive_comparative_findings.py --check` — deterministic comparative summary reproduces from canonical path codings.
-3. `validate_boundary_layer.py` — node-selection conditions and boundary/countercases remain path- and source-controlled.
-4. `validate_operational_capacity.py` — Stage-B filing/correction/refund/audit/appeal/enforcement evidence remains source-controlled and outcome/performance claims remain bounded.
+2. `derive_comparative_findings.py --check`
+   - deterministic comparative summary reproduces from canonical path codings.
 
-## Current controlled package
+3. `validate_boundary_layer.py`
+   - node-selection conditions and countercases retain path/source coverage.
 
-The validated tree includes:
+4. `validate_operational_capacity.py`
+   - Stage-B filing/correction/refund/audit/appeal/enforcement evidence remains source-controlled;
+   - procedural evidence cannot be silently promoted into performance ranking.
 
-- the five-country / seven-path transaction-node architecture;
-- source and claim registers;
-- chronology and reconciliation evidence;
-- node-selection conditions and negative/boundary cases;
-- Stage-B `OPERATIONAL_CAPACITY_MATRIX.csv`;
-- bounded Stage-B claims for Malaysia, Vietnam, Thailand and the Philippines;
-- explicit unresolved/harmonization gaps for matching, audit yields, refund performance, disputes, compliance cost and causal outcomes;
-- the expanded package manifest and four-gate workflow.
+5. `validate_publication_candidate.py`
+   - complete article structure and bounded findings;
+   - no live return of superseded rate/DiD claims;
+   - no affirmative maturity/performance ranking;
+   - required reviewer-facing package: manuscript source map, novelty audit, overlap control, hostile audit, readiness contract, figures/tables, and submission materials.
 
 ## Interpretation
 
-A PASS verifies package consistency under the programmed controls. It does **not** independently establish:
+The run establishes **internal structural consistency of the publication package**. It does not establish peer review, external reproduction, causal administrative effectiveness, or venue acceptance.
 
-- correctness of every legal interpretation beyond the frozen-source audit;
-- administrative effectiveness;
-- causal revenue/compliance effects;
-- cross-country superiority;
-- external reproduction, novelty acceptance or publication readiness.
+## Remaining external/process gates
 
-The `PARTIAL_COMPLETE` country architecture states and `UNRESOLVED` Stage-B outcomes are deliberate research boundaries, not validation failures.
-
-## Promotion effect
-
-The structural, boundary-case and operational-capacity control layers are executable and green on the recorded exact head.
-
-Still external/unclosed:
-
-- independent novelty challenge;
-- independent re-coding of node locus/event coupling;
-- comparable downstream administrative outcomes;
-- final legal-source currentness check immediately before any submission freeze.
+- independent primary-source/path recode of a sample of core classifications;
+- final legal-currentness sweep immediately before submission;
+- venue-specific legal citation/reference/formatting pass;
+- related-work/overlap disclosure according to venue policy;
+- human copyedit and final citation audit.
