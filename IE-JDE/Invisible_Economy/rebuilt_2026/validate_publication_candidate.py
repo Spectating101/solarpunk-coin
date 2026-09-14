@@ -15,6 +15,8 @@ REQUIRED_PACKAGE_FILES = [
     "SUBMISSION_MATERIALS.md",
     "FIGURES_TABLES_SPEC.md",
     "SSRN_SUPERSESSION_NOTE.md",
+    "VENUE_ROUTE_ECRA.md",
+    "AI_ASSISTANCE_DISCLOSURE.md",
 ]
 
 REQUIRED = [
@@ -110,7 +112,7 @@ def main() -> int:
             print(f"ERROR: {e}", file=sys.stderr)
         print(f"FAIL: {len(errors)} publication-candidate error(s)", file=sys.stderr)
         return 1
-    print("PASS: Invisible Ledger publication candidate and reviewer-facing controls are structurally complete")
+    print("PASS: Invisible Ledger publication candidate, venue route, AI disclosure, and reviewer-facing controls are structurally complete")
     return 0
 
 if __name__ == "__main__":
