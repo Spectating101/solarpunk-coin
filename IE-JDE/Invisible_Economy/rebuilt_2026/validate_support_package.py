@@ -2,8 +2,8 @@
 """Structural and boundary validation for the Invisible Ledger V2 support package.
 
 This validator does not certify empirical truth. It checks that provisional/frozen
-status, source references, current-state controls, and forbidden equivalences remain
-explicit while the active proposal is still evolving.
+status, source references, current-state controls, audited issuer arithmetic, and
+forbidden equivalences remain explicit while the active proposal is still evolving.
 """
 from __future__ import annotations
 
@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parent
 
 FILES = {
     "sources": ROOT / "SOURCE_REGISTER.csv",
+    "issuer": ROOT / "ISSUER_TRANSITION_LEDGER.csv",
+    "tokopedia": ROOT / "TOKOPEDIA_RECONCILIATION.csv",
     "bps_growth": ROOT / "BPS_GROWTH_ANATOMY.csv",
     "bps_chars": ROOT / "BPS_BUSINESS_CHARACTERISTICS.csv",
     "bi": ROOT / "BI_DEFINITION_LEDGER.csv",
@@ -23,23 +25,27 @@ FILES = {
     "exclusions": ROOT / "EXCLUSION_LEDGER.csv",
 }
 
-FORBIDDEN_CANONICAL_PHRASES = (
-    "$185B invisible economy",
-    "12.3x fiscal multiplier",
-    "transaction value minus revenue = unmeasured GDP",
-)
-
 
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as fh:
         return list(csv.DictReader(fh))
 
 
+def refs(raw: str) -> list[str]:
+    return [x.strip() for x in (raw or "").split(";") if x.strip()]
+
+
+def check_refs(label: str, raw: str, valid: set[str], errors: list[str]) -> None:
+    for sid in refs(raw):
+        if sid not in valid:
+            errors.append(f"{label}: unknown source_id {sid}")
+
+
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
 
-    for label, path in FILES.items():
+    for path in FILES.values():
         if not path.exists():
             errors.append(f"missing required file {path.name}")
     if errors:
@@ -49,9 +55,61 @@ def main() -> int:
 
     sources = read_csv(FILES["sources"])
     source_ids = {(r.get("source_id") or "").strip() for r in sources}
-    if "DJP-DELAY-2026-08" not in source_ids:
-        errors.append("current-state control source DJP-DELAY-2026-08 is missing")
+    for required_source in ("DJP-DELAY-2026-08", "GOTO-AR-2023", "BPS-ECOM-2023", "BPS-ECOM-2024"):
+        if required_source not in source_ids:
+            errors.append(f"required control source {required_source} is missing")
 
+    # Audited issuer transition and mechanism layer.
+    issuer = read_csv(FILES["issuer"])
+    issuer_by_id = {(r.get("transition_id") or "").strip(): r for r in issuer}
+    toko = issuer_by_id.get("IL-ISS-TOKO-22-23")
+    if not toko:
+        errors.append("audited Tokopedia transition IL-ISS-TOKO-22-23 is missing")
+    else:
+        check_refs("IL-ISS-TOKO-22-23", toko.get("source_ids") or "", source_ids, errors)
+        if toko.get("admission_status") != "CORE_DIRECT":
+            errors.append("Tokopedia transition must remain CORE_DIRECT unless source/perimeter is re-audited")
+        if toko.get("signal_relation") != "OPPOSITE_DIRECTION":
+            errors.append("Tokopedia transition must preserve opposite-direction signal classification")
+    for gate in ("IL-ISS-BLIBLI-GATE", "IL-ISS-BUKA-GATE"):
+        row = issuer_by_id.get(gate)
+        if not row or row.get("admission_status") != "ADVISOR_GATE":
+            errors.append(f"{gate}: must remain ADVISOR_GATE until explicit proposal/advisor decision")
+
+    rec_rows = read_csv(FILES["tokopedia"])
+    rec = {(r.get("recon_id") or "").strip(): r for r in rec_rows}
+    for rid, row in rec.items():
+        check_refs(rid, row.get("source_id") or "", source_ids, errors)
+    required_rec = {
+        "TOKO-REC-GTV", "TOKO-REC-GROSS3P", "TOKO-REC-INCENTIVES",
+        "TOKO-REC-NET3P", "TOKO-REC-DELTA-GROSS", "TOKO-REC-DELTA-INC", "TOKO-REC-CHECK",
+    }
+    missing_rec = required_rec - set(rec)
+    if missing_rec:
+        errors.append(f"Tokopedia reconciliation missing rows: {sorted(missing_rec)}")
+    else:
+        try:
+            gross22 = float(rec["TOKO-REC-GROSS3P"]["value_from"])
+            gross23 = float(rec["TOKO-REC-GROSS3P"]["value_to"])
+            inc22 = float(rec["TOKO-REC-INCENTIVES"]["value_from"])
+            inc23 = float(rec["TOKO-REC-INCENTIVES"]["value_to"])
+            net22 = float(rec["TOKO-REC-NET3P"]["value_from"])
+            net23 = float(rec["TOKO-REC-NET3P"]["value_to"])
+            delta_gross = gross23 - gross22
+            delta_incentives = inc22 - inc23
+            delta_net = net23 - net22
+            if not math.isclose(delta_gross + delta_incentives, delta_net, rel_tol=0, abs_tol=1e-9):
+                errors.append("Tokopedia accounting bridge no longer reconciles exactly")
+            expected_share = delta_incentives / delta_net * 100
+            actual_share = float(rec["TOKO-REC-DELTA-INC"]["change_percent"])
+            if not math.isclose(actual_share, expected_share, rel_tol=0, abs_tol=1e-6):
+                errors.append(f"Tokopedia incentive-share mismatch: stored={actual_share} computed={expected_share}")
+            if rec["TOKO-REC-CHECK"].get("status") != "PASS_IDENTITY":
+                errors.append("Tokopedia reconciliation identity row must remain PASS_IDENTITY")
+        except (KeyError, ValueError, ZeroDivisionError) as exc:
+            errors.append(f"Tokopedia arithmetic check failed: {exc}")
+
+    # BPS growth anatomy.
     growth = read_csv(FILES["bps_growth"])
     growth_by_id = {(r.get("bps_row_id") or "").strip(): r for r in growth}
     required_growth_ids = {
@@ -63,24 +121,15 @@ def main() -> int:
     missing = required_growth_ids - set(growth_by_id)
     if missing:
         errors.append(f"BPS growth ledger missing rows: {sorted(missing)}")
-
     for rid, row in growth_by_id.items():
-        raw_ids = row.get("source_id") or ""
-        for sid in [x.strip() for x in raw_ids.split(";") if x.strip()]:
-            if sid not in source_ids:
-                errors.append(f"{rid}: unknown source_id {sid}")
+        check_refs(rid, row.get("source_id") or "", source_ids, errors)
         status = row.get("status") or ""
         if rid in {"BPS23-BUSINESSES", "BPS24-BUSINESSES"} and "RESOLUTION" not in status:
             errors.append(f"{rid}: business-count row must remain unresolved until primary table conflict closes")
-
-    # Check the descriptive channel arithmetic while retaining provisional status.
     try:
-        v23 = float(growth_by_id["BPS23-TOTAL"]["value"])
-        v24 = float(growth_by_id["BPS24-TOTAL"]["value"])
-        m23 = float(growth_by_id["BPS23-MKT"]["value"])
-        m24 = float(growth_by_id["BPS24-MKT"]["value"])
-        n23 = float(growth_by_id["BPS23-NONMKT"]["value"])
-        n24 = float(growth_by_id["BPS24-NONMKT"]["value"])
+        v23 = float(growth_by_id["BPS23-TOTAL"]["value"]); v24 = float(growth_by_id["BPS24-TOTAL"]["value"])
+        m23 = float(growth_by_id["BPS23-MKT"]["value"]); m24 = float(growth_by_id["BPS24-MKT"]["value"])
+        n23 = float(growth_by_id["BPS23-NONMKT"]["value"]); n24 = float(growth_by_id["BPS24-NONMKT"]["value"])
         expected = {
             "BPS-D-TOTAL": (v24 / v23 - 1) * 100,
             "BPS-D-MKT": (m24 / m23 - 1) * 100,
@@ -97,21 +146,18 @@ def main() -> int:
     chars = read_csv(FILES["bps_chars"])
     for row in chars:
         cid = row.get("characteristic_id") or "<blank>"
-        sid = (row.get("source_id") or "").strip()
-        if sid not in source_ids:
-            errors.append(f"{cid}: unknown source_id {sid}")
+        check_refs(cid, row.get("source_id") or "", source_ids, errors)
         if not (row.get("forbidden_inference") or "").strip():
             errors.append(f"{cid}: missing forbidden_inference")
 
     bi_rows = read_csv(FILES["bi"])
     for row in bi_rows:
         mid = row.get("bi_measure_id") or "<blank>"
-        for sid in [x.strip() for x in (row.get("source_id") or "").split(";") if x.strip()]:
-            if sid not in source_ids:
-                errors.append(f"{mid}: unknown source_id {sid}")
+        check_refs(mid, row.get("source_id") or "", source_ids, errors)
         if not (row.get("forbidden_equivalence") or "").strip():
             errors.append(f"{mid}: missing forbidden_equivalence")
 
+    # Institutional currentness boundary.
     visibility = read_csv(FILES["visibility"])
     current_rows = [r for r in visibility if (r.get("visibility_id") or "") == "IL-PMK37-01"]
     if len(current_rows) != 1:
@@ -125,10 +171,7 @@ def main() -> int:
         if row.get("matching_evidence_status") != "UNKNOWN" or row.get("outcome_evidence_status") != "UNKNOWN":
             errors.append("PMK37 matching/outcome must remain UNKNOWN without later-stage evidence")
     for row in visibility:
-        vid = row.get("visibility_id") or "<blank>"
-        for sid in [x.strip() for x in (row.get("source_ids") or "").split(";") if x.strip()]:
-            if sid not in source_ids:
-                errors.append(f"{vid}: unknown source_id {sid}")
+        check_refs(row.get("visibility_id") or "<blank>", row.get("source_ids") or "", source_ids, errors)
 
     exclusions = read_csv(FILES["exclusions"])
     excluded_objects = "\n".join((r.get("candidate_object") or "") for r in exclusions).lower()
@@ -137,8 +180,7 @@ def main() -> int:
             errors.append(f"exclusion ledger missing control concept: {concept}")
 
     for filename in ("SUPPORT_PACKAGE_MANIFEST.md", "EVIDENCE_FREEZE_PREVIEW.md", "DATA_PRODUCT_SCHEMAS.md"):
-        path = ROOT / filename
-        if not path.exists():
+        if not (ROOT / filename).exists():
             errors.append(f"missing support control file {filename}")
 
     unresolved_growth = [r["bps_row_id"] for r in growth if "PENDING" in (r.get("status") or "") or "CONFLICT" in (r.get("status") or "")]
@@ -148,7 +190,11 @@ def main() -> int:
     if unresolved_bi:
         warnings.append("BI definitions still require workbook freeze: " + ", ".join(unresolved_bi))
 
-    print(f"sources={len(sources)} bps_growth_rows={len(growth)} bps_characteristics={len(chars)} bi_rows={len(bi_rows)} visibility_rows={len(visibility)} exclusions={len(exclusions)}")
+    print(
+        f"sources={len(sources)} issuer_rows={len(issuer)} tokopedia_rows={len(rec_rows)} "
+        f"bps_growth_rows={len(growth)} bps_characteristics={len(chars)} bi_rows={len(bi_rows)} "
+        f"visibility_rows={len(visibility)} exclusions={len(exclusions)}"
+    )
     for w in warnings:
         print(f"WARNING: {w}")
     if errors:
@@ -157,7 +203,7 @@ def main() -> int:
         print(f"FAIL: {len(errors)} support-package error(s)", file=sys.stderr)
         return 1
     print("PASS: Invisible Ledger V2 support package is structurally consistent")
-    print("NOTE: PASS does not promote provisional rows or resolve advisor gates")
+    print("NOTE: PASS does not promote provisional BPS/BI rows or resolve advisor gates")
     return 0
 
 
