@@ -24,6 +24,7 @@ REQUIRED_FILES = [
     "REPRODUCTION_PLAN.md",
     "LEGACY_MIGRATION.md",
     "CONSOLIDATION_BOUNDARY.md",
+    "PROPOSAL_SYNC_CHECKLIST.md",
 ]
 
 EVIDENCE_REQUIRED = {
@@ -66,8 +67,9 @@ CANONICAL_TEXT_FILES = [
     "CONSOLIDATION_BOUNDARY.md",
 ]
 
-# Legacy phrases may appear in LEGACY_MIGRATION.md and RESULT_REGISTER.csv only when
-# they are explicitly marked rejected/demoted. They must not leak into canonical prose.
+# Legacy phrases may appear in LEGACY_MIGRATION.md, RESULT_REGISTER.csv, and the
+# proposal-sync regression checklist only when explicitly rejected/demoted. They must
+# not leak into canonical V2 prose.
 QUARANTINED_PHRASES = [
     "$185 billion unmeasured economy",
     "$82.8 billion invisible economy",
@@ -166,7 +168,11 @@ def main() -> int:
                 fail(f"quarantined legacy phrase leaked into canonical prose: {name}: {phrase}", errors)
 
     pending = [r for r in results if "PENDING" in r.get("status", "")]
-    unknown_visibility = [r for r in visibility if r.get("current_status", "") in {"UNKNOWN", "UNKNOWN_PENDING_FREEZE", "NOT_ESTABLISHED"}]
+    unknown_visibility = [
+        r
+        for r in visibility
+        if r.get("current_status", "") in {"UNKNOWN", "UNKNOWN_PENDING_FREEZE", "NOT_ESTABLISHED"}
+    ]
     if pending:
         warnings.append(f"{len(pending)} result rows remain pending by design")
     if unknown_visibility:
