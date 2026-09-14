@@ -2,9 +2,9 @@
 
 **Date:** 2026-09-14  
 **Branch:** `invisible-ledger/full-capacity-2026`  
-**Validated head:** `ee9c190f551a6c8e8baa68703ac8fb81f853b721`  
+**Final validated head before this report-only commit:** `2f2cb83307f93207dcddb8484872cc54bd326055`  
 **Workflow:** `Invisible Ledger V2 support validation`  
-**Run:** `34841564632`  
+**Run:** `34841645334`  
 **Conclusion:** `SUCCESS`
 
 ## Gates executed
@@ -33,7 +33,7 @@
 
 ## Interpretation
 
-The run establishes **internal structural consistency of the publication package**. It does not establish peer review, external replication, venue acceptance, or that PMK 37 will retain the same operational state after the currentness date.
+The run establishes **internal structural consistency of the crystallized publication package**. It does not establish peer review, external replication, venue acceptance, or future PMK 37 operational state.
 
 ## Remaining external/process gates
 
@@ -42,3 +42,5 @@ The run establishes **internal structural consistency of the publication package
 - independent source spot-check;
 - venue-specific citation/formatting pass;
 - related-work/overlap disclosure according to venue policy.
+
+This report is documentation only; any subsequent substantive manuscript/evidence change requires a new exact-head validation run.
