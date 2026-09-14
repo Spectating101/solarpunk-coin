@@ -35,6 +35,7 @@ jobs:
           {
             python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_package.py
             python IE-JDE/Digital_Tax_Design/rebuilt_2026/derive_comparative_findings.py --check
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_boundary_layer.py
           } 2>&1 | tee /tmp/digital-tax-validation.log
 
       - name: Upload validation log
