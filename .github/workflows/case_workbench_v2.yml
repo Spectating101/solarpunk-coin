@@ -45,7 +45,8 @@ jobs:
           node --test packages/constraint-core/test/*.test.mjs 2>&1 | tee _ci_logs/core-test.log
 
       - name: Check SDK package contents
-        run: npm pack --dry-run --prefix packages/constraint-core
+        run: npm pack --dry-run
+        working-directory: packages/constraint-core
 
       - name: Install frontend dependencies
         run: npm install
