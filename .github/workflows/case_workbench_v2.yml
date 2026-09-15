@@ -9,6 +9,7 @@ on:
       - 'protocol/schema/**'
       - 'frontend/**'
       - 'scripts/capture_case_workbench_v2.mjs'
+      - 'scripts/smoke_live_policy_lab.mjs'
       - 'scripts/check_frontend_bundle.mjs'
       - '.github/workflows/case_workbench_v2.yml'
   workflow_dispatch:
@@ -44,10 +45,17 @@ jobs:
           node --test packages/constraint-core/test/*.test.mjs 2>&1 | tee _ci_logs/core-test.log
 
       - name: Check SDK package contents
-        run: npm pack --dry-run --prefix packages/constraint-core
+        run: npm pack --dry-run
+        working-directory: packages/constraint-core
 
       - name: Install frontend dependencies
         run: npm install
+        working-directory: frontend
+
+      - name: Audit shipped frontend dependencies
+        run: |
+          set -o pipefail
+          npm audit --omit=dev --audit-level=high 2>&1 | tee ../_ci_logs/frontend-production-audit.log
         working-directory: frontend
 
       - name: Test frontend workbench
@@ -70,7 +78,7 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Capture case workbench browser flows
+      - name: Capture and smoke candidate research surface
         run: |
           set -o pipefail
           cd frontend
@@ -81,6 +89,9 @@ jobs:
             sleep 1
           done
           curl --fail http://127.0.0.1:4173/ >/dev/null
+          POLICY_LAB_URL=http://127.0.0.1:4173/ \
+            POLICY_LAB_EXPECT_SURFACE=browser \
+            node scripts/smoke_live_policy_lab.mjs 2>&1 | tee _ci_logs/release-surface-smoke.log
           node scripts/capture_case_workbench_v2.mjs _review_case_workbench_v2 2>&1 | tee _ci_logs/browser-capture.log
 
       - name: Upload V2 CI diagnostics

@@ -1,0 +1,141 @@
+name: Policy Lab Specialized Gauntlet
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - benchmark/gauntlet/policy-lab-specialized.v1.json
+      - benchmark/gauntlet/policy-assumptions.v1.json
+      - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
+      - benchmark/gauntlet/policy-lab-external-validation-protocol.v1.json
+      - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - scripts/check_policy_lab_external_gauntlet_protocols.mjs
+      - scripts/build_policy_lab_release_provenance.mjs
+      - docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md
+      - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
+      - packages/constraint-core/src/**
+      - packages/constraint-core/test/fc-non-promotion-invariants.test.mjs
+      - packages/constraint-core/test/conformance-benchmark-v1.test.mjs
+      - protocol/cases/energy-v1/**
+      - protocol/policies-v2/**
+      - protocol/schema/**
+      - frontend/src/data/publicEvidenceCheckpoint.js
+      - .github/workflows/policy-lab-specialized-gauntlet.yml
+      - .github/workflows/policy-lab-release-attestation.yml
+  push:
+    branches:
+      - main
+    paths:
+      - benchmark/gauntlet/policy-lab-specialized.v1.json
+      - benchmark/gauntlet/policy-assumptions.v1.json
+      - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
+      - benchmark/gauntlet/policy-lab-external-validation-protocol.v1.json
+      - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - scripts/check_policy_lab_external_gauntlet_protocols.mjs
+      - scripts/build_policy_lab_release_provenance.mjs
+      - docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md
+      - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
+      - packages/constraint-core/src/**
+      - protocol/cases/energy-v1/**
+      - protocol/policies-v2/**
+      - protocol/schema/**
+      - frontend/src/data/publicEvidenceCheckpoint.js
+      - .github/workflows/policy-lab-specialized-gauntlet.yml
+      - .github/workflows/policy-lab-release-attestation.yml
+
+permissions:
+  contents: read
+
+jobs:
+  specialized-gauntlet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact revision
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install baseline test dependencies
+        run: npm install
+
+      - name: Run Policy Lab specialized Gauntlet
+        run: |
+          set -euo pipefail
+          node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/policy-lab-specialized-gauntlet"
+
+      - name: Attack timezone and locale determinism
+        run: |
+          set -euo pipefail
+          TZ=UTC LANG=C node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-env-utc" >/dev/null
+          TZ=Asia/Taipei LANG=C node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-env-taipei" >/dev/null
+          cmp \
+            "$RUNNER_TEMP/gauntlet-env-utc/policy-lab-specialized-gauntlet.v1.json" \
+            "$RUNNER_TEMP/gauntlet-env-taipei/policy-lab-specialized-gauntlet.v1.json"
+          cmp \
+            "$RUNNER_TEMP/gauntlet-env-utc/policy-lab-specialized-gauntlet.v1.md" \
+            "$RUNNER_TEMP/gauntlet-env-taipei/policy-lab-specialized-gauntlet.v1.md"
+          printf '%s\n' '{"schema":"policylab.environment_determinism_check.v1","status":"PASS","environments":["TZ=UTC LANG=C","TZ=Asia/Taipei LANG=C"],"boundary":"Internal CI determinism proof; not independent reproduction."}' \
+            > "$RUNNER_TEMP/policy-lab-specialized-gauntlet/environment-determinism-check.json"
+
+      - name: Attack partial-output retry determinism
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/gauntlet-retry"
+          printf '%s\n' '{"truncated":true}' > "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.json"
+          printf '%s\n' 'partial output' > "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.md"
+          node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-retry" >/dev/null
+          node scripts/run_policy_lab_specialized_gauntlet.mjs \
+            --out="$RUNNER_TEMP/gauntlet-clean-repeat" >/dev/null
+          cmp \
+            "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.json" \
+            "$RUNNER_TEMP/gauntlet-clean-repeat/policy-lab-specialized-gauntlet.v1.json"
+          cmp \
+            "$RUNNER_TEMP/gauntlet-retry/policy-lab-specialized-gauntlet.v1.md" \
+            "$RUNNER_TEMP/gauntlet-clean-repeat/policy-lab-specialized-gauntlet.v1.md"
+          printf '%s\n' '{"schema":"policylab.retry_determinism_check.v1","status":"PASS","attack":"pre-existing truncated output replaced by deterministic clean rebuild","boundary":"Tests the specialized Gauntlet report build/retry path, not every Policy Lab workflow."}' \
+            > "$RUNNER_TEMP/policy-lab-specialized-gauntlet/retry-determinism-check.json"
+
+      - name: Verify external gate closure protocols
+        run: |
+          set -euo pipefail
+          node scripts/check_policy_lab_external_gauntlet_protocols.mjs \
+            | tee "$RUNNER_TEMP/policy-lab-specialized-gauntlet/external-gate-protocol-check.json"
+
+      - name: Build release provenance closure
+        env:
+          POLICY_LAB_SOURCE_REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          node scripts/build_policy_lab_release_provenance.mjs \
+            --out="$RUNNER_TEMP/policy-lab-specialized-gauntlet/policy-lab-release-provenance.v1.json"
+          node scripts/build_policy_lab_release_provenance.mjs \
+            --out="$RUNNER_TEMP/policy-lab-release-provenance-repeat.json"
+          cmp \
+            "$RUNNER_TEMP/policy-lab-specialized-gauntlet/policy-lab-release-provenance.v1.json" \
+            "$RUNNER_TEMP/policy-lab-release-provenance-repeat.json"
+
+      - name: Re-run critical non-promotion invariants
+        run: node --test packages/constraint-core/test/fc-non-promotion-invariants.test.mjs
+
+      - name: Verify frozen C0-C2 conformance baseline
+        run: node --test packages/constraint-core/test/conformance-benchmark-v1.test.mjs
+
+      - name: Show machine report
+        run: cat "$RUNNER_TEMP/policy-lab-specialized-gauntlet/policy-lab-specialized-gauntlet.v1.md"
+
+      - name: Upload specialized Gauntlet report
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-lab-specialized-gauntlet-${{ github.sha }}
+          path: ${{ runner.temp }}/policy-lab-specialized-gauntlet/
+          retention-days: 90

@@ -1,0 +1,100 @@
+{
+  "schema": "policylab.external_validation_protocol.v1",
+  "version": "0.1.0",
+  "status": "OPEN_PROTOCOLS_DEFINED",
+  "purpose": "Define in advance what evidence can close Policy Lab's external Gauntlet gates and prevent internal activity, traffic, or favorable reactions from being miscounted as validation.",
+  "global_non_evidence": [
+    "the author rerunning the repository",
+    "CI success",
+    "GitHub stars, page views, clones, or social engagement",
+    "a judge saying the demo looks good",
+    "an AI model reviewing or reproducing the author's own reasoning",
+    "controlled fixture cases",
+    "the public Ausgrid checkpoint without source-holder review",
+    "submission to a competition without independent evaluation"
+  ],
+  "protocols": [
+    {
+      "challenge_id": "PLG-09",
+      "name": "Independent clean-room reproduction",
+      "gate_state": "OPEN_EXTERNAL",
+      "minimum_evidence": {
+        "evaluator_relation": "not an author and did not prepare the release package",
+        "starting_material": "frozen public release/package and documented instructions only",
+        "environment_record": true,
+        "start_and_end_time": true,
+        "commands_or_actions_recorded": true,
+        "manual_interventions_recorded": true,
+        "expected_and_observed_decision_ids": true,
+        "expected_and_observed_package_ids": true,
+        "result": "PASS_OR_FAIL_RECORDED"
+      },
+      "pass_rule": "The evaluator independently reaches the declared result and identity agreement without code changes or author intervention after the attempt begins.",
+      "publication_boundary": "A failed attempt remains reportable evidence and must not be deleted from the validation ledger."
+    },
+    {
+      "challenge_id": "PLG-11",
+      "name": "External-source heterogeneity",
+      "gate_state": "OPEN_EXTERNAL",
+      "minimum_evidence": {
+        "attributable_source_relationship": true,
+        "acquisition_method_and_date": true,
+        "private_validation_permission": true,
+        "publication_scope": true,
+        "source_file_or_machine_response_identity": true,
+        "measurement_semantics": true,
+        "source_holder_factual_review_path": true,
+        "material_contrast_from_public_ausgrid": "format, custodian, interval semantics, source relationship, or authentication"
+      },
+      "pass_rule": "A materially different external source completes its declared intake, policy, decision, and reproduction contract without unsupported assurance promotion.",
+      "publication_boundary": "Raw rows need not be published; only authorized metadata, diagnostics, aggregates, identities, and limitations may enter the public package."
+    },
+    {
+      "challenge_id": "PLG-12",
+      "name": "Blind evaluator comprehension",
+      "gate_state": "OPEN_EXTERNAL",
+      "minimum_evidence": {
+        "uncoached_evaluators": 5,
+        "standardized_demo": true,
+        "questions_fixed_before_responses": true,
+        "scoring_key_fixed_before_responses": true,
+        "individual_response_records": true,
+        "aggregate_accuracy_reported": true,
+        "sample_size_reported": true
+      },
+      "required_questions": [
+        "What does Policy Lab decide?",
+        "Does the evidence or a signature prove physical truth?",
+        "Why can the same evidence be admitted by one policy and blocked by another?",
+        "Why is an admitted quantity bounded?",
+        "Does admission guarantee settlement?",
+        "What remains unproven in the demonstrated case?"
+      ],
+      "pass_rule": "At least 80% of scored answers across the fixed questions are correct, with the exact sample and mistakes disclosed.",
+      "publication_boundary": "This measures comprehension of the presentation, not scientific validity, adoption, or product-market fit."
+    },
+    {
+      "challenge_id": "PLG-14",
+      "name": "Practical workflow validation",
+      "gate_state": "OPEN_EXTERNAL",
+      "minimum_evidence": {
+        "external_actor": true,
+        "real_workflow_or_decision_problem": true,
+        "current_manual_or_automated_process_described": true,
+        "failure_or_cost_of_current_process_described": true,
+        "Policy_Lab_role_requested_or_tested": true,
+        "outcome_or_feedback_recorded": true
+      },
+      "acceptable_evidence_types": [
+        "structured user or institutional interview",
+        "integration request",
+        "source-provider request",
+        "pilot or shadow-pilot attempt",
+        "repeated external use",
+        "independent research integration"
+      ],
+      "pass_rule": "At least one inspectable external workflow demonstrates a real reason to use or test the mechanism beyond competition presentation.",
+      "publication_boundary": "One workflow can close the existence gate but cannot be generalized into market demand or product-market fit."
+    }
+  ]
+}

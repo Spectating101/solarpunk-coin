@@ -16,8 +16,32 @@ const setSettlementMultiplier = vi.fn();
 function workbenchValue() {
   return {
     pack: {
-      cases: [{ case_id: 'TYN-001', subject: 'Taoyuan controlled energy case' }],
-      policies: [{ id: 'ENERGY-CASE-PILOT-005', name: 'Pilot policy' }],
+      manifest: { id: 'energy-v1' },
+      cases: [{
+        case_id: 'TYN-001',
+        subject: 'Taoyuan controlled energy case',
+        case_type: 'energy_site',
+        spatial_identity: { latitude: 24.99, longitude: 121.3, spatial_reference: 'WGS84' },
+        measurement_window: { start: '2026-05-01T00:00:00Z', end: '2026-05-08T00:00:00Z' },
+        context_refs: ['resource:tyn-001:pvwatts-v1'],
+        boundaries: ['Controlled scenario demonstration.'],
+      }, {
+        case_id: 'OPS-001',
+        subject: 'Operator-format CSV pipeline pilot',
+        case_type: 'energy_site',
+        spatial_identity: null,
+        measurement_window: { start: '2026-05-01T00:00:00Z', end: '2026-05-08T00:00:00Z' },
+        context_refs: ['resource:tyn-001:pvwatts-v1'],
+        boundaries: ['Synthetic operator-format fixture.'],
+      }],
+      policies: [{
+        id: 'ENERGY-CASE-PILOT-005',
+        name: 'Pilot policy',
+        version: '1.0.0',
+        description: 'Controlled pilot research policy.',
+        admission_rules: [{ rule_id: 'minimum-provenance', calculator_id: 'MIN_PROVENANCE', parameters: { minimum: 'L2' } }],
+        quantity_rules: [{ rule_id: 'provenance-capacity', calculator_id: 'PROVENANCE_POLICY_CAPACITY', parameters: { L2: 0.7 } }],
+      }],
       scenarios: [{ scenario_id: 'PROVENANCE-L2-COUNTERFACTUAL', name: 'L2 counterfactual' }],
     },
     activeCaseId: 'TYN-001',
@@ -44,6 +68,17 @@ function workbenchValue() {
         },
       },
     },
+    visibleRunsByCaseId: {
+      'TYN-001': {
+        evidence: { evidence_hash: 'evidence-0123456789abcdef', summary: { total_eligible_surplus_kwh: 180 } },
+        decision: {
+          decision: 'ADMIT_WITH_LIMIT',
+          decision_id: 'decision-l2-fedcba9876543210',
+          admission: { blocking_rules: [] },
+          capacity: { admitted_maximum: 126, binding_constraints: ['PROVENANCE_POLICY_CAPACITY'] },
+        },
+      },
+    },
     activeStress: {
       available: true,
       settlement: {
@@ -66,24 +101,73 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('LabOverview paired platform surface', () => {
-  it('renders a complete interpreted overview from shared workbench state', () => {
+describe('LabOverview explorer + workbench research surface', () => {
+  it('opens on an interactive research landscape rather than an engine dashboard', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
 
-    expect(screen.getByRole('heading', { name: /can real-world evidence justify a financial claim/i })).toBeInTheDocument();
-    expect(screen.getByText('180')).toBeInTheDocument();
-    expect(screen.getByText('126')).toBeInTheDocument();
-    expect(screen.getByText('50.4')).toBeInTheDocument();
-    expect(screen.getByText(/provenance policy capacity/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /explore how evidence becomes/i })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /research landscape explorer/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /PUB-AUSGRID-001P/i })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /research atlas views/i })).toBeInTheDocument();
   });
 
-  it('switches into Full Analysis through the global view callback', () => {
+  it('uses landscape selection to activate real case, assurance, and policy state before descending into the workbench', () => {
+    useCaseWorkbench.mockReturnValue(workbenchValue());
+    render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Taoyuan controlled energy case/i }));
+    expect(selectCase).toHaveBeenCalledWith('TYN-001');
+    expect(screen.getByText(/126 maximum/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /L2 counterfactual/i }));
+    expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
+
+    fireEvent.click(screen.getByRole('button', { name: /ENERGY-CASE-PILOT-005/i }));
+    expect(selectPolicy).toHaveBeenCalledWith('ENERGY-CASE-PILOT-005');
+
+    fireEvent.click(screen.getByRole('button', { name: /^Workbench$/i }));
+    expect(screen.getByRole('heading', { name: /evidence-constrained policy analysis/i })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: /research documents/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/research object inspector/i)).toBeInTheDocument();
+  });
+
+  it('lets a visitor traverse findings, evidence landscape, and research development from the same explorer', () => {
+    useCaseWorkbench.mockReturnValue(workbenchValue());
+    render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Findings$/i }));
+    expect(screen.getAllByText(/policy can change financial authority without changing the evidence identity/i).length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Evidence$/i }));
+    expect(screen.getAllByText(/Ausgrid public checkpoint/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Owner\/operator evidence/i).length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Timeline$/i }));
+    expect(screen.getByText(/Norway institutional dossier/i)).toBeInTheDocument();
+    expect(screen.getByText(/Ausgrid public-data checkpoint/i)).toBeInTheDocument();
+  });
+
+  it('keeps live parameters and method inspection in the deeper workbench', () => {
+    useCaseWorkbench.mockReturnValue(workbenchValue());
+    render(<LabOverview viewMode="overview" onViewModeChange={vi.fn()} onNavigate={vi.fn()} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Workbench$/i }));
+    fireEvent.change(screen.getByLabelText(/proof \/ assurance/i), { target: { value: 'PROVENANCE-L2-COUNTERFACTUAL' } });
+    expect(selectScenario).toHaveBeenCalledWith('PROVENANCE-L2-COUNTERFACTUAL');
+
+    fireEvent.click(screen.getByRole('button', { name: /^Methods$/i }));
+    expect(screen.getByRole('heading', { name: /pilot policy/i })).toBeInTheDocument();
+    expect(screen.getByText('MIN_PROVENANCE')).toBeInTheDocument();
+  });
+
+  it('switches into Full Analysis through the deeper workbench action', () => {
     useCaseWorkbench.mockReturnValue(workbenchValue());
     const onViewModeChange = vi.fn();
     render(<LabOverview viewMode="overview" onViewModeChange={onViewModeChange} onNavigate={vi.fn()} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /open full analysis/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^Workbench$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^Full analysis$/i }));
     expect(onViewModeChange).toHaveBeenCalledWith('full');
   });
 
