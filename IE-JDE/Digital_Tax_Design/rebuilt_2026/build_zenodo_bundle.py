@@ -82,7 +82,6 @@ def verify_external(path: Path, expected: dict[str, object]) -> dict[str, object
             f"size mismatch for {path.name}: expected {expected['bytes']}, got {actual_bytes}"
         )
     return {
-        "source_path": str(path.resolve()),
         "archive_name": expected["name"],
         "sha256": actual_hash,
         "bytes": actual_bytes,
