@@ -6,20 +6,49 @@ on:
     branches:
       - main
     paths:
+      - CURRENT_SURFACE.json
+      - package.json
       - benchmark/gauntlet/policy-lab-specialized.v1.json
       - benchmark/gauntlet/policy-assumptions.v1.json
       - benchmark/gauntlet/policy-lab-c3-c4-map.v1.json
       - benchmark/gauntlet/policy-lab-external-validation-protocol.v1.json
-      - scripts/run_policy_lab_specialized_gauntlet.mjs
-      - scripts/check_policy_lab_external_gauntlet_protocols.mjs
-      - scripts/build_policy_lab_release_provenance.mjs
       - docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md
       - docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md
-      - packages/constraint-core/src/**
+      - docs/submission/POLICY_LAB_GAUNTLET_MASTER.md
+      - docs/submission/POLICY_LAB_JUDGE_DEMO_AND_QA.md
+      - docs/submission/POLICY_LAB_ROUTE_ADAPTERS.md
+      - docs/submission/POLICY_LAB_SUBMISSION_READINESS.md
+      - frontend/package.json
+      - frontend/package-lock.json
+      - frontend/vite.config.js
+      - frontend/public/**
+      - frontend/src/**
+      - packages/constraint-core/**
       - protocol/cases/energy-v1/**
       - protocol/policies-v2/**
       - protocol/schema/**
-      - frontend/src/data/publicEvidenceCheckpoint.js
+      - scripts/build_claim_assessment_package.mjs
+      - scripts/verify_claim_assessment_package.mjs
+      - scripts/build_constrained_claim_assessment.mjs
+      - scripts/verify_constrained_claim_assessment.mjs
+      - scripts/external_case_001p_ausgrid.mjs
+      - scripts/run_policy_lab_specialized_gauntlet.mjs
+      - scripts/check_policy_lab_external_gauntlet_protocols.mjs
+      - scripts/build_policy_lab_release_provenance.mjs
+      - scripts/check_current_surface.mjs
+      - scripts/policy_lab_preflight.mjs
+      - scripts/check_frontend_bundle.mjs
+      - scripts/smoke_live_policy_lab.mjs
+      - scripts/capture_case_workbench_v2.mjs
+      - scripts/capture_constraint_protocol_alpha.mjs
+      - scripts/capture_policy_lab_submission_assets.mjs
+      - .github/workflows/current-surface.yml
+      - .github/workflows/case_workbench_v2.yml
+      - .github/workflows/constraint_protocol_alpha.yml
+      - .github/workflows/external-case-001p-ausgrid.yml
+      - .github/workflows/policy-lab-live-smoke.yml
+      - .github/workflows/policy-lab-specialized-gauntlet.yml
+      - .github/workflows/policy-lab-submission-assets.yml
       - .github/workflows/policy-lab-release-attestation.yml
 
 permissions:
@@ -50,7 +79,7 @@ jobs:
           node scripts/check_policy_lab_external_gauntlet_protocols.mjs \
             > "$RUNNER_TEMP/policy-lab-release-proof/external-gate-protocol-check.json"
 
-      - name: Build source-closure provenance
+      - name: Build release source-closure provenance
         env:
           POLICY_LAB_SOURCE_REVISION: ${{ github.sha }}
         run: |
@@ -96,5 +125,5 @@ jobs:
             echo
             echo "Attestation: ${{ steps.attest.outputs.attestation-url }}"
             echo
-            echo 'This attestation proves build provenance for the packaged Policy Lab release proof. It does not certify physical evidence truth, legal authority, production security, external validation, or adoption.'
+            echo 'The attested package includes the declared engine, protocol, full research-interface source/public closure, and release-certifier closure. The attestation proves build provenance for those packaged bytes. It does not certify physical evidence truth, legal authority, production security, external validation, or adoption.'
           } >> "$GITHUB_STEP_SUMMARY"
