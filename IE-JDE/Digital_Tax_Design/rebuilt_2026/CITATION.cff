@@ -4,7 +4,7 @@ title: "Fiscal Choke Points: Transaction-Node Architecture and Operational Fisca
 authors:
   - family-names: Ongko
     given-names: Christopher
-affiliation: "Yuan Ze University"
+    affiliation: "Yuan Ze University"
 version: "DT-FCP-2026-001"
 repository-code: "https://github.com/Spectating101/solarpunk-coin"
 url: "https://github.com/Spectating101/solarpunk-coin/tree/digital-tax/rebuild-2026/IE-JDE/Digital_Tax_Design/rebuilt_2026"
