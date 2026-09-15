@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this research package, please cite it using the metadata in this file."
+title: "Fiscal Choke Points: Transaction-Node Architecture and Operational Fiscal Capacity in Southeast Asian Digital Tax Administration"
+authors:
+  - family-names: Ongko
+    given-names: Christopher
+affiliation: "Yuan Ze University"
+version: "DT-FCP-2026-001"
+repository-code: "https://github.com/Spectating101/solarpunk-coin"
+url: "https://github.com/Spectating101/solarpunk-coin/tree/digital-tax/rebuild-2026/IE-JDE/Digital_Tax_Design/rebuilt_2026"
+abstract: >-
+  A source-controlled comparative research package examining how five Southeast
+  Asian jurisdictions assign bounded fiscal functions to nodes inside seven
+  digital-tax transaction paths. The package separates taxable object, liable
+  node, destination or nexus evidence, transaction rail, and reconciliation
+  power; distinguishes node locus from event coupling; and preserves explicit
+  boundaries between legal architecture and operational performance. The work
+  is comparative and institutional rather than causal.
+keywords:
+  - digital taxation
+  - tax administration
+  - VAT
+  - GST
+  - e-commerce
+  - regulatory intermediaries
+  - transaction paths
+  - Southeast Asia
