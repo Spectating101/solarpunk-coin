@@ -143,11 +143,14 @@ async function assertBrowserSurface() {
   const pilotButton = policyLine.getByRole('button', { name: /Pilot ENERGY-CASE-PILOT-005/i });
   await pilotButton.click();
 
-  const l0Button = assuranceLine.getByRole('button', { name: /L0/i }).first();
+  // The assurance buttons expose descriptive scenario names as their accessible names,
+  // while the compact L0/L2 labels remain visible text. Scope to the ASSURANCE rail
+  // and match that visible level label so the certifier follows the actual UI contract.
+  const l0Button = assuranceLine.locator('button').filter({ hasText: /^L0\b/ }).first();
   await l0Button.click();
   await page.locator('.rb-result-line').getByText('BLOCKED', { exact: true }).waitFor({ timeout: 10_000 });
 
-  const l2Button = assuranceLine.getByRole('button', { name: /L2/i }).first();
+  const l2Button = assuranceLine.locator('button').filter({ hasText: /^L2\b/ }).first();
   await l2Button.click();
   await page.locator('.rb-result-line').getByText('ADMIT WITH LIMIT', { exact: true }).waitFor({ timeout: 10_000 });
   await page.getByText('126 maximum', { exact: true }).waitFor({ timeout: 10_000 });
