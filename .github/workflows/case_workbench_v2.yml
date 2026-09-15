@@ -51,6 +51,12 @@ jobs:
         run: npm install
         working-directory: frontend
 
+      - name: Audit shipped frontend dependencies
+        run: |
+          set -o pipefail
+          npm audit --omit=dev --audit-level=high 2>&1 | tee ../_ci_logs/frontend-production-audit.log
+        working-directory: frontend
+
       - name: Test frontend workbench
         run: |
           set -o pipefail
