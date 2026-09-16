@@ -1,4 +1,5 @@
-import { chromium } from 'playwright';
+const playwrightImport = process.env.PLAYWRIGHT_IMPORT || 'playwright';
+const { chromium } = await import(playwrightImport);
 
 const target = process.env.POLICY_LAB_URL || 'https://spectating101.github.io/solarpunk-coin/demo/';
 const expectedTitle = /Policy Lab/i;
@@ -34,9 +35,9 @@ try {
   await page.getByRole('heading', { name: 'Live claim journey' }).waitFor({ timeout: 20_000 });
   await page.getByRole('heading', { name: 'Current explanation' }).waitFor({ timeout: 20_000 });
 
-  const caseSelect = page.getByLabel('Case');
-  const assuranceSelect = page.getByLabel('Proof / assurance');
-  const policySelect = page.getByLabel('Policy');
+  const caseSelect = page.locator('label').filter({ hasText: /^Case/ }).locator('select');
+  const assuranceSelect = page.locator('label').filter({ hasText: /^(Proof \/ assurance|Assurance)/ }).locator('select');
+  const policySelect = page.locator('label').filter({ hasText: /^Policy/ }).locator('select');
 
   for (const [name, select] of [
     ['case', caseSelect],
