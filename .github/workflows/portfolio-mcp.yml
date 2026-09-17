@@ -1,0 +1,47 @@
+name: Portfolio MCP capsule verification
+on:
+  pull_request:
+    paths: ['integrations/mcp/**', '.github/workflows/portfolio-mcp.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  capsule:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Spectating101/cite-refinery
+          ref: c9559e4e217f9f266aa451008cda32c96eee544e
+          path: .mcp-runner
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -e .mcp-runner/integrations/portfolio-mcp
+      - run: node --test packages/constraint-core/test/capsule-verify.test.mjs
+      - run: portfolio-mcp probe --manifest integrations/mcp/manifest.json --root .
+      - name: MCP preserves native invalid-capsule result
+        run: |
+          python - <<'PY'
+          import asyncio, json, os, subprocess, sys
+          from portfolio_mcp.client import StdioConnection, invoke
+          connection = StdioConnection(sys.executable, ('-m','portfolio_mcp.cli','serve','--manifest','integrations/mcp/manifest.json','--root','.'), dict(os.environ))
+          script = "import {verifyResearchCapsuleBundle} from './packages/constraint-core/src/workbench.js'; console.log(JSON.stringify(await verifyResearchCapsuleBundle({})));"
+          expected = json.loads(subprocess.check_output(['node','--input-type=module','-e',script], timeout=30))
+          async def exercise():
+              async with asyncio.timeout(45):
+                  response = await invoke(connection, 'policy_lab_verify_capsule', {'capsule':{}})
+                  assert not response['is_error'], response
+                  actual = response['structured_content']['result']
+                  assert actual == expected and actual['ok'] is False
+          asyncio.run(exercise())
+          print('PASS: MCP preserves canonical invalid-capsule outcome; no truth certification')
+          PY
