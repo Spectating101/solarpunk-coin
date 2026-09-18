@@ -1,0 +1,117 @@
+{
+  "schema": "policy_lab.claim_boundary.v1",
+  "as_of": "2026-09-18",
+  "authority": {
+    "repository": "https://github.com/Spectating101/solarpunk-coin",
+    "visibility": "PUBLIC",
+    "public_default_ref": "origin/main",
+    "commit": "55fd6f2cf2eed25b589e91b5e3161e6ced68f5de",
+    "commit_subject": "Publish Policy Lab research surface [skip ci]",
+    "commit_date": "2026-08-26T09:55:23Z",
+    "live_demo_url": "https://spectating101.github.io/solarpunk-coin/demo/",
+    "live_demo_http_status": 200,
+    "live_demo_index_sha256": "02f40d3c330b0c5f008b58d786584386a934efcb69da0b52a9f9be91fe9da349",
+    "live_demo_last_modified": "2026-08-26T09:55:45Z",
+    "public_lab_tag_match": null,
+    "public_lab_tag_match_reason": "Neither public-lab-v1.0 nor public-lab-v1.0-maintenance peels to origin/main. Claims are bound to the public GitHub default, not to those tags.",
+    "tags_compared": [
+      {
+        "ref": "refs/tags/public-lab-v1.0",
+        "tag_object": "6d7c3c16945d18beda9b43305db11ffb99a0bafb",
+        "peeled_commit": "e2b9d9d31c35e32ac684e3e36fe6d3f0ea998d30",
+        "commit_date": "2026-07-02T13:29:31Z",
+        "matches_origin_main": false
+      },
+      {
+        "ref": "refs/tags/public-lab-v1.0-maintenance",
+        "tag_object": "d3d1e6f146332e8a46b33eea556b821b781812b4",
+        "peeled_commit": "9de148737bf9d6138c0a03d1d22bdd88b655c2a5",
+        "commit_date": "2026-07-10T18:40:52Z",
+        "matches_origin_main": false
+      },
+      {
+        "ref": "refs/tags/v0.2.0-field-ready-alpha",
+        "tag_object": "336927fa3dfbac79d7f07156a3d978c802e54f93",
+        "peeled_commit": "c32a4840eac19b9b5775cc7c08b9cab8dc4827bb",
+        "commit_date": "2026-07-20T07:55:24Z",
+        "matches_origin_main": false
+      }
+    ]
+  },
+  "supported": [
+    {
+      "claim": "The public GitHub default for Spectating101/solarpunk-coin is origin/main at 55fd6f2cf2eed25b589e91b5e3161e6ced68f5de, published 2026-08-26 as the Policy Lab research surface.",
+      "evidence": "git ls-remote / git log origin/main; commit subject 'Publish Policy Lab research surface [skip ci]'."
+    },
+    {
+      "claim": "The live demo URL returns HTTP 200 and serves the same docs/demo/index.html bytes as origin/main.",
+      "evidence": "GET https://spectating101.github.io/solarpunk-coin/demo/ -> 200; Last-Modified 2026-08-26T09:55:45Z; index SHA-256 02f40d3c330b0c5f008b58d786584386a934efcb69da0b52a9f9be91fe9da349 matches docs/demo/index.html on 55fd6f2."
+    },
+    {
+      "claim": "The current project identity is Policy Lab, a case-based constraint research workbench. Historical SolarPunk / SPK / Sepolia material is reference-only.",
+      "evidence": "CURRENT_SURFACE.json identity.primary_name; README.md; AGENTS.md."
+    },
+    {
+      "claim": "The browser workbench exposes four controlled mechanism cases (TYN-001, AUS-001, PHX-001, OPS-001) that declare empirical_claim: false.",
+      "evidence": "protocol/cases/energy-v1/case-pack.json and CURRENT_SURFACE.json interactive_pack."
+    },
+    {
+      "claim": "PUB-AUSGRID-001P is a separate outside-public-data checkpoint at actual L0 assurance: 336 half-hour intervals, 33.066 kWh eligible surplus.",
+      "evidence": "frontend/src/data/publicEvidenceCheckpoint.js; GitHub Actions run 31899863661."
+    },
+    {
+      "claim": "The same outside-data object yields different deterministic consequences under different declared policies: LAB-CASE-OPEN-004 -> ADMIT_WITH_LIMIT at 33.066 kWh; ENERGY-CASE-PILOT-005 -> BLOCKED by SIGNED_EVIDENCE and MIN_PROVENANCE.",
+      "evidence": "publicEvidenceCheckpoint.js decisions.open / decisions.pilot."
+    },
+    {
+      "claim": "A 40% declared settlement-capacity stress on the admitted open-policy quantity is PARTIAL: 13.2264 kWh covered / 19.8396 kWh shortfall. This is scenario accounting, not legal settlement.",
+      "evidence": "publicEvidenceCheckpoint.js settlement; README.md outside-data checkpoint."
+    },
+    {
+      "claim": "Closed-world decision reproduction, capsule integrity, and schema validation are recorded as PASS for that checkpoint, with R1 NOT_ASSESSED, R2 PARTIAL, R3 PARTIAL, R4 UNTESTED.",
+      "evidence": "publicEvidenceCheckpoint.js verification and boundaries; constrained-claim-assessment tests."
+    },
+    {
+      "claim": "A portable policylab.claim_assessment_package.v0.1 rendering can be built and independently verified from the closed case artifacts. Packaging does not create new evidence authority.",
+      "evidence": "CURRENT_SURFACE.json portable_assessment_package; scripts/build_claim_assessment_package.mjs and verify_claim_assessment_package.mjs."
+    },
+    {
+      "claim": "Scheduled Policy Lab Live Smoke on origin/main currently fails before the live page is tested, because the workflow asks setup-node to cache npm and then runs npm ci, while root package-lock.json is gitignored. The demo 200 is independent of that failure.",
+      "evidence": "GitHub Actions run 35312626720 failed at Setup Node; .gitignore ignores package-lock.json and keeps frontend/package-lock.json; live demo HTTP 200 as above."
+    }
+  ],
+  "unsupported_or_prohibited": [
+    "Policy Lab has been recognized as a Digital Public Good / DPG.",
+    "Policy Lab has legal issuance authority, legal-money status, or any other legal authority.",
+    "Policy Lab has settlement authority, enforceable delivery, or enforceable redemption.",
+    "An operator has adopted Policy Lab, or a named owner/operator field case exists.",
+    "The research policies are calibrated, institutionally endorsed, legally correct, or claimed optimal.",
+    "origin/main equals public-lab-v1.0 or public-lab-v1.0-maintenance.",
+    "The public case is owner/operator-validated, physically metered, L1/L2 authenticated, or a pilot.",
+    "R4 monetary performance, currency, stablecoin, token-launch, or production financial-infrastructure status.",
+    "Independent external validation, commercial demand, or product-market fit."
+  ],
+  "promotion_requirements": {
+    "DPG_RECOGNITION": [
+      "unaltered public revision nominated in a DPGA application",
+      "external DPGA review receipt / registry listing"
+    ],
+    "LEGAL_AUTHORITY": [
+      "named legal instrument or regulator determination",
+      "scope limited to the exact attested authority"
+    ],
+    "SETTLEMENT_AUTHORITY": [
+      "enforceable delivery or redemption evidence",
+      "named counterparty and settlement rails"
+    ],
+    "OPERATOR_ADOPTION": [
+      "named source-holder/operator identity",
+      "attributable custody evidence at the claimed assurance level",
+      "durable operator agreement or production use receipt"
+    ],
+    "CALIBRATED_POLICY_ENDORSEMENT": [
+      "empirical calibration record or institutional endorsement",
+      "policy identity bound to that external source rather than researcher-declared sensitivity configs"
+    ]
+  }
+}
