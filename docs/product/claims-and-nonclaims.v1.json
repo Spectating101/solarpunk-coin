@@ -52,8 +52,12 @@
       "evidence": "CURRENT_SURFACE.json identity.primary_name; README.md; AGENTS.md."
     },
     {
-      "claim": "The browser workbench exposes four controlled mechanism cases (TYN-001, AUS-001, PHX-001, OPS-001) that declare empirical_claim: false.",
-      "evidence": "protocol/cases/energy-v1/case-pack.json and CURRENT_SURFACE.json interactive_pack."
+      "claim": "The controlled interactive case pack includes five mechanism cases (TYN-001, AUS-001, PHX-001, OPS-001, CPT-001) that declare empirical_claim: false. CPT-001 is a Cape Town laboratory case with a controlled TMY-shaped resource context. PUB-AUSGRID-001P remains outside the interactive pack.",
+      "evidence": "protocol/cases/energy-v1/case-pack.json case_ids; CURRENT_SURFACE.json interactive_pack; packages/constraint-core/test/cpt-001-generalization.test.mjs."
+    },
+    {
+      "claim": "CPT-001 negative-control variants fail closed: retained-hash evidence tampering is rejected as an evidence hash mismatch; zero-surplus evidence is BLOCKED at POSITIVE_SURPLUS and does not silently admit.",
+      "evidence": "protocol/cases/energy-v1/negative-controls/; packages/constraint-core/test/cpt-001-generalization.test.mjs."
     },
     {
       "claim": "PUB-AUSGRID-001P is a separate outside-public-data checkpoint at actual L0 assurance: 336 half-hour intervals, 33.066 kWh eligible surplus.",

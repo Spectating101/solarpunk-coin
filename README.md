@@ -55,12 +55,13 @@ The implementation stages are deliberately separate from the research boundaries
 
 ### Controlled interactive case pack
 
-The browser workbench currently exposes four controlled mechanism cases:
+The browser workbench currently exposes five controlled mechanism cases:
 
 - `TYN-001`
 - `AUS-001`
 - `PHX-001`
 - `OPS-001`
+- `CPT-001`
 
 The pack declares `empirical_claim: false`. These cases test decision structure, policy divergence, assurance counterfactuals, quantity ceilings, settlement behavior, receipts, and reproduction. They are not independent empirical validation.
 

@@ -60,7 +60,19 @@ async function main() {
 
   const casePack = JSON.parse(await readFile(path.join(ROOT, 'protocol/cases/energy-v1/case-pack.json'), 'utf8'));
   checks.push(check('controlled_pack_non_empirical', casePack.empirical_claim === false, `empirical_claim=${casePack.empirical_claim}`));
-  checks.push(check('controlled_pack_size', casePack.case_ids?.length === 4, `cases=${casePack.case_ids?.length ?? 0}`));
+  const packIds = casePack.case_ids || [];
+  checks.push(check('controlled_pack_size', packIds.length === 5, `cases=${packIds.length}`));
+  checks.push(check('controlled_pack_includes_cpt', packIds.includes('CPT-001'), 'CPT-001'));
+  checks.push(check(
+    'controlled_pack_excludes_outside_checkpoint',
+    !packIds.includes('PUB-AUSGRID-001P'),
+    'PUB-AUSGRID-001P excluded',
+  ));
+  checks.push(check(
+    'controlled_pack_excludes_negative_controls',
+    !packIds.some((id) => String(id).includes('NEG')),
+    'negative-control case IDs excluded',
+  ));
 
   const checkpointText = await readFile(path.join(ROOT, 'frontend/src/data/publicEvidenceCheckpoint.js'), 'utf8');
   checks.push(check('outside_checkpoint_present', checkpointText.includes("case_id: 'PUB-AUSGRID-001P'"), 'PUB-AUSGRID-001P'));

@@ -36,7 +36,7 @@
   },
   "interactive_pack": {
     "case_pack_id": "energy-reference-cases-v1",
-    "case_ids": ["TYN-001", "AUS-001", "PHX-001", "OPS-001"],
+    "case_ids": ["TYN-001", "AUS-001", "PHX-001", "OPS-001", "CPT-001"],
     "policy_ids": ["LAB-CASE-OPEN-004", "ENERGY-CASE-PILOT-005", "ENERGY-CASE-STRICT-006"],
     "classification": "controlled mechanism / decision-structure cases"
   },

@@ -11,6 +11,7 @@ It is a **controlled mechanism and decision-structure demonstration**. It is not
 | `TYN-001` | Taoyuan | 180 kWh eligible surplus | PVWatts / NSRDB PSM V3 Himawari TMY baseline |
 | `AUS-001` | Austin | 500 kWh eligible surplus | PVWatts / NSRDB PSM V3 GOES TMY baseline |
 | `PHX-001` | Phoenix | 320 kWh eligible surplus | PVWatts / NSRDB PSM V3 GOES TMY baseline |
+| `CPT-001` | Cape Town | 240 kWh eligible surplus | Controlled TMY-shaped modeled fixture; not an NREL/PVWatts refresh |
 
 The resource values reuse the committed three-site baseline documented in [`docs/product/NREL_SOLAR_TRAINING_LAB.md`](../../../docs/product/NREL_SOLAR_TRAINING_LAB.md). That upstream artifact records three sites and 1,095 daily modeled rows. No PVWatts API refresh is required to evaluate this case pack.
 
@@ -81,7 +82,10 @@ Under the current V2 policy/calculator definitions:
 - `TYN-001` at the L2 assurance counterfactual under `ENERGY-CASE-PILOT-005` is expected to be **provenance-policy-capacity bound**;
 - `AUS-001` at L2 under the same policy is expected to be **modeled-resource-context bound**;
 - `PHX-001` under `LAB-CASE-OPEN-004` is expected to be **evidence-backed-capacity bound**;
+- `CPT-001` under `LAB-CASE-OPEN-004` is expected to be **evidence-backed-capacity bound** at 240 kWh;
 - the L0 base scenario under the pilot policy is expected to be blocked at `MIN_PROVENANCE` before quantity evaluation.
+
+`CPT-001` negative-control fixtures live in `negative-controls/` and are not interactive-pack members. A retained-hash tamper must fail closed; zero-surplus evidence must remain `BLOCKED` at `POSITIVE_SURPLUS`.
 
 These are conformance expectations for the research engine, not empirical performance claims.
 

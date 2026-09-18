@@ -9,7 +9,7 @@ import {
   evaluateCaseDecision,
   hashContextManifest,
   verifyEvidenceEnvelopeHash,
-} from '../src/index.js';
+} from '../src/workbench.js';
 
 const PACK_ROOT = new URL('../../../protocol/cases/energy-v1/', import.meta.url);
 const SCHEMA_ROOT = new URL('../../../protocol/schema/', import.meta.url);
@@ -66,9 +66,11 @@ test('energy case pack is explicitly a controlled non-empirical mechanism demons
   assert.equal(loaded.pack.case_pack_id, 'energy-reference-cases-v1');
   assert.equal(loaded.pack.domain, 'energy_linked_finance');
   assert.equal(loaded.pack.empirical_claim, false);
-  assert.deepEqual(new Set(loaded.pack.case_ids), new Set(['TYN-001', 'AUS-001', 'PHX-001', 'OPS-001']));
+  assert.deepEqual(new Set(loaded.pack.case_ids), new Set(['TYN-001', 'AUS-001', 'PHX-001', 'OPS-001', 'CPT-001']));
+  assert.equal(loaded.pack.case_ids.includes('PUB-AUSGRID-001P'), false);
   assert.match(loaded.pack.boundary, /not realized operator outcomes/i);
   assert.match(loaded.pack.boundary, /OPS-001/i);
+  assert.match(loaded.pack.boundary, /CPT-001/i);
 });
 
 test('committed case, context, evidence, and assurance scenario objects match published schema contracts', async () => {

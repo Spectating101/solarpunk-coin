@@ -29,7 +29,8 @@ No public-lab tag currently points at `55fd6f2`. Claims stay on the public defau
 |---|---|
 | Public default is Policy Lab at `55fd6f2` | GitHub default branch; `CURRENT_SURFACE.json` |
 | Live research surface is up | HTTP 200 at `/solarpunk-coin/demo/`; index bytes match `docs/demo/index.html` |
-| Four controlled cases, not empirical validation | `TYN-001`, `AUS-001`, `PHX-001`, `OPS-001`; pack `empirical_claim: false` |
+| Five controlled cases, not empirical validation | `TYN-001`, `AUS-001`, `PHX-001`, `OPS-001`, `CPT-001`; pack `empirical_claim: false`; `PUB-AUSGRID-001P` remains outside the interactive pack |
+| `CPT-001` negative controls fail closed | Tampered retained-hash evidence is rejected (`evidence hash mismatch`); zero-surplus evidence is `BLOCKED` at `POSITIVE_SURPLUS` and does not admit |
 | One outside-data checkpoint at actual L0 | `PUB-AUSGRID-001P`: 336 intervals, 33.066 kWh eligible surplus |
 | Same evidence, different policy, different consequence | open `LAB-CASE-OPEN-004` → `ADMIT_WITH_LIMIT` 33.066 kWh; pilot `ENERGY-CASE-PILOT-005` → `BLOCKED` (`SIGNED_EVIDENCE`, `MIN_PROVENANCE`) |
 | Settlement stress is separate scenario accounting | 40% capacity → `PARTIAL` 13.2264 covered / 19.8396 shortfall |

@@ -1,0 +1,29 @@
+{
+  "schema": "solarpunk.constraint.context_manifest.v1",
+  "context_id": "resource:cpt-001:controlled-tmy-v1",
+  "context_type": "resource_model",
+  "label": "CPT-001 controlled TMY-shaped resource baseline",
+  "source": {
+    "provider": "controlled_modeled_fixture",
+    "dataset": "CPT-001 laboratory TMY-shaped resource context v1",
+    "source_kind": "typical_meteorological_year",
+    "source_document": "protocol/cases/energy-v1/contexts/cpt-resource-context.json"
+  },
+  "spatial_identity": {
+    "latitude": -33.9249,
+    "longitude": 18.4241,
+    "spatial_reference": "WGS84"
+  },
+  "temporal_semantics": {
+    "kind": "TMY",
+    "observed_case_window": false,
+    "model_window_basis": "controlled-tmy-fixture"
+  },
+  "values": {
+    "annual_ac_kwh": 15200,
+    "system_capacity_kw": 10
+  },
+  "hash_algorithm": "SHA-256",
+  "boundary": "Controlled modeled TMY-shaped resource context for CPT-001; not an NREL/PVWatts refresh, not observed generation evidence, and not claim authority.",
+  "context_hash": "74830f7f78bc5b2ac7716ef5521885150ecfa66e4ceef4730e3e26185e58c75c"
+}

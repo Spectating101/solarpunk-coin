@@ -1,0 +1,142 @@
+{
+  "schema": "solarpunk.constraint.evidence_envelope.v1",
+  "adapter": {
+    "id": "controlled-case-fixture",
+    "version": "1.0.0"
+  },
+  "source": {
+    "kind": "signed_sample_fixture",
+    "case_id": "CPT-001",
+    "sample_fixture": true,
+    "negative_control": "insufficient_evidence",
+    "signature_semantics": "declared_fixture_capability_not_trusted_operator_verification"
+  },
+  "intervals": [
+    {
+      "meter_id": "fixture-cape_town_10kw",
+      "site_id": "cape_town_10kw",
+      "window_start": "2026-11-01T00:00:00Z",
+      "window_end": "2026-11-02T00:00:00Z",
+      "generation_kwh": 10,
+      "site_load_kwh": 10,
+      "export_kwh": 0,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 0,
+      "surplus_basis": "fixture_export_kwh",
+      "quality_score": 1,
+      "source": "controlled_signed_sample_fixture"
+    },
+    {
+      "meter_id": "fixture-cape_town_10kw",
+      "site_id": "cape_town_10kw",
+      "window_start": "2026-11-02T00:00:00Z",
+      "window_end": "2026-11-03T00:00:00Z",
+      "generation_kwh": 10,
+      "site_load_kwh": 10,
+      "export_kwh": 0,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 0,
+      "surplus_basis": "fixture_export_kwh",
+      "quality_score": 1,
+      "source": "controlled_signed_sample_fixture"
+    },
+    {
+      "meter_id": "fixture-cape_town_10kw",
+      "site_id": "cape_town_10kw",
+      "window_start": "2026-11-03T00:00:00Z",
+      "window_end": "2026-11-04T00:00:00Z",
+      "generation_kwh": 10,
+      "site_load_kwh": 10,
+      "export_kwh": 0,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 0,
+      "surplus_basis": "fixture_export_kwh",
+      "quality_score": 1,
+      "source": "controlled_signed_sample_fixture"
+    },
+    {
+      "meter_id": "fixture-cape_town_10kw",
+      "site_id": "cape_town_10kw",
+      "window_start": "2026-11-04T00:00:00Z",
+      "window_end": "2026-11-05T00:00:00Z",
+      "generation_kwh": 10,
+      "site_load_kwh": 10,
+      "export_kwh": 0,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 0,
+      "surplus_basis": "fixture_export_kwh",
+      "quality_score": 1,
+      "source": "controlled_signed_sample_fixture"
+    },
+    {
+      "meter_id": "fixture-cape_town_10kw",
+      "site_id": "cape_town_10kw",
+      "window_start": "2026-11-05T00:00:00Z",
+      "window_end": "2026-11-06T00:00:00Z",
+      "generation_kwh": 10,
+      "site_load_kwh": 10,
+      "export_kwh": 0,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 0,
+      "surplus_basis": "fixture_export_kwh",
+      "quality_score": 1,
+      "source": "controlled_signed_sample_fixture"
+    },
+    {
+      "meter_id": "fixture-cape_town_10kw",
+      "site_id": "cape_town_10kw",
+      "window_start": "2026-11-06T00:00:00Z",
+      "window_end": "2026-11-07T00:00:00Z",
+      "generation_kwh": 10,
+      "site_load_kwh": 10,
+      "export_kwh": 0,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 0,
+      "surplus_basis": "fixture_export_kwh",
+      "quality_score": 1,
+      "source": "controlled_signed_sample_fixture"
+    },
+    {
+      "meter_id": "fixture-cape_town_10kw",
+      "site_id": "cape_town_10kw",
+      "window_start": "2026-11-07T00:00:00Z",
+      "window_end": "2026-11-08T00:00:00Z",
+      "generation_kwh": 10,
+      "site_load_kwh": 10,
+      "export_kwh": 0,
+      "curtailed_kwh": 0,
+      "eligible_surplus_kwh": 0,
+      "surplus_basis": "fixture_export_kwh",
+      "quality_score": 1,
+      "source": "controlled_signed_sample_fixture"
+    }
+  ],
+  "summary": {
+    "interval_count": 7,
+    "total_eligible_surplus_kwh": 0,
+    "blocker_count": 0,
+    "warning_count": 1,
+    "rejected_input_records": 0
+  },
+  "capabilities": {
+    "identity": true,
+    "signed": true,
+    "cryptographically_verified": false,
+    "signature_verification": false,
+    "external_corroboration": false,
+    "browser_local": true
+  },
+  "diagnostics": [
+    {
+      "code": "insufficient_eligible_surplus",
+      "status": "WARNING",
+      "detail": "Negative-control fixture with zero eligible surplus. Admission must fail closed under POSITIVE_SURPLUS; this is not a silent-admit path."
+    }
+  ],
+  "meta": {
+    "source_label": "CPT-001 insufficient-evidence negative control",
+    "browser_local": true
+  },
+  "evidence_hash": "8babab4606ac0ae2150eb0ff7b175f573b42916887c273580a929b66f8451c7a",
+  "hash_algorithm": "SHA-256"
+}

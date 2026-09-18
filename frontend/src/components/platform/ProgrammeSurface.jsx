@@ -63,7 +63,7 @@ const VALIDATION_ROWS = [
   ['DecisionResult', 'YES', 'YES', 'YES', 'internal', 'core tests / schemas'],
   ['Quantity ceilings', 'YES', 'YES', 'YES', 'controlled cases', 'case receipts'],
   ['Settlement replay', 'YES', 'YES', 'YES', 'modeled stress', 'stress artifacts'],
-  ['Comparison workspace', 'YES', 'YES', 'YES', 'controlled', '12-decision matrix'],
+  ['Comparison workspace', 'YES', 'YES', 'YES', 'controlled', '15-decision matrix'],
   ['Market-capacity study', 'YES', 'YES', 'YES', 'licensed-source boundary', 'aggregate study files'],
   ['Norway mapping', 'YES', 'REVIEWED', 'SOURCE-LINKED', 'institutional grounding', 'dossier / registers'],
   ['Operator-format pipeline', 'YES', 'YES', 'YES', 'synthetic Gate 1A', 'OPS-001 capsule'],
@@ -73,7 +73,7 @@ const VALIDATION_ROWS = [
 const OUTPUT_ROWS = [
   ['Public workbench', 'field-ready alpha', 'run · inspect · review'],
   ['Constraint core', 'versioned package', 'install · test · inspect schemas'],
-  ['Controlled case pack', '4 cases / 3 policies', 'execute · compare · export'],
+  ['Controlled case pack', '5 cases / 3 policies', 'execute · compare · export'],
   ['Market-capacity study', 'aggregate package', 'inspect · reproduce'],
   ['Norway evidence dossier', 'source-linked package', 'inspect sources · claim map'],
   ['Decision receipts', 'deterministic identities', 'JSON · memo · capsule'],
