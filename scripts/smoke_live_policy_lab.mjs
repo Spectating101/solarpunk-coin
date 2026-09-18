@@ -34,9 +34,12 @@ try {
   await page.getByRole('heading', { name: 'Live claim journey' }).waitFor({ timeout: 20_000 });
   await page.getByRole('heading', { name: 'Current explanation' }).waitFor({ timeout: 20_000 });
 
-  const caseSelect = page.getByLabel('Case', { exact: true });
-  const assuranceSelect = page.getByLabel('Proof / assurance', { exact: true });
-  const policySelect = page.getByLabel('Policy', { exact: true });
+  // Native wrapping labels include option text, so a Case field label is
+  // either ambiguous (substring match hits Open Case Demonstration) or empty
+  // (exact match). The combobox accessible name is the visible field title.
+  const caseSelect = page.getByRole('combobox', { name: 'Case', exact: true });
+  const assuranceSelect = page.getByRole('combobox', { name: 'Proof / assurance', exact: true });
+  const policySelect = page.getByRole('combobox', { name: 'Policy', exact: true });
 
   for (const [name, select] of [
     ['case', caseSelect],

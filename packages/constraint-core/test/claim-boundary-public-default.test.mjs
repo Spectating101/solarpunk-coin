@@ -100,3 +100,11 @@ test('live smoke workflow can install without a root package-lock.json', async (
   assert.match(workflow, /--no-package-lock/);
   assert.match(workflow, /POLICY_LAB_URL: https:\/\/spectating101\.github\.io\/solarpunk-coin\/demo\//);
 });
+
+test('live smoke locates wrapping selects by combobox accessible name', async () => {
+  const smoke = await readText('scripts/smoke_live_policy_lab.mjs');
+  assert.match(smoke, /getByRole\('combobox', \{ name: 'Case', exact: true \}\)/);
+  assert.match(smoke, /getByRole\('combobox', \{ name: 'Proof \/ assurance', exact: true \}\)/);
+  assert.match(smoke, /getByRole\('combobox', \{ name: 'Policy', exact: true \}\)/);
+  assert.equal([...smoke.matchAll(/getByLabel\(/g)].length, 0);
+});
