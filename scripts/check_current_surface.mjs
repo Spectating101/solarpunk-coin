@@ -139,6 +139,9 @@ async function main() {
 
   const smokeWorkflow = await readText(surface.executable_truth.live_smoke_workflow);
   if (!smokeWorkflow.includes(`workflows: ["${PAGES_WORKFLOW_NAME}"]`)) fail('live smoke no longer follows the current Pages deployment workflow');
+  if (/^\s+run:\s*npm ci\b/m.test(smokeWorkflow)) fail('live smoke must not require a root package-lock.json via npm ci');
+  if (/\bcache:\s*npm\b/.test(smokeWorkflow)) fail('live smoke must not cache npm against a missing root lockfile');
+  if (!smokeWorkflow.includes('playwright@1.61.1')) fail('live smoke no longer installs isolated Playwright');
 
   const routes = await readText(surface.executable_truth.frontend_routes);
   for (const route of surface.historical_reference.active_but_secondary_routes) {

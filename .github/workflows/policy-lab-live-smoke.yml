@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: '22'
 
-      # Root package-lock.json is gitignored. Do not npm ci / cache npm against it.
+      # Root package-lock.json is gitignored. Do not cache npm or run a lockfile install.
       # Playwright is the only runtime the live-smoke script needs.
       - name: Install isolated browser tooling
         run: |
