@@ -1,31 +1,24 @@
 # Policy Lab
 
-**Case-based constraint research workbench for testing what evidence can justify, what policy blocks, what quantity ceiling binds, and what fails at settlement.**
+**Can real-world evidence justify a financial claim? Policy Lab is a workbench for testing that case by case: what the evidence supports, what a policy blocks, how much can be admitted, and what fails at settlement.**
 
-**Live research surface:** https://spectating101.github.io/solarpunk-coin/demo/
+![Policy Lab — overview of the live workbench](docs/media/policy-lab-overview.jpg)
 
-Policy Lab grew out of the earlier SolarPunk / Energy Standard research programme. The current project is not a token launch or a claim that an energy-linked financial instrument is already money. It is an executable research environment built around explicit evidence, versioned policy, deterministic constraints, settlement stress, lineage, and reproducibility.
+**Try it:** <https://spectating101.github.io/solarpunk-coin/demo/> — runs in the browser, no install.
 
-## Start here: current source of truth
+Each case pairs evidence (for example, metered electricity data) with a versioned policy. The workbench classifies how trustworthy the evidence is, applies the policy, sets a quantity ceiling, and stress-tests settlement, keeping every input and decision so the result can be reproduced.
 
-Do **not** infer current project state from whichever Markdown handoff looks newest. This repository contains years of historical iterations.
-
-The current surface is machine-declared in [`CURRENT_SURFACE.json`](./CURRENT_SURFACE.json) and enforced by [`scripts/check_current_surface.mjs`](./scripts/check_current_surface.mjs) in CI.
-
-| Question | Current executable source |
+| | |
 |---|---|
-| What is the project? | `CURRENT_SURFACE.json` |
-| What does the public app expose? | `frontend/src/App.jsx` + `frontend/src/app/routes.js` |
-| What evaluates a case? | `packages/constraint-core/src/workbench.js` |
-| Which controlled cases exist? | `protocol/cases/energy-v1/case-pack.json` |
-| Which policy manifests are executable? | `protocol/policies-v2/` |
-| What schemas bind outputs? | `protocol/schema/` |
-| What is the outside-data checkpoint? | `.github/workflows/external-case-001p-ausgrid.yml` + `frontend/src/data/publicEvidenceCheckpoint.js` |
-| What portable artifact leaves the lab? | `policylab.claim_assessment_package.v0.1` |
-| What publishes the live site? | `.github/workflows/deploy.yml` |
-| What verifies production after deploy? | `.github/workflows/policy-lab-live-smoke.yml` |
+| **Outside-data check** | A CI run pulls 336 half-hour intervals from a pinned public Ausgrid archive. The same evidence is admitted with a 33.066 kWh ceiling under the open research policy and blocked under the stricter pilot policy |
+| **Controlled cases** | An interactive case pack where you change assurance, policy and settlement conditions and watch the decision change |
+| **Portable output** | Each assessment exports as a versioned claim-assessment package |
+| **Engineering** | Deterministic decision core, JSON-schema-bound outputs, CI-published site with a post-deploy smoke test |
+| **Status** | Public research workbench. Not a token, not a financial product, not a claim that any energy-linked instrument is money |
 
-Historical Markdown remains useful for provenance, research development, and reconstruction, but it is not runtime authority.
+Where everything lives, and which files are authority: [`docs/SOURCE_OF_TRUTH.md`](docs/SOURCE_OF_TRUTH.md), with the machine-declared surface in [`CURRENT_SURFACE.json`](./CURRENT_SURFACE.json).
+
+Policy Lab grew out of the earlier SolarPunk energy-standard research; that material is kept under *Historical SolarPunk / SPK material* below.
 
 ## Decision model
 
