@@ -1,0 +1,24 @@
+name: Invisible Ledger V2 package validation
+
+on:
+  push:
+    branches:
+      - invisible-ledger/v2-research-pack
+    paths:
+      - 'IE-JDE/Invisible_Economy/rebuilt_2026/**'
+      - '.github/workflows/invisible-ledger-v2-validate.yml'
+  pull_request:
+    paths:
+      - 'IE-JDE/Invisible_Economy/rebuilt_2026/**'
+      - '.github/workflows/invisible-ledger-v2-validate.yml'
+
+jobs:
+  validate-il-v2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Invisible Ledger V2 research pack
+        run: python IE-JDE/Invisible_Economy/rebuilt_2026/validate_il_v2_pack.py
