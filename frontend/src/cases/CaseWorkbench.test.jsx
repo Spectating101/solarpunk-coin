@@ -2,8 +2,19 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CaseWorkbenchProvider } from '../app/CaseWorkbenchProvider';
+import { ENERGY_CASE_PACK } from '../lib/energyCasePack';
 import CaseExplorer from './CaseExplorer';
 import CaseWorkspace from './CaseWorkspace';
+
+function mappedCaseCount(cases) {
+  return cases.filter((caseManifest) => {
+    const spatial = caseManifest.spatial_identity;
+    if (!spatial) return false;
+    const latitude = Number(spatial.latitude);
+    const longitude = Number(spatial.longitude);
+    return Number.isFinite(latitude) && Number.isFinite(longitude);
+  }).length;
+}
 
 function renderWithWorkbench(node) {
   return render(<CaseWorkbenchProvider>{node}</CaseWorkbenchProvider>);
@@ -26,7 +37,10 @@ describe('case workbench investigation flow', () => {
     expect(screen.getAllByText(/minimum provenance/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/empirical claim: no/i)).toBeInTheDocument();
 
-    const mapToggle = screen.getByRole('button', { name: /show 3 mapped cases/i });
+    const expectedMappedCases = mappedCaseCount(ENERGY_CASE_PACK.cases);
+    const mapToggle = screen.getByRole('button', {
+      name: new RegExp(`show ${expectedMappedCases} mapped cases`, 'i'),
+    });
     expect(mapToggle).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(mapToggle);
     expect(mapToggle).toHaveAttribute('aria-expanded', 'true');
