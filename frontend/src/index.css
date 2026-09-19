@@ -2044,6 +2044,7 @@ p {
   color: var(--muted);
   font-size: 13px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .app-tab.active {

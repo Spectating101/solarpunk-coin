@@ -12,7 +12,7 @@
 
 .global-view-switch {
   display: inline-grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, auto);
   gap: 3px;
   padding: 3px;
   border: 1px solid var(--border);
@@ -32,6 +32,7 @@
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .global-view-switch button.active {
@@ -1418,4 +1419,17 @@
   .platform-mission-strip > div {
     width: 100%;
   }
+}
+
+/* Keep the header subtitle to two lines when the section nav and view switch take their full width. */
+.paired-platform-top .brand-sub {
+  min-width: 128px;
+}
+
+.paired-platform-top .app-tab {
+  padding: 6px 9px;
+}
+
+.paired-platform-top .global-view-switch button {
+  padding: 0 8px;
 }
