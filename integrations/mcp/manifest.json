@@ -1,0 +1,18 @@
+{
+  "schema":"portfolio.mcp.manifest.v1",
+  "project":"policy-lab",
+  "repository":"Spectating101/solarpunk-coin",
+  "mode":"bridge",
+  "required_files":["packages/constraint-core/src/workbench.js","integrations/mcp/bridge.mjs"],
+  "timeout_seconds":60,
+  "runner_source":"Spectating101/cite-refinery@c9559e4e217f9f266aa451008cda32c96eee544e:integrations/portfolio-mcp",
+  "tools":[
+    {
+      "name":"policy_lab_verify_capsule",
+      "description":"Verify a supplied research capsule using the native constraint-core verifier. Preserves integrity and source-truth boundaries. Does not certify source truth, grant legal or physical authority, or execute blockchain transactions.",
+      "effect":"compute",
+      "input_schema":{"type":"object","properties":{"capsule":{"type":"object"}},"required":["capsule"],"additionalProperties":false},
+      "argv":["$NODE","integrations/mcp/bridge.mjs"]
+    }
+  ]
+}
