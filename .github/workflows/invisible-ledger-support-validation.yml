@@ -1,0 +1,47 @@
+name: Invisible Ledger V2 support validation
+
+on:
+  push:
+    branches:
+      - invisible-ledger/full-capacity-2026
+    paths:
+      - 'IE-JDE/Invisible_Economy/rebuilt_2026/**'
+      - '.github/workflows/invisible-ledger-support-validation.yml'
+  pull_request:
+    paths:
+      - 'IE-JDE/Invisible_Economy/rebuilt_2026/**'
+      - '.github/workflows/invisible-ledger-support-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Invisible Ledger support package
+        shell: bash
+        run: |
+          set -o pipefail
+          {
+            python IE-JDE/Invisible_Economy/rebuilt_2026/validate_support_package.py
+            python IE-JDE/Invisible_Economy/rebuilt_2026/validate_reproduction_map.py
+            python IE-JDE/Invisible_Economy/rebuilt_2026/validate_publication_candidate.py
+          } 2>&1 | tee /tmp/invisible-ledger-support-validation.log
+
+      - name: Upload validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: invisible-ledger-support-validation-log
+          path: /tmp/invisible-ledger-support-validation.log
+          if-no-files-found: error
