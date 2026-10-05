@@ -12,3 +12,5 @@ Start with:
 Historical handoffs, status files, roadmaps, thesis notes, SolarPunk/SPK operator documents, and research narratives remain useful as provenance or context, but they must be checked against executable state before reuse.
 
 If the current surface changes, change `CURRENT_SURFACE.json` and its integrity tests rather than creating another competing handoff document.
+
+For the local repository audit/repair session, see [the 2026-10-05 handoff and continuation context](./docs/ops/AUDIT_REPAIR_HANDOFF_2026-10-05.md). It records the repair branch, evidence, migration requirements and outstanding maintenance; it does not replace the executable starting points above.
