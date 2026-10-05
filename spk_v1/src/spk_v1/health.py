@@ -12,6 +12,7 @@ from web3 import Web3
 
 from spk_v1.chain import connect_web3
 from spk_v1.runtime import read_runtime, runtime_paths
+from spk_v1.storage import atomic_write_text
 
 DEFAULT_RPC = "https://ethereum-sepolia-rpc.publicnode.com"
 DEFAULT_MIN_ETH = 0.01
@@ -27,7 +28,7 @@ def utc_now() -> datetime:
 
 
 def _sync_age_hours(synced_at: str | None, now: datetime) -> float | None:
-    if not synced_at:
+    if not isinstance(synced_at, str) or not synced_at:
         return None
     try:
         ts = synced_at.replace("Z", "+00:00")
@@ -66,7 +67,11 @@ def build_operator_health(
     if operator_eth is not None and not gas_ok:
         actions.append(f"Top up Sepolia ETH on deployer (need ≥{min_eth}, have {operator_eth:.6f})")
     if not sync_ok:
-        reason = "missing or invalid timestamp" if sync_age is None else f"invalid/stale age {sync_age:.0f}h"
+        reason = (
+            "missing or invalid timestamp"
+            if sync_age is None
+            else f"invalid/stale age {sync_age:.0f}h"
+        )
         actions.append(f"Run npm run foundation:sync ({reason})")
     if gas_ok and sync_ok:
         actions.append("Ready for npm run foundation:cycle")
@@ -106,8 +111,12 @@ def fetch_operator_balances(
     if spk_addr:
         from spk_v1.abis import load_abi
 
-        token = w3.eth.contract(address=Web3.to_checksum_address(spk_addr), abi=load_abi("SolarPunkCoin"))
-        spk_balance = float(token.functions.balanceOf(Web3.to_checksum_address(deployer)).call()) / 10**18
+        token = w3.eth.contract(
+            address=Web3.to_checksum_address(spk_addr), abi=load_abi("SolarPunkCoin")
+        )
+        spk_balance = (
+            float(token.functions.balanceOf(Web3.to_checksum_address(deployer)).call()) / 10**18
+        )
 
     return eth, spk_balance
 
@@ -125,8 +134,14 @@ def run_operator_health(
     if not runtime:
         raise FileNotFoundError(f"Missing runtime at {runtime_paths(root)['runtime']}")
 
-    rpc = rpc_url or os.environ.get("SEPOLIA_RPC") or os.environ.get("SEPOLIA_RPC_URL") or DEFAULT_RPC
-    min_eth_val = min_eth if min_eth is not None else float(os.environ.get("FOUNDATION_MIN_OPERATOR_ETH", DEFAULT_MIN_ETH))
+    rpc = (
+        rpc_url or os.environ.get("SEPOLIA_RPC") or os.environ.get("SEPOLIA_RPC_URL") or DEFAULT_RPC
+    )
+    min_eth_val = (
+        min_eth
+        if min_eth is not None
+        else float(os.environ.get("FOUNDATION_MIN_OPERATOR_ETH", DEFAULT_MIN_ETH))
+    )
     max_age = (
         max_sync_age_hours
         if max_sync_age_hours is not None
@@ -146,8 +161,7 @@ def run_operator_health(
 
     if write_json:
         out = foundation_health_path(root)
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+        atomic_write_text(out, json.dumps(report, indent=2, allow_nan=False) + "\n")
 
     return report
 

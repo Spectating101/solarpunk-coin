@@ -30,29 +30,52 @@ from spk_v1.service import (
 def require_operator_token(request: Request) -> None:
     expected = os.environ.get("SPK_V1_API_TOKEN", "")
     if not expected:
-        raise HTTPException(status_code=503, detail="Operator mutations are disabled; configure SPK_V1_API_TOKEN.")
+        raise HTTPException(
+            status_code=503, detail="Operator mutations are disabled; configure SPK_V1_API_TOKEN."
+        )
     supplied = request.headers.get("authorization", "")
-    if not supplied.startswith("Bearer ") or not secrets.compare_digest(supplied[7:].encode("utf-8"), expected.encode("utf-8")):
+    if not supplied.startswith("Bearer ") or not secrets.compare_digest(
+        supplied[7:].encode("utf-8"), expected.encode("utf-8")
+    ):
         raise HTTPException(status_code=401, detail="Valid operator bearer token required")
 
 
 def checked_rpc_url(rpc_url: str | None) -> str | None:
     if rpc_url is None:
         return None
-    configured = os.environ.get("SEPOLIA_RPC") or os.environ.get("SEPOLIA_RPC_URL") or "https://ethereum-sepolia-rpc.publicnode.com"
-    allowed = {configured, *filter(None, (x.strip() for x in os.environ.get("SPK_V1_API_RPC_ALLOWLIST", "").split(",")))}
+    configured = (
+        os.environ.get("SEPOLIA_RPC")
+        or os.environ.get("SEPOLIA_RPC_URL")
+        or "https://ethereum-sepolia-rpc.publicnode.com"
+    )
+    allowed = {
+        configured,
+        *filter(
+            None, (x.strip() for x in os.environ.get("SPK_V1_API_RPC_ALLOWLIST", "").split(","))
+        ),
+    }
     if rpc_url not in allowed:
-        raise HTTPException(status_code=422, detail="RPC URL is not in the operator-configured allowlist")
+        raise HTTPException(
+            status_code=422, detail="RPC URL is not in the operator-configured allowlist"
+        )
     return rpc_url
 
 
 def checked_export_root(out_root: str) -> Path:
-    base = Path(os.environ.get("SPK_V1_API_EXPORT_ROOT", str(default_repo_root() / "state" / "exports"))).resolve()
+    base = Path(
+        os.environ.get("SPK_V1_API_EXPORT_ROOT", str(default_repo_root() / "state" / "exports"))
+    ).resolve()
     candidate = Path(out_root)
-    destination = (candidate if candidate.is_absolute() else base / candidate).resolve()
+    try:
+        destination = (candidate if candidate.is_absolute() else base / candidate).resolve()
+    except (ValueError, OSError, RuntimeError) as exc:
+        raise HTTPException(status_code=422, detail="Invalid export directory") from exc
     if not destination.is_relative_to(base):
-        raise HTTPException(status_code=422, detail="Export directory must be inside SPK_V1_API_EXPORT_ROOT")
+        raise HTTPException(
+            status_code=422, detail="Export directory must be inside SPK_V1_API_EXPORT_ROOT"
+        )
     return destination
+
 
 app = FastAPI(
     title="SPK v1 Backend API",
@@ -74,7 +97,9 @@ app.add_middleware(
 
 
 class LakeExportRequest(BaseModel):
-    out_root: str = Field(..., description="Directory within the operator-configured export root")
+    out_root: str = Field(
+        ..., min_length=1, description="Directory within the operator-configured export root"
+    )
 
 
 class SyncResponse(BaseModel):
@@ -85,7 +110,10 @@ class SyncResponse(BaseModel):
 
 
 @app.get("/health")
-def health(request: Request, live: bool = Query(False, description="Fetch live operator gas via Sepolia RPC")) -> dict[str, Any]:
+def health(
+    request: Request,
+    live: bool = Query(False, description="Fetch live operator gas via Sepolia RPC"),
+) -> dict[str, Any]:
     if live:
         require_operator_token(request)
     root = default_repo_root()
@@ -99,10 +127,12 @@ def health(request: Request, live: bool = Query(False, description="Fetch live o
     try:
         operator = get_operator_health(root, live=live)
         payload["operator"] = operator
-        payload["ok"] = bool(operator.get("ok", True))
+        payload["ok"] = bool(operator.get("ok", False))
     except FileNotFoundError:
+        payload["ok"] = False
         payload["operator"] = None
     except ConnectionError as exc:
+        payload["ok"] = False
         payload["operator_error"] = str(exc)
     return payload
 

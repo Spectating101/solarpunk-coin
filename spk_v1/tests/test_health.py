@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from datetime import datetime, timezone
 
 from spk_v1.health import build_operator_health
@@ -14,7 +15,9 @@ def test_build_operator_health_ok():
         "genesis": {"metrics": {"network_payment_count": 3}},
         "monetary_policy": {"peg_enabled": False},
     }
-    report = build_operator_health(runtime, operator_eth=0.5, operator_spk=1000, foundation_status_exists=True, now=NOW)
+    report = build_operator_health(
+        runtime, operator_eth=0.5, operator_spk=1000, foundation_status_exists=True, now=NOW
+    )
     assert report["ok"] is True
     assert report["network_payment_count"] == 3
     assert "Ready for npm run foundation:cycle" in report["actions"][0]
@@ -28,7 +31,7 @@ def test_build_operator_health_low_gas():
 
 
 def test_stale_missing_invalid_and_future_sync_are_unhealthy():
-    for stamp in [None, "invalid", "2026-05-01T00:00:00Z", "2026-06-09T00:00:00Z"]:
+    for stamp in [None, 123, [], "invalid", "2026-05-01T00:00:00Z", "2026-06-09T00:00:00Z"]:
         report = build_operator_health({"synced_at": stamp}, now=NOW)
         assert report["ok"] is False
         assert any("foundation:sync" in action for action in report["actions"])

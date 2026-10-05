@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import os
 from pathlib import Path
 from typing import Any
@@ -119,13 +120,15 @@ def get_counterparties(repo_root: str | Path | None = None) -> dict[str, Any]:
     balances = runtime.get("counterparty_balances_spk") or {}
     rows = []
     for cid, info in counterparties.items():
-        rows.append({
-            "id": cid,
-            "label": info.get("label") or cid.replace("_", " ").title(),
-            "role": info.get("role"),
-            "address": info.get("address"),
-            "balance_spk": balances.get(cid),
-        })
+        rows.append(
+            {
+                "id": cid,
+                "label": info.get("label") or cid.replace("_", " ").title(),
+                "role": info.get("role"),
+                "address": info.get("address"),
+                "balance_spk": balances.get(cid),
+            }
+        )
     return {"counterparties": rows, "balances_spk": balances}
 
 
@@ -138,18 +141,57 @@ def get_operator_health(
     root = Path(repo_root or default_repo_root())
     if live:
         return run_operator_health(root, rpc_url=rpc_url)
+    runtime = get_runtime(root)
+    from spk_v1.health import (
+        DEFAULT_MAX_SYNC_AGE_HOURS,
+        DEFAULT_MIN_ETH,
+        _sync_age_hours,
+        build_operator_health,
+        utc_now,
+    )
+
+    now = utc_now()
+    max_age = float(os.environ.get("FOUNDATION_MAX_SYNC_AGE_HOURS", DEFAULT_MAX_SYNC_AGE_HOURS))
+    min_eth = float(os.environ.get("FOUNDATION_MIN_OPERATOR_ETH", DEFAULT_MIN_ETH))
+    cached: dict[str, Any] = {}
     health_path = root / "state" / "foundation" / "health.json"
     if health_path.exists():
         import json
 
-        return json.loads(health_path.read_text(encoding="utf-8"))
-    runtime = get_runtime(root)
-    from spk_v1.health import build_operator_health
+        try:
+            value = json.loads(health_path.read_text(encoding="utf-8"))
+            if isinstance(value, dict):
+                balances = [value.get("operator_eth"), value.get("operator_spk")]
+                if all(
+                    balance is None
+                    or (type(balance) in (int, float) and math.isfinite(balance) and balance >= 0)
+                    for balance in balances
+                ):
+                    cached = value
+        except (ValueError, UnicodeError):
+            pass
 
-    return build_operator_health(
+    report = build_operator_health(
         runtime,
+        operator_eth=cached.get("operator_eth"),
+        operator_spk=cached.get("operator_spk"),
+        min_eth=min_eth,
+        max_sync_age_hours=max_age,
         foundation_status_exists=(root / "state" / "foundation" / "status.json").exists(),
+        now=now,
     )
+    if health_path.exists():
+        age = _sync_age_hours(cached.get("at"), now)
+        fresh = age is not None and 0 <= age <= max_age and cached.get("operator_eth") is not None
+        report["balance_checked_at"] = cached.get("at")
+        report["cached_balance_fresh"] = fresh
+        if not fresh:
+            report["ok"] = False
+            report["actions"] = [a for a in report["actions"] if not a.startswith("Ready for")]
+            report["actions"].append(
+                "Refresh live operator health (cached balance observation missing, invalid or stale)"
+            )
+    return report
 
 
 def run_validate_runtime(
