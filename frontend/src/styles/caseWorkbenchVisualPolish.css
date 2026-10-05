@@ -44,7 +44,7 @@
 .constraint-rule-row > strong code {
   color: var(--dim);
   font-family: var(--font-mono);
-  font-size: 8px;
+  font-size: 12px;
   overflow-wrap: anywhere;
 }
 

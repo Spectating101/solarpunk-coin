@@ -3,6 +3,7 @@ import { ExternalLink, FileCheck2, ShieldCheck } from 'lucide-react';
 import { GITHUB_REPO } from '../constants/contracts';
 import { PUBLIC_EVIDENCE_CHECKPOINT as checkpoint } from '../data/publicEvidenceCheckpoint';
 import { StatusBadge, shortHash } from './platform/PlatformSurface';
+import SourceAndLimits, { joinOr } from './platform/SourceAndLimits';
 
 const WORKFLOW_URL = `${GITHUB_REPO}/actions/runs/${checkpoint.provenance.workflow_run_id}`;
 const ARTIFACT_URL = `${WORKFLOW_URL}/artifacts/${checkpoint.provenance.artifact_id}`;
@@ -28,6 +29,11 @@ export default function PublicEvidenceCheckpoint({ compact = false }) {
         <div><span>40% settlement</span><StatusBadge tone="warn">{checkpoint.settlement.result}</StatusBadge></div>
         <div><span>Replay</span><StatusBadge tone="pass">{checkpoint.verification.decision_reproduction}</StatusBadge></div>
       </div>
+
+      <SourceAndLimits>
+        Public Ausgrid data from a pinned archive, at actual assurance {checkpoint.evidence.assurance}. This checkpoint does not
+        establish {joinOr(checkpoint.non_claims)}. R4 monetary performance is {checkpoint.boundaries.R4.toLowerCase()}.
+      </SourceAndLimits>
 
       {!compact ? (
         <>

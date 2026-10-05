@@ -7,6 +7,7 @@ import {
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
 import SectionNavigator from '../components/SectionNavigator';
+import SourceAndLimits from '../components/platform/SourceAndLimits';
 import PolicyDiffPanel from './PolicyDiffPanel';
 
 const DEFAULT_BASELINE_POLICY_ID = 'LAB-CASE-OPEN-004';
@@ -178,7 +179,7 @@ export default function CompareWorkspace({
     <main className="compare-workspace" aria-labelledby="compare-title">
       <section className="case-explorer-hero compare-hero">
         <div>
-          <span className="wb-kicker"><GitCompareArrows size={13} /> Compare · same declared assurance scenario</span>
+          <span className="wb-kicker"><GitCompareArrows size={13} /> One assurance scenario, every policy</span>
           <h1 id="compare-title">Where do policies disagree—and what actually binds?</h1>
           <p>
             {decisionCount} deterministic decisions are evaluated from {caseCount} committed cases and {policyCount} V2 policies.
@@ -209,6 +210,11 @@ export default function CompareWorkspace({
           { id: 'compare-capacity', label: 'Capacity', meta: 'admitted only' },
         ]}
       />
+
+      <SourceAndLimits>
+        These are controlled mechanism cases and the pack declares empirical_claim: false. The comparison shows how
+        policy declarations change a decision. It does not show which policy is correct.
+      </SourceAndLimits>
 
       <PolicyDiffPanel
         policies={pack.policies}

@@ -92,7 +92,7 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
     return (
       <main className="platform-page field-surface full" aria-labelledby="full-field-title">
         <PlatformPageIntro
-          kicker="Field use · complete source and custody chain"
+          kicker="Complete source and custody chain"
           title="Audit the source before any policy is allowed to trust it."
           description="Full Field Use exposes the source receipt, permission manifest, adapter, diagnostics, assurance boundary, policy decisions, privacy boundary, and remaining promotion requirements for OPS-001."
           viewMode="full"
@@ -220,7 +220,7 @@ export default function FieldUseSurface({ viewMode, onNavigate, onOpenFullAnalys
   return (
     <main className="platform-page field-surface" aria-labelledby="field-title">
       <PlatformPageIntro
-        kicker="Field use · executable intake walkthrough"
+        kicker="Intake walkthrough"
         title="Process an operator-format source without pretending the format proves the source."
         description="Run the synthetic OPS-001 fixture through normalization, diagnostics, evidence hashing, source classification, a separately declared analysis context, policy evaluation, receipt generation, and capsule packaging."
         viewMode="overview"

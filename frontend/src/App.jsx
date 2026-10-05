@@ -49,7 +49,11 @@ import './styles/labOverview.css';
 import './styles/platformSurfaces.css';
 
 const ConstraintProtocolLab = lazy(() => import('./components/ConstraintProtocolLab'));
+import SiteFooter from './components/SiteFooter';
 const PublicLabLanding = lazy(() => import('./components/PublicLabLanding'));
+
+// SolarPunk / SPK-era routes: reachable for inspection, never the current product.
+const HISTORICAL_SECTIONS = new Set(['reference', 'legacy-protocol', 'currency']);
 const EvidenceLab = lazy(() => import('./components/EvidenceLab'));
 const CurrencyLab = lazy(() => import('./components/CurrencyLab'));
 const SpkV1Console = lazy(() => import('./components/SpkV1Console'));
@@ -340,8 +344,8 @@ function App() {
       </header>
 
       {viewMode === 'full' ? (
-        <nav className="full-analysis-nav" aria-label="Shared full-analysis workspaces">
-          <span>Shared workspaces</span>
+        <nav className="full-analysis-nav" aria-label="Full analysis tools">
+          <span>Full analysis tools</span>
           {FULL_ANALYSIS_NAV.map((item) => (
             <button key={item.section} type="button" className={route.section === item.section ? 'active' : ''} onClick={() => navigateFullTool(item.section)}>{item.label}</button>
           ))}
@@ -368,7 +372,7 @@ function App() {
       {route.section === 'investigate' && viewMode === 'full' ? (
         <>
           <section className="platform-page paired-full-bridge" aria-label="Full investigation bridge">
-            <span className="wb-kicker">Full investigation · same active state</span>
+            <span className="wb-kicker">Full investigation of the selected case</span>
             <h1>Every admission gate, quantity ceiling, stress condition, identity, and artifact.</h1>
             <p>The selected case, policy, assurance scenario, and settlement condition come directly from the shared workbench state.</p>
           </section>
@@ -413,6 +417,13 @@ function App() {
       ) : null}
       {route.section === 'study' && route.view === 'detail' ? <EmpiricalRunsLab onOpenProtocol={() => navigate({ section: 'legacy-protocol' })} /> : null}
       {route.section === 'study' && route.view === 'reproduce' ? <EmpiricalReproductionLab onOpenRuns={() => navigate({ section: 'study', id: 'market-capacity-v1', view: 'detail' })} /> : null}
+      {HISTORICAL_SECTIONS.has(route.section) ? (
+        <aside className="historical-reference-note" role="note">
+          <strong>Historical reference.</strong>
+          <span>This page documents the earlier SolarPunk / SPK research programme. It is kept for inspection and does not describe Policy Lab&apos;s current evidence, assurance level or status.</span>
+          <button type="button" className="historical-reference-link" onClick={() => navigate({ section: 'lab' })}>Go to the Policy Lab overview</button>
+        </aside>
+      ) : null}
       {route.section === 'legacy-protocol' ? (
         <Suspense fallback={<RouteFallback label="Loading protocol laboratory…" />}>
           <ConstraintProtocolLab onOpenSepolia={() => navigate({ section: 'reference', id: 'sepolia' })} />
@@ -444,6 +455,7 @@ function App() {
           <SpkV1Console provider={provider} signer={signer} account={account} onConnect={connectWallet} connecting={isConnecting} wrongNetwork={wrongNetwork} />
         </Suspense>
       ) : null}
+      <SiteFooter />
     </div>
   );
 }

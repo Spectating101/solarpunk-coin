@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
+import CopyLinkButton from '../components/CopyLinkButton';
 import {
   decisionArtifactStem,
   decisionMemo,
@@ -292,13 +293,14 @@ export default function CaseWorkspace({
           <span>POLICY <code>{activePolicyId}@{pack.policiesById[activePolicyId].version}</code></span>
           <span>SCENARIO <code>{activeScenarioId}</code></span>
           <span>DECISION <code>{activeRun?.decision?.decision_id?.slice(0, 12) || 'evaluating…'}</code></span>
-          <span className="local-mode">URL-BOUND STATE</span>
+          <span className="local-mode">State is in the URL</span>
         </div>
         <div className="case-workspace-actions">
           <button type="button" onClick={openCompare}><GitCompareArrows size={15} /> Compare</button>
           <button type="button" onClick={openReceipt} disabled={!activeRun}><FileText size={15} /> Open receipt</button>
           <button type="button" onClick={downloadReceipt} disabled={!activeReceipt}><Download size={15} /> Receipt JSON</button>
           <button type="button" onClick={downloadMemo} disabled={!activeRun}><Download size={15} /> Memo</button>
+          <CopyLinkButton />
         </div>
       </header>
 

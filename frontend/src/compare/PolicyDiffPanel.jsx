@@ -9,6 +9,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
+import '../styles/policyDiff.css';
 
 function stable(value) {
   return JSON.stringify(value ?? null);
@@ -188,7 +189,7 @@ export default function PolicyDiffPanel({
     <section id="compare-policy-diff" className="policy-diff-panel" aria-labelledby="policy-diff-title">
       <header className="policy-diff-heading">
         <div>
-          <span className="wb-kicker"><GitCompareArrows size={13} /> Policy manifest diff · versioned rule declarations</span>
+          <span className="wb-kicker"><GitCompareArrows size={13} /> Policy manifest diff</span>
           <h2 id="policy-diff-title">What changed in the policy before the outcomes changed?</h2>
           <p>Compare executable rule presence and parameters independently from any case result. Rule identity remains inspectable even when two policies happen to produce the same decision.</p>
         </div>

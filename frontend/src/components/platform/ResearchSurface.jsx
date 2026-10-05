@@ -99,7 +99,7 @@ export default function ResearchSurface({ viewMode, onNavigate, onOpenFullAnalys
     return (
       <main className="platform-page research-surface full" aria-labelledby="full-research-title">
         <PlatformPageIntro
-          kicker="Research · complete scholarly architecture"
+          kicker="Complete scholarly architecture"
           title="Inspect every claim, evidence class, method, limitation, and executable research object."
           description="Full Research connects ECI, the Constrained Ledger, the Policy Lab, institutional source mapping, empirical studies, and public outputs without collapsing one evidence class into another."
           viewMode="full"
@@ -172,7 +172,7 @@ export default function ResearchSurface({ viewMode, onNavigate, onOpenFullAnalys
   return (
     <main className="platform-page research-surface" aria-labelledby="research-title">
       <PlatformPageIntro
-        kicker="Research · interactive argument"
+        kicker="Interactive argument"
         title="Where does the claim stop being justified?"
         description="Select a distinction to see the concrete failure it prevents, the implemented mechanism that addresses it, and the research path supporting that mechanism."
         viewMode="overview"

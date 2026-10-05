@@ -91,7 +91,7 @@ export default function ProgrammeSurface({ viewMode, onNavigate, onOpenFullAnaly
     return (
       <main className="platform-page programme-surface full" aria-labelledby="full-programme-title">
         <PlatformPageIntro
-          kicker="Programme · validation, outputs, releases, and reference"
+          kicker="Validation, outputs, releases and reference"
           title="Inspect exactly what exists, what is tested, what is reusable, and what remains open."
           description="Full Programme is the due-diligence surface: validation ledger, release identities, output status, citation and archival paths, external-use readiness, technical reference, and historical implementation context."
           viewMode="full"
@@ -181,7 +181,7 @@ export default function ProgrammeSurface({ viewMode, onNavigate, onOpenFullAnaly
   return (
     <main className="platform-page programme-surface" aria-labelledby="programme-title">
       <PlatformPageIntro
-        kicker="Programme · verify the project"
+        kicker="Verify the project"
         title="Do not take the project claims on trust—open the evidence behind each one."
         description="Select a programme claim to see what supports it, what the visitor can verify, what is already available, and which external gate remains unresolved."
         viewMode="overview"
@@ -216,7 +216,7 @@ export default function ProgrammeSurface({ viewMode, onNavigate, onOpenFullAnaly
       <section className="programme-use-grid">
         <article><FlaskConical size={20} /><strong>Run</strong><span>Public workbench · guided investigation · policy comparison</span></article>
         <article><BookOpenCheck size={20} /><strong>Read</strong><span>Programme research · empirical study · methods and limitations</span></article>
-        <article><ShieldCheck size={20} /><strong>Inspect</strong><span>Four-case pack · Norway dossier · {receiptCount} browser-session receipts</span></article>
+        <article><ShieldCheck size={20} /><strong>Inspect</strong><span>{pack.cases.length}-case pack · Norway dossier · {receiptCount} browser-session receipts</span></article>
         <article><Archive size={20} /><strong>Reuse</strong><span>Constraint core · public schemas · reproduction commands</span></article>
       </section>
 

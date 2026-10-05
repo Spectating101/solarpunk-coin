@@ -42,7 +42,7 @@
   background: var(--amber-dim);
   color: #efc17d;
   font-family: var(--font-mono);
-  font-size: 0.73rem;
+  font-size: 0.75rem;
   line-height: 1.55;
 }
 
@@ -71,10 +71,9 @@
 .protocol-stage-index,
 .protocol-card-kicker {
   color: var(--green);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .protocol-flow-step strong {
@@ -159,7 +158,7 @@
 .protocol-policy-card span,
 .protocol-policy-card small {
   color: var(--muted-readable);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   line-height: 1.45;
 }
 
@@ -200,7 +199,7 @@
 .protocol-file-list,
 .protocol-muted {
   color: var(--muted-readable);
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -228,9 +227,8 @@
 .protocol-claim-card span,
 .protocol-settlement-result span {
   color: var(--muted);
-  font-size: 0.66rem;
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .protocol-evidence-summary strong,
@@ -274,7 +272,7 @@
 .protocol-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .protocol-table th,
@@ -288,15 +286,14 @@
 
 .protocol-table th {
   color: var(--muted);
-  font-size: 0.62rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .protocol-table code {
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
 }
 
 .protocol-check-list {
@@ -326,12 +323,12 @@
 .protocol-check strong {
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
 .protocol-check span {
   color: var(--muted-readable);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   line-height: 1.45;
 }
 
@@ -364,16 +361,15 @@
 
 .provenance-level span {
   color: var(--muted);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
 }
 
 .provenance-level em {
   align-self: end;
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   font-style: normal;
-  letter-spacing: 0.07em;
 }
 
 .provenance-level.active {
@@ -402,8 +398,8 @@
 
 .protocol-provenance-decision span {
   color: var(--muted);
-  font-size: 0.65rem;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .protocol-provenance-decision strong {
@@ -433,14 +429,14 @@
 .protocol-policy-card code {
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 0.64rem;
+  font-size: 0.75rem;
 }
 
 .protocol-decision {
   padding: 0.24rem 0.38rem;
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 0.56rem !important;
+  font-size: 0.75rem !important;
 }
 
 .protocol-decision.admit {
@@ -473,7 +469,7 @@
   gap: 0.3rem;
   min-width: 190px;
   color: var(--muted-readable);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
 }
 
 .protocol-settlement-controls input {
@@ -510,7 +506,7 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
 }
 
 .protocol-constraint-matrix span.pass { color: var(--green); border-color: rgba(52, 211, 153, 0.35); }
@@ -520,7 +516,7 @@
 .protocol-settlement-result > p {
   grid-column: 1 / -1;
   color: var(--muted-readable);
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   line-height: 1.55;
 }
 

@@ -51,7 +51,7 @@ export default function AnalysisLab({ initialTool = 'cases', onNavigate }) {
     <div className="analysis-lab-shell">
       <section className="platform-page analysis-lab-intro" aria-label="Analysis Lab introduction">
         <PlatformPageIntro
-          kicker="Shared workspace · cases, comparison, and stress"
+          kicker="Cases, comparison and stress"
           title="Analyse a decision without fragmenting the inquiry across separate pages."
           description="Find a case, hold one dimension constant, compare policies, replay settlement stress, and preserve useful investigation states from one consolidated workspace."
           viewMode="full"

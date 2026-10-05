@@ -94,7 +94,7 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
     <div className="verification-hub-shell">
       <section className="platform-page verification-hub-intro" aria-label="Verification Hub introduction">
         <PlatformPageIntro
-          kicker="Shared workspace · lineage, receipt, capsule, and objects"
+          kicker="Lineage, receipt, capsule and objects"
           title="Verify the result from source identity to portable research artifact."
           description="Trace a selected value backward, inspect the deterministic receipt, build the actual research capsule, test a changed quantity, and open the real objects used by the decision runtime."
           viewMode="full"

@@ -32,7 +32,7 @@
 
 .paired-view-bar-copy span {
   color: var(--muted-readable);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
@@ -53,11 +53,10 @@
   border-radius: 6px;
   color: var(--muted-readable);
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .paired-view-toggle button:hover {
@@ -104,11 +103,10 @@
 .full-overview-metric span,
 .full-overview-boundary span {
   color: rgba(220, 235, 225, 0.48);
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.065em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .full-overview-state-copy strong {
@@ -119,7 +117,7 @@
 .full-overview-state-copy code {
   color: var(--muted-readable);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .full-overview-grid {
@@ -180,7 +178,7 @@
   background: rgba(0, 0, 0, 0.18);
   color: var(--muted-readable);
   cursor: pointer;
-  font-size: 10px;
+  font-size: 12px;
   text-align: left;
 }
 
@@ -212,7 +210,7 @@
 
 .full-overview-stage-detail p {
   color: var(--muted-readable);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -271,13 +269,13 @@
   min-height: 38px;
   padding: 0 10px;
   border-bottom: 1px solid rgba(182, 220, 195, 0.12);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .full-validation-list strong {
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .full-validation-list strong.open {
@@ -313,9 +311,9 @@
 
 .full-overview-inventory span {
   color: var(--muted-readable);
-  font-size: 9px;
+  font-size: 12px;
   line-height: 1.35;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .full-overview-boundary {
@@ -335,7 +333,7 @@
 
 .full-overview-boundary p {
   color: var(--muted-readable);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.65;
 }
 

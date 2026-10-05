@@ -10,6 +10,8 @@ import {
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
 import SectionNavigator from '../components/SectionNavigator';
+import CopyLinkButton from '../components/CopyLinkButton';
+import SourceAndLimits from '../components/platform/SourceAndLimits';
 import {
   decisionArtifactStem,
   decisionMemo,
@@ -74,7 +76,12 @@ function ReceiptDetail({ run, receipt }) {
         >
           <Download size={15} /> Capsule manifest
         </button>
+        <CopyLinkButton />
       </div>
+      <SourceAndLimits title="What a receipt proves">
+        It proves lineage and that the decision reproduces from the declared evidence, policy and context. It does not
+        prove physical truth, legal authority, reserves, certification, adoption or money.
+      </SourceAndLimits>
       {capsuleError ? <div className="workbench-error" role="alert">{capsuleError}</div> : null}
 
       <SectionNavigator
@@ -291,7 +298,7 @@ export default function ReceiptsWorkspace({
       <main className="receipts-workspace" aria-labelledby="receipts-title">
         <section className="receipt-index-header">
           <div>
-            <span className="wb-kicker"><FileCheck2 size={13} /> Receipts · decisions evaluated in this browser session</span>
+            <span className="wb-kicker"><FileCheck2 size={13} /> Decisions evaluated in this browser session</span>
             <h1 id="receipts-title">Share the decision identity, not a screenshot.</h1>
             <p>Receipts summarize deterministic decisions and runtime audit context. Durable links encode the case, policy, and assurance scenario; capsule exports exclude raw evidence rows by default.</p>
           </div>

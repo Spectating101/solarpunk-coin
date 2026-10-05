@@ -102,7 +102,7 @@ export default function CaseExplorer({ onOpenCase }) {
     <main className="case-explorer" aria-labelledby="case-explorer-title">
       <section className="case-explorer-hero">
         <div>
-          <span className="wb-kicker"><CircleDot size={13} /> Case workbench · controlled energy pack</span>
+          <span className="wb-kicker"><CircleDot size={13} /> Controlled energy case pack</span>
           <h1 id="case-explorer-title">Investigate the rule that blocks or bounds the case.</h1>
           <p>
             The same committed case pack is evaluated through explicit policy rules. Modeled resource
