@@ -15,6 +15,14 @@ describe("SolarPunkOption", () => {
   const NOTIONAL = 1_000n; // kWh per contract
   const PRICE_DECIMALS = 6;
 
+  async function openPosition(seriesId, quantity, margin, counterpartyMargin = 3_000_000_000n) {
+    const deadline = (await ethers.provider.getBlock("latest")).timestamp + 3600;
+    await option.connect(owner).approveMatchedPosition(seriesId, trader.address,
+      -quantity, counterpartyMargin, margin, deadline, true);
+    return option.connect(trader).openMatchedPosition(seriesId, owner.address,
+      quantity, margin, counterpartyMargin, deadline);
+  }
+
   beforeEach(async () => {
     [owner, oracle, liquidator, trader] = await ethers.getSigners();
 
@@ -43,8 +51,11 @@ describe("SolarPunkOption", () => {
     await usdc.mint(trader.address, 3_000_000_000n); // 3000 USDC (6 decimals)
     await usdc.connect(trader).approve(option.target, 3_000_000_000n);
 
+    await usdc.mint(owner.address, 50_000_000_000n);
+    await usdc.connect(owner).approve(option.target, ethers.MaxUint256);
+
     // Create series and set initial index
-    const expiry = Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60;
+    const expiry = (await ethers.provider.getBlock("latest")).timestamp + 30 * 24 * 60 * 60;
     await option.createSeries(SERIES_ID, expiry, STRIKE, true, NOTIONAL);
     await option.connect(oracle).updateIndex(STRIKE, ethers.ZeroHash);
   });
@@ -60,7 +71,7 @@ describe("SolarPunkOption", () => {
   it("opens a long position and accrues positive PnL when index rises", async () => {
     // Post initial margin and open 1 long
     const margin = 200_000_000n; // 200 USDC
-    await option.connect(trader).modifyPosition(SERIES_ID, 1, margin);
+    await openPosition(SERIES_ID, 1n, margin);
 
     const pos = await option.getPosition(trader.address, SERIES_ID);
     expect(pos.qty).to.equal(1);
@@ -77,7 +88,7 @@ describe("SolarPunkOption", () => {
   it("allows liquidation when margin falls below maintenance", async () => {
     // Open a short with limited margin
     const margin = 120_000_000n; // 120 USDC
-    await option.connect(trader).modifyPosition(SERIES_ID, -1, margin);
+    await openPosition(SERIES_ID, -1n, margin);
 
     // Mark index higher to force maintenance breach but leave margin > 0
     await option.connect(oracle).updateIndex(1_100_000n, ethers.ZeroHash); // +$0.10 → $100 loss
@@ -96,12 +107,12 @@ describe("SolarPunkOption", () => {
 
   it("requires sufficient initial margin", async () => {
     await expect(
-      option.connect(trader).modifyPosition(SERIES_ID, 1, 10_000n) // too low
+      openPosition(SERIES_ID, 1n, 10_000n) // too low
     ).to.be.revertedWithCustomError(option, "InsufficientMargin");
   });
 
   it("rejects duplicate series ids", async () => {
-    const expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 90;
+    const expiry = (await ethers.provider.getBlock("latest")).timestamp + 60 * 60 * 24 * 90;
     await expect(
       option.createSeries(SERIES_ID, expiry, STRIKE, true, NOTIONAL)
     ).to.be.revertedWithCustomError(option, "SeriesExists");
@@ -132,7 +143,7 @@ describe("SolarPunkOption", () => {
 
   it("enforces maintenance margin on withdraw", async () => {
     // Short with enough margin, then price rises against the short
-    await option.connect(trader).modifyPosition(SERIES_ID, -1, 150_000_000n); // 150 USDC
+    await openPosition(SERIES_ID, -1n, 150_000_000n); // 150 USDC
     await option.connect(oracle).updateIndex(1_050_000n, ethers.ZeroHash); // +$0.05 -> $50 loss
     await option.markPosition(trader.address, SERIES_ID);
 
@@ -143,7 +154,7 @@ describe("SolarPunkOption", () => {
   });
 
   it("does not liquidate when still above maintenance", async () => {
-    await option.connect(trader).modifyPosition(SERIES_ID, -1, 200_000_000n); // 200 USDC
+    await openPosition(SERIES_ID, -1n, 200_000_000n); // 200 USDC
     await option.connect(oracle).updateIndex(1_050_000n, ethers.ZeroHash); // -$50 to margin
     await option.markPosition(trader.address, SERIES_ID);
 
@@ -157,7 +168,7 @@ describe("SolarPunkOption", () => {
     await option.setBondRequirements(0, minLiquidatorBond);
 
     const margin = 120_000_000n;
-    await option.connect(trader).modifyPosition(SERIES_ID, -1, margin);
+    await openPosition(SERIES_ID, -1n, margin);
     await option.connect(oracle).updateIndex(1_100_000n, ethers.ZeroHash);
     await option.markPosition(trader.address, SERIES_ID);
 
@@ -177,7 +188,7 @@ describe("SolarPunkOption", () => {
   it("honors pause on trading paths", async () => {
     await option.pause();
     await expect(
-      option.connect(trader).modifyPosition(SERIES_ID, 1, 200_000_000n)
+      openPosition(SERIES_ID, 1n, 200_000_000n)
     ).to.be.revertedWithCustomError(option, "EnforcedPause");
   });
 
@@ -187,7 +198,7 @@ describe("SolarPunkOption", () => {
     const tradeFee = await option.estimateTradingFee(SERIES_ID, 1n);
     const treasuryBefore = await usdc.balanceOf(treasury.target);
 
-    await option.connect(trader).modifyPosition(SERIES_ID, 1, 200_000_000n);
+    await openPosition(SERIES_ID, 1n, 200_000_000n);
 
     expect(await usdc.balanceOf(treasury.target)).to.equal(treasuryBefore + tradeFee);
   });
@@ -257,7 +268,7 @@ describe("SolarPunkOption", () => {
 
     // Open a long position
     const margin = 200_000_000n; // 200 USDC
-    await option.connect(trader).modifyPosition(expiredId, 1, margin);
+    await openPosition(expiredId, 1n, margin);
 
     // Fast-forward past expiry
     await ethers.provider.send("evm_increaseTime", [400]);
@@ -270,6 +281,7 @@ describe("SolarPunkOption", () => {
 
     // settle() should succeed and return margin
     const balanceBefore = await usdc.balanceOf(trader.address);
+    await option.connect(oracle).setSettlementIndex(expiredId, STRIKE, ethers.ZeroHash);
     const tx = await option.connect(trader).settle(expiredId);
     const balanceAfter = await usdc.balanceOf(trader.address);
 
@@ -286,7 +298,7 @@ describe("SolarPunkOption", () => {
 
   it("rejects settle on non-expired series", async () => {
     const margin = 200_000_000n;
-    await option.connect(trader).modifyPosition(SERIES_ID, 1, margin);
+    await openPosition(SERIES_ID, 1n, margin);
 
     await expect(
       option.connect(trader).settle(SERIES_ID)
@@ -319,7 +331,7 @@ describe("SolarPunkOption", () => {
     await option.connect(oracle).updateIndex(STRIKE, ethers.ZeroHash);
 
     // Open position and deposit margin
-    await option.connect(trader).modifyPosition(expiredId, 1, 200_000_000n);
+    await openPosition(expiredId, 1n, 200_000_000n);
 
     // Fast-forward past expiry
     await ethers.provider.send("evm_increaseTime", [400]);
@@ -333,17 +345,88 @@ describe("SolarPunkOption", () => {
 
   it("marks losses for a long put when index rises", async () => {
     const putId = ethers.id("SERIES_JAN_2026_PUT");
-    const expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 90;
+    const expiry = (await ethers.provider.getBlock("latest")).timestamp + 60 * 60 * 24 * 90;
     await option.createSeries(putId, expiry, STRIKE, false, NOTIONAL);
 
     // Start below strike so the put has value, then move above strike
     await option.connect(oracle).updateIndex(900_000n, ethers.ZeroHash);
 
-    await option.connect(trader).modifyPosition(putId, 1, 300_000_000n);
+    await openPosition(putId, 1n, 300_000_000n);
     await option.connect(oracle).updateIndex(1_100_000n, ethers.ZeroHash); // price up to $1.10 -> put loses value
     await option.markPosition(trader.address, putId);
 
     const updated = await option.getPosition(trader.address, putId);
     expect(updated.margin).to.be.lt(300_000_000n);
   });
+  it("rejects unfunded unilateral opening even when unrelated deposits are present", async () => {
+    await option.connect(trader).depositMargin(SERIES_ID, 2_000_000_000n);
+    await expect(option.connect(trader).modifyPosition(SERIES_ID, 1, 0))
+      .to.be.revertedWithCustomError(option, "MatchedTradeRequired");
+    expect(await option.totalMarginLiability()).to.equal(await usdc.balanceOf(option.target));
+  });
+
+  it("requires exact counterparty trade consent and consumes it once", async () => {
+    const deadline = (await ethers.provider.getBlock("latest")).timestamp + 3600;
+    await expect(option.connect(trader).openMatchedPosition(SERIES_ID, owner.address,
+      1, 200_000_000n, 3_000_000_000n, deadline)).to.be.revertedWith("counterparty approval required");
+    await option.connect(owner).approveMatchedPosition(SERIES_ID, trader.address,
+      -1, 3_000_000_000n, 200_000_000n, deadline, true);
+    await expect(option.connect(trader).openMatchedPosition(SERIES_ID, owner.address,
+      1, 210_000_000n, 3_000_000_000n, deadline)).to.be.revertedWith("counterparty approval required");
+    await option.connect(trader).openMatchedPosition(SERIES_ID, owner.address,
+      1, 200_000_000n, 3_000_000_000n, deadline);
+    await option.connect(trader).modifyPosition(SERIES_ID, -1, 0);
+    await expect(option.connect(trader).openMatchedPosition(SERIES_ID, owner.address,
+      1, 200_000_000n, 3_000_000_000n, deadline)).to.be.revertedWith("counterparty approval required");
+  });
+
+  it("funds profits from the matched counterparty and preserves unrelated withdrawals", async () => {
+    await option.setMarginParams(25_000, 12_500, 100);
+    const unrelated = liquidator;
+    await usdc.mint(unrelated.address, 2_000_000_000n);
+    await usdc.connect(unrelated).approve(option.target, ethers.MaxUint256);
+    await option.connect(unrelated).depositMargin(SERIES_ID, 2_000_000_000n);
+    await openPosition(SERIES_ID, 1n, 2_500_000_000n);
+    await option.connect(oracle).updateIndex(1_200_000n, ethers.ZeroHash);
+    await option.connect(trader).modifyPosition(SERIES_ID, -1, 0);
+    expect((await option.getPosition(owner.address, SERIES_ID)).margin).to.equal(2_800_000_000n);
+    await option.connect(trader).withdrawMargin(SERIES_ID, 2_700_000_000n);
+    await option.connect(unrelated).withdrawMargin(SERIES_ID, 2_000_000_000n);
+    expect(await usdc.balanceOf(option.target)).to.equal(2_800_000_000n);
+    expect(await option.totalMarginLiability()).to.equal(2_800_000_000n);
+  });
+
+  it("conserves pair collateral across price gaps larger than the losing margin", async () => {
+    await openPosition(SERIES_ID, 1n, 200_000_000n);
+    const total = await option.totalMarginLiability();
+    for (const index of [10_000_000n, 500_000n, 1_200_000n]) {
+      await option.connect(oracle).updateIndex(index, ethers.ZeroHash);
+      await option.markPosition(trader.address, SERIES_ID);
+      const long = await option.getPosition(trader.address, SERIES_ID);
+      const short = await option.getPosition(owner.address, SERIES_ID);
+      expect(long.margin + short.margin).to.equal(total);
+      expect(await option.totalMarginLiability()).to.equal(total);
+      expect(await usdc.balanceOf(option.target)).to.equal(total);
+    }
+  });
+
+  it("requires a frozen expiry price and uses it for both counterparties", async () => {
+    const expiry = (await ethers.provider.getBlock("latest")).timestamp + 300;
+    const id = ethers.id("FROZEN_EXPIRY");
+    await option.createSeries(id, expiry, STRIKE, true, NOTIONAL);
+    await openPosition(id, 1n, 200_000_000n);
+    await ethers.provider.send("evm_increaseTime", [400]);
+    await ethers.provider.send("evm_mine");
+    await expect(option.connect(trader).settle(id)).to.be.revertedWithCustomError(option, "SettlementIndexRequired");
+    await option.connect(oracle).setSettlementIndex(id, 1_200_000n, ethers.id("expiry-source"));
+    await option.connect(oracle).updateIndex(1_900_000n, ethers.ZeroHash);
+    await option.connect(trader).settle(id);
+    expect((await option.getPosition(owner.address, id)).margin).to.equal(2_800_000_000n);
+    await expect(option.connect(oracle).setSettlementIndex(id, 1_900_000n, ethers.ZeroHash))
+      .to.be.revertedWith("invalid or frozen settlement index");
+    await option.connect(owner).settle(id);
+    expect(await option.totalMarginLiability()).to.equal(0);
+    expect(await usdc.balanceOf(option.target)).to.equal(0);
+  });
+
 });

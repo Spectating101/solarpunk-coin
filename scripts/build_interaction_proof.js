@@ -76,6 +76,7 @@ async function main() {
     throw new Error("Use a persistent network (e.g., amoy or localhost), not ephemeral hardhat.");
   }
   const [deployer, user, trader] = await hre.ethers.getSigners();
+  if (!user || !trader) throw new Error("Interaction proof requires three distinct configured signers; no unilateral option opening is supported.");
 
   const root = path.join(__dirname, "..");
   const receiptArg = getArg("receipt", null);
@@ -97,6 +98,7 @@ async function main() {
   const usdc = await hre.ethers.getContractAt("MockUSDC", usdcAddress);
   const spk = await hre.ethers.getContractAt("SolarPunkCoin", spkAddress);
   const option = await hre.ethers.getContractAt("SolarPunkOption", optionAddress);
+  try { await option.totalMarginLiability(); } catch { throw new Error("The referenced option deployment predates matched clearing. Deploy the repaired contract before running this proof."); }
 
   const interactions = {};
   const usdcSeed = hre.ethers.parseUnits("10000", 6);
@@ -150,9 +152,18 @@ async function main() {
   await approveOptionTx.wait();
   interactions.approve_option = approveOptionTx.hash;
 
-  const modifyPositionTx = await option.connect(trader).modifyPosition(optionSeries, 1, traderMargin);
-  await modifyPositionTx.wait();
-  interactions.option_modify_position = modifyPositionTx.hash;
+  const counterpartyMint = await usdc.mint(deployer.address, traderMargin);
+  await counterpartyMint.wait();
+  interactions.seed_counterparty_usdc = counterpartyMint.hash;
+  const counterpartyAllowance = await usdc.approve(optionAddress, traderMargin);
+  await counterpartyAllowance.wait();
+  const deadline = (await hre.ethers.provider.getBlock("latest")).timestamp + 3600;
+  const consent = await option.approveMatchedPosition(optionSeries, trader.address, -1, traderMargin, traderMargin, deadline, true);
+  await consent.wait();
+  interactions.option_counterparty_consent = consent.hash;
+  const matchTx = await option.connect(trader).openMatchedPosition(optionSeries, deployer.address, 1, traderMargin, traderMargin, deadline);
+  await matchTx.wait();
+  interactions.option_open_matched_position = matchTx.hash;
 
   const chainId = hre.network.config.chainId || null;
   const base = explorerBase(networkName);

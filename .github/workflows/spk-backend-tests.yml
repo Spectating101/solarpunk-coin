@@ -1,0 +1,22 @@
+name: Historical SPK backend tests
+on:
+  push:
+    branches: [main]
+    paths: ['spk_v1/**', '.github/workflows/spk-backend-tests.yml']
+  pull_request:
+    paths: ['spk_v1/**', '.github/workflows/spk-backend-tests.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -e '.[dev]'
+        working-directory: spk_v1
+      - run: python -m pytest tests -m 'not integration'
+        working-directory: spk_v1

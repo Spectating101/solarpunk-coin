@@ -148,7 +148,7 @@ await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 
 
 await openMobile('#cases', 'Investigate the rule that blocks or bounds the case.');
 await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
-const mapToggle = mobilePage.getByRole('button', { name: /show 3 mapped cases/i });
+const mapToggle = mobilePage.getByRole('button', { name: /^show \d+ mapped cases$/i });
 await mapToggle.waitFor({ state: 'visible' });
 if (await mapToggle.getAttribute('aria-expanded') !== 'false') {
   throw new Error('Mobile case map must begin collapsed');

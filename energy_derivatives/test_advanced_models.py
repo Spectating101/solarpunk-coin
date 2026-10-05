@@ -26,7 +26,6 @@ def test_mean_reversion():
     assert 'price' in result, "Missing price in result"
     assert result['price'] >= 0, "Negative price"
     
-    return True
 
 
 def test_jump_diffusion():
@@ -46,7 +45,6 @@ def test_jump_diffusion():
     call_price = jd.price_european_call_analytical(K=105, num_terms=30)
     assert call_price > 0, "Analytical price should be positive"
     
-    return True
 
 
 def test_energy_jump_model():
@@ -59,7 +57,6 @@ def test_energy_jump_model():
     times, paths, jumps = ejm.simulate_paths(num_paths=50, num_steps=100, seed=42)
     assert paths.shape[1] == 50, "Wrong number of paths"
     
-    return True
 
 
 def test_implied_volatility():
@@ -75,7 +72,6 @@ def test_implied_volatility():
     
     assert error < 1e-5, f"Implied vol error too large: {error}"
     
-    return True
 
 
 def test_calibration():
@@ -92,7 +88,6 @@ def test_calibration():
     assert 'sigma' in params
     assert params['kappa'] >= 0
     
-    return True
 
 
 if __name__ == "__main__":

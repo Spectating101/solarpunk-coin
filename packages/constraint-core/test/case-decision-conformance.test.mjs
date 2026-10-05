@@ -24,7 +24,17 @@ async function evidenceFor(siteKey, identityTag = 'baseline') {
       identity_tag: identityTag,
       sample_fixture: true,
     },
-    intervals: [],
+    intervals: Array.from({ length: 7 }, (_, index) => {
+      const surplus = index === 6 ? site.surplus - Math.floor(site.surplus / 7) * 6 : Math.floor(site.surplus / 7);
+      return {
+        meter_id: `fixture-${site.site_id}`, site_id: site.site_id,
+        window_start: `2026-05-0${index + 1}T00:00:00Z`,
+        window_end: `2026-05-0${index + 2}T00:00:00Z`,
+        generation_kwh: surplus + 10, site_load_kwh: 10, export_kwh: surplus,
+        curtailed_kwh: 0, eligible_surplus_kwh: surplus, surplus_basis: 'fixture_export_kwh',
+        quality_score: 1, source: 'controlled_fixture',
+      };
+    }),
     diagnostics: [],
     capabilities: {
       signed: true,

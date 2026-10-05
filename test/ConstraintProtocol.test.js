@@ -52,6 +52,18 @@ describe('Constraint Protocol Alpha', function () {
     return { claimId, evidenceHash, policyId, manifestHash };
   }
 
+  it('rejects the zero-version sentinel and preserves registry readability', async function () {
+    const { policyRegistry } = await deployFixture();
+    const id = ethers.id('zero-version-policy');
+    const hash = ethers.id('zero-version-manifest');
+    await expect(policyRegistry.publishPolicy(id, hash, 0, 'ipfs://invalid'))
+      .to.be.revertedWithCustomError(policyRegistry, 'VersionMustIncrease');
+    await policyRegistry.publishPolicy(id, hash, 1, 'ipfs://valid');
+    expect((await policyRegistry.getPolicy(id)).version).to.equal(1n);
+    await policyRegistry.deactivatePolicy(id);
+    expect((await policyRegistry.getPolicy(id)).active).to.equal(false);
+  });
+
   it('publishes versioned policy manifests and rejects rollback', async function () {
     const { policyRegistry } = await deployFixture();
     const policyId = ethers.id('ENERGY-PILOT-002');

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import os
+import secrets
+from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -23,6 +25,34 @@ from spk_v1.service import (
     run_sync_and_foundation,
     run_validate_runtime,
 )
+
+
+def require_operator_token(request: Request) -> None:
+    expected = os.environ.get("SPK_V1_API_TOKEN", "")
+    if not expected:
+        raise HTTPException(status_code=503, detail="Operator mutations are disabled; configure SPK_V1_API_TOKEN.")
+    supplied = request.headers.get("authorization", "")
+    if not supplied.startswith("Bearer ") or not secrets.compare_digest(supplied[7:].encode("utf-8"), expected.encode("utf-8")):
+        raise HTTPException(status_code=401, detail="Valid operator bearer token required")
+
+
+def checked_rpc_url(rpc_url: str | None) -> str | None:
+    if rpc_url is None:
+        return None
+    configured = os.environ.get("SEPOLIA_RPC") or os.environ.get("SEPOLIA_RPC_URL") or "https://ethereum-sepolia-rpc.publicnode.com"
+    allowed = {configured, *filter(None, (x.strip() for x in os.environ.get("SPK_V1_API_RPC_ALLOWLIST", "").split(",")))}
+    if rpc_url not in allowed:
+        raise HTTPException(status_code=422, detail="RPC URL is not in the operator-configured allowlist")
+    return rpc_url
+
+
+def checked_export_root(out_root: str) -> Path:
+    base = Path(os.environ.get("SPK_V1_API_EXPORT_ROOT", str(default_repo_root() / "state" / "exports"))).resolve()
+    candidate = Path(out_root)
+    destination = (candidate if candidate.is_absolute() else base / candidate).resolve()
+    if not destination.is_relative_to(base):
+        raise HTTPException(status_code=422, detail="Export directory must be inside SPK_V1_API_EXPORT_ROOT")
+    return destination
 
 app = FastAPI(
     title="SPK v1 Backend API",
@@ -44,7 +74,7 @@ app.add_middleware(
 
 
 class LakeExportRequest(BaseModel):
-    out_root: str = Field(..., description="Destination directory for data_lake/spk_v1 bundle")
+    out_root: str = Field(..., description="Directory within the operator-configured export root")
 
 
 class SyncResponse(BaseModel):
@@ -55,7 +85,9 @@ class SyncResponse(BaseModel):
 
 
 @app.get("/health")
-def health(live: bool = Query(False, description="Fetch live operator gas via Sepolia RPC")) -> dict[str, Any]:
+def health(request: Request, live: bool = Query(False, description="Fetch live operator gas via Sepolia RPC")) -> dict[str, Any]:
+    if live:
+        require_operator_token(request)
     root = default_repo_root()
     payload: dict[str, Any] = {
         "ok": True,
@@ -102,14 +134,16 @@ def payments_endpoint(
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.post("/v1/sync", response_model=SyncResponse)
+@app.post("/v1/sync", response_model=SyncResponse, dependencies=[Depends(require_operator_token)])
 def sync_endpoint(rpc_url: str | None = Query(None)) -> dict[str, Any]:
     try:
-        return run_sync(rpc_url=rpc_url)
+        return run_sync(rpc_url=checked_rpc_url(rpc_url))
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ConnectionError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except HTTPException:
+        raise
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
@@ -124,11 +158,14 @@ def counterparties_endpoint() -> dict[str, Any]:
 
 @app.get("/v1/operator/health")
 def operator_health_endpoint(
-    live: bool = Query(True),
+    request: Request,
+    live: bool = Query(False),
     rpc_url: str | None = Query(None),
 ) -> dict[str, Any]:
+    if live:
+        require_operator_token(request)
     try:
-        return get_operator_health(rpc_url=rpc_url, live=live)
+        return get_operator_health(rpc_url=checked_rpc_url(rpc_url), live=live)
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ConnectionError as exc:
@@ -154,7 +191,7 @@ def foundation_endpoint() -> dict[str, Any]:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.post("/v1/foundation/export")
+@app.post("/v1/foundation/export", dependencies=[Depends(require_operator_token)])
 def foundation_export_endpoint() -> dict[str, Any]:
     try:
         return run_foundation_export()
@@ -162,19 +199,21 @@ def foundation_export_endpoint() -> dict[str, Any]:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.post("/v1/foundation/sync")
+@app.post("/v1/foundation/sync", dependencies=[Depends(require_operator_token)])
 def foundation_sync_endpoint(rpc_url: str | None = Query(None)) -> dict[str, Any]:
     try:
-        return run_sync_and_foundation(rpc_url=rpc_url)
+        return run_sync_and_foundation(rpc_url=checked_rpc_url(rpc_url))
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ConnectionError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+    except HTTPException:
+        raise
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
-@app.post("/v1/export/evidence")
+@app.post("/v1/export/evidence", dependencies=[Depends(require_operator_token)])
 def export_evidence_endpoint() -> dict[str, Any]:
     try:
         return run_export_evidence()
@@ -182,10 +221,10 @@ def export_evidence_endpoint() -> dict[str, Any]:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.post("/v1/export/lake")
+@app.post("/v1/export/lake", dependencies=[Depends(require_operator_token)])
 def export_lake_endpoint(body: LakeExportRequest) -> dict[str, Any]:
     try:
-        return run_export_lake(out_root=body.out_root)
+        return run_export_lake(out_root=checked_export_root(body.out_root))
     except FileNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
@@ -194,6 +233,8 @@ def main() -> None:
     import uvicorn
 
     host = os.environ.get("SPK_V1_API_HOST", "127.0.0.1")
+    if host not in {"127.0.0.1", "localhost", "::1"} and not os.environ.get("SPK_V1_API_TOKEN"):
+        raise RuntimeError("Non-loopback binding requires SPK_V1_API_TOKEN")
     port = int(os.environ.get("SPK_V1_API_PORT", "8787"))
     uvicorn.run("spk_v1.api:app", host=host, port=port, reload=False)
 

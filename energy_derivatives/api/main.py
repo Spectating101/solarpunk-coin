@@ -2,11 +2,12 @@ import os
 import time
 import secrets
 from collections import defaultdict
+from threading import Lock
 from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, HTTPException, Request, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, Dict, Any, List
 
 import numpy as np
@@ -41,6 +42,7 @@ API_KEYS[DEMO_KEY] = "demo"
 
 # Rate limit tracking
 rate_tracker: Dict[str, list] = defaultdict(list)
+rate_lock = Lock()
 
 # --- App ---
 
@@ -79,7 +81,7 @@ curl -X POST https://api.solarpunk.energy/v1/price \\
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -87,25 +89,25 @@ app.add_middleware(
 # --- Auth & Rate Limiting ---
 
 def check_rate_limit(api_key: str, tier: str):
-    now = time.time()
-    limits = RATE_LIMITS.get(tier, RATE_LIMITS["demo"])
+    with rate_lock:
+        now = time.time()
+        limits = RATE_LIMITS.get(tier, RATE_LIMITS["demo"])
 
-    # Clean old entries
-    rate_tracker[api_key] = [t for t in rate_tracker[api_key] if now - t < 86400]
+        # Clean old entries
+        rate_tracker[api_key] = [t for t in rate_tracker[api_key] if now - t < 86400]
 
-    # Check daily limit
-    if len(rate_tracker[api_key]) >= limits["requests_per_day"]:
-        raise HTTPException(status_code=429, detail=f"Daily limit ({limits['requests_per_day']}) exceeded. Upgrade your plan.")
+        # Check daily limit
+        if len(rate_tracker[api_key]) >= limits["requests_per_day"]:
+            raise HTTPException(status_code=429, detail=f"Daily limit ({limits['requests_per_day']}) exceeded. Upgrade your plan.")
 
-    # Check per-minute limit
-    recent = [t for t in rate_tracker[api_key] if now - t < 60]
-    if len(recent) >= limits["requests_per_minute"]:
-        raise HTTPException(status_code=429, detail=f"Rate limit ({limits['requests_per_minute']}/min) exceeded. Slow down or upgrade.")
+        # Check per-minute limit
+        recent = [t for t in rate_tracker[api_key] if now - t < 60]
+        if len(recent) >= limits["requests_per_minute"]:
+            raise HTTPException(status_code=429, detail=f"Rate limit ({limits['requests_per_minute']}/min) exceeded. Slow down or upgrade.")
 
-    rate_tracker[api_key].append(now)
+        rate_tracker[api_key].append(now)
 
-
-async def verify_api_key(x_api_key: str = Header(None)):
+def verify_api_key(x_api_key: str = Header(None)):
     if x_api_key is None:
         # Allow unauthenticated access with demo limits
         check_rate_limit("anonymous", "demo")
@@ -120,7 +122,10 @@ async def verify_api_key(x_api_key: str = Header(None)):
 
 # --- Data Models ---
 
-class PricingRequest(BaseModel):
+class APIRequest(BaseModel):
+    model_config = ConfigDict(allow_inf_nan=False)
+
+class PricingRequest(APIRequest):
     S0: float = Field(..., description="Spot price ($/MWh for energy)", gt=0)
     K: float = Field(..., description="Strike price", gt=0)
     T: float = Field(1.0, description="Time to expiry (years)", gt=0)
@@ -128,17 +133,17 @@ class PricingRequest(BaseModel):
     sigma: float = Field(..., description="Annualized volatility", gt=0)
     method: str = Field("binomial", description="Pricing method: binomial, monte-carlo")
     payoff_type: str = Field("call", description="Option type: call or put")
-    N: int = Field(100, description="Tree steps / simulation paths", ge=10, le=10000)
+    N: int = Field(100, description="Tree steps / simulation paths", ge=10, le=1000)
 
-class GreeksRequest(BaseModel):
+class GreeksRequest(APIRequest):
     S0: float = Field(..., gt=0)
     K: float = Field(..., gt=0)
     T: float = Field(1.0, gt=0)
     r: float = Field(0.05)
     sigma: float = Field(..., gt=0)
-    N: int = Field(200, ge=10, le=10000)
+    N: int = Field(200, ge=10, le=1000)
 
-class RiskAssessmentRequest(BaseModel):
+class RiskAssessmentRequest(APIRequest):
     capacity_mw: float = Field(..., description="Plant capacity in MW", gt=0)
     lat: float = Field(..., description="Latitude", ge=-90, le=90)
     lon: float = Field(..., description="Longitude", ge=-180, le=180)
@@ -146,10 +151,10 @@ class RiskAssessmentRequest(BaseModel):
     hedge_period_years: float = Field(1.0, description="Hedge duration in years", gt=0)
     target_floor_pct: float = Field(0.8, description="Revenue floor as % of expected (0.0-1.0)")
 
-class BatchPricingRequest(BaseModel):
+class BatchPricingRequest(APIRequest):
     requests: List[PricingRequest] = Field(..., max_length=50)
 
-class DecisionPackRequest(BaseModel):
+class DecisionPackRequest(APIRequest):
     client_name: str = Field("Operator", description="Client/operator display name")
     region: str = Field("unknown", description="Region label for reporting")
     capacity_mw: float = Field(..., description="Plant capacity in MW", gt=0)
@@ -162,26 +167,26 @@ class DecisionPackRequest(BaseModel):
     contract_notional_mwh: float = Field(100.0, gt=0)
     contracts_planned: int = Field(0, ge=0)
 
-class WindParams(BaseModel):
+class WindParams(APIRequest):
     lat: float = Field(..., ge=-90, le=90)
     lon: float = Field(..., ge=-180, le=180)
     rotor_diameter_m: float = 80.0
     hub_height_m: float = 80.0
 
-class HydroParams(BaseModel):
+class HydroParams(APIRequest):
     lat: float = Field(..., ge=-90, le=90)
     lon: float = Field(..., ge=-180, le=180)
     catchment_area_km2: float = 1000.0
     fall_height_m: float = 50.0
 
-class SolarParams(BaseModel):
+class SolarParams(APIRequest):
     lat: float = Field(..., ge=-90, le=90)
     lon: float = Field(..., ge=-180, le=180)
 
 # --- Public Endpoints ---
 
 @app.get("/", response_class=HTMLResponse)
-async def root():
+def root():
     return """<!DOCTYPE html>
 <html><head><title>SolarPunk Energy Derivatives API</title>
 <style>
@@ -310,7 +315,7 @@ SolarPunk gives them the tools Wall Street won't.</p>
 # --- V1 API Endpoints ---
 
 @app.post("/v1/price")
-async def price_option_v1(req: PricingRequest, auth: dict = Depends(verify_api_key)):
+def price_option_v1(req: PricingRequest, auth: dict = Depends(verify_api_key)):
     try:
         if req.method == "binomial":
             tree = BinomialTree(
@@ -334,7 +339,7 @@ async def price_option_v1(req: PricingRequest, auth: dict = Depends(verify_api_k
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/v1/greeks")
-async def compute_greeks_v1(req: GreeksRequest, auth: dict = Depends(verify_api_key)):
+def compute_greeks_v1(req: GreeksRequest, auth: dict = Depends(verify_api_key)):
     try:
         calc = GreeksCalculator(
             S0=req.S0, K=req.K, T=req.T, r=req.r, sigma=req.sigma,
@@ -346,25 +351,24 @@ async def compute_greeks_v1(req: GreeksRequest, auth: dict = Depends(verify_api_
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/v1/batch")
-async def batch_price_v1(req: BatchPricingRequest, auth: dict = Depends(verify_api_key)):
+def batch_price_v1(req: BatchPricingRequest, auth: dict = Depends(verify_api_key)):
     if auth["tier"] == "demo" and len(req.requests) > 5:
         raise HTTPException(status_code=403, detail="Demo tier limited to 5 items per batch. Upgrade to Starter or Pro.")
 
+    if sum(item.N ** 2 for item in req.requests) > 2_000_000:
+        raise HTTPException(status_code=400, detail="Batch exceeds the pricing workload limit; reduce steps or split the batch.")
     results = []
     for i, item in enumerate(req.requests):
         try:
-            tree = BinomialTree(
-                S0=item.S0, K=item.K, T=item.T, r=item.r, sigma=item.sigma,
-                N=item.N, payoff_type=item.payoff_type
-            )
-            results.append({"index": i, "price": tree.price(), "parameters": item.model_dump()})
+            result = price_option_v1(item, auth)
+            results.append({"index": i, **result})
         except Exception as e:
             results.append({"index": i, "error": str(e)})
 
     return {"results": results, "count": len(results), "tier": auth["tier"]}
 
 @app.post("/v1/risk-assessment")
-async def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(verify_api_key)):
+def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(verify_api_key)):
     if auth["tier"] == "demo":
         raise HTTPException(status_code=403, detail="Risk assessment requires Starter or Pro tier.")
 
@@ -434,7 +438,7 @@ async def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(ve
 
 
 @app.post("/v1/decision-pack")
-async def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_key)):
+def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_key)):
     if auth["tier"] == "demo":
         raise HTTPException(status_code=403, detail="Decision pack requires Starter or Pro tier.")
 
@@ -563,12 +567,12 @@ async def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify
 
 
 @app.post("/v1/operator-workbench")
-async def operator_workbench_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_key)):
+def operator_workbench_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_key)):
     if auth["tier"] == "demo":
         raise HTTPException(status_code=403, detail="Operator workbench requires Starter or Pro tier.")
 
     try:
-        decision_payload = await decision_pack_v1(req, auth)
+        decision_payload = decision_pack_v1(req, auth)
         summary = decision_payload["summary"]
         decision = decision_payload["decision"]
         actions = decision_payload["actions"]
@@ -639,7 +643,7 @@ async def operator_workbench_v1(req: DecisionPackRequest, auth: dict = Depends(v
 # --- Data Endpoints ---
 
 @app.post("/v1/data/solar")
-async def get_solar_parameters(params: SolarParams, auth: dict = Depends(verify_api_key)):
+def get_solar_parameters(params: SolarParams, auth: dict = Depends(verify_api_key)):
     try:
         pricing_params = load_solar_parameters(params.lat, params.lon)
         clean_params = {k: float(v) if isinstance(v, (int, float, np.floating, np.integer)) else str(v)
@@ -649,7 +653,7 @@ async def get_solar_parameters(params: SolarParams, auth: dict = Depends(verify_
         raise HTTPException(status_code=500, detail=f"Data fetch failed: {str(e)}")
 
 @app.post("/v1/data/wind")
-async def get_wind_parameters(params: WindParams, auth: dict = Depends(verify_api_key)):
+def get_wind_parameters(params: WindParams, auth: dict = Depends(verify_api_key)):
     try:
         loader = WindDataLoader(lat=params.lat, lon=params.lon, rotor_diameter_m=params.rotor_diameter_m, hub_height_m=params.hub_height_m)
         pricing_params = loader.load_parameters()
@@ -660,7 +664,7 @@ async def get_wind_parameters(params: WindParams, auth: dict = Depends(verify_ap
         raise HTTPException(status_code=500, detail=f"Data fetch failed: {str(e)}")
 
 @app.post("/v1/data/hydro")
-async def get_hydro_parameters(params: HydroParams, auth: dict = Depends(verify_api_key)):
+def get_hydro_parameters(params: HydroParams, auth: dict = Depends(verify_api_key)):
     try:
         loader = HydroDataLoader(lat=params.lat, lon=params.lon, catchment_area_km2=params.catchment_area_km2, fall_height_m=params.fall_height_m)
         pricing_params = loader.load_parameters()
@@ -673,39 +677,39 @@ async def get_hydro_parameters(params: HydroParams, auth: dict = Depends(verify_
 # --- Legacy endpoints (backward compatible) ---
 
 @app.post("/price")
-async def price_option(req: PricingRequest):
-    return await price_option_v1(req, {"key": "legacy", "tier": "demo"})
+def price_option(req: PricingRequest, auth: dict = Depends(verify_api_key)):
+    return price_option_v1(req, auth)
 
 @app.post("/greeks")
-async def compute_greeks(req: GreeksRequest):
-    return await compute_greeks_v1(req, {"key": "legacy", "tier": "demo"})
+def compute_greeks(req: GreeksRequest, auth: dict = Depends(verify_api_key)):
+    return compute_greeks_v1(req, auth)
 
 @app.post("/price/binomial")
-async def price_binomial(req: PricingRequest):
+def price_binomial(req: PricingRequest, auth: dict = Depends(verify_api_key)):
     req.method = "binomial"
-    return await price_option_v1(req, {"key": "legacy", "tier": "demo"})
+    return price_option_v1(req, auth)
 
 @app.post("/price/monte-carlo")
-async def price_monte_carlo(req: PricingRequest):
+def price_monte_carlo(req: PricingRequest, auth: dict = Depends(verify_api_key)):
     req.method = "monte-carlo"
-    return await price_option_v1(req, {"key": "legacy", "tier": "demo"})
+    return price_option_v1(req, auth)
 
 @app.post("/data/wind")
-async def get_wind_legacy(params: WindParams):
-    return await get_wind_parameters(params, {"key": "legacy", "tier": "demo"})
+def get_wind_legacy(params: WindParams, auth: dict = Depends(verify_api_key)):
+    return get_wind_parameters(params, auth)
 
 @app.post("/data/hydro")
-async def get_hydro_legacy(params: HydroParams):
-    return await get_hydro_parameters(params, {"key": "legacy", "tier": "demo"})
+def get_hydro_legacy(params: HydroParams, auth: dict = Depends(verify_api_key)):
+    return get_hydro_parameters(params, auth)
 
 # --- Health & Status ---
 
 @app.get("/health")
-async def health_check():
+def health_check():
     return {"status": "healthy", "version": "1.0.0", "engine": "spk-derivatives-0.5.0"}
 
 @app.get("/v1/usage")
-async def usage_stats(auth: dict = Depends(verify_api_key)):
+def usage_stats(auth: dict = Depends(verify_api_key)):
     now = time.time()
     key = auth["key"]
     today_requests = len([t for t in rate_tracker.get(key, []) if now - t < 86400])

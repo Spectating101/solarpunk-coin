@@ -1,4 +1,5 @@
 import { autoMapColumns, parseCsv, pickAlias } from './csv.js';
+import { overlappingIntervalIndexes } from './intervalIntegrity.js';
 import {
   canonicalTimestamp,
   numeric,
@@ -100,7 +101,7 @@ function detectDuplicateWindows(intervals) {
   const seen = new Set();
   const duplicates = [];
   intervals.forEach((row, index) => {
-    const key = `${row.meter_id || '__default__'}|${row.window_start}|${row.window_end}`;
+    const key = JSON.stringify([row.meter_id || null, row.site_id || null, row.window_start, row.window_end]);
     if (seen.has(key)) duplicates.push(index);
     seen.add(key);
   });
@@ -111,7 +112,7 @@ function detectCounterRegression(intervals) {
   const byMeter = new Map();
   for (const row of intervals) {
     if (row.cumulative_kwh == null) continue;
-    const key = row.meter_id || '__default__';
+    const key = JSON.stringify([row.meter_id || null, row.site_id || null]);
     if (!byMeter.has(key)) byMeter.set(key, []);
     byMeter.get(key).push(row);
   }
@@ -121,7 +122,7 @@ function detectCounterRegression(intervals) {
     let previous = null;
     for (const row of sorted) {
       if (previous != null && row.cumulative_kwh < previous) {
-        regressions.push({ meter_id: meterId === '__default__' ? null : meterId, window_start: row.window_start });
+        regressions.push({ meter_id: JSON.parse(meterId)[0], site_id: JSON.parse(meterId)[1], window_start: row.window_start });
       }
       previous = row.cumulative_kwh;
     }
@@ -132,7 +133,9 @@ function detectCounterRegression(intervals) {
 function finalizeAdapter({ adapter_id, adapter_version = '1.0.0', source, intervals, diagnostics = [], capabilities = {} }) {
   const duplicates = detectDuplicateWindows(intervals);
   const counterRegressions = detectCounterRegression(intervals);
+  const overlaps = overlappingIntervalIndexes(intervals);
   const blockers = [];
+  if (overlaps.length) blockers.push(diagnostic('overlapping_window', 'BLOCK', `${overlaps.length} overlapping measurement window(s) detected`, { row_indexes: overlaps }));
   if (duplicates.length) blockers.push(diagnostic('duplicate_window', 'BLOCK', `${duplicates.length} duplicate measurement window(s) detected`, { row_indexes: duplicates }));
   if (counterRegressions.length) blockers.push(diagnostic('counter_regression', 'BLOCK', `${counterRegressions.length} cumulative counter regression(s) detected`, { regressions: counterRegressions }));
   const surplus = sum(intervals.filter((row) => row.surplus_basis_ok).map((row) => row.eligible_surplus_kwh));
@@ -199,6 +202,7 @@ export function normalizeGenericCsv(csvText, mapping = null) {
 export function normalizeGreenButtonCsv(csvText) {
   const { rows } = parseCsv(csvText);
   const daily = new Map();
+  const channels = [];
   const diagnostics = [];
   rows.forEach((row, index) => {
     try {
@@ -212,20 +216,26 @@ export function normalizeGreenButtonCsv(csvText) {
       if (flow && isExport === isImport) {
         diagnostics.push(diagnostic('ambiguous_flow_direction', 'WARNING', `Row ${index + 1} has ambiguous flow direction: ${flow}`));
       }
+      if (unixSeconds(start) >= unixSeconds(end)) throw new Error('interval_end must be after interval_start');
+      const meterId = pickAlias(row, ['meter_id', 'meter', 'usage_point_id']) || null;
+      const siteId = pickAlias(row, ['site_id', 'site']) || null;
+      channels.push({ meter_id: JSON.stringify([meterId, isImport && !isExport ? 'import' : 'export']), site_id: siteId, window_start: start, window_end: end });
       const day = start.slice(0, 10);
-      const bucket = daily.get(day) || { export_kwh: 0, site_load_kwh: 0, window_start: `${day}T00:00:00Z`, window_end: `${day}T23:59:59Z` };
+      const key = JSON.stringify([meterId, siteId, day]);
+      const bucket = daily.get(key) || { meter_id: meterId, site_id: siteId || `utility-day-${day}`, export_kwh: 0, site_load_kwh: 0, window_start: `${day}T00:00:00Z`, window_end: `${day}T23:59:59Z` };
       if (isImport && !isExport) bucket.site_load_kwh += usage;
       else bucket.export_kwh += usage;
-      daily.set(day, bucket);
-      if (unixSeconds(start) >= unixSeconds(end)) throw new Error('interval_end must be after interval_start');
+      daily.set(key, bucket);
     } catch (error) {
       diagnostics.push(diagnostic('utility_row_rejected', 'BLOCK', error.message, { row_index: index + 1 }));
     }
   });
-  const intervals = [...daily.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([day, bucket]) => canonicalInterval({
+  const overlaps = overlappingIntervalIndexes(channels);
+  const duplicates = detectDuplicateWindows(channels);
+  if (overlaps.length || duplicates.length) diagnostics.push(diagnostic('overlapping_utility_window', 'BLOCK', 'Overlapping or duplicate utility intervals must be reconciled before daily aggregation', { row_indexes: [...new Set([...overlaps, ...duplicates])] }));
+  const intervals = [...daily.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([, bucket]) => canonicalInterval({
     ...bucket,
     source: 'green_button_or_utility_interval',
-    site_id: `utility-day-${day}`,
   }, { source_kind: 'utility_interval_export' }));
   if (!intervals.length) throw new Error('No utility rows survived normalization');
   diagnostics.push(diagnostic('utility_generation_unknown', 'WARNING', 'Utility interval exports can establish import/export flow but do not by themselves prove on-site generation. Claim policies must treat export-only evidence explicitly.'));

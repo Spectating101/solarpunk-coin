@@ -1,0 +1,82 @@
+[
+  {
+    "package": "braces",
+    "version": "3.0.3",
+    "file": "lib/compile.js",
+    "upstream": "https://github.com/micromatch/braces/pull/75",
+    "original_sha256": "dc98f22eee3d511785d92a00758d5f0d48efed5f5813bdecc2de430c529b5c9f",
+    "patched_sha256": "0cd703c97c843067bf0d879ec853691661c4eca8c32c5977365434fbd2b4d820",
+    "replacements": [
+      {
+        "before": "const utils = require('./utils');\n\nconst compile = (ast, options = {}) => {\n  const walk = (node, parent = {}) => {\n    const invalidBlock = utils.isInvalidBrace(parent);\n    const invalidNode = node.invalid === true && options.escapeInvalid === true;\n    const invalid = invalidBlock === true || invalidNode === true;\n",
+        "after": "const utils = require('./utils');\n\nconst compile = (ast, options = {}) => {\n  const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : 64;\n  const walk = (node, parent = {}, depth = 0) => {\n    if (depth > maxDepth) {\n      throw new RangeError('input exceeds maximum nesting depth. Use options.maxDepth to increase or disable the limit.');\n    }\n    const invalidBlock = utils.isInvalidBrace(parent);\n    const invalidNode = node.invalid === true && options.escapeInvalid === true;\n    const invalid = invalidBlock === true || invalidNode === true;\n"
+      },
+      {
+        "before": "    }\n\n    if (node.isClose === true) {\n      console.log('node.isClose', prefix, node.value);\n      return prefix + node.value;\n    }\n\n",
+        "after": "    }\n\n    if (node.isClose === true) {\n      return prefix + node.value;\n    }\n\n"
+      },
+      {
+        "before": "\n    if (node.nodes) {\n      for (const child of node.nodes) {\n        output += walk(child, node);\n      }\n    }\n\n",
+        "after": "\n    if (node.nodes) {\n      for (const child of node.nodes) {\n        output += walk(child, node, depth + 1);\n      }\n    }\n\n"
+      }
+    ]
+  },
+  {
+    "package": "braces",
+    "version": "3.0.3",
+    "file": "lib/expand.js",
+    "upstream": "https://github.com/micromatch/braces/pull/75",
+    "original_sha256": "41ccc196ebfa7b7781a634e721eb744e4e7bcb54cba427a7e3d6806a1b9e58f7",
+    "patched_sha256": "1be0d099099e24e4c0182b9523ce89e5b1f26ebd239cd95962887dd8c59c9a81",
+    "replacements": [
+      {
+        "before": "const stringify = require('./stringify');\nconst utils = require('./utils');\n\nconst append = (queue = '', stash = '', enclose = false) => {\n  const result = [];\n\n  queue = [].concat(queue);\n",
+        "after": "const stringify = require('./stringify');\nconst utils = require('./utils');\n\nconst append = (queue = '', stash = '', enclose = false, depth = 0, maxDepth = 64) => {\n  if (depth > maxDepth) {\n    throw new RangeError('input exceeds maximum nesting depth. Use options.maxDepth to increase or disable the limit.');\n  }\n  const result = [];\n\n  queue = [].concat(queue);\n"
+      },
+      {
+        "before": "  for (const item of queue) {\n    if (Array.isArray(item)) {\n      for (const value of item) {\n        result.push(append(value, stash, enclose));\n      }\n    } else {\n      for (let ele of stash) {\n        if (enclose === true && typeof ele === 'string') ele = `{${ele}}`;\n        result.push(Array.isArray(ele) ? append(item, ele, enclose) : item + ele);\n      }\n    }\n  }\n",
+        "after": "  for (const item of queue) {\n    if (Array.isArray(item)) {\n      for (const value of item) {\n        result.push(append(value, stash, enclose, depth + 1, maxDepth));\n      }\n    } else {\n      for (let ele of stash) {\n        if (enclose === true && typeof ele === 'string') ele = `{${ele}}`;\n        result.push(Array.isArray(ele) ? append(item, ele, enclose, depth + 1, maxDepth) : item + ele);\n      }\n    }\n  }\n"
+      },
+      {
+        "before": "\nconst expand = (ast, options = {}) => {\n  const rangeLimit = options.rangeLimit === undefined ? 1000 : options.rangeLimit;\n\n  const walk = (node, parent = {}) => {\n    node.queue = [];\n\n    let p = parent;\n",
+        "after": "\nconst expand = (ast, options = {}) => {\n  const rangeLimit = options.rangeLimit === undefined ? 1000 : options.rangeLimit;\n  const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : 64;\n\n  const walk = (node, parent = {}, depth = 0) => {\n    if (depth > maxDepth) {\n      throw new RangeError('input exceeds maximum nesting depth. Use options.maxDepth to increase or disable the limit.');\n    }\n    node.queue = [];\n\n    let p = parent;\n"
+      },
+      {
+        "before": "      }\n\n      if (child.nodes) {\n        walk(child, node);\n      }\n    }\n\n",
+        "after": "      }\n\n      if (child.nodes) {\n        walk(child, node, depth + 1);\n      }\n    }\n\n"
+      }
+    ]
+  },
+  {
+    "package": "elliptic",
+    "version": "6.6.1",
+    "file": "lib/elliptic/ec/index.js",
+    "upstream": "https://github.com/indutny/elliptic/pull/345",
+    "original_sha256": "668741c0c921bf5174439104e8fd20636578373cbbd28736ccbcd8e59a5aeafc",
+    "patched_sha256": "093125ed199d6c89cc61f5011d03d4c10a7122ba85b0c782da0cee79c5d9d75d",
+    "replacements": [
+      {
+        "before": "  var ns1 = this.n.sub(new BN(1));\n\n  for (var iter = 0; ; iter++) {\n    var k = options.k ?\n      options.k(iter) :\n      new BN(drbg.generate(this.n.byteLength()));\n    k = this._truncateToN(k, true);\n    if (k.cmpn(1) <= 0 || k.cmp(ns1) >= 0)\n      continue;\n\n",
+        "after": "  var ns1 = this.n.sub(new BN(1));\n\n  for (var iter = 0; ; iter++) {\n    var k;\n    if (options.k) {\n      k = this._truncateToN(options.k(iter), true);\n    } else {\n      // Pass array directly to _truncateToN to preserve leading zero byte count\n      k = this._truncateToN(drbg.generate(this.n.byteLength()), true);\n    }\n    if (k.cmpn(1) <= 0 || k.cmp(ns1) >= 0)\n      continue;\n\n"
+      }
+    ]
+  },
+  {
+    "package": "braces",
+    "version": "3.0.3",
+    "file": "lib/stringify.js",
+    "upstream": "https://github.com/micromatch/braces/issues/73 (additional local stringify depth guard)",
+    "original_sha256": "379f22d77bfa1478341ccd49c5e4267464aabcbba03558bab332aac23fc6f23a",
+    "patched_sha256": "a8d14748956c337c1c0cdb8420a80d8f420abc0a3fdfe557e2f1afa98ed370e0",
+    "replacements": [
+      {
+        "before": "  const stringify = (node, parent = {}) => {",
+        "after": "  const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : 64;\n  const stringify = (node, parent = {}, depth = 0) => {\n    if (depth > maxDepth) throw new RangeError('input exceeds maximum nesting depth. Use options.maxDepth to increase or disable the limit.');"
+      },
+      {
+        "before": "output += stringify(child);",
+        "after": "output += stringify(child, node, depth + 1);"
+      }
+    ]
+  }
+]

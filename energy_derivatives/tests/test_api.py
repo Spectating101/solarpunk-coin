@@ -1,13 +1,25 @@
 import sys
+import time
+import pytest
 from pathlib import Path
 from fastapi.testclient import TestClient
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from api.main import API_KEYS, app  # type: ignore  # noqa: E402
+from api.main import API_KEYS, RATE_LIMITS, rate_tracker, app  # type: ignore  # noqa: E402
 
 client = TestClient(app)
+
+
+@pytest.fixture(autouse=True)
+def reset_api_state():
+    keys = dict(API_KEYS)
+    rate_tracker.clear()
+    yield
+    API_KEYS.clear()
+    API_KEYS.update(keys)
+    rate_tracker.clear()
 
 
 def test_price_endpoint_binomial():
@@ -70,3 +82,45 @@ def test_operator_workbench_with_starter_key():
     body = resp.json()
     assert body["decision"]["immediate_go_no_go"] in {"GO", "NO_GO"}
     assert "assignments" in body
+
+
+@pytest.mark.parametrize("route", ["/v1/price", "/price", "/price/binomial", "/price/monte-carlo", "/greeks"])
+def test_legacy_and_versioned_routes_share_auth_and_rate_limits(route):
+    payload = {"S0": 1, "K": 1, "sigma": 0.2, "N": 10}
+    assert client.post(route, json=payload, headers={"X-API-Key": "invalid"}).status_code == 401
+    rate_tracker["anonymous"] = [time.time()] * RATE_LIMITS["demo"]["requests_per_minute"]
+    assert client.post(route, json=payload).status_code == 429
+
+
+def test_pricing_and_batch_workload_limits():
+    payload = {"S0": 1, "K": 1, "sigma": 0.2, "N": 1001}
+    assert client.post("/price", json=payload).status_code == 422
+    API_KEYS["test-budget"] = "starter"
+    payload["N"] = 1000
+    assert client.post("/v1/batch", json={"requests": [payload] * 3},
+                       headers={"X-API-Key": "test-budget"}).status_code == 400
+    assert client.post("/price", json={**payload, "S0": "NaN"}).status_code == 422
+
+
+def test_pricing_work_does_not_block_health(monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+    from api.main import BinomialTree
+    entered, release = Event(), Event()
+
+    def controlled_price(self):
+        entered.set()
+        release.wait(2)
+        return 1.0
+
+    monkeypatch.setattr(BinomialTree, "price", controlled_price)
+    with TestClient(app) as shared, ThreadPoolExecutor(1) as worker:
+        pending = worker.submit(shared.post, "/price", json={"S0": 1, "K": 1, "sigma": 0.2, "N": 10})
+        try:
+            assert entered.wait(1)
+            started = time.monotonic()
+            assert shared.get("/health").status_code == 200
+            assert time.monotonic() - started < 1
+        finally:
+            release.set()
+        assert pending.result(timeout=3).status_code == 200

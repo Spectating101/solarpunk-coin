@@ -82,10 +82,10 @@ const OUTPUT_ROWS = [
 ];
 
 export default function ProgrammeSurface({ viewMode, onNavigate, onOpenFullAnalysis }) {
-  const { pack, receiptsById } = useCaseWorkbench();
+  const { pack, receiptsByKey } = useCaseWorkbench();
   const [activeId, setActiveId] = useState(PROGRAMME_CLAIMS[0].id);
   const active = useMemo(() => PROGRAMME_CLAIMS.find((item) => item.id === activeId) || PROGRAMME_CLAIMS[0], [activeId]);
-  const receiptCount = Object.keys(receiptsById || {}).length;
+  const receiptCount = Object.keys(receiptsByKey || {}).length;
 
   if (viewMode === 'full') {
     return (

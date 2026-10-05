@@ -15,8 +15,9 @@ interface IProtocolTreasuryBonds {
 /**
  * @title SolarPunkOption
  * @notice Margin-based clearinghouse for energy index options (European, cash-settled in USDC or compatible collateral).
- * @dev Simplified MVP: weighted-median oracle updates, per-series margining, and liquidation hooks.
- *      Heavy pricing happens off-chain; contract enforces margin/settlement and trusts posted index values.
+ * @dev Bilateral, explicitly approved matching with limited recourse to each pair's posted margin.
+ *      Positive PnL is transferred from the matched loser, never created from unrelated deposits.
+ *      Price-gap losses are capped at posted pair collateral; oracle prices remain trusted inputs.
  */
 contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     using SafeERC20 for IERC20Metadata;
@@ -60,6 +61,10 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
 
     mapping(bytes32 => Series) public series;
     mapping(address => mapping(bytes32 => Position)) public positions;
+    mapping(address => mapping(bytes32 => address)) public counterparties;
+    mapping(bytes32 => bool) public approvedMatches;
+    mapping(bytes32 => uint256) public settlementIndexes;
+    uint256 public totalMarginLiability;
 
     event SeriesCreated(bytes32 indexed seriesId, uint64 expiry, uint128 strike, bool isCall, uint128 notional);
     event IndexUpdated(uint256 index, bytes32 indexed sourceHash, uint256 timestamp);
@@ -76,6 +81,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     event GovernanceActionQueued(bytes32 indexed actionId, uint256 executeAfter);
     event GovernanceActionCancelled(bytes32 indexed actionId);
     event GovernanceActionConsumed(bytes32 indexed actionId);
+    event SettlementIndexSet(bytes32 indexed seriesId, uint256 index, bytes32 sourceHash);
     event PositionSettled(address indexed user, bytes32 indexed seriesId, uint256 finalPayoff, uint256 marginReturned);
 
     error InvalidSeries();
@@ -85,6 +91,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     error Unauthorized();
     error SeriesExpired();
     error StillHealthy();
+    error MatchedTradeRequired();
+    error SettlementIndexRequired();
 
     mapping(bytes32 => uint256) public queuedGovernanceActions;
 
@@ -266,6 +274,75 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         emit IndexUpdated(newIndex, sourceHash, block.timestamp);
     }
 
+    /// @notice Freeze a series-specific expiry price. Later global updates cannot change it.
+    function setSettlementIndex(bytes32 seriesId, uint256 index, bytes32 sourceHash)
+        external onlyRole(ORACLE_ROLE)
+    {
+        Series memory s = series[seriesId];
+        if (!s.exists) revert InvalidSeries();
+        require(block.timestamp >= s.expiry, "series not expired");
+        require(index > 0 && settlementIndexes[seriesId] == 0, "invalid or frozen settlement index");
+        _requireBond(msg.sender, minOracleBond, "oracle bond too low");
+        settlementIndexes[seriesId] = index;
+        emit SettlementIndexSet(seriesId, index, sourceHash);
+    }
+
+    function matchedPositionHash(bytes32 seriesId, address party, address counterparty,
+        int256 quantity, uint256 ownMargin, uint256 otherMargin, uint64 deadline)
+        public view returns (bytes32)
+    {
+        return keccak256(abi.encode(block.chainid, address(this), seriesId, party,
+            counterparty, quantity, ownMargin, otherMargin, deadline));
+    }
+
+    /// @notice Approve or revoke exact, one-use terms; ERC20 allowance alone is not trade consent.
+    function approveMatchedPosition(bytes32 seriesId, address counterparty, int256 quantity,
+        uint256 ownMargin, uint256 otherMargin, uint64 deadline, bool approved) external
+    {
+        require(counterparty != address(0) && counterparty != msg.sender, "invalid counterparty");
+        require(quantity != 0 && quantity != type(int256).min, "invalid quantity");
+        if (approved) require(deadline >= block.timestamp, "match expired");
+        approvedMatches[matchedPositionHash(seriesId, msg.sender, counterparty,
+            quantity, ownMargin, otherMargin, deadline)] = approved;
+    }
+
+    function openMatchedPosition(bytes32 seriesId, address counterparty, int256 quantity,
+        uint256 ownMargin, uint256 otherMargin, uint64 deadline)
+        external whenNotPaused nonReentrant
+    {
+        _requireIndexSet();
+        Series memory s = series[seriesId];
+        if (!s.exists) revert InvalidSeries();
+        if (s.expiry <= block.timestamp) revert SeriesExpired();
+        require(counterparty != address(0) && counterparty != msg.sender, "invalid counterparty");
+        require(quantity != 0 && quantity != type(int256).min, "invalid quantity");
+        require(deadline >= block.timestamp, "match expired");
+        Position storage p = positions[msg.sender][seriesId];
+        Position storage other = positions[counterparty][seriesId];
+        require(p.qty == 0 && other.qty == 0, "position already matched");
+        bytes32 approval = matchedPositionHash(seriesId, counterparty, msg.sender,
+            -quantity, otherMargin, ownMargin, deadline);
+        require(approvedMatches[approval], "counterparty approval required");
+        delete approvedMatches[approval];
+        _deposit(p, msg.sender, ownMargin);
+        _deposit(other, counterparty, otherMargin);
+        p.qty = quantity;
+        other.qty = -quantity;
+        p.lastIndex = currentIndex;
+        other.lastIndex = currentIndex;
+        counterparties[msg.sender][seriesId] = counterparty;
+        counterparties[counterparty][seriesId] = msg.sender;
+        _ensureInitialMargin(p, s);
+        _ensureInitialMargin(other, s);
+        uint256 fee = _tradingFeeForQuantity(s, _abs(quantity));
+        if (fee > 0) {
+            collateral.safeTransferFrom(msg.sender, insuranceFund, fee);
+            emit TradingFeeCollected(msg.sender, seriesId, fee);
+        }
+        emit PositionModified(msg.sender, seriesId, quantity, ownMargin, p.margin);
+        emit PositionModified(counterparty, seriesId, -quantity, otherMargin, other.margin);
+    }
+
     // ---------------------- Margin + Positions ----------------------
 
     function modifyPosition(bytes32 seriesId, int256 qtyDelta, uint256 marginDelta) external whenNotPaused nonReentrant {
@@ -277,7 +354,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         Position storage p = positions[msg.sender][seriesId];
 
         // Realize PnL to current index before adjusting
-        _markToIndex(p, s);
+        _markPair(msg.sender, seriesId, s);
 
         if (qtyDelta != 0) {
             uint256 tradingFee = _tradingFeeForQuantity(s, _abs(qtyDelta));
@@ -287,17 +364,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
             }
         }
 
-        if (marginDelta > 0) {
-            collateral.safeTransferFrom(msg.sender, address(this), marginDelta);
-            p.margin += marginDelta;
-        }
-
-        if (qtyDelta != 0) {
-            int256 newQty = p.qty + qtyDelta;
-            p.qty = newQty;
-        }
-
-        p.lastIndex = currentIndex;
+        _deposit(p, msg.sender, marginDelta);
+        if (qtyDelta != 0) _reducePair(msg.sender, seriesId, qtyDelta);
 
         _ensureInitialMargin(p, s);
 
@@ -307,9 +375,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     function depositMargin(bytes32 seriesId, uint256 amount) external whenNotPaused nonReentrant {
         if (!series[seriesId].exists) revert InvalidSeries();
         require(amount > 0, "amount required");
-        collateral.safeTransferFrom(msg.sender, address(this), amount);
         Position storage p = positions[msg.sender][seriesId];
-        p.margin += amount;
+        _deposit(p, msg.sender, amount);
         emit PositionModified(msg.sender, seriesId, 0, amount, p.margin);
     }
 
@@ -317,12 +384,13 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         _requireIndexSet();
         Series memory s = series[seriesId];
         if (!s.exists) revert InvalidSeries();
-        if (s.expiry <= block.timestamp) revert SeriesExpired(); // use settle() after expiry
+        if (s.expiry <= block.timestamp && positions[msg.sender][seriesId].qty != 0) revert SeriesExpired(); // flat margin can always exit
 
         Position storage p = positions[msg.sender][seriesId];
-        _markToIndex(p, s);
+        _markPair(msg.sender, seriesId, s);
         require(amount <= p.margin, "insufficient margin");
         p.margin -= amount;
+        totalMarginLiability -= amount;
         _ensureMaintenanceMargin(p, s);
 
         collateral.safeTransfer(msg.sender, amount);
@@ -334,8 +402,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         Series memory s = series[seriesId];
         if (!s.exists) revert InvalidSeries();
         Position storage p = positions[user][seriesId];
-        _markToIndex(p, s);
-        p.lastIndex = currentIndex;
+        _markPair(user, seriesId, s);
         return p.margin;
     }
 
@@ -346,7 +413,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         if (!s.exists) revert InvalidSeries();
         Position storage p = positions[user][seriesId];
 
-        _markToIndex(p, s);
+        _markPair(user, seriesId, s);
 
         uint256 absQty = _abs(p.qty);
         if (absQty == 0) revert StillHealthy();
@@ -357,8 +424,8 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         uint256 penalty = (p.margin * liquidationPenaltyBps) / 10_000;
         uint256 remaining = p.margin - penalty;
         p.margin = 0;
-        p.qty = 0;
-        p.lastIndex = currentIndex;
+        _reducePair(user, seriesId, -p.qty);
+        totalMarginLiability -= penalty + remaining;
 
         if (penalty > 0) {
             collateral.safeTransfer(insuranceFund, penalty);
@@ -375,8 +442,7 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
     /**
      * @notice Settle an expired position and return remaining collateral
      * @dev Called by any position holder after series expiry. Marks PnL to the
-     *      current index (which should reflect the expiry settlement price posted
-     *      by the oracle), closes the position, and returns all remaining margin.
+     *      series-specific settlement index frozen by the oracle, closes the position, and returns all remaining margin.
      *      `modifyPosition` blocks with SeriesExpired after expiry, so this is
      *      the only exit path for open positions once a series expires.
      * @param seriesId The series to settle
@@ -385,19 +451,16 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         Series memory s = series[seriesId];
         if (!s.exists) revert InvalidSeries();
         require(s.expiry <= block.timestamp, "Series not yet expired");
-        if (currentIndex == 0) revert IndexNotSet();
-
         Position storage p = positions[msg.sender][seriesId];
-        require(p.qty != 0, "No position to settle");
+        require(p.qty != 0 || p.margin > 0, "No position to settle");
 
         // Realize all PnL at final settlement index
-        _markToIndex(p, s);
-        p.lastIndex = currentIndex;
-
+        _markPair(msg.sender, seriesId, s);
         uint256 marginToReturn = p.margin;
-        uint256 finalPayoff = _payoff(currentIndex, s);
+        uint256 finalPayoff = _payoff(settlementIndexes[seriesId], s);
+        if (p.qty != 0) _reducePair(msg.sender, seriesId, -p.qty);
         p.margin = 0;
-        p.qty = 0;
+        totalMarginLiability -= marginToReturn;
 
         if (marginToReturn > 0) {
             collateral.safeTransfer(msg.sender, marginToReturn);
@@ -439,47 +502,60 @@ contract SolarPunkOption is AccessControl, Pausable, ReentrancyGuard {
         require(bonded >= minBond, err);
     }
 
-    function _markToIndex(Position storage p, Series memory s) internal {
-        if (p.qty == 0) {
-            p.lastIndex = currentIndex;
-            return;
+    function _deposit(Position storage p, address party, uint256 amount) internal {
+        if (amount == 0) return;
+        uint256 beforeBalance = collateral.balanceOf(address(this));
+        collateral.safeTransferFrom(party, address(this), amount);
+        // Exact incoming collateral is required before increasing liabilities; this rejects transfer fees.
+        // slither-disable-next-line incorrect-equality
+        require(collateral.balanceOf(address(this)) - beforeBalance == amount, "unsupported transfer-fee collateral");
+        p.margin += amount;
+        totalMarginLiability += amount;
+    }
+
+    function _reducePair(address user, bytes32 seriesId, int256 delta) internal {
+        Position storage p = positions[user][seriesId];
+        int256 next = p.qty + delta;
+        if (p.qty == 0 || _abs(next) >= _abs(p.qty)
+            || (next != 0 && (next > 0) != (p.qty > 0))) revert MatchedTradeRequired();
+        address counterparty = counterparties[user][seriesId];
+        require(counterparty != address(0), "missing matched counterparty");
+        Position storage other = positions[counterparty][seriesId];
+        require(other.qty == -p.qty, "pair quantity mismatch");
+        p.qty = next;
+        other.qty = -next;
+        if (next == 0) {
+            delete counterparties[user][seriesId];
+            delete counterparties[counterparty][seriesId];
         }
+    }
 
-        uint256 prevIndex = p.lastIndex == 0 ? currentIndex : p.lastIndex;
-        if (currentIndex == prevIndex) {
-            return;
+    function _markPair(address user, bytes32 seriesId, Series memory s) internal {
+        Position storage p = positions[user][seriesId];
+        if (p.qty == 0) return;
+        uint256 index = currentIndex;
+        if (block.timestamp >= s.expiry) {
+            index = settlementIndexes[seriesId];
+            if (index == 0) revert SettlementIndexRequired();
         }
-
-        uint256 prevPayoff = _payoff(prevIndex, s);
-        uint256 newPayoff = _payoff(currentIndex, s);
-
-        int256 delta = int256(newPayoff) - int256(prevPayoff);
-        if (delta == 0) {
-            p.lastIndex = currentIndex;
-            return;
+        address counterparty = counterparties[user][seriesId];
+        require(counterparty != address(0), "missing matched counterparty");
+        Position storage other = positions[counterparty][seriesId];
+        require(other.qty == -p.qty && other.lastIndex == p.lastIndex, "pair state mismatch");
+        int256 delta = int256(_payoff(index, s)) - int256(_payoff(p.lastIndex, s));
+        if (delta != 0) {
+            uint256 absDelta = uint256(delta > 0 ? delta : -delta);
+            uint256 size = Math.mulDiv(s.notional, _abs(p.qty), 1);
+            uint256 pnl = Math.mulDiv(Math.mulDiv(absDelta, size, 1), collateralScale, priceScale);
+            bool gain = (delta > 0 && p.qty > 0) || (delta < 0 && p.qty < 0);
+            Position storage loser = gain ? other : p;
+            Position storage winner = gain ? p : other;
+            uint256 fundedPnl = pnl > loser.margin ? loser.margin : pnl;
+            loser.margin -= fundedPnl;
+            winner.margin += fundedPnl;
         }
-
-        uint256 absDelta = uint256(delta > 0 ? delta : -delta);
-        uint256 absQty = _abs(p.qty);
-
-        // Scale price PnL (priceDecimals) into collateral decimals
-        uint256 size = Math.mulDiv(s.notional, absQty, 1);
-        uint256 pnlRaw = Math.mulDiv(absDelta, size, 1); // still in price decimals
-        uint256 pnlTotal = Math.mulDiv(pnlRaw, collateralScale, priceScale);
-
-        bool isGain = (delta > 0 && p.qty > 0) || (delta < 0 && p.qty < 0);
-
-        if (isGain) {
-            p.margin += pnlTotal;
-        } else {
-            if (pnlTotal >= p.margin) {
-                p.margin = 0;
-            } else {
-                p.margin -= pnlTotal;
-            }
-        }
-
-        p.lastIndex = currentIndex;
+        p.lastIndex = index;
+        other.lastIndex = index;
     }
 
     function _ensureInitialMargin(Position storage p, Series memory s) internal view {

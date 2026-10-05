@@ -240,6 +240,25 @@ test('capsule verifier rejects cross-object identity disagreement after hashes a
   assert.ok(result.checks.some((item) => item.code === 'cross_object_identity' && !item.ok));
 });
 
+test('capsule replay rejects contradictory receipt rules even with refreshed hashes', async () => {
+  const loaded = await loadPack();
+  for (const mutate of [
+    (r) => { r.evaluated_rules[0].status = r.evaluated_rules[0].status === 'PASS' ? 'BLOCK' : 'PASS'; },
+    (r) => { r.blocking_rules = ['FABRICATED_BLOCKER']; },
+    (r) => { r.binding_constraints = ['FABRICATED_CAPACITY']; },
+  ]) {
+    const bundle = await buildMinimalBundle(loaded);
+    const receipt = JSON.parse(bundle.files['decision-receipt.json']);
+    mutate(receipt);
+    bundle.files['decision-receipt.json'] = jsonText(receipt);
+    await refreshBundle(bundle);
+    const result = await verifyResearchCapsuleBundle(bundle, { packReplay: loaded });
+    assert.equal(result.ok, false);
+    assert.ok(result.checks.some((item) => item.code === 'file_hashes' && item.ok));
+    assert.ok(result.checks.some((item) => item.code === 'cross_object_identity' && !item.ok));
+  }
+});
+
 test('capsule verifier rejects malformed required schemas after hashes are refreshed', async () => {
   const loaded = await loadPack();
   const bundle = await buildMinimalBundle(loaded);
@@ -269,4 +288,21 @@ test('capsule verifier reports FAIL summaries for a missing bundle', async () =>
   assert.equal(result.ok, false);
   assert.equal(result.summary.capsule_integrity, 'FAIL');
   assert.equal(result.summary.schema_validation, 'FAIL');
+});
+
+
+test('malformed lineage and receipt collections fail verification without crashing the consumer', async () => {
+  const loaded = await loadPack();
+  for (const [file, mutate] of [
+    ['lineage.json', () => null],
+    ['decision-receipt.json', (receipt) => ({ ...receipt, evidence: {} })],
+    ['decision-receipt.json', (receipt) => ({ ...receipt, contexts: {} })],
+  ]) {
+    const bundle = await buildMinimalBundle(loaded);
+    bundle.files[file] = jsonText(mutate(JSON.parse(bundle.files[file])));
+    await refreshBundle(bundle);
+    const result = await verifyResearchCapsuleBundle(bundle);
+    assert.equal(result.ok, false);
+    assert.equal(result.summary.capsule_integrity, 'FAIL');
+  }
 });

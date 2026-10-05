@@ -49,7 +49,7 @@ contract PolicyRegistry is AccessControl {
         if (manifestHash == bytes32(0)) revert InvalidManifestHash();
 
         Policy storage current = _policies[policyId];
-        if (current.version != 0 && version <= current.version) revert VersionMustIncrease();
+        if (version == 0 || version <= current.version) revert VersionMustIncrease();
 
         _policies[policyId] = Policy({
             manifestHash: manifestHash,

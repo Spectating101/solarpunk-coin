@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
@@ -41,7 +42,9 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     }
     (runtime_dir / "spk_v1.json").write_text(json.dumps(runtime), encoding="utf-8")
     monkeypatch.setenv("SPK_V1_REPO_ROOT", str(repo))
-    return TestClient(app)
+    monkeypatch.setenv("SPK_V1_API_TOKEN", "test-operator-token")
+    monkeypatch.setattr("spk_v1.health.utc_now", lambda: datetime(2026, 6, 8, tzinfo=timezone.utc))
+    return TestClient(app, headers={"Authorization": "Bearer test-operator-token"})
 
 
 def test_health(client: TestClient):
@@ -89,3 +92,29 @@ def test_counterparties_and_validate(client: TestClient):
     validate = client.get("/v1/validate", params={"check_foundation": False})
     assert validate.status_code == 200
     assert validate.json()["ok"] is True
+
+
+def test_mutations_require_authentication(client, monkeypatch):
+    unauthenticated = TestClient(app)
+    assert unauthenticated.post("/v1/export/evidence").status_code == 401
+    monkeypatch.delenv("SPK_V1_API_TOKEN")
+    assert client.post("/v1/export/evidence").status_code == 503
+    assert client.get("/v1/runtime").status_code == 200
+
+
+def test_export_paths_reject_escape_and_allow_configured_destinations(client, tmp_path, monkeypatch):
+    base = tmp_path / "exports"
+    base.mkdir()
+    monkeypatch.setenv("SPK_V1_API_EXPORT_ROOT", str(base))
+    assert client.post("/v1/export/lake", json={"out_root": "../escape"}).status_code == 422
+    assert client.post("/v1/export/lake", json={"out_root": str(tmp_path / "outside")}).status_code == 422
+    (base / "link").symlink_to(tmp_path, target_is_directory=True)
+    assert client.post("/v1/export/lake", json={"out_root": "link/escape"}).status_code == 422
+    response = client.post("/v1/export/lake", json={"out_root": "allowed"})
+    assert response.status_code == 200
+    assert (base / "allowed" / "manifest.json").exists()
+
+
+def test_caller_cannot_select_arbitrary_rpc_endpoint(client):
+    assert client.post("/v1/sync", params={"rpc_url": "http://169.254.169.254/"}).status_code == 422
+    assert TestClient(app).get("/v1/operator/health", params={"live": True}).status_code == 401

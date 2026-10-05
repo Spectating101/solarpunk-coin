@@ -74,6 +74,14 @@ No PyPI publish required — editable local install is the packaging boundary.
 | POST | `/v1/export/evidence` | Thesis evidence markdown |
 | POST | `/v1/export/lake` | Body: `{"out_root": "..."}` |
 
+All POST endpoints and GET requests with `live=true` require `Authorization: Bearer <token>`.
+Set `SPK_V1_API_TOKEN` in the service environment; without it, mutations return 503 and read-only endpoints remain available.
+Use a generated operator secret, keep it out of source control, and pass it only to authorized local clients.
+
+HTTP lake exports resolve beneath `SPK_V1_API_EXPORT_ROOT` (default: `<repo>/state/exports`); relative paths such as `research/run-001` are recommended. Traversal and symlink escapes return 422. The local CLI retains its filesystem access.
+Caller-supplied RPC URLs must equal the configured Sepolia RPC or an entry in the comma-separated `SPK_V1_API_RPC_ALLOWLIST`.
+Operator health defaults to a cached read; live queries require the bearer token. A non-loopback server bind requires the token to be configured.
+
 Full operator doc: `docs/foundation/BACKEND.md`.
 
 ## Library API

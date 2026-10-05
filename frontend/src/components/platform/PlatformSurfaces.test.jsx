@@ -188,7 +188,7 @@ function providerValue(overrides = {}) {
       },
     },
     settlementMultiplier: 0.4,
-    receiptsById: {},
+    receiptsByKey: {},
     selectCase,
     selectPolicy,
     selectScenario,

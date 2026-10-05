@@ -1,6 +1,6 @@
 import { caseManifestBody, hashCaseManifest } from './case.js';
 import { casePolicyManifestBody, hashCasePolicyManifest } from './casePolicies.js';
-import { constraintEvaluationBody, createCalculatorRegistry } from './constraints.js';
+import { constraintEvaluationBody, createCalculatorRegistry, verifyConstraintEvaluationHash } from './constraints.js';
 import { contextManifestBody, hashContextManifest } from './context.js';
 import { verifyEvidenceEnvelopeHash } from './portableEvidence.js';
 import { round, sha256Hex, stableStringify } from './stable.js';
@@ -97,12 +97,19 @@ function decisionHashBody(value) {
     'ADMISSION_GATE',
   );
   const blockingRules = [...new Set(stringArray(admissionValue.blocking_rules, 'admission.blocking_rules'))];
+  const actualBlockingRules = [...new Set(admissionEvaluations
+    .filter((item) => item.status === 'BLOCK').map((item) => item.calculator_id))];
+  if (stableStringify([...blockingRules].sort()) !== stableStringify([...actualBlockingRules].sort())
+    || admissionResult !== (actualBlockingRules.length ? 'BLOCK' : 'PASS')) {
+    throw new Error('admission summary must agree with gate evaluations and blocking rules');
+  }
 
   const capacityValue = value.capacity;
   if (!capacityValue || typeof capacityValue !== 'object' || Array.isArray(capacityValue)) {
     throw new Error('capacity is required');
   }
-  const capacityEvaluated = Boolean(capacityValue.evaluated);
+  if (typeof capacityValue.evaluated !== 'boolean') throw new Error('capacity.evaluated must be a boolean');
+  const capacityEvaluated = capacityValue.evaluated;
   const capacityEvaluations = normalizeEvaluations(
     capacityValue.evaluations ?? [],
     'capacity.evaluations',
@@ -146,6 +153,15 @@ function decisionHashBody(value) {
     if (!bindingConstraints.length) {
       throw new Error('ADMIT_WITH_LIMIT decision requires at least one binding constraint');
     }
+    const expectedMaximum = round(Math.min(...comparable.evaluations.map((item) => item.capacity)));
+    const expectedBindings = [...new Set(comparable.evaluations
+      .filter((item) => item.capacity === expectedMaximum).map((item) => item.calculator_id))];
+    if (admittedMaximum !== expectedMaximum) {
+      throw new Error('capacity.admitted_maximum must equal the minimum applicable quantity ceiling');
+    }
+    if (stableStringify([...bindingConstraints].sort()) !== stableStringify(expectedBindings.sort())) {
+      throw new Error('capacity.binding_constraints must identify all minimum quantity ceilings');
+    }
   }
 
   return {
@@ -179,11 +195,19 @@ function decisionHashBody(value) {
 }
 
 export async function hashDecisionResultBody(value) {
-  return sha256Hex(stableStringify(decisionHashBody(value)));
+  const body = decisionHashBody(value);
+  await verifyEvaluations(body);
+  return sha256Hex(stableStringify(body));
+}
+
+async function verifyEvaluations(body) {
+  await Promise.all([...body.admission.evaluations, ...body.capacity.evaluations]
+    .map(verifyConstraintEvaluationHash));
 }
 
 export async function buildDecisionResult(value) {
   const body = decisionHashBody(value);
+  await verifyEvaluations(body);
   return {
     ...body,
     decision_id: await sha256Hex(stableStringify(body)),
