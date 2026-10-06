@@ -7,6 +7,7 @@ import {
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
 import SectionNavigator from '../components/SectionNavigator';
+import ScrollRegion from '../components/ScrollRegion';
 import SourceAndLimits from '../components/platform/SourceAndLimits';
 import PolicyDiffPanel from './PolicyDiffPanel';
 
@@ -238,7 +239,7 @@ export default function CompareWorkspace({
                 <div><span className="wb-section-label">Decision matrix</span><h3>Case × policy</h3></div>
                 <span className="case-map-boundary">click any cell to inspect its exact state</span>
               </div>
-              <div className="wb-table-scroll">
+              <ScrollRegion className="wb-table-scroll" label="Case policy decision matrix, scrollable">
                 <table className="comparison-matrix" aria-label="Case policy decision matrix">
                   <thead>
                     <tr>
@@ -267,7 +268,7 @@ export default function CompareWorkspace({
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </ScrollRegion>
             </section>
           </ResponsiveDisclosure>
 
@@ -278,7 +279,7 @@ export default function CompareWorkspace({
             meta="why the result moved"
           >
             <section className="compare-two-column">
-              <article className="compare-panel">
+              <ScrollRegion as="article" className="compare-panel" label="Blocking and binding matrix, scrollable">
                 <div className="constraint-section-heading">
                   <div><span className="wb-section-label">Blocking / binding matrix</span><h3>Primary rule attribution</h3></div>
                 </div>
@@ -293,7 +294,7 @@ export default function CompareWorkspace({
                     }),
                   ])}
                 </div>
-              </article>
+              </ScrollRegion>
 
               <article className="compare-panel">
                 <div className="constraint-section-heading">
@@ -323,7 +324,7 @@ export default function CompareWorkspace({
               <div className="constraint-section-heading">
                 <div><span className="wb-section-label">Capacity table</span><h3>Admitted decisions only</h3></div>
               </div>
-              <div className="wb-table-scroll">
+              <ScrollRegion className="wb-table-scroll" label="Admitted decision capacity table, scrollable">
                 <table className="wb-data-table" aria-label="Admitted decision capacity table">
                   <thead><tr><th scope="col">Case</th><th scope="col">Policy</th><th scope="col">Decision ID</th><th scope="col">Admitted max</th><th scope="col">Binding ceiling</th></tr></thead>
                   <tbody>
@@ -338,7 +339,7 @@ export default function CompareWorkspace({
                     ))) }
                   </tbody>
                 </table>
-              </div>
+              </ScrollRegion>
             </section>
           </ResponsiveDisclosure>
         </>

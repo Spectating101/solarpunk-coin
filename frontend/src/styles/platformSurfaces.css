@@ -743,16 +743,23 @@
   color: var(--dim);
 }
 
+/* A vertical chain: the panel is a third of the page, too narrow for a three-column diagram. */
 .research-architecture-map {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 9px;
   align-items: center;
+}
+
+.research-architecture-map > svg {
+  margin: 0 auto;
+  transform: rotate(90deg);
 }
 
 .research-architecture-map > div {
   display: grid;
   gap: 5px;
+  min-width: 0;
   min-height: 100px;
   padding: 13px;
   border: 1px solid var(--border);
@@ -1547,4 +1554,52 @@
 
 .investigation-stage-list {
   margin-bottom: 12px;
+}
+
+/* The state pickers must shrink to the column instead of sizing to their longest option. */
+.platform-state-controls {
+  min-width: 0;
+}
+
+.platform-state-controls select {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 680px) {
+  .platform-state-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Decision text must wrap inside its card on very narrow screens. */
+.field-decision-stack strong,
+.field-decision-stack small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .field-decision-stack > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Titles in flex rows and cards must wrap instead of being crushed to a sliver. */
+.platform-panel strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* On very narrow screens a long status badge drops under its title instead of squeezing it. */
+@media (max-width: 420px) {
+  .field-pipeline-list > div {
+    grid-template-columns: 27px minmax(0, 1fr);
+    padding-block: 8px;
+  }
+
+  .field-pipeline-list > div > :nth-child(3) {
+    grid-column: 2;
+    justify-self: start;
+  }
 }

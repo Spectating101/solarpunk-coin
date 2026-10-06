@@ -30,7 +30,10 @@ const VIEWPORTS = [
   ['tablet', { width: 820, height: 1180 }],
   ['mobile', { width: 390, height: 844 }],
 ];
-const KEYBOARD_ROUTES = ['lab', 'case/TYN-001', 'compare'];
+const KEYBOARD_ROUTES = [
+  'lab', 'investigate', 'case/TYN-001', 'compare', 'receipts', 'research', 'programme',
+  'evidence', 'verify', 'study', 'reproduce', 'runs',
+];
 const MAX_TAB_STOPS = 70;
 const MIN_FOCUS_RING_CONTRAST = 3;
 

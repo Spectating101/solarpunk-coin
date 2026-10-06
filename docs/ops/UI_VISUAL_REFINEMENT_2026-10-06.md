@@ -57,6 +57,41 @@ Before and after, character-weighted, desktop: text under 12px fell from 53–87
 | Guards | `scripts/check_accessibility.mjs` (`npm run policy-lab:a11y`) and a third-party-origin budget in `check_visual_quality.mjs`; the visual check now also covers tablet width and 18 routes. Both are wired into `.github/workflows/case_workbench_v2.yml`, which has not run on this unpublished branch. `axe-core` is a dev-only dependency (MPL-2.0, not bundled); the lockfile change is 11 lines and the four dependency backports still verify. Each guard was proved with a negative control. |
 | Tests changed | Case lens buttons are now named by their visible text, so three tests and `capture_case_workbench_v2.mjs` match by prefix. The horizon toggle drops its redundant per-button label; one test and `capture_constraint_protocol_alpha.mjs` target the labelled group. The heavy receipts test has a 30 s timeout. One test title said "four-case". |
 
+## Third pass: exhaustive state coverage
+
+`scripts/check_visual_states.mjs` walks the reachable state space with the same measurements as `check_visual_quality.mjs` (shared in `scripts/lib/visual_measure.mjs`):
+
+| Group | Coverage (profile `full`) |
+|---|---|
+| Routes | 19 routes x overview/full-analysis mode x 320, 390, 820, 1440 and 1920px |
+| Cases | 5 cases x 3 policies x 4 assurance scenarios x 4 lenses, at phone, tablet and desktop |
+| Compare, tools, receipts | every scenario x ordered policy pair, every Analysis Lab and Verification Hub tool, a receipt opened from every case state |
+| Controls | every in-page button clicked in turn (822 clicks), every disclosure open, the mobile menu, the settlement slider at 0/10/40/100 |
+| Settings | 320px reflow, 200% and 400% zoom widths, WCAG text-spacing overrides, forced-colors, reduced motion, A4 print with a real PDF |
+| Engines | `ci` profile in Chromium, Firefox and WebKit (`--browser`) |
+
+Run: `npm run policy-lab:visual-states` (profile `ci`, about 3 minutes) or `npm run policy-lab:visual-states:full` (about 15 minutes, with axe on every state). The `ci` profile is in the CI workflow; the cross-browser runs and the `full` profile are local.
+
+Final results: `full` + axe in Chromium, 2,279 states and 2,254 axe runs, all within budget; `ci` in Firefox (447 states) and WebKit (462 states), all within budget.
+
+What the crawl and the screenshot review found and fixed:
+
+| Finding | Fix |
+|---|---|
+| Research page (Full mode): the "How the programme composes" diagram was crushed into 30px columns, text spilling past its borders | Vertical chain with rotated connectors |
+| Reference page: three-step pipelines laid out in a five-column grid inside half-width cards (steps about 57px wide) | Auto-fit grid |
+| Reproduction list: the MATCH/MISMATCH status auto-placed into a 30px column on phones and tablets | Explicit grid placement |
+| `.event-type` used an undefined `--danger` variable that fell back to #a33 (2.86:1) | Defined `--danger` from the red token |
+| Admitted quantity and binding rule truncated with an ellipsis on phones | Wraps |
+| WebKit: selects sized to their longest option, overflowing their label | `min-width: 0`; one cross-engine select appearance |
+| Full-analysis state pickers overflowed on phones | Shrinkable selects |
+| Keyboard: scroll regions had no focus ring (introduced earlier this day, caught by the keyboard check) | Focus ring on any `tabindex="0"` element |
+| **Print**: receipts and cases printed in the dark theme; without background graphics (the browser default) that is pale text on white | `styles/print.css`: light, high-contrast, no navigation chrome, cards kept whole, disclosures open; a receipt prints as three pages starting with the receipt |
+| Live Sepolia reads could issue a second wave of requests after the page was left | Cancel check, provider `destroy()`, a 400 ms start delay so passing through the page contacts no one; three unit tests |
+| 8 scrollable containers unreachable by keyboard, heading order, an invalid ARIA list | `ScrollRegion` component, heading levels, `role="group"` |
+
+The detectors were also corrected where they were wrong: the measurement ignored 1px visually-hidden elements, requests are attributed to the route the page is on, a squeezed-text check was added (verified with a control), and WebKit's select-popup scroll-width quirk is not reported.
+
 ## Known test behaviour
 
 `ReceiptsWorkspace.test.jsx` ("revisiting a shared decision identity…") builds capsules and takes about 3.7 of its 5 s timeout. On a heavily loaded machine (load average about 11 on 6 cores) the full suite timed out on it three times in a row; with `--maxWorkers=2` all 96 pass. It now has a 30 s timeout (see above).
@@ -66,7 +101,8 @@ Before and after, character-weighted, desktop: text under 12px fell from 53–87
 - Dark theme kept. A light theme was weighed and deferred: about 500 hard-coded colour literals across the CSS make it a larger, riskier change. Colour goes through custom properties, so it is feasible later.
 - 12px is a floor, not a target. Much label text is 12–13px. Raising the floor to 13px is a possible follow-up and was not tested.
 - Navigation still has three layers (primary nav, Overview/Full-analysis switch, full-analysis tools bar). Only the bar's label changed.
-- Hosted Pages, real screen readers (VoiceOver, NVDA, TalkBack) and light-mode preferences were not tested. Automated accessibility checks find only part of the problems.
+- Hosted Pages, real screen readers (VoiceOver, NVDA, TalkBack), real devices and the Windows high-contrast themes were not tested. Automated accessibility checks find only part of the problems. Firefox and WebKit were exercised through Playwright builds, not Firefox ESR, Safari on macOS or iOS.
+- The cross-browser crawl and the `full` profile are not in CI.
 - The historical Reference route reads a public Sepolia RPC as soon as it opens. A "load live reads" button instead of an automatic read would remove that third-party request; that changes behaviour and was not done.
 - The `og:image` URL will 404 until the site is published.
 - On a machine whose Playwright build does not match the installed browser, set `PLAYWRIGHT_BROWSERS_PATH` to a directory that links the installed headless shell under the expected name, or set `CHROMIUM_EXECUTABLE_PATH` for `check_visual_quality.mjs`.

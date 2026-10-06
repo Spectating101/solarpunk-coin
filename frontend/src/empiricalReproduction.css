@@ -315,11 +315,17 @@
   }
 
   .reproduction-file-list article {
-    grid-template-columns: 34px minmax(180px, 1fr) 86px;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
   }
 
   .reproduction-file-list article > div:not(.reproduction-file-name) {
     grid-column: 2 / -1;
+  }
+
+  /* Keep the status at the end of the first row, beside the file name. */
+  .reproduction-file-list article > .reproduction-file-state {
+    grid-column: 3;
+    grid-row: 1;
   }
 }
 
@@ -343,11 +349,16 @@
   }
 
   .reproduction-file-list article {
-    grid-template-columns: 30px minmax(0, 1fr) 76px;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
   }
 
   .reproduction-file-list article > div:not(.reproduction-file-name) {
     grid-column: 1 / -1;
+  }
+
+  .reproduction-file-list article > .reproduction-file-state {
+    grid-column: 3;
+    grid-row: 1;
   }
 
   .reproduction-identity-chain {

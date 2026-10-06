@@ -1,0 +1,152 @@
+/* Print and PDF: a light, high-contrast page for receipts, cases and comparisons.
+ *
+ * Browsers do not print backgrounds by default, so the dark screen theme would print as pale text
+ * on white paper. This sheet loads last and resets colour decisions wholesale; status is always
+ * carried by a text label (BLOCKED, PASS, ...), never by colour alone, so nothing is lost. */
+
+@media print {
+  :root {
+    color-scheme: light;
+    --bg: #fff;
+    --surface: #fff;
+    --surface-2: #fff;
+    --surface-3: #fff;
+    --border: #9aa39d;
+    --border-strong: #5c635e;
+    --green: #0b5d41;
+    --green-dim: transparent;
+    --amber: #7a4a00;
+    --amber-dim: transparent;
+    --red: #9c1c1c;
+    --danger: #9c1c1c;
+    --text: #111;
+    --muted: #2b2f2c;
+    --muted-readable: #1d201e;
+    --dim: #3a3f3b;
+  }
+
+  @page {
+    margin: 14mm 12mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    background-image: none !important;
+    color: #111 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  svg,
+  svg * {
+    color: #111 !important;
+    stroke: currentColor;
+  }
+
+  /* Page chrome and controls have no meaning on paper. */
+  .skip-link,
+  .visually-hidden,
+  .app-minimal-top,
+  .full-analysis-nav,
+  .mobile-nav-trigger,
+  .mobile-primary-menu,
+  .global-view-switch,
+  .platform-mode-note,
+  .section-navigator,
+  .case-investigation-lenses,
+  .case-workspace-actions,
+  .case-next-actions,
+  .receipt-action-row,
+  .historical-reference-link,
+  .site-footer nav,
+  .lab-session-bar,
+  .receipt-index-header,
+  .receipt-index-list,
+  .receipt-index-scroll,
+  input[type='range'] {
+    display: none !important;
+  }
+
+  .app-minimal,
+  .app-minimal.paired-platform-app {
+    max-width: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* The receipt sits in a two-column shell (index + detail); on paper it is just the detail. */
+  .receipts-layout {
+    display: block !important;
+    border: 0 !important;
+  }
+
+  .case-workspace,
+  .compare-workspace,
+  .receipts-workspace,
+  .platform-page,
+  .site-footer {
+    width: 100% !important;
+    padding-top: 0 !important;
+  }
+
+  /* Keep each card and table row whole, and let long identifiers wrap. */
+  tr,
+  .platform-panel,
+  .compare-panel,
+  .receipt-detail > *,
+  .receipt-grid > *,
+  .constraint-rule-row,
+  .quantity-ceiling-row {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  code,
+  pre,
+  .receipt-detail code {
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  /* Scroll regions must show everything. */
+  [role='region'][tabindex],
+  .wb-table-scroll,
+  .platform-table-scroll,
+  .table-scroll {
+    overflow: visible !important;
+  }
+
+  /* Disclosures print open. */
+  details > :not(summary) {
+    display: block !important;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  /* Cards keep an outline so structure survives without fills. */
+  .platform-panel,
+  .compare-panel,
+  .receipt-detail article,
+  .constraint-rule-row,
+  [class*='-card'] {
+    border: 1px solid #5c635e !important;
+  }
+}

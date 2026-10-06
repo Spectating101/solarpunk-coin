@@ -5,6 +5,8 @@ import CURRENCY_ABI from '../abi/SolarPunkCurrencySystem.json';
 import { SEPOLIA_RPC_URL } from '../constants/contracts';
 
 const POLL_MS = 25_000;
+// Wait briefly before the first read so a visitor passing through the page never contacts the RPC endpoint.
+const START_DELAY_MS = 400;
 
 export default function useSpkV1Live(runtime, account = null, refreshKey = 0) {
   const [live, setLive] = useState({ status: 'idle', data: null, error: null });
@@ -13,7 +15,8 @@ export default function useSpkV1Live(runtime, account = null, refreshKey = 0) {
     if (!runtime?.contracts?.solar_punk_coin) return undefined;
 
     let cancelled = false;
-    const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
+    let provider = null;
+    let pollId = null;
     const spkAddress = runtime.contracts.solar_punk_coin;
     const currencyAddress = runtime.contracts.currency_system;
     const deployer = runtime.deployer;
@@ -35,6 +38,8 @@ export default function useSpkV1Live(runtime, account = null, refreshKey = 0) {
           currency.networkMetrics(),
         ]);
 
+        // The page may have been left while the first wave of reads was in flight.
+        if (cancelled) return;
         const counterparties = runtime.counterparties || {};
         const balances = {};
         await Promise.all(
@@ -68,11 +73,17 @@ export default function useSpkV1Live(runtime, account = null, refreshKey = 0) {
       }
     }
 
-    load();
-    const id = window.setInterval(load, POLL_MS);
+    const startId = window.setTimeout(() => {
+      if (cancelled) return;
+      provider = new ethers.JsonRpcProvider(SEPOLIA_RPC_URL);
+      load();
+      pollId = window.setInterval(load, POLL_MS);
+    }, START_DELAY_MS);
     return () => {
       cancelled = true;
-      window.clearInterval(id);
+      window.clearTimeout(startId);
+      if (pollId !== null) window.clearInterval(pollId);
+      provider?.destroy();
     };
   }, [runtime, account, refreshKey]);
 

@@ -72,11 +72,10 @@
 .case-investigation-bar.admitted .case-investigation-result strong { color: var(--green); }
 
 .case-investigation-result span {
-  overflow: hidden;
   color: var(--muted-readable);
   font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .case-investigation-lenses {
@@ -198,12 +197,10 @@
 }
 
 .case-transition-changes code {
-  overflow: hidden;
   color: var(--muted-readable);
   font-family: var(--font-mono);
   font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .case-transition-changes code:first-of-type { grid-area: before; }

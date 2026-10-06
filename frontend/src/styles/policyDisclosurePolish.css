@@ -67,3 +67,11 @@
     display: none;
   }
 }
+
+@media (max-width: 480px) {
+  .policy-diff-rule-section > summary,
+  .policy-metadata-disclosure > summary {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+  }
+}

@@ -15,6 +15,7 @@ import {
   ShieldAlert,
   SlidersHorizontal,
 } from 'lucide-react';
+import ScrollRegion from './ScrollRegion';
 
 const STUDY_FILES = {
   summary: 'market-capacity-summary.json',
@@ -301,7 +302,7 @@ function StressView({ study, selectedRunId, setSelectedRunId }) {
         </div>
       </div>
       <div className="stress-layout">
-        <div className="stress-run-list" role="list" aria-label="Reference stress runs">
+        <div className="stress-run-list" role="group" aria-label="Reference stress runs">
           {runs.map((item) => {
             const baseline = item.policy_results.find((row) => row.policy_id === 'COLLATERAL-FIXED-20');
             return (
@@ -379,7 +380,7 @@ function MethodsView({ study }) {
             <article key={policy.policy_id}>
               <code>{policy.policy_id}</code>
               <strong>{policy.name}</strong>
-              <pre>{policy.formula}</pre>
+              <ScrollRegion as="pre" label={`${policy.name} formula, scrollable`}>{policy.formula}</ScrollRegion>
               <p>{policy.claim}</p>
             </article>
           ))}

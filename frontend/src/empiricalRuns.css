@@ -345,7 +345,7 @@
 .methods-source-panel { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.6rem; }
 .methods-key { display: grid; gap: 0.28rem; padding: 0.7rem; border: 1px solid var(--border); border-radius: 7px; background: rgba(7,13,8,.62); min-width: 0; }
 .methods-key.full { grid-column: 1 / -1; }
-.methods-key code { overflow: hidden; color: var(--green); font-family: var(--font-mono); font-size: 0.75rem; text-overflow: ellipsis; }
+.methods-key code { color: var(--green); font-family: var(--font-mono); font-size: 0.75rem; overflow-wrap: anywhere; }
 .methods-key strong { color: var(--text); font-size: 0.75rem; }
 .methods-step-list { display: grid; gap: 0.48rem; margin: 0; padding: 0; list-style: none; }
 .methods-step-list li { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 0.6rem; padding: 0.65rem; border: 1px solid var(--border); border-radius: 7px; background: rgba(7,13,8,.58); }

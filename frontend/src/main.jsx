@@ -14,6 +14,7 @@ import './styles/policyDisclosurePolish.css';
 import './styles/receiptPolish.css';
 import './styles/caseInvestigationPolish.css';
 import './styles/caseInvestigationLayoutTuning.css';
+import './styles/print.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

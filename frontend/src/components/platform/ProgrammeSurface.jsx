@@ -20,6 +20,7 @@ import {
   PlatformPageIntro,
   StatusBadge,
 } from './PlatformSurface';
+import ScrollRegion from '../ScrollRegion';
 
 const PROGRAMME_CLAIMS = [
   {
@@ -101,7 +102,7 @@ export default function ProgrammeSurface({ viewMode, onNavigate, onOpenFullAnaly
 
         <section className="platform-panel programme-ledger">
           <header><span>Validation ledger</span><h2>Component-by-component status</h2></header>
-          <div className="platform-table-scroll">
+          <ScrollRegion className="platform-table-scroll" label="Programme claims, scrollable">
             <table>
               <thead><tr><th>Component</th><th>Implemented</th><th>Tested</th><th>Reproduced</th><th>External status</th><th>Artifact</th></tr></thead>
               <tbody>
@@ -114,7 +115,7 @@ export default function ProgrammeSurface({ viewMode, onNavigate, onOpenFullAnaly
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollRegion>
         </section>
 
         <section className="platform-two-column programme-full-grid">

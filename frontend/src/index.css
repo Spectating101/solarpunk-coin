@@ -1,5 +1,6 @@
 :root {
   color-scheme: dark;
+  accent-color: #34d399;
   --bg: #070d08;
   --surface: #0d1710;
   --surface-2: #101f14;
@@ -11,6 +12,7 @@
   --amber: #d97706;
   --amber-dim: rgba(217, 119, 6, 0.1);
   --red: #f87171;
+  --danger: var(--red);
   --text: #e4efe5;
   /* Text tiers: each is at least 5.3:1 on every surface (WCAG AA is 4.5:1). */
   --muted: #8aa690;
@@ -2874,6 +2876,7 @@ p {
 }
 
 .event-type {
+  overflow-wrap: anywhere;
   font-weight: 600;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.75rem;
@@ -2980,6 +2983,10 @@ button.audience-cta-card {
   }
 }
 
+.dual-path-grid .public-lab-pipeline {
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+}
+
 .dual-path-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -3054,4 +3061,32 @@ td a:not([class]) {
 
 main:focus {
   outline: none;
+}
+
+/* Disclosure toggles are controls: keep them at least 24px tall. */
+summary {
+  min-height: 24px;
+}
+
+/* A select sizes to its longest option in some engines (WebKit); let it, and its label, shrink. */
+select {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* One look in every engine: Safari otherwise draws its own light grey control. */
+  -webkit-appearance: none;
+  appearance: none;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding-right: 34px;
+  background-color: var(--surface-2);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%239eb5a3' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 12px 8px !important;
+}
+
+label {
+  min-width: 0;
 }

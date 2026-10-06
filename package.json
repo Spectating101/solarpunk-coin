@@ -9,6 +9,8 @@
     "policy-lab:preflight": "node scripts/policy_lab_preflight.mjs",
     "policy-lab:visual-quality": "node scripts/check_visual_quality.mjs",
     "policy-lab:a11y": "node scripts/check_accessibility.mjs",
+    "policy-lab:visual-states": "node scripts/check_visual_states.mjs --profile ci",
+    "policy-lab:visual-states:full": "node scripts/check_visual_states.mjs --profile full --axe",
     "policy-lab:test-core": "node --test packages/constraint-core/test/*.test.mjs",
     "policy-lab:test-frontend": "cd frontend && npm run test:run",
     "policy-lab:build": "npm run policy-lab:preflight && cd frontend && npm run build",

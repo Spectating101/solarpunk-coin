@@ -13,6 +13,8 @@ on:
       - 'scripts/check_receipt_context.mjs'
       - 'scripts/check_visual_quality.mjs'
       - 'scripts/check_accessibility.mjs'
+      - 'scripts/check_visual_states.mjs'
+      - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
       - 'package*.json'
       - '.github/workflows/case_workbench_v2.yml'
@@ -26,6 +28,8 @@ on:
       - 'scripts/check_receipt_context.mjs'
       - 'scripts/check_visual_quality.mjs'
       - 'scripts/check_accessibility.mjs'
+      - 'scripts/check_visual_states.mjs'
+      - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
       - 'scripts/check_frontend_bundle.mjs'
       - 'package*.json'
@@ -89,7 +93,7 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Capture browser flows and check visual quality and accessibility
+      - name: Capture browser flows; check visual quality, accessibility and visual states
         run: |
           set -o pipefail
           cd frontend
@@ -104,6 +108,7 @@ jobs:
           node scripts/check_receipt_context.mjs _review_receipt_context 2>&1 | tee _ci_logs/receipt-context.log
           node scripts/check_visual_quality.mjs _ci_logs/visual-quality.json 2>&1 | tee _ci_logs/visual-quality.log
           node scripts/check_accessibility.mjs _ci_logs/accessibility.json 2>&1 | tee _ci_logs/accessibility.log
+          node scripts/check_visual_states.mjs --profile ci --report _ci_logs/visual-states.json 2>&1 | tee _ci_logs/visual-states.log
 
       - name: Upload V2 CI diagnostics
         if: always()
