@@ -5,6 +5,7 @@ import {
   isSepoliaRoute,
   parseHashRoute,
   primarySection,
+  routeTitle,
   routeToHash,
 } from './routes';
 
@@ -118,5 +119,20 @@ describe('paired platform route model', () => {
       id: null,
       invalid: 'definitely-not-a-route',
     });
+  });
+});
+
+describe('routeTitle', () => {
+  it('names every kind of route, marking historical material', () => {
+    expect(routeTitle(parseHashRoute(''))).toBe('Overview');
+    expect(routeTitle(parseHashRoute('#case/TYN-001?policy=LAB-CASE-OPEN-004'))).toBe('Case TYN-001');
+    expect(routeTitle(parseHashRoute('#compare'))).toBe('Compare policies');
+    expect(routeTitle(parseHashRoute('#receipt/55078b731e3324eb'))).toBe('Receipt 55078b73');
+    expect(routeTitle(parseHashRoute('#study'))).toBe('Market-capacity study');
+    expect(routeTitle(parseHashRoute('#overview'))).toBe('SolarPunk reference (historical)');
+    expect(routeTitle(parseHashRoute('#sepolia'))).toBe('Sepolia proof (historical)');
+    expect(routeTitle(parseHashRoute('#currency'))).toBe('Currency lab (historical)');
+    expect(routeTitle(parseHashRoute('#protocol'))).toBe('Protocol lab (historical)');
+    expect(routeTitle({ section: 'nonsense' })).toBe('Overview');
   });
 });

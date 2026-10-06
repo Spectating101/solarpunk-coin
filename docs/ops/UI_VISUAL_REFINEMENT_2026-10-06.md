@@ -45,14 +45,28 @@ The visual-quality check was exercised with a negative control (type floor raise
 
 Before and after, character-weighted, desktop: text under 12px fell from 53–87% to 0% on the Policy Lab routes, text below AA contrast from 8–26% to 0%, and every overflow, clipped-text and light-select finding on the audited routes was removed. Contrast is measured against flat background colours and ignores gradients.
 
+## Second pass: accessibility, privacy and sharing
+
+| Area | Change |
+|---|---|
+| axe-core | Scanned all 18 routes at desktop (1440), tablet (820) and phone (390). Findings fixed: one `<main>` landmark on every route (Reference, Evidence, Currency, Sepolia and Protocol had none; the study, reproduction and brief pages nested or lacked one), links in text and tables underlined instead of colour-only, keyboard access to scrollable regions, menu and horizon buttons whose accessible name omitted their visible text, heading order on the reproduction page. Result: 0 violations on 54 route and viewport combinations. |
+| Keyboard | Skip-to-content link (script-driven, because the app uses hash routing), per-page document titles, a polite route-change announcement, and a keyboard walk that checks every tab stop shows a focus ring at least 3:1. |
+| Tablet | Hash strings on the reproduction page wrap instead of truncating, proof-stage hints wrap, the Sepolia header and grid no longer overflow at 820px and 390px, small links meet 24px. |
+| Privacy | The page no longer requests fonts from Google. DM Sans, Instrument Serif and JetBrains Mono (SIL OFL 1.1, Latin and Latin Extended) are served from the site; licence texts ship at `third-party-notices.txt`, linked from the footer. `PRIVACY.md` now states this. Measured: every current route requests only its own origin. The historical Reference and Sepolia routes read a public Sepolia RPC and are the documented exception. |
+| Sharing | `og:image` and `twitter:image` (1200×630 crop of the real overview), `summary_large_image`, canonical URL, `theme-color`, `color-scheme`. The image URL is the Pages path and resolves once published. |
+| Guards | `scripts/check_accessibility.mjs` (`npm run policy-lab:a11y`) and a third-party-origin budget in `check_visual_quality.mjs`; the visual check now also covers tablet width and 18 routes. Both are wired into `.github/workflows/case_workbench_v2.yml`, which has not run on this unpublished branch. `axe-core` is a dev-only dependency (MPL-2.0, not bundled); the lockfile change is 11 lines and the four dependency backports still verify. Each guard was proved with a negative control. |
+| Tests changed | Case lens buttons are now named by their visible text, so three tests and `capture_case_workbench_v2.mjs` match by prefix. The horizon toggle drops its redundant per-button label; one test and `capture_constraint_protocol_alpha.mjs` target the labelled group. The heavy receipts test has a 30 s timeout. One test title said "four-case". |
+
 ## Known test behaviour
 
-`ReceiptsWorkspace.test.jsx` ("revisiting a shared decision identity…") builds capsules and takes about 3.7 of its 5 s timeout. On a heavily loaded machine (load average about 11 on 6 cores) the full suite timed out on it three times in a row; with `--maxWorkers=2` all 96 pass. The test was not modified. Raising its timeout is a reasonable follow-up.
+`ReceiptsWorkspace.test.jsx` ("revisiting a shared decision identity…") builds capsules and takes about 3.7 of its 5 s timeout. On a heavily loaded machine (load average about 11 on 6 cores) the full suite timed out on it three times in a row; with `--maxWorkers=2` all 96 pass. It now has a 30 s timeout (see above).
 
 ## Not done, and decisions left open
 
 - Dark theme kept. A light theme was weighed and deferred: about 500 hard-coded colour literals across the CSS make it a larger, riskier change. Colour goes through custom properties, so it is feasible later.
 - 12px is a floor, not a target. Much label text is 12–13px. Raising the floor to 13px is a possible follow-up and was not tested.
 - Navigation still has three layers (primary nav, Overview/Full-analysis switch, full-analysis tools bar). Only the bar's label changed.
-- Hosted Pages, keyboard-only use, screen readers, tablet widths and light-mode preferences were not tested.
+- Hosted Pages, real screen readers (VoiceOver, NVDA, TalkBack) and light-mode preferences were not tested. Automated accessibility checks find only part of the problems.
+- The historical Reference route reads a public Sepolia RPC as soon as it opens. A "load live reads" button instead of an automatic read would remove that third-party request; that changes behaviour and was not done.
+- The `og:image` URL will 404 until the site is published.
 - On a machine whose Playwright build does not match the installed browser, set `PLAYWRIGHT_BROWSERS_PATH` to a directory that links the installed headless shell under the expected name, or set `CHROMIUM_EXECUTABLE_PATH` for `check_visual_quality.mjs`.

@@ -209,7 +209,7 @@ export default function DecisionBrief({
   const severityTone = conditionalSeverityChange > 0 ? 'warning' : 'good';
 
   return (
-    <section className="decision-brief" aria-labelledby="decision-brief-heading">
+    <main className="decision-brief" aria-labelledby="decision-brief-heading">
       <header className="decision-hero">
         <div className="decision-hero-copy">
           <div className="decision-status-line">
@@ -274,7 +274,6 @@ export default function DecisionBrief({
               type="button"
               className={horizon === value ? 'active' : ''}
               aria-pressed={horizon === value}
-              aria-label={`Use ${value}-session horizon`}
               onClick={() => setHorizon(value)}
             >
               {value} sessions
@@ -492,6 +491,6 @@ export default function DecisionBrief({
           <small>{summary.public_data_boundary}</small>
         </div>
       </section>
-    </section>
+    </main>
   );
 }

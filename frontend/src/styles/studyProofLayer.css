@@ -184,11 +184,9 @@
 }
 
 .study-proof-stage small {
-  overflow: hidden;
   color: var(--dim);
   font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.35;
 }
 
 .study-proof-active .decision-brief,

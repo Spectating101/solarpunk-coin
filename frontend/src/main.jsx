@@ -4,6 +4,7 @@ import App from './App';
 import { CaseWorkbenchProvider } from './app/CaseWorkbenchProvider';
 import FullAnalysisRouteGuard from './app/FullAnalysisRouteGuard';
 import StudyProofNavigator from './components/StudyProofNavigator';
+import './styles/fonts.css';
 import './index.css';
 import './decisionBriefPolish.css';
 import './constraintProtocolHardening.css';

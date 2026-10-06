@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import {
   AlertTriangle,
   ChevronRight,
@@ -37,6 +37,7 @@ import {
   isSepoliaRoute,
   parseHashRoute,
   primarySection,
+  routeTitle,
   routeToHash,
 } from './app/routes';
 import './workbenchSession.css';
@@ -54,6 +55,9 @@ const PublicLabLanding = lazy(() => import('./components/PublicLabLanding'));
 
 // SolarPunk / SPK-era routes: reachable for inspection, never the current product.
 const HISTORICAL_SECTIONS = new Set(['reference', 'legacy-protocol', 'currency']);
+
+// Routes whose components do not render their own <main> landmark.
+const NEEDS_MAIN_SECTIONS = new Set(['reference', 'legacy-protocol', 'currency', 'evidence']);
 const EvidenceLab = lazy(() => import('./components/EvidenceLab'));
 const CurrencyLab = lazy(() => import('./components/CurrencyLab'));
 const SpkV1Console = lazy(() => import('./components/SpkV1Console'));
@@ -95,6 +99,7 @@ function App() {
   const [chainId, setChainId] = useState(null);
   const [connectError, setConnectError] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
   const {
     activeCaseId,
     activePolicyId,
@@ -184,6 +189,43 @@ function App() {
   }, []);
 
   const sepRoute = isSepoliaRoute(route);
+  const pageTitle = routeTitle(route);
+
+  const firstPage = useRef(true);
+  useEffect(() => {
+    document.title = `${pageTitle} | Policy Lab`;
+    // Only a change of page is worth announcing, not the initial load.
+    if (firstPage.current) {
+      firstPage.current = false;
+      return;
+    }
+    setAnnouncement(`${pageTitle} page`);
+  }, [pageTitle]);
+
+  // The skip link targets whichever <main> the current page renders. Some pages render
+  // theirs after their data loads, so keep it marked as the DOM changes.
+  useEffect(() => {
+    const markMain = () => {
+      const main = document.querySelector('main');
+      if (main && main.id !== 'main') {
+        main.id = 'main';
+        main.setAttribute('tabindex', '-1');
+      }
+    };
+    markMain();
+    const observer = new MutationObserver(markMain);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
+  const skipToContent = (event) => {
+    event.preventDefault();
+    const target = document.querySelector('main');
+    if (!target) return;
+    target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: false });
+  };
+  const Landmark = NEEDS_MAIN_SECTIONS.has(route.section) || sepRoute ? 'main' : React.Fragment;
 
   useEffect(() => {
     if (!sepRoute || !window.ethereum) return undefined;
@@ -274,6 +316,8 @@ function App() {
 
   return (
     <div className={`app-minimal paired-platform-app ${viewMode === 'full' ? 'full-analysis-active' : ''}`}>
+      <a href="#main" className="skip-link" onClick={skipToContent}>Skip to main content</a>
+      <div className="visually-hidden" role="status" aria-live="polite">{announcement}</div>
       <header className="app-minimal-top workbench-app-top paired-platform-top">
         <div className="brand-block">
           <div className="brand-mark">P</div>
@@ -317,7 +361,7 @@ function App() {
             className="mobile-nav-trigger"
             aria-expanded={mobileNavOpen}
             aria-controls="mobile-primary-menu"
-            aria-label={mobileNavOpen ? 'Close primary navigation' : 'Open primary navigation'}
+            aria-label={mobileNavOpen ? 'Close primary navigation menu' : 'Open primary navigation menu'}
             onClick={() => setMobileNavOpen((open) => !open)}
           >
             {mobileNavOpen ? <X size={18} /> : <Menu size={18} />}<span>Menu</span>
@@ -417,6 +461,7 @@ function App() {
       ) : null}
       {route.section === 'study' && route.view === 'detail' ? <EmpiricalRunsLab onOpenProtocol={() => navigate({ section: 'legacy-protocol' })} /> : null}
       {route.section === 'study' && route.view === 'reproduce' ? <EmpiricalReproductionLab onOpenRuns={() => navigate({ section: 'study', id: 'market-capacity-v1', view: 'detail' })} /> : null}
+      <Landmark>
       {HISTORICAL_SECTIONS.has(route.section) ? (
         <aside className="historical-reference-note" role="note">
           <strong>Historical reference.</strong>
@@ -455,6 +500,7 @@ function App() {
           <SpkV1Console provider={provider} signer={signer} account={account} onConnect={connectWallet} connecting={isConnecting} wrongNetwork={wrongNetwork} />
         </Suspense>
       ) : null}
+      </Landmark>
       <SiteFooter />
     </div>
   );

@@ -173,12 +173,10 @@
 }
 
 .reproduction-file-list code {
-  overflow: hidden;
   color: var(--muted-readable);
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .reproduction-file-state {

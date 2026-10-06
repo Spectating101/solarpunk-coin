@@ -80,7 +80,8 @@ it('revisiting a shared decision identity restores the requested scenario and ex
   fireEvent.click(screen.getByRole('button', { name: 'Receipt JSON' }));
   expect(download.mock.calls.at(-1)[1]).toBe(receipt);
   build.mockRestore(); download.mockRestore();
-});
+  // Builds and verifies research capsules, which takes seconds on a loaded machine.
+}, 30000);
 
 it('capsule runtime identity follows the supplied receipt outside the browser build', async () => {
   const run = await runtimeExports.evaluateCaseRun({ caseId: 'TYN-001', policyId: 'LAB-CASE-OPEN-004', scenarioId: 'PROVENANCE-L0-BASE' });

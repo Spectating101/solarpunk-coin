@@ -138,7 +138,7 @@ export default function StudyProofNavigator() {
             })}
           </nav>
 
-          <div className="study-proof-chain" aria-label="Empirical proof sequence">
+          <div className="study-proof-chain" aria-label="Empirical proof sequence" role="group" tabIndex={0}>
             <ProofStage number={1} title="Decision" detail="Coverage, capacity cost, residual failure" active={copy.stage === 1} />
             <ProofStage number={2} title="Historical evidence" detail="Common sample, frontier, stress, methods" active={copy.stage === 2} />
             <ProofStage number={3} title="Controlled mechanics" detail="Admission, binding rule, settlement, lineage" active={false} />

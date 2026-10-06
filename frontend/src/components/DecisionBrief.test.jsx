@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import DecisionBrief from './DecisionBrief';
 
 const summary = {
@@ -111,7 +111,7 @@ describe('DecisionBrief', () => {
     render(<DecisionBrief onOpenStudy={() => {}} onOpenReproduce={() => {}} onOpenProtocol={() => {}} />);
     await screen.findByRole('heading', { name: /what did the stricter rule buy/i });
 
-    fireEvent.click(screen.getByRole('button', { name: /use 60-session horizon/i }));
+    fireEvent.click(within(screen.getByRole('group', { name: /evaluation horizon/i })).getByRole('button', { name: /^60 sessions$/i }));
 
     expect(screen.getAllByText('+5.51 pp').length).toBeGreaterThan(0);
     expect(screen.getAllByText('8.34 pp').length).toBeGreaterThan(0);

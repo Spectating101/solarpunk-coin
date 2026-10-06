@@ -324,10 +324,9 @@ export default function CaseWorkspace({
                 className={lens === item.id ? 'active' : ''}
                 onClick={() => changeLens(item.id)}
                 aria-current={lens === item.id ? 'page' : undefined}
-                aria-label={item.label}
               >
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <Icon size={16} />
+                <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <Icon size={16} aria-hidden="true" />
                 <strong>{item.label}</strong>
                 <small>{item.question}</small>
               </button>

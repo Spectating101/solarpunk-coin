@@ -73,6 +73,7 @@ describe('SiteFooter', () => {
       const link = screen.getAllByRole('link', { name }).find((el) => nav.contains(el));
       expect(link).toHaveAttribute('href', expect.stringMatching(new RegExp(`/blob/main/${file}$`)));
     }
+    expect(screen.getByRole('link', { name: /font licences/i })).toHaveAttribute('href', 'third-party-notices.txt');
     expect(screen.getByText(/not a token, a financial product/i)).toBeInTheDocument();
   });
 });

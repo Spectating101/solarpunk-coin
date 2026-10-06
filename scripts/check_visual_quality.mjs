@@ -1,8 +1,9 @@
 // Visual-quality budgets for the built Policy Lab frontend.
 //
-// Loads each route at a desktop and a phone width in headless Chromium and fails when a
+// Loads each route at desktop, tablet and phone widths in headless Chromium and fails when a
 // route overflows its container, clips text, falls below the type floor, drops below
-// AA contrast, has undersized targets, or renders a light native <select>.
+// AA contrast, has undersized targets, renders a light native <select>, or requests anything
+// from a third-party origin (the site serves its own fonts and scripts).
 //
 //   npm --prefix frontend run build && npx --prefix frontend vite preview --port 4173
 //   CASE_WORKBENCH_URL=http://127.0.0.1:4173/ node scripts/check_visual_quality.mjs [report.json]
@@ -20,13 +21,20 @@ const reportPath = process.argv[2] ? path.resolve(process.argv[2]) : null;
 const ROUTES = [
   'lab', 'investigate', 'case/TYN-001', 'compare', 'research', 'study', 'field',
   'programme', 'receipts', 'reference', 'evidence', 'currency', 'analysis', 'verify',
+  'protocol', 'runs', 'reproduce', 'sepolia',
 ];
 const VIEWPORTS = [
   ['desktop', { width: 1440, height: 900 }],
+  ['tablet', { width: 820, height: 1180 }],
   ['mobile', { width: 390, height: 844 }],
 ];
 
+// Historical SolarPunk routes that read a public Sepolia RPC (disclosed in PRIVACY.md).
+const EXTERNAL_REQUESTS_ALLOWED = new Set(['reference', 'sepolia']);
+const ownOrigin = new URL(url).origin;
+
 export const BUDGETS = Object.freeze({
+  thirdPartyOrigins: 0,
   documentOverflowPx: 0,
   overflowingChildren: 0,
   clippedText: 0,
@@ -98,6 +106,8 @@ function measurePage(minFontPx) {
       small += text.length;
       smallSamples.set(`${label(el)} ${px}px`, text.slice(0, 40));
     }
+    // Inactive controls are exempt from the contrast minimum (WCAG 2.2, 1.4.3).
+    if (el.closest('button:disabled, [aria-disabled="true"]')) continue;
     const fg = parse(cs.color);
     if (!fg) continue;
     const bg = backgroundOf(el);
@@ -173,12 +183,19 @@ try {
     for (const route of ROUTES) {
       const page = await context.newPage();
       const errors = [];
+      const foreignOrigins = new Set();
+      page.on('request', (request) => {
+        const target = new URL(request.url());
+        if (target.protocol.startsWith('http') && target.origin !== ownOrigin) foreignOrigins.add(target.origin);
+      });
       page.on('pageerror', (error) => errors.push(error.message.slice(0, 120)));
       page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text().slice(0, 120)); });
       await page.goto(`${url}#${route}`, { waitUntil: 'networkidle', timeout: 30000 });
       await page.waitForTimeout(800);
       const m = await page.evaluate(measurePage, BUDGETS.minFontPx);
       m.consoleErrors = errors.length;
+      m.thirdPartyOrigins = EXTERNAL_REQUESTS_ALLOWED.has(route.split('/')[0]) ? 0 : foreignOrigins.size;
+      m.thirdPartyOriginSamples = [...foreignOrigins];
       const key = `${vpName}:${route}`;
       results[key] = m;
       const check = (name, value, limit, samples = []) => {
@@ -192,6 +209,7 @@ try {
       check('targetsBelow24px', m.targetsBelow24px, BUDGETS.targetsBelow24px, m.targetsBelow24pxSamples);
       check('lightNativeSelects', m.lightNativeSelects, BUDGETS.lightNativeSelects);
       check('consoleErrors', m.consoleErrors, BUDGETS.consoleErrors);
+      check('thirdPartyOrigins', m.thirdPartyOrigins, BUDGETS.thirdPartyOrigins, m.thirdPartyOriginSamples);
       await page.close();
     }
     await context.close();

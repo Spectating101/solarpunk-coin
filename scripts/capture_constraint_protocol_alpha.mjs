@@ -48,7 +48,7 @@ async function runSample(page, sourceLabel = null) {
 const desktop = await newPage({ width: 1440, height: 1000 });
 await openBrief(desktop.page);
 await shot(desktop.page, '01-decision-brief-20-session.png');
-await desktop.page.getByRole('button', { name: /Use 60-session horizon/i }).click();
+await desktop.page.getByRole('group', { name: /evaluation horizon/i }).getByRole('button', { name: /^60 sessions$/i }).click();
 await desktop.page.getByText('5.09%', { exact: true }).first().waitFor();
 await shot(desktop.page, '02-decision-brief-60-session.png');
 

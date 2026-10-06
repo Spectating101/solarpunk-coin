@@ -21,6 +21,7 @@ export default function SiteFooter() {
         {DOCS.map(([label, file]) => (
           <a key={file} href={`${GITHUB_REPO}/blob/main/${file}`} target="_blank" rel="noreferrer">{label}</a>
         ))}
+        <a href="third-party-notices.txt" target="_blank" rel="noreferrer">Font licences</a>
         <a href={GITHUB_REPO} target="_blank" rel="noreferrer">Source code</a>
       </nav>
     </footer>
