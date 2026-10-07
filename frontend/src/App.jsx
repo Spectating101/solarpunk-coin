@@ -100,6 +100,7 @@ function App() {
   const [connectError, setConnectError] = useState(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [announcement, setAnnouncement] = useState('');
+  const [hasMain, setHasMain] = useState(false);
   const {
     activeCaseId,
     activePolicyId,
@@ -211,6 +212,9 @@ function App() {
         main.id = 'main';
         main.setAttribute('tabindex', '-1');
       }
+      // The footer waits for the page content; shown earlier it would sit high on the screen
+      // while data loads and then be pushed away (a layout shift).
+      setHasMain(Boolean(main));
     };
     markMain();
     const observer = new MutationObserver(markMain);
@@ -501,7 +505,7 @@ function App() {
         </Suspense>
       ) : null}
       </Landmark>
-      <SiteFooter />
+      {hasMain ? <SiteFooter /> : null}
     </div>
   );
 }

@@ -92,6 +92,21 @@ What the crawl and the screenshot review found and fixed:
 
 The detectors were also corrected where they were wrong: the measurement ignored 1px visually-hidden elements, requests are attributed to the route the page is on, a squeezed-text check was added (verified with a control), and WebKit's select-popup scroll-width quirk is not reported.
 
+## Fourth pass: load performance
+
+Measured cold on an emulated mid-range phone (390px, 4x CPU slowdown, "Slow 4G" at 1.6 Mbps and 150 ms RTT), median of three runs. Before: first and largest paint about 1.45 s, 257 KB over 13 requests, blocking time 12-63 ms, but layout shift of 0.13 on Compare and Receipts and up to 0.27 on Study (poor).
+
+| Cause | Fix |
+|---|---|
+| Web fonts were discovered late (after the stylesheet), arrived at about 1.8 s, and the swap moved the whole page by about 3px | `<link rel="preload">` for DM Sans and Instrument Serif; JetBrains Mono is not preloaded because a third file cost about 150 ms of paint time for little extra stability |
+| The new footer rendered while a page's data was still loading, then was pushed away when the content arrived (intermittent, 0.16 on Study) | The footer is shown only once the page's `<main>` exists |
+
+After: layout shift 0.000-0.002 on every route in most runs (an occasional 0.05 from a small font swap), largest paint about 1.7-1.9 s, 257-264 KB. `scripts/check_load_performance.mjs` (`npm run policy-lab:load-performance`) keeps this from regressing; its budgets are layout shift 0.1, paint 4.5 s, blocking time 300 ms, 400 KB and 30 requests. Paint and blocking budgets are loose because runner speed varies. The guard caught the intermittent footer shift the first time it ran.
+
+## Hosted CI
+
+Pull request 74 (draft, into `main`) was the first time any of this ran on GitHub's runners: all 19 checks passed on the first run (core, frontend, Solidity, Slither, Python 3.11-3.13, conformance on Ubuntu and macOS, gitleaks, the public-case execution, and the workbench job including the visual quality, accessibility and visual-state checks).
+
 ## Known test behaviour
 
 `ReceiptsWorkspace.test.jsx` ("revisiting a shared decision identity…") builds capsules and takes about 3.7 of its 5 s timeout. On a heavily loaded machine (load average about 11 on 6 cores) the full suite timed out on it three times in a row; with `--maxWorkers=2` all 96 pass. It now has a 30 s timeout (see above).

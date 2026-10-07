@@ -14,6 +14,7 @@ on:
       - 'scripts/check_visual_quality.mjs'
       - 'scripts/check_accessibility.mjs'
       - 'scripts/check_visual_states.mjs'
+      - 'scripts/check_load_performance.mjs'
       - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
       - 'package*.json'
@@ -29,6 +30,7 @@ on:
       - 'scripts/check_visual_quality.mjs'
       - 'scripts/check_accessibility.mjs'
       - 'scripts/check_visual_states.mjs'
+      - 'scripts/check_load_performance.mjs'
       - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
       - 'scripts/check_frontend_bundle.mjs'
@@ -109,6 +111,7 @@ jobs:
           node scripts/check_visual_quality.mjs _ci_logs/visual-quality.json 2>&1 | tee _ci_logs/visual-quality.log
           node scripts/check_accessibility.mjs _ci_logs/accessibility.json 2>&1 | tee _ci_logs/accessibility.log
           node scripts/check_visual_states.mjs --profile ci --report _ci_logs/visual-states.json 2>&1 | tee _ci_logs/visual-states.log
+          node scripts/check_load_performance.mjs _ci_logs/load-performance.json 2>&1 | tee _ci_logs/load-performance.log
 
       - name: Upload V2 CI diagnostics
         if: always()
