@@ -20,6 +20,7 @@ import { buildContextManifest } from '../packages/constraint-core/src/context.js
 import { hashCaseManifest } from '../packages/constraint-core/src/case.js';
 import { parseCsv } from '../packages/constraint-core/src/csv.js';
 import { buildResearchCapsule } from '../frontend/src/lib/researchCapsule.js';
+import { verifyArchiveCsvBinding } from './lib/archive_csv_binding.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CASE_ID = 'PUB-AUSGRID-001P';
@@ -177,7 +178,14 @@ async function main() {
   if (archiveSha256 !== EXPECTED_ARCHIVE_SHA256) throw new Error(`mirror archive SHA-256 mismatch: ${archiveSha256}`);
   if (archiveBytes !== EXPECTED_ARCHIVE_BYTES) throw new Error(`mirror archive byte-length mismatch: ${archiveBytes}`);
 
-  const rawCsv = await readFile(csvPath, 'utf8');
+  const csvBytes = await readFile(csvPath);
+  await verifyArchiveCsvBinding({
+    archivePath,
+    csvBytes,
+    memberName: '2012-2013 Solar home electricity data v2.csv',
+    expectedArchiveSha256: EXPECTED_ARCHIVE_SHA256,
+  });
+  const rawCsv = csvBytes.toString('utf8');
   const { rows } = parseCsv(trimToAusgridHeader(rawCsv));
   const timeColumns = Object.keys(rows[0] || {}).filter((key) => /^\d{1,2}:\d{2}$/.test(key));
   if (timeColumns.length !== 48) throw new Error(`expected 48 half-hour columns, received ${timeColumns.length}`);

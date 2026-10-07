@@ -2,7 +2,6 @@ import { sha256Hex } from '@solarpunk/constraint-core';
 import {
   decisionArtifactStem,
   decisionMemo,
-  WORKBENCH_RUNTIME,
 } from './caseWorkbenchRuntime';
 
 const RO_CRATE_CONTEXT = 'https://w3id.org/ro/crate/1.3/context';
@@ -80,7 +79,7 @@ function provJsonLdFor(run, receipt) {
   const receiptId = provId('receipt', run.decision.decision_id);
   const decisionActivityId = provId('activity', `evaluate-${run.decision.decision_id}`);
   const receiptActivityId = provId('activity', `package-${run.decision.decision_id}`);
-  const runtimeAgentId = provId('agent', WORKBENCH_RUNTIME.package);
+  const runtimeAgentId = provId('agent', receipt.runtime.package);
   const contextIds = run.contexts.map((context) => provId('context', context.context_hash));
 
   const entities = [
@@ -145,8 +144,8 @@ function provJsonLdFor(run, receipt) {
         '@type': 'Agent',
         '@id': runtimeAgentId,
         type: ['prov:SoftwareAgent'],
-        label: [{ '@value': `${WORKBENCH_RUNTIME.package}@${WORKBENCH_RUNTIME.package_version}` }],
-        'spk:sourceRevision': [WORKBENCH_RUNTIME.source_revision],
+        label: [{ '@value': `${receipt.runtime.package}@${receipt.runtime.package_version}` }],
+        'spk:sourceRevision': [receipt.runtime.source_revision],
       },
       {
         '@type': 'Activity',
@@ -251,9 +250,9 @@ function roCrateFor(run, receipt, payloadFiles) {
       {
         '@id': '#constraint-core',
         '@type': 'SoftwareApplication',
-        name: WORKBENCH_RUNTIME.package,
-        softwareVersion: WORKBENCH_RUNTIME.package_version,
-        identifier: WORKBENCH_RUNTIME.source_revision,
+        name: receipt.runtime.package,
+        softwareVersion: receipt.runtime.package_version,
+        identifier: receipt.runtime.source_revision,
       },
       {
         '@id': '#policy',
@@ -273,10 +272,10 @@ function roCrateFor(run, receipt, payloadFiles) {
   };
 }
 
-function reproductionFor(run) {
+function reproductionFor(run, receipt) {
   return {
     schema: 'solarpunk.constraint.reproduction.v1',
-    runtime: WORKBENCH_RUNTIME,
+    runtime: receipt.runtime,
     case_id: run.caseManifest.case_id,
     evidence_hashes: run.decision.evidence_hashes,
     context_refs: run.decision.context_refs,
@@ -329,7 +328,7 @@ export async function buildResearchCapsule(run, receipt = run.receipt) {
     'evidence-metadata.json': jsonText(evidenceMetadata),
     'context-manifest.json': jsonText(run.contexts),
     'lineage.json': jsonText(lineageFor(run)),
-    'reproduction.json': jsonText(reproductionFor(run)),
+    'reproduction.json': jsonText(reproductionFor(run, receipt)),
     'decision-memo.md': decisionMemo(run),
     'CITATION.cff': citationFor(run),
   };
@@ -355,7 +354,7 @@ export async function buildResearchCapsule(run, receipt = run.receipt) {
     },
     assurance_scenario: run.scenario.scenario_id,
     decision_id: run.decision.decision_id,
-    source_revision: WORKBENCH_RUNTIME.source_revision,
+    source_revision: receipt.runtime.source_revision,
     interoperability: {
       ro_crate_profile: RO_CRATE_PROFILE,
       prov_jsonld_context: PROV_JSONLD_CONTEXT,

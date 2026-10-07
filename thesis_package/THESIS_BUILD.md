@@ -70,3 +70,10 @@ pip install -r thesis_package/requirements-docx.txt
 ```
 
 (`python-docx`, `mistune`)
+
+
+## Restore generated figures before verification
+
+From a clean checkout, `npm run thesis:verify` first runs `thesis:prepare`, which regenerates the 16 manuscript figures from the committed empirical CSV/JSON artifacts, then checks numbers and referenced figure paths. PNG outputs are generated and ignored by Git. It does not refresh data or rerun regressions.
+
+For an inspection that must not generate assets, run `python3 thesis_package/verify_thesis_numbers.py` directly after `npm run thesis:prepare`. Thesis submission now performs this verification before DOCX generation. Matplotlib, NumPy and pandas must be installed (the Python `viz` extra provides these).

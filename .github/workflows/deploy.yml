@@ -43,7 +43,7 @@ jobs:
         run: node scripts/policy_lab_preflight.mjs
 
       - name: Install root dependencies
-        run: npm install
+        run: npm ci
 
       - name: Test deterministic case workbench core
         run: node --test packages/constraint-core/test/*.test.mjs
@@ -51,7 +51,7 @@ jobs:
       - name: Install and test public interface
         working-directory: frontend
         run: |
-          npm install
+          npm ci
           npm run test:run
 
       - name: Build and mirror Policy Lab to docs/demo

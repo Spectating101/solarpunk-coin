@@ -44,10 +44,9 @@
   border-radius: 999px;
   background: rgba(52, 211, 153, 0.055);
   color: var(--muted-readable);
-  font-family: var(--font-mono);
-  font-size: 0.61rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .decision-live-dot {
@@ -93,15 +92,14 @@
 .decision-receipt-head span,
 .decision-research-receipt dt {
   color: var(--muted);
-  font-size: 0.61rem;
-  letter-spacing: 0.065em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .decision-receipt-head strong {
   overflow-wrap: anywhere;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.45;
 }
 
@@ -127,7 +125,7 @@
 .decision-research-receipt dd {
   margin: 0;
   color: var(--muted-readable);
-  font-size: 0.69rem;
+  font-size: 0.75rem;
   line-height: 1.45;
   text-align: right;
 }
@@ -150,7 +148,7 @@
   background: rgba(52, 211, 153, 0.06);
   color: var(--green);
   cursor: pointer;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
@@ -212,10 +210,9 @@
   border: 1px solid var(--border);
   border-radius: 999px;
   color: var(--muted-readable);
-  font-family: var(--font-mono);
-  font-size: 0.57rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .decision-receipt {
@@ -248,7 +245,7 @@
 
 .decision-receipt-delta span {
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: 0.75rem;
   text-align: center;
 }
 
@@ -304,7 +301,7 @@
 
 .decision-sensitivity-title strong {
   color: var(--muted-readable);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
 .decision-sensitivity-grid dl {
@@ -325,9 +322,8 @@
 
 .decision-sensitivity-grid dt {
   color: var(--muted);
-  font-size: 0.57rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .decision-sensitivity-grid dd {
@@ -339,8 +335,7 @@
 .decision-sensitivity-grid > button > small {
   color: var(--dim);
   font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
 }
 
 .decision-sensitivity-grid > button.active > small {

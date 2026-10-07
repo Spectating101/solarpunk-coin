@@ -15,6 +15,7 @@ import {
   ShieldAlert,
   SlidersHorizontal,
 } from 'lucide-react';
+import ScrollRegion from './ScrollRegion';
 
 const STUDY_FILES = {
   summary: 'market-capacity-summary.json',
@@ -161,7 +162,7 @@ function StudyView({ study, horizon, setHorizon }) {
           </div>
           <GitCompareArrows size={19} aria-hidden />
         </div>
-        <div className="empirical-table-scroll">
+        <div className="empirical-table-scroll" role="group" aria-label="Policy comparison table" tabIndex={0}>
           <table className="empirical-table">
             <thead>
               <tr><th>Policy</th><th>Coverage</th><th>Shortfall events</th><th>Mean permitted</th><th>Conditional shortfall</th></tr>
@@ -226,7 +227,7 @@ function StudyView({ study, horizon, setHorizon }) {
           </div>
           <Activity size={19} aria-hidden />
         </div>
-        <div className="empirical-table-scroll">
+        <div className="empirical-table-scroll" role="group" aria-label="Annual coverage table" tabIndex={0}>
           <table className="empirical-table annual-table">
             <thead>
               <tr><th>Year</th>{metrics.map((row) => <th key={row.policy_id}>{POLICY_SHORT[row.policy_id]}</th>)}</tr>
@@ -301,7 +302,7 @@ function StressView({ study, selectedRunId, setSelectedRunId }) {
         </div>
       </div>
       <div className="stress-layout">
-        <div className="stress-run-list" role="list" aria-label="Reference stress runs">
+        <div className="stress-run-list" role="group" aria-label="Reference stress runs">
           {runs.map((item) => {
             const baseline = item.policy_results.find((row) => row.policy_id === 'COLLATERAL-FIXED-20');
             return (
@@ -379,7 +380,7 @@ function MethodsView({ study }) {
             <article key={policy.policy_id}>
               <code>{policy.policy_id}</code>
               <strong>{policy.name}</strong>
-              <pre>{policy.formula}</pre>
+              <ScrollRegion as="pre" label={`${policy.name} formula, scrollable`}>{policy.formula}</ScrollRegion>
               <p>{policy.claim}</p>
             </article>
           ))}
@@ -435,7 +436,7 @@ export default function EmpiricalRunsLab({ onOpenProtocol }) {
         : <MethodsView study={study} />;
 
   return (
-    <section className="empirical-lab" aria-labelledby="empirical-heading">
+    <main className="empirical-lab" aria-labelledby="empirical-heading">
       <header className="empirical-hero">
         <div>
           <p className="empirical-kicker">Constraint · empirical runs</p>
@@ -467,7 +468,7 @@ export default function EmpiricalRunsLab({ onOpenProtocol }) {
           <button type="button" className="empirical-protocol-link" onClick={onOpenProtocol}>Open protocol lab <ArrowRight size={15} /></button>
         </aside>
 
-        <main className="empirical-workspace">{activeView}</main>
+        <div className="empirical-workspace">{activeView}</div>
 
         <aside className="empirical-dossier" aria-label="Run dossier">
           <p className="empirical-kicker">Run dossier</p>
@@ -499,6 +500,6 @@ export default function EmpiricalRunsLab({ onOpenProtocol }) {
           </div>
         </aside>
       </div>
-    </section>
+    </main>
   );
 }

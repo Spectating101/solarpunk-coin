@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertTriangle, CheckCircle2, FileDigit, ShieldCheck } from 'lucide-react';
 import { useCaseWorkbench } from '../../app/CaseWorkbenchProvider';
+import ScrollRegion from '../../components/ScrollRegion';
 
 function semanticLabel(kind) {
   if (kind === 'MODELED') return 'MODELED CONTEXT';
@@ -41,11 +42,11 @@ export default function EvidenceLens() {
         <div className="constraint-section-heading">
           <div>
             <span className="wb-section-label">Accepted evidence intervals</span>
-            <h3>{evidence.summary.interval_count} rows · {evidence.summary.rejected_input_records || 0} rejected</h3>
+            <h3 role="heading" aria-level="2">{evidence.summary.interval_count} rows · {evidence.summary.rejected_input_records || 0} rejected</h3>
           </div>
           <span className="wb-status-pill pass"><CheckCircle2 size={14} /> hash verified before decision</span>
         </div>
-        <div className="wb-table-scroll">
+        <ScrollRegion className="wb-table-scroll" label="Accepted evidence intervals, scrollable">
           <table className="wb-data-table">
             <thead>
               <tr>
@@ -70,7 +71,7 @@ export default function EvidenceLens() {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollRegion>
       </section>
 
       <section className="evidence-provenance-grid">

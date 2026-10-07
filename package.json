@@ -7,6 +7,11 @@
   "scripts": {
     "policy-lab:surface": "node scripts/check_current_surface.mjs",
     "policy-lab:preflight": "node scripts/policy_lab_preflight.mjs",
+    "policy-lab:visual-quality": "node scripts/check_visual_quality.mjs",
+    "policy-lab:a11y": "node scripts/check_accessibility.mjs",
+    "policy-lab:load-performance": "node scripts/check_load_performance.mjs",
+    "policy-lab:visual-states": "node scripts/check_visual_states.mjs --profile ci",
+    "policy-lab:visual-states:full": "node scripts/check_visual_states.mjs --profile full --axe",
     "policy-lab:test-core": "node --test packages/constraint-core/test/*.test.mjs",
     "policy-lab:test-frontend": "cd frontend && npm run test:run",
     "policy-lab:build": "npm run policy-lab:preflight && cd frontend && npm run build",
@@ -87,8 +92,8 @@
     "engine:status": "bash scripts/engine_status.sh",
     "thesis:foundation": "python3 thesis_package/build_foundation_pack.py",
     "thesis:figures": "python3 thesis_package/options_pricing.py && python3 thesis_package/ceir_regression.py && python3 thesis_package/generate_thesis_figures.py && python3 thesis_package/generate_thesis_tables.py && python3 thesis_package/verify_thesis_numbers.py",
-    "thesis:verify": "python3 thesis_package/verify_thesis_numbers.py",
-    "thesis:submit": "npm run thesis:docx && python3 thesis_package/export_submission.py",
+    "thesis:verify": "npm run thesis:prepare && python3 thesis_package/verify_thesis_numbers.py",
+    "thesis:submit": "npm run thesis:verify && npm run thesis:docx && python3 thesis_package/export_submission.py",
     "thesis:all": "npm run thesis:submit",
     "thesis:evidence": "SPK_V1_REPO_ROOT=. spk_v1/.venv/bin/spk-v1 export-evidence --repo-root .",
     "thesis:build": "python3 thesis_package/build_grounded_thesis.py",
@@ -150,7 +155,10 @@
     "gas-report": "REPORT_GAS=true hardhat test",
     "simulate": "python3 scripts/simulate_peg.py",
     "clean": "rm -rf artifacts cache coverage .coverage",
-    "health:check": "node scripts/health_check.js"
+    "health:check": "node scripts/health_check.js",
+    "thesis:prepare": "python3 thesis_package/generate_thesis_figures.py",
+    "postinstall": "node scripts/apply_dependency_security_patches.cjs",
+    "security:dependency-patches": "node scripts/apply_dependency_security_patches.cjs --check"
   },
   "keywords": [
     "policy-lab",
@@ -166,28 +174,35 @@
   "author": "Spectating101",
   "license": "MIT",
   "engines": {
-    "node": ">=20 <23"
+    "node": ">=22.12 <23"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "@nomicfoundation/hardhat-verify": "^2.0.0",
-    "@typechain/ethers-v6": "^0.5.0",
-    "@typechain/hardhat": "^9.0.0",
-    "@types/chai": "^4.3.0",
-    "@types/mocha": "^10.0.0",
+    "axe-core": "^4.14.0",
     "chai": "^4.3.0",
     "dotenv": "^16.0.0",
-    "ethers": "^6.7.0",
-    "hardhat": "^2.17.0",
-    "hardhat-gas-reporter": "^1.0.0",
+    "ethers": "^6.17.0",
+    "hardhat": "^2.29.1",
+    "hardhat-gas-reporter": "^2.3.0",
     "playwright": "^1.61.1",
-    "solidity-coverage": "^0.8.0"
+    "solidity-coverage": "^0.8.17"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.0",
     "@openzeppelin/contracts-upgradeable": "^5.0.0"
+  },
+  "overrides": {
+    "adm-zip": "^0.6.1",
+    "undici": "^6.28.1",
+    "@fastify/busboy": "^3.2.2",
+    "bn.js@<5": "^4.12.3",
+    "cookie": "^0.7.2",
+    "uuid": "^11.1.1",
+    "serialize-javascript": "^7.1.2",
+    "diff": "^8.0.3",
+    "tmp": "^0.2.6"
   }
 }

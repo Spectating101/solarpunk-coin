@@ -400,6 +400,7 @@ contract EnergyRevenueFloor is AccessControl, ReentrancyGuard, Pausable {
                     policyId,
                     realizedKwh,
                     measuredAt,
+                    sourceHash,
                     reporterNonce
                 )
             );

@@ -75,10 +75,9 @@
 .reproduction-verdict span,
 .reproduction-file-list article > div > span {
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .reproduction-verdict strong {
@@ -99,8 +98,7 @@
   padding: 0.8rem 1rem;
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.05em;
+  font-size: 0.75rem;
 }
 
 .reproduction-flow strong {
@@ -149,7 +147,7 @@
 .reproduction-index {
   color: var(--dim);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
 }
 
 .reproduction-file-name {
@@ -165,7 +163,7 @@
 .reproduction-file-name small {
   color: var(--muted);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
 }
 
 .reproduction-file-list article > div:not(.reproduction-file-name) {
@@ -175,18 +173,16 @@
 }
 
 .reproduction-file-list code {
-  overflow: hidden;
   color: var(--muted-readable);
   font-family: var(--font-mono);
-  font-size: 0.61rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
 }
 
 .reproduction-file-state {
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   text-align: right;
 }
 
@@ -214,8 +210,8 @@
 
 .reproduction-identity-chain span {
   color: var(--muted);
-  font-size: 0.68rem;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .reproduction-identity-chain code,
@@ -228,7 +224,7 @@
 
 .reproduction-identity-chain small {
   color: var(--muted-readable);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.4;
 }
 
@@ -261,14 +257,14 @@
 
 .reproduction-receipt dt {
   color: var(--muted);
-  font-size: 0.64rem;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .reproduction-receipt dd {
   margin: 0;
   color: var(--muted-readable);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
@@ -319,11 +315,17 @@
   }
 
   .reproduction-file-list article {
-    grid-template-columns: 34px minmax(180px, 1fr) 86px;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
   }
 
   .reproduction-file-list article > div:not(.reproduction-file-name) {
     grid-column: 2 / -1;
+  }
+
+  /* Keep the status at the end of the first row, beside the file name. */
+  .reproduction-file-list article > .reproduction-file-state {
+    grid-column: 3;
+    grid-row: 1;
   }
 }
 
@@ -347,11 +349,16 @@
   }
 
   .reproduction-file-list article {
-    grid-template-columns: 30px minmax(0, 1fr) 76px;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
   }
 
   .reproduction-file-list article > div:not(.reproduction-file-name) {
     grid-column: 1 / -1;
+  }
+
+  .reproduction-file-list article > .reproduction-file-state {
+    grid-column: 3;
+    grid-row: 1;
   }
 
   .reproduction-identity-chain {

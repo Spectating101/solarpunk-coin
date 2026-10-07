@@ -10,6 +10,31 @@ on:
       - 'frontend/**'
       - 'scripts/capture_case_workbench_v2.mjs'
       - 'scripts/check_frontend_bundle.mjs'
+      - 'scripts/check_receipt_context.mjs'
+      - 'scripts/check_visual_quality.mjs'
+      - 'scripts/check_accessibility.mjs'
+      - 'scripts/check_visual_states.mjs'
+      - 'scripts/check_load_performance.mjs'
+      - 'scripts/lib/visual_measure.mjs'
+      - 'scripts/check_sdk_package.mjs'
+      - 'package*.json'
+      - '.github/workflows/case_workbench_v2.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/constraint-core/**'
+      - 'protocol/**'
+      - 'frontend/**'
+      - 'scripts/capture_case_workbench_v2.mjs'
+      - 'scripts/check_receipt_context.mjs'
+      - 'scripts/check_visual_quality.mjs'
+      - 'scripts/check_accessibility.mjs'
+      - 'scripts/check_visual_states.mjs'
+      - 'scripts/check_load_performance.mjs'
+      - 'scripts/lib/visual_measure.mjs'
+      - 'scripts/check_sdk_package.mjs'
+      - 'scripts/check_frontend_bundle.mjs'
+      - 'package*.json'
       - '.github/workflows/case_workbench_v2.yml'
   workflow_dispatch:
 
@@ -35,7 +60,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install root dependencies
-        run: npm install
+        run: npm ci
 
       - name: Test deterministic workbench core
         run: |
@@ -44,10 +69,10 @@ jobs:
           node --test packages/constraint-core/test/*.test.mjs 2>&1 | tee _ci_logs/core-test.log
 
       - name: Check SDK package contents
-        run: npm pack --dry-run --prefix packages/constraint-core
+        run: node scripts/check_sdk_package.mjs
 
       - name: Install frontend dependencies
-        run: npm install
+        run: npm ci
         working-directory: frontend
 
       - name: Test frontend workbench
@@ -70,7 +95,7 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Capture case workbench browser flows
+      - name: Capture browser flows; check visual quality, accessibility and visual states
         run: |
           set -o pipefail
           cd frontend
@@ -82,6 +107,11 @@ jobs:
           done
           curl --fail http://127.0.0.1:4173/ >/dev/null
           node scripts/capture_case_workbench_v2.mjs _review_case_workbench_v2 2>&1 | tee _ci_logs/browser-capture.log
+          node scripts/check_receipt_context.mjs _review_receipt_context 2>&1 | tee _ci_logs/receipt-context.log
+          node scripts/check_visual_quality.mjs _ci_logs/visual-quality.json 2>&1 | tee _ci_logs/visual-quality.log
+          node scripts/check_accessibility.mjs _ci_logs/accessibility.json 2>&1 | tee _ci_logs/accessibility.log
+          node scripts/check_visual_states.mjs --profile ci --report _ci_logs/visual-states.json 2>&1 | tee _ci_logs/visual-states.log
+          node scripts/check_load_performance.mjs _ci_logs/load-performance.json 2>&1 | tee _ci_logs/load-performance.log
 
       - name: Upload V2 CI diagnostics
         if: always()

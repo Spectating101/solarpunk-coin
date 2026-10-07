@@ -1,0 +1,313 @@
+/* Policy manifest diff body: ruled rows rather than nested cards. */
+
+.policy-diff-panel select {
+  width: 100%;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background-color: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.policy-diff-controls > label {
+  min-width: 0;
+}
+
+.policy-diff-controls > label > code {
+  color: var(--muted-readable);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.policy-diff-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.policy-diff-summary > div {
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px;
+  border-left: 1px solid var(--border);
+}
+
+.policy-diff-summary > div:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.policy-diff-summary strong {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.policy-diff-summary > div {
+  min-width: 0;
+}
+
+.policy-diff-summary span {
+  overflow-wrap: anywhere;
+  color: var(--muted-readable);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.policy-diff-summary .added strong { color: var(--green); }
+.policy-diff-summary .removed strong { color: var(--red); }
+.policy-diff-summary .changed strong { color: var(--amber); }
+
+.policy-diff-description-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.policy-diff-description-grid article {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.policy-diff-description-grid span {
+  color: var(--muted-readable);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.policy-diff-description-grid p {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.policy-diff-rule-list {
+  display: grid;
+  border-top: 1px solid var(--border);
+}
+
+.policy-diff-row {
+  display: grid;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.policy-diff-row-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.policy-diff-row-head > strong {
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.policy-diff-row-head > code {
+  color: var(--muted-readable);
+  font-size: 12px;
+}
+
+.policy-diff-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 96px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.policy-diff-row.added .policy-diff-status { color: var(--green); }
+.policy-diff-row.removed .policy-diff-status { color: var(--red); }
+.policy-diff-row.changed .policy-diff-status { color: var(--amber); }
+.policy-diff-row.unchanged .policy-diff-status { color: var(--muted-readable); }
+
+.policy-diff-single {
+  display: grid;
+  gap: 6px;
+  padding-left: 108px;
+}
+
+.policy-diff-single small,
+.policy-parameter-diff small {
+  color: var(--muted-readable);
+  font-size: 12px;
+}
+
+.policy-diff-single code,
+.policy-diff-single span,
+.policy-parameter-diff code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.policy-diff-single > span {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-3);
+  color: var(--muted-readable);
+}
+
+.policy-parameter-diff {
+  display: grid;
+  gap: 8px;
+  padding-left: 108px;
+}
+
+.policy-parameter-diff > div {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.7fr) minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.policy-parameter-diff > div > strong {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.policy-parameter-diff > div > span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.policy-diff-unchanged {
+  padding-left: 108px;
+  color: var(--muted-readable);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.policy-diff-unchanged code {
+  font-size: 12px;
+}
+
+.policy-diff-shared > summary {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  color: var(--muted-readable);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.policy-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.policy-metadata-diff {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.policy-metadata-diff > p {
+  margin: 0;
+  color: var(--muted-readable);
+  font-size: 13px;
+}
+
+.policy-metadata-diff > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.policy-metadata-diff > div > strong {
+  min-width: 90px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.policy-metadata-diff > div > span {
+  color: var(--muted-readable);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 680px) {
+  .policy-diff-panel .policy-diff-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .policy-diff-panel .policy-diff-controls > svg {
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+
+  .policy-diff-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .policy-diff-summary > div,
+  .policy-diff-summary > div:first-child {
+    padding: 12px 12px 12px 0;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .policy-diff-summary > div:nth-child(-n + 2) {
+    border-top: 0;
+  }
+
+  .policy-diff-description-grid,
+  .policy-metadata-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .policy-diff-single,
+  .policy-parameter-diff,
+  .policy-diff-unchanged {
+    padding-left: 0;
+  }
+
+  .policy-parameter-diff > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .policy-parameter-diff > div > svg {
+    display: none;
+  }
+}
+
+/* Long rule identifiers and JSON parameters must wrap inside narrow panels. */
+.policy-diff-rule-section,
+.policy-diff-rule-list,
+.policy-diff-row,
+.policy-metadata-disclosure {
+  min-width: 0;
+}
+
+.policy-diff-row-head > code,
+.policy-diff-single code,
+.policy-parameter-diff code,
+.policy-diff-unchanged code,
+.policy-diff-shared > summary {
+  overflow-wrap: anywhere;
+}

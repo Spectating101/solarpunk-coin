@@ -28,7 +28,7 @@ const initialState = {
   settlementMultiplier: 1,
   runsByKey: {},
   decisionsById: {},
-  receiptsById: {},
+  receiptsByKey: {},
   activeStress: null,
   pinnedCaseIds: [],
   loading: true,
@@ -50,11 +50,11 @@ function reducer(state, action) {
     case 'RUN_SUCCESS': {
       const runsByKey = { ...state.runsByKey };
       const decisionsById = { ...state.decisionsById };
-      const receiptsById = { ...state.receiptsById };
+      const receiptsByKey = { ...state.receiptsByKey };
       for (const run of action.runs) {
         runsByKey[run.key] = run;
         decisionsById[run.decision.decision_id] = run.decision;
-        receiptsById[run.decision.decision_id] = run.receipt;
+        receiptsByKey[run.key] = run.receipt;
       }
       return {
         ...state,
@@ -62,7 +62,7 @@ function reducer(state, action) {
         error: null,
         runsByKey,
         decisionsById,
-        receiptsById,
+        receiptsByKey,
       };
     }
     case 'RUN_ERROR':
@@ -161,7 +161,7 @@ export function CaseWorkbenchProvider({ children }) {
     pack: ENERGY_CASE_PACK,
     activeRun,
     activeDecision: activeRun?.decision || null,
-    activeReceipt: activeRun ? state.receiptsById[activeRun.decision.decision_id] || null : null,
+    activeReceipt: activeRun?.receipt || null,
     visibleRunsByCaseId,
     selectCase,
     selectPolicy,

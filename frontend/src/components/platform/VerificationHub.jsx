@@ -20,6 +20,7 @@ import {
   humanize,
   shortHash,
 } from './PlatformSurface';
+import ScrollRegion from '../ScrollRegion';
 
 const TABS = [
   ['lineage', 'Lineage', GitBranch],
@@ -94,7 +95,7 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
     <div className="verification-hub-shell">
       <section className="platform-page verification-hub-intro" aria-label="Verification Hub introduction">
         <PlatformPageIntro
-          kicker="Shared workspace · lineage, receipt, capsule, and objects"
+          kicker="Lineage, receipt, capsule and objects"
           title="Verify the result from source identity to portable research artifact."
           description="Trace a selected value backward, inspect the deterministic receipt, build the actual research capsule, test a changed quantity, and open the real objects used by the decision runtime."
           viewMode="full"
@@ -230,11 +231,11 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
             <article className="platform-panel">
               <header><span>Manifest verification</span><h2>What was actually hashed?</h2></header>
               {capsule ? (
-                <div className="capsule-compact-list">
+                <ScrollRegion className="capsule-compact-list" label="Capsule files, scrollable">
                   {capsule.manifest.files.map((file) => (
                     <div key={file.path}><FileCheck2 size={15} /><strong>{file.path}</strong><span>{file.bytes} bytes</span><code>{shortHash(file.sha256)}</code></div>
                   ))}
-                </div>
+                </ScrollRegion>
               ) : <EmptyState>Waiting for the generated manifest.</EmptyState>}
             </article>
           </section>
@@ -262,7 +263,7 @@ export default function VerificationHub({ initialTool = 'lineage', routeContext 
             </article>
             <article className="platform-panel object-json-panel">
               <header><span>Actual instance</span><h2>{OBJECTS.find(([, key]) => key === objectKey)?.[0]}</h2></header>
-              {selectedObject ? <pre>{JSON.stringify(selectedObject, null, 2)}</pre> : <EmptyState>Resolving the selected object…</EmptyState>}
+              {selectedObject ? <ScrollRegion as="pre" label="Selected object JSON, scrollable">{JSON.stringify(selectedObject, null, 2)}</ScrollRegion> : <EmptyState>Resolving the selected object…</EmptyState>}
             </article>
           </section>
         </main>

@@ -17,6 +17,7 @@ import {
   validateMeterRows,
 } from '../lib/evidenceLab';
 import { CONSTRAINTS } from '../lib/currencyLab';
+import ScrollRegion from './ScrollRegion';
 
 const SAMPLE_URL = `${import.meta.env.BASE_URL}samples/public_lab_sample_meter.csv`;
 
@@ -223,7 +224,7 @@ export default function EvidenceLab({
       {previewRows.length > 0 ? (
         <div className="workbench-card">
           <h2>Row preview</h2>
-          <div className="table-scroll">
+          <ScrollRegion className="table-scroll" label="Parsed evidence rows, scrollable">
             <table className="workbench-table">
               <thead>
                 <tr>
@@ -242,7 +243,7 @@ export default function EvidenceLab({
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollRegion>
           {rawRows.length > previewLimit ? (
             <p className="muted">Showing {previewLimit} of {rawRows.length} rows.</p>
           ) : null}

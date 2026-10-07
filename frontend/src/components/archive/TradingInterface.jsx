@@ -99,66 +99,12 @@ const TradingInterface = ({ provider, signer }) => {
   ];
 
   const executeLabel = (() => {
-    if (loading) return status === 'approving' ? 'Approving collateral...' : 'Confirming on-chain...';
-    if (!signer) return 'Connect Wallet to Execute';
-    if (seriesStatus !== 'ok') return 'Series Unavailable';
-    if (seriesExpired) return 'Series Expired';
-    return 'Execute Hedge';
+    return 'Matched counterparty workflow required';
   })();
 
   const executeTrade = async () => {
-    if (!signer) return;
-    if (!series || seriesExpired) {
-      setStatus('missing-series');
-      return;
-    }
-
-    setLoading(true);
-    setStatus(null);
-    setTxHash(null);
-    setErrorMsg('');
-
-    try {
-      const option = new ethers.Contract(CONTRACT_ADDRESS, SolarPunkOptionABI.abi, signer);
-
-      // Get collateral token address and set up ERC20 interface
-      const collateralAddr = await option.collateral();
-      const collateral = new ethers.Contract(collateralAddr, ERC20_ABI, signer);
-      const decimals = await collateral.decimals();
-      const marginWei = ethers.parseUnits(pricing.requiredMargin.toFixed(Number(decimals)), decimals);
-
-      // Check balance
-      const userAddr = await signer.getAddress();
-      const balance = await collateral.balanceOf(userAddr);
-      if (balance < marginWei) {
-        setStatus('insufficient-balance');
-        setErrorMsg(`Need ${pricing.requiredMargin.toFixed(2)} collateral, have ${ethers.formatUnits(balance, decimals)}`);
-        setLoading(false);
-        return;
-      }
-
-      // Check and request approval if needed
-      const allowance = await collateral.allowance(userAddr, CONTRACT_ADDRESS);
-      if (allowance < marginWei) {
-        setStatus('approving');
-        const approveTx = await collateral.approve(CONTRACT_ADDRESS, marginWei);
-        await approveTx.wait();
-      }
-
-      const qtyDelta = BigInt(Math.trunc(amount));
-      const tx = await option.modifyPosition(series.id, qtyDelta, marginWei);
-      const receipt = await tx.wait();
-
-      setTxHash(receipt.hash);
-      setStatus('success');
-    } catch (err) {
-      console.error('Trade failed:', err);
-      const reason = err.reason || err.shortMessage || err.message || 'Unknown error';
-      setErrorMsg(reason);
-      setStatus('error');
-    } finally {
-      setLoading(false);
-    }
+    setErrorMsg('This archived trading screen supports previews. Opening a position requires the matched counterparty workflow documented in the audit repairs.');
+    setStatus('error');
   };
 
   return (
@@ -244,12 +190,13 @@ const TradingInterface = ({ provider, signer }) => {
           ))}
         </div>
 
+        <p className="text-muted">This historical screen supports previews. New option positions require an explicitly approved, funded counterparty.</p>
         {/* Action Button */}
         <button
           className="btn-primary"
           style={{ justifyContent: 'center', width: '100%', padding: '16px', fontSize: '16px' }}
           onClick={executeTrade}
-          disabled={!canExecute}
+          disabled={true}
         >
           {executeLabel} {!loading && signer && seriesStatus === 'ok' && !seriesExpired && <ArrowRight size={18} />}
         </button>
@@ -292,7 +239,7 @@ const TradingInterface = ({ provider, signer }) => {
 
         {!signer && (
            <div style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)' }}>
-            Connect wallet to execute. The preview above is read-only.
+            The preview is read-only. Use the matched counterparty contract workflow to open positions.
            </div>
         )}
         {seriesStatus === 'error' && (

@@ -8,7 +8,7 @@ import {
 } from './decision.js';
 import { verifyEvidenceEnvelopeHash } from './portableEvidence.js';
 import { classifyProvenance } from './provenance.js';
-import { receiptSummary } from './receipt.js';
+import { buildDecisionReceipt, receiptSummary } from './receipt.js';
 import { sha256Hex, stableStringify } from './stable.js';
 
 export const RESEARCH_CAPSULE_BUNDLE_SCHEMA = 'solarpunk.constraint.research_capsule_bundle.v1';
@@ -112,6 +112,16 @@ function failResult(code, message, warnings) {
  * evidence and contexts can be resolved from a committed case pack.
  */
 export async function verifyResearchCapsuleBundle(bundle, options = {}) {
+  try {
+    return await verifyCapsule(bundle, options);
+  } catch (error) {
+    return failResult('malformed_capsule', `Capsule verification rejected malformed input: ${error.message}`, [
+      'Source-truth certification is never claimed.',
+    ]);
+  }
+}
+
+async function verifyCapsule(bundle, options) {
   const checks = [];
   const warnings = [
     'Source-truth certification is never claimed. Integrity/reproduction does not establish physical meter truth, operator identity, legal authority, or redemption rights.',
@@ -372,6 +382,18 @@ export async function verifyResearchCapsuleBundle(bundle, options = {}) {
     const reproductionContexts = sorted(reproductionFile.context_refs || []);
     const caseContextIds = sorted(caseManifest.context_refs || []);
     const contextIds = sorted(contexts.map((context) => context.context_id));
+    let expectedReceipt = null;
+    try {
+      expectedReceipt = buildDecisionReceipt({
+        decision,
+        evaluated_at: receipt.evaluated_at,
+        runtime: receipt.runtime,
+        data_boundary: receipt.data_boundary,
+        raw_evidence_included: false,
+      });
+    } catch {
+      // Malformed receipts are verification failures, not uncaught parser errors.
+    }
 
     const identityAssertions = [
       manifest.case_id === caseManifest.case_id,
@@ -407,6 +429,10 @@ export async function verifyResearchCapsuleBundle(bundle, options = {}) {
       manifest.source_revision === receipt.runtime?.source_revision,
       manifest.source_revision === reproductionFile.runtime?.source_revision,
       receipt.result === decision.decision,
+      Boolean(expectedReceipt),
+      same(receipt.evaluated_rules, expectedReceipt?.evaluated_rules),
+      same(receipt.blocking_rules, expectedReceipt?.blocking_rules),
+      same(receipt.binding_constraints, expectedReceipt?.binding_constraints),
       (receipt.evidence || []).every((item) => item.raw_included === false),
     ];
 

@@ -1,6 +1,6 @@
 # Energy-Backed Derivatives Pricing Framework
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Research Software](https://img.shields.io/badge/status-research--ready-green.svg)](RESEARCH_USE_NOTICE.md)
 
@@ -20,21 +20,34 @@ This is research-grade software for academic use. See [RESEARCH_USE_NOTICE.md](R
 ### Quick Start (Research Release)
 
 ```bash
-# Install the stable research release
-pip install git+https://github.com/YOUR_USERNAME/solarpunk-bitcoin.git@v0.2.0-research
+# Install a reviewed revision of the repository (Python 3.11+)
+pip install git+https://github.com/Spectating101/solarpunk-coin.git
 ```
 
 ### Development Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/solarpunk-bitcoin.git
-cd solarpunk-bitcoin
+git clone https://github.com/Spectating101/solarpunk-coin.git
+cd solarpunk-coin
 
 # Install with optional dependencies
 pip install -e ".[viz,dev]"    # Visualization + development tools
 pip install -e ".[all]"         # All optional dependencies
 ```
+
+### Command line
+
+The installed package provides a working `spk-derivatives` entry point:
+
+```bash
+spk-derivatives --version
+spk-derivatives price --spot 100 --strike 100 --volatility 0.2 --years 1 --steps 100
+spk-derivatives price --spot 100 --strike 100 --volatility 0.2 --method monte-carlo --seed 42
+```
+
+Outputs are JSON. Pricing and Greeks accept 10–1000 binomial steps; batch pricing is limited to two million total squared steps per request. Non-finite inputs are rejected.
+Legacy `/price`, `/greeks`, `/price/binomial`, `/price/monte-carlo`, `/data/wind`, and `/data/hydro` routes use the same API key validation and per-process rate limit as `/v1` routes. Configure paid keys in the comma-separated `SPK_API_KEYS` environment variable and send `x-api-key` on both route families. Anonymous access and the published demo key retain the demo rate limit. CPU pricing runs in FastAPI's worker pool so the event loop can still answer health checks.
 
 ### Basic Usage
 
@@ -266,8 +279,8 @@ pytest energy_derivatives/tests
 ### API Server (FastAPI)
 ```bash
 uvicorn energy_derivatives.api.main:app --reload
-# Then POST to /price, /greeks, /stress
-# Optional: set API_KEY env and pass header x-api-key
+# Then POST to /v1/price, /v1/greeks, /v1/risk-assessment
+# Optional paid keys: set SPK_API_KEYS and pass header x-api-key
 ```
 
 ### Streamlit Dashboard

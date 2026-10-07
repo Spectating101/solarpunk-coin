@@ -82,7 +82,7 @@ await page.getByRole('button', { name: /40% capacity/i }).click();
 await page.getByText('PARTIAL', { exact: true }).waitFor({ state: 'visible' });
 await shot('06-settlement-stress-partial.png');
 
-await page.getByRole('navigation', { name: /investigation sequence/i }).getByRole('button', { name: /^Lineage$/i }).click();
+await page.getByRole('navigation', { name: /investigation sequence/i }).getByRole('button', { name: /^Lineage/i }).click();
 await page.getByText('Which declared objects and activities produced this result?', { exact: false }).waitFor({ state: 'visible' });
 await shot('07-decision-lineage.png');
 
@@ -148,7 +148,7 @@ await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 
 
 await openMobile('#cases', 'Investigate the rule that blocks or bounds the case.');
 await mobilePage.getByText('BLOCKED', { exact: true }).first().waitFor({ state: 'visible' });
-const mapToggle = mobilePage.getByRole('button', { name: /show 3 mapped cases/i });
+const mapToggle = mobilePage.getByRole('button', { name: /^show \d+ mapped cases$/i });
 await mapToggle.waitFor({ state: 'visible' });
 if (await mapToggle.getAttribute('aria-expanded') !== 'false') {
   throw new Error('Mobile case map must begin collapsed');

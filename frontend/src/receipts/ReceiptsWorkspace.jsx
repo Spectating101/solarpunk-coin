@@ -10,6 +10,8 @@ import {
 import { useCaseWorkbench } from '../app/CaseWorkbenchProvider';
 import ResponsiveDisclosure from '../components/ResponsiveDisclosure';
 import SectionNavigator from '../components/SectionNavigator';
+import CopyLinkButton from '../components/CopyLinkButton';
+import SourceAndLimits from '../components/platform/SourceAndLimits';
 import {
   decisionArtifactStem,
   decisionMemo,
@@ -41,7 +43,7 @@ function ReceiptDetail({ run, receipt }) {
       if (active) setCapsuleError(error?.message || String(error));
     });
     return () => { active = false; };
-  }, [run?.decision?.decision_id, receipt?.evaluated_at]);
+  }, [run, receipt]);
 
   if (!run || !receipt) return <div className="wb-lens-loading">Select a decision receipt.</div>;
   const artifactStem = decisionArtifactStem(run);
@@ -74,7 +76,12 @@ function ReceiptDetail({ run, receipt }) {
         >
           <Download size={15} /> Capsule manifest
         </button>
+        <CopyLinkButton />
       </div>
+      <SourceAndLimits title="What a receipt proves">
+        It proves lineage and that the decision reproduces from the declared evidence, policy and context. It does not
+        prove physical truth, legal authority, reserves, certification, adoption or money.
+      </SourceAndLimits>
       {capsuleError ? <div className="workbench-error" role="alert">{capsuleError}</div> : null}
 
       <SectionNavigator
@@ -241,7 +248,6 @@ export default function ReceiptsWorkspace({
   const {
     pack,
     runsByKey,
-    receiptsById,
     activeRun,
     activeCaseId,
     activePolicyId,
@@ -265,14 +271,16 @@ export default function ReceiptsWorkspace({
     if (routeContext.scenarioId) selectScenario(routeContext.scenarioId);
   }, [routeContext?.caseId, routeContext?.policyId, routeContext?.scenarioId, contextValid, selectCase, selectPolicy, selectScenario]);
 
-  const runByDecisionId = useMemo(() => Object.fromEntries(
-    Object.values(runsByKey).map((run) => [run.decision.decision_id, run]),
-  ), [runsByKey]);
-  const receipts = useMemo(() => Object.values(receiptsById)
-    .sort((a, b) => b.evaluated_at.localeCompare(a.evaluated_at)), [receiptsById]);
-  const selectedId = receiptId || receipts[0]?.decision_id || null;
-  const selectedRun = selectedId ? runByDecisionId[selectedId] : null;
-  const selectedReceipt = selectedId ? receiptsById[selectedId] : null;
+  const receiptRuns = useMemo(() => Object.values(runsByKey)
+    .sort((a, b) => b.receipt.evaluated_at.localeCompare(a.receipt.evaluated_at)), [runsByKey]);
+  const selectedId = receiptId || receiptRuns[0]?.decision.decision_id || null;
+  const selectedRun = contextValid ? receiptRuns.find((run) => (
+    run.decision.decision_id === selectedId
+    && (!routeContext?.caseId || run.caseManifest.case_id === routeContext.caseId)
+    && (!routeContext?.policyId || run.policy.id === routeContext.policyId)
+    && (!routeContext?.scenarioId || run.scenario.scenario_id === routeContext.scenarioId)
+  )) : null;
+  const selectedReceipt = selectedRun?.receipt || null;
   const contextMatched = !routeContext || (
     (!routeContext.caseId || routeContext.caseId === activeCaseId)
     && (!routeContext.policyId || routeContext.policyId === activePolicyId)
@@ -290,7 +298,7 @@ export default function ReceiptsWorkspace({
       <main className="receipts-workspace" aria-labelledby="receipts-title">
         <section className="receipt-index-header">
           <div>
-            <span className="wb-kicker"><FileCheck2 size={13} /> Receipts · decisions evaluated in this browser session</span>
+            <span className="wb-kicker"><FileCheck2 size={13} /> Decisions evaluated in this browser session</span>
             <h1 id="receipts-title">Share the decision identity, not a screenshot.</h1>
             <p>Receipts summarize deterministic decisions and runtime audit context. Durable links encode the case, policy, and assurance scenario; capsule exports exclude raw evidence rows by default.</p>
           </div>
@@ -299,13 +307,13 @@ export default function ReceiptsWorkspace({
           <aside className="receipt-index-list">
             <span className="wb-section-label">Browser-session decisions</span>
             <div className="receipt-index-scroll">
-              {receipts.map((receipt) => {
-                const run = runByDecisionId[receipt.decision_id];
+              {receiptRuns.map((run) => {
+                const receipt = run.receipt;
                 return (
                   <button
                     type="button"
-                    key={receipt.decision_id}
-                    className={selectedId === receipt.decision_id ? 'active' : ''}
+                    key={run.key}
+                    className={selectedRun?.key === run.key ? 'active' : ''}
                     onClick={() => run && typeof onOpenReceipt === 'function' && onOpenReceipt(run)}
                   >
                     <span>

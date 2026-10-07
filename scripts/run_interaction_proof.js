@@ -21,11 +21,12 @@ const ADDRESSES = {
   MockUSDC:         "0xa467ab7BD1143fB1bF435097b4c72910AbBC1fe2",
   ProtocolTreasury: "0x138e793f095a33D2790349eC1066FED3A756dd2c",
   SolarPunkCoin:    "0x1D55C6c9B240966E24f7ab9A9EC8b2f924E0407F",
-  SolarPunkOption:  "0xe40A88398b5f90D038f7A6F1f122112DCD9e4104",
+  SolarPunkOption: process.env.SOLARPUNK_OPTION_ADDRESS || "0xe40A88398b5f90D038f7A6F1f122112DCD9e4104",
 };
 
 async function main() {
-  const [deployer] = await hre.ethers.getSigners();
+  const [deployer, counterparty] = await hre.ethers.getSigners();
+  if (!counterparty) throw new Error("A distinct counterparty signer is required for matched option clearing.");
   const network = hre.network.name;
   const explorer = "https://sepolia.etherscan.io";
 
@@ -53,6 +54,7 @@ async function main() {
   const usdc    = await hre.ethers.getContractAt("MockUSDC",         ADDRESSES.MockUSDC,         deployer);
   const spk     = await hre.ethers.getContractAt("SolarPunkCoin",    ADDRESSES.SolarPunkCoin,    deployer);
   const option  = await hre.ethers.getContractAt("SolarPunkOption",  ADDRESSES.SolarPunkOption,  deployer);
+  try { await option.totalMarginLiability(); } catch { throw new Error("Historical deployed options are unfunded. Set SOLARPUNK_OPTION_ADDRESS to a new repaired deployment before running this proof."); }
 
   // ── Step 1: Mint MockUSDC ──────────────────────────────────────────
   console.log("\n[1/6] Minting MockUSDC to deployer...");
@@ -104,7 +106,11 @@ async function main() {
   const marginAmount = 20_000_000n; // 20 USDC — above 15 USDC IM requirement
   const tradingFee   =     50_000n; // 50 bps on $10 exposure = $0.05 USDC
   await (await usdc.approve(ADDRESSES.SolarPunkOption, marginAmount + tradingFee)).wait();
-  const tx6 = await (await option.modifyPosition(SERIES_ID, 1n, marginAmount)).wait();
+  await (await usdc.mint(counterparty.address, marginAmount)).wait();
+  await (await usdc.connect(counterparty).approve(ADDRESSES.SolarPunkOption, marginAmount)).wait();
+  const deadline = (await hre.ethers.provider.getBlock("latest")).timestamp + 3600;
+  await (await option.connect(counterparty).approveMatchedPosition(SERIES_ID, deployer.address, -1n, marginAmount, marginAmount, deadline, true)).wait();
+  const tx6 = await (await option.openMatchedPosition(SERIES_ID, counterparty.address, 1n, marginAmount, marginAmount, deadline)).wait();
   record(
     "Open 1-contract long call (SOLAR_CALL_JUN2026_1USD)",
     tx6,

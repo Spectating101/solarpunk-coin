@@ -89,7 +89,7 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
     return (
       <main className="platform-page overview-surface full" aria-labelledby="full-overview-title">
         <PlatformPageIntro
-          kicker="Overview · complete platform analysis"
+          kicker="Complete platform analysis"
           title="See the whole programme behind the active decision."
           description="The same case state now exposes the object model, source-to-receipt pipeline, platform inventory, live result, validation boundary, research layers, and external value gate."
           viewMode="full"
@@ -226,7 +226,7 @@ export default function LabOverview({ viewMode = 'overview', onViewModeChange, o
   return (
     <main className="platform-page overview-surface" aria-labelledby="overview-title">
       <PlatformPageIntro
-        kicker="Overview · executable programme synopsis"
+        kicker="Programme summary"
         title="Can real-world evidence justify a financial claim?"
         description="The outside-data checkpoint shows what happened with a pinned public Ausgrid source. The interactive controlled cases below let you change assurance, policy, and settlement conditions through the same deterministic decision machinery."
         viewMode="overview"

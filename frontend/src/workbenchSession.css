@@ -3,7 +3,8 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
-summary:focus-visible {
+summary:focus-visible,
+[tabindex="0"]:focus-visible {
   outline: 2px solid var(--green);
   outline-offset: 3px;
 }
@@ -27,10 +28,9 @@ summary:focus-visible {
 
 .lab-session-kicker {
   color: var(--green);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: none;
 }
 
 .lab-session-summary {
@@ -117,7 +117,7 @@ summary:focus-visible {
 .lab-session-step-index {
   color: var(--dim);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
 }
 
 .lab-session-step-copy {
@@ -133,7 +133,7 @@ summary:focus-visible {
 .lab-session-step-copy small {
   margin-top: 0.1rem;
   overflow: hidden;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

@@ -111,7 +111,7 @@ export default function EmpiricalReproductionLab({ onOpenRuns }) {
   const exact = state.status === 'exact';
 
   return (
-    <section className="reproduction-lab" aria-labelledby="reproduction-heading">
+    <main className="reproduction-lab" aria-labelledby="reproduction-heading">
       <header className="reproduction-hero">
         <div>
           <p className="empirical-kicker">Policy Lab · reproduce public run</p>
@@ -126,15 +126,15 @@ export default function EmpiricalReproductionLab({ onOpenRuns }) {
         </div>
       </header>
 
-      <div className="reproduction-flow" aria-label="Public reproduction flow">
+      <div className="reproduction-flow" aria-label="Public reproduction flow" role="group" tabIndex={0}>
         <span>COMMITTED MANIFEST</span><ArrowRight size={15} /><span>FETCH PUBLIC BYTES</span><ArrowRight size={15} /><span>SHA-256</span><ArrowRight size={15} /><span>COMPARE</span><ArrowRight size={15} /><strong>{exact ? 'EXACT' : 'FAIL'}</strong>
       </div>
 
       <div className="reproduction-grid">
-        <main className="reproduction-workspace">
+        <div className="reproduction-workspace">
           <section className="empirical-panel">
             <div className="empirical-panel-head">
-              <div><p className="empirical-kicker">Artifact verification</p><h3>Exact byte identity, file by file.</h3></div>
+              <div><p className="empirical-kicker">Artifact verification</p><h3 role="heading" aria-level="2">Exact byte identity, file by file.</h3></div>
               <FileCheck2 size={19} aria-hidden />
             </div>
             <div className="reproduction-file-list">
@@ -152,7 +152,7 @@ export default function EmpiricalReproductionLab({ onOpenRuns }) {
 
           <section className="empirical-panel reproduction-identity-panel">
             <div className="empirical-panel-head">
-              <div><p className="empirical-kicker">Identity chain</p><h3>What this check establishes — and what it does not.</h3></div>
+              <div><p className="empirical-kicker">Identity chain</p><h3 role="heading" aria-level="2">What this check establishes — and what it does not.</h3></div>
               <Fingerprint size={19} aria-hidden />
             </div>
             <div className="reproduction-identity-chain">
@@ -168,7 +168,7 @@ export default function EmpiricalReproductionLab({ onOpenRuns }) {
             <LockKeyhole size={21} aria-hidden />
             <div><strong>Verification boundary</strong><p>{state.manifest.boundary}</p></div>
           </section>
-        </main>
+        </div>
 
         <aside className="reproduction-receipt">
           <p className="empirical-kicker">Reproduction receipt</p>
@@ -187,6 +187,6 @@ export default function EmpiricalReproductionLab({ onOpenRuns }) {
           <div className="dossier-boundary"><Hash size={15} /><p>This check runs locally in the browser. It does not upload licensed source data or require a wallet.</p></div>
         </aside>
       </div>
-    </section>
+    </main>
   );
 }

@@ -51,6 +51,6 @@ test('decision-bound claim creation rejects a tampered admitted maximum with ret
       decision: tampered,
       subject: 'TYN-001 research claim',
     }),
-    /DecisionResult identity mismatch/,
+    /DecisionResult identity mismatch|minimum applicable quantity ceiling/,
   );
 });

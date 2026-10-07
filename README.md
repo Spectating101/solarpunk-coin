@@ -13,7 +13,7 @@ Each case pairs evidence (for example, metered electricity data) with a versione
 | **Outside-data check** | A CI run pulls 336 half-hour intervals from a pinned public Ausgrid archive. The same evidence is admitted with a 33.066 kWh ceiling under the open research policy and blocked under the stricter pilot policy |
 | **Controlled cases** | An interactive case pack where you change assurance, policy and settlement conditions and watch the decision change |
 | **Portable output** | Each assessment exports as a versioned claim-assessment package |
-| **Engineering** | Deterministic decision core, JSON-schema-bound outputs, CI-published site with a post-deploy smoke test |
+| **Engineering** | Deterministic decision core, JSON-schema-bound outputs, CI-published site with a post-deploy smoke test, and automated visual-quality, accessibility and no-third-party-request checks |
 | **Status** | Public research workbench. Not a token, not a financial product, not a claim that any energy-linked instrument is money |
 
 Where everything lives, and which files are authority: [`docs/SOURCE_OF_TRUTH.md`](docs/SOURCE_OF_TRUTH.md), with the machine-declared surface in [`CURRENT_SURFACE.json`](./CURRENT_SURFACE.json).

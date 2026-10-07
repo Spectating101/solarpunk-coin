@@ -29,11 +29,10 @@
 .policy-diff-rule-section > summary > span:first-child small,
 .policy-metadata-disclosure > summary > span:first-child small {
   color: var(--dim);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .policy-diff-rule-section > summary > span:first-child strong,
@@ -47,7 +46,7 @@
 .policy-metadata-disclosure > summary > .responsive-disclosure-meta {
   color: var(--dim);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .policy-diff-rule-section > .responsive-disclosure-body,
@@ -66,5 +65,13 @@
   .policy-diff-rule-section > summary svg,
   .policy-metadata-disclosure > summary svg {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-diff-rule-section > summary,
+  .policy-metadata-disclosure > summary {
+    flex-wrap: wrap;
+    gap: 6px 12px;
   }
 }

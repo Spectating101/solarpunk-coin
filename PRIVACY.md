@@ -24,7 +24,7 @@ Energy and financial records can become identifying when combined with other dat
 
 ## Hosting and third parties
 
-The public website is presently hosted with GitHub Pages. As with ordinary web hosting, the hosting provider may process standard network metadata such as IP addresses and request logs under its own policies. Policy Lab does not receive a first-party analytics feed from the current application.
+The public website is presently hosted with GitHub Pages. As with ordinary web hosting, the hosting provider may process standard network metadata such as IP addresses and request logs under its own policies. Policy Lab does not receive a first-party analytics feed from the current application. The current pages serve their own scripts, styles and fonts and make no requests to third-party origins; `scripts/check_visual_quality.mjs` fails if a current route does. The historical SolarPunk reference and Sepolia routes are the exception: they read a public Sepolia RPC endpoint (`ethereum-sepolia-rpc.publicnode.com`) when opened, so that endpoint's operator can see the visitor's IP address.
 
 Links from Policy Lab may navigate to GitHub, public datasets, academic sources, or other third-party services. Their privacy practices are governed by their own terms and policies.
 

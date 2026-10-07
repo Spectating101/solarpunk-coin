@@ -20,8 +20,14 @@ function renderWithWorkbench(node) {
   return render(<CaseWorkbenchProvider>{node}</CaseWorkbenchProvider>);
 }
 
+// Lens buttons are named by their visible text: the lens label followed by its guiding question.
+function lensButton(label) {
+  const sequence = screen.getByRole('navigation', { name: /investigation sequence/i });
+  return within(sequence).getByRole('button', { name: new RegExp(`^${label}`, 'i') });
+}
+
 describe('case workbench investigation flow', () => {
-  it('opens on the four-case research surface with Taoyuan blocked under the default pilot/L0 run', async () => {
+  it('opens on the five-case research surface with Taoyuan blocked under the default pilot/L0 run', async () => {
     const openCase = vi.fn();
     renderWithWorkbench(<CaseExplorer onOpenCase={openCase} />);
 
@@ -57,7 +63,7 @@ describe('case workbench investigation flow', () => {
     expect(screen.getByRole('heading', { name: /why is this case blocked/i })).toBeInTheDocument();
     expect(screen.getAllByText(/MIN_PROVENANCE/i).length).toBeGreaterThan(0);
     expect(screen.getByRole('navigation', { name: /investigation sequence/i })).toBeInTheDocument();
-    expect(screen.getByLabelText('Constraints')).toHaveAttribute('aria-current', 'page');
+    expect(lensButton('Constraints')).toHaveAttribute('aria-current', 'page');
 
     fireEvent.click(screen.getByRole('button', { name: /preview l2 without changing the evidence hash/i }));
 
@@ -76,13 +82,13 @@ describe('case workbench investigation flow', () => {
     await screen.findByText('NOT EXECUTED');
 
     const investigation = screen.getByRole('navigation', { name: /investigation sequence/i });
-    fireEvent.click(within(investigation).getByRole('button', { name: /^Evidence$/i }));
+    fireEvent.click(within(investigation).getByRole('button', { name: /^Evidence/i }));
 
     expect(await screen.findByText('CONTROLLED EVIDENCE FIXTURE')).toBeInTheDocument();
     expect(screen.getByText('MODELED CONTEXT')).toBeInTheDocument();
     expect(screen.getAllByText(/TMY/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/not observed meter evidence/i)).toBeInTheDocument();
-    expect(screen.getByLabelText('Evidence')).toHaveAttribute('aria-current', 'page');
+    expect(lensButton('Evidence')).toHaveAttribute('aria-current', 'page');
   });
 
   it('does not fabricate settlement stress for a blocked decision and exposes partial shortfall after admission', async () => {
@@ -90,7 +96,7 @@ describe('case workbench investigation flow', () => {
     await screen.findByText('NOT EXECUTED');
 
     const investigation = screen.getByRole('navigation', { name: /investigation sequence/i });
-    fireEvent.click(within(investigation).getByRole('button', { name: /^Stress$/i }));
+    fireEvent.click(within(investigation).getByRole('button', { name: /^Stress/i }));
     expect(await screen.findByRole('heading', { name: /settlement stress is downstream of admission/i })).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/assurance context/i), {

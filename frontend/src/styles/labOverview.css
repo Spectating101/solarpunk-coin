@@ -70,11 +70,10 @@
 .flagship-primary-rule > span,
 .flagship-decision-id > span {
   color: var(--flagship-dim);
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .flagship-question > strong {
@@ -149,11 +148,10 @@
   border-radius: 6px;
   color: var(--flagship-muted);
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .flagship-stage-controls button:hover {
@@ -244,7 +242,7 @@
   overflow: hidden;
   color: var(--flagship-muted);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -252,7 +250,7 @@
 .flagship-boundary-note {
   margin-top: 17px;
   color: var(--flagship-muted);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.65;
 }
 
@@ -290,16 +288,15 @@
 }
 
 .flagship-check strong {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: capitalize;
 }
 
 .flagship-check small {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.06em;
 }
 
 .flagship-check.passed > span {
@@ -338,7 +335,7 @@
   border-left: 2px solid var(--wb-violet);
   background: rgba(167, 139, 250, 0.08);
   color: var(--flagship-muted);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.55;
 }
 
@@ -355,7 +352,7 @@
   border-radius: 8px;
   background: var(--flagship-red-dim);
   color: #fecdd3;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .flagship-verdict-panel {
@@ -410,10 +407,10 @@
 
 .flagship-verdict-quantity small {
   color: var(--flagship-muted);
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   line-height: 1.45;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .flagship-primary-rule,
@@ -452,7 +449,7 @@
   border-radius: 8px;
   color: var(--text);
   cursor: pointer;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 650;
 }
 
@@ -537,7 +534,7 @@
 .flagship-path-grid article > div span {
   color: var(--flagship-dim);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
 }
 

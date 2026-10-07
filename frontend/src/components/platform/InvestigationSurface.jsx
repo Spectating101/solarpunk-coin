@@ -90,7 +90,7 @@ export default function InvestigationSurface({ onNavigate, onOpenFullAnalysis })
   return (
     <main className="platform-page investigation-surface" aria-labelledby="investigation-title">
       <PlatformPageIntro
-        kicker="Investigate · guided decision inquiry"
+        kicker="Guided decision inquiry"
         title="Find what blocks the claim, what bounds it, and what fails afterward."
         description="Set a case, assurance condition, policy, and settlement stress. The workbench runs the same deterministic decision objects used by the complete investigation workspace."
         viewMode="overview"

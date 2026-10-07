@@ -26,6 +26,13 @@ The human-facing entrypoint is [`README.md`](./README.md). Agent instructions ar
 | Deployment | `.github/workflows/deploy.yml` |
 | Production verification | `.github/workflows/policy-lab-live-smoke.yml` |
 
+## Audit repair session context
+
+- [2026-10-05 handoff and continuation context](./docs/ops/AUDIT_REPAIR_HANDOFF_2026-10-05.md) — repair checkout/commit, evidence, outstanding work, migration requirements and resume commands.
+- [2026-10-05 repair report](./docs/ops/AUDIT_REPAIRS_2026-10-05.md) — finding-by-finding changes and validation.
+
+These are dated session records. Verify current state through the executable sources above.
+
 ## Research and historical documentation
 
 The `docs/` tree contains research papers, empirical notes, implementation handoffs, packaging work, institutional evidence, grant material, historical SolarPunk/SPK documentation, and archived pre-pivot material.

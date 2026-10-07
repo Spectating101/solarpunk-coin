@@ -133,6 +133,15 @@ export function constraintEvaluationBody(value) {
   };
 }
 
+export async function verifyConstraintEvaluationHash(value) {
+  const body = constraintEvaluationBody(value);
+  const { evaluation_id: evaluationId, ...identity } = body;
+  if (evaluationId !== await sha256Hex(stableStringify(identity))) {
+    throw new Error(`constraint evaluation identity mismatch: ${body.calculator_id}`);
+  }
+  return true;
+}
+
 function normalizeCalculator(calculator) {
   if (!calculator || typeof calculator !== 'object' || Array.isArray(calculator)) {
     throw new Error('calculator must be an object');

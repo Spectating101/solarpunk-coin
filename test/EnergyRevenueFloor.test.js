@@ -117,6 +117,31 @@ describe("EnergyRevenueFloor", function () {
     };
   }
 
+
+  it("binds the signed report to its source hash and consumes the nonce once", async function () {
+    const { policyId, periodStart } = await openFloorPolicy();
+    const measuredAt = periodStart + 60;
+    await ethers.provider.send("evm_setNextBlockTimestamp", [measuredAt + 1]);
+    await ethers.provider.send("evm_mine");
+    const sourceHash = ethers.id("verified-source");
+    const nonce = await floor.reportNonces(reporter.address);
+    const digest = ethers.solidityPackedKeccak256(
+      ["uint256", "address", "uint256", "uint256", "uint64", "bytes32", "uint256"],
+      [(await ethers.provider.getNetwork()).chainId, floor.target, policyId, 700n, measuredAt, sourceHash, nonce]
+    );
+    const signature = await reporter.signMessage(ethers.getBytes(digest));
+    await expect(floor.connect(payer).submitSignedProductionReport(
+      policyId, 700n, measuredAt, nonce, ethers.id("substituted-source"), signature
+    )).to.be.revertedWithCustomError(floor, "UnauthorizedActor");
+    expect(await floor.reportNonces(reporter.address)).to.equal(nonce);
+    await floor.connect(payer).submitSignedProductionReport(policyId, 700n, measuredAt, nonce, sourceHash, signature);
+    expect((await floor.policies(policyId)).sourceHash).to.equal(sourceHash);
+    expect(await floor.reportNonces(reporter.address)).to.equal(nonce + 1n);
+    await expect(floor.connect(payer).submitSignedProductionReport(
+      policyId, 700n, measuredAt, nonce, sourceHash, signature
+    )).to.be.revertedWithCustomError(floor, "PolicyStateInvalid");
+  });
+
   it("registers producers and stores heartbeat configuration", async function () {
     const p = await floor.producers(producerId);
 

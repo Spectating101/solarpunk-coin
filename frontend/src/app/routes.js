@@ -145,3 +145,30 @@ export function primarySection(route) {
 export function isSepoliaRoute(route) {
   return route.section === 'reference' && route.id === 'sepolia';
 }
+
+const SECTION_TITLES = Object.freeze({
+  lab: 'Overview',
+  investigate: 'Investigate',
+  research: 'Research',
+  field: 'Field use',
+  programme: 'Programme',
+  analysis: 'Analysis lab',
+  verify: 'Verification hub',
+  cases: 'Cases',
+  compare: 'Compare policies',
+  receipts: 'Receipts',
+  studies: 'Market-capacity study',
+  evidence: 'Evidence lab',
+  currency: 'Currency lab (historical)',
+  'legacy-protocol': 'Protocol lab (historical)',
+});
+
+/** Human title for a route, used for the document title and the screen-reader route announcement. */
+export function routeTitle(route) {
+  const section = route?.section || 'lab';
+  if (section === 'case') return route.id ? `Case ${route.id}` : 'Case';
+  if (section === 'receipt') return route.id ? `Receipt ${String(route.id).slice(0, 8)}` : 'Receipt';
+  if (section === 'study') return 'Market-capacity study';
+  if (section === 'reference') return route.id === 'sepolia' ? 'Sepolia proof (historical)' : 'SolarPunk reference (historical)';
+  return SECTION_TITLES[section] || 'Overview';
+}

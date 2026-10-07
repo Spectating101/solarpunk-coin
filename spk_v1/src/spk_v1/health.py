@@ -22,7 +22,11 @@ def foundation_health_path(repo_root: Path) -> Path:
     return Path(repo_root) / "state" / "foundation" / "health.json"
 
 
-def _sync_age_hours(synced_at: str | None) -> float | None:
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def _sync_age_hours(synced_at: str | None, now: datetime) -> float | None:
     if not synced_at:
         return None
     try:
@@ -30,7 +34,6 @@ def _sync_age_hours(synced_at: str | None) -> float | None:
         synced = datetime.fromisoformat(ts)
         if synced.tzinfo is None:
             synced = synced.replace(tzinfo=timezone.utc)
-        now = datetime.now(timezone.utc)
         return (now - synced).total_seconds() / 3600.0
     except (ValueError, TypeError):
         return None
@@ -44,28 +47,33 @@ def build_operator_health(
     min_eth: float = DEFAULT_MIN_ETH,
     max_sync_age_hours: float = DEFAULT_MAX_SYNC_AGE_HOURS,
     foundation_status_exists: bool | None = None,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     deployer = runtime.get("deployer") or (runtime.get("roles") or {}).get("currency_operator")
     synced_at = runtime.get("synced_at") or runtime.get("updated_at")
-    sync_age = _sync_age_hours(synced_at)
+    now = now or utc_now()
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+    sync_age = _sync_age_hours(synced_at, now)
     metrics = (runtime.get("genesis") or {}).get("metrics") or {}
     chain_index = runtime.get("chain_index") or {}
     payments = metrics.get("network_payment_count") or chain_index.get("payment_count")
 
     gas_ok = operator_eth is None or operator_eth >= min_eth
-    sync_ok = sync_age is None or sync_age <= max_sync_age_hours
+    sync_ok = sync_age is not None and 0 <= sync_age <= max_sync_age_hours
 
     actions: list[str] = []
     if operator_eth is not None and not gas_ok:
         actions.append(f"Top up Sepolia ETH on deployer (need ≥{min_eth}, have {operator_eth:.6f})")
-    if sync_age is not None and not sync_ok:
-        actions.append(f"Run npm run foundation:sync (stale {sync_age:.0f}h)")
+    if not sync_ok:
+        reason = "missing or invalid timestamp" if sync_age is None else f"invalid/stale age {sync_age:.0f}h"
+        actions.append(f"Run npm run foundation:sync ({reason})")
     if gas_ok and sync_ok:
         actions.append("Ready for npm run foundation:cycle")
 
     return {
         "ok": gas_ok and sync_ok,
-        "at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "at": now.isoformat().replace("+00:00", "Z"),
         "deployer": deployer,
         "operator_eth": operator_eth,
         "operator_eth_min": min_eth,
