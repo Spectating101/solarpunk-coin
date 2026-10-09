@@ -1,0 +1,46 @@
+name: Policy Lab Specialized Gauntlet
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'benchmark/gauntlet/policy-*.json'
+      - 'scripts/*policy_lab*gauntlet*.mjs'
+      - 'docs/submission/POLICY_LAB_GAUNTLET_EXPANSION.md'
+      - 'docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md'
+      - 'packages/constraint-core/**'
+      - 'protocol/**'
+      - 'frontend/src/data/publicEvidenceCheckpoint.js'
+      - '.github/workflows/policy-lab-specialized-gauntlet.yml'
+permissions:
+  contents: read
+jobs:
+  gauntlet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Run specialized challenges and external gate contracts
+        run: |
+          node scripts/run_policy_lab_specialized_gauntlet.mjs --out="$RUNNER_TEMP/gauntlet"
+          node scripts/check_policy_lab_external_gauntlet_protocols.mjs
+          node --test packages/constraint-core/test/fc-non-promotion-invariants.test.mjs packages/constraint-core/test/conformance-benchmark-v1.test.mjs
+      - name: Verify environment and retry determinism
+        run: |
+          set -euo pipefail
+          TZ=UTC LANG=C node scripts/run_policy_lab_specialized_gauntlet.mjs --out="$RUNNER_TEMP/utc" >/dev/null
+          TZ=Asia/Taipei LANG=C node scripts/run_policy_lab_specialized_gauntlet.mjs --out="$RUNNER_TEMP/taipei" >/dev/null
+          mkdir -p "$RUNNER_TEMP/retry"
+          printf '%s\n' '{"truncated":true}' > "$RUNNER_TEMP/retry/policy-lab-specialized-gauntlet.v1.json"
+          node scripts/run_policy_lab_specialized_gauntlet.mjs --out="$RUNNER_TEMP/retry" >/dev/null
+          for report in policy-lab-specialized-gauntlet.v1.json policy-lab-specialized-gauntlet.v1.md; do
+            cmp "$RUNNER_TEMP/utc/$report" "$RUNNER_TEMP/taipei/$report"
+            cmp "$RUNNER_TEMP/utc/$report" "$RUNNER_TEMP/retry/$report"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: policy-lab-specialized-gauntlet-${{ github.sha }}
+          path: ${{ runner.temp }}/gauntlet/

@@ -1,0 +1,127 @@
+{
+  "schema": "policylab.specialized_gauntlet.v1",
+  "version": "0.1.0",
+  "status": "ACTIVE_EVALUATION",
+  "purpose": "Attack Policy Lab's evidence-to-authority semantics without changing the generic Gauntlet dimensions or treating self-authored tests as external validation.",
+  "claim_boundary": [
+    "PASS means the declared machine invariant was reproduced by the reference implementation on the tested revision.",
+    "DOCUMENTED means a comparison or limitation is source-backed but not itself an executable proof.",
+    "OPEN means the evidence does not yet exist and must not be promoted by copywriting or internal simulation.",
+    "Controlled cases do not become empirical validation merely because they pass this suite.",
+    "External reproduction, source-holder review, adoption, and pilots remain external evidence classes."
+  ],
+  "reference_case": {
+    "case_id": "TYN-001",
+    "actual_scenario": "PROVENANCE-L0-BASE",
+    "counterfactual_scenario": "PROVENANCE-L2-COUNTERFACTUAL",
+    "policies": [
+      "LAB-CASE-OPEN-004",
+      "ENERGY-CASE-PILOT-005"
+    ],
+    "boundary": "Controlled mechanism case only; empirical_claim remains false."
+  },
+  "challenges": [
+    {
+      "id": "PLG-01",
+      "title": "Evidence capability non-promotion",
+      "state": "MACHINE_REQUIRED",
+      "question": "Can source assurance capabilities be upgraded while retaining the stale evidence identity?",
+      "pass_condition": "Capability tampering causes evidence-hash verification to fail.",
+      "evidence": ["packages/constraint-core/test/fc-non-promotion-invariants.test.mjs"]
+    },
+    {
+      "id": "PLG-02",
+      "title": "Policy identity integrity",
+      "state": "MACHINE_REQUIRED",
+      "question": "Does changing policy while holding evidence fixed create a distinct policy and decision identity?",
+      "pass_condition": "Evidence hashes remain fixed while policy manifest hash and decision identity change."
+    },
+    {
+      "id": "PLG-03",
+      "title": "Quantity inflation resistance",
+      "state": "MACHINE_REQUIRED",
+      "question": "Can a caller request more quantity than the DecisionResult authorized?",
+      "pass_condition": "Decision-bound claim quantity remains equal to the admitted maximum despite an oversized caller value.",
+      "evidence": ["packages/constraint-core/test/fc-non-promotion-invariants.test.mjs"]
+    },
+    {
+      "id": "PLG-04",
+      "title": "Settlement separation",
+      "state": "MACHINE_REQUIRED",
+      "question": "Can settlement assumptions retroactively alter admission or decision identity?",
+      "pass_condition": "One decision produces SETTLED, PARTIAL, and SHORTFALL outcomes under different declared settlement capacities without changing its decision identity."
+    },
+    {
+      "id": "PLG-05",
+      "title": "Counterfactual isolation",
+      "state": "MACHINE_REQUIRED",
+      "question": "Does an assurance counterfactual mutate the observed evidence?",
+      "pass_condition": "The evidence identity remains unchanged; only declared provenance context and resulting policy consequence change."
+    },
+    {
+      "id": "PLG-06",
+      "title": "Policy sensitivity disclosure",
+      "state": "MACHINE_REQUIRED",
+      "question": "Are score-material policy thresholds exposed as assumptions rather than disguised as empirical estimates?",
+      "pass_condition": "Declared sensitivity variants change only the intended policy parameter and produce an ordered, attributable quantity response."
+    },
+    {
+      "id": "PLG-07",
+      "title": "Semantic ambiguity fail-closed",
+      "state": "CORE_SUITE_REQUIRED",
+      "question": "Does malformed or semantically incomplete evidence fail clearly rather than receive invented assumptions?",
+      "pass_condition": "Relevant constraint-core conformance tests pass; no new external-validation credit is awarded."
+    },
+    {
+      "id": "PLG-08",
+      "title": "Lifecycle anti-reuse, cancellation, and correction",
+      "state": "OPEN",
+      "question": "Can duplicate/overlapping evidentiary use, cancellation, and correction lineage be proven end-to-end?",
+      "pass_condition": "C3 lifecycle corpus passes with deterministic duplicate/overlap refusal and correction lineage.",
+      "gap": "The current evaluation inventory marks anti-reuse and revision lineage incomplete/planned."
+    },
+    {
+      "id": "PLG-09",
+      "title": "Independent clean-room reproduction",
+      "state": "OPEN_EXTERNAL",
+      "question": "Can a person who did not build Policy Lab reproduce the frozen result without coaching?",
+      "pass_condition": "A named external evaluator records environment, duration, interventions, and matching decision/package identities."
+    },
+    {
+      "id": "PLG-10",
+      "title": "Release provenance",
+      "state": "OPEN_RELEASE",
+      "question": "Is the judge-facing release cryptographically bound to its source revision and build?",
+      "pass_condition": "Frozen release has source SHA, artifact digest, SBOM/attestation where available, screenshot manifest, and reproducible build record."
+    },
+    {
+      "id": "PLG-11",
+      "title": "External-source heterogeneity",
+      "state": "OPEN_EXTERNAL",
+      "question": "Does the mechanism survive a materially different owner/operator, institutional, API, or registry source?",
+      "pass_condition": "At least one additional attributable external case closes its declared source/review contract."
+    },
+    {
+      "id": "PLG-12",
+      "title": "Independent evaluator comprehension",
+      "state": "OPEN_EXTERNAL",
+      "question": "Can uncoached evaluators correctly distinguish evidence, admission, quantity, and settlement?",
+      "pass_condition": "Blind comprehension protocol records questions, responses, scoring rule, and results without treating liking the demo as validation."
+    },
+    {
+      "id": "PLG-13",
+      "title": "Standards and adjacent-system differentiation",
+      "state": "DOCUMENTED",
+      "question": "Is the contribution distinguishable from generic policy engines, authorization languages, verifiable credentials, proof-of-reserve feeds, and financial-contract standards?",
+      "pass_condition": "Source-backed matrix states overlap, non-overlap, and prohibited novelty claims.",
+      "evidence": ["docs/submission/POLICY_LAB_STANDARDS_DIFFERENTIATION.md"]
+    },
+    {
+      "id": "PLG-14",
+      "title": "Practical workflow validation",
+      "state": "OPEN_EXTERNAL",
+      "question": "Does an outside user or institution have a real workflow/problem for which this mechanism is useful?",
+      "pass_condition": "Inspectable interviews, integration request, pilot, or repeated use exists; internal route simulation does not count."
+    }
+  ]
+}
