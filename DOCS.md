@@ -26,6 +26,10 @@ The human-facing entrypoint is [`README.md`](./README.md). Agent instructions ar
 | Deployment | `.github/workflows/deploy.yml` |
 | Production verification | `.github/workflows/policy-lab-live-smoke.yml` |
 
+## Retained handoff and archive navigation
+
+- [Policy Lab document archive index](./docs/ops/POLICY_LAB_DOCUMENT_ARCHIVE_INDEX.md) — retained handoffs and status records, with their roles and Git dates; no files moved or deleted.
+
 ## Audit repair session context
 
 - [2026-10-05 handoff and continuation context](./docs/ops/AUDIT_REPAIR_HANDOFF_2026-10-05.md) — repair checkout/commit, evidence, outstanding work, migration requirements and resume commands.
