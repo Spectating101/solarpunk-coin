@@ -1,0 +1,49 @@
+name: Digital Tax package validation
+
+on:
+  push:
+    branches:
+      - digital-tax/rebuild-2026
+    paths:
+      - 'IE-JDE/Digital_Tax_Design/**'
+      - '.github/workflows/digital-tax-package.yml'
+  pull_request:
+    paths:
+      - 'IE-JDE/Digital_Tax_Design/**'
+      - '.github/workflows/digital-tax-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Digital Tax research package
+        shell: bash
+        run: |
+          set -o pipefail
+          {
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_package.py
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/derive_comparative_findings.py --check
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_boundary_layer.py
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_operational_capacity.py
+            python IE-JDE/Digital_Tax_Design/rebuilt_2026/validate_publication_candidate.py
+          } 2>&1 | tee /tmp/digital-tax-validation.log
+
+      - name: Upload validation log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital-tax-validation-log
+          path: /tmp/digital-tax-validation.log
+          if-no-files-found: error
