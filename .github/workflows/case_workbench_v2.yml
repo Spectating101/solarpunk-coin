@@ -17,6 +17,8 @@ on:
       - 'scripts/check_load_performance.mjs'
       - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
+      - 'scripts/build_policy_lab_release_provenance.mjs'
+      - 'test-node/policy_lab_release_provenance.test.js'
       - 'package*.json'
       - '.github/workflows/case_workbench_v2.yml'
   push:
@@ -33,6 +35,8 @@ on:
       - 'scripts/check_load_performance.mjs'
       - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
+      - 'scripts/build_policy_lab_release_provenance.mjs'
+      - 'test-node/policy_lab_release_provenance.test.js'
       - 'scripts/check_frontend_bundle.mjs'
       - 'package*.json'
       - '.github/workflows/case_workbench_v2.yml'
@@ -67,6 +71,9 @@ jobs:
           mkdir -p _ci_logs
           set -o pipefail
           node --test packages/constraint-core/test/*.test.mjs 2>&1 | tee _ci_logs/core-test.log
+
+      - name: Test release source inventory boundaries
+        run: node --test test-node/policy_lab_release_provenance.test.js
 
       - name: Check SDK package contents
         run: node scripts/check_sdk_package.mjs
