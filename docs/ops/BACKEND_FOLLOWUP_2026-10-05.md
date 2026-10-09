@@ -1,5 +1,10 @@
 # Backend follow-up and integration handoff — 2026-10-05
 
+## Consolidation candidate — historical-reference only
+
+This standalone candidate reapplies ff44da42fa0c6df761a86d8c6859ec285d23421f onto current Policy Lab main. It repairs historical energy_derivatives/spk_v1 backends and does not make them current Policy Lab authority or a production financial service. The validation statements below belong to the original dated session; this candidate requires fresh local guards and hosted CI before any merge decision. No live RPC, provider access, deployment or evidence promotion is included.
+
+
 The user assigned Codex the backend while Claude handles visual work. Changes are isolated in the portfolio worktree `.worktrees/solarpunk-backend-repairs`, branch `fix/backend-followup-2026-10-05`, based on handoff commit `998b9f3` and the earlier implementation commit `41a241d`. No frontend files, contracts, dependencies, lockfiles or workflows were changed in this follow-up. Nothing was pushed or deployed.
 
 Read [the original repair handoff](AUDIT_REPAIR_HANDOFF_2026-10-05.md) and [CURRENT_SURFACE.json](../../CURRENT_SURFACE.json) for the earlier audit and project boundaries. This dated record describes subsequent backend changes; it does not supersede executable state. Policy Lab remains current; these Python SPK/derivatives services remain historical/reference systems.
