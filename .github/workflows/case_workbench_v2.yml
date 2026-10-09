@@ -17,6 +17,8 @@ on:
       - 'scripts/check_load_performance.mjs'
       - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
+      - 'scripts/build_policy_lab_release_provenance.mjs'
+      - 'test-node/policy_lab_release_provenance.test.js'
       - 'package*.json'
       - '.github/workflows/case_workbench_v2.yml'
   push:
@@ -33,6 +35,8 @@ on:
       - 'scripts/check_load_performance.mjs'
       - 'scripts/lib/visual_measure.mjs'
       - 'scripts/check_sdk_package.mjs'
+      - 'scripts/build_policy_lab_release_provenance.mjs'
+      - 'test-node/policy_lab_release_provenance.test.js'
       - 'scripts/check_frontend_bundle.mjs'
       - 'package*.json'
       - '.github/workflows/case_workbench_v2.yml'
@@ -68,11 +72,20 @@ jobs:
           set -o pipefail
           node --test packages/constraint-core/test/*.test.mjs 2>&1 | tee _ci_logs/core-test.log
 
+      - name: Test release source inventory boundaries
+        run: node --test test-node/policy_lab_release_provenance.test.js
+
       - name: Check SDK package contents
         run: node scripts/check_sdk_package.mjs
 
       - name: Install frontend dependencies
         run: npm ci
+        working-directory: frontend
+
+      - name: Audit shipped frontend dependencies
+        run: |
+          set -o pipefail
+          npm audit --omit=dev --audit-level=high 2>&1 | tee ../_ci_logs/frontend-production-audit.log
         working-directory: frontend
 
       - name: Test frontend workbench
