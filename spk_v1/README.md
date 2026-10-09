@@ -78,9 +78,9 @@ All POST endpoints and GET requests with `live=true` require `Authorization: Bea
 Set `SPK_V1_API_TOKEN` in the service environment; without it, mutations return 503 and read-only endpoints remain available.
 Use a generated operator secret, keep it out of source control, and pass it only to authorized local clients.
 
-HTTP lake exports resolve beneath `SPK_V1_API_EXPORT_ROOT` (default: `<repo>/state/exports`); relative paths such as `research/run-001` are recommended. Traversal and symlink escapes return 422. The local CLI retains its filesystem access.
+HTTP lake exports resolve beneath `SPK_V1_API_EXPORT_ROOT` (default: `<repo>/state/exports`); relative paths such as `research/run-001` are recommended. Traversal and directory symlink escapes return 422. Existing output-file symlinks are replaced as directory entries, leaving their targets untouched. Runtime, health and lake files publish through atomic replacement so readers see complete files. A multi-file export is not a single filesystem transaction. The local CLI retains its filesystem access.
 Caller-supplied RPC URLs must equal the configured Sepolia RPC or an entry in the comma-separated `SPK_V1_API_RPC_ALLOWLIST`.
-Operator health defaults to a cached read; live queries require the bearer token. A non-loopback server bind requires the token to be configured.
+Operator health defaults to an offline read: runtime freshness is recomputed on every request, and cached balance observations keep their original `balance_checked_at` timestamp. Missing, malformed or stale cached balance reports are unhealthy; `/health` also reports `ok=false` when its operator check fails. Live queries require the bearer token. A non-loopback server bind requires the token to be configured. Runtime sync honors `SEPOLIA_RPC` before `SEPOLIA_RPC_URL`, matching the HTTP allowlist and live-health configuration.
 
 Full operator doc: `docs/foundation/BACKEND.md`.
 

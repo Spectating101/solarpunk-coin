@@ -1,6 +1,8 @@
 import os
 import time
 import secrets
+import math
+import sqlite3
 from collections import defaultdict
 from threading import Lock
 from datetime import datetime, timedelta, timezone
@@ -19,6 +21,7 @@ from spk_derivatives.sensitivities import GreeksCalculator
 from spk_derivatives.data_loader_wind import WindDataLoader
 from spk_derivatives.data_loader_hydro import HydroDataLoader
 from spk_derivatives.data_loader_nasa import load_solar_parameters
+from . import rate_limits
 
 # --- Configuration ---
 
@@ -67,7 +70,7 @@ Built on NASA POWER satellite data with institutional-grade pricing methods.
 ### Quick Start
 Use the demo API key: `demo-key-solarpunk-2026`
 ```
-curl -X POST https://api.solarpunk.energy/v1/price \\
+curl -X POST http://127.0.0.1:8000/v1/price \\
   -H "X-API-Key: demo-key-solarpunk-2026" \\
   -H "Content-Type: application/json" \\
   -d '{"S0": 50, "K": 55, "sigma": 0.35}'
@@ -89,6 +92,16 @@ app.add_middleware(
 # --- Auth & Rate Limiting ---
 
 def check_rate_limit(api_key: str, tier: str):
+    database = os.environ.get("SPK_RATE_LIMIT_DB")
+    if database:
+        try:
+            rate_limits.consume(database, api_key, RATE_LIMITS.get(tier, RATE_LIMITS["demo"]), time.time())
+        except rate_limits.QuotaExceeded as exc:
+            raise HTTPException(status_code=429, detail=str(exc)) from exc
+        except (OSError, sqlite3.Error) as exc:
+            # Never fall back to separate worker counters when the shared store fails.
+            raise HTTPException(status_code=503, detail="Shared rate-limit store unavailable") from exc
+        return
     with rate_lock:
         now = time.time()
         limits = RATE_LIMITS.get(tier, RATE_LIMITS["demo"])
@@ -116,14 +129,43 @@ def verify_api_key(x_api_key: str = Header(None)):
     tier = API_KEYS.get(x_api_key)
     if tier is None:
         raise HTTPException(status_code=401, detail="Invalid API key")
+    if tier not in RATE_LIMITS:
+        tier = "demo"
 
     check_rate_limit(x_api_key, tier)
     return {"key": x_api_key, "tier": tier}
+
+
+def checked_numbers(value):
+    """Reject numerical overflow inside a handler, before JSON serialization."""
+    if isinstance(value, dict):
+        for item in value.values():
+            checked_numbers(item)
+    elif isinstance(value, (list, tuple)):
+        for item in value:
+            checked_numbers(item)
+    elif isinstance(value, (float, np.floating)) and not math.isfinite(value):
+        raise HTTPException(status_code=400, detail="Calculation produced non-finite values; adjust the parameters.")
+    return value
 
 # --- Data Models ---
 
 class APIRequest(BaseModel):
     model_config = ConfigDict(allow_inf_nan=False)
+
+class RevenueAssumptions(APIRequest):
+    spot_price_per_mwh: float = Field(50.0, gt=0, description="Operator-supplied market price in USD/MWh; default 50 is a modeling assumption, not a NASA price")
+    capacity_factor: float = Field(0.20, gt=0, le=1, description="Generation capacity factor; default 0.20 is a modeling assumption")
+
+
+def revenue_assumptions(req: RevenueAssumptions):
+    return {
+        "spot_price_per_mwh": req.spot_price_per_mwh,
+        "spot_price_basis": "operator_supplied" if "spot_price_per_mwh" in req.model_fields_set else "modeled_default",
+        "capacity_factor": req.capacity_factor,
+        "capacity_factor_basis": "operator_supplied" if "capacity_factor" in req.model_fields_set else "modeled_default",
+        "volatility_basis": "weather_generation_proxy; not observed market-price volatility",
+    }
 
 class PricingRequest(APIRequest):
     S0: float = Field(..., description="Spot price ($/MWh for energy)", gt=0)
@@ -143,18 +185,18 @@ class GreeksRequest(APIRequest):
     sigma: float = Field(..., gt=0)
     N: int = Field(200, ge=10, le=1000)
 
-class RiskAssessmentRequest(APIRequest):
+class RiskAssessmentRequest(RevenueAssumptions):
     capacity_mw: float = Field(..., description="Plant capacity in MW", gt=0)
     lat: float = Field(..., description="Latitude", ge=-90, le=90)
     lon: float = Field(..., description="Longitude", ge=-180, le=180)
     energy_type: str = Field("solar", description="Energy type: solar, wind, hydro")
     hedge_period_years: float = Field(1.0, description="Hedge duration in years", gt=0)
-    target_floor_pct: float = Field(0.8, description="Revenue floor as % of expected (0.0-1.0)")
+    target_floor_pct: float = Field(0.8, gt=0, le=1, description="Revenue floor as fraction of expected (greater than 0, at most 1)")
 
 class BatchPricingRequest(APIRequest):
     requests: List[PricingRequest] = Field(..., max_length=50)
 
-class DecisionPackRequest(APIRequest):
+class DecisionPackRequest(RevenueAssumptions):
     client_name: str = Field("Operator", description="Client/operator display name")
     region: str = Field("unknown", description="Region label for reporting")
     capacity_mw: float = Field(..., description="Plant capacity in MW", gt=0)
@@ -170,14 +212,14 @@ class DecisionPackRequest(APIRequest):
 class WindParams(APIRequest):
     lat: float = Field(..., ge=-90, le=90)
     lon: float = Field(..., ge=-180, le=180)
-    rotor_diameter_m: float = 80.0
-    hub_height_m: float = 80.0
+    rotor_diameter_m: float = Field(80.0, gt=0)
+    hub_height_m: float = Field(80.0, gt=0)
 
 class HydroParams(APIRequest):
     lat: float = Field(..., ge=-90, le=90)
     lon: float = Field(..., ge=-180, le=180)
-    catchment_area_km2: float = 1000.0
-    fall_height_m: float = 50.0
+    catchment_area_km2: float = Field(1000.0, gt=0)
+    fall_height_m: float = Field(50.0, gt=0)
 
 class SolarParams(APIRequest):
     lat: float = Field(..., ge=-90, le=90)
@@ -219,7 +261,7 @@ a:hover{text-decoration:underline}
 <div class="hero">
 <h1>SolarPunk Energy Derivatives API</h1>
 <p class="sub">Price renewable energy options with physics-calibrated models</p>
-<span class="badge live">API Online</span>
+<span class="badge beta">Historical reference - not deployed</span>
 <span class="badge beta">v1.0</span>
 <br><br>
 <a href="/docs" class="cta">Interactive Docs</a>
@@ -231,7 +273,7 @@ a:hover{text-decoration:underline}
 <pre>curl -X POST /v1/price \\
   -H "Content-Type: application/json" \\
   -d '{"S0": 50, "K": 55, "sigma": 0.35}'</pre>
-<p>Or use the demo key for higher limits: <code>demo-key-solarpunk-2026</code></p>
+<p>The public demo key <code>demo-key-solarpunk-2026</code> has the same limits as no key. This service is a historical research reference and is not deployed.</p>
 </div>
 
 <div class="card">
@@ -247,42 +289,6 @@ location-specific risk models, then price options using institutional-grade meth
 <li>Location-specific risk assessment for any coordinates</li>
 <li>Batch pricing for portfolio analysis</li>
 </ul>
-</div>
-
-<h2 style="text-align:center;margin:30px 0 10px">Pricing</h2>
-<div class="pricing">
-<div class="tier">
-<h3>Demo</h3>
-<div class="price">Free</div>
-<ul>
-<li>10 requests/minute</li>
-<li>100 requests/day</li>
-<li>All pricing models</li>
-<li>No signup needed</li>
-</ul>
-</div>
-<div class="tier featured">
-<h3>Starter</h3>
-<div class="price">$99<small>/month</small></div>
-<ul>
-<li>60 requests/minute</li>
-<li>5,000 requests/day</li>
-<li>All pricing models</li>
-<li>NASA data endpoints</li>
-<li>Email support</li>
-</ul>
-</div>
-<div class="tier">
-<h3>Pro</h3>
-<div class="price">$499<small>/month</small></div>
-<ul>
-<li>300 requests/minute</li>
-<li>50,000 requests/day</li>
-<li>Batch pricing (50/req)</li>
-<li>Risk assessment reports</li>
-<li>Priority support</li>
-</ul>
-</div>
 </div>
 
 <div class="card">
@@ -302,11 +308,8 @@ location-specific risk models, then price options using institutional-grade meth
 </div>
 
 <div class="card" style="text-align:center">
-<h3>Built for the Energy Transition</h3>
-<p style="color:#888">Renewable energy producers lose $500M+ annually to price volatility they can't hedge.
-SolarPunk gives them the tools Wall Street won't.</p>
-<br>
-<a href="mailto:s1133958@mail.yzu.edu.tw" class="cta">Contact Us</a>
+<h3>Historical reference</h3>
+<p style="color:#888">This API is retained as a historical research artifact of the SolarPunk project. It is not a deployed service, has no pricing or support tiers, and makes no claim about real-world performance.</p>
 <a href="https://github.com/Spectating101/solarpunk-coin" class="cta" style="background:#2a2a4e">GitHub</a>
 </div>
 </div>
@@ -322,14 +325,14 @@ def price_option_v1(req: PricingRequest, auth: dict = Depends(verify_api_key)):
                 S0=req.S0, K=req.K, T=req.T, r=req.r, sigma=req.sigma,
                 N=req.N, payoff_type=req.payoff_type
             )
-            price = tree.price()
+            price = checked_numbers(tree.price())
             return {"model": "BinomialTree", "price": price, "parameters": req.model_dump(), "tier": auth["tier"]}
         elif req.method in ("monte-carlo", "monte_carlo", "mc"):
             sim = MonteCarloSimulator(
                 S0=req.S0, K=req.K, T=req.T, r=req.r, sigma=req.sigma,
                 num_simulations=min(req.N * 100, 100000), payoff_type=req.payoff_type
             )
-            price, lower, upper = sim.confidence_interval()
+            price, lower, upper = checked_numbers(sim.confidence_interval())
             return {"model": "MonteCarlo", "price": price, "ci_95": [lower, upper], "parameters": req.model_dump(), "tier": auth["tier"]}
         else:
             raise HTTPException(status_code=400, detail=f"Unknown method: {req.method}. Use 'binomial' or 'monte-carlo'.")
@@ -345,8 +348,10 @@ def compute_greeks_v1(req: GreeksRequest, auth: dict = Depends(verify_api_key)):
             S0=req.S0, K=req.K, T=req.T, r=req.r, sigma=req.sigma,
             pricing_method="binomial", N=req.N
         )
-        greeks = calc.compute_all_greeks()
+        greeks = checked_numbers(calc.compute_all_greeks())
         return {"greeks": greeks, "parameters": req.model_dump(), "tier": auth["tier"]}
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -386,7 +391,7 @@ def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(verify_a
             raise HTTPException(status_code=400, detail="energy_type must be solar, wind, or hydro")
 
         sigma = params.get("sigma", params.get("annual_volatility", 0.35))
-        S0 = params.get("S0", params.get("spot_price", 50.0))
+        S0 = req.spot_price_per_mwh
         K = S0 * req.target_floor_pct
 
         # Price the hedge
@@ -394,11 +399,11 @@ def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(verify_a
         hedge_price = tree.price()
 
         # Calculate Greeks
-        calc = GreeksCalculator(S0=S0, K=K, T=req.hedge_period_years, r=0.05, sigma=sigma, pricing_method="binomial", N=200)
-        greeks = calc.compute_all_greeks()
+        calc = GreeksCalculator(S0=S0, K=K, T=req.hedge_period_years, r=0.05, sigma=sigma, pricing_method="binomial", N=200, payoff_type="put")
+        greeks = checked_numbers(calc.compute_all_greeks())
 
         # Estimate annual generation and revenue
-        capacity_factor = params.get("capacity_factor", 0.20)
+        capacity_factor = req.capacity_factor
         annual_mwh = req.capacity_mw * 8760 * capacity_factor
         annual_revenue = annual_mwh * S0
         hedge_cost = hedge_price * annual_mwh
@@ -407,7 +412,7 @@ def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(verify_a
         clean_params = {k: float(v) if isinstance(v, (int, float, np.floating, np.integer)) else str(v)
                         for k, v in params.items() if not hasattr(v, 'to_dict') and not hasattr(v, '__len__')}
 
-        return {
+        return checked_numbers({
             "assessment": {
                 "location": {"lat": req.lat, "lon": req.lon},
                 "energy_type": req.energy_type,
@@ -429,8 +434,9 @@ def risk_assessment_v1(req: RiskAssessmentRequest, auth: dict = Depends(verify_a
             },
             "greeks": greeks,
             "calibration": clean_params,
+            "model_assumptions": revenue_assumptions(req),
             "tier": auth["tier"],
-        }
+        })
     except HTTPException:
         raise
     except Exception as e:
@@ -453,7 +459,7 @@ def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_k
             raise HTTPException(status_code=400, detail="energy_type must be solar, wind, or hydro")
 
         sigma = float(params.get("sigma", params.get("annual_volatility", 0.35)))
-        S0 = float(params.get("S0", params.get("spot_price", 50.0)))
+        S0 = req.spot_price_per_mwh
         K = S0 * req.target_floor_pct
 
         tree = BinomialTree(
@@ -467,7 +473,7 @@ def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_k
         )
         premium_per_mwh = float(tree.price())
 
-        capacity_factor = float(params.get("capacity_factor", 0.20))
+        capacity_factor = req.capacity_factor
         annual_mwh = float(req.capacity_mw * 8760 * capacity_factor)
         target_hedged_mwh = annual_mwh * req.target_floor_pct
         recommended_contracts = int(np.ceil(target_hedged_mwh / req.contract_notional_mwh))
@@ -536,7 +542,7 @@ def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_k
 
         immediate = "NO_GO" if any(a["priority"] == "P0" for a in actions) else "GO"
 
-        return {
+        return checked_numbers({
             "decision": {
                 "immediate_go_no_go": immediate,
                 "risk_band": risk_band,
@@ -558,8 +564,9 @@ def decision_pack_v1(req: DecisionPackRequest, auth: dict = Depends(verify_api_k
                 "coverage_gap_ratio": round(coverage_gap_ratio, 6),
             },
             "actions": actions,
+            "model_assumptions": revenue_assumptions(req),
             "tier": auth["tier"],
-        }
+        })
     except HTTPException:
         raise
     except Exception as e:
@@ -615,7 +622,7 @@ def operator_workbench_v1(req: DecisionPackRequest, auth: dict = Depends(verify_
         elif decision["immediate_go_no_go"] == "GO" and decision["operating_score"] >= 70:
             confidence = "medium"
 
-        return {
+        return checked_numbers({
             "generated_at": now.isoformat(),
             "decision": decision,
             "business_snapshot": {
@@ -633,8 +640,9 @@ def operator_workbench_v1(req: DecisionPackRequest, auth: dict = Depends(verify_
             },
             "assignments": assignment_items,
             "summary": summary,
+            "model_assumptions": decision_payload["model_assumptions"],
             "tier": auth["tier"],
-        }
+        })
     except HTTPException:
         raise
     except Exception as e:
@@ -648,7 +656,9 @@ def get_solar_parameters(params: SolarParams, auth: dict = Depends(verify_api_ke
         pricing_params = load_solar_parameters(params.lat, params.lon)
         clean_params = {k: float(v) if isinstance(v, (int, float, np.floating, np.integer)) else str(v)
                         for k, v in pricing_params.items() if not hasattr(v, 'to_dict') and not hasattr(v, '__len__')}
-        return {"source": "NASA POWER", "location": {"lat": params.lat, "lon": params.lon}, "pricing_parameters": clean_params}
+        return checked_numbers({"source": "NASA POWER", "location": {"lat": params.lat, "lon": params.lon}, "pricing_parameters": clean_params})
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Data fetch failed: {str(e)}")
 
@@ -659,7 +669,9 @@ def get_wind_parameters(params: WindParams, auth: dict = Depends(verify_api_key)
         pricing_params = loader.load_parameters()
         clean_params = {k: float(v) if isinstance(v, (int, float, np.floating, np.integer)) else str(v)
                         for k, v in pricing_params.items() if not hasattr(v, 'to_dict') and not hasattr(v, '__len__')}
-        return {"source": "NASA MERRA-2", "location": {"lat": params.lat, "lon": params.lon}, "pricing_parameters": clean_params}
+        return checked_numbers({"source": "NASA MERRA-2", "location": {"lat": params.lat, "lon": params.lon}, "pricing_parameters": clean_params})
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Data fetch failed: {str(e)}")
 
@@ -670,7 +682,9 @@ def get_hydro_parameters(params: HydroParams, auth: dict = Depends(verify_api_ke
         pricing_params = loader.load_parameters()
         clean_params = {k: float(v) if isinstance(v, (int, float, np.floating, np.integer)) else str(v)
                         for k, v in pricing_params.items() if not hasattr(v, 'to_dict') and not hasattr(v, '__len__')}
-        return {"source": "NASA MERRA-2", "location": {"lat": params.lat, "lon": params.lon}, "pricing_parameters": clean_params}
+        return checked_numbers({"source": "NASA MERRA-2", "location": {"lat": params.lat, "lon": params.lon}, "pricing_parameters": clean_params})
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Data fetch failed: {str(e)}")
 
@@ -712,7 +726,15 @@ def health_check():
 def usage_stats(auth: dict = Depends(verify_api_key)):
     now = time.time()
     key = auth["key"]
-    today_requests = len([t for t in rate_tracker.get(key, []) if now - t < 86400])
+    database = os.environ.get("SPK_RATE_LIMIT_DB")
+    if database:
+        try:
+            today_requests = rate_limits.usage(database, key, now)
+        except (OSError, sqlite3.Error) as exc:
+            raise HTTPException(status_code=503, detail="Shared rate-limit store unavailable") from exc
+    else:
+        with rate_lock:
+            today_requests = len([t for t in rate_tracker.get(key, []) if now - t < 86400])
     limits = RATE_LIMITS.get(auth["tier"], RATE_LIMITS["demo"])
     return {
         "tier": auth["tier"],

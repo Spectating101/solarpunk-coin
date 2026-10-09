@@ -8,6 +8,7 @@ from typing import Any
 
 from spk_v1.chain import read_live_snapshot, resolve_deploy_block
 from spk_v1.counterparties import enrich_payment_ledger, merge_counterparties
+from spk_v1.storage import atomic_write_text
 
 DEFAULT_RPC = "https://ethereum-sepolia-rpc.publicnode.com"
 
@@ -30,10 +31,9 @@ def read_runtime(repo_root: str | Path) -> dict[str, Any] | None:
 
 def write_runtime(payload: dict[str, Any], repo_root: str | Path) -> Path:
     paths = runtime_paths(repo_root)
-    body = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+    body = json.dumps(payload, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
     for target in (paths["runtime"], paths["public"]):
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(body, encoding="utf-8")
+        atomic_write_text(target, body)
     return paths["runtime"]
 
 
@@ -52,7 +52,9 @@ def sync_runtime(
     if not runtime or not runtime.get("contracts", {}).get("solar_punk_coin"):
         raise FileNotFoundError("Missing state/runtime/spk_v1.json with SPK v1 contracts")
 
-    rpc = rpc_url or os.environ.get("SEPOLIA_RPC_URL") or DEFAULT_RPC
+    rpc = (
+        rpc_url or os.environ.get("SEPOLIA_RPC") or os.environ.get("SEPOLIA_RPC_URL") or DEFAULT_RPC
+    )
     deploy_block = resolve_deploy_block(runtime, rpc)
     runtime_with_block = {**runtime, "deploy_block": deploy_block}
     snapshot = read_live_snapshot(runtime_with_block, rpc)
@@ -64,7 +66,11 @@ def sync_runtime(
         counterparties,
     )
 
-    status = runtime.get("status") if runtime.get("status") == "operating" else runtime.get("status") or "genesis_complete"
+    status = (
+        runtime.get("status")
+        if runtime.get("status") == "operating"
+        else runtime.get("status") or "genesis_complete"
+    )
     patch = {
         "status": status,
         "deploy_block": deploy_block,
