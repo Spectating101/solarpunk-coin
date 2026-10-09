@@ -46,7 +46,7 @@ The first automated visual package was generated successfully by PR #54 CI from 
 |---|---|---|
 | deterministic core | PASS | constraint-core tests |
 | versioned schemas/policies | PASS | `protocol/schema`, `protocol/policies-v2` |
-| controlled decision cases | PASS | four-case interactive pack |
+| controlled decision cases | PASS | five-case interactive pack |
 | outside public-data operability | PASS | Ausgrid CI checkpoint |
 | binding-rule attribution | PASS | decision outputs |
 | settlement stress | PASS | decision/settlement artifacts |

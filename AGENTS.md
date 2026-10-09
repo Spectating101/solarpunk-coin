@@ -25,7 +25,7 @@ SolarPunk / Energy Standard / SPK / Sepolia material is historical and reference
 
 ## Evidence boundaries
 
-- The interactive four-case pack is controlled and declares `empirical_claim: false`.
+- The interactive five-case pack is controlled and declares `empirical_claim: false`.
 - `PUB-AUSGRID-001P` is a separate outside-public-data checkpoint at actual `L0` assurance.
 - Do not promote controlled fixtures, modeled context, public data, receipts, signatures, packages, contracts, or blockchain state into stronger evidence than their source supports.
 - R1–R4 research boundaries are not aliases for runtime stages.
