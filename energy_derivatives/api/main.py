@@ -70,7 +70,7 @@ Built on NASA POWER satellite data with institutional-grade pricing methods.
 ### Quick Start
 Use the demo API key: `demo-key-solarpunk-2026`
 ```
-curl -X POST https://api.solarpunk.energy/v1/price \\
+curl -X POST http://127.0.0.1:8000/v1/price \\
   -H "X-API-Key: demo-key-solarpunk-2026" \\
   -H "Content-Type: application/json" \\
   -d '{"S0": 50, "K": 55, "sigma": 0.35}'
@@ -261,7 +261,7 @@ a:hover{text-decoration:underline}
 <div class="hero">
 <h1>SolarPunk Energy Derivatives API</h1>
 <p class="sub">Price renewable energy options with physics-calibrated models</p>
-<span class="badge live">API Online</span>
+<span class="badge beta">Historical reference - not deployed</span>
 <span class="badge beta">v1.0</span>
 <br><br>
 <a href="/docs" class="cta">Interactive Docs</a>
@@ -273,7 +273,7 @@ a:hover{text-decoration:underline}
 <pre>curl -X POST /v1/price \\
   -H "Content-Type: application/json" \\
   -d '{"S0": 50, "K": 55, "sigma": 0.35}'</pre>
-<p>Or use the demo key for higher limits: <code>demo-key-solarpunk-2026</code></p>
+<p>The public demo key <code>demo-key-solarpunk-2026</code> has the same limits as no key. This service is a historical research reference and is not deployed.</p>
 </div>
 
 <div class="card">
@@ -289,42 +289,6 @@ location-specific risk models, then price options using institutional-grade meth
 <li>Location-specific risk assessment for any coordinates</li>
 <li>Batch pricing for portfolio analysis</li>
 </ul>
-</div>
-
-<h2 style="text-align:center;margin:30px 0 10px">Pricing</h2>
-<div class="pricing">
-<div class="tier">
-<h3>Demo</h3>
-<div class="price">Free</div>
-<ul>
-<li>10 requests/minute</li>
-<li>100 requests/day</li>
-<li>All pricing models</li>
-<li>No signup needed</li>
-</ul>
-</div>
-<div class="tier featured">
-<h3>Starter</h3>
-<div class="price">$99<small>/month</small></div>
-<ul>
-<li>60 requests/minute</li>
-<li>5,000 requests/day</li>
-<li>All pricing models</li>
-<li>NASA data endpoints</li>
-<li>Email support</li>
-</ul>
-</div>
-<div class="tier">
-<h3>Pro</h3>
-<div class="price">$499<small>/month</small></div>
-<ul>
-<li>300 requests/minute</li>
-<li>50,000 requests/day</li>
-<li>Batch pricing (50/req)</li>
-<li>Risk assessment reports</li>
-<li>Priority support</li>
-</ul>
-</div>
 </div>
 
 <div class="card">
@@ -344,11 +308,8 @@ location-specific risk models, then price options using institutional-grade meth
 </div>
 
 <div class="card" style="text-align:center">
-<h3>Built for the Energy Transition</h3>
-<p style="color:#888">Renewable energy producers lose $500M+ annually to price volatility they can't hedge.
-SolarPunk gives them the tools Wall Street won't.</p>
-<br>
-<a href="mailto:s1133958@mail.yzu.edu.tw" class="cta">Contact Us</a>
+<h3>Historical reference</h3>
+<p style="color:#888">This API is retained as a historical research artifact of the SolarPunk project. It is not a deployed service, has no pricing or support tiers, and makes no claim about real-world performance.</p>
 <a href="https://github.com/Spectating101/solarpunk-coin" class="cta" style="background:#2a2a4e">GitHub</a>
 </div>
 </div>

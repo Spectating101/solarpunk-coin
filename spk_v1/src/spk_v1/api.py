@@ -121,7 +121,6 @@ def health(
         "ok": True,
         "service": "spk-v1",
         "version": __version__,
-        "repo_root": str(root),
         "repo_root_exists": root.exists(),
     }
     try:
