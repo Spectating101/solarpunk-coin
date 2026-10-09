@@ -99,3 +99,10 @@ The project does **not** need another core subsystem to become more submit-able.
 For InnoServe, remaining work is administrative/presentation conversion: faculty advisor/team identity, official Word-template formatting, consent/enrollment documents, team photo, and recording/uploading the three-minute video.
 
 External validation remains open and is especially important for fintech/commercialization-heavy routes, but lack of a pilot does not prevent a truthful IP/IC InnoServe submission.
+
+## Specialized Policy Lab checks
+
+- [Gauntlet expansion](POLICY_LAB_GAUNTLET_EXPANSION.md) — six machine challenges and open external gates.
+- [Standards differentiation](POLICY_LAB_STANDARDS_DIFFERENTIATION.md) — retained comparison context.
+
+Run `node scripts/run_policy_lab_specialized_gauntlet.mjs` and `node scripts/check_policy_lab_external_gauntlet_protocols.mjs`. Their outputs do not close external validation, source-holder review or R4.
