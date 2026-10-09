@@ -1,7 +1,7 @@
 # Policy Lab — Standards and Adjacent-System Differentiation
 
-**Status:** judge-facing comparison note  
-**Last verified:** 2026-09-10  
+**Status:** judge-facing comparison note
+**Last verified:** 2026-09-10
 **Purpose:** prevent false novelty claims and make the actual contribution easier to evaluate.
 
 Policy Lab should **not** claim that policy-as-code, authorization, cryptographic credentials, proof-of-reserve, or machine-readable financial contracts are novel. Mature systems already cover those functions.

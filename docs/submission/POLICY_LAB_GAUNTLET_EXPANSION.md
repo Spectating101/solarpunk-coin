@@ -2,7 +2,7 @@
 
 Salvaged from PR #65 onto current main. Historical descriptions below remain scoped to their recorded mechanisms; use freshly generated reports for the candidate. No trusted release-attestation workflow is included.
 
-**Status:** executable judge-facing adversarial package  
+**Status:** executable judge-facing adversarial package
 **Purpose:** explain what the Policy Lab-specific Gauntlet tests, what it has proved internally, and which high-value gates remain external.
 
 The generic Gauntlet remains the venue/ranking stress test. This specialized layer does **not** replace or reweight it. It attacks the mechanism that Policy Lab specifically claims to contribute:
