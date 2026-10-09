@@ -27,6 +27,7 @@ jobs:
           node-version: '22'
       - run: python -m pip install -e .mcp-runner/integrations/portfolio-mcp
       - run: node --test packages/constraint-core/test/capsule-verify.test.mjs
+      - run: python integrations/mcp/test_bridge.py
       - run: portfolio-mcp probe --manifest integrations/mcp/manifest.json --root .
       - name: MCP preserves native invalid-capsule result
         run: |
