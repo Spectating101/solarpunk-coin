@@ -272,6 +272,15 @@ const machinePassed = machineCoverageComplete && machineResults.every((item) => 
 const openChallenges = manifest.challenges.filter((item) => String(item.state).startsWith('OPEN'));
 const c3Requirements = c3c4.levels.C3.requirements;
 const c4Requirements = c3c4.levels.C4.requirements;
+// A PASS_* readiness state must point at a file that exists in this checkout.
+for (const requirement of [...c3Requirements, ...c4Requirements]) {
+  if (!String(requirement.state).startsWith('PASS_')) continue;
+  for (const evidencePath of [].concat(requirement.evidence || [])) {
+    await fs.access(path.join(root, evidencePath)).catch(() => {
+      throw new Error(`Readiness evidence path missing for ${requirement.id}: ${evidencePath}`);
+    });
+  }
+}
 const countStates = (items) => Object.fromEntries(
   [...new Set(items.map((item) => item.state))].sort().map((state) => [state, items.filter((item) => item.state === state).length]),
 );
@@ -370,8 +379,12 @@ const markdown = `# Policy Lab Specialized Gauntlet v${manifest.version}\n\n` +
   `- C4: **${c3c4.levels.C4.state}** — ${JSON.stringify(report.c3_c4_readiness.C4.counts)}\n\n` +
   `Open lifecycle, independent reproduction, release-provenance, heterogeneous-source, comprehension, and practical-validation gates remain open.\n`;
 
-await fs.rm(outDir, { recursive: true, force: true });
+// Replace only this runner's own report files. Never delete the output directory itself:
+// --out is user-supplied and may point at a directory that holds other files.
 await fs.mkdir(outDir, { recursive: true });
+for (const name of ['policy-lab-specialized-gauntlet.v1.json', 'policy-lab-specialized-gauntlet.v1.md']) {
+  await fs.rm(path.join(outDir, name), { force: true });
+}
 await fs.writeFile(path.join(outDir, 'policy-lab-specialized-gauntlet.v1.json'), `${JSON.stringify(report, null, 2)}\n`);
 await fs.writeFile(path.join(outDir, 'policy-lab-specialized-gauntlet.v1.md'), markdown);
 

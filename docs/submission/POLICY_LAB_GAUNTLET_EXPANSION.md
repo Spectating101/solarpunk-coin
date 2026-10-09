@@ -76,12 +76,12 @@ A machine-readable assumption register now classifies current thresholds, haircu
 
 ## Additional internal hardening now exercised
 
-The specialized CI also attacks its own certification path:
+The specialized CI also attacks its own report-building path:
 
 - **environment determinism:** JSON and Markdown results are byte-identical under `TZ=UTC` and `TZ=Asia/Taipei` with `LANG=C`;
 - **retry determinism:** deliberately truncated specialized-Gauntlet outputs are replaced by a clean deterministic rebuild identical to a fresh run;
-- **external-gate anti-gaming:** every `OPEN_EXTERNAL` challenge has a frozen evidence contract and CI/traffic/controlled fixtures/AI review are explicitly excluded as validation;
-- **release source closure:** a deterministic SHA-256 inventory binds the declared Policy Lab source closure to the tested revision and reproduces byte-identically;
+- **external-gate anti-gaming:** every `OPEN_EXTERNAL` challenge has a declared evidence contract and CI/traffic/controlled fixtures/AI review are explicitly excluded as validation;
+- **release source closure:** the deterministic SHA-256 inventory is produced by the separate release-provenance builder and its own test, not by this workflow;
 - **legacy invariants:** the existing Financial Cryptography non-promotion tests are rerun;
 - **baseline compatibility:** the existing C0–C2 conformance contract is rerun rather than replaced by the specialized suite.
 
@@ -117,7 +117,7 @@ Existing/internal proof includes:
 - private/public package boundary;
 - current-surface CI;
 - cross-timezone deterministic specialized output;
-- deterministic source-closure inventory;
+- deterministic source-closure inventory (separate release-provenance builder and its test, not exercised by this workflow);
 - bounded retry proof for the specialized report builder.
 
 Still missing:
@@ -127,9 +127,9 @@ Still missing:
 - broader recovery proof beyond the specialized report build path;
 - the unresolved C3 lifecycle requirements inherited by C4.
 
-## External gates — frozen before the evidence arrives
+## External gates — declared before the evidence arrives
 
-The Gauntlet deliberately fixes the closure rules now so future favorable outcomes cannot move the goalposts.
+The Gauntlet deliberately fixes the closure rules now so future favorable outcomes cannot move the goalposts. These rules are declared in the repository and checked structurally; they are not pinned by a hash or a signed tag, so a later change would be visible only in git history.
 
 ### PLG-09 — independent reproduction
 
